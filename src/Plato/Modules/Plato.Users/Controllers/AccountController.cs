@@ -30,13 +30,13 @@ namespace Plato.Users.Controllers
         #region "Constructor"
 
         private readonly IViewProviderManager<UserRegistration> _registerViewProvider;
-        private readonly IViewProviderManager<UserLogin> _loginViewProvider;        
-        private readonly IPlatoUserManager<User> _platoUserManager;        
-        private readonly SignInManager<User> _signInManager;
-        private readonly ILogger<AccountController> _logger;
-        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly IViewProviderManager<UserLogin> _loginViewProvider;
         private readonly IOptions<IdentityOptions> _identityOptions;
+        private readonly IPlatoUserManager<User> _platoUserManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly SignInManager<User> _signInManager;
+        private readonly ILogger<AccountController> _logger;        
         private readonly UserManager<User> _userManager;
         private readonly IUserEmails _userEmails;
         private readonly IAlerter _alerter;
@@ -48,29 +48,30 @@ namespace Plato.Users.Controllers
         public AccountController(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
-            UserManager<User> userManager,
-            SignInManager<User> signInManage,
-            ILogger<AccountController> logger, 
+            IViewProviderManager<UserRegistration> registerViewProvider,
+            IViewProviderManager<UserLogin> loginViewProvider,
+            IOptions<IdentityOptions> identityOptions,
             IPlatoUserManager<User> platoUserManager,
             IPlatoUserStore<User> platoUserStore,
-            IOptions<IdentityOptions> identityOptions,
-            IBreadCrumbManager breadCrumbManager, 
-            IViewProviderManager<UserLogin> loginViewProvider,
-            IViewProviderManager<UserRegistration> registerViewProvider,
-            IAlerter alerter, IUserEmails userEmails)
-        {
-            _userManager = userManager;
-            _signInManager = signInManage;
-            _logger = logger;
-            _platoUserManager = platoUserManager;
-            _platoUserStore = platoUserStore;
-            _identityOptions = identityOptions;
+            IBreadCrumbManager breadCrumbManager,
+            ILogger<AccountController> logger,            
+            SignInManager<User> signInManage,
+            UserManager<User> userManager,
+            IUserEmails userEmails,
+            IAlerter alerter)
+        {   
+            _registerViewProvider = registerViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _loginViewProvider = loginViewProvider;
-            _registerViewProvider = registerViewProvider;
-            _alerter = alerter;
+            _platoUserManager = platoUserManager;
+            _identityOptions = identityOptions;
+            _platoUserStore = platoUserStore;
+            _signInManager = signInManage;
+            _userManager = userManager;
             _userEmails = userEmails;
-       
+            _alerter = alerter;            
+            _logger = logger;
+
             T = htmlLocalizer;
             S = stringLocalizer;
 

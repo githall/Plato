@@ -6,15 +6,16 @@
 
 @if (hasUsername && hasPassword)
 {
-    <card>
-        <card-body>            
-                <h6 class="font-weight-bold">@T["Admin Login"]</h6>
-                <p>
-                    @T["Plato is running in demo mode. Use the button below to login using the default administrator account to further explore Plato."]
-                </p>
-                <button id="btnDemoLogin" asp-route-area="Plato.Site.Demo" asp-route-controller="Home" asp-route-action="Login" class="btn btn-primary" type="button" role="button">@T["Login as admin..."]</button>            
-        </card-body>
-    </card>
+    <p>
+        <img src="/plato.site.demo/content/images/dashboard.png" alt="Plato Dashboard" title="Plato Dashboard" class="img-fluid" />
+    </p>
+    <h6 class="font-weight-bold">
+        @T["Plato Dashboard"]
+    </h6>
+    <p>
+        @T["Use the button below to login using the demo administrator account and visit the Plato administrator dashboard. Once logged in you can fully explore Plato using the demo administrator account..."]
+    </p>
+    <button id="btnDemoLogin" asp-route-area="Plato.Site.Demo" asp-route-controller="Home" asp-route-action="Login" class="btn btn-primary" type="button" role="button">@T["Goto Dashboard"]</button>      
     <script section="Footer">
 
         $(function (win, doc, $) {
@@ -25,8 +26,8 @@
                 $btn = $("#btnDemoLogin");
 
             app.ready(function () {
-                           
-                $btn.click(function () {   
+
+                $btn.click(function () {
 
                     var formAction = null;
                     var attr = $(this).attr("formaction");
@@ -43,14 +44,14 @@
                         $form[0].action = formAction;
                         formAction = null;
                     }
-                               
-                    // Note don't call $(form).submit() as this 
+
+                    // Note don't call $(form).submit() as this
                     // internally calls the validators submitHandler again
                     $form[0].submit();
 
                 });
 
-            })       
+            })
 
         }(window, document, jQuery));
 

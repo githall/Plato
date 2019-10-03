@@ -1,14 +1,18 @@
-﻿@model DemoSettingsViewModel
+﻿@using Plato.Internal.Abstractions.Settings
+@model DemoSettingsViewModel
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
+}
 
 <card>
     <card-title>
-        <h6 class="card-title">@T["Admin Account"]</h6>
+        <h6 class="card-title">@T["Demo Admin Account"]</h6>
         <div class="text-muted">
-            @T["The default administrator account users can login with to explore the admin dashboard."]
+            @T["The default administrator account users can login with to explore the Plato dashboard."]
         </div>
     </card-title>
     <card-body>
-
         <div class="row">
             <div class="col">
                 <fieldset>
@@ -17,7 +21,7 @@
                             <strong>@T["Admin Username"]</strong>
                             <span asp-validation-for="AdminUserName" class="text-danger"></span>
                             <br />
-                            <span class="text-muted">@T["The username for the demo administrator account."]</span>                            
+                            <span class="text-muted">@T["The username for the demo administrator account."]</span>
                         </label>
                         <input placeholder="@T["your administrator username..."]" asp-for="AdminUserName" class="form-control" autofocus />
                     </div>
@@ -26,9 +30,10 @@
                     <div class="form-group" asp-validation-class-for="DefaultFrom">
                         <label asp-for="AdminPassword">
                             <strong>@T["Admin Password"]</strong>
+                            <i class="fal fa-info-circle" title="@T["Must contain at least 1 lower case character, 1 upper case character, 1 special character, 1 digit and be a minimum of 6 characters long."]" data-toggle="tooltip"></i>
                             <span asp-validation-for="AdminPassword" class="text-danger"></span>
                             <br />
-                            <span class="text-muted">@T["The password for the demo administrator account."]</span>                            
+                            <span class="text-muted">@T["The password for the demo administrator account."]</span>
                         </label>
                         <div class="search-input-group">
                             <input asp-for="AdminPassword"
@@ -45,12 +50,22 @@
                 </fieldset>
             </div>
         </div>
-
     </card-body>
 </card>
 
 <card class="card mt-4">
     <card-footer>
-        <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        @if (isDemo)
+        {
+            <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["These settings cannot be changed in the demo"]">
+                <a href="#" class="btn btn-primary disabled">
+                    @T["Save"]
+                </a>
+            </span>
+        }
+        else
+        {
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        }
     </card-footer>
 </card>
