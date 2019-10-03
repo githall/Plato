@@ -14,8 +14,8 @@ using Plato.Site.Demo.Navigation;
 using Plato.Site.Demo.Configuration;
 using Plato.Site.Demo.Models;
 using Plato.Site.Demo.Stores;
-
 using Plato.Site.Demo.ViewProviders;
+using Plato.Internal.Models.Users;
 
 namespace Plato.Site.Demo
 {
@@ -51,6 +51,11 @@ namespace Plato.Site.Demo
             // View providers
             services.AddScoped<IViewProviderManager<DemoSettings>, ViewProviderManager<DemoSettings>>();
             services.AddScoped<IViewProvider<DemoSettings>, AdminViewProvider>();
+            
+            // Login view provider
+            services.AddScoped<IViewProviderManager<UserLogin>, ViewProviderManager<UserLogin>>();
+            services.AddScoped<IViewProvider<UserLogin>, LoginViewProvider>();
+
 
             // Permissions provider
             //services.AddScoped<IPermissionsProvider<Permission>, Permissions>();            

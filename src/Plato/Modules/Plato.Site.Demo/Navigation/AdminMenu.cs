@@ -25,7 +25,7 @@ namespace Plato.Site.Demo.Navigation
             builder
                 .Add(T["Settings"], int.MaxValue, settings => settings
                     .IconCss("fal fa-cog")
-                    .Add(T["Demo Setting"], int.MaxValue - 450, webApiSettings => webApiSettings
+                    .Add(T["Demo"], int.MaxValue - 450, webApiSettings => webApiSettings
                         .Action("Index", "Admin", "Plato.Site.Demo")
                         //.Permission(Permissions.EditTwitterSettings)
                         .LocalNav())

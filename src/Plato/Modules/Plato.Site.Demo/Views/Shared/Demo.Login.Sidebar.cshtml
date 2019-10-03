@@ -1,0 +1,59 @@
+﻿@model DemoSettingsViewModel
+@{
+    var hasUsername = !string.IsNullOrEmpty(Model.AdminUserName);
+    var hasPassword = !string.IsNullOrEmpty(Model.AdminPassword);
+}
+
+@if (hasUsername && hasPassword)
+{
+    <card>
+        <card-body>            
+                <h6 class="font-weight-bold">@T["Admin Login"]</h6>
+                <p>
+                    @T["Plato is running in demo mode. Use the button below to login using the default administrator account to further explore Plato."]
+                </p>
+                <button id="btnDemoLogin" asp-route-area="Plato.Site.Demo" asp-route-controller="Home" asp-route-action="Login" class="btn btn-primary" type="button" role="button">@T["Login as admin..."]</button>            
+        </card-body>
+    </card>
+    <script section="Footer">
+
+        $(function (win, doc, $) {
+
+            'use strict';
+
+            var app = win.$.Plato,
+                $btn = $("#btnDemoLogin");
+
+            app.ready(function () {
+                           
+                $btn.click(function () {   
+
+                    var formAction = null;
+                    var attr = $(this).attr("formaction");
+                    if (attr) {
+                        formAction = attr;
+                    }
+
+                    var $form = $(this).closest("form");
+                    if ($form.length === 0) {
+                        throw new Error("Could not locate a parent form")
+                    }
+
+                    if (formAction) {
+                        $form[0].action = formAction;
+                        formAction = null;
+                    }
+                               
+                    // Note don't call $(form).submit() as this 
+                    // internally calls the validators submitHandler again
+                    $form[0].submit();
+
+                });
+
+            })       
+
+        }(window, document, jQuery));
+
+    </script>
+}
+

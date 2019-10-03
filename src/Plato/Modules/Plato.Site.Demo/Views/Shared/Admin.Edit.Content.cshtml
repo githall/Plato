@@ -3,6 +3,9 @@
 <card>
     <card-title>
         <h6 class="card-title">@T["Admin Account"]</h6>
+        <div class="text-muted">
+            @T["The default administrator account users can login with to explore the admin dashboard."]
+        </div>
     </card-title>
     <card-body>
 
@@ -25,7 +28,7 @@
                             <strong>@T["Admin Password"]</strong>
                             <span asp-validation-for="AdminPassword" class="text-danger"></span>
                             <br />
-                            <span class="text-muted">@T["Your demo administrator account password."]</span>                            
+                            <span class="text-muted">@T["The password for the demo administrator account."]</span>                            
                         </label>
                         <div class="search-input-group">
                             <input asp-for="AdminPassword"
@@ -33,7 +36,7 @@
                                    class="form-control"
                                    autocomplete="off"
                                    data-provide="password"
-                                   placeholder="@T["your demo administrator account password..."]" />
+                                   placeholder="@T["your administrator password..."]" />
                             <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
                                 <i class="fal fa-eye"></i>
                             </button>

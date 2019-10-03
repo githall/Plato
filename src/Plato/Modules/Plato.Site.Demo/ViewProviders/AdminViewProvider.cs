@@ -132,7 +132,7 @@ namespace Plato.Site.Demo.ViewProviders
 
                 return new DemoSettingsViewModel()
                 {
-                    AdminUserName = settings.AdminPassword,
+                    AdminUserName = settings.AdminUserName,
                     AdminPassword = adminPassword
                 };
 
