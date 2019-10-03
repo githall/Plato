@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using Plato.Internal.Security.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Users.ViewModels
 {
@@ -14,15 +15,11 @@ namespace Plato.Users.ViewModels
         [Required]
         public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        [Display(Name = "new password")]
-        [StringLength(100, MinimumLength = 6)]
+        [Required, IdentityPasswordOptionsValidator, DataType(DataType.Password)]
+        [Display(Name = "new password"), StringLength(100)]
         public string NewPassword { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
-        [StringLength(100, MinimumLength = 6)]
+        [Required, DataType(DataType.Password), StringLength(100)]
         [Display(Name = "new password confirmation")]
         public string PasswordConfirmation { get; set; }
 

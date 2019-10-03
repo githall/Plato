@@ -4,7 +4,7 @@
 
 <div class="form-group">
     <label asp-for="UserName" class="col-form-label font-weight-bold">@T["Username"]</label>
-    <i class="fal fa-info-circle" title="@T["Your username cannot contain the @ or , characters."]" data-toggle="tooltip"></i>
+    <i class="fal fa-info-circle" title="@T["Your username cannot contain spaces or the @ or , characters."]" data-toggle="tooltip"></i>
     <span asp-validation-for="UserName" class="text-danger"></span>
     <input asp-for="UserName" placeholder="@T["Username"]" class="form-control" autofocus />
 </div>

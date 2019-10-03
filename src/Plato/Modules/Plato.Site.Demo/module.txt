@@ -1,0 +1,19 @@
+Name: Plato Site Demo
+Description: Installing this module will set Plato to demo mode.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Core
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.site.demo/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.WebAPI",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Admin",
+		Version: "1.0.0"
+	}
+]

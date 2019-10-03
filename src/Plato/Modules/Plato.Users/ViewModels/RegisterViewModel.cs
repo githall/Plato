@@ -7,7 +7,7 @@ namespace Plato.Users.ViewModels
     {
 
         [Required, Display(Name = "username"), StringLength(255, MinimumLength = 4)]
-        [RegularExpression("[^\\n|^\\s|^,|^@]*", ErrorMessage = "The username cannot contain the @ or , characters.")]
+        [RegularExpression("[^\\n|^\\s|^,|^@]*", ErrorMessage = "The username cannot contain spaces or the @ or , characters.")]
         public string UserName { get; set; }
 
         [Required, EmailAddress, Display(Name = "email")]
