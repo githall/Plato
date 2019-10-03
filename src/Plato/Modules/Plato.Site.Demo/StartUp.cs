@@ -2,18 +2,19 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.SetUp;
-using Plato.Site.Demo.Handlers;
 using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Models.Shell;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Navigation.Abstractions;
+using Plato.Internal.Layout.ViewProviders;
+using Plato.Site.Demo.Handlers;
 using Plato.Site.Demo.Navigation;
-using Microsoft.Extensions.Options;
 using Plato.Site.Demo.Configuration;
 using Plato.Site.Demo.Models;
 using Plato.Site.Demo.Stores;
-using Plato.Internal.Layout.ViewProviders;
+
 using Plato.Site.Demo.ViewProviders;
 
 namespace Plato.Site.Demo
@@ -37,8 +38,7 @@ namespace Plato.Site.Demo
 
             // Feature installation event handler
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
-
-
+            
             // Navigation provider
             services.AddScoped<INavigationProvider, AdminMenu>();
 

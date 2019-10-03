@@ -15,21 +15,21 @@ namespace Plato.Twitter.ViewProviders
     public class AdminViewProvider : BaseViewProvider<TwitterSettings>
     {
 
-        private readonly ITwitterSettingsStore<TwitterSettings> _TwitterSettingsStore;
+        private readonly ITwitterSettingsStore<TwitterSettings> _twitterSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
         public AdminViewProvider(
-            ITwitterSettingsStore<TwitterSettings> TwitterSettingsStore,
+            ITwitterSettingsStore<TwitterSettings> twitterSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
             IPlatoHost platoHost)
         {
             _dataProtectionProvider = dataProtectionProvider;
-            _TwitterSettingsStore = TwitterSettingsStore;
+            _twitterSettingsStore = twitterSettingsStore;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
@@ -111,7 +111,7 @@ namespace Plato.Twitter.ViewProviders
                 };
 
                 // Persist the settings
-                var result = await _TwitterSettingsStore.SaveAsync(settings);
+                var result = await _twitterSettingsStore.SaveAsync(settings);
                 if (result != null)
                 {
                     // Recycle shell context to ensure changes take effect
@@ -127,7 +127,7 @@ namespace Plato.Twitter.ViewProviders
         async Task<TwitterSettingsViewModel> GetModel()
         {
 
-            var settings = await _TwitterSettingsStore.GetAsync();
+            var settings = await _twitterSettingsStore.GetAsync();
             if (settings != null)
             {
 

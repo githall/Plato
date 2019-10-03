@@ -70,9 +70,8 @@ namespace Plato.Site.Demo.ViewProviders
             if (context.Updater.ModelState.IsValid)
             {
 
-                // Encrypt the secret
+                // Encrypt the password
                 var adminPassword = string.Empty;
-
                 if (!string.IsNullOrWhiteSpace(model.AdminPassword))
                 {
                     try

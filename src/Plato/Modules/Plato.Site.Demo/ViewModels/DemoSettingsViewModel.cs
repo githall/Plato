@@ -1,12 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Plato.Site.Demo.ViewModels
+﻿namespace Plato.Site.Demo.ViewModels
 {
     public class DemoSettingsViewModel
     {
-
 
         public bool DemoEnabled { get; set; }
 
@@ -15,4 +10,5 @@ namespace Plato.Site.Demo.ViewModels
         public string AdminPassword { get; set; }
 
     }
+
 }

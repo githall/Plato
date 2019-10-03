@@ -4,8 +4,10 @@ using Plato.Internal.Navigation.Abstractions;
 
 namespace Plato.Site.Demo.Navigation
 {
+
     public class AdminMenu : INavigationProvider
     {
+
         public AdminMenu(IStringLocalizer<AdminMenu> localizer)
         {
             T = localizer;
