@@ -16,6 +16,7 @@ using Plato.Site.Demo.Services;
 using Plato.Internal.Models.Users;
 using Plato.Users.Services;
 using System.Collections.Generic;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Site.Demo.Controllers
 {
@@ -28,32 +29,104 @@ namespace Plato.Site.Demo.Controllers
                 new EntityDataDescriptor()
                 {
                     ModuleId = "Plato.Discuss",
-                    EntityType = "topic"
+                    EntityType = "topic",
+                    EntityRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Discuss",
+                        ["controller"] = "Home",
+                        ["action"] = "Display"
+                    },
+                    ReplyRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Discuss",
+                        ["controller"] = "Home",
+                        ["action"] = "Reply"
+                    }
                 },
                 new EntityDataDescriptor()
                 {
                     ModuleId = "Plato.Docs",
-                    EntityType = "doc"
+                    EntityType = "doc",
+                    EntityRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Docs",
+                        ["controller"] = "Home",
+                        ["action"] = "Display"
+                    },
+                    ReplyRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Docs",
+                        ["controller"] = "Home",
+                        ["action"] = "Reply"
+                    }
                 },
                 new EntityDataDescriptor()
                 {
                     ModuleId = "Plato.Articles",
-                    EntityType = "articles"
+                    EntityType = "articles",
+                    EntityRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Articles",
+                        ["controller"] = "Home",
+                        ["action"] = "Display"
+                    },
+                    ReplyRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Articles",
+                        ["controller"] = "Home",
+                        ["action"] = "Reply"
+                    }
                 },
                 new EntityDataDescriptor()
                 {
                     ModuleId = "Plato.Ideas",
-                    EntityType = "idea"
+                    EntityType = "idea",
+                    EntityRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Ideas",
+                        ["controller"] = "Home",
+                        ["action"] = "Display"
+                    },
+                    ReplyRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Ideas",
+                        ["controller"] = "Home",
+                        ["action"] = "Reply"
+                    }
                 },
                 new EntityDataDescriptor()
                 {
                     ModuleId = "Plato.Issues",
-                    EntityType = "issue"
+                    EntityType = "issue",
+                    EntityRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Issues",
+                        ["controller"] = "Home",
+                        ["action"] = "Display"
+                    },
+                    ReplyRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Issues",
+                        ["controller"] = "Home",
+                        ["action"] = "Reply"
+                    }
                 },
                 new EntityDataDescriptor()
                 {
                     ModuleId = "Plato.Questions",
-                    EntityType = "question"
+                    EntityType = "question",
+                    EntityRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Questions",
+                        ["controller"] = "Home",
+                        ["action"] = "Display"
+                    },
+                    ReplyRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Questions",
+                        ["controller"] = "Home",
+                        ["action"] = "Reply"
+                    }
                 }
             };
 

@@ -1,4 +1,8 @@
-﻿using Plato.Entities.Models;
+﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
+using System.Collections.Generic;
+using Plato.Entities.Models;
 using Plato.Entities.Services;
 using Plato.Internal.Abstractions;
 using Plato.Internal.Data.Abstractions;
@@ -7,10 +11,9 @@ using Plato.Internal.Models.Users;
 using Plato.Internal.Stores.Abstractions.Users;
 using Plato.Site.Demo.Models;
 using Plato.Users.Services;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
+using Microsoft.AspNetCore.Routing;
+using Plato.Internal.Hosting.Abstractions;
+using System.Text;
 
 namespace Plato.Site.Demo.Services
 {
@@ -20,41 +23,149 @@ namespace Plato.Site.Demo.Services
 
         Random _random;
 
+        public string[] Usernames = new string[]
+        {
+            "John D",
+            "Mark Dogs",
+            "Reverbe ",
+            "Johan",
+            "jcarreira ",
+            "tokyo2002 ",
+            "ebevernage",
+            "pwelter34",
+            "frankmonroe",
+            "tabs",
+            "johangw",
+            "raymak23",
+            "beats",
+            "Fred",
+            "shan",
+            "scottrudy",
+            "thechop",
+            "lyrog",
+            "daniel.gehr",
+            "Cedrik",
+            "nathanchase",
+            "MattPress",
+            "gert.oelof",
+            "abiniyam",
+            "austinh ",
+            "wasimf",
+            "project.ufa",
+            "einaradolfsen",
+            "bstj",
+            "samos",
+            "jintoppy",
+            "mhelin",
+            "eric-914",
+            "marcus85",
+            "leopetes",
+            "angaler1984",
+            "PeterMull",
+            "Stevie",
+            "coder90",
+            "sharah",
+            "Stephen25",
+            "P4a7ker",
+            "Tipsy",
+            "Ryan",
+            "AndyLivey",
+            "RobertW",
+            "ArronG",
+            "Aleena",
+            "Annie",
+            "Cassie",
+            "Lachlan",
+            "Summers",
+            "Isla",
+            "Greer55",
+            "Carry",
+            "Loulou",
+            "MPatterson",
+            "Padilla",
+            "dejavu1987",
+            "fjanon",
+            "project.ufa",
+            "vraptorche",
+            "appleskin",
+            "jintoppy",
+            "mhelin",
+            "NajiJzr",
+            "eric-914",
+            "cportermo",
+            "jack4it",
+            "sapocockas",
+            "srowan",
+            "atpw25",
+            "ralmlopez",
+            "PartyLineLimo",
+            "murdocj",
+            "unichan2018",
+            "eliemichael",
+            "typedef",
+            "MattEllison",
+            "JaiPundir",
+            "zyberzero",
+            "tim",
+            "zakjan",
+            "revered",
+            "Breaker222",
+            "xenod",
+            "mortenbrudv",
+            "cmd_shell",
+            "mcrose",
+            "cusdom",
+            "recruit-jp",
+            "house",
+            "TedProsoft",
+            "luison",
+            "fritz",
+            "eric",
+            "rossang",
+            "AlDennis",
+            "Oxid2178",
+            "CasiOo",
+            "JimShelly",
+            "cisco",
+            "ToadRage",
+            "ericedgar ",
+            "bryan",
+            "joshuaharderr",
+            "mvehar",
+            "arkadiusz-cholewa",
+            "necipakif",
+            "PeterEltgroth",
+            "redone218",
+            "iiiyx",
+            "seanmill",
+            "00ffx"
+        };
+
         private readonly IEntityReplyManager<EntityReply> _entityReplyManager;
         private readonly IPlatoUserManager<User> _platoUserManager;
         private readonly IEntityManager<Entity> _entityManager;
         private readonly IPlatoUserStore<User> _platoUserStore;    
         private readonly IFeatureFacade _featureFacade;
+        private readonly IContextFacade _contextFacade;
         private readonly IDbHelper _dbHelper;
-
-        // 1. Install sample categories 
-
-        // 2. Install sample labels 
-
-        // 3. Install sample tags 
-
-        // 4. Install sample entities 
-
-        // 5. Install sample entity replies?
 
         public DemoService(
             IEntityReplyManager<EntityReply> entityReplyManager,
             IPlatoUserManager<User> platoUserManager,
             IEntityManager<Entity> entityManager,            
             IPlatoUserStore<User> platoUserStore,
+            IContextFacade contextFacade,
             IFeatureFacade featureFacade,
             IDbHelper dbHelper)
         {
-
             _entityReplyManager = entityReplyManager;
             _platoUserManager = platoUserManager;
             _platoUserStore = platoUserStore;
             _entityManager = entityManager;
+            _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _dbHelper = dbHelper;
-
             _random = new Random();
-
         }
 
         // Entities
@@ -104,7 +215,7 @@ namespace Plato.Site.Demo.Services
             return output.Success();
 
         }
-        
+
         public async Task<ICommandResultBase> UninstallEntitiesAsync(EntityDataDescriptor descriptor)
         {
             return await UninstallEntitiesInternalAsync(descriptor);
@@ -127,14 +238,12 @@ namespace Plato.Site.Demo.Services
 
         }
 
-
         // Users
 
         public async Task<ICommandResultBase> InstallUsersAsync()
         {
             return await InstallUsersInternalAsync();
         }
-
 
         // ------------------
 
@@ -185,14 +294,47 @@ namespace Plato.Site.Demo.Services
             if (entityResult.Succeeded)
             {
 
+                var lastReplyId = string.Empty;
+                var lastReplyUserName = string.Empty;
+                var lastReplyMessage = string.Empty;
+
                 for (var i = 0; i < descriptor.EntityRepliesToCreate; i++)
                 {
               
                     randomUser = users[_random.Next(0, users.Count - 1)];
 
                     var message = GetReplyText(descriptor);
-                    message = message.Replace("{entityUserName}", entityResult.Response.CreatedBy.UserName);
+                    
                     message = message.Replace("{replyUserName}", randomUser?.UserName ?? "");
+
+                    message = message.Replace("{lastReplyId}", lastReplyId ?? "");
+                    message = message.Replace("{lastReplyMessage}", lastReplyMessage ?? "");
+                    message = message.Replace("{lastReplyQuotedMessage}", lastReplyMessage.Replace(System.Environment.NewLine, System.Environment.NewLine + "> ") ?? "");
+                    message = message.Replace("{lastReplyUserName}", lastReplyUserName ?? "");                    
+
+                    message = message.Replace("{entityId}", entityResult.Response.Id.ToString() ?? "");
+                    message = message.Replace("{entityTitle}", entityResult.Response.Title ?? "");
+                    message = message.Replace("{entityUserName}", entityResult.Response.CreatedBy.UserName);
+
+                    message = message.Replace("{mentionSample}", BuildMentionSampleMarkUp());
+
+
+                    if (descriptor.ReplyRoute != null) {
+
+                        var lastReplyRoute = new RouteValueDictionary()
+                        {
+                            ["area"] = descriptor.ReplyRoute["area"],
+                            ["controller"] = descriptor.ReplyRoute["controller"],
+                            ["action"] = descriptor.ReplyRoute["action"],
+                            ["opts.id"] = entityResult.Response.Id.ToString() ?? "",
+                            ["opts.alias"] = entityResult.Response.Alias.ToString() ?? "",
+                            ["opts.replyId"] = lastReplyId ?? ""
+                        };
+
+                        message = message.Replace("{lastReplyUrl}", _contextFacade.GetRouteUrl(lastReplyRoute));
+
+                    }
+
 
                     var reply = new EntityReply()
                     {
@@ -206,6 +348,11 @@ namespace Plato.Site.Demo.Services
                     {
                         return result.Failed();
                     }
+
+                    lastReplyId = replyResult.Response.Id.ToString();
+                    lastReplyMessage = replyResult.Response.Message;
+                    lastReplyUserName = replyResult.Response.CreatedBy.UserName;                    
+
                 }
             }
             else
@@ -214,6 +361,38 @@ namespace Plato.Site.Demo.Services
             }
 
             return result.Success();
+
+        }
+
+        string BuildMentionSampleMarkUp()
+        {
+
+            var i = 0;
+            var sb = new StringBuilder();
+            var userNames = new List<string>();
+            for (i = 0; i < _random.Next(4, 8); i++)
+            {                
+                var index = _random.Next(0, Usernames.Length - 1);
+                var username = Usernames[index];
+                if (userNames.Contains(username))
+                {
+                    continue;
+                }
+                userNames.Add(username);
+            }
+
+            i = 0;
+            foreach (var userName in userNames)
+            {
+                sb.Append("@").Append(userName);
+                if (i < userNames.Count)
+                {
+                    sb.Append(", ");
+                }
+                i++;
+            }
+
+            return sb.ToString();
 
         }
 
@@ -281,127 +460,9 @@ namespace Plato.Site.Demo.Services
         {
 
             // Our result
-            var result = new CommandResultBase();
+            var result = new CommandResultBase();                 
             
-            var usernames = new string[]
-                {
-                    "John D",
-                    "Mark Dogs",
-                    "Reverbe ",
-                    "Johan",
-                    "jcarreira ",
-                    "tokyo2002 ",
-                    "ebevernage",
-                    "pwelter34",
-                    "frankmonroe",
-                    "tabs",
-                    "johangw",
-                    "raymak23",
-                    "beats",
-                    "Fred",
-                    "shan",
-                    "scottrudy",
-                    "thechop",
-                    "lyrog",
-                    "daniel.gehr",
-                    "Cedrik",
-                    "nathanchase",
-                    "MattPress",
-                    "gert.oelof",
-                    "abiniyam",
-                    "austinh ",
-                    "wasimf",
-                    "project.ufa",
-                    "einaradolfsen",
-                    "bstj",
-                    "samos",
-                    "jintoppy",
-                    "mhelin",
-                    "eric-914",
-                    "marcus85",
-                    "leopetes",
-                    "angaler1984",
-                    "PeterMull",
-                    "Stevie",
-                    "coder90",
-                    "sharah",
-                    "Stephen25",
-                    "P4a7ker",
-                    "Tipsy",
-                    "Ryan",
-                    "AndyLivey",
-                    "RobertW",
-                    "ArronG",
-                    "Aleena",
-                    "Annie",
-                    "Cassie",
-                    "Lachlan",
-                    "Summers",
-                    "Isla",
-                    "Greer55",
-                    "Carry",
-                    "Loulou",
-                    "MPatterson",
-                    "Padilla",
-                    "dejavu1987",
-                    "fjanon",
-                    "project.ufa",
-                    "vraptorche",
-                    "appleskin",
-                    "jintoppy",
-                    "mhelin",
-                    "NajiJzr",
-                    "eric-914",
-                    "cportermo",
-                    "jack4it",
-                    "sapocockas",
-                    "srowan",
-                    "atpw25",
-                    "ralmlopez",
-                    "PartyLineLimo",
-                    "murdocj",
-                    "unichan2018",
-                    "eliemichael",
-                    "typedef",
-                    "MattEllison",
-                    "JaiPundir",
-                    "zyberzero",
-                    "tim",
-                    "zakjan",
-                    "revered",
-                    "Breaker222",
-                    "xenod",
-                    "mortenbrudv",
-                    "cmd_shell",
-                    "mcrose",
-                    "cusdom",
-                    "recruit-jp",
-                    "house",
-                    "TedProsoft",
-                    "luison",
-                    "fritz",
-                    "eric",
-                    "rossang",
-                    "AlDennis",
-                    "Oxid2178",
-                    "CasiOo",
-                    "JimShelly",
-                    "cisco",
-                    "ToadRage",
-                    "ericedgar ",
-                    "bryan",
-                    "joshuaharderr",
-                    "mvehar",
-                    "arkadiusz-cholewa",
-                    "necipakif",
-                    "PeterEltgroth",
-                    "redone218",
-                    "iiiyx",
-                    "seanmill",
-                    "00ffx"
-                };
-            
-            foreach (var username in usernames)
+            foreach (var username in Usernames)
             {
                 var displayName = username;
                 var userNAme = username;
@@ -450,7 +511,7 @@ namespace Plato.Site.Demo.Services
             return message;
 
         }
-     
+
         string ParseDescriptorTags(EntityDataDescriptor descriptor, string input)
         {
             input = input.Replace("{moduleId}", descriptor.ModuleId);
@@ -665,14 +726,40 @@ https://www.instantasp.co.uk/",
 
 {replyUserName}  
 https://plato.instantasp.co.uk/",
-            @"Hey @{entityUserName},
+        @"Hey @{entityUserName},
 
-Thanks for the post. I'm just an example reply but if I was a real person I would definately :heart: :heart: :heart: this.
+Thanks for the post. I'm just an example reply but if I was a real person I would definately :heart: this.
 
 -=: {replyUserName} :=-",
-              @"Thanks @{entityUserName},
+        @"Thanks @{entityUserName},
 
-I'm just an example reply but if I was a real person this would make me :grinning:
+I'm not actually a real person. I'm just an example reply to help demonstrate how Plato works. I'm populated automatically via a background process within Plato.
+
+Regards,  
+{replyUserName}",
+        @"Hey @{entityUserName},
+
+Did you know that Plato supports quoting replies. You can see a quoted reply below...
+
+> {lastReplyQuotedMessage}
+> ^^ In response to [{lastReplyUserName}]({lastReplyUrl})
+
+We can of course include some text after the quote. 
+
+-=: {replyUserName} :=-",
+        @"Did you know you can link to any other entity (topic, doc, article, question, idea or issue) within Plato using a # tag. Type the # character when composing a message within Plato to quickly search for and embed links to other entities.
+
+For example we can link to the {entityType} hosting this reply using a # character follwed by the entity ID like so #{entityId}. 
+
+You can also include option text for # references Like so #`entityId`(`optional link text`).
+
+You can see a hash link with link text here #{entityId}({entityTitle}) or just using the entity id like  #{entityId}.
+
+Regards,  
+{replyUserName}",
+        @"I'm just an example reply but did you know you can @ mention others within Plato. Type the @ character when composing any entity to search for and mention others. 
+
+For example here are some mentions {mentionSample} 
 
 Regards,  
 {replyUserName}",

@@ -132,7 +132,7 @@ namespace Plato.Entities.Subscribers
                 totalParticipants = GetTotalUniqueParticipantCount(replies.Data);
                 lastReply = replies.Data[0];
             }
-          
+
             // Update last reply 
             entity.TotalReplies = totalReplies;
             entity.TotalParticipants = totalParticipants;

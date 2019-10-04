@@ -17,6 +17,8 @@
 </head>
 <body>
 
+    <div id="top"></div>
+
     <assets section="Body" />
     <scripts section="Body" />
 
@@ -153,10 +155,10 @@
         }
         @RenderBody()
     </div>
-    
-   <footer>
+
+    <footer>
         <div class="container-fluid container-fluid-1280">
-            <hr class="mb-0"/>
+            <hr class="mb-0" />
             <div class="row py-4">
                 <div class="col-lg-6">
                     <p>&copy; @siteOpts.SiteName @System.DateTime.Now.Year</p>
@@ -171,6 +173,12 @@
             </div>
         </div>
     </footer>
+
+    <div class="slide-out slide-out-bottom-right" data-provide="slide-spy">
+        <a href="#top" data-provide="scroll" class="btn btn-primary" data-toggle="tooltip" title="@T["Back to Top"]">
+            <i class="fal fa-chevron-up  d-inline-block"></i>
+        </a>
+    </div>
 
     <assets section="Footer" />
     <scripts section="Footer" />
