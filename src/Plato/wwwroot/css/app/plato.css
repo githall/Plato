@@ -680,6 +680,12 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     margin-top: 0;
 }
 
+/* Ensure embedded media files have minimum dimensions  */
+.markdown-body iframe.img-fluid {    
+    min-height: 281px;
+    min-width: 500px;
+}
+
 /* ------------------------- */
 /* Grid system */
 /* ------------------------- */

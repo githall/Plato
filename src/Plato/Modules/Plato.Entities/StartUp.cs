@@ -84,7 +84,8 @@ namespace Plato.Entities
             services.AddScoped<IBrokerSubscriber, ParseEntityAliasSubscriber>();
             services.AddScoped<IBrokerSubscriber, ParseEntityUrlsSubscriber>();
             services.AddScoped<IBrokerSubscriber, ParseEntityHtmlSubscriber>();
-            
+            services.AddScoped<IBrokerSubscriber, EntityReplySubscriber<EntityReply>>();
+
             // Full text index providers
             services.AddScoped<IFullTextIndexProvider, FullTextIndexes>();
             

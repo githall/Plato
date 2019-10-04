@@ -109,11 +109,5 @@ namespace Plato.Markdown.Services
 
         #endregion
 
-
-        // --------------------------------
-
-
-
-
     }
 }
