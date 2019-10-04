@@ -13,10 +13,8 @@ using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.Alerts;
 using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.ViewProviders;
-using Plato.Internal.Models.Users;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Security.Abstractions;
-using Plato.Internal.Stores.Abstractions.Users;
 using Plato.Docs.Models;
 using Plato.Docs.Services;
 using Plato.Entities;
@@ -43,8 +41,7 @@ namespace Plato.Docs.Controllers
         private readonly IEntityReplyService<DocComment> _replyService;
         private readonly IReportEntityManager<Doc> _reportEntityManager;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IViewProviderManager<Doc> _docViewProvider;
-        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly IViewProviderManager<Doc> _docViewProvider;        
         private readonly IPostManager<DocComment> _replyManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
@@ -69,8 +66,7 @@ namespace Plato.Docs.Controllers
             IViewProviderManager<Doc> docViewProvider,
             IAuthorizationService authorizationService,
             IEntityReplyService<DocComment> replyService,
-            IPostManager<DocComment> replyManager,
-            IPlatoUserStore<User> platoUserStore,
+            IPostManager<DocComment> replyManager,            
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
             IClientIpAddress clientIpAddress,
@@ -89,8 +85,7 @@ namespace Plato.Docs.Controllers
             _entityReplyStore = entityReplyStore;
             _pageTitleBuilder = pageTitleBuilder;
             _docViewProvider = docViewProvider;
-            _clientIpAddress = clientIpAddress;
-            _platoUserStore = platoUserStore;
+            _clientIpAddress = clientIpAddress;            
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
             _replyService = replyService;
@@ -126,8 +121,6 @@ namespace Plato.Docs.Controllers
             {
                 pager = new PagerOptions();
             }
-
-            //await CreateSampleData();
 
             // Get default options
             var defaultViewOptions = new EntityIndexOptions();
@@ -2681,63 +2674,6 @@ namespace Plato.Docs.Controllers
             }
 
             return output;
-        }
-
-        // ------------
-
-        string GetSampleMarkDown(int number)
-        {
-            return @"Hi There, 
-
-This is just a sample post to demonstrate documentation within Plato.Docs use markdown for formatting and can be organized using tags, labels or channels. 
-
-You can add dozens of :large_blue_diamond: emojis :large_blue_diamond: and @mention other users within your posts. For example hey @admin.
-
-We hope you enjoy this early version of Plato :)
-
-Ryan :heartpulse: :heartpulse: :heartpulse:";
-
-        }
-
-        async Task CreateSampleData()
-        {
-            var users = await _platoUserStore.QueryAsync()
-                .OrderBy("LastLoginDate", OrderBy.Desc)
-                .ToList();
-
-            var rnd = new Random();
-            var totalUsers = users?.Total - 1 ?? 0;
-            var randomUser = users?.Data[rnd.Next(0, totalUsers)];
-            var feature = await _featureFacade.GetFeatureByIdAsync(RouteData.Values["area"].ToString());
-
-            var entity = new Doc()
-            {
-                Title = "Test Doc " + rnd.Next(0, 2000).ToString(),
-                Message = GetSampleMarkDown(rnd.Next(0, 2000)),
-                FeatureId = feature?.Id ?? 0,
-                CreatedUserId = randomUser?.Id ?? 0,
-                CreatedDate = DateTimeOffset.UtcNow
-            };
-
-            // create entity
-            var data = await _docManager.CreateAsync(entity);
-            if (data.Succeeded)
-            {
-                for (var i = 0; i < 25; i++)
-                {
-                    rnd = new Random();
-                    randomUser = users?.Data[rnd.Next(0, totalUsers)];
-
-                    var reply = new DocComment()
-                    {
-                        EntityId = data.Response.Id,
-                        Message = GetSampleMarkDown(i) + " - reply: " + i.ToString(),
-                        CreatedUserId = randomUser?.Id ?? 0,
-                        CreatedDate = DateTimeOffset.UtcNow
-                    };
-                    var newReply = await _replyManager.CreateAsync(reply);
-                }
-            }
         }
 
         #endregion

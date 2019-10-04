@@ -24,11 +24,9 @@ using Plato.Internal.Layout.Alerts;
 using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.Titles;
 using Plato.Internal.Layout.ViewProviders;
-using Plato.Internal.Models.Users;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Net.Abstractions;
 using Plato.Internal.Security.Abstractions;
-using Plato.Internal.Stores.Abstractions.Users;
 
 namespace Plato.Articles.Controllers
 {
@@ -43,8 +41,7 @@ namespace Plato.Articles.Controllers
         private readonly IViewProviderManager<Comment> _replyViewProvider;
         private readonly IEntityReplyStore<Comment> _entityReplyStore;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IEntityReplyService<Comment> _replyService;
-        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly IEntityReplyService<Comment> _replyService;        
         private readonly IPostManager<Article> _articleManager;
         private readonly IPostManager<Comment> _commentManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
@@ -70,8 +67,7 @@ namespace Plato.Articles.Controllers
             IAuthorizationService authorizationService,
             IEntityReplyService<Comment> replyService,
             IPostManager<Article> articleManager,
-            IPostManager<Comment> commentManager,
-            IPlatoUserStore<User> platoUserStore,
+            IPostManager<Comment> commentManager,            
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
             IEntityStore<Article> entityStore,
@@ -90,8 +86,7 @@ namespace Plato.Articles.Controllers
             _pageTitleBuilder = pageTitleBuilder;
             _entityReplyStore = entityReplyStore;
             _articleManager = articleManager;
-            _commentManager = commentManager;
-            _platoUserStore = platoUserStore;
+            _commentManager = commentManager;            
             _contextFacade = contextFacade;
             _clientIpAddress = clientIpAddress;
             _featureFacade = featureFacade;
@@ -109,7 +104,7 @@ namespace Plato.Articles.Controllers
         #region "Actions"
 
         // -----------------
-        // Latest
+        // Index
         // -----------------
 
         public async Task<IActionResult> Index(EntityIndexOptions opts, PagerOptions pager)
@@ -126,8 +121,6 @@ namespace Plato.Articles.Controllers
             {
                 pager = new PagerOptions();
             }
-            
-            //await CreateSampleData();
 
             // Get default options
             var defaultViewOptions = new EntityIndexOptions();
@@ -180,31 +173,6 @@ namespace Plato.Articles.Controllers
             // Return view
             return View((LayoutViewModel) await _entityViewProvider.ProvideIndexAsync(new Article(), this));
 
-        }
-
-        // -----------------
-        // Popular
-        // -----------------
-
-        public Task<IActionResult> Popular(EntityIndexOptions opts, PagerOptions pager)
-        {
-
-            // Default options
-            if (opts == null)
-            {
-                opts = new EntityIndexOptions();
-            }
-
-            // Default pager
-            if (pager == null)
-            {
-                pager = new PagerOptions();
-            }
-
-            opts.Sort = SortBy.Replies;
-            opts.Order = OrderBy.Desc;
-
-            return Index(opts, pager);
         }
 
         // -----------------
@@ -2352,61 +2320,6 @@ namespace Plato.Articles.Controllers
             }
 
             return output;
-        }
-        
-        // --------------
-
-        string GetSampleMarkDown(int number)
-        {
-            return @"This is just a sample article to demonstrate articles within Plato. Articles use markdown for formatting and can be organized using tags, labels or categories. 
-
-We hope you enjoy this early version of Plato :)
-
-Ryan :heartpulse: :heartpulse: :heartpulse:" + number;
-
-        }
-
-        async Task CreateSampleData()
-        {
-            
-            var users = await _platoUserStore.QueryAsync()
-                .OrderBy("LastLoginDate", OrderBy.Desc)
-                .ToList();
-
-            var rnd = new Random();
-            var totalUsers = users?.Data.Count - 1 ?? 0;
-            var randomUser = users?.Data[rnd.Next(0, totalUsers)];
-            var feature = await _featureFacade.GetFeatureByIdAsync(RouteData.Values["area"].ToString());
-
-            var entity = new Article()
-            {
-                Title = "Test Article " + rnd.Next(0, 2000).ToString(),
-                Message = GetSampleMarkDown(rnd.Next(0, 2000)),
-                FeatureId = feature?.Id ?? 0,
-                CreatedUserId = randomUser?.Id ?? 0,
-                CreatedDate = DateTimeOffset.UtcNow
-            };
-
-            // create entity
-            var data = await _articleManager.CreateAsync(entity);
-            if (data.Succeeded)
-            {
-                for (var i = 0; i < 25; i++)
-                {
-                    rnd = new Random();
-                    randomUser = users?.Data[rnd.Next(0, totalUsers)];
-
-                    var reply = new Comment()
-                    {
-                        EntityId = data.Response.Id,
-                        Message = GetSampleMarkDown(i) + " - comment : " + i.ToString(),
-                        CreatedUserId = randomUser?.Id ?? 0,
-                        CreatedDate = DateTimeOffset.UtcNow
-                    };
-                    var newReply = await _commentManager.CreateAsync(reply);
-                }
-            }
-
         }
 
         #endregion

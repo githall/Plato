@@ -24,11 +24,9 @@ using Plato.Internal.Layout.Alerts;
 using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.Titles;
 using Plato.Internal.Layout.ViewProviders;
-using Plato.Internal.Models.Users;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Net.Abstractions;
 using Plato.Internal.Security.Abstractions;
-using Plato.Internal.Stores.Abstractions.Users;
 
 namespace Plato.Issues.Controllers
 {
@@ -43,8 +41,7 @@ namespace Plato.Issues.Controllers
         private readonly IViewProviderManager<Issue> _entityViewProvider;
         private readonly IEntityReplyStore<Comment> _entityReplyStore;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IEntityReplyService<Comment> _replyService;
-        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly IEntityReplyService<Comment> _replyService;        
         private readonly IPostManager<Comment> _commentManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
@@ -72,7 +69,6 @@ namespace Plato.Issues.Controllers
             IAuthorizationService authorizationService,
             IEntityReplyService<Comment> replyService,
             IBreadCrumbManager breadCrumbManager,
-            IPlatoUserStore<User> platoUserStore,
             IPostManager<Comment> commentManager,
             IPageTitleBuilder pageTitleBuilder,
             IClientIpAddress clientIpAddress,
@@ -91,15 +87,14 @@ namespace Plato.Issues.Controllers
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
             _entityReplyStore = entityReplyStore;
-            _platoUserStore = platoUserStore;
+            _clientIpAddress = clientIpAddress;
             _commentManager = commentManager;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _replyService = replyService;
             _issueManager = issueManager;
             _entityStore = entityStore;
-            _alerter = alerter;
-            _clientIpAddress = clientIpAddress;
+            _alerter = alerter;            
 
             T = localizer;
             S = stringLocalizer;
@@ -129,8 +124,6 @@ namespace Plato.Issues.Controllers
                 pager = new PagerOptions();
             }
             
-            //await CreateSampleData();
-
             // Get default options
             var defaultViewOptions = new EntityIndexOptions();
             var defaultPagerOptions = new PagerOptions();
@@ -2431,66 +2424,8 @@ namespace Plato.Issues.Controllers
             }
 
             return output;
-        }
+        }        
         
-        // --------------
-
-        string GetSampleMarkDown(int number)
-        {
-            return @"Hi There, 
-
-This is just a sample issue to demonstrate issues within Plato. Issues use markdown for formatting and can be organized using tags, labels or categories. 
-
-We hope you enjoy this early version of Plato :)
-
-        string GetSampleMarkDown(int number)
-Ryan :heartpulse: :heartpulse: :heartpulse:" + number;
-
-        }
-
-        async Task CreateSampleData()
-        {
-            
-            var users = await _platoUserStore.QueryAsync()
-                .OrderBy("LastLoginDate", OrderBy.Desc)
-                .ToList();
-
-            var rnd = new Random();
-            var totalUsers = users?.Data.Count - 1 ?? 0;
-            var randomUser = users?.Data[rnd.Next(0, totalUsers)];
-            var feature = await _featureFacade.GetFeatureByIdAsync(RouteData.Values["area"].ToString());
-
-            var entity = new Issue()
-            {
-                Title = "Test Issue " + rnd.Next(0, 2000).ToString(),
-                Message = GetSampleMarkDown(rnd.Next(0, 2000)),
-                FeatureId = feature?.Id ?? 0,
-                CreatedUserId = randomUser?.Id ?? 0,
-                CreatedDate = DateTimeOffset.UtcNow
-            };
-
-            // create entity
-            var data = await _issueManager.CreateAsync(entity);
-            if (data.Succeeded)
-            {
-                for (var i = 0; i < 25; i++)
-                {
-                    rnd = new Random();
-                    randomUser = users?.Data[rnd.Next(0, totalUsers)];
-
-                    var reply = new Comment()
-                    {
-                        EntityId = data.Response.Id,
-                        Message = GetSampleMarkDown(i) + " - comment : " + i.ToString(),
-                        CreatedUserId = randomUser?.Id ?? 0,
-                        CreatedDate = DateTimeOffset.UtcNow
-                    };
-                    var newReply = await _commentManager.CreateAsync(reply);
-                }
-            }
-
-        }
-
         #endregion
 
     }

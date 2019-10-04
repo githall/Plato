@@ -101,8 +101,8 @@ namespace Plato.Site.Demo.Controllers
             
         }
 
-        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
-        public async Task<IActionResult> InstallEntities(DemoSettingsViewModel viewModel)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InstallEntities()
         {
 
             var result = await _demoService.InstallEntitiesAsync("Plato.Discuss");
@@ -130,8 +130,8 @@ namespace Plato.Site.Demo.Controllers
 
         }
 
-        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
-        public async Task<IActionResult> InstallUsers(DemoSettingsViewModel viewModel)
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InstallUsers()
         {
 
             var result = await _demoService.InstallUsersAsync();

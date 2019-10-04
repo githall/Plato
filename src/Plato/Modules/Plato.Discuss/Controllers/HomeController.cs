@@ -13,10 +13,8 @@ using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.Alerts;
 using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.ViewProviders;
-using Plato.Internal.Models.Users;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Security.Abstractions;
-using Plato.Internal.Stores.Abstractions.Users;
 using Plato.Discuss.Models;
 using Plato.Discuss.Services;
 using Plato.Entities;
@@ -28,7 +26,6 @@ using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Layout;
 using Plato.Internal.Layout.Titles;
 using Plato.Internal.Net.Abstractions;
-using Plato.Entities.Extensions;
 using Plato.Internal.Abstractions;
 
 namespace Plato.Discuss.Controllers
@@ -45,8 +42,7 @@ namespace Plato.Discuss.Controllers
         private readonly IViewProviderManager<Reply> _replyViewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityReplyStore<Reply> _entityReplyStore;
-        private readonly IEntityReplyService<Reply> _replyService;
-        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly IEntityReplyService<Reply> _replyService;        
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IClientIpAddress _clientIpAddress;
@@ -70,8 +66,7 @@ namespace Plato.Discuss.Controllers
             IViewProviderManager<Reply> replyViewProvider,
             IAuthorizationService authorizationService,
             IEntityReplyStore<Reply> entityReplyStore,
-            IEntityReplyService<Reply> replyService,
-            IPlatoUserStore<User> platoUserStore,
+            IEntityReplyService<Reply> replyService,            
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
             IClientIpAddress clientIpAddress,
@@ -90,8 +85,7 @@ namespace Plato.Discuss.Controllers
             _replyViewProvider = replyViewProvider;
             _entityReplyStore = entityReplyStore;
             _pageTitleBuilder = pageTitleBuilder;
-            _clientIpAddress = clientIpAddress;
-            _platoUserStore = platoUserStore;
+            _clientIpAddress = clientIpAddress;            
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
             _replyManager = replyManager;
@@ -127,8 +121,6 @@ namespace Plato.Discuss.Controllers
             {
                 pager = new PagerOptions();
             }
-
-            //await CreateSampleData();
 
             // Get default options
             var defaultViewOptions = new EntityIndexOptions();
@@ -2337,63 +2329,6 @@ namespace Plato.Discuss.Controllers
             }
 
             return output;
-        }
-
-        // ------------
-
-        string GetSampleMarkDown(int number)
-        {
-            return @"Hi There, 
-
-This is just a sample post to demonstrate discussions within Plato. Discussions use markdown for formatting and can be organized using tags, labels or channels. 
-
-You can add dozens of :large_blue_diamond: emojis :large_blue_diamond: and @mention other users within your posts. For example hey @admin.
-
-We hope you enjoy this early version of Plato :)
-
-Ryan :heartpulse: :heartpulse: :heartpulse:";
-
-        }
-
-        async Task CreateSampleData()
-        {
-            var users = await _platoUserStore.QueryAsync()
-                .OrderBy("LastLoginDate", OrderBy.Desc)
-                .ToList();
-
-            var rnd = new Random();
-            var totalUsers = users?.Total - 1 ?? 0;
-            var randomUser = users?.Data[rnd.Next(0, totalUsers)];
-            var feature = await _featureFacade.GetFeatureByIdAsync(RouteData.Values["area"].ToString());
-
-            var entity = new Topic()
-            {
-                Title = "Test Topic " + rnd.Next(0, 2000).ToString(),
-                Message = GetSampleMarkDown(rnd.Next(0, 2000)),
-                FeatureId = feature?.Id ?? 0,
-                CreatedUserId = randomUser?.Id ?? 0,
-                CreatedDate = DateTimeOffset.UtcNow
-            };
-
-            // create topic
-            var data = await _topicManager.CreateAsync(entity);
-            if (data.Succeeded)
-            {
-                for (var i = 0; i < 28; i++)
-                {
-                    rnd = new Random();
-                    randomUser = users?.Data[rnd.Next(0, totalUsers)];
-
-                    var reply = new Reply()
-                    {
-                        EntityId = data.Response.Id,
-                        Message = GetSampleMarkDown(i) + " - reply: " + i.ToString(),
-                        CreatedUserId = randomUser?.Id ?? 0,
-                        CreatedDate = DateTimeOffset.UtcNow
-                    };
-                    var newReply = await _replyManager.CreateAsync(reply);
-                }
-            }
         }
 
         #endregion

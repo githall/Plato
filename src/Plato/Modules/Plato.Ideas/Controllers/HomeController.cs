@@ -46,8 +46,7 @@ namespace Plato.Ideas.Controllers
         private readonly IViewProviderManager<Idea> _entityViewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IPostManager<IdeaComment> _replyManager;
-        private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly IBreadCrumbManager _breadCrumbManager;        
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IClientIpAddress _clientIpAddress;
         private readonly IPostManager<Idea> _ideaManager;
@@ -73,7 +72,6 @@ namespace Plato.Ideas.Controllers
             IAuthorizationService authorizationService,
             IPostManager<IdeaComment> replyManager,
             IBreadCrumbManager breadCrumbManager,
-            IPlatoUserStore<User> platoUserStore,
             IPageTitleBuilder pageTitleBuilder,
             IClientIpAddress clientIpAddress,
             IPostManager<Idea> ideaManager,
@@ -92,8 +90,7 @@ namespace Plato.Ideas.Controllers
             _replyViewProvider = replyViewProvider;
             _entityReplyStore = entityReplyStore;
             _pageTitleBuilder = pageTitleBuilder;
-            _clientIpAddress = clientIpAddress;
-            _platoUserStore = platoUserStore;
+            _clientIpAddress = clientIpAddress;            
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _replyService = replyService;
@@ -129,8 +126,6 @@ namespace Plato.Ideas.Controllers
             {
                 pager = new PagerOptions();
             }
-            
-            //await CreateSampleData();
 
             // Get default options
             var defaultViewOptions = new EntityIndexOptions();

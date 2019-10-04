@@ -7407,32 +7407,33 @@ $(function (win, doc, $) {
 
 $(function (win, doc, $) {
 
-    'use strict';
+    'use strict';        
 
-    // formAction
-    // ------------------
-    // Accomodate for custom "formaction" attributes added
-    // when using multiple submit elements for example...
-    // <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">
-    //      <i class="fal fa-trash"></i>      
-    // </button>
-    // Produces the following HTML...
-    // <button type="submit" formaction="/action">
-    //      <i class="fal fa-trash"></i>
-    //      Delete
-    // </button>
+    var app = win.$.Plato;
 
-    var app = win.$.Plato,
-        formAction = null;
+    app.ready(function () {    
 
-    app.ready(function () {
-        // Populate formAction on any submit click
+        // Accomodate for custom "formaction" attributes added
+        // when using multiple submit elements within a single form
+        // For example...
+        // <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">
+        //      <i class="fal fa-trash"></i>      
+        // </button>
+        // Produces the following HTML...
+        // <button type="submit" formaction="/action">
+        //      <i class="fal fa-trash"></i>
+        //      Delete
+        // </button>
         $('*[type="submit"]').click(function () {
-            var attr = $(this).attr("formaction");
-            if (attr) {
-                formAction = attr;
+            var action = $(this).attr("formaction");          
+            if (action) {
+                var $form = $(this).closest("form");
+                if ($form.length > 0) {
+                    $form[0].action = action;
+                }               
             }
         });
+
     });
 
     // Update jQuery validation defaults
@@ -7445,12 +7446,6 @@ $(function (win, doc, $) {
                 $form.find('*[type="submit"]')
                     .addClass("disabled")
                     .attr("disabled", "disabled");
-            }
-
-            // Do we need to update the form action?
-            if (formAction) {
-                form.action = formAction;
-                formAction = null;
             }
 
             // Note don't call $(form).submit() as this 

@@ -4,6 +4,8 @@
     var platoOpts = GetOptions<PlatoOptions>();
     var isDemo = platoOpts?.DemoMode ?? false;
 }
+    
+<div asp-validation-summary="All"></div>
 
 <div class="row">
     <div class="col-lg-6">
@@ -81,10 +83,10 @@
             </card-title>
             <card-body>
                 <p>
-                    <button class="btn btn-secondary" asp-route="InstallUsers" type="submit">@T["Add Sample Users"]</button>
+                    <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallUsers" type="submit">@T["Add Sample Users"]</button>
                 </p>
                 <p>
-                    <button class="btn btn-secondary" asp-route="InstallEntities" type="submit">@T["Add Sample Entities"]</button>
+                    <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallEntities" type="submit">@T["Add Sample Entities"]</button>
                 </p>
             </card-body>
         </card>
