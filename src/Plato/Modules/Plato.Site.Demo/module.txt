@@ -9,7 +9,19 @@ Icon: /plato.site.demo/content/images/icon.png
 Dependencies: 
 [
 	{
-		Id: "Plato.WebAPI",
+		Id: "Plato.Entities",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Categories",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Labels",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Tags",
 		Version: "1.0.0"
 	},
 	{

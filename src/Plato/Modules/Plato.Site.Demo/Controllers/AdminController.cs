@@ -12,6 +12,9 @@ using Plato.Internal.Navigation;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Security.Abstractions;
+using Plato.Site.Demo.Services;
+using Plato.Internal.Models.Users;
+using Plato.Users.Services;
 
 namespace Plato.Site.Demo.Controllers
 {
@@ -20,7 +23,9 @@ namespace Plato.Site.Demo.Controllers
     {
         private readonly IViewProviderManager<DemoSettings> _viewProvider;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IPlatoUserManager<User> _platoUserManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly IDemoService _demoService;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -32,13 +37,17 @@ namespace Plato.Site.Demo.Controllers
             IStringLocalizer<AdminController> stringLocalizer,
             IViewProviderManager<DemoSettings> viewProvider,
             IAuthorizationService authorizationService,
+             IPlatoUserManager<User> platoUserManager,
             IBreadCrumbManager breadCrumbManager,
+            IDemoService demoService,
             IAlerter alerter)
         {
        
             _authorizationService = authorizationService;
             _breadCrumbManager = breadCrumbManager;
+            _platoUserManager = platoUserManager;
             _viewProvider = viewProvider;
+            _demoService = demoService;
             _alerter = alerter;
 
             T = htmlLocalizer;
@@ -83,14 +92,73 @@ namespace Plato.Site.Demo.Controllers
 
             // Execute view providers ProvideUpdateAsync method
             await _viewProvider.ProvideUpdateAsync(new DemoSettings(), this);
-        
+
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);
-      
+
+            // Reidrect to success
             return RedirectToAction(nameof(Index));
             
         }
-      
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
+        public async Task<IActionResult> InstallEntities(DemoSettingsViewModel viewModel)
+        {
+
+            var result = await _demoService.InstallEntitiesAsync("Plato.Discuss");
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Data Added Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
+        public async Task<IActionResult> InstallUsers(DemoSettingsViewModel viewModel)
+        {
+
+            var result = await _demoService.InstallUsersAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Data Added Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
     }
 
 }

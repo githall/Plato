@@ -2253,7 +2253,7 @@ namespace Plato.Ideas.Controllers
             return result.Success();
 
         }
-        
+
         async Task<EntityIndexViewModel<Idea>> GetIndexViewModelAsync(EntityIndexOptions options, PagerOptions pager)
         {
 
@@ -2332,64 +2332,6 @@ namespace Plato.Ideas.Controllers
             return output;
         }
         
-        // --------------
-
-        string GetSampleMarkDown(int number)
-        {
-            return @"Hi There, 
-
-This is just a sample idea to demonstrate idea within Plato.Ideas use markdown for formatting and can be organized using tags, labels or categories. 
-
-We hope you enjoy this early version of Plato :)
-
-        string GetSampleMarkDown(int number)
-Ryan :heartpulse: :heartpulse: :heartpulse:" + number;
-
-        }
-
-        async Task CreateSampleData()
-        {
-            
-            var users = await _platoUserStore.QueryAsync()
-                .OrderBy("LastLoginDate", OrderBy.Desc)
-                .ToList();
-
-            var rnd = new Random();
-            var totalUsers = users?.Data.Count - 1 ?? 0;
-            var randomUser = users?.Data[rnd.Next(0, totalUsers)];
-            var feature = await _featureFacade.GetFeatureByIdAsync(RouteData.Values["area"].ToString());
-
-            var topic = new Idea()
-            {
-                Title = "Test Idea " + rnd.Next(0, 2000).ToString(),
-                Message = GetSampleMarkDown(rnd.Next(0, 2000)),
-                FeatureId = feature?.Id ?? 0,
-                CreatedUserId = randomUser?.Id ?? 0,
-                CreatedDate = DateTimeOffset.UtcNow
-            };
-
-            // create topic
-            var data = await _ideaManager.CreateAsync(topic);
-            if (data.Succeeded)
-            {
-                for (var i = 0; i < 25; i++)
-                {
-                    rnd = new Random();
-                    randomUser = users?.Data[rnd.Next(0, totalUsers)];
-
-                    var reply = new IdeaComment()
-                    {
-                        EntityId = data.Response.Id,
-                        Message = GetSampleMarkDown(i) + " - comment : " + i.ToString(),
-                        CreatedUserId = randomUser?.Id ?? 0,
-                        CreatedDate = DateTimeOffset.UtcNow
-                    };
-                    var newReply = await _replyManager.CreateAsync(reply);
-                }
-            }
-
-        }
-
         #endregion
 
     }

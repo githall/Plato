@@ -13,11 +13,10 @@
         @T["Plato Dashboard"]
     </h6>
     <p>
-        @T["Use the button below to login using the demo administrator account and visit the Plato administrator dashboard. Once logged in you can fully explore Plato using the demo administrator account..."]
+        @T["Use the button below to automatically login using the demo administrator account and visit the Plato administrator dashboard. Once logged in you can fully explore Plato using the demo administrator account..."]
     </p>
     <button id="btnDemoLogin" asp-route-area="Plato.Site.Demo" asp-route-controller="Home" asp-route-action="Login" class="btn btn-primary" type="button" role="button">@T["Goto Dashboard"]</button>      
     <script section="Footer">
-
         $(function (win, doc, $) {
 
             'use strict';
@@ -54,7 +53,6 @@
             })
 
         }(window, document, jQuery));
-
     </script>
 }
 
