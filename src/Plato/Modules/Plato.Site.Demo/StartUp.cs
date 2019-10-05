@@ -58,7 +58,8 @@ namespace Plato.Site.Demo
             services.AddScoped<IViewProvider<UserLogin>, LoginViewProvider>();
 
             // Services
-            services.AddScoped<IDemoService, DemoService>();
+            services.AddScoped<ISampleEntitiesService, SampleEntitiesService>();
+            services.AddScoped<ISampleUsersService, SampleUsersService>();
 
             // Permissions provider
             //services.AddScoped<IPermissionsProvider<Permission>, Permissions>();            

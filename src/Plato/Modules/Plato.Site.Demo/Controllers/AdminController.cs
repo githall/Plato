@@ -23,118 +23,14 @@ namespace Plato.Site.Demo.Controllers
 
     public class AdminController : Controller, IUpdateModel
     {
-
-        private readonly List<EntityDataDescriptor> _entityDataDescriptors = new List<EntityDataDescriptor>()
-            {
-                new EntityDataDescriptor()
-                {
-                    ModuleId = "Plato.Discuss",
-                    EntityType = "topic",
-                    EntityRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Discuss",
-                        ["controller"] = "Home",
-                        ["action"] = "Display"
-                    },
-                    ReplyRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Discuss",
-                        ["controller"] = "Home",
-                        ["action"] = "Reply"
-                    }
-                },
-                new EntityDataDescriptor()
-                {
-                    ModuleId = "Plato.Docs",
-                    EntityType = "doc",
-                    EntityRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Docs",
-                        ["controller"] = "Home",
-                        ["action"] = "Display"
-                    },
-                    ReplyRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Docs",
-                        ["controller"] = "Home",
-                        ["action"] = "Reply"
-                    }
-                },
-                new EntityDataDescriptor()
-                {
-                    ModuleId = "Plato.Articles",
-                    EntityType = "articles",
-                    EntityRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Articles",
-                        ["controller"] = "Home",
-                        ["action"] = "Display"
-                    },
-                    ReplyRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Articles",
-                        ["controller"] = "Home",
-                        ["action"] = "Reply"
-                    }
-                },
-                new EntityDataDescriptor()
-                {
-                    ModuleId = "Plato.Ideas",
-                    EntityType = "idea",
-                    EntityRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Ideas",
-                        ["controller"] = "Home",
-                        ["action"] = "Display"
-                    },
-                    ReplyRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Ideas",
-                        ["controller"] = "Home",
-                        ["action"] = "Reply"
-                    }
-                },
-                new EntityDataDescriptor()
-                {
-                    ModuleId = "Plato.Issues",
-                    EntityType = "issue",
-                    EntityRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Issues",
-                        ["controller"] = "Home",
-                        ["action"] = "Display"
-                    },
-                    ReplyRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Issues",
-                        ["controller"] = "Home",
-                        ["action"] = "Reply"
-                    }
-                },
-                new EntityDataDescriptor()
-                {
-                    ModuleId = "Plato.Questions",
-                    EntityType = "question",
-                    EntityRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Questions",
-                        ["controller"] = "Home",
-                        ["action"] = "Display"
-                    },
-                    ReplyRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Questions",
-                        ["controller"] = "Home",
-                        ["action"] = "Reply"
-                    }
-                }
-            };
-
+    
         private readonly IViewProviderManager<DemoSettings> _viewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IPlatoUserManager<User> _platoUserManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IDemoService _demoService;
+        private readonly ISampleEntitiesService _sampleEntitiesService;
+        private readonly ISampleUsersService _sampleUsersService;
+
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -145,18 +41,20 @@ namespace Plato.Site.Demo.Controllers
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
             IViewProviderManager<DemoSettings> viewProvider,
+            ISampleEntitiesService sampleEntitiesService,
             IAuthorizationService authorizationService,
              IPlatoUserManager<User> platoUserManager,
+             ISampleUsersService sampleUsersService,
             IBreadCrumbManager breadCrumbManager,
-            IDemoService demoService,
             IAlerter alerter)
         {
-       
+
+            _sampleEntitiesService = sampleEntitiesService;
             _authorizationService = authorizationService;
+            _sampleUsersService = sampleUsersService;
             _breadCrumbManager = breadCrumbManager;
             _platoUserManager = platoUserManager;
-            _viewProvider = viewProvider;
-            _demoService = demoService;
+            _viewProvider = viewProvider;            
             _alerter = alerter;
 
             T = htmlLocalizer;
@@ -216,7 +114,7 @@ namespace Plato.Site.Demo.Controllers
         public async Task<IActionResult> InstallEntities()
         {
 
-            var result = await _demoService.InstallEntitiesAsync(_entityDataDescriptors);
+            var result = await _sampleEntitiesService.InstallAsync();
             if (result.Succeeded)
             {
 
@@ -245,7 +143,7 @@ namespace Plato.Site.Demo.Controllers
         public async Task<IActionResult> UninstallEntities()
         {
 
-            var result = await _demoService.UninstallEntitiesAsync(_entityDataDescriptors);
+            var result = await _sampleEntitiesService.UninstallAsync();
             if (result.Succeeded)
             {
 
@@ -276,7 +174,7 @@ namespace Plato.Site.Demo.Controllers
         public async Task<IActionResult> InstallUsers()
         {
 
-            var result = await _demoService.InstallUsersAsync();
+            var result = await _sampleUsersService.InstallAsync();
             if (result.Succeeded)
             {
 

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Text;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -10,148 +11,62 @@ using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Models.Users;
 using Plato.Internal.Stores.Abstractions.Users;
 using Plato.Site.Demo.Models;
-using Plato.Users.Services;
 using Microsoft.AspNetCore.Routing;
 using Plato.Internal.Hosting.Abstractions;
-using System.Text;
 
 namespace Plato.Site.Demo.Services
 {
-     
-    public class DemoService : IDemoService
+
+    public class SampleEntitiesService : ISampleEntitiesService
     {
 
-        Random _random;
-
-        public string[] Usernames = new string[]
+        private readonly List<SampleDataDescriptor> Descriptors = new List<SampleDataDescriptor>()
         {
-            "John D",
-            "Mark Dogs",
-            "Reverbe ",
-            "Johan",
-            "jcarreira ",
-            "tokyo2002 ",
-            "ebevernage",
-            "pwelter34",
-            "frankmonroe",
-            "tabs",
-            "johangw",
-            "raymak23",
-            "beats",
-            "Fred",
-            "shan",
-            "scottrudy",
-            "thechop",
-            "lyrog",
-            "daniel.gehr",
-            "Cedrik",
-            "nathanchase",
-            "MattPress",
-            "gert.oelof",
-            "abiniyam",
-            "austinh ",
-            "wasimf",
-            "project.ufa",
-            "einaradolfsen",
-            "bstj",
-            "samos",
-            "jintoppy",
-            "mhelin",
-            "eric-914",
-            "marcus85",
-            "leopetes",
-            "angaler1984",
-            "PeterMull",
-            "Stevie",
-            "coder90",
-            "sharah",
-            "Stephen25",
-            "P4a7ker",
-            "Tipsy",
-            "Ryan",
-            "AndyLivey",
-            "RobertW",
-            "ArronG",
-            "Aleena",
-            "Annie",
-            "Cassie",
-            "Lachlan",
-            "Summers",
-            "Isla",
-            "Greer55",
-            "Carry",
-            "Loulou",
-            "MPatterson",
-            "Padilla",
-            "dejavu1987",
-            "fjanon",
-            "project.ufa",
-            "vraptorche",
-            "appleskin",
-            "jintoppy",
-            "mhelin",
-            "NajiJzr",
-            "eric-914",
-            "cportermo",
-            "jack4it",
-            "sapocockas",
-            "srowan",
-            "atpw25",
-            "ralmlopez",
-            "PartyLineLimo",
-            "murdocj",
-            "unichan2018",
-            "eliemichael",
-            "typedef",
-            "MattEllison",
-            "JaiPundir",
-            "zyberzero",
-            "tim",
-            "zakjan",
-            "revered",
-            "Breaker222",
-            "xenod",
-            "mortenbrudv",
-            "cmd_shell",
-            "mcrose",
-            "cusdom",
-            "recruit-jp",
-            "house",
-            "TedProsoft",
-            "luison",
-            "fritz",
-            "eric",
-            "rossang",
-            "AlDennis",
-            "Oxid2178",
-            "CasiOo",
-            "JimShelly",
-            "cisco",
-            "ToadRage",
-            "ericedgar ",
-            "bryan",
-            "joshuaharderr",
-            "mvehar",
-            "arkadiusz-cholewa",
-            "necipakif",
-            "PeterEltgroth",
-            "redone218",
-            "iiiyx",
-            "seanmill",
-            "00ffx"
+            new SampleDataDescriptor()
+            {
+                ModuleId = "Plato.Discuss",
+                EntityType = "topic"
+            },
+            new SampleDataDescriptor()
+            {
+                ModuleId = "Plato.Docs",
+                EntityType = "doc",
+            },
+            new SampleDataDescriptor()
+            {
+                ModuleId = "Plato.Articles",
+                EntityType = "articles",
+            },
+            new SampleDataDescriptor()
+            {
+                ModuleId = "Plato.Ideas",
+                EntityType = "idea"
+            },
+            new SampleDataDescriptor()
+            {
+                ModuleId = "Plato.Issues",
+                EntityType = "issue"
+            },
+            new SampleDataDescriptor()
+            {
+                ModuleId = "Plato.Questions",
+                EntityType = "question"
+            }
         };
 
-        private readonly IEntityReplyManager<EntityReply> _entityReplyManager;
-        private readonly IPlatoUserManager<User> _platoUserManager;
+        Random _random;
+        
+        private readonly IEntityReplyManager<EntityReply> _entityReplyManager;  
+        private readonly ISampleUsersService _sampleUsersService;
         private readonly IEntityManager<Entity> _entityManager;
         private readonly IPlatoUserStore<User> _platoUserStore;    
         private readonly IFeatureFacade _featureFacade;
-        private readonly IContextFacade _contextFacade;
+        private readonly IContextFacade _contextFacade;        
         private readonly IDbHelper _dbHelper;
 
-        public DemoService(
-            IEntityReplyManager<EntityReply> entityReplyManager,
-            IPlatoUserManager<User> platoUserManager,
+        public SampleEntitiesService(
+            IEntityReplyManager<EntityReply> entityReplyManager, 
+            ISampleUsersService sampleUsersService,
             IEntityManager<Entity> entityManager,            
             IPlatoUserStore<User> platoUserStore,
             IContextFacade contextFacade,
@@ -159,7 +74,7 @@ namespace Plato.Site.Demo.Services
             IDbHelper dbHelper)
         {
             _entityReplyManager = entityReplyManager;
-            _platoUserManager = platoUserManager;
+            _sampleUsersService = sampleUsersService;               
             _platoUserStore = platoUserStore;
             _entityManager = entityManager;
             _contextFacade = contextFacade;
@@ -170,40 +85,12 @@ namespace Plato.Site.Demo.Services
 
         // Entities
 
-        public async Task<ICommandResultBase> InstallEntitiesAsync(EntityDataDescriptor descriptor)
+ 
+        public async Task<ICommandResultBase> InstallAsync()
         {
 
             var output = new CommandResultBase();
-            
-            // Get sample users
-            var users = await _platoUserStore.QueryAsync()
-                .OrderBy("LastLoginDate", OrderBy.Desc)
-                .ToList();
-
-            // We need sample users to create sample entities
-            if (users == null || users.Data == null)
-            {
-                return output.Failed("You must create sample users first!");
-            }
-
-            for (var i = 0; i < descriptor.EntitiesToCreate; i++)
-            {
-                var result =  await InstallEntitiesInternalAsync(descriptor, users?.Data);
-                if (!result.Succeeded)
-                {
-                    return output.Failed(result.Errors.ToArray());
-                }
-            }
-
-            return output.Success();
-
-        }
-
-        public async Task<ICommandResultBase> InstallEntitiesAsync(IEnumerable<EntityDataDescriptor> descriptors)
-        {
-
-            var output = new CommandResultBase();
-            foreach (var descriptor in descriptors)
+            foreach (var descriptor in Descriptors)
             {
                 var result = await InstallEntitiesAsync(descriptor);
                 if (!result.Succeeded)
@@ -216,16 +103,11 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        public async Task<ICommandResultBase> UninstallEntitiesAsync(EntityDataDescriptor descriptor)
-        {
-            return await UninstallEntitiesInternalAsync(descriptor);
-        }
-
-        public async Task<ICommandResultBase> UninstallEntitiesAsync(IEnumerable<EntityDataDescriptor> descriptors)
+        public async Task<ICommandResultBase> UninstallAsync()
         {
 
             var output = new CommandResultBase();
-            foreach (var descriptor in descriptors)
+            foreach (var descriptor in Descriptors)
             {
                 var result = await UninstallEntitiesAsync(descriptor);
                 if (!result.Succeeded)
@@ -240,14 +122,45 @@ namespace Plato.Site.Demo.Services
 
         // Users
 
-        public async Task<ICommandResultBase> InstallUsersAsync()
-        {
-            return await InstallUsersInternalAsync();
-        }
 
         // ------------------
 
-        async Task<ICommandResultBase> InstallEntitiesInternalAsync(EntityDataDescriptor descriptor, IList<User> users)
+
+        async Task<ICommandResultBase> InstallEntitiesAsync(SampleDataDescriptor descriptor)
+        {
+
+            var output = new CommandResultBase();
+
+            // Get sample users
+            var users = await _platoUserStore.QueryAsync()
+                .OrderBy("LastLoginDate", OrderBy.Desc)
+                .ToList();
+
+            // We need sample users to create sample entities
+            if (users == null || users.Data == null)
+            {
+                return output.Failed("You must create sample users first!");
+            }
+
+            for (var i = 0; i < descriptor.EntitiesToCreate; i++)
+            {
+                var result = await InstallEntitiesInternalAsync(descriptor, users?.Data);
+                if (!result.Succeeded)
+                {
+                    return output.Failed(result.Errors.ToArray());
+                }
+            }
+
+            return output.Success();
+
+        }
+
+        async Task<ICommandResultBase> UninstallEntitiesAsync(SampleDataDescriptor descriptor)
+        {
+            return await UninstallEntitiesInternalAsync(descriptor);
+        }
+
+        async Task<ICommandResultBase> InstallEntitiesInternalAsync(SampleDataDescriptor descriptor, IList<User> users)
         {
 
             // Validate
@@ -317,24 +230,16 @@ namespace Plato.Site.Demo.Services
                     message = message.Replace("{entityUserName}", entityResult.Response.CreatedBy.UserName);
 
                     message = message.Replace("{mentionSample}", BuildMentionSampleMarkUp());
-
-
-                    if (descriptor.ReplyRoute != null) {
-
-                        var lastReplyRoute = new RouteValueDictionary()
-                        {
-                            ["area"] = descriptor.ReplyRoute["area"],
-                            ["controller"] = descriptor.ReplyRoute["controller"],
-                            ["action"] = descriptor.ReplyRoute["action"],
-                            ["opts.id"] = entityResult.Response.Id.ToString() ?? "",
-                            ["opts.alias"] = entityResult.Response.Alias.ToString() ?? "",
-                            ["opts.replyId"] = lastReplyId ?? ""
-                        };
-
-                        message = message.Replace("{lastReplyUrl}", _contextFacade.GetRouteUrl(lastReplyRoute));
-
-                    }
-
+                   
+                    message = message.Replace("{lastReplyUrl}", _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    {
+                        ["area"] = descriptor.ModuleId,
+                        ["controller"] = "Home",
+                        ["action"] = "Reply",
+                        ["opts.id"] = entityResult.Response.Id.ToString() ?? "",
+                        ["opts.alias"] = entityResult.Response.Alias.ToString() ?? "",
+                        ["opts.replyId"] = lastReplyId ?? ""
+                    }));
 
                     var reply = new EntityReply()
                     {
@@ -370,10 +275,11 @@ namespace Plato.Site.Demo.Services
             var i = 0;
             var sb = new StringBuilder();
             var userNames = new List<string>();
+            
             for (i = 0; i < _random.Next(4, 8); i++)
             {                
-                var index = _random.Next(0, Usernames.Length - 1);
-                var username = Usernames[index];
+                var index = _random.Next(0, _sampleUsersService.Usernames.Length - 1);
+                var username = _sampleUsersService.Usernames[index];
                 if (userNames.Contains(username))
                 {
                     continue;
@@ -385,9 +291,12 @@ namespace Plato.Site.Demo.Services
             foreach (var userName in userNames)
             {
                 sb.Append("@").Append(userName);
-                if (i < userNames.Count)
+                if (i < userNames.Count - 1)
                 {
                     sb.Append(", ");
+                } else
+                {
+                    sb.Append(".");
                 }
                 i++;
             }
@@ -396,7 +305,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        async Task<ICommandResultBase> UninstallEntitiesInternalAsync(EntityDataDescriptor descriptor)
+        async Task<ICommandResultBase> UninstallEntitiesInternalAsync(SampleDataDescriptor descriptor)
         {
 
             // Validate
@@ -455,34 +364,8 @@ namespace Plato.Site.Demo.Services
                 : result.Success();
 
         }
-
-        async Task<ICommandResultBase> InstallUsersInternalAsync()
-        {
-
-            // Our result
-            var result = new CommandResultBase();                 
-            
-            foreach (var username in Usernames)
-            {
-                var displayName = username;
-                var userNAme = username;
-                var email = username + "@example.com";
-                var password = "34Fdckf#343";
-
-                var newUserResult = await _platoUserManager.CreateAsync(new User()
-                {
-                    UserName = userNAme,
-                    Email = email,
-                    Password = password,
-                    DisplayName = displayName
-                });
-            }
-            
-            return result.Success();
-
-        }
-
-        string GetEntityText(EntityDataDescriptor descriptor)
+              
+        string GetEntityText(SampleDataDescriptor descriptor)
         {
 
             // Get random markdown sample
@@ -497,7 +380,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        string GetReplyText(EntityDataDescriptor descriptor)
+        string GetReplyText(SampleDataDescriptor descriptor)
         {
 
             // Get random markdown sample
@@ -512,7 +395,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        string ParseDescriptorTags(EntityDataDescriptor descriptor, string input)
+        string ParseDescriptorTags(SampleDataDescriptor descriptor, string input)
         {
             input = input.Replace("{moduleId}", descriptor.ModuleId);
             input = input.Replace("{entityType}", descriptor.EntityType);
@@ -751,9 +634,9 @@ We can of course include some text after the quote.
 
 For example we can link to the {entityType} hosting this reply using a # character follwed by the entity ID like so #{entityId}. 
 
-You can also include option text for # references Like so #`entityId`(`optional link text`).
+You can also include optional text to display for # links like so #`1234`(`optional link text here`).
 
-You can see a hash link with link text here #{entityId}({entityTitle}) or just using the entity id like  #{entityId}.
+You can see a real hash link with link text here:- #{entityId}({entityTitle}) - notice the contextual tooltip when you hover over # links. You can also just use a # followed by the entity id to link to any entity like so #{entityId}.
 
 Regards,  
 {replyUserName}",

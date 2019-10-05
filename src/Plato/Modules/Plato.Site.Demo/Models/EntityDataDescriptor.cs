@@ -3,7 +3,7 @@
 namespace Plato.Site.Demo.Models
 {
 
-    public class EntityDataDescriptor
+    public class SampleDataDescriptor
     {
 
         public string ModuleId { get; set; }
@@ -11,10 +11,6 @@ namespace Plato.Site.Demo.Models
         public string EntityType { get; set; }
         
         public int EntitiesToCreate { get; set; } = 10;
-
-        public RouteValueDictionary EntityRoute { get; set; }
-
-        public RouteValueDictionary ReplyRoute { get; set; }
 
         public int EntityRepliesToCreate { get; set; } = 25;
 
