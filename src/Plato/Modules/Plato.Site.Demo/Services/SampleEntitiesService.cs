@@ -61,13 +61,13 @@ namespace Plato.Site.Demo.Services
         private readonly IEntityManager<Entity> _entityManager;
         private readonly IPlatoUserStore<User> _platoUserStore;    
         private readonly IFeatureFacade _featureFacade;
-        private readonly IContextFacade _contextFacade;        
+        private readonly IContextFacade _contextFacade;
         private readonly IDbHelper _dbHelper;
 
         public SampleEntitiesService(
-            IEntityReplyManager<EntityReply> entityReplyManager, 
+            IEntityReplyManager<EntityReply> entityReplyManager,
             ISampleUsersService sampleUsersService,
-            IEntityManager<Entity> entityManager,            
+            IEntityManager<Entity> entityManager,
             IPlatoUserStore<User> platoUserStore,
             IContextFacade contextFacade,
             IFeatureFacade featureFacade,
@@ -83,9 +83,6 @@ namespace Plato.Site.Demo.Services
             _random = new Random();
         }
 
-        // Entities
-
- 
         public async Task<ICommandResultBase> InstallAsync()
         {
 
@@ -120,11 +117,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        // Users
-
-
         // ------------------
-
 
         async Task<ICommandResultBase> InstallEntitiesAsync(SampleDataDescriptor descriptor)
         {

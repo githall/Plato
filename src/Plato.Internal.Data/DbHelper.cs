@@ -18,9 +18,9 @@ namespace Plato.Internal.Data
     /// </summary>
     public class DbHelper : IDbHelper
     {
-
-        private readonly IDbContext _dbContext;
+        
         private readonly IOptions<DbContextOptions> _dbOptions;
+        private readonly IDbContext _dbContext;
 
         public DbHelper(
             IOptions<DbContextOptions> dbOptions,
@@ -104,16 +104,16 @@ namespace Plato.Internal.Data
 
         string ReplaceTablePrefix(string input)
         {
-           return input.Replace("{prefix}_", _dbOptions.Value.TablePrefix);
+            return input.Replace("{prefix}_", _dbOptions.Value.TablePrefix);
         }
-        
+
         string PerformSqlReplacements(string input, IDictionary<string, string> replacements)
         {
             if (replacements != null)
             {
                 foreach (var replacement in replacements)
                 {
-                    input = input.Replace(replacement.Key, replacement.Value?.Replace("'", "''"));
+                    input = input.Replace(replacement.Key, replacement.Value);
                 }
             }
 

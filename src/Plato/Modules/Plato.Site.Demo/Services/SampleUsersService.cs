@@ -1,6 +1,9 @@
 ﻿using System;
+using System.Collections.Generic;
+using System.Text;
 using System.Threading.Tasks;
 using Plato.Internal.Abstractions;
+using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Models.Users;
 using Plato.Users.Services;
 
@@ -12,12 +15,12 @@ namespace Plato.Site.Demo.Services
 
         public string[] Usernames => new string[]
         {
-            "John D",
-            "Mark Dogs",
-            "Reverbe ",
+            "JohnD",
+            "MarkDogs",
+            "Reverbe",
             "Johan",
-            "jcarreira ",
-            "tokyo2002 ",
+            "jcarreira",
+            "tokyo2002",
             "ebevernage",
             "pwelter34",
             "frankmonroe",
@@ -131,27 +134,30 @@ namespace Plato.Site.Demo.Services
         Random _random;
 
         private readonly IPlatoUserManager<User> _platoUserManager;
+        private readonly IDbHelper _dbHelper;
 
-        public SampleUsersService(IPlatoUserManager<User> platoUserManager)
+        public SampleUsersService(
+            IPlatoUserManager<User> platoUserManager,
+            IDbHelper dbHelper)
         {     
-            _platoUserManager = platoUserManager;           
+            _platoUserManager = platoUserManager;
+            _dbHelper = dbHelper;
             _random = new Random();
         }
 
         public async Task<ICommandResultBase> InstallAsync()
         {
-            return await InstallUsersInternalAsync();
+            return await InstallInternalAsync();
         }
 
-
-        public Task<ICommandResultBase> UninstallAsync()
+        public async Task<ICommandResultBase> UninstallAsync()
         {
-            throw new NotImplementedException();
+            return await UninstallInternalAsync();
         }
 
         // --------------
 
-        async Task<ICommandResultBase> InstallUsersInternalAsync()
+        async Task<ICommandResultBase> InstallInternalAsync()
         {
 
             // Our result
@@ -159,7 +165,7 @@ namespace Plato.Site.Demo.Services
 
             foreach (var username in Usernames)
             {
-                var displayName = username;
+
                 var userNAme = username;
                 var email = username + "@example.com";
                 var password = "34Fdckf#343";
@@ -169,7 +175,7 @@ namespace Plato.Site.Demo.Services
                     UserName = userNAme,
                     Email = email,
                     Password = password,
-                    DisplayName = displayName
+                    DisplayName = userNAme
                 });
             }
 
@@ -177,6 +183,62 @@ namespace Plato.Site.Demo.Services
 
         }
 
+        async Task<ICommandResultBase> UninstallInternalAsync()
+        {
+
+            var sb = new StringBuilder();
+            var i = 0;
+            foreach (var userName in Usernames)
+            {
+                sb.Append("'")
+                    .Append(userName.Replace("'", "''"))
+                    .Append("'");
+                if (i < Usernames.Length - 1)
+                {
+                    sb.Append(", ");
+                }
+                i++;
+            }
+
+            // Replacements for SQL script
+            var replacements = new Dictionary<string, string>()
+            {
+                ["{userNames}"] = sb.ToString()
+            };
+
+            var sql = @"
+                DELETE FROM {prefix}_UserBadges WHERE UserId IN (
+                    SELECT Id FROM {prefix}_Users WHERE UserName IN ({userNames})
+                );
+                DELETE FROM {prefix}_UserPhoto WHERE UserId IN (
+                    SELECT Id FROM {prefix}_Users WHERE UserName IN ({userNames})
+                );
+                DELETE FROM {prefix}_UserData WHERE UserId IN (
+                    SELECT Id FROM {prefix}_Users WHERE UserName IN ({userNames})
+                );
+                DELETE FROM {prefix}_Users WHERE UserName IN ({userNames});
+            ";
+
+            // Our result
+            var result = new CommandResultBase();
+
+            // Execute and return result
+            var error = string.Empty;
+            try
+            {
+                await _dbHelper.ExecuteScalarAsync<int>(sql, replacements);
+            }
+            catch (Exception e)
+            {
+                error = e.Message;
+            }
+
+            return !string.IsNullOrEmpty(error)
+                ? result.Failed(error)
+                : result.Success();
+
+        }
 
     }
+
 }

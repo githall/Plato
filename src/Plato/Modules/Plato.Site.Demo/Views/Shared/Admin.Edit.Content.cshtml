@@ -84,6 +84,7 @@
             <card-body>
                 <p>
                     <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallUsers" type="submit">@T["Add Sample Users"]</button>
+                    <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallUsers" data-provide="confirm" type="submit">@T["Remove Sample Users"]</button>
                 </p>
                 <p>
                     <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallEntities" type="submit">@T["Add Sample Entities"]</button>

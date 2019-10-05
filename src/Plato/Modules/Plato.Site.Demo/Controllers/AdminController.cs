@@ -131,7 +131,6 @@ namespace Plato.Site.Demo.Controllers
             {
                 // Add errors
                 _alerter.Danger(T[error.Description]);
-
             }
 
             // And redirect to display
@@ -160,7 +159,6 @@ namespace Plato.Site.Demo.Controllers
             {
                 // Add errors
                 _alerter.Danger(T[error.Description]);
-
             }
 
             // And redirect to display
@@ -191,7 +189,34 @@ namespace Plato.Site.Demo.Controllers
             {
                 // Add errors
                 _alerter.Danger(T[error.Description]);
+            }
 
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UninstallUsers()
+        {
+
+            var result = await _sampleUsersService.UninstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Users Removed Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
             }
 
             // And redirect to display
