@@ -23,11 +23,11 @@ namespace Plato.Questions.Labels.Controllers
     public class AdminController : Controller, IUpdateModel
     {
 
-        private readonly IContextFacade _contextFacade;
-        private readonly ILabelStore<Label> _labelStore;
-        private readonly ILabelManager<Label> _labelManager;
         private readonly IViewProviderManager<LabelAdmin> _viewProvider;
         private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly ILabelManager<Label> _labelManager;        
+        private readonly ILabelStore<Label> _labelStore;
+        private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
         private readonly IAlerter _alerter;
 
