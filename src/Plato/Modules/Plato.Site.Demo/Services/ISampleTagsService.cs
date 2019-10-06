@@ -2,6 +2,7 @@
 {
     public interface ISampleTagsService : ISampleDataService
     {
+        string[] ExampleTags { get; }
     }
 
 }

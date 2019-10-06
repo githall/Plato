@@ -62,8 +62,8 @@ namespace Plato.Site.Demo.Services
 
         public SampleLabelsService(
             ILabelManager<LabelBase> labelManager,
-             IUserColorProvider colorProvider,
-             IContextFacade contextFacade,
+            IUserColorProvider colorProvider,
+            IContextFacade contextFacade,
             IFeatureFacade featureFacade,
             IDbHelper dbHelper)
         {
@@ -74,7 +74,6 @@ namespace Plato.Site.Demo.Services
             _dbHelper = dbHelper;
             _random = new Random();
         }
-
 
         public async Task<ICommandResultBase> InstallAsync()
         {
@@ -147,7 +146,7 @@ namespace Plato.Site.Demo.Services
             // Our result
             var result = new CommandResultBase();
 
-            for (var i = 0; i < 5; i++)
+            for (var i = 0; i < 10; i++)
             {
                 var categoryResult = await InstallCategoryAsync(feature, i);
                 if (!categoryResult.Succeeded)
@@ -253,7 +252,6 @@ namespace Plato.Site.Demo.Services
                 : result.Success();
 
         }
-
 
     }
 
