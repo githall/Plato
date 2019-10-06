@@ -7,6 +7,14 @@ using Plato.Internal.Assets.Abstractions;
 using Plato.Internal.Models.Shell;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Site.Assets;
+using Plato.Site.Navigation;
+using Plato.Internal.Navigation.Abstractions;
+using Plato.Site.Configuration;
+using Microsoft.Extensions.Options;
+using Plato.Site.Models;
+using Plato.Site.Stores;
+using Plato.Internal.Layout.ViewProviders;
+using Plato.Site.ViewProviders;
 
 namespace Plato.Site
 {
@@ -25,8 +33,24 @@ namespace Plato.Site
             // Register assets
             services.AddScoped<IAssetProvider, AssetProvider>();
 
+            // Navigation provider
+            services.AddScoped<INavigationProvider, AdminMenu>();
+
+            // Configuration
+            services.AddTransient<IConfigureOptions<PlatoSiteOptions>, PlatoSiteOptionsConfiguration>();
+
+            // Stores
+            services.AddScoped<IPlatoSiteSettingsStore<PlatoSiteSettings>, PlatoSiteSettingsStore>();
+
+            // View providers
+            services.AddScoped<IViewProviderManager<PlatoSiteSettings>, ViewProviderManager<PlatoSiteSettings>>();
+            services.AddScoped<IViewProvider<PlatoSiteSettings>, AdminViewProvider>();
+
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();
+
+            // Permissions provider
+            //services.AddScoped<IPermissionsProvider<Permission>, Permissions>();            
 
         }
 
@@ -99,6 +123,14 @@ namespace Plato.Site
                 areaName: "Plato.Site",
                 template: "terms",
                 defaults: new { controller = "Home", action = "Terms" }
+            );
+
+            // Admin Settings
+            routes.MapAreaRoute(
+                 name: "PlatoSiteSettingsAdmin",
+                 areaName: "Plato.Site",
+                 template: "admin/settings/site",
+                 defaults: new { controller = "Admin", action = "Index" }
             );
 
             // Catch All

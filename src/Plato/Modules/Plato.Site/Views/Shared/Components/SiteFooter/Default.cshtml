@@ -1,4 +1,6 @@
-﻿
+﻿@{ 
+    var platoSiteOptions = GetOptions<PlatoSiteOptions>();
+}
 
 <div class="row no-gutters bg-black">
     <div class="container">
@@ -43,7 +45,7 @@
                             </a>
                         </li>
                         <li class="d-block mb-2">
-                            <a asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index" class="text-white" data-provide="loader-spy">
+                            <a href="@platoSiteOptions.DemoUrl" target="_blank" class="text-white" data-provide="loader-spy">
                                 Demo
                             </a>
                         </li>

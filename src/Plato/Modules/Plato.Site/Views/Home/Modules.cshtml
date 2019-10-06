@@ -1,5 +1,6 @@
 ﻿@{
     AddTitleSegment(T["Modules"]);
+    var platoSiteOptions = GetOptions<PlatoSiteOptions>();
 }
 
 <!-- Jumbotron -->
@@ -49,7 +50,7 @@
             <h3 class="font-weight-light">
                 Take Plato for a spin. The demo provides access to a default administrator account so you can fully explore Plato. Questions? <a asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Contact">Get in touch</a>
             </h3>
-            <a class="btn btn-primary btn-lg mt-4" asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index">
+            <a class="btn btn-primary btn-lg mt-4" href="@platoSiteOptions.DemoUrl" target="_blank"  data-provide="loader-spy">
                 Launch Demo
             </a>
         </div>

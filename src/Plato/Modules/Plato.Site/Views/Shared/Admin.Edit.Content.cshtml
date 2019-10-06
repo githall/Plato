@@ -1,0 +1,35 @@
+﻿@model PlatoSiteSettingsViewModel
+
+<div asp-validation-summary="All"></div>
+
+<card>
+    <card-title>
+        <h6 class="card-title">@T["Site Settings"]</h6>
+        <div class="text-muted">
+            @T["Configure settings specific to the Plato web site"]
+        </div>
+    </card-title>
+    <card-body>
+        <div class="row">
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="DefaultFrom">
+                        <label asp-for="DemoUrl">
+                            <strong>@T["Demo Url"]</strong>
+                            <span asp-validation-for="DemoUrl" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["The url to the Plato demo site"]</span>
+                        </label>
+                        <input placeholder="@T["https://demos.domain.com/plato"]" asp-for="DemoUrl" class="form-control" autofocus />
+                    </div>
+                </fieldset>             
+            </div>
+        </div>
+    </card-body>
+</card>
+
+<card class="card mt-4">
+    <card-footer>
+        <button class="btn btn-primary" type="submit">@T["Save"]</button> 
+    </card-footer>
+</card>

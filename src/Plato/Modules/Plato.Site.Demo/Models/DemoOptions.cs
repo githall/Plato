@@ -5,6 +5,8 @@
 
         public bool DemoEnabled { get; set; }
 
+        public string DemoUrl { get; set; }
+
         public string AdminUserName { get; set; }
 
         public string AdminPassword { get; set; }

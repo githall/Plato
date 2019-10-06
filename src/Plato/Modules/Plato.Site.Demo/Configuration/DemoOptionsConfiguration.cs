@@ -11,16 +11,16 @@ namespace Plato.Site.Demo.Configuration
     public class DemoOptionsConfiguration : IConfigureOptions<DemoOptions>
     {
 
-        private readonly IDemoSettingsStore<DemoSettings> _TwitterSettingsStore;
+        private readonly IDemoSettingsStore<DemoSettings> _demoSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<DemoOptionsConfiguration> _logger;
 
         public DemoOptionsConfiguration(
-            IDemoSettingsStore<DemoSettings> TwitterSettingsStore,
+            IDemoSettingsStore<DemoSettings> demoSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             ILogger<DemoOptionsConfiguration> logger)
         {
-            _TwitterSettingsStore = TwitterSettingsStore;
+            _demoSettingsStore = demoSettingsStore;
             _dataProtectionProvider = dataProtectionProvider;
             _logger = logger;
         }
@@ -28,7 +28,7 @@ namespace Plato.Site.Demo.Configuration
         public void Configure(DemoOptions options)
         {
 
-            var settings = _TwitterSettingsStore
+            var settings = _demoSettingsStore
                 .GetAsync()
                 .GetAwaiter()
                 .GetResult();
