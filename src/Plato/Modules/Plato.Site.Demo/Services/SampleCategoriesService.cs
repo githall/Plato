@@ -3,10 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Plato.Categories.Models;
+using Plato.Categories.Roles.Services;
 using Plato.Categories.Services;
 using Plato.Internal.Abstractions;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Features.Abstractions;
+using Plato.Internal.Models.Features;
 using Plato.Site.Demo.Models;
 using Plato.Users.Services;
 
@@ -52,17 +54,20 @@ namespace Plato.Site.Demo.Services
             }
         };
 
+        private readonly IDefaultCategoryRolesManager<CategoryBase> _defaultCategoryRolesManager;
         private readonly ICategoryManager<CategoryBase> _categoryManager;
         private readonly IFeatureFacade _featureFacade;
         private readonly IUserColorProvider _colorProvider;
         private readonly IDbHelper _dbHelper;
 
         public SampleCategoriesService(
+            IDefaultCategoryRolesManager<CategoryBase> defaultCategoryRolesManager,
             ICategoryManager<CategoryBase> categoryManager,
             IUserColorProvider colorProvider,
             IFeatureFacade featureFacade,             
-             IDbHelper dbHelper)
+            IDbHelper dbHelper)
         {
+            _defaultCategoryRolesManager = defaultCategoryRolesManager;
             _categoryManager = categoryManager;
             _featureFacade = featureFacade;
             _colorProvider = colorProvider;
@@ -72,14 +77,28 @@ namespace Plato.Site.Demo.Services
 
         public async Task<ICommandResultBase> InstallAsync()
         {
+
             var output = new CommandResultBase();
             foreach (var descriptor in Descriptors)
             {
-                var result = await InstallCategoriesAsync(descriptor);
-                if (!result.Succeeded)
+
+                var feature = await _featureFacade.GetFeatureByIdAsync(descriptor.ModuleId);
+                if (feature == null)
+                {
+                    continue;
+                }
+
+                var result = await InstallCategoriesAsync(feature);
+                if (result.Succeeded)
+                {
+                    // Install default roles for all feature categories
+                    await _defaultCategoryRolesManager.InstallAsync(feature.Id);                    
+                }
+                else
                 {
                     return output.Failed(result.Errors.ToArray());
                 }
+
             }
 
             return output.Success();
@@ -92,39 +111,49 @@ namespace Plato.Site.Demo.Services
             var output = new CommandResultBase();
             foreach (var descriptor in Descriptors)
             {
-                var result = await UninstallCategoriesAsync(descriptor);
+
+                // Ensure the feature is enabled
+                var feature = await _featureFacade.GetFeatureByIdAsync(descriptor.ModuleId);
+                if (feature == null)
+                {
+                    continue;
+                }
+
+                var result = await UninstallCategoriesAsync(feature);
                 if (!result.Succeeded)
                 {
                     return output.Failed(result.Errors.ToArray());
                 }
+
             }
 
             return output.Success();
+
         }
 
         // ----------
 
-        async Task<ICommandResultBase> InstallCategoriesAsync(SampleDataDescriptor descriptor)
+        async Task<ICommandResultBase> InstallCategoriesAsync(IShellFeature feature)
         {
 
             // Validate
 
-            if (descriptor == null)
+            if (feature == null)
             {
-                throw new ArgumentNullException(nameof(descriptor));
+                throw new ArgumentNullException(nameof(feature));
             }
 
-            if (string.IsNullOrEmpty(descriptor.ModuleId))
+            if (string.IsNullOrEmpty(feature.ModuleId))
             {
-                throw new ArgumentNullException(nameof(descriptor.ModuleId));
+                throw new ArgumentNullException(nameof(feature.ModuleId));
             }
 
             // Our result
             var result = new CommandResultBase();
 
-            for (var i = 0; i <= 5; i++)
+            for (var i = 0; i < 5; i++)
             {
-                var categoryResult = await InstallCategoryAsync(descriptor, i);
+                var categoryResult = await InstallCategoryAsync(feature, i);
                 if (!categoryResult.Succeeded)
                 {
                     return result.Failed(categoryResult.Errors.ToArray());
@@ -135,37 +164,30 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        async Task<ICommandResultBase> InstallCategoryAsync(SampleDataDescriptor descriptor, int sortOrder = 0)
+        async Task<ICommandResultBase> InstallCategoryAsync(IShellFeature feature, int sortOrder = 0)
         {
 
             // Validate
 
-            if (descriptor == null)
+            if (feature == null)
             {
-                throw new ArgumentNullException(nameof(descriptor));
+                throw new ArgumentNullException(nameof(feature));
             }
 
-            if (string.IsNullOrEmpty(descriptor.ModuleId))
+            if (string.IsNullOrEmpty(feature.ModuleId))
             {
-                throw new ArgumentNullException(nameof(descriptor.ModuleId));
+                throw new ArgumentNullException(nameof(feature.ModuleId));
             }
 
             // Our result
             var result = new CommandResultBase();
-
-            var feature = await _featureFacade.GetFeatureByIdAsync(descriptor.ModuleId);
-
-            if (feature == null)
-            {
-                return result.Failed($"The feature {descriptor.ModuleId} is not enabled!");
-            }
 
             var icons = new DefaultIcons();
 
             var foreColor = "#ffffff";
             var backColor = $"#{_colorProvider.GetColor()}";
             var iconCss = $"fal fa-{icons.GetIcon()}";
- 
+
             var categoryResult = await _categoryManager.CreateAsync(new CategoryBase()
             {
                 FeatureId = feature.Id,
@@ -187,31 +209,23 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        async Task<ICommandResultBase> UninstallCategoriesAsync(SampleDataDescriptor descriptor)
+        async Task<ICommandResultBase> UninstallCategoriesAsync(IShellFeature feature)
         {
 
             // Validate
 
-            if (descriptor == null)
+            if (feature == null)
             {
-                throw new ArgumentNullException(nameof(descriptor));
+                throw new ArgumentNullException(nameof(feature));
             }
 
-            if (string.IsNullOrEmpty(descriptor.ModuleId))
+            if (string.IsNullOrEmpty(feature.ModuleId))
             {
-                throw new ArgumentNullException(nameof(descriptor.ModuleId));
+                throw new ArgumentNullException(nameof(feature.ModuleId));
             }
 
             // Our result
             var result = new CommandResultBase();
-
-            // Ensure the feature is enabled
-            var feature = await _featureFacade.GetFeatureByIdAsync(descriptor.ModuleId);
-
-            if (feature == null)
-            {
-                return result.Failed($"The feature {descriptor.ModuleId} is not enabled!");
-            }
 
             // Replacements for SQL script
             var replacements = new Dictionary<string, string>()
