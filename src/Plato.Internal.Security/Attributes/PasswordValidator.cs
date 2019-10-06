@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Identity;
@@ -10,13 +11,15 @@ namespace Plato.Internal.Security.Attributes
     /// <summary>
     /// A custom view model validation attribute to ensure user passwords match configured ASP.NET identity options.
     /// </summary>
-    public class IdentityPasswordOptionsValidator : ValidationAttribute
+    [AttributeUsage(AttributeTargets.Property, AllowMultiple = false, Inherited = true)]
+    public class PasswordValidator : ValidationAttribute
     {
-                
+
         public IdentityErrorDescriber Describer { get; set; } = new IdentityErrorDescriber();
 
-        public IdentityPasswordOptionsValidator()
-        {    
+        public PasswordValidator() 
+        {
+            ErrorMessage = "The {0} field must contain at least 1 lower case character, 1 upper case character, 1 special character, 1 digit and be a minimum of 6 characters long.";
         }
 
         protected override ValidationResult IsValid(object value, ValidationContext context)
@@ -25,23 +28,22 @@ namespace Plato.Internal.Security.Attributes
             // Get password
             var password = ((string)value);
 
-            var identityOptions = (IOptions<IdentityOptions>) context.GetService(typeof(IOptions<IdentityOptions>));
+            var identityOptions = (IOptions<IdentityOptions>)context.GetService(typeof(IOptions<IdentityOptions>));       
             var result = ValidatePassword(password, identityOptions.Value);
 
             // Return the first validation error we encounter
             if (!result.Succeeded)
-            {             
+            {
                 foreach (var error in result.Errors)
                 {
                     return new ValidationResult(error.Description);
-                }              
+                }
             }
-                       
+
             return ValidationResult.Success;
         }
-        
-        // -------------
 
+        //// -------------
 
         IdentityResult ValidatePassword(string password, IdentityOptions identityOptions)
         {

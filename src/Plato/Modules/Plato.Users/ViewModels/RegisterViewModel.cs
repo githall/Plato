@@ -6,18 +6,17 @@ namespace Plato.Users.ViewModels
     public class RegisterViewModel
     {
 
-        [Required, Display(Name = "username"), StringLength(255, MinimumLength = 4)]
-        [RegularExpression("[^\\n|^\\s|^,|^@]*", ErrorMessage = "The username cannot contain spaces or the @ or , characters.")]
+        [Required, UserNameValidator, Display(Name = "username"), StringLength(100)]
         public string UserName { get; set; }
 
         [Required, EmailAddress, Display(Name = "email")]
         public string Email { get; set; }
 
-        [Required, IdentityPasswordOptionsValidator, StringLength(100)]
+        [Required, PasswordValidator, StringLength(100)]
         [DataType(DataType.Password), Display(Name = "password")]
         public string Password { get; set; }
 
-        [Required, DataType(DataType.Password), Compare("Password")]
+        [Required, PasswordValidator, DataType(DataType.Password), Compare("Password")]
         [Display(Name = "password confirmation")]
         public string ConfirmPassword { get; set; }
 

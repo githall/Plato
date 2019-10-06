@@ -1,9 +1,11 @@
 ﻿using System.IO;
 using Microsoft.AspNetCore.DataProtection;
+using Microsoft.AspNetCore.Mvc.DataAnnotations;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.Settings;
 using Plato.Internal.Security.Abstractions;
+using Plato.Internal.Security.Attributes;
 
 namespace Plato.Internal.Security.Extensions
 {
@@ -13,7 +15,7 @@ namespace Plato.Internal.Security.Extensions
         public static IServiceCollection AddPlatoAuthorization(
             this IServiceCollection services)
         {
-            
+        
             // Permissions manager
             services.AddScoped<IPermissionsManager<Permission>, PermissionsManager<Permission>>();
         
@@ -39,6 +41,16 @@ namespace Plato.Internal.Security.Extensions
                         .PersistKeysToFileSystem(new DirectoryInfo(opts.Value.SecretsPath));
                 }
             }
+
+            return services;
+
+        }
+
+        public static IServiceCollection AddPlatoModelValidation(
+            this IServiceCollection services)
+        {
+            // 
+            services.AddSingleton<IValidationAttributeAdapterProvider, CustomValidatiomAttributeAdapterProvider>();
 
             return services;
 

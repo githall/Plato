@@ -26,7 +26,7 @@ namespace Plato.SetUp.ViewModels
         [Required, EmailAddress, Display(Name = "email")]
         public string Email { get; set; }
 
-        [Required, IdentityPasswordOptionsValidator, StringLength(100)]
+        [Required, PasswordValidator, StringLength(100)]
         [DataType(DataType.Password), Display(Name = "password")]
         public string Password { get; set; }
 

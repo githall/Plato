@@ -222,6 +222,9 @@ namespace Plato.Internal.Hosting.Web.Extensions
             // Add module mvc
             services.AddPlatoModuleMvc();
 
+            // Custom view model valiation
+            services.AddPlatoModelValidation();
+
             // Add json formatter
             builder.AddJsonFormatters();
 

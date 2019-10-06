@@ -7458,5 +7458,133 @@ $(function (win, doc, $) {
             // https://github.com/jquery-validation/jquery-validation/issues/765
         }
     });
+
+    // Add jQuery validation adapters
+
+    $.validator.addMethod("username", function (value, element, params) {
+
+        // Return valid if we have no value to validate
+        // The [Required] attribute should be responsible 
+        // for checking if the field is required or not 
+        if (!value) return true;
+        value = $.trim(value);
+        if (!value) return true;
+        
+        var $element = $(element),            
+            blackList = $element.data("valUsernameBlacklist"),
+            length = $element.data("valUsernameLength");
+
+        if (length) {
+            var len = parseInt(length);
+            if (!isNaN(len)) {
+                if (value.length < len) {
+                    return false;
+                }
+            }
+        }
+
+        if (blackList) {
+            for (var i = 0; i < blackList.length; i++) {
+                if (value.indexOf(blackList[i]) >= 0) {
+                    return false;
+                }
+            }
+        }
+
+        return true;
+
+    });    
+
+
+    $.validator.addMethod("password", function (value, element, params) {
+
+        // Return valid if we have no value to validate
+        // The [Required] attribute should be responsible 
+        // for checking if the field is required or not 
+        if (!value) return true;
+        value = $.trim(value);
+        if (!value) return true;
+
+        var all = function (input, func) {
+            var result = true;
+            for (var i = 0; i < input.length; i++) {
+                if (!func(input[i])) {
+                    result = false;
+                }
+            }
+            return result;
+        };
+
+        var any = function (input, func) {
+            for (var i = 0; i < input.length; i++) {
+                if (func(input[i])) {
+                    return true;
+                }
+            }
+            return false;
+        };
+
+        var isLower = function (c) {
+            return c >= 'a' && c <= 'z';
+        };
+
+        var isUpper = function (c) {
+            return c >= 'A' && c <= 'Z';
+        };
+
+        var isDigit = function (c) {
+            return c >= '0' && c <= '9';
+        };
+
+        var isLetterOrDigit = function (c) {
+            return isUpper(c) || isLower(c) || isDigit(c);
+        };
+
+        var $element = $(element),
+            lower = $element.data("valPasswordLower"),
+            upper = $element.data("valPasswordUpper"),
+            digit = $element.data("valPasswordDigit"),
+            nonAlphaNumeric = $element.data("valPasswordNonAlphaNumeric"),
+            length = $element.data("valPasswordLength");
+        
+        if (length) {
+            var len = parseInt(length);         
+            if (!isNaN(len)) {
+                if (value.length < len) {
+                    return false;
+                }
+            }
+        }
+
+        if (lower && !any(value, isLower)) {            
+            return false;
+        }
+
+        if (upper && !any(value, isUpper)) {            
+            return false;
+        }
+
+        if (digit && !any(value, isDigit)) {            
+            return false;
+        }
+
+        // All digits or characters (i.e. No special characters)
+        if (nonAlphaNumeric && all(value, isLetterOrDigit)) {            
+            return false;
+        }
+
+        return true;
+
+    });    
+
+    var adapters = $.validator.unobtrusive.adapters;    
+    adapters.addBool("username");
+    adapters.addBool("password");
+
+
+
+
+
+
     
 }(window, document, jQuery));

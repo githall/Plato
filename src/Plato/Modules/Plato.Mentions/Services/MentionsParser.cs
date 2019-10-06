@@ -61,14 +61,14 @@ namespace Plato.Mentions.Services
                 // Parse
                 for (var i = 0; i < input.Length; i++)
                 {
-                    
+
                     foreach (var token in tokenList)
                     {
 
                         // Token start
                         if (i == token.Start)
                         {
-                            var user = userList.FirstOrDefault(u => u.UserName.Equals(token.Value, StringComparison.Ordinal));
+                            var user = userList.FirstOrDefault(u => u.UserName.Equals(token.Value, StringComparison.OrdinalIgnoreCase));
                             if (user != null)
                             {
                                 var url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
@@ -87,9 +87,13 @@ namespace Plato.Mentions.Services
                                     ["opts.id"] = user.Id,
                                     ["opts.alias"] = user.Alias
                                 });
-                                sb.Append("<a href=\"").Append(url).Append("\" ")
+                                sb.Append("<a href=\"")
+                                    .Append(url)
+                                    .Append("\" ")
                                     .Append("data-provide=\"popper\" ")
-                                    .Append("data-popper-url=\"").Append(popperUrl).Append("\" ")
+                                    .Append("data-popper-url=\"")
+                                    .Append(popperUrl)
+                                    .Append("\" ")
                                     .Append("class=\"mention-link\">");
                             }
                         }
@@ -101,7 +105,7 @@ namespace Plato.Mentions.Services
                     {
                         if (i == token.End)
                         {
-                            var user = userList.FirstOrDefault(u => u.UserName.Equals(token.Value, StringComparison.Ordinal));
+                            var user = userList.FirstOrDefault(u => u.UserName.Equals(token.Value, StringComparison.OrdinalIgnoreCase));
                             if (user != null)
                                 sb.Append("</a>");
                         }

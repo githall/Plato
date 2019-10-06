@@ -14,6 +14,7 @@ namespace Plato.Mentions.Services
         private readonly IList<char> _terminators = new List<char>()
         {
             ',',
+            '.',
             ' ',
             '\r',
             '\n',
