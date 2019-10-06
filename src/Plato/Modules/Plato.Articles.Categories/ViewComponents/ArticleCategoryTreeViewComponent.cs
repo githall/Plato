@@ -7,12 +7,15 @@ using Plato.Categories.Services;
 using Plato.Categories.ViewModels;
 using Plato.Articles.Categories.Models;
 using Plato.Internal.Navigation.Abstractions;
+using System;
 
 namespace Plato.Articles.Categories.ViewComponents
 {
 
     public class ArticleCategoryTreeViewComponent : ViewComponent
     {
+
+        private const string _controllerKey = "controller";
 
         private readonly ICategoryService<Category> _categoryService;
      
@@ -52,6 +55,15 @@ namespace Plato.Articles.Categories.ViewComponents
 
             // Get categories
             var categories = await _categoryService
+                .ConfigureQuery(q =>
+                {
+                    // Skip role based security when
+                    // viewing categories within the admin
+                    if (IsAdminController())
+                    {
+                        q.UserId.Clear();
+                    }
+                })
                 .GetResultsAsync(options.IndexOptions, new PagerOptions()
                 {
                     Page = 1,
@@ -67,6 +79,20 @@ namespace Plato.Articles.Categories.ViewComponents
 
         }
 
+        bool IsAdminController()
+        {
+
+            var routeValues = ViewContext.RouteData.Values;
+            var controllerName = string.Empty;
+            if (routeValues.ContainsKey(_controllerKey))
+            {
+                controllerName = (string)routeValues[_controllerKey];
+            }
+
+            return controllerName.StartsWith("Admin", StringComparison.OrdinalIgnoreCase);
+
+        }
+
     }
-    
+
 }

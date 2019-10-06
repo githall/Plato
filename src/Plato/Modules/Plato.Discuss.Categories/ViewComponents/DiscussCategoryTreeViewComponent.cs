@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -14,6 +15,8 @@ namespace Plato.Discuss.Categories.ViewComponents
     public class DiscussCategoryTreeViewComponent : ViewComponent
     {
 
+        private const string _controllerKey = "controller";
+
         private readonly ICategoryService<Category> _categoryService;
      
         public DiscussCategoryTreeViewComponent(ICategoryService<Category> categoryService)
@@ -23,6 +26,8 @@ namespace Plato.Discuss.Categories.ViewComponents
 
         public async Task<IViewComponentResult> InvokeAsync(CategoryTreeOptions options)
         {
+
+
 
             if (options == null)
             {
@@ -52,6 +57,15 @@ namespace Plato.Discuss.Categories.ViewComponents
 
             // Get categories
             var categories = await _categoryService
+                .ConfigureQuery(q =>
+                {
+                    // Skip role based security when
+                    // viewing categories within the admin
+                    if (IsAdminController())
+                    {                      
+                        q.UserId.Clear();
+                    }
+                })
                 .GetResultsAsync(options.IndexOptions, new PagerOptions()
                 {
                     Page = 1,
@@ -65,6 +79,20 @@ namespace Plato.Discuss.Categories.ViewComponents
                 })
                 .ToList();
 
+        }
+
+        bool IsAdminController()
+        {
+
+            var routeValues = ViewContext.RouteData.Values;
+            var controllerName = string.Empty;
+            if (routeValues.ContainsKey(_controllerKey))
+            {
+                controllerName = (string) routeValues[_controllerKey];
+            }
+
+            return controllerName.StartsWith("Admin", StringComparison.OrdinalIgnoreCase);
+               
         }
 
     }

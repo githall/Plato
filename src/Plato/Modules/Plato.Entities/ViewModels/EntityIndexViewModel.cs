@@ -7,7 +7,7 @@ using Plato.Internal.Navigation.Abstractions;
 
 namespace Plato.Entities.ViewModels
 {
-  
+
     public class EntityIndexViewModel<TModel> where TModel : class
     {
 

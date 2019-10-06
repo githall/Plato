@@ -77,7 +77,7 @@ namespace Plato.Categories.Services
                     // Set current authenticated user id
                     // This is required for various security checks
                     // ----------------
-
+                    
                     q.UserId.Equals(user?.Id ?? 0);
 
                     // ----------------

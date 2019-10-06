@@ -122,7 +122,7 @@ namespace Plato.Site.Demo.Services
             // Our result
             var result = new CommandResultBase();
 
-            for (var i = 0; i <= 10; i++)
+            for (var i = 0; i <= 5; i++)
             {
                 var categoryResult = await InstallCategoryAsync(descriptor, i);
                 if (!categoryResult.Succeeded)

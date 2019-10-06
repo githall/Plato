@@ -108,17 +108,24 @@ namespace Plato.Internal.Stores.Abstractions
 
     public class WhereInt
     {
-        private readonly StringBuilder _builder;
         private QueryOperator _operator = QueryOperator.And;
+        private readonly StringBuilder _builder;        
+        private const int _initialValue = -1;  // use negative 1 as the default to allow us to query for zeros or zero or above
 
+        public int Value { get; private set; } = _initialValue;
+
+        public string Operator => _operator == QueryOperator.And ? " AND " : " OR ";
+        
         public WhereInt()
         {
             _builder = new StringBuilder();
         }
 
-        public int Value { get; private set; } = -1; // use negative 1 as the default to allow us to query for zeros
-
-        public string Operator => _operator == QueryOperator.And ? " AND " : " OR ";
+        public WhereInt Clear()
+        {
+            Value = _initialValue;
+            return this;
+        }
 
         public WhereInt Or()
         {

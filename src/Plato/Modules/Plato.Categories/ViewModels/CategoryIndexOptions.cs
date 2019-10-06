@@ -18,8 +18,8 @@ namespace Plato.Categories.ViewModels
         [DataMember(Name = "order")]
         public OrderBy Order { get; set; } = OrderBy.Desc;
 
-
     }
+
     public enum SortBy
     {
         Auto = 0,
