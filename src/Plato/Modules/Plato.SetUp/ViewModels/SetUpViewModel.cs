@@ -19,8 +19,7 @@ namespace Plato.SetUp.ViewModels
         
         public bool TablePrefixPreset { get; set; }
 
-        [Required, Display(Name = "username"), StringLength(255, MinimumLength = 4)]
-        [RegularExpression("[^\\n|^\\s|^,|^@]*", ErrorMessage = "The username cannot contain spaces or the @ or , characters.")]
+        [Required, UserNameValidator, Display(Name = "username"), StringLength(255)]
         public string UserName { get; set; }
 
         [Required, EmailAddress, Display(Name = "email")]
@@ -30,7 +29,7 @@ namespace Plato.SetUp.ViewModels
         [DataType(DataType.Password), Display(Name = "password")]
         public string Password { get; set; }
 
-        [Required, StringLength(100, MinimumLength = 6)]
+        [Required, PasswordValidator, StringLength(100), Compare("Password")]
         [DataType(DataType.Password), Display(Name = "password confirmation")]
         public string PasswordConfirmation { get; set; }
         

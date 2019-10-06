@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Http;
 using Plato.Internal.Models.Users;
+using Plato.Internal.Security.Attributes;
 
 namespace Plato.Users.ViewModels
 {
@@ -14,8 +15,8 @@ namespace Plato.Users.ViewModels
         [Required, StringLength(255), DataType(DataType.Text), Display(Name = "display name")]
         public string DisplayName { get; set; }
 
-        [Required, StringLength(255), DataType(DataType.Text), Display(Name = "username")]
-        [RegularExpression("[^\\n|^\\s|^,|^@]*", ErrorMessage = "The username cannot contain the @ or , characters.")]
+        [Required, UserNameValidator, StringLength(255)]
+        [DataType(DataType.Text), Display(Name = "username")]        
         public string UserName { get; set; }
 
         [Required, EmailAddress, DataType(DataType.EmailAddress), Display(Name = "email address")]

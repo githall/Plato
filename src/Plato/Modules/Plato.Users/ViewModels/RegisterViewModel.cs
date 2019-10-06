@@ -9,7 +9,7 @@ namespace Plato.Users.ViewModels
         [Required, UserNameValidator, Display(Name = "username"), StringLength(100)]
         public string UserName { get; set; }
 
-        [Required, EmailAddress, Display(Name = "email")]
+        [Required, EmailAddress, DataType(DataType.EmailAddress), Display(Name = "email")]
         public string Email { get; set; }
 
         [Required, PasswordValidator, StringLength(100)]

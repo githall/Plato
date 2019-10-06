@@ -33,8 +33,7 @@
                         <fieldset>
                             <div class="form-group" asp-validation-class-for="DefaultFrom">
                                 <label asp-for="AdminPassword">
-                                    <strong>@T["Admin Password"]</strong>
-                                    <i class="fal fa-info-circle" title="@T["Must contain at least 1 lower case character, 1 upper case character, 1 special character, 1 digit and be a minimum of 6 characters long."]" data-toggle="tooltip"></i>
+                                    <strong>@T["Admin Password"]</strong>                                    
                                     <span asp-validation-for="AdminPassword" class="text-danger"></span>
                                     <br />
                                     <span class="text-muted">@T["The password for the demo administrator account."]</span>

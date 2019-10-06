@@ -43,7 +43,7 @@ namespace Plato.Internal.Security.Attributes
             return ValidationResult.Success;
         }
 
-        //// -------------
+        // -------------
 
         IdentityResult ValidatePassword(string password, IdentityOptions identityOptions)
         {

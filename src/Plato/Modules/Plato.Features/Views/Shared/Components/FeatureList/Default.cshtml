@@ -1,10 +1,13 @@
-﻿@using Microsoft.AspNetCore.Routing
+﻿@using Plato.Internal.Abstractions.Settings
+@using Microsoft.AspNetCore.Routing
 @using Plato.Features
 @model FeaturesIndexViewModel
 @{
     var enablePermission = Permissions.EnableFeatures;
     var disablePermission = Permissions.DisableFeatures;
     SelectListItem currentCategory = null;
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
 }
 
 <input type="hidden" name="category" value="@Model.Options.Category" />
@@ -43,11 +46,11 @@
                             ["opts.category"] = option.Value?.ToLower(),
                         };
 
-                            <a class="@css" href="@GetRouteUrl(routeValues)">
-                                <i class="@iconCss"></i>
-                                @T[option.Text]
-                            </a>
-                   
+                        <a class="@css" href="@GetRouteUrl(routeValues)">
+                            <i class="@iconCss"></i>
+                            @T[option.Text]
+                        </a>
+
                     }
                 </div>
 
@@ -57,8 +60,8 @@
 </div>
 
 <div class="form-group">
-    <input type="search" 
-           data-provide="filter-list" 
+    <input type="search"
+           data-provide="filter-list"
            data-filter-list-target="#featureList"
            data-filter-list-empty="#featureListEmpty"
            class="form-control" placeholder="@T["Search features..."]" autofocus />
@@ -80,7 +83,7 @@
         </div>
     </card-title>
     <card-body>
-        
+
         <ul id="featureListEmpty" class="list-group list-group-flush" style="display: none;">
             <li class="list-group-item">
                 @T["No features matched your search!"]
@@ -95,7 +98,7 @@
             {
                 foreach (var feature in features)
                 {
-                    <li  data-filter-list-value="@feature.Descriptor.Name" class="list-group-item list-group-item-action">
+                    <li data-filter-list-value="@feature.Descriptor.Name" class="list-group-item list-group-item-action">
                         <div class="row">
                             <div class="col-lg-9">
 
@@ -175,26 +178,45 @@
                                     {
                                         <authorize asp-permission="@enablePermission.Name">
                                             <authorize-success>
-                                                <button type="submit" asp-controller="Admin" asp-action="Enable" asp-route-id="@feature.ModuleId" class="btn btn-primary" itemprop="UnsafeUrl">
-                                                    @T["Enable"]
-                                                </button>
+                                                @if (isDemo)
+                                                {
+                                                    <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                                                        <a href="#" class="btn btn-primary disabled">
+                                                            @T["Enable"]
+                                                        </a>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit" asp-controller="Admin" asp-action="Enable" asp-route-id="@feature.ModuleId" class="btn btn-primary" itemprop="UnsafeUrl">
+                                                        @T["Enable"]
+                                                    </button>
+                                                }
                                             </authorize-success>
                                         </authorize>
-
                                     }
                                     else
                                     {
                                         <authorize asp-permission="@disablePermission.Name">
                                             <authorize-success>
-                                                <button type="submit" asp-controller="Admin" asp-action="Disable" asp-route-id="@feature.ModuleId" class="btn btn-secondary" itemprop="UnsafeUrl">
-                                                    @T["Disable"]
-                                                </button>
+                                                @if (isDemo)
+                                                {
+                                                    <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                                                        <a href="#" class="btn btn-secondary disabled">
+                                                            @T["Disable"]
+                                                        </a>
+                                                    </span>
+                                                }
+                                                else
+                                                {
+                                                    <button type="submit" asp-controller="Admin" asp-action="Disable" asp-route-id="@feature.ModuleId" class="btn btn-secondary">
+                                                        @T["Disable"]
+                                                    </button>
+                                                }
                                             </authorize-success>
                                         </authorize>
-
                                     }
                                 }
-
                             </div>
                         </div>
                     </li>

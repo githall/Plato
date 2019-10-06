@@ -19,12 +19,12 @@ namespace Plato.Users.ViewModels
         [Display(Name = "new password"), StringLength(100)]
         public string NewPassword { get; set; }
 
-        [Required, DataType(DataType.Password), StringLength(100)]
-        [Display(Name = "new password confirmation")]
+        [Required, PasswordValidator, DataType(DataType.Password), Compare("NewPassword")]
+        [Display(Name = "new password confirmation"), StringLength(100)]
         public string PasswordConfirmation { get; set; }
 
         public bool SendEmail { get; set; }
 
-
     }
+
 }

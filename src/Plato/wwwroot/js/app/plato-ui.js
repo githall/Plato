@@ -7461,6 +7461,7 @@ $(function (win, doc, $) {
 
     // Add jQuery validation adapters
 
+    // username
     $.validator.addMethod("username", function (value, element, params) {
 
         // Return valid if we have no value to validate
@@ -7493,9 +7494,9 @@ $(function (win, doc, $) {
 
         return true;
 
-    });    
+    });
 
-
+    // password
     $.validator.addMethod("password", function (value, element, params) {
 
         // Return valid if we have no value to validate
@@ -7577,14 +7578,9 @@ $(function (win, doc, $) {
 
     });    
 
+    // add adapters
     var adapters = $.validator.unobtrusive.adapters;    
     adapters.addBool("username");
     adapters.addBool("password");
-
-
-
-
-
-
     
 }(window, document, jQuery));
