@@ -255,7 +255,7 @@ namespace Plato.Site.Demo.Services
             }
             else
             {
-                return result.Failed();
+                return result.Failed(result.Errors.ToArray());
             }
 
             return result.Success();

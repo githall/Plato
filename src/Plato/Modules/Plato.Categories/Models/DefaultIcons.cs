@@ -1,4 +1,6 @@
-﻿namespace Plato.Categories.Models
+﻿using System;
+
+namespace Plato.Categories.Models
 {
     public class DefaultIcons
     {
@@ -995,6 +997,11 @@
             "x-ray",
             "yen-sign"
         };
+
+        public string GetIcon()
+        {
+            return Icons[new Random().Next(0, Icons.Length - 1)];
+        }
 
     }
 }

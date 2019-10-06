@@ -86,6 +86,18 @@
                     <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallUsers" data-provide="confirm" type="submit">@T["Remove Sample Users"]</button>
                 </p>
                 <p>
+                    <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallCategories" type="submit">@T["Add Sample Categories"]</button>
+                    <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallCategories" data-provide="confirm" type="submit">@T["Remove All Categories"]</button>
+                </p>
+                <p>
+                    <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallLabels" type="submit">@T["Add Sample Labels"]</button>
+                    <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallLabels" data-provide="confirm" type="submit">@T["Remove All Labels"]</button>
+                </p>
+                <p>
+                    <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallTags" type="submit">@T["Add Sample Tags"]</button>
+                    <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallTags" data-provide="confirm" type="submit">@T["Remove All Tags"]</button>
+                </p>
+                <p>
                     <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallEntities" type="submit">@T["Add Sample Entities"]</button>
                     <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallEntities" data-provide="confirm" type="submit">@T["Remove All Entities"]</button>
                 </p>

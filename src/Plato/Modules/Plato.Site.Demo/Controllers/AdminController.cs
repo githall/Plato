@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
@@ -8,28 +7,23 @@ using Plato.Site.Demo.ViewModels;
 using Plato.Internal.Layout;
 using Plato.Internal.Layout.Alerts;
 using Plato.Internal.Layout.ModelBinding;
-using Plato.Internal.Navigation;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Navigation.Abstractions;
-using Plato.Internal.Security.Abstractions;
 using Plato.Site.Demo.Services;
-using Plato.Internal.Models.Users;
-using Plato.Users.Services;
-using System.Collections.Generic;
-using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Site.Demo.Controllers
 {
 
     public class AdminController : Controller, IUpdateModel
     {
-    
+
+        private readonly ISampleCategoriesService _sampleCategoriesService;
         private readonly IViewProviderManager<DemoSettings> _viewProvider;
-        private readonly IAuthorizationService _authorizationService;
-        private readonly IPlatoUserManager<User> _platoUserManager;
-        private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly ISampleEntitiesService _sampleEntitiesService;
-        private readonly ISampleUsersService _sampleUsersService;
+        private readonly ISampleLabelsService _sampleLabelsService;
+        private readonly ISampleUsersService _sampleUsersService;        
+        private readonly ISampleTagsService _sampleTagsService;
+        private readonly IBreadCrumbManager _breadCrumbManager;
 
         private readonly IAlerter _alerter;
 
@@ -40,20 +34,22 @@ namespace Plato.Site.Demo.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
+            ISampleCategoriesService sampleCategoriesService,
             IViewProviderManager<DemoSettings> viewProvider,
-            ISampleEntitiesService sampleEntitiesService,
-            IAuthorizationService authorizationService,
-             IPlatoUserManager<User> platoUserManager,
-             ISampleUsersService sampleUsersService,
+            ISampleEntitiesService sampleEntitiesService,            
+            ISampleLabelsService sampleLabelsService,
+            ISampleUsersService sampleUsersService,
+            ISampleTagsService sampleTagsService,            
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
         {
 
+            _sampleCategoriesService = sampleCategoriesService;
             _sampleEntitiesService = sampleEntitiesService;
-            _authorizationService = authorizationService;
+            _sampleLabelsService = sampleLabelsService;            
             _sampleUsersService = sampleUsersService;
+            _sampleTagsService = sampleTagsService;
             _breadCrumbManager = breadCrumbManager;
-            _platoUserManager = platoUserManager;
             _viewProvider = viewProvider;            
             _alerter = alerter;
 
@@ -65,12 +61,6 @@ namespace Plato.Site.Demo.Controllers
         public async Task<IActionResult> Index()
         {
 
-            // Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditTwitterSettings))
-            //{
-            //    return Unauthorized();
-            //}
-            
             _breadCrumbManager.Configure(builder =>
             {
                 builder.Add(S["Home"], home => home
@@ -90,12 +80,6 @@ namespace Plato.Site.Demo.Controllers
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
         public async Task<IActionResult> IndexPost(DemoSettingsViewModel viewModel)
         {
-
-            // Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditTwitterSettings))
-            //{
-            //    return Unauthorized();
-            //}
 
             // Execute view providers ProvideUpdateAsync method
             await _viewProvider.ProvideUpdateAsync(new DemoSettings(), this);
@@ -206,6 +190,180 @@ namespace Plato.Site.Demo.Controllers
 
                 // Add alert
                 _alerter.Success(T["Sample Users Removed Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        // Categories
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InstallCategories()
+        {
+
+            var result = await _sampleCategoriesService.InstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Categories Added Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UninstallCategories()
+        {
+
+            var result = await _sampleCategoriesService.UninstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Categories Removed Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        // Labels
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InstallLabels()
+        {
+
+            var result = await _sampleLabelsService.InstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Labels Added Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UninstallLabels()
+        {
+
+            var result = await _sampleLabelsService.UninstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Labels Removed Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        // Tags
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InstallTags()
+        {
+
+            var result = await _sampleTagsService.InstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Tags Added Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UninstallTags()
+        {
+
+            var result = await _sampleTagsService.UninstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Tags Removed Successfully!"]);
 
                 // Redirect to success
                 return RedirectToAction(nameof(Index));
