@@ -98,6 +98,10 @@
                     <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallTags" data-provide="confirm" type="submit">@T["Remove All Tags"]</button>
                 </p>
                 <p>
+                    <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallEntityTags" type="submit">@T["Add Sample Entity Tags"]</button>
+                    <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallEntityTags" data-provide="confirm" type="submit">@T["Remove All Entity Tags"]</button>
+                </p>
+                <p>
                     <button class="btn btn-secondary" asp-controller="Admin" asp-action="InstallEntities" type="submit">@T["Add Sample Entities"]</button>
                     <button class="btn btn-danger" asp-controller="Admin" asp-action="UninstallEntities" data-provide="confirm" type="submit">@T["Remove All Entities"]</button>
                 </p>

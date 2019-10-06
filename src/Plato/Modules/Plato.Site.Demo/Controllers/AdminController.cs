@@ -23,6 +23,7 @@ namespace Plato.Site.Demo.Controllers
         private readonly ISampleLabelsService _sampleLabelsService;
         private readonly ISampleUsersService _sampleUsersService;        
         private readonly ISampleTagsService _sampleTagsService;
+        private readonly ISampleEntityTagsService _sampleEntityTagsService;
         private readonly IBreadCrumbManager _breadCrumbManager;
 
         private readonly IAlerter _alerter;
@@ -36,6 +37,7 @@ namespace Plato.Site.Demo.Controllers
             IStringLocalizer<AdminController> stringLocalizer,
             ISampleCategoriesService sampleCategoriesService,
             IViewProviderManager<DemoSettings> viewProvider,
+            ISampleEntityTagsService sampleEntityTagsService,
             ISampleEntitiesService sampleEntitiesService,            
             ISampleLabelsService sampleLabelsService,
             ISampleUsersService sampleUsersService,
@@ -43,7 +45,7 @@ namespace Plato.Site.Demo.Controllers
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
         {
-
+            _sampleEntityTagsService = sampleEntityTagsService;
             _sampleCategoriesService = sampleCategoriesService;
             _sampleEntitiesService = sampleEntitiesService;
             _sampleLabelsService = sampleLabelsService;            
@@ -364,6 +366,64 @@ namespace Plato.Site.Demo.Controllers
 
                 // Add alert
                 _alerter.Success(T["Sample Tags Removed Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        // Entity Tags
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InstallEntityTags()
+        {
+
+            var result = await _sampleEntityTagsService.InstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Entity Tags Added Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UninstallEntityTags()
+        {
+
+            var result = await _sampleEntityTagsService.UninstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Entity Tags Removed Successfully!"]);
 
                 // Redirect to success
                 return RedirectToAction(nameof(Index));

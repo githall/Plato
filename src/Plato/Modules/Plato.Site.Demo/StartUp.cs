@@ -63,6 +63,7 @@ namespace Plato.Site.Demo
             services.AddScoped<ISampleCategoriesService, SampleCategoriesService>();
             services.AddScoped<ISampleLabelsService, SampleLabelsService>();
             services.AddScoped<ISampleTagsService, SampleTagsService>();
+            services.AddScoped<ISampleEntityTagsService, SampleEntityTagsService>();
 
             // Permissions provider
             //services.AddScoped<IPermissionsProvider<Permission>, Permissions>();            
