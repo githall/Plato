@@ -330,7 +330,7 @@ namespace Plato.Site.Demo.Services
                     continue;
                 }
 
-                var result = await UninstallCategoriesAsync(feature);
+                var result = await UninstallInternalAsync(feature);
                 if (!result.Succeeded)
                 {
                     return output.Failed(result.Errors.ToArray());
@@ -413,7 +413,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        async Task<ICommandResultBase> UninstallCategoriesAsync(IShellFeature feature)
+        async Task<ICommandResultBase> UninstallInternalAsync(IShellFeature feature)
         {
 
             // Validate
