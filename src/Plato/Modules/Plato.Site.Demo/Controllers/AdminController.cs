@@ -16,14 +16,14 @@ namespace Plato.Site.Demo.Controllers
 
     public class AdminController : Controller, IUpdateModel
     {
-
+        private readonly ISampleEntityLabelsService _sampleEntityLabelsService;
+        private readonly ISampleEntityTagsService _sampleEntityTagsService;
         private readonly ISampleCategoriesService _sampleCategoriesService;
         private readonly IViewProviderManager<DemoSettings> _viewProvider;
         private readonly ISampleEntitiesService _sampleEntitiesService;
         private readonly ISampleLabelsService _sampleLabelsService;
         private readonly ISampleUsersService _sampleUsersService;        
         private readonly ISampleTagsService _sampleTagsService;
-        private readonly ISampleEntityTagsService _sampleEntityTagsService;
         private readonly IBreadCrumbManager _breadCrumbManager;
 
         private readonly IAlerter _alerter;
@@ -33,6 +33,7 @@ namespace Plato.Site.Demo.Controllers
         public IStringLocalizer S { get; }
         
         public AdminController(
+            ISampleEntityLabelsService sampleEntityLabelsService,
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
             ISampleCategoriesService sampleCategoriesService,
@@ -45,6 +46,7 @@ namespace Plato.Site.Demo.Controllers
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
         {
+            _sampleEntityLabelsService = sampleEntityLabelsService;
             _sampleEntityTagsService = sampleEntityTagsService;
             _sampleCategoriesService = sampleCategoriesService;
             _sampleEntitiesService = sampleEntitiesService;
@@ -308,6 +310,64 @@ namespace Plato.Site.Demo.Controllers
 
                 // Add alert
                 _alerter.Success(T["Sample Labels Removed Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        // Entity Labels
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InstallEntityLabels()
+        {
+
+            var result = await _sampleEntityLabelsService.InstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Entity Labels Added Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UninstallEntityLabels()
+        {
+
+            var result = await _sampleEntityLabelsService.UninstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Entity Labels Removed Successfully!"]);
 
                 // Redirect to success
                 return RedirectToAction(nameof(Index));

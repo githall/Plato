@@ -9,15 +9,15 @@ using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Models.Features;
+using Plato.Labels.Models;
+using Plato.Labels.Services;
+using Plato.Labels.Stores;
 using Plato.Site.Demo.Models;
-using Plato.Tags.Models;
-using Plato.Tags.Services;
-using Plato.Tags.Stores;
 
 namespace Plato.Site.Demo.Services
 {
 
-    public class SampleEntityTagsService : ISampleEntityTagsService
+    public class SampleEntityLabelsService : ISampleEntityLabelsService
     {
 
         Random _random;
@@ -56,26 +56,26 @@ namespace Plato.Site.Demo.Services
             }
         };
 
-        private readonly IEntityTagManager<EntityTag> _entityTagManager;
-        private readonly IEntityStore<Entity> _entityStore;        
+        private readonly IEntityLabelManager<EntityLabel> _entityLabelManager;
+        private readonly ILabelStore<LabelBase> _labelStore;
+        private readonly IEntityStore<Entity> _entityStore;
         private readonly IContextFacade _contextFacade;
-        private readonly IFeatureFacade _featureFacade;
-        private readonly ITagStore<TagBase> _tagStore;
+        private readonly IFeatureFacade _featureFacade;        
         private readonly IDbHelper _dbHelper;
 
-        public SampleEntityTagsService(
-            IEntityTagManager<EntityTag> entityTagManager,
+        public SampleEntityLabelsService(
+            IEntityLabelManager<EntityLabel> entityLabelManager,            
+            ILabelStore<LabelBase> labelStore,
             IEntityStore<Entity> entityStore,
-            ITagStore<TagBase> tagStore,
             IContextFacade contextFacade,
             IFeatureFacade featureFacade,
             IDbHelper dbHelper)
         {
-            _entityTagManager = entityTagManager;
+            _entityLabelManager = entityLabelManager;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
             _entityStore = entityStore;
-            _tagStore = tagStore;
+            _labelStore = labelStore;
             _dbHelper = dbHelper;
             _random = new Random();
         }
@@ -106,6 +106,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
+
         public async Task<ICommandResultBase> UninstallAsync()
         {
 
@@ -120,7 +121,7 @@ namespace Plato.Site.Demo.Services
                     continue;
                 }
 
-                var result = await UninstallInternalAsync(feature);
+                var result = await UninstallCategoriesAsync(feature);
                 if (!result.Succeeded)
                 {
                     return output.Failed(result.Errors.ToArray());
@@ -152,11 +153,10 @@ namespace Plato.Site.Demo.Services
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
             // Get all feature tags
-            var tags = await _tagStore.QueryAsync()
-              .Select<TagQueryParams>(Q =>
+            var labels = await _labelStore.QueryAsync()
+              .Select<LabelQueryParams>(Q =>
               {
                   Q.FeatureId.Equals(feature.Id);
-
               })
               .ToList();
 
@@ -164,7 +164,7 @@ namespace Plato.Site.Demo.Services
 
             var output = new CommandResultBase();
 
-            if (tags != null)
+            if (labels != null)
             {
 
                 var entities = await _entityStore.QueryAsync()
@@ -174,15 +174,16 @@ namespace Plato.Site.Demo.Services
                     })
                     .ToList();
 
-                foreach (var tag in tags?.Data)
-                {
-                    var randomEntities = GetRandomEntities(entities?.Data);
+                var alreadyAdded = new Dictionary<int, Entity>();
+                foreach (var label in labels?.Data)
+                {                 
+                    var randomEntities = GetRandomEntities(entities?.Data, alreadyAdded);
                     foreach (var entity in randomEntities)
                     {
-                        var result = await _entityTagManager.CreateAsync(new EntityTag()
+                        var result = await _entityLabelManager.CreateAsync(new EntityLabel()
                         {
                             EntityId = entity.Id,
-                            TagId = tag.Id,
+                            LabelId = label.Id,
                             CreatedUserId = user?.Id ?? 0,
                             CreatedDate = DateTime.UtcNow
                         });
@@ -199,7 +200,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        async Task<ICommandResultBase> UninstallInternalAsync(IShellFeature feature)
+        async Task<ICommandResultBase> UninstallCategoriesAsync(IShellFeature feature)
         {
 
             // Validate
@@ -225,8 +226,8 @@ namespace Plato.Site.Demo.Services
 
             // Sql to execute
             var sql = @"
-                DELETE FROM {prefix}_EntityTags WHERE TagId IN (
-                    SELECT Id FROM {prefix}_Tags WHERE FeatureId = {featureId}
+                DELETE FROM {prefix}_EntityLabels WHERE LabelId IN (
+                    SELECT Id FROM {prefix}_Labels WHERE FeatureId = {featureId}
                 );
             ";
 
@@ -247,7 +248,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        IList<Entity> GetRandomEntities(IList<Entity> entities, int total = 2)
+        IList<Entity> GetRandomEntities(IList<Entity> entities, IDictionary<int, Entity> alreadyAdded)
         {
 
             if (entities == null)
@@ -256,13 +257,14 @@ namespace Plato.Site.Demo.Services
             }
 
             var output = new Dictionary<int, Entity>();
-            for (var i = 0; i < total; i++)
+            for (var i = 0; i < _random.Next(0, 3); i++)
             {
                 var index = _random.Next(0, entities.Count - 1);
                 var entity = entities[index];
-                if (!output.ContainsKey(entity.Id))
+                if (!output.ContainsKey(entity.Id) && !alreadyAdded.ContainsKey(entity.Id))
                 {
                     output.Add(entity.Id, entity);
+                    alreadyAdded.Add(entity.Id, entity);
                 }
             }
 

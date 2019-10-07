@@ -88,7 +88,7 @@ namespace Plato.Site.Demo.Services
                     continue;
                 }
 
-                var result = await InstallCategoriesAsync(feature);
+                var result = await InstallLabelsAsync(feature);
                 if (!result.Succeeded)              
                 {
                     return output.Failed(result.Errors.ToArray());
@@ -114,7 +114,7 @@ namespace Plato.Site.Demo.Services
                     continue;
                 }
 
-                var result = await UninstallCategoriesAsync(feature);
+                var result = await UninstallLabelsAsync(feature);
                 if (!result.Succeeded)
                 {
                     return output.Failed(result.Errors.ToArray());
@@ -128,7 +128,7 @@ namespace Plato.Site.Demo.Services
 
         // ----------
 
-        async Task<ICommandResultBase> InstallCategoriesAsync(IShellFeature feature)
+        async Task<ICommandResultBase> InstallLabelsAsync(IShellFeature feature)
         {
 
             // Validate
@@ -148,7 +148,7 @@ namespace Plato.Site.Demo.Services
 
             for (var i = 0; i < 10; i++)
             {
-                var categoryResult = await InstallCategoryAsync(feature, i);
+                var categoryResult = await InstallLabelAsync(feature, i);
                 if (!categoryResult.Succeeded)
                 {
                     return result.Failed(categoryResult.Errors.ToArray());
@@ -159,7 +159,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        async Task<ICommandResultBase> InstallCategoryAsync(IShellFeature feature, int sortOrder = 0)
+        async Task<ICommandResultBase> InstallLabelAsync(IShellFeature feature, int sortOrder = 0)
         {
 
             // Validate
@@ -204,7 +204,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        async Task<ICommandResultBase> UninstallCategoriesAsync(IShellFeature feature)
+        async Task<ICommandResultBase> UninstallLabelsAsync(IShellFeature feature)
         {
 
             // Validate
