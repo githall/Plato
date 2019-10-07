@@ -1,8 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Plato.Internal.Features.Abstractions;
-using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Data.Abstractions;
 using Plato.Labels.Stores;
@@ -17,21 +14,11 @@ namespace Plato.Discuss.Labels.ViewProviders
     public class LabelViewProvider : BaseViewProvider<Label>
     {
 
-        private readonly ILabelStore<Label> _labelStore;
-        private readonly IContextFacade _contextFacade;
-        private readonly IFeatureFacade _featureFacade;
-        private readonly IActionContextAccessor _actionContextAccessor;
+        private readonly ILabelStore<Label> _labelStore; 
 
-        public LabelViewProvider(
-            ILabelStore<Label> labelStore,
-            IContextFacade contextFacade,
-            IFeatureFacade featureFacade,
-            IActionContextAccessor actionContextAccessor)
+        public LabelViewProvider(ILabelStore<Label> labelStore)
         {
-            _labelStore = labelStore;
-            _contextFacade = contextFacade;
-            _featureFacade = featureFacade;
-            _actionContextAccessor = actionContextAccessor;
+            _labelStore = labelStore;          
         }
         
         public override Task<IViewProviderResult> BuildIndexAsync(Label label, IViewProviderContext context)
@@ -56,7 +43,7 @@ namespace Plato.Discuss.Labels.ViewProviders
         {
 
             // Get topic index view model from context
-            var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
+            var viewModel = context.Controller.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
             if (viewModel == null)
             {
                 throw new Exception($"A view model of type {typeof(EntityIndexViewModel<Topic>).ToString()} has not been registered on the HttpContext!");

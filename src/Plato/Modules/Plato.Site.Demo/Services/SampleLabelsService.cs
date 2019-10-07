@@ -230,6 +230,9 @@ namespace Plato.Site.Demo.Services
 
             // Sql to execute
             var sql = @"
+                DELETE FROM {prefix}_EntityLabels WHERE LabelId IN (
+                    SELECT Id FROM {prefix}_Labels WHERE FeatureId = {featureId}
+                );
                 DELETE FROM {prefix}_LabelData WHERE LabelId IN (
                     SELECT Id FROM {prefix}_Labels WHERE FeatureId = {featureId}
                 );             

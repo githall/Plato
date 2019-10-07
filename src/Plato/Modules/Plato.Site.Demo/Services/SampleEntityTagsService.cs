@@ -174,9 +174,10 @@ namespace Plato.Site.Demo.Services
                     })
                     .ToList();
 
+                var alreadyAdded = new Dictionary<int, Entity>();
                 foreach (var tag in tags?.Data)
                 {
-                    var randomEntities = GetRandomEntities(entities?.Data);
+                    var randomEntities = GetRandomEntities(entities?.Data, alreadyAdded);
                     foreach (var entity in randomEntities)
                     {
                         var result = await _entityTagManager.CreateAsync(new EntityTag()
@@ -247,7 +248,7 @@ namespace Plato.Site.Demo.Services
 
         }
 
-        IList<Entity> GetRandomEntities(IList<Entity> entities, int total = 2)
+        IList<Entity> GetRandomEntities(IList<Entity> entities, IDictionary<int, Entity> alreadyAdded)
         {
 
             if (entities == null)
@@ -256,13 +257,14 @@ namespace Plato.Site.Demo.Services
             }
 
             var output = new Dictionary<int, Entity>();
-            for (var i = 0; i < total; i++)
+            for (var i = 0; i < _random.Next(1, 4); i++)
             {
                 var index = _random.Next(0, entities.Count - 1);
                 var entity = entities[index];
-                if (!output.ContainsKey(entity.Id))
+                if (!output.ContainsKey(entity.Id) && !alreadyAdded.ContainsKey(entity.Id))
                 {
                     output.Add(entity.Id, entity);
+                    alreadyAdded.Add(entity.Id, entity);
                 }
             }
 

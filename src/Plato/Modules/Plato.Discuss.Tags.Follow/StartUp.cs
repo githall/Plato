@@ -17,6 +17,8 @@ using Plato.Internal.Notifications;
 using Plato.Internal.Notifications.Abstractions;
 using Plato.Internal.Security.Abstractions;
 using Plato.Tags.Models;
+using Plato.Internal.Features.Abstractions;
+using Plato.Discuss.Tags.Follow.Handlers;
 
 namespace Plato.Discuss.Tags.Follow
 {
@@ -31,6 +33,9 @@ namespace Plato.Discuss.Tags.Follow
 
         public override void ConfigureServices(IServiceCollection services)
         {
+
+            // Feature installation event handler
+            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // Notification types
             services.AddScoped<INotificationTypeProvider, EmailNotifications>();
