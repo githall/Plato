@@ -55,10 +55,10 @@ namespace Plato.Site.Demo.Services
         };
 
         Random _random;
-        
+
         private readonly IEntityReplyManager<EntityReply> _entityReplyManager;  
         private readonly ISampleUsersService _sampleUsersService;
-        private readonly IEntityManager<Entity> _entityManager;
+        private readonly IEntityManager<Entity> _entityManager;        
         private readonly IPlatoUserStore<User> _platoUserStore;    
         private readonly IFeatureFacade _featureFacade;
         private readonly IContextFacade _contextFacade;

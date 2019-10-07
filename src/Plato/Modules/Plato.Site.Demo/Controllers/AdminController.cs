@@ -16,6 +16,8 @@ namespace Plato.Site.Demo.Controllers
 
     public class AdminController : Controller, IUpdateModel
     {
+
+        private readonly ISampleEntityCategoriesService _sampleEntityCategoriesService;
         private readonly ISampleEntityLabelsService _sampleEntityLabelsService;
         private readonly ISampleEntityTagsService _sampleEntityTagsService;
         private readonly ISampleCategoriesService _sampleCategoriesService;
@@ -33,6 +35,7 @@ namespace Plato.Site.Demo.Controllers
         public IStringLocalizer S { get; }
         
         public AdminController(
+            ISampleEntityCategoriesService sampleEntityCategoriesService,
             ISampleEntityLabelsService sampleEntityLabelsService,
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
@@ -46,6 +49,7 @@ namespace Plato.Site.Demo.Controllers
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
         {
+            _sampleEntityCategoriesService = sampleEntityCategoriesService;
             _sampleEntityLabelsService = sampleEntityLabelsService;
             _sampleEntityTagsService = sampleEntityTagsService;
             _sampleCategoriesService = sampleCategoriesService;
@@ -484,6 +488,64 @@ namespace Plato.Site.Demo.Controllers
 
                 // Add alert
                 _alerter.Success(T["Sample Entity Tags Removed Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        // Entity Categories
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> InstallEntityCategories()
+        {
+
+            var result = await _sampleEntityCategoriesService.InstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Entity Categories Added Successfully!"]);
+
+                // Redirect to success
+                return RedirectToAction(nameof(Index));
+
+            }
+
+            // If we reach this point something went wrong
+            foreach (var error in result.Errors)
+            {
+                // Add errors
+                _alerter.Danger(T[error.Description]);
+            }
+
+            // And redirect to display
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> UninstallEntityCategories()
+        {
+
+            var result = await _sampleEntityCategoriesService.UninstallAsync();
+            if (result.Succeeded)
+            {
+
+                // Add alert
+                _alerter.Success(T["Sample Entity Categories Removed Successfully!"]);
 
                 // Redirect to success
                 return RedirectToAction(nameof(Index));
