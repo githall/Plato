@@ -2,9 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
-using Plato.Email.Configuration;
+using Microsoft.Extensions.Options;
 using Plato.Email.Stores;
 using Plato.Email.ViewModels;
+using Plato.Internal.Abstractions.Settings;
 using Plato.Internal.Emails.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
@@ -21,17 +22,21 @@ namespace Plato.Email.ViewProviders
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
+        private readonly PlatoOptions _platoOptions;
+
         public AdminViewProvider(
             IEmailSettingsStore<EmailSettings> emailSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
+            IOptions<PlatoOptions> platoOptions,
             IPlatoHost platoHost)
         {
             _dataProtectionProvider = dataProtectionProvider;
             _emailSettingsStore = emailSettingsStore;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
+            _platoOptions = platoOptions.Value;
             _logger = logger;
         }
         
@@ -127,11 +132,19 @@ namespace Plato.Email.ViewProviders
                 {
                     SmtpSettings = new SmtpSettingsViewModel()
                     {
-                        DefaultFrom = settings.SmtpSettings.DefaultFrom,
-                        Host = settings.SmtpSettings.Host,
+                        DefaultFrom = _platoOptions.DemoMode
+                            ? "email@example.com"
+                            : settings.SmtpSettings.DefaultFrom,
+                        Host = _platoOptions.DemoMode
+                            ? "smtp.example.com"
+                            : settings.SmtpSettings.Host,                        
                         Port = settings.SmtpSettings.Port,
-                        UserName = settings.SmtpSettings.UserName,
-                        Password = settings.SmtpSettings.Password,
+                        UserName = _platoOptions.DemoMode
+                            ? "email@example.com"
+                            : settings.SmtpSettings.UserName,
+                        Password = _platoOptions.DemoMode
+                            ? "" 
+                            : settings.SmtpSettings.Password,
                         RequireCredentials = settings.SmtpSettings.RequireCredentials,
                         EnableSsl = settings.SmtpSettings.EnableSsl,
                         PollInterval = settings.SmtpSettings.PollingInterval,
