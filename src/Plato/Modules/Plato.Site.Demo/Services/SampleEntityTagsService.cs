@@ -151,7 +151,7 @@ namespace Plato.Site.Demo.Services
 
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
-            // Get all feature tags
+            // Get all tags
             var tags = await _tagStore.QueryAsync()
               .Select<TagQueryParams>(Q =>
               {
@@ -167,6 +167,7 @@ namespace Plato.Site.Demo.Services
             if (tags != null)
             {
 
+                // Get all entities
                 var entities = await _entityStore.QueryAsync()
                     .Select<EntityQueryParams>(q =>
                     {

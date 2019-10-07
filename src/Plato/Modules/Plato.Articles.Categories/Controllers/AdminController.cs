@@ -12,7 +12,6 @@ using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Features;
 using Plato.Internal.Navigation.Abstractions;
-using Plato.Categories.Models;
 using Plato.Categories.Services;
 using Plato.Categories.Stores;
 using Plato.Articles.Categories.Models;
@@ -38,11 +37,11 @@ namespace Plato.Articles.Categories.Controllers
 
         public AdminController(
             IHtmlLocalizer htmlLocalizer,
-            IStringLocalizer stringLocalizer,
-            ICategoryStore<Category> categoryStore,
+            IStringLocalizer stringLocalizer,            
             IViewProviderManager<CategoryAdmin> viewProvider,
             ICategoryManager<Category> categoryManager,
             IBreadCrumbManager breadCrumbManager,
+            ICategoryStore<Category> categoryStore,
             IFeatureFacade featureFacade,
             IAlerter alerter)
         {
@@ -539,7 +538,6 @@ namespace Plato.Articles.Categories.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-
 
         // ---------
 

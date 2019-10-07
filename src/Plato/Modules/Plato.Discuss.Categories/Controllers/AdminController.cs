@@ -12,7 +12,6 @@ using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Features;
 using Plato.Internal.Navigation.Abstractions;
-using Plato.Categories.Models;
 using Plato.Categories.Services;
 using Plato.Categories.Stores;
 using Plato.Discuss.Categories.Models;

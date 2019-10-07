@@ -8,7 +8,6 @@ using Plato.Categories.Stores;
 using Plato.Questions.Categories.Models;
 using Plato.Questions.Models;
 using Plato.Internal.Hosting.Abstractions;
-using Plato.Internal.Stores.Abstractions.Settings;
 using Plato.Entities.ViewModels;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Features.Abstractions;
@@ -38,20 +37,19 @@ namespace Plato.Questions.Categories.Controllers
             IStringLocalizer stringLocalizer,
             IHtmlLocalizer<HomeController> localizer,
             IViewProviderManager<Category> viewProvider,
-            IBreadCrumbManager breadCrumbManager,
             ICategoryStore<Category> categoryStore,
-            IContextFacade contextFacade1, 
-            IFeatureFacade featureFacade, 
-            IPageTitleBuilder pageTitleBuilder)
+            IBreadCrumbManager breadCrumbManager,            
+            IPageTitleBuilder pageTitleBuilder,
+            IContextFacade contextFacade, 
+            IFeatureFacade featureFacade)
         {
-      
-            _viewProvider = viewProvider;
             _breadCrumbManager = breadCrumbManager;
-            _contextFacade = contextFacade1;
-            _featureFacade = featureFacade;
             _pageTitleBuilder = pageTitleBuilder;
+            _contextFacade = contextFacade;
+            _featureFacade = featureFacade;            
             _categoryStore = categoryStore;
-        
+            _viewProvider = viewProvider;
+
             T = localizer;
             S = stringLocalizer;
         }

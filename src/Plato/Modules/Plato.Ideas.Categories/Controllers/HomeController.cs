@@ -39,17 +39,16 @@ namespace Plato.Ideas.Categories.Controllers
             IViewProviderManager<Category> viewProvider,
             IBreadCrumbManager breadCrumbManager,
             ICategoryStore<Category> categoryStore,
-            IContextFacade contextFacade1, 
-            IFeatureFacade featureFacade,
-            IPageTitleBuilder pageTitleBuilder)
-        {
-      
-            _viewProvider = viewProvider;
+            IPageTitleBuilder pageTitleBuilder,
+            IContextFacade contextFacade, 
+            IFeatureFacade featureFacade)
+        {                  
             _breadCrumbManager = breadCrumbManager;
-            _contextFacade = contextFacade1;
-            _featureFacade = featureFacade;
             _pageTitleBuilder = pageTitleBuilder;
             _categoryStore = categoryStore;
+            _contextFacade = contextFacade;
+            _featureFacade = featureFacade;
+            _viewProvider = viewProvider;
         
             T = localizer;
             S = stringLocalizer;

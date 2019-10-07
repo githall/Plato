@@ -22,8 +22,8 @@ namespace Plato.Docs.Categories.Controllers
     public class HomeController : Controller, IUpdateModel
     {
      
-        private readonly IViewProviderManager<Category> _channelViewProvider;
-        private readonly ICategoryStore<Category> _channelStore;
+        private readonly IViewProviderManager<Category> _categoryViewProvider;
+        private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IContextFacade _contextFacade;
@@ -36,20 +36,20 @@ namespace Plato.Docs.Categories.Controllers
         public HomeController(
             IStringLocalizer stringLocalizer,
             IHtmlLocalizer<HomeController> localizer,
-            IViewProviderManager<Category> channelViewProvider,
+            IViewProviderManager<Category> categoryViewProvider,
             IBreadCrumbManager breadCrumbManager,
-            ICategoryStore<Category> channelStore,
+            ICategoryStore<Category> categoryStore,
             IPageTitleBuilder pageTitleBuilder,
-            IContextFacade contextFacade1, 
+            IContextFacade contextFacade, 
             IFeatureFacade featureFacade)
         {
       
-            _channelViewProvider = channelViewProvider;
+            _categoryViewProvider = categoryViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
-            _contextFacade = contextFacade1;
+            _contextFacade = contextFacade;
             _featureFacade = featureFacade;
-            _channelStore = channelStore;
+            _categoryStore = categoryStore;
        
             T = localizer;
             S = stringLocalizer;
@@ -75,7 +75,7 @@ namespace Plato.Docs.Categories.Controllers
             }
 
             // Get category
-            var category = await _channelStore.GetByIdAsync(opts.CategoryId);
+            var category = await _categoryStore.GetByIdAsync(opts.CategoryId);
 
             // If supplied ensure category exists
             if (category == null && opts.CategoryId > 0)
@@ -144,7 +144,7 @@ namespace Plato.Docs.Categories.Controllers
 
                 // Build breadcrumb
                 var parents = category != null
-                    ? await _channelStore.GetParentsByIdAsync(category.Id)
+                    ? await _categoryStore.GetParentsByIdAsync(category.Id)
                     : null;
                 if (parents == null)
                 {
@@ -187,7 +187,7 @@ namespace Plato.Docs.Categories.Controllers
             });
             
             // Return view
-            return View((LayoutViewModel) await _channelViewProvider.ProvideIndexAsync(category, this));
+            return View((LayoutViewModel) await _categoryViewProvider.ProvideIndexAsync(category, this));
 
         }
 

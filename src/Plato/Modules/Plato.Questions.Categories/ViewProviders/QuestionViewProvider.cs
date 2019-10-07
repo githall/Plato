@@ -12,7 +12,6 @@ using Plato.Categories.ViewModels;
 using Plato.Questions.Categories.Models;
 using Plato.Questions.Categories.Services;
 using Plato.Questions.Models;
-using Plato.Questions.Services;
 using Plato.Entities.Stores;
 using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
@@ -33,8 +32,7 @@ namespace Plato.Questions.Categories.ViewProviders
         private readonly ICategoryDetailsUpdater _categoryDetailsUpdater;
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IEntityStore<Question> _entityStore;
-        private readonly IPostManager<Question> _entityManager;
+        private readonly IEntityStore<Question> _entityStore;        
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
         private readonly HttpRequest _request;
@@ -50,8 +48,7 @@ namespace Plato.Questions.Categories.ViewProviders
             IEntityCategoryManager entityCategoryManager,
             IHttpContextAccessor httpContextAccessor,
             ICategoryStore<Category> categoryStore, 
-            IBreadCrumbManager breadCrumbManager,
-            IPostManager<Question> entityManager,
+            IBreadCrumbManager breadCrumbManager,            
             IEntityStore<Question> entityStore,
             IFeatureFacade featureFacade,
             IContextFacade contextFacade)
@@ -61,8 +58,7 @@ namespace Plato.Questions.Categories.ViewProviders
             _entityCategoryManager = entityCategoryManager;
             _entityCategoryStore = entityCategoryStore;
             _breadCrumbManager = breadCrumbManager;
-            _featureFacade = featureFacade;
-            _entityManager = entityManager;
+            _featureFacade = featureFacade;            
             _contextFacade = contextFacade;
             _categoryStore = categoryStore;
             _entityStore = entityStore;

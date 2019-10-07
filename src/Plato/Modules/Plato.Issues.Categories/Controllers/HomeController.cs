@@ -37,20 +37,19 @@ namespace Plato.Issues.Categories.Controllers
             IStringLocalizer stringLocalizer,
             IHtmlLocalizer<HomeController> localizer,
             IViewProviderManager<Category> viewProvider,
-            IBreadCrumbManager breadCrumbManager,
             ICategoryStore<Category> categoryStore,
-            IContextFacade contextFacade1, 
-            IFeatureFacade featureFacade,
-            IPageTitleBuilder pageTitleBuilder)
+            IBreadCrumbManager breadCrumbManager,            
+            IPageTitleBuilder pageTitleBuilder,
+            IContextFacade contextFacade, 
+            IFeatureFacade featureFacade)
         {
-      
-            _viewProvider = viewProvider;
             _breadCrumbManager = breadCrumbManager;
-            _contextFacade = contextFacade1;
-            _featureFacade = featureFacade;
             _pageTitleBuilder = pageTitleBuilder;
+            _contextFacade = contextFacade;
+            _featureFacade = featureFacade;            
             _categoryStore = categoryStore;
-        
+            _viewProvider = viewProvider;
+
             T = localizer;
             S = stringLocalizer;
         }

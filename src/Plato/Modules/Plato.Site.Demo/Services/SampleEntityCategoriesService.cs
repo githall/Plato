@@ -6,6 +6,7 @@ using Plato.Categories.Models;
 using Plato.Categories.Services;
 using Plato.Categories.Stores;
 using Plato.Entities.Models;
+using Plato.Entities.Services;
 using Plato.Entities.Stores;
 using Plato.Internal.Abstractions;
 using Plato.Internal.Data.Abstractions;
@@ -13,8 +14,6 @@ using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Models.Features;
 using Plato.Site.Demo.Models;
-using Plato.Tags.Models;
-using Plato.Tags.Services;
 using Plato.Tags.Stores;
 
 namespace Plato.Site.Demo.Services
@@ -29,56 +28,59 @@ namespace Plato.Site.Demo.Services
         {
             new SampleDataDescriptor()
             {
-                ModuleId = "Plato.Discuss",
+                ModuleId = "Plato.Discuss.Categories",
                 EntityType = "topic"
             },
             new SampleDataDescriptor()
             {
-                ModuleId = "Plato.Docs",
+                ModuleId = "Plato.Docs.Categories",
                 EntityType = "doc",
             },
             new SampleDataDescriptor()
             {
-                ModuleId = "Plato.Articles",
+                ModuleId = "Plato.Articles.Categories",
                 EntityType = "articles",
             },
             new SampleDataDescriptor()
             {
-                ModuleId = "Plato.Ideas",
+                ModuleId = "Plato.Ideas.Categories",
                 EntityType = "idea"
             },
             new SampleDataDescriptor()
             {
-                ModuleId = "Plato.Issues",
+                ModuleId = "Plato.Issues.Categories",
                 EntityType = "issue"
             },
             new SampleDataDescriptor()
             {
-                ModuleId = "Plato.Questions",
+                ModuleId = "Plato.Questions.Categories",
                 EntityType = "question"
             }
         };
-
+                
         private readonly IEntityCategoryManager _entityCategoryManager;
-        private readonly IEntityStore<Entity> _entityStore;        
-        private readonly IContextFacade _contextFacade;
-        private readonly IFeatureFacade _featureFacade;
         private readonly ICategoryStore<CategoryBase> _categoryStore;
+        private readonly IEntityManager<Entity> _entityManager;
+        private readonly IEntityStore<Entity> _entityStore;
+        private readonly IContextFacade _contextFacade;
+        private readonly IFeatureFacade _featureFacade;        
         private readonly IDbHelper _dbHelper;
 
         public SampleEntityCategoriesService(
             IEntityCategoryManager entityCategoryManager,
-            IEntityStore<Entity> entityStore,
             ICategoryStore<CategoryBase> categoryStore,
+            IEntityManager<Entity> entityManager,
+            IEntityStore<Entity> entityStore,            
             IContextFacade contextFacade,
             IFeatureFacade featureFacade,
             IDbHelper dbHelper)
         {
             _entityCategoryManager = entityCategoryManager;
             _featureFacade = featureFacade;
-            _contextFacade = contextFacade;
-            _entityStore = entityStore;
+            _contextFacade = contextFacade;            
+            _entityManager = entityManager;
             _categoryStore = categoryStore;
+            _entityStore = entityStore;
             _dbHelper = dbHelper;
             _random = new Random();
         }
@@ -155,52 +157,81 @@ namespace Plato.Site.Demo.Services
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
             // Get all feature tags
-            var tags = await _categoryStore.QueryAsync()
-              .Select<TagQueryParams>(Q =>
+            var categories = await _categoryStore.QueryAsync()
+              .Select<CategoryQueryParams>(Q =>
               {
                   Q.FeatureId.Equals(feature.Id);
 
               })
               .ToList();
 
-            // Associate every tag with at least 1 entity
+            // Associate every category with at least 1 entity
 
             var output = new CommandResultBase();
 
-            if (tags != null)
+            if (categories != null)
             {
 
+                var entityFeature = await GetEntityFeatureAsync(feature);
+                if (entityFeature == null)
+                {
+                    return output.Failed($"A feature named {feature.ModuleId.Replace(".Categories", "")} is not enabled!");
+                }
+
+                // Get entities for feature
                 var entities = await _entityStore.QueryAsync()
                     .Select<EntityQueryParams>(q =>
                     {
-                        q.FeatureId.Equals(feature.Id);
+                        q.FeatureId.Equals(entityFeature.Id);
+                        q.CategoryId.Equals(0);
                     })
                     .ToList();
 
                 var alreadyAdded = new Dictionary<int, Entity>();
-                foreach (var tag in tags?.Data)
+                foreach (var category in categories?.Data)
                 {
                     var randomEntities = GetRandomEntities(entities?.Data, alreadyAdded);
                     foreach (var entity in randomEntities)
                     {
-                        var result = await _entityCategoryManager.CreateAsync(new EntityCategory()
-                        {
-                            EntityId = entity.Id,
-                            CategoryId = tag.Id,
-                            CreatedUserId = user?.Id ?? 0,
-                            CreatedDate = DateTime.UtcNow
-                        });
 
-                        if (!result.Succeeded)
+                        var fullEntity = await _entityStore.GetByIdAsync(entity.Id);
+                        fullEntity.CategoryId = category.Id;
+                        fullEntity.ModifiedUserId = user?.Id ?? 0;
+                        fullEntity.ModifiedDate =  DateTime.UtcNow;
+
+                        var entityResult = await _entityManager.UpdateAsync(fullEntity);
+                        if (entityResult.Succeeded)
                         {
-                            return output.Failed(result.Errors.ToArray());
+                            var result = await _entityCategoryManager.CreateAsync(new EntityCategory()
+                            {
+                                EntityId = entityResult.Response.Id,
+                                CategoryId = category.Id,
+                                CreatedUserId = user?.Id ?? 0,
+                                CreatedDate = DateTime.UtcNow
+                            });
+                            if (!result.Succeeded)
+                            {
+                                return output.Failed(result.Errors.ToArray());
+                            }
+                        } else
+                        {
+                            return output.Failed(entityResult.Errors.ToArray());
                         }
+
                     }
+
                 }
+
             }
 
             return output.Success();
 
+        }
+
+        async Task<IShellFeature> GetEntityFeatureAsync(IShellFeature feature)
+        {
+            var featureId = feature.ModuleId.Replace(".Categories", "");
+            return await _featureFacade.GetFeatureByIdAsync(featureId);          
         }
 
         async Task<ICommandResultBase> UninstallInternalAsync(IShellFeature feature)
@@ -221,17 +252,29 @@ namespace Plato.Site.Demo.Services
             // Our result
             var result = new CommandResultBase();
 
+            // Get entities feature for categories feature
+            var entityFeature = await GetEntityFeatureAsync(feature);
+            if (entityFeature == null)
+            {
+                return result.Failed($"A feature named {feature.ModuleId.Replace(".Categories", "")} is not enabled!");
+            }
+
             // Replacements for SQL script
             var replacements = new Dictionary<string, string>()
             {
-                ["{featureId}"] = feature.Id.ToString()
+                ["{featureId}"] = feature.Id.ToString(),
+                ["{entityFeatureId}"] = entityFeature.Id.ToString()
             };
 
             // Sql to execute
             var sql = @"
-                DELETE FROM {prefix}_EntityCategories WHERE TagId IN (
-                    SELECT Id FROM {prefix}_Tags WHERE FeatureId = {featureId}
+                DELETE FROM {prefix}_EntityCategories WHERE CategoryId IN (
+                    SELECT Id FROM {prefix}_Categories WHERE FeatureId = {featureId}
                 );
+                DELETE FROM {prefix}_CategoryData WHERE CategoryId IN (
+                    SELECT Id FROM {prefix}_Categories WHERE FeatureId = {featureId}
+                );
+                UPDATE {prefix}_Entities SET CategoryId = 0 WHERE FeatureId = {entityFeatureId}
             ";
 
             // Execute and return result
@@ -269,6 +312,7 @@ namespace Plato.Site.Demo.Services
                     output.Add(entity.Id, entity);
                     alreadyAdded.Add(entity.Id, entity);
                 }
+
             }
 
             return output.Values.ToList();

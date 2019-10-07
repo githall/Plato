@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -9,7 +8,6 @@ using Plato.Categories.Stores;
 using Plato.Discuss.Categories.Models;
 using Plato.Discuss.Models;
 using Plato.Internal.Hosting.Abstractions;
-using Plato.Internal.Stores.Abstractions.Settings;
 using Plato.Entities.ViewModels;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Features.Abstractions;
@@ -22,11 +20,12 @@ using Plato.Internal.Navigation.Abstractions;
 
 namespace Plato.Discuss.Categories.Controllers
 {
+
     public class HomeController : Controller, IUpdateModel
     {
-     
+
         private readonly IViewProviderManager<Category> _categoryViewProvider;
-        private readonly ICategoryStore<Category> _channelStore;
+        private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IContextFacade _contextFacade;
@@ -43,9 +42,8 @@ namespace Plato.Discuss.Categories.Controllers
             IViewProviderManager<Category> categoryViewProvider,
             ICategoryStore<Category> channelStore,
             IBreadCrumbManager breadCrumbManager,
-            IPageTitleBuilder pageTitleBuilder,
-            ISiteSettingsStore settingsStore,
-            IContextFacade contextFacade1, 
+            IPageTitleBuilder pageTitleBuilder,           
+            IContextFacade contextFacade, 
             IFeatureFacade featureFacade,
             IAlerter alerter)
         {
@@ -53,9 +51,9 @@ namespace Plato.Discuss.Categories.Controllers
             _categoryViewProvider = categoryViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
-            _contextFacade = contextFacade1;
+            _contextFacade = contextFacade;
             _featureFacade = featureFacade;
-            _channelStore = channelStore;
+            _categoryStore = channelStore;
             _alerter = alerter;
 
             T = localizer;
@@ -78,7 +76,7 @@ namespace Plato.Discuss.Categories.Controllers
             }
 
             // Get category
-            var category = await _channelStore.GetByIdAsync(opts.CategoryId);
+            var category = await _categoryStore.GetByIdAsync(opts.CategoryId);
 
             // If supplied ensure category exists
             if (category == null && opts.CategoryId > 0)
@@ -147,7 +145,7 @@ namespace Plato.Discuss.Categories.Controllers
 
                 // Build breadcrumb
                 var parents = category != null
-                    ? await _channelStore.GetParentsByIdAsync(category.Id)
+                    ? await _categoryStore.GetParentsByIdAsync(category.Id)
                     : null;
                 if (parents == null)
                 {
@@ -205,7 +203,7 @@ namespace Plato.Discuss.Categories.Controllers
             {
                 options.FeatureId = feature.Id;
             }
-            
+
             // Include child categories
             if (category != null)
             {

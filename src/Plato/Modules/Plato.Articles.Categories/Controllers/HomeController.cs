@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -9,7 +8,6 @@ using Plato.Categories.Stores;
 using Plato.Articles.Categories.Models;
 using Plato.Articles.Models;
 using Plato.Internal.Hosting.Abstractions;
-using Plato.Internal.Stores.Abstractions.Settings;
 using Plato.Entities.ViewModels;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Features.Abstractions;
@@ -44,18 +42,17 @@ namespace Plato.Articles.Categories.Controllers
             IBreadCrumbManager breadCrumbManager,
             ICategoryStore<Category> categoryStore,
             IContextFacade contextFacade,
-            IAlerter alerter,
-            IContextFacade contextFacade1, 
-            IFeatureFacade featureFacade, IPageTitleBuilder pageTitleBuilder)
+            IFeatureFacade featureFacade,
+            IPageTitleBuilder pageTitleBuilder,
+            IAlerter alerter)
         {
-       
+            _breadCrumbManager = breadCrumbManager;
+            _pageTitleBuilder = pageTitleBuilder;
+            _contextFacade = contextFacade;
+            _featureFacade = featureFacade;
             _categoryStore = categoryStore;
             _viewProvider = viewProvider;
-            _breadCrumbManager = breadCrumbManager;
             _alerter = alerter;
-            _contextFacade = contextFacade1;
-            _featureFacade = featureFacade;
-            _pageTitleBuilder = pageTitleBuilder;
 
             T = localizer;
             S = stringLocalizer;
@@ -240,7 +237,7 @@ namespace Plato.Articles.Categories.Controllers
             };
 
         }
-        
+
     }
 
 }

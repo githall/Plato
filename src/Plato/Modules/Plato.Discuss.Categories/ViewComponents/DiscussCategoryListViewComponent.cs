@@ -34,7 +34,7 @@ namespace Plato.Discuss.Categories.ViewComponents
         
         async Task<CategoryListViewModel<Category>> GetIndexModel(CategoryIndexOptions options)
         {
-           
+
             // Get categories
             var categories = await _categoryService
                 .GetResultsAsync(options, new PagerOptions()
