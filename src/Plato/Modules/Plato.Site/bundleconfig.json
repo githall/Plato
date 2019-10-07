@@ -4,5 +4,11 @@
     "inputFiles": [
       "Content/js/home/logo-canvas.js"
     ]
+  },
+  {
+    "outputFileName": "Content/js/site.min.js",
+    "inputFiles": [
+      "Content/js/site.js"
+    ]
   }
 ]

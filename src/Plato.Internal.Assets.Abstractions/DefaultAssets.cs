@@ -97,31 +97,31 @@ namespace Plato.Internal.Assets.Abstractions
 
                     new Asset()
                     {
-                        Url = "/js/vendors/jquery.js",
+                        Url = "/js/vendors/jquery.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/js/vendors/bootstrap.js",
+                        Url = "/js/vendors/bootstrap.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/js/vendors/bootstrap-notify.js",
+                        Url = "/js/vendors/bootstrap-notify.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/js/app/plato.js",
+                        Url = "/js/app/plato.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/js/app/plato-ui.js",
+                        Url = "/js/app/plato-ui.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }
@@ -155,31 +155,31 @@ namespace Plato.Internal.Assets.Abstractions
 
                     new Asset()
                     {
-                        Url = "/js/vendors/jquery.js",
+                        Url = "/js/vendors/jquery.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/js/vendors/bootstrap.js",
+                        Url = "/js/vendors/bootstrap.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/js/vendors/bootstrap-notify.js",
+                        Url = "/js/vendors/bootstrap-notify.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/js/app/plato.js",
+                        Url = "/js/app/plato.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/js/app/plato-ui.js",
+                        Url = "/js/app/plato-ui.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }

@@ -173,16 +173,3 @@ a.img-thumbnail:hover .img-caption {
 .accordion a[data-toggle="collapse"][aria-expanded="true"] .fa-chevron-right {
     transform: rotate(90deg);
 }
-
-/* GitHub Buttons */
-
-/* Ensure GitHub embedded buttons match our bootstrap buttons */
-.widget-lg .btn,
-.widget-lg .social-count {
-    padding: 0.5rem 1rem !important;
-    font-size: 1.25rem !important;
-    line-height: 1.5 !important;
-    height:auto !important;
-}
-
-

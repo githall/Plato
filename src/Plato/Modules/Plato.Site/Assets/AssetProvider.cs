@@ -41,7 +41,7 @@ namespace Plato.Site.Assets
                     },
                     new Asset()
                     {
-                        Url = "/plato.site/content/js/site.js",
+                        Url = "/plato.site/content/js/site.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }
@@ -58,7 +58,7 @@ namespace Plato.Site.Assets
                     },
                     new Asset()
                     {
-                        Url = "/plato.site/content/js/site.js",
+                        Url = "/plato.site/content/js/site.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }

@@ -47,6 +47,7 @@
     <_moduleFiles Include="$(MSBuildProjectDirectory)/Modules/**/Bin/**;$(MSBuildProjectDirectory)/Modules/**/Content/**" />
     <_themeFiles Include="$(MSBuildProjectDirectory)/Themes/**/*" />
     <_siteFiles Include="$(MSBuildProjectDirectory)/Sites/**/*" />
+    <Content Remove="bundleconfig.json" />
 
     <DotNetPublishFiles Include="@(_moduleFiles)">
       <DestinationRelativePath>Modules/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
@@ -60,6 +61,10 @@
       <DestinationRelativePath>Sites/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
     </DotNetPublishFiles>
 
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
   </ItemGroup>
 
   <ItemGroup>

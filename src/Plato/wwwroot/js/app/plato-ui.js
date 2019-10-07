@@ -4371,7 +4371,7 @@ $(function (win, doc, $) {
                     methods.hide($caller);
                 }
             },
-            _isExpanded($caller) {
+            _isExpanded: function($caller) {
                 if (methods._isHorizontal($caller)) {
                     return $caller.height() === $(win).height();
                 }
@@ -6088,7 +6088,7 @@ $(function (win, doc, $) {
                 }
                 
             },
-            _position($caller) {
+            _position: function($caller) {
 
                 var $popper = methods._getOrCreate($caller);
                 if ($popper) {
