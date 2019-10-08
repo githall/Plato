@@ -69,7 +69,7 @@ namespace Plato.Internal.Layout.TagHelpers
                             sw.Write(BuildJavaScriptInclude(asset));
                             if (i < assets.Count)
                             {
-                                sw.Write(sw.NewLine);
+                                sw.Write(sw.NewLine + "    ");
                             }
                             break;
 
@@ -78,7 +78,7 @@ namespace Plato.Internal.Layout.TagHelpers
                             sw.Write(BuildCssInclude(asset));
                             if (i < assets.Count)
                             {
-                                sw.Write(sw.NewLine);
+                                sw.Write(sw.NewLine + "    ");
                             }
                             break;
 
@@ -87,7 +87,7 @@ namespace Plato.Internal.Layout.TagHelpers
                             sw.Write(BuildMeta(asset));
                             if (i < assets.Count)
                             {
-                                sw.Write(sw.NewLine);
+                                sw.Write(sw.NewLine + "    ");
                             }
                             break;
                     }

@@ -13,8 +13,8 @@
     <title asp-separator=" - ">@siteOpts.SiteName</title>
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-    <link rel="icon" href="/fav.ico" />
     <assets section="Header" />
+    <link rel="icon" href="/favicon.ico" />
     <scripts section="Header" />
 </head>
 <body>
@@ -31,17 +31,17 @@
         </div>
     </div>
 
-    <cache expires-after="@TimeSpan.FromMinutes(30)">
-        <assets section="Body" />
-        <scripts section="Body" />
-    </cache>
+<cache expires-after="@TimeSpan.FromMinutes(30)">
+    <assets section="Body" />
+    <scripts section="Body" />
+</cache>
 
-    <cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">     
-        @await DisplayAsync(new View("SiteHeader", new
-        {
-            sticky = false
-        }))
-    </cache>
+<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">     
+    @await DisplayAsync(new View("SiteHeader", new
+    {
+        sticky = false
+    }))
+</cache>
 
     <!-- Plato Nav  -->
     <nav class="nav-site bg-white">
@@ -124,18 +124,18 @@
         @RenderBody()
     </div>
         
-    <cache expires-after="@TimeSpan.FromMinutes(30)">
-        <footer>
-            @await DisplayAsync(new View("SiteFooterMinimal", new
-            {
-            }))
-        </footer>
-    </cache>
+<cache expires-after="@TimeSpan.FromMinutes(30)">
+    <footer>
+        @await DisplayAsync(new View("SiteFooterMinimal", new
+        {
+        }))
+    </footer>
+</cache>
     
-    <cache expires-after="@TimeSpan.FromMinutes(30)">
-        <assets section="Footer" />
-        <scripts section="Footer" />
-    </cache>
+<cache expires-after="@TimeSpan.FromMinutes(30)">
+    <assets section="Footer" />
+    <scripts section="Footer" />
+</cache>
 
 </body>
 </html>
