@@ -64,9 +64,9 @@ To learn more about Plato please visit the projedts official web site https://pl
 
 ## Live Demo
 
-Our online demo provides full access to the Plato administrator dashaboard...
+Our online demo provides access to the Plato administrator dashaboard allowing you to fully explore Plato...
 
-https://demos.instantasp.co.uk/plato/login/
+https://platodemo.instantasp.co.uk/
 
 ## Documentation
 
