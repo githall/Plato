@@ -40,5 +40,29 @@
     "inputFiles": [
       "wwwroot/js/vendors/bootstrap-slider.js"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/css/app/plato.min.css",
+    "inputFiles": [
+      "wwwroot/css/app/plato.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/vendors/bootstrap-colorpicker.min.css",
+    "inputFiles": [
+      "wwwroot/css/vendors/bootstrap-colorpicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/vendors/bootstrap-datepicker.min.css",
+    "inputFiles": [
+      "wwwroot/css/vendors/bootstrap-datepicker.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/css/vendors/bootstrap-slider.min.css",
+    "inputFiles": [
+      "wwwroot/css/vendors/bootstrap-slider.css"
+    ]
   }
 ]

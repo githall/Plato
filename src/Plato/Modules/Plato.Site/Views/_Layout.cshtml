@@ -5,15 +5,18 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title asp-separator=" - ">Plato</title>
-    <link rel="stylesheet" href="/css/vendors/bootstrap.css" />
-    <link rel="stylesheet" href="/css/vendors/font-awesome.css" />
-    <link rel="stylesheet" href="/css/app/plato.css" />
-    <link rel="stylesheet" href="/plato.site/content/css/site.css" />
+    <link rel="stylesheet" href="/css/vendors/bootstrap.min.css" />
+    <link rel="stylesheet" href="/css/vendors/font-awesome.min.css" />
+    <link rel="stylesheet" href="/css/app/plato.min.css" />
+    <link rel="stylesheet" href="/plato.site/content/css/site.min.css" />
     <link rel="stylesheet" href="/sites/plato/themes/plato-site/theme.css" />
-    <link rel="icon" href="/plato.core/content/fav.ico" />
+    <link rel="icon" href="/favicon.ico" />
     @await RenderSectionAsync("Header", required: false)
 </head>
 <body>
+
+    <div id="top"></div>
+
     <div class="page-loader" data-provide="loader">
         <div class="plato-loader position-absolute-center">
             <div class="cube"></div>
@@ -38,11 +41,19 @@
             options = new FeatureIndexOptions()
         }))
     </cache>
+
+    <div class="slide-out slide-out-bottom-right" data-provide="slide-spy">
+        <a href="#top" data-provide="scroll" class="btn btn-primary" data-toggle="tooltip" title="@T["Back to Top"]">
+            <i class="fal fa-chevron-up  d-inline-block"></i>
+        </a>
+    </div>
+
     <script src="~/js/vendors/jquery.min.js"></script>
     <script src="~/js/vendors/bootstrap.min.js"></script>
     <script src="~/js/app/plato.min.js" asp-append-version="true"></script>
     <script src="~/js/app/plato-ui.min.js" asp-append-version="true"></script>
     @RenderSection("Scripts", required: false)
-    <script async defer src="/plato.site/content/js/gitbuttons.min.js"></script>   
+    <script async defer src="/plato.site/content/js/gitbuttons.min.js"></script>
+
 </body>
 </html>

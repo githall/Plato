@@ -119,6 +119,11 @@ namespace Plato.Internal.Modules
                   
                 }
 
+            } else
+            {
+                // Accomodate for files inside the root of the wwwroot folder i.e. favicon.ico etc
+                var filePath = _root + Path.Combine("wwwroot", path);
+                return new PhysicalFileInfo(new FileInfo(filePath));
             }
 
             return new NotFoundFileInfo(subpath);

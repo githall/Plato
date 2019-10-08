@@ -69,6 +69,9 @@ namespace Plato.Internal.Assets.Abstractions
                     }
                 }),
 
+                // Staging & Production environments use 
+                // minified versions of the CSS & JavaScript
+
                 // Staging
                 new AssetEnvironment(TargetEnvironment.Staging, new List<Asset>()
                 {
@@ -76,19 +79,19 @@ namespace Plato.Internal.Assets.Abstractions
 
                     new Asset()
                     {
-                        Url = "/css/vendors/bootstrap.css",
+                        Url = "/css/vendors/bootstrap.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/css/vendors/font-awesome.css",
+                        Url = "/css/vendors/font-awesome.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/css/app/plato.css",
+                        Url = "/css/app/plato.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
@@ -134,19 +137,19 @@ namespace Plato.Internal.Assets.Abstractions
 
                     new Asset()
                     {
-                        Url = "/css/vendors/bootstrap.css",
+                        Url = "/css/vendors/bootstrap.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/css/vendors/font-awesome.css",
+                        Url = "/css/vendors/font-awesome.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/css/app/plato.css",
+                        Url = "/css/app/plato.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },

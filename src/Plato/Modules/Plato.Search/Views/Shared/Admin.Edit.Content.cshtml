@@ -1,5 +1,9 @@
 ﻿@using Plato.Internal.Data.Abstractions
+@using Plato.Internal.Abstractions.Settings
 @model SearchSettingsViewModel
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+}
 
 <card>
     <card-title>
@@ -18,21 +22,21 @@
 
         @if (Model.SearchType != SearchTypes.Tsql && Model.Catalogs == null)
         {
-            <div class="alert alert-secondary">
-                <p>
-                    <i class="fal fa-database"></i>
-                    <strong>@T["You need to create a catalog"]</strong>
-                </p>
-                <p>
-                    @T["Full text search has been enabled within Plato but no full text catalog has been created yet. You will see errors when searching if full text is enabled but no catalog is created."]
-                </p>
-                <p>
-                    @T["If you have full text search installed & enabled within your SQL Server database use the \"Create Catalog\" button below to create your catalog and all necessary indexes. If full text search is not enabled for your SQL Server database you will be notified when you click the \"Create Catalog\" button."]
-                </p>
-                <p>
-                    <a asp-route-action="CreateCatalog" class="btn btn-primary">@T["Create Catalog"]</a>
-                </p>
-            </div>
+        <div class="alert alert-secondary">
+            <p>
+                <i class="fal fa-database"></i>
+                <strong>@T["You need to create a catalog"]</strong>
+            </p>
+            <p>
+                @T["Full text search has been enabled within Plato but no full text catalog has been created yet. You will see errors when searching if full text is enabled but no catalog is created."]
+            </p>
+            <p>
+                @T["If you have full text search installed & enabled within your SQL Server database use the \"Create Catalog\" button below to create your catalog and all necessary indexes. If full text search is not enabled for your SQL Server database you will be notified when you click the \"Create Catalog\" button."]
+            </p>
+            <p>
+                <a asp-route-action="CreateCatalog" class="btn btn-primary">@T["Create Catalog"]</a>
+            </p>
+        </div>
         }
 
     </card-body>
@@ -41,61 +45,72 @@
 @if (Model.SearchType != SearchTypes.Tsql && Model.Catalogs != null)
 {
 
-    <card class="card card-body-flush">
-        <card-title>
-            <h6 class="card-title">@T["Catalog"]</h6>
-        </card-title>
-        <card-body>
-            <ul class="list-group list-group-flush">
-                @foreach (var catalog in Model.Catalogs)
+<card class="card card-body-flush">
+    <card-title>
+        <h6 class="card-title">@T["Catalog"]</h6>
+    </card-title>
+    <card-body>
+        <ul class="list-group list-group-flush">
+            @foreach (var catalog in Model.Catalogs)
+            {
+            <li class="list-group-item">
+                @if (platoOpts.DemoMode) 
                 {
-                    <li class="list-group-item">
-                        <a asp-route-action="DeleteCatalog" class="btn btn-danger float-right ml-2" data-toggle="tooltip" title="@T["Delete the catalog and all installed indexes"]">
+                    <span class="d-inline-block disabled float-right ml-2" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                        <a href="#" class="btn btn-danger disabled">
                             @T["Delete"]
                         </a>
-                        <a asp-route-action="RebuildCatalog" class="btn btn-primary float-right" data-toggle="tooltip" title="@T["Rebuild existing indexes and search for new indexes"]">
-                            @T["Rebuild"]
-                        </a>
-                        <strong>@catalog.Name</strong>
-                    </li>
+                    </span>
+                } 
+                else 
+                {
+                    <a asp-route-action="DeleteCatalog" class="btn btn-danger float-right ml-2" data-toggle="tooltip" title="@T["Delete the catalog and all installed indexes"]">
+                        @T["Delete"]
+                    </a>
                 }
-            </ul>
-        </card-body>
-    </card>
-    
-    @if (Model.Indexes != null)
+                <a asp-route-action="RebuildCatalog" class="btn btn-primary float-right" data-toggle="tooltip" title="@T["Rebuild existing indexes and search for new indexes"]">
+                    @T["Rebuild"]
+                </a>
+                <strong>@catalog.Name</strong>
+            </li>
+            }
+        </ul>
+    </card-body>
+</card>
+
+@if (Model.Indexes != null)
     {
-        <card class="card card-body-flush">
-            <card-title>
-                <h6 class="card-title">@T["Installed Indexes"]</h6>
-            </card-title>
-            <card-body>
-                <ul class="list-group list-group-flush list-group-hover">
-                    @foreach (var index in Model.Indexes)
+<card class="card card-body-flush">
+    <card-title>
+        <h6 class="card-title">@T["Installed Indexes"]</h6>
+    </card-title>
+    <card-body>
+        <ul class="list-group list-group-flush list-group-hover">
+            @foreach (var index in Model.Indexes)
                     {
-                        <li class="list-group-item list-group-item-action">
-                            <span class="text-muted">@index.TableName</span>.<strong>@index.ColumnName</strong><br />
-                        </li>
+            <li class="list-group-item list-group-item-action">
+                <span class="text-muted">@index.TableName</span>.<strong>@index.ColumnName</strong><br />
+            </li>
                     }
-                </ul>
-            </card-body>
-        </card>
+        </ul>
+    </card-body>
+</card>
     }
     else
     {
-        <card>
-            <card-title>
-                <h6 class="card-title">@T["No Indexes"]</h6>
-            </card-title>
-            <card-body>
-                <span class="text-muted">
-                    @T["No full text indexes are installed. It could be features have been removed or you've not installed any features that create indexes yet. Use the \"Rebuild\" button above to the right of your catalog name to check for new indexes."]
-                </span>
+<card>
+    <card-title>
+        <h6 class="card-title">@T["No Indexes"]</h6>
+    </card-title>
+    <card-body>
+        <span class="text-muted">
+            @T["No full text indexes are installed. It could be features have been removed or you've not installed any features that create indexes yet. Use the \"Rebuild\" button above to the right of your catalog name to check for new indexes."]
+        </span>
 
-            </card-body>
-        </card>
+    </card-body>
+</card>
     }
-    
+
 }
 
 <card class="card mt-4">

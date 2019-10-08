@@ -10,5 +10,11 @@
     "inputFiles": [
       "Content/js/site.js"
     ]
+  },
+  {
+    "outputFileName": "Content/css/site.min.css",
+    "inputFiles": [
+      "Content/css/site.css"
+    ]
   }
 ]
