@@ -1,6 +1,8 @@
 
 ![logo.png](https://plato.instantasp.co.uk/plato.site/content/images/logo-text.png)
 
+![dotNetCore22](https://img.shields.io/static/v1?label=.NET+Core&message=2.2&color=green) ![mvc6](https://img.shields.io/static/v1?label=MVC&message=6&color=green) ![csharp8](https://img.shields.io/static/v1?label=C%23&message=8&color=green) ![bootstrap4](https://img.shields.io/static/v1?label=Bootstrap&message=4&color=green) 
+
 Welcome to the official repository for Plato.
 
 Plato is free, open source user community & customer support software built upon .NET core. Plato offers a complete stack of fully integrated tools to help you offer a simple, branded support experience for your users or customers.
@@ -56,17 +58,23 @@ Plato.Issues added public or private issues tracking to Plato.
 
 ![issues.png](https://plato.instantasp.co.uk/plato.site/content/images/issues.png)
 
-## Plato Web Site
+## Web Site
 
 To learn more about Plato please visit the projedts official web site https://plato.instantasp.co.uk/
 
-## Plato Documentation
+## Live Demo
+
+Our online demo provides full access to the Plato administrator dashaboard...
+
+https://demos.instantasp.co.uk/plato/login/
+
+## Documentation
 
 Our documentation is probably the best place to get started with Plato.
 
 https://plato.instantasp.co.uk/docs/
 
-## Plato Community
+## Community
 
 Please discuss Plato, post your questions, suggest ideas or report issues via our own Plato installation at...
 
@@ -108,7 +116,7 @@ We welcome contributions and will always support and assist contributors. Before
 
 # Security
 
-We strive to ensure Plato is as secure as possible. Plato is open source software and the code can be reviewed by anyone on the internet. We are confident in the quality of our code and have nothing to hide but should you discover any vulnerabilities, attacks or room for improvement please do let us know immediately via email to sales@instantasp.co.uk and we will assist as quickly as possible. 
+We strive to ensure Plato is as secure as possible. Plato is open source software and the code can be reviewed by anyone on the internet. We are confident in the quality of our code and have nothing to hide but should you discover any vulnerabilities, attacks or room for improvement please do let us know immediately via email to [sales@instantasp.co.uk](mailto:sales@instantasp.co.uk) and we will assist as quickly as possible. 
 
 # License
 
