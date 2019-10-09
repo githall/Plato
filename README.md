@@ -5,7 +5,7 @@
 
 Welcome to the official repository for Plato.
 
-Plato is free, open source user community & customer support software built upon .NET core. Plato offers a complete stack of fully integrated tools to help you offer a simple, branded support experience for your users or customers.
+Plato is free, open source user community & customer support software built upon .NET Core. Plato offers a complete stack of fully integrated tools to help anyone provide a simple, branded support site for your users or customers.
 
 Plato can be used to...
 
@@ -18,9 +18,15 @@ Plato can be used to...
 
 Plato is written in C# using .NET Core 2.2, MVC6 & Bootstrap 4.
 
+## Live Demo
+
+Our demo provides access to the Plato administrator dashaboard allowing you to fully explore Plato...
+
+https://plato.instantasp.co.uk/discuss/t/160/plato-demo
+
 ## Plato In Action
 
-You can see below the main modules offered with Plato. You can custom fit Plato to suite your requirements with [hundreds of extra modules](https://plato.instantasp.co.uk/modules).
+You can see below the main modules offered with Plato. You can custom fit Plato to suite your specific requirements via [hundreds of extra modules](https://plato.instantasp.co.uk/modules).
 
 ### Discuss
 
@@ -63,12 +69,6 @@ Plato.Issues added public or private issues tracking to Plato.
 To learn more about Plato please visit the projedts official web site...
 
 https://plato.instantasp.co.uk/
-
-## Live Demo
-
-Our online demo provides access to the Plato administrator dashaboard allowing you to fully explore Plato...
-
-https://platodemo.instantasp.co.uk/
 
 ## Documentation
 
@@ -122,9 +122,7 @@ We strive to ensure Plato is as secure as possible. Plato is open source softwar
 
 # License
 
-Plato is **100% free** and **open source** software licensed under the GNU General Public License v3.0. 
-
-Before using Plato please review [the GPL 3.0 license](https://github.com/InstantASP/plato/blob/master/COPYING) and ensure your happy with the terms and conditions defined by the license.
+Plato is **100% free** and **open source** software licensed under the GNU General Public License 3.0. Before using Plato please review [the GPL 3.0 license](https://github.com/InstantASP/plato/blob/master/COPYING) and ensure your happy with the terms and conditions defined by the license.
 
 ---
 
