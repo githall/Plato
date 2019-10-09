@@ -60,7 +60,9 @@ Plato.Issues added public or private issues tracking to Plato.
 
 ## Web Site
 
-To learn more about Plato please visit the projedts official web site https://plato.instantasp.co.uk/
+To learn more about Plato please visit the projedts official web site...
+
+https://plato.instantasp.co.uk/
 
 ## Live Demo
 
@@ -112,7 +114,7 @@ Only the master branch is suitible for production. All other branches are develo
 
 # Contributions
 
-We welcome contributions and will always support and assist contributors. Before considering a contribution please see our [simple guidelines](https://github.com/InstantASP/plato/blob/master/CONTRIBUTOR.md). 
+We welcome contributions and will always support and assist contributors. Before considering a contribution please see our [simple guidelines](https://github.com/InstantASP/plato/blob/master/CONTRIBUTING.md). 
 
 # Security
 
@@ -120,28 +122,11 @@ We strive to ensure Plato is as secure as possible. Plato is open source softwar
 
 # License
 
-Plato is free, open source software licensed under the GNU General Public License. 
-
-```
-Plato - Better, Faster Support... Free
-Copyright (C) 2019, InstantASP Limited
-
-Plato is free software: you can redistribute it and/or modify
-it under the version 3 terms of the GNU General Public License 
-as published by the Free Software Foundation.
-
-Plato is distributed in the hope that it will be useful, but 
-WITHOUT ANY WARRANTY; without even the implied warranty of
-MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
-GNU General Public License for more details.
-
-You should have received a copy of the GNU General Public License
-along with Plato.  If not, see https://www.gnu.org/licenses/ or 
-https://www.gnu.org/licenses/gpl-3.0.txt.
-```
+Plato is **100% free** and **open source** software licensed under the GNU Lesser General Public License v3.0. 
 
 
-Before using Plato please review the [Plato license](https://plato.instantasp.co.uk/docs/d/46/licensing) and ensure your happy with the terms and conditions defined by the GPL.
+
+Before using Plato please review [the Plato license](https://github.com/InstantASP/plato/blob/master/COPYING) and ensure your happy with the terms and conditions defined by the license.
 
 ---
 
