@@ -1,8 +1,39 @@
-﻿@model User
+﻿@using Plato.Internal.Abstractions.Settings
+@using Plato.Internal.Security.Abstractions
+@model User
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
+    var isAdmin = false;
+    if (Model.RoleNames != null)
+    {
+        foreach (var roleName in Model.RoleNames)
+        {
+            if (roleName.Equals(DefaultRoles.Administrator, StringComparison.OrdinalIgnoreCase))
+            {
+                isAdmin = true;
+                break;
+            }
+        }
+    }
+}
 
 <card>
     <card-body>
-        <button class="btn btn-primary" type="submit">@T["Save"]</button>
+
+        @if (isAdmin && isDemo)
+        {
+            <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                <a href="#" class="btn btn-primary disabled">
+                    @T["Save"]
+                </a>
+            </span>
+        }
+        else
+        {
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        }
+
     </card-body>
 </card>
 

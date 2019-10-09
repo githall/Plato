@@ -1,7 +1,7 @@
 
 ![logo.png](https://plato.instantasp.co.uk/plato.site/content/images/logo-text.png)
 
-![dotNetCore22](https://img.shields.io/static/v1?label=.NET+Core&message=2.2&color=green) ![mvc6](https://img.shields.io/static/v1?label=MVC&message=6&color=green) ![csharp8](https://img.shields.io/static/v1?label=C%23&message=8&color=green) ![bootstrap4](https://img.shields.io/static/v1?label=Bootstrap&message=4&color=green) 
+![dotNetCore22](https://img.shields.io/static/v1?label=.NET+Core&message=2.2&color=green) ![mvc6](https://img.shields.io/static/v1?label=MVC&message=6&color=green) ![csharp8](https://img.shields.io/static/v1?label=C%23&message=7&color=green) ![bootstrap4](https://img.shields.io/static/v1?label=Bootstrap&message=4&color=green) 
 
 Welcome to the official repository for Plato.
 

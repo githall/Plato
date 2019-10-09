@@ -64,5 +64,11 @@
     "inputFiles": [
       "wwwroot/css/vendors/bootstrap-slider.css"
     ]
+  },
+  {
+    "outputFileName": "wwwroot/css/vendors/bootstrap.min.css",
+    "inputFiles": [
+      "wwwroot/css/vendors/bootstrap.css"
+    ]
   }
 ]
