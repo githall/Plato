@@ -122,11 +122,9 @@ We strive to ensure Plato is as secure as possible. Plato is open source softwar
 
 # License
 
-Plato is **100% free** and **open source** software licensed under the GNU Lesser General Public License v3.0. 
+Plato is **100% free** and **open source** software licensed under the GNU General Public License v3.0. 
 
-
-
-Before using Plato please review [the Plato license](https://github.com/InstantASP/plato/blob/master/COPYING) and ensure your happy with the terms and conditions defined by the license.
+Before using Plato please review [the GPL 3.0 license](https://github.com/InstantASP/plato/blob/master/COPYING) and ensure your happy with the terms and conditions defined by the license.
 
 ---
 
