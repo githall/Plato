@@ -1,11 +1,25 @@
-Contributor Guidelines
---------------
+# Contributing guidelines
 
-Here are some guidelines to keep in mind when you're considering making changes to Plato:
+We’d love you to help us improve Plato. To help us keep this Plato
+high quality, we request that contributions adhere to the following guidelines.
 
-- Try to include descriptive commit messages, even if you squash them before sending a pull request.
+- Try to include descriptive commit messages, even if you squash them before sending a pull request. Good commit messages are important. They tell others why you did the changes you did, not just right here and now, but months or years from now.
+- Commit messages should be clear, concise and provide a reasonable summary to give an indication of what was changed and why.
+- Avoid committing several unrelated changes in one go. It makes merging difficult, and also makes it harder to determine which change is the culprit if a bug crops up.
 - If you aren't sure how something works or want to solicit input from other Plato developers before making a change, you can create an issue with the discussion tag or post your quesitons to https://plato.instantasp.co.uk/questions.
 - Please include relevant unit tests / specs along with your changes, if appropriate.
+
+## Commit Messages
+
+Please try to indicate the type of commit by using one of the following prefixes with your commit message...
+
+- fix: A code fix
+- ref: A code refactor
+- feat: A new feature
+- build: A change to build or publish files
+- legal: A legal change
+- doc: A documentation change
+- typo: A text fix
 
 ## Coding conventions
 
