@@ -13,13 +13,18 @@ high quality, we request that contributions adhere to the following guidelines.
 
 Please try to indicate the type of commit by using one of the following prefixes with your commit message...
 
-- fix: A code fix
-- ref: A code refactor
-- feat: A new feature
-- build: A change to build or publish files
-- legal: A legal change
-- doc: A documentation change
-- typo: A text fix
+- FIX: A code fix
+- REF: A code refactor
+- FEAT: A new feature
+- SEC: A security update
+- PERF: Performance related work
+- UX: A user experience fix or improvement
+- UI: A user interface fix or improvement
+- DEV: Tooling, project or dev changes
+- BUILD: Changes to build or publishing pipeline
+- LEGAL: A legal change
+- DOC: A documentation change
+- TYPO: A text change / fix
 
 ## Coding conventions
 
