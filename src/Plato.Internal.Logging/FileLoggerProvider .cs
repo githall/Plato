@@ -1,8 +1,8 @@
-﻿using System.Collections.Generic;
-using System.IO;
+﻿using System.IO;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Logging.BatchingLogger;
 
@@ -78,6 +78,7 @@ namespace Plato.Internal.Logging
                 }
             }
         }
+
     }
 
 }
