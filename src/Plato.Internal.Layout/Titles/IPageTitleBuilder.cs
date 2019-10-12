@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
-using Plato.Internal.Navigation.Abstractions;
 
 namespace Plato.Internal.Layout.Titles
 {

@@ -14,13 +14,13 @@ namespace Plato.Internal.Layout.Localizers
     {
 
         private string _cultureCode;
-
-        private readonly ILocaleStore _localeStore;
+        
         private readonly IOptions<LocaleOptions> _localeOptions;
+        private readonly ILocaleStore _localeStore;
 
         public LocaleStringLocalizer(
-            ILocaleStore localeStore,
-            IOptions<LocaleOptions> localeOptions)
+            IOptions<LocaleOptions> localeOptions,
+            ILocaleStore localeStore)
         {
             _localeStore = localeStore;
             _localeOptions = localeOptions;
@@ -67,7 +67,7 @@ namespace Plato.Internal.Layout.Localizers
                 return new LocalizedString(name, value, resourceNotFound: format == null);
             }
         }
-    }
 
+    }
 
 }

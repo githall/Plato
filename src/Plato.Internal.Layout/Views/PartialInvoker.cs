@@ -15,15 +15,15 @@ namespace Plato.Internal.Layout.Views
 
     public class PartialInvoker : IPartialInvoker
     {
-                
-        private readonly ICompositeViewEngine _viewEngine;
+
         private readonly IViewBufferScope _viewBufferScope;
+        private readonly ICompositeViewEngine _viewEngine;        
         private readonly IMemoryCache _memoryCache;
 
         public PartialInvoker(
-            IMemoryCache memoryCache,
+            IViewBufferScope viewBufferScope,
             ICompositeViewEngine viewEngine,
-            IViewBufferScope viewBufferScope)
+            IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
             _viewEngine = viewEngine ?? throw new ArgumentNullException(nameof(viewEngine));

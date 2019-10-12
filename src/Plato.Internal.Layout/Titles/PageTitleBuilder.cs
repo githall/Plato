@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using Plato.Internal.Navigation.Abstractions;
 
 namespace Plato.Internal.Layout.Titles
 {
-    
+
     public class PageTitleBuilder : IPageTitleBuilder
     {
 
@@ -36,7 +34,6 @@ namespace Plato.Internal.Layout.Titles
             });
             return this;
         }
-
 
         public IPageTitleBuilder FromNavigationBuilder(INavigationBuilder builder)
         {

@@ -18,17 +18,14 @@ namespace Plato.Internal.Layout.Views
         private readonly IViewComponentHelper _viewComponentHelper;
         private readonly IPartialInvoker _partialInvoker;
         private readonly ILogger<ViewInvoker> _logger;        
-        private readonly IHtmlHelper _htmlHelper;
 
         public ViewInvoker(            
             IViewComponentHelper viewComponentHelper,
             IPartialInvoker partialInvoker,
-            ILogger<ViewInvoker> logger,
-            IHtmlHelper htmlHelper)
+            ILogger<ViewInvoker> logger)
         {            
             _viewComponentHelper = viewComponentHelper;
-            _partialInvoker = partialInvoker;
-            _htmlHelper = htmlHelper;
+            _partialInvoker = partialInvoker;            
             _logger = logger;
         }
 

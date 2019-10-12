@@ -16,9 +16,9 @@ namespace Plato.Internal.Layout.Localizers
         public ViewContext ViewContext { get; private set; }
 
         public LocaleViewLocalizer(
-            ILocaleStore localeStore,
-            IOptions<LocaleOptions> localeOptions)
-            : base(localeStore,  localeOptions)
+            IOptions<LocaleOptions> localeOptions,
+            ILocaleStore localeStore)
+            : base(localeOptions, localeStore)
         {
         }
 

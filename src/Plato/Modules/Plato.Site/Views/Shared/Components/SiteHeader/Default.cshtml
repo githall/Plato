@@ -101,7 +101,6 @@
                                 </span>
                             </a>
                         </div>
-
                     </div>
                 </div>
             </div>
@@ -138,7 +137,6 @@
                                         <button type="submit" class="btn dropdown-item">@T["Log off"]</button>
                                     </div>
                                 </li>
-
                             </ul>
                         </form>
                     }
@@ -147,10 +145,7 @@
                         <ul class="nav nav-pills">
                             <li class="nav-item">
                                 <a class="nav-link" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@Context.Request.Path" data-provide="loader-spy">@T["Login"]</a>
-                            </li>
-                            @*<li class="nav-item">
-                                    <a class="nav-link" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Register" asp-route-returnUrl="@Context.Request.Path">@T["Register"]</a>
-                                </li>*@
+                            </li>                           
                         </ul>
                     }
                 </div>

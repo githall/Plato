@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using Plato.Internal.Layout.ViewAdapters;
-
-namespace Plato.Internal.Layout.Views
+﻿namespace Plato.Internal.Layout.Views
 {
     public class ViewDescriptor
     {

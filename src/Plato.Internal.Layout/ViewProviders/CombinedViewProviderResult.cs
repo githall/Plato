@@ -41,7 +41,7 @@ namespace Plato.Internal.Layout.ViewProviders
 
                 return views;
             }
-           
+
         }
 
     }

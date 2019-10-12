@@ -18,7 +18,7 @@ namespace Plato.Internal.Layout.Views
 
     public class PositionedView : View, IPositionedView
     {
-     
+
         private string _zone;
         private int _order;
         
@@ -47,7 +47,7 @@ namespace Plato.Internal.Layout.Views
                 throw new Exception(
                     $"No znon has been specified for the view {this.ViewName}.");
             }
-            
+
             // Is the zone supported?
             var supprtedZones = LayoutZones.SupportedZones;
             if (!supprtedZones.Contains(zone.ToLower()))
@@ -67,4 +67,5 @@ namespace Plato.Internal.Layout.Views
         }
 
     }
+
 }

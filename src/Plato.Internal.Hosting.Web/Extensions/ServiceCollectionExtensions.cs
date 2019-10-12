@@ -216,9 +216,6 @@ namespace Plato.Internal.Hosting.Web.Extensions
             // View adapters
             services.AddPlatoViewAdapters();
 
-            // Razor
-            //services.AddPlatoRazor();
-
             // Add module mvc
             services.AddPlatoModuleMvc();
 
