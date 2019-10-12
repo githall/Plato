@@ -1,6 +1,6 @@
-# Contributing guidelines
+# Contributing Guidelines
 
-We’d love you to help us improve Plato. To help us keep this Plato
+We’d love you to help us improve Plato. To help us keep Plato
 high quality, we request that contributions adhere to the following guidelines.
 
 - Try to include descriptive commit messages, even if you squash them before sending a pull request. Good commit messages are important. They tell others why you did the changes you did, not just right here and now, but months or years from now.
@@ -26,7 +26,7 @@ Please try to indicate the type of commit by using one of the following prefixes
 - DOC: A documentation change
 - TYPO: A text change / fix
 
-## Coding conventions
+## Coding Conventions
 
 - Use the default Resharper guidelines for code styling
 - Start private fields with _, i.e. _camelCased
