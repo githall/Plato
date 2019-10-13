@@ -49,7 +49,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
             // Required to invoke child tag helpers
             var content = await output.GetChildContentAsync();
-            
+
             // Find permission
             var permission = _permissionManager
                 .GetPermissions()?
@@ -60,31 +60,32 @@ namespace Plato.Internal.Layout.TagHelpers
             {
                 return;
             }
-            
+
             // Validate against registered permission handlers
             var result = await _authorizationService.AuthorizeAsync(
                 ViewContext.HttpContext.User,
                 Resource,
                 new PermissionRequirement(permission));
 
-            // Authorization failed 
+            // Authorization success 
             if (result.Succeeded)
             {
                 if (authorizeContext.Success != null)
-                {
-                    //success.InnerHtml.AppendHtml(authorizeContext.Success.Content);
+                {                    
                     output.Content.AppendHtml(authorizeContext.Success.Content);
                 }
             }
             else
             {
+                // Authorization failure 
                 if (authorizeContext.Fail != null)
                 {
                     output.Content.AppendHtml(authorizeContext.Fail.Content);
                 }
                 else
                 {
-                    // Suppress output if authorization failed and we have no failure content
+                    // Suppress output if authorization failed and we have 
+                    // no failure content to display
                     output.SuppressOutput();
                 }
             }
@@ -92,4 +93,5 @@ namespace Plato.Internal.Layout.TagHelpers
         }
 
     }
+
 }

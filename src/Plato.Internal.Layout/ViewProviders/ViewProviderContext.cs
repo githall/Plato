@@ -24,7 +24,7 @@ namespace Plato.Internal.Layout.ViewProviders
         public ViewProviderContext(IUpdateModel updater)
         {
             Updater = updater ?? throw new ArgumentNullException(nameof(updater));
-            Controller = updater as Controller ?? throw new Exception($"Could not convert type of '{this.GetType()}' to type of 'Controller'.");
+            Controller = updater as Controller ?? throw new Exception($"Could not convert type of '{GetType()}' to type of 'Controller'.");
         }
     }
 }

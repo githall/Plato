@@ -3,15 +3,16 @@
     public class ViewPosition
     {
 
-        public string Zone { get; set; } 
+        public string Zone { get; set; }
 
         public int Order { get; set; }
 
-        public ViewPosition(string zoneName, int order)
+        public ViewPosition(string zone, int order)
         {
-            this.Zone = zoneName;
-            this.Order = order;
+            Zone = zone;
+            Order = order;
         }
 
     }
+
 }

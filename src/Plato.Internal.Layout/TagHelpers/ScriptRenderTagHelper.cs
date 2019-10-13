@@ -21,20 +21,20 @@ namespace Plato.Internal.Layout.TagHelpers
 
         [HtmlAttributeName("auto-merge")]
         public bool AutoMerge { get; set; }
-        
+
         private readonly IScriptManager _scriptManager;
 
         public ScriptRenderTagHelper(IScriptManager scriptManager)
         {
             _scriptManager = scriptManager;
         }
-        
+
         public override void Process(TagHelperContext context, TagHelperOutput output)
         {
 
             output.TagName = null;
 
-            var capture = _scriptManager.GetScriptBlocks(this.Section);
+            var capture = _scriptManager.GetScriptBlocks(Section);
             if (capture == null)
             {
                 output.SuppressOutput();
@@ -57,7 +57,7 @@ namespace Plato.Internal.Layout.TagHelpers
                 (AutoMerge && b.CanMerge) ||
                 (!AutoMerge && b.CanMerge))
             );
-            
+
             // Convert mergables to list
             var mergableBlocksList = mergableBlocks.ToList();
 
@@ -66,7 +66,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
             // Render merged blocks
             await RenderMergedBlocks(textWriter, finalList);
-            
+
             // Get all other blocks we can't merge
             var otherBlocks = orderedBlocksList.Except(mergableBlocksList);
 
@@ -77,6 +77,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
         async Task RenderSeparateBlocks(TextWriter textWriter, IEnumerable<ScriptBlock> blocks)
         {
+
             foreach (var block in blocks)
             {
                 var tagBuilder = new TagBuilder(ScriptTag)
@@ -102,7 +103,9 @@ namespace Plato.Internal.Layout.TagHelpers
             var blockList = blocks.ToList();
 
             if (!blockList.Any())
+            {
                 return;
+            }
 
             var tagBuilder = new TagBuilder(ScriptTag)
             {

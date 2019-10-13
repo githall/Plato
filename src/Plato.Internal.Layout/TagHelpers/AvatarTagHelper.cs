@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
@@ -32,18 +31,15 @@ namespace Plato.Internal.Layout.TagHelpers
 
         public ISimpleUser User { get; set; } 
 
-        private readonly IUrlHelper _urlHelper;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IUrlHelper _urlHelper; 
 
-        public AvatarTagHelper(
-            IUrlHelperFactory urlHelperFactory,
-            IHttpContextAccessor httpContextAccessor, 
-            IActionContextAccessor actionContextAccesor)
-        {
-            _httpContextAccessor = httpContextAccessor;
+        public AvatarTagHelper(                      
+            IActionContextAccessor actionContextAccesor,
+            IUrlHelperFactory urlHelperFactory)
+        {       
             _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
         }
-        
+
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
             
@@ -66,20 +62,20 @@ namespace Plato.Internal.Layout.TagHelpers
                         {AreaAttributeName, Area},
                         {ControllerAttributeName, Controller},
                         {ActionAttributeName, Action},
-                        {IdAttributeName, this.UserId}
+                        {IdAttributeName, UserId}
                     }
                 });
-                
+
                 img.Attributes.Add("style", $"background-image: url('{url}');");
 
             }
-      
+
             output.Content.SetHtmlContent(img.ToHtmlString());
 
             return Task.CompletedTask;
 
         }
 
-
     }
+
 }

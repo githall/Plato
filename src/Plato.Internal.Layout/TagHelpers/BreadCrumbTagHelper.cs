@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
-using System.Text.Encodings.Web;
 using System.Threading.Tasks;
+using System.Text.Encodings.Web;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Plato.Internal.Navigation.Abstractions;
@@ -14,9 +14,9 @@ namespace Plato.Internal.Layout.TagHelpers
     public class BreadCrumbTagHelper : TagHelper
     {
 
-        private readonly HtmlEncoder _htmlEncoder;
-        private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IActionContextAccessor _actionContextAccessor;
+        private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly HtmlEncoder _htmlEncoder;
 
         public BreadCrumbTagHelper(
             IActionContextAccessor actionContextAccessor,
@@ -44,7 +44,7 @@ namespace Plato.Internal.Layout.TagHelpers
             return Task.CompletedTask;
 
         }
-        
+
         string BuildBreadCrumb(IEnumerable<MenuItem> items)
         {
 
@@ -60,7 +60,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
         void BuildBreadCrumbItem(MenuItem item, StringBuilder sb)
         {
-         
+
             var hasUrl = !String.IsNullOrEmpty(item.Href);
 
             sb.Append("<li  class=\"breadcrumb-item\">");

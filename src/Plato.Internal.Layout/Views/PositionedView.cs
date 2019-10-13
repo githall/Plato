@@ -45,7 +45,7 @@ namespace Plato.Internal.Layout.Views
             if (String.IsNullOrEmpty(zone))
             {
                 throw new Exception(
-                    $"No znon has been specified for the view {this.ViewName}.");
+                    $"No znon has been specified for the view {ViewName}.");
             }
 
             // Is the zone supported?

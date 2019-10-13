@@ -11,6 +11,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+
             var childContent = await output.GetChildContentAsync();
             var modalContext = (CardContext)context.Items[typeof(CardContext)];
             modalContext.Footer = new CardSection()
@@ -20,5 +21,7 @@ namespace Plato.Internal.Layout.TagHelpers
             };
             output.SuppressOutput();
         }
+
     }
+
 }

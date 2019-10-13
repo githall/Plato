@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Logging;
 using Plato.Internal.Layout.Views;
 
 namespace Plato.Internal.Layout.TagHelpers
 {
-    
+
     [HtmlTargetElement("view")]
     public class ViewTagHelper : TagHelper
     {
@@ -43,9 +41,9 @@ namespace Plato.Internal.Layout.TagHelpers
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
 
-            if (this.Model == null)
+            if (Model == null)
             {
-                throw new ArgumentNullException(nameof(this.Model));
+                throw new ArgumentNullException(nameof(Model));
             }
 
             IHtmlContent builder = null;
@@ -91,7 +89,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
             HtmlContentBuilder builder = null;
             
-            if (this.Model is IEnumerable<IView>)
+            if (Model is IEnumerable<IView>)
             {
                 builder = new HtmlContentBuilder();
                 foreach (var view in Model)
@@ -105,29 +103,29 @@ namespace Plato.Internal.Layout.TagHelpers
                     {
                         throw;
                     }
-                    
                 }
             }
             else
             {
-                if (this.Model is IView)
+                if (Model is IView)
                 {
                     builder = new HtmlContentBuilder();
                     try
                     {
-                        var result = await _viewDisplayHelper.DisplayAsync(this.Model);
+                        var result = await _viewDisplayHelper.DisplayAsync(Model);
                         builder.AppendHtml(result);
                     }
-                    catch 
-                    {                    
+                    catch
+                    {
                         throw;
-                    }                  
+                    }
                 }
             }
-       
+
             return builder;
 
         }
-        
+
     }
+
 }

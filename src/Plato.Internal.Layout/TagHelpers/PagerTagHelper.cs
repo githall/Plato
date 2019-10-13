@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Internal.Abstractions.Extensions;
-using Plato.Internal.Navigation;
 using Plato.Internal.Navigation.Abstractions;
 
 namespace Plato.Internal.Layout.TagHelpers
@@ -37,9 +36,8 @@ namespace Plato.Internal.Layout.TagHelpers
         public string LastText { get; set; }
 
         [ViewContext] // inform razor to inject
-        public ViewContext ViewContext { get; set; }
-        
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        public ViewContext ViewContext { get; set; }        
+  
         private readonly IActionContextAccessor _actionContextAccesor;
         private readonly IUrlHelper _urlHelper;
         private string pageKey = "pager.page";
@@ -48,11 +46,9 @@ namespace Plato.Internal.Layout.TagHelpers
 
         public PagerTagHelper(
             IStringLocalizer<PagerTagHelper> localizer,
-            IHttpContextAccessor httpContextAccessor,
             IActionContextAccessor actionContextAccesor,
             IUrlHelperFactory urlHelperFactory)
         {
-            _httpContextAccessor = httpContextAccessor;
             _actionContextAccesor = actionContextAccesor;
             _urlHelper = urlHelperFactory.GetUrlHelper(_actionContextAccesor.ActionContext);
             T = localizer;
@@ -60,10 +56,10 @@ namespace Plato.Internal.Layout.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-         
+
             // Calculate total pages
             _totalPageCount = Model.Size > 0 ? (int)Math.Ceiling((double)Model.Total / Model.Size) : 1;
-            
+
             // Get route data
             _routeData = new RouteValueDictionary(_actionContextAccesor.ActionContext.RouteData.Values);
 
@@ -78,12 +74,12 @@ namespace Plato.Internal.Layout.TagHelpers
             {
                 output.Content.SetHtmlContent(await Build());
             }
-            
+
         }
 
         async Task<IHtmlContent> Build()
         {
-            
+
             var builder = new HtmlContentBuilder();
             var htmlContentBuilder = builder
                 .AppendHtml("<ul class=\"pagination\">")
@@ -98,11 +94,11 @@ namespace Plato.Internal.Layout.TagHelpers
             return await Task.FromResult(htmlContentBuilder);
 
         }
-        
+
         HtmlString BuildFirst()
         {
 
-            if (this.Model.Page <= 2)
+            if (Model.Page <= 2)
             {
                 return new HtmlString(string.Empty);
             }
@@ -131,14 +127,14 @@ namespace Plato.Internal.Layout.TagHelpers
         HtmlString BuildPrevious()
         {
 
-            if (this.Model.Page == 1)
+            if (Model.Page == 1)
             {
                 return new HtmlString(string.Empty);
             }
 
             var text = PreviousText ?? T["Prev"];
 
-            _routeData[pageKey] = this.Model.Page - 1;
+            _routeData[pageKey] = Model.Page - 1;
             var url = _urlHelper.RouteUrl(new UrlRouteContext { Values = _routeData });
             
             var builder = new HtmlContentBuilder();
@@ -221,14 +217,14 @@ namespace Plato.Internal.Layout.TagHelpers
         HtmlString BuildNext()
         {
 
-            if (this.Model.Page == _totalPageCount)
+            if (Model.Page == _totalPageCount)
             {
                 return new HtmlString(string.Empty);
             }
 
             var text = NextText ?? T["Next"];
 
-            _routeData[pageKey] = this.Model.Page + 1;
+            _routeData[pageKey] = Model.Page + 1;
             var url = _urlHelper.RouteUrl(new UrlRouteContext { Values = _routeData });
             
             var builder = new HtmlContentBuilder();
@@ -250,7 +246,7 @@ namespace Plato.Internal.Layout.TagHelpers
         HtmlString BuildLast()
         {
 
-            if (this.Model.Page >= _totalPageCount - 1)
+            if (Model.Page >= _totalPageCount - 1)
             {
                 return new HtmlString(string.Empty);
             }
@@ -289,13 +285,13 @@ namespace Plato.Internal.Layout.TagHelpers
                 .AppendHtml("<div class=\"p-2 text-muted\">")
                 .Append(page)
                 .Append(" ")
-                .Append(this.Model.Page.ToString())
+                .Append(Model.Page.ToString())
                 .Append(" ")
                 .Append(of)
                 .Append(" ")
                 .Append(_totalPageCount.ToString())
                 .Append(", ")
-                .Append(this.Model.Total.ToString())
+                .Append(Model.Total.ToString())
                 .Append(" ")
                 .Append(results)
                 .AppendHtml("</div>")

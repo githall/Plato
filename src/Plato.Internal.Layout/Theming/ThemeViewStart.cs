@@ -14,8 +14,8 @@ namespace Plato.Internal.Layout.Theming
 
             // Compute layout based on controller type
 
-            var themeOptions = this.Context.RequestServices.GetService<IOptions<ThemeOptions>>();
-            var siteOptions = this.Context.RequestServices.GetService<IOptions<SiteOptions>>();
+            var themeOptions = Context.RequestServices.GetService<IOptions<ThemeOptions>>();
+            var siteOptions = Context.RequestServices.GetService<IOptions<SiteOptions>>();
 
             var path = "";
             if (!string.IsNullOrEmpty(siteOptions.Value.Theme))

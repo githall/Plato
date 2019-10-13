@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Plato.Internal.Layout.TagHelpers
@@ -14,6 +11,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
+
             var childContent = await output.GetChildContentAsync();
             var modalContext = (CardContext)context.Items[typeof(CardContext)];
             modalContext.Title = new CardSection()
@@ -23,6 +21,7 @@ namespace Plato.Internal.Layout.TagHelpers
             };
             output.SuppressOutput();
         }
+
     }
 
 }

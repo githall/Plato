@@ -92,9 +92,11 @@ namespace Plato.Internal.Layout.TagHelpers
 
             output.Attributes.SetAttribute("data-provide", "date-picker");
             return Task.CompletedTask;
+
         }
 
         #endregion
 
     }
+
 }

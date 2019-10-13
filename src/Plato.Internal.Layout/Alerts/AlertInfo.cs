@@ -26,8 +26,8 @@ namespace Plato.Internal.Layout.Alerts
 
         public AlertInfo(AlertType type, LocalizedHtmlString message)
         {
-            this.Type = type;
-            this.Message = message;
+            Type = type;
+            Message = message;
         }
 
     }

@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 
 namespace Plato.Internal.Layout.TagHelpers
 {
-  
+
     [HtmlTargetElement("authorize-success")]
     public class AuthorizeSuccessTagHelper : TagHelper
     {
@@ -25,9 +25,9 @@ namespace Plato.Internal.Layout.TagHelpers
                 Content = childContent
             };
             output.SuppressOutput();
+
         }
+
     }
-
-
 
 }

@@ -18,9 +18,9 @@ namespace Plato.Internal.Layout.ViewFeatures
 
         private static IEnumerable<string> _referencePaths;
         private static object _synLock = new object();
- 
+
         private readonly ITypedModuleProvider _typedModuleProvider;
- 
+
         public ModularFeatureApplicationPart(IServiceProvider services)
         {                  
             _typedModuleProvider = services.GetRequiredService<ITypedModuleProvider>();
@@ -59,8 +59,6 @@ namespace Plato.Internal.Layout.ViewFeatures
                 {
                     return _referencePaths;
                 }
-
-                var types = this.Types;
 
                 _referencePaths = DependencyContext.Default.CompileLibraries
                     .SelectMany(library => library.ResolveReferencePaths());

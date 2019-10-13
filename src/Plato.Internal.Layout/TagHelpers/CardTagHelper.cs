@@ -27,26 +27,26 @@ namespace Plato.Internal.Layout.TagHelpers
 
             // Required to invoke child tag helpers
             var content = await output.GetChildContentAsync();
-            
+
             output.TagName = "div";
-            if (this.Enabled)
+            if (Enabled)
             {
                 output.Attributes.Add("class", $"card card-{Type.ToString().ToLower()}");
             }
 
             // title
-            if (cardContext.Title != null && this.Enabled)
+            if (cardContext.Title != null && Enabled)
             {
                 var panelTitle = new TagBuilder("div");
                 panelTitle.AddCssClass(cardContext.Title.CssClass);
                 panelTitle.InnerHtml.AppendHtml(cardContext.Title.Content);
                 output.Content.AppendHtml(panelTitle);
             }
-            
+
             if (cardContext.Body != null)
             {
                 // panel body
-                if (cardContext.Body.Content != null && this.Enabled)
+                if (cardContext.Body.Content != null && Enabled)
                 {
                     var panelBody = new TagBuilder("div");
                     panelBody.AddCssClass(cardContext.Body.CssClass);
@@ -59,10 +59,9 @@ namespace Plato.Internal.Layout.TagHelpers
                     output.Attributes.Clear();
                 }
             }
-           
 
             // panel footer
-            if (cardContext.Footer != null && this.Enabled)
+            if (cardContext.Footer != null && Enabled)
             {
                 var panelFooter = new TagBuilder("div");
                 panelFooter.AddCssClass(cardContext.Footer.CssClass);
@@ -72,9 +71,9 @@ namespace Plato.Internal.Layout.TagHelpers
             }
 
         }
-        
+
     }
-    
+
     public enum CardType
     {
         Default,

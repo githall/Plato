@@ -33,7 +33,7 @@ namespace Plato.Internal.Layout.Views
 
         public void Contextualize(ViewDisplayContext context)
         {
-            this.ViewContext = context.ViewContext;
+            ViewContext = context.ViewContext;
         }
 
         public async Task<IHtmlContent> InvokeAsync(IView view)
@@ -51,7 +51,7 @@ namespace Plato.Internal.Layout.Views
 
             // ** Hot code path ** - please modify carefully
 
-            if (this.ViewContext == null)
+            if (ViewContext == null)
             {
                 throw new Exception(
                     "ViewContext must be set via the Contextualize method before calling the InvokeAsync method");
@@ -63,7 +63,7 @@ namespace Plato.Internal.Layout.Views
             if (view.EmbeddedView != null)
             {                
                 return await view.EmbeddedView
-                    .Contextualize(this.ViewContext)
+                    .Contextualize(ViewContext)
                     .Build();
             }
             
@@ -85,7 +85,7 @@ namespace Plato.Internal.Layout.Views
 
         async Task<IHtmlContent> InvokePartialAsync(string viewName, object model)
         {
-            _partialInvoker.Contextualize(this.ViewContext);
+            _partialInvoker.Contextualize(ViewContext);
             return await _partialInvoker.InvokeAsync(viewName, model, ViewContext.ViewData);
         }
 
@@ -98,7 +98,7 @@ namespace Plato.Internal.Layout.Views
             }
 
             // Contextualize view component
-            helper.Contextualize(this.ViewContext);
+            helper.Contextualize(ViewContext);
 
             // Log the invocation, we can't use try / catch around our view component helper :(
             if (_logger.IsEnabled(LogLevel.Information))

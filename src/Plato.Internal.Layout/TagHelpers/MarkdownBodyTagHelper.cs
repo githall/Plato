@@ -59,13 +59,12 @@ namespace Plato.Internal.Layout.TagHelpers
                 content = (await output.GetChildContentAsync(htmlEncoder))
                     .GetContent(htmlEncoder);
             }
-            
 
             if (string.IsNullOrEmpty(content))
             {
                 return;
             }
-                
+
             var markdown = NormalizeWhiteSpaceText(content.Trim('\n', '\r'));
 
             output.TagName = "div";
@@ -73,9 +72,9 @@ namespace Plato.Internal.Layout.TagHelpers
             output.Attributes.Add("data-provide", "markdownBody");
 
             output.Content.SetHtmlContent(await ParseEntityHtml(markdown));
-            
+
         }
-        
+
         async Task<string> ParseEntityHtml(string message)
         {
       
@@ -95,13 +94,13 @@ namespace Plato.Internal.Layout.TagHelpers
             {
                 return text;
             }
-                
+
             var lines = GetLines(text);
             if (lines.Length < 1)
             {
                 return text;
             }
-                
+
             string line1 = null;
 
             // find first non-empty line
@@ -116,14 +115,14 @@ namespace Plato.Internal.Layout.TagHelpers
             {
                 return text;
             }
-                
+
             var trimLine = line1.TrimStart();
             var whitespaceCount = line1.Length - trimLine.Length;
             if (whitespaceCount == 0)
             {
                 return text;
             }
-                
+
             var sb = new StringBuilder();
             foreach (var line in lines)
             {
@@ -133,6 +132,7 @@ namespace Plato.Internal.Layout.TagHelpers
             }
 
             return sb.ToString();
+
         }
 
         string[] GetLines(string s, int maxLines = 0)

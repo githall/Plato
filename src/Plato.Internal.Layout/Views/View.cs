@@ -1,9 +1,8 @@
-﻿using System;
-using Plato.Internal.Layout.EmbeddedViews;
+﻿using Plato.Internal.Layout.EmbeddedViews;
 
 namespace Plato.Internal.Layout.Views
 {
-    
+
     public interface IView
     {
         IEmbeddedView EmbeddedView { get; set; }
@@ -11,7 +10,7 @@ namespace Plato.Internal.Layout.Views
         string ViewName { get; set; }
 
         object Model { get; set; }
-        
+
     }
 
     public class View : IView
@@ -25,16 +24,16 @@ namespace Plato.Internal.Layout.Views
         
         public View(IEmbeddedView view)
         {
-            this.ViewName = view.GetType().Name;
-            this.EmbeddedView = view;
+            ViewName = view.GetType().Name;
+            EmbeddedView = view;
         }
-        
+
         public View(string viewName, object model = null)
         {
-            this.ViewName = viewName;
-            this.Model = model;
+            ViewName = viewName;
+            Model = model;
         }
-        
+
     }
 
 }

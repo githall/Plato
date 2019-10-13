@@ -106,11 +106,11 @@ namespace Plato.Internal.Layout.Titles
             if (other == null)
                 return 1;
             var sortOrderCompare = ((PageTitlePart)other).Position;
-            if (this.Position == sortOrderCompare)
+            if (Position == sortOrderCompare)
                 return 0;
-            if (this.Position < sortOrderCompare)
+            if (Position < sortOrderCompare)
                 return -1;
-            if (this.Position > sortOrderCompare)
+            if (Position > sortOrderCompare)
                 return 1;
             return 0;
         }

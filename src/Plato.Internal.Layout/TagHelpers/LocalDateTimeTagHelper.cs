@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.Settings;
 using Plato.Internal.Hosting.Abstractions;
@@ -26,7 +25,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
         [HtmlAttributeName("pretty")]
         public bool Pretty { get; set; } = true;
-        
+
         private readonly ILocalDateTimeProvider _localDateTimeProvider;
         private readonly IContextFacade _contextFacade;
 
@@ -41,7 +40,7 @@ namespace Plato.Internal.Layout.TagHelpers
             _contextFacade = contextFacade;
             _settings = siteSettings.Value;
         }
-        
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
 
@@ -73,7 +72,7 @@ namespace Plato.Internal.Layout.TagHelpers
             output.Attributes.Add("title", formattedDateTime);
             output.Attributes.Add("data-toggle", "tooltip");
 
-            output.Content.SetHtmlContent(this.Pretty
+            output.Content.SetHtmlContent(Pretty
                 ? builder.AppendHtml(utcDateTime.DateTime.ToPrettyDate(dateTimeFormat))
                 : builder.AppendHtml(formattedDateTime));
 
@@ -81,6 +80,7 @@ namespace Plato.Internal.Layout.TagHelpers
         
         string GetDefaultDateTimeFormat()
         {
+
             if (_settings != null)
             {
                 if (!String.IsNullOrEmpty(_settings.DateTimeFormat))
@@ -89,7 +89,9 @@ namespace Plato.Internal.Layout.TagHelpers
                 }
             }
             return DefaultDateTimeFormat;
+
         }
-        
+
     }
+
 }

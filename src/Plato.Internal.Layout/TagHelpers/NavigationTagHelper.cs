@@ -1,17 +1,15 @@
 ﻿using System;
-using System.Collections;
-using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Collections;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Plato.Internal.Abstractions.Extensions;
 using Plato.Internal.Layout.Views;
-using Plato.Internal.Navigation;
 using Plato.Internal.Navigation.Abstractions;
 
 namespace Plato.Internal.Layout.TagHelpers
@@ -58,22 +56,22 @@ namespace Plato.Internal.Layout.TagHelpers
         private int _level;
         private int _index;
         private object _cssClasses;
-        
-        private readonly INavigationManager _navigationManager;
+
         private readonly IActionContextAccessor _actionContextAccessor;
+        private readonly INavigationManager _navigationManager;        
         private readonly IViewHelperFactory _viewHelperFactory;
         private IViewDisplayHelper _viewDisplayHelper;
 
         public NavigationTagHelper(
-            INavigationManager navigationManager,
             IActionContextAccessor actionContextAccessor,
+            INavigationManager navigationManager,            
             IViewHelperFactory viewHelperFactory)
         {
-            _navigationManager = navigationManager;
             _actionContextAccessor = actionContextAccessor;
+            _navigationManager = navigationManager;            
             _viewHelperFactory = viewHelperFactory;
         }
-        
+
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
 
@@ -83,20 +81,20 @@ namespace Plato.Internal.Layout.TagHelpers
             // Ensure no surrounding element
             output.TagName = "";
             output.TagMode = TagMode.StartTagAndEndTag;
-            
+
             // Get action context
             var actionContext = _actionContextAccessor.ActionContext;
 
             // Add navigation model if provided to action context for
             // optional use within any navigation builders later on
-            if (this.Model != null)
+            if (Model != null)
             {
-                actionContext.HttpContext.Items[this.Model.GetType()] = this.Model;
+                actionContext.HttpContext.Items[Model.GetType()] = Model;
             }
-            
+
             // Build navigation
             var sb = new StringBuilder();
-            var items = _navigationManager.BuildMenu(this.Name, actionContext);
+            var items = _navigationManager.BuildMenu(Name, actionContext);
             var itemsList = items.ToList();
             if (itemsList.Any())
             {
@@ -107,7 +105,7 @@ namespace Plato.Internal.Layout.TagHelpers
             {
                 output.SuppressOutput();
             }
-            
+
         }
 
         bool IsLinkExpandedOrChildSelected(MenuItem menuItem)
@@ -168,9 +166,9 @@ namespace Plato.Internal.Layout.TagHelpers
             sb.Append(NewLine);
             AddTabs(_level, sb);
             
-            if (_level > 0 && this.Collaspsable)
+            if (_level > 0 && Collaspsable)
             {
-                var collapseCss = IsChildSelected(items) ? this.CollapseCss + " show" : this.CollapseCss;
+                var collapseCss = IsChildSelected(items) ? CollapseCss + " show" : CollapseCss;
                 sb.Append("<div class=\"")
                     .Append(collapseCss)
                     .Append("\" id=\"")
@@ -179,12 +177,12 @@ namespace Plato.Internal.Layout.TagHelpers
                     .Append("\">");
             }
 
-            if (this.EnableList)
+            if (EnableList)
             {
                 var ulClass = _cssClasses;
                 if (_level > 0)
                 {
-                    ulClass = this.ChildUlCssClass;
+                    ulClass = ChildUlCssClass;
                 }
                
                 // ul
@@ -210,7 +208,7 @@ namespace Plato.Internal.Layout.TagHelpers
                 
                 AddTabs(_level + 1, sb);
 
-                if (this.EnableList)
+                if (EnableList)
                 {
                     sb.Append("<div class=\"")
                         .Append(GetListItemClass(items, item, index))
@@ -232,7 +230,7 @@ namespace Plato.Internal.Layout.TagHelpers
                             .Append("An exception occurred whilst invoking the view \"")
                             .Append(item.View.ViewName)
                             .Append("\" for the \"")
-                            .Append(this.Name)
+                            .Append(Name)
                             .Append("\" navigation tag helper, Exception message: ")
                             .Append(e.Message);
 
@@ -242,7 +240,7 @@ namespace Plato.Internal.Layout.TagHelpers
                         sb
                             .Append(
                                 "An exception occurred whilst building a link for the navigation tag helper with the name \"")
-                            .Append(this.Name)
+                            .Append(Name)
                             .Append("\", Exception message: ")
                             .Append(e.Message);
                     }
@@ -261,7 +259,7 @@ namespace Plato.Internal.Layout.TagHelpers
                     _level--;
                 }
 
-                if (this.EnableList)
+                if (EnableList)
                 {
                     sb.Append("</div>").Append(NewLine);
                 }
@@ -270,7 +268,7 @@ namespace Plato.Internal.Layout.TagHelpers
             }
 
             AddTabs(_level, sb);
-            if (this.EnableList)
+            if (EnableList)
             {
 
                 if (!string.IsNullOrEmpty(ChildUlInnerCssClass) && _level > 0)
@@ -284,24 +282,24 @@ namespace Plato.Internal.Layout.TagHelpers
                 
             }
 
-            if (_level > 0 && this.Collaspsable)
+            if (_level > 0 && Collaspsable)
             {
                 sb.Append("</div>");
             }
-            
+
             return sb.ToString();
-            
+
         }
 
         string BuildLink(MenuItem item)
         {
-            var linkClass = _level == 0 | this.Collaspsable
+            var linkClass = _level == 0 | Collaspsable
                 ? LinkCssClass
                 : "dropdown-item";
 
             if (item.Items.Count > 0)
             {
-                if (!this.Collaspsable)
+                if (!Collaspsable)
                 {
                     if (!string.IsNullOrEmpty(linkClass))
                         linkClass += " ";
@@ -327,7 +325,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
             var targetEvent = "";
             var targetCss = " data-toggle=\"dropdown\"";
-            if (this.Collaspsable)
+            if (Collaspsable)
             {
                 targetCss = " data-toggle=\"collapse\"";
                 targetEvent = $" data-target=\"#menu-{_index}\" aria-controls=\"#menu-{_index}\"";
@@ -343,7 +341,7 @@ namespace Plato.Internal.Layout.TagHelpers
             }
             else
             {
-                
+
                 sb.Append("<a class=\"")
                     .Append(linkClass)
                     .Append("\" href=\"")
@@ -384,11 +382,11 @@ namespace Plato.Internal.Layout.TagHelpers
                         .Append(item.IconCss)
                         .Append("\"></i>");
                 }
-                
+
                 sb.Append("<span class=\"nav-text\">")
                     .Append(item.Text.Value)
                     .Append("</span>");
-                
+
                 if (!String.IsNullOrEmpty(item.BadgeText))
                 {
                     sb.Append("<span class=\"")
@@ -397,7 +395,7 @@ namespace Plato.Internal.Layout.TagHelpers
                         .Append(item.BadgeText)
                         .Append("</span>");
                 }
-                
+
                 sb.Append("</a>");
 
             }
@@ -408,8 +406,7 @@ namespace Plato.Internal.Layout.TagHelpers
         async Task<string> BuildViewAsync(MenuItem item)
         {
 
-            EnsureViewHelper();
-            
+            EnsureViewHelper();            
             var viewResult = await _viewDisplayHelper.DisplayAsync(new View(item.View.ViewName, item.View.Model));
             return viewResult.Stringify();
 
@@ -430,13 +427,13 @@ namespace Plato.Internal.Layout.TagHelpers
         {
 
             var sb = new StringBuilder();
-            sb.Append(this.LiCssClass);
+            sb.Append(LiCssClass);
 
             if (item.Items.Count > 0)
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(" ");
-                if (!this.Collaspsable)
+                if (!Collaspsable)
                 {
                     sb.Append("dropdown");
                 }
@@ -445,14 +442,14 @@ namespace Plato.Internal.Layout.TagHelpers
 
             if (_level > 0)
             {
-                if (!this.Collaspsable)
+                if (!Collaspsable)
                 {
                     if (!string.IsNullOrEmpty(sb.ToString()))
                         sb.Append(" ");
                     sb.Append("dropdown-submenu");
                 }
             }
-            
+
             if (index == 0)
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
