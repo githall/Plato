@@ -186,7 +186,10 @@ namespace Plato.Internal.FileSystem
           
             var file = _fileProvider.GetFileInfo(Combine(path));
             if (!file.Exists)
+            {
                 return null;
+            }
+
             byte[] output = null;
             using (var stream = File.Open(path, FileMode.Open))
             {

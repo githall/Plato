@@ -8,7 +8,6 @@ using Plato.Internal.Stores.Roles;
 using Plato.Internal.Stores.Users;
 using Plato.Internal.Models.Users;
 using Plato.Internal.Stores.Abstract;
-using Plato.Internal.Stores.Abstractions;
 using Plato.Internal.Stores.Abstractions.Badges;
 using Plato.Internal.Stores.Abstractions.Files;
 using Plato.Internal.Stores.Abstractions.Reputations;
@@ -29,7 +28,7 @@ namespace Plato.Internal.Stores.Extensions
     {
 
         public static IServiceCollection AddPlatoStores(
-         this IServiceCollection services)
+            this IServiceCollection services)
         {
 
             // Abstract stores 
@@ -38,9 +37,9 @@ namespace Plato.Internal.Stores.Extensions
 
             // Ensure query is aware of current db context
             services.AddScoped<IDbQueryConfiguration, DbQueryConfiguration>();
-            
+
             // Files
-            services.AddScoped<IFileStore, FileStore>();
+            services.AddSingleton<IFileStore, FileStore>();
 
             // Shell features
             services.AddScoped<IShellDescriptorStore, ShellDescriptorStore>();
@@ -48,7 +47,7 @@ namespace Plato.Internal.Stores.Extensions
 
             // Site Settings
             services.AddScoped<ISiteSettingsStore, SiteSettingsStore>();
-            
+
             // Roles
             services.AddScoped<IPlatoRoleStore, PlatoRoleStore>();
             services.AddScoped<IPlatoUserRoleStore<UserRole>, PlatoUserRolesStore>();
@@ -68,13 +67,12 @@ namespace Plato.Internal.Stores.Extensions
 
             // User badges
             services.AddScoped<IUserBadgeStore<UserBadge>, UserBadgeStore>();
-            
+
             // Schema
             services.AddScoped<IConstraintStore, ConstraintStore>();
-            
-   
+
             return services;
-            
+
         }
 
     }

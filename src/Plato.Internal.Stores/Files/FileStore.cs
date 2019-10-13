@@ -1,30 +1,30 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.Caching.Memory;
 using Plato.Internal.FileSystem.Abstractions;
 using Plato.Internal.Stores.Abstractions.Files;
 
 namespace Plato.Internal.Stores.Files
 {
-    
+
     public class FileStore : IFileStore
     {
 
-        private readonly IMemoryCache _memoryCache;
-        private readonly IPlatoFileSystem _fileSystem;
+        private readonly IPlatoFileSystem _fileSystem;                
         private readonly ILogger<FileStore> _logger;
-      
+        private readonly IMemoryCache _memoryCache;
+
         public FileStore(
-            IMemoryCache memoryCache,
             IPlatoFileSystem fileSystem,
-            ILogger<FileStore> logger)
+            ILogger<FileStore> logger,
+            IMemoryCache memoryCache)
         {
             _memoryCache = memoryCache;
             _fileSystem = fileSystem;
             _logger = logger;
         }
-
+        
         public async Task<byte[]> GetFileBytesAsync(string path)
         {
 
@@ -32,41 +32,41 @@ namespace Plato.Internal.Stores.Files
             {
                 throw new ArgumentNullException(nameof(path));
             }
-                
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .AddExpirationToken(_fileSystem.Watch(path));
 
             if (!_memoryCache.TryGetValue(path, out byte[] result))
             {
                 result = await _fileSystem.ReadFileBytesAsync(path);
                 if (result != null)
                 {
-                    _memoryCache.Set(path, result, cacheEntryOptions);
+                    _memoryCache.Set(path, result, new MemoryCacheEntryOptions()
+                        .AddExpirationToken(_fileSystem.Watch(path)));
                 }
             }
 
             return result;
+
         }
         
         public async Task<string> GetFileAsync(string path)
         {
 
             if (string.IsNullOrEmpty(path))
+            {
                 throw new ArgumentNullException(nameof(path));
-
-            var cacheEntryOptions = new MemoryCacheEntryOptions()
-                .AddExpirationToken(_fileSystem.Watch(path));
+            }
 
             if (!_memoryCache.TryGetValue(path, out string result))
             {
                 result = await _fileSystem.ReadFileAsync(path);
                 if (result != null)
                 {
-                    _memoryCache.Set(path, result, cacheEntryOptions);
+                    _memoryCache.Set(path, result, new MemoryCacheEntryOptions()
+                        .AddExpirationToken(_fileSystem.Watch(path)));
                 }
             }
 
             return result;
+
         }
 
         public string Combine(params string[] paths)

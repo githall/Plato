@@ -12,4 +12,5 @@ namespace Plato.Internal.Stores.Abstractions.Files
         string Combine(params string[] paths);
 
     }
+
 }

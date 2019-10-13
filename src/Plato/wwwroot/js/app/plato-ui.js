@@ -7357,7 +7357,7 @@ $(function (win, doc, $) {
                 });
         }
 
-        // SEt-up header alerts
+        // Set-up header alerts
         var $alerts = this.find(".layout-header").find(".alert");
         if ($alerts.length > 0) {
 

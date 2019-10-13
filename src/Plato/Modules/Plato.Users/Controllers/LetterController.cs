@@ -4,39 +4,39 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Plato.Internal.Abstractions.Extensions;
-using Plato.Internal.Drawing.Abstractions.Letters;
-using Plato.Internal.FileSystem.Abstractions;
 using Plato.Internal.Models.Shell;
+using Plato.Internal.Abstractions.Extensions;
+using Plato.Internal.FileSystem.Abstractions;
 using Plato.Internal.Stores.Abstractions.Files;
+using Plato.Internal.Drawing.Abstractions.Letters;
+using Microsoft.Net.Http.Headers;
 
 namespace Plato.Users.Controllers
 {
     public class LetterController : Controller
     {
-
-        private readonly IFileStore _fileStore;
+        
         private readonly IInMemoryLetterRenderer _letterRenderer;
         private readonly ISitesFolder _sitesFolder;
-        private readonly IHostingEnvironment _hostEnvironment;
+        private readonly IFileStore _fileStore;
 
-        private static string _pathToImages;
-        private static string _urlToImages;
+        private static string _pathToImages;    
 
         public LetterController(
             IInMemoryLetterRenderer letterRenderer,
-            IFileStore fileStore,
+            IHostingEnvironment hostEnvironment,            
             IShellSettings shellSettings,
             ISitesFolder sitesFolder,
-            IHostingEnvironment hostEnvironment)
+            IFileStore fileStore)
         {
             _letterRenderer = letterRenderer;
-            _fileStore = fileStore;
             _sitesFolder = sitesFolder;
-            _hostEnvironment = hostEnvironment;
+            _fileStore = fileStore;
 
-            _pathToImages = fileStore.Combine(hostEnvironment.ContentRootPath, shellSettings.Location, "images");
-            _urlToImages = $"/sites/{shellSettings.Location.ToLower()}/images/";
+            _pathToImages = fileStore.Combine(
+                hostEnvironment.ContentRootPath,
+                shellSettings.Location,
+                "images");            
 
         }
 
@@ -52,16 +52,19 @@ namespace Plato.Users.Controllers
             var fileName = $"{letter}-{color}.png";
             var r = Response;
             r.Clear();
-    
+
             var existingFileBytes = await _fileStore.GetFileBytesAsync(_fileStore.Combine(
                 _sitesFolder.RootPath,
                 _pathToImages,
                 fileName));
+
             if (existingFileBytes != null)
             {
                 r.ContentType = "image/png";
-                r.Headers.Add("content-disposition", $"filename=\"{fileName}\"");
-                r.Headers.Add("content-length", Convert.ToString((int)existingFileBytes.Length));
+                r.Headers.Add(HeaderNames.ContentDisposition, $"filename=\"{fileName}\"");
+                r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((int)existingFileBytes.Length));
+                r.Headers.Add(HeaderNames.CacheControl, "public,max-age=86400"); // 86400 = 24 hours
+
                 r.Body.Write(existingFileBytes, 0, existingFileBytes.Length);
             }
             else
@@ -94,8 +97,9 @@ namespace Plato.Users.Controllers
                     }
 
                     r.ContentType = "image/png";
-                    r.Headers.Add("content-disposition", $"filename=\"{fileName}\"");
-                    r.Headers.Add("content-length", Convert.ToString((int)fileBytes.Length));
+                    r.Headers.Add(HeaderNames.ContentDisposition, $"filename=\"{fileName}\"");
+                    r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((int)fileBytes.Length));
+                    r.Headers.Add(HeaderNames.CacheControl, "public,max-age=86400"); // 86400 = 24 hours
                     r.Body.Write(fileBytes, 0, fileBytes.Length);
 
                 }
@@ -103,7 +107,7 @@ namespace Plato.Users.Controllers
             }
 
         }
-        
+
     }
 
 }
