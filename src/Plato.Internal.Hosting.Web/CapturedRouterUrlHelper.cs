@@ -2,9 +2,9 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
+using Microsoft.AspNetCore.Mvc.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 using Plato.Internal.Abstractions.Settings;
 using Plato.Internal.Hosting.Abstractions;
@@ -21,22 +21,22 @@ namespace Plato.Internal.Hosting.Web
     {
 
         private readonly IServiceCollection _applicationServices;
-        private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly ISiteSettingsStore _siteSettingsStore;
+        private readonly IUrlHelperFactory _urlHelperFactory;        
         private readonly ICapturedRouter _capturedRouter;
 
         private IUrlHelper _urlHelper;
 
         public CapturedRouterUrlHelper(
-            ICapturedRouter capturedRouter, 
+            IServiceCollection applicationServices,
             ISiteSettingsStore siteSettingsStore,
             IUrlHelperFactory urlHelperFactory,
-            IServiceCollection applicationServices)
+            ICapturedRouter capturedRouter)
         {
-            _capturedRouter = capturedRouter;
+            _applicationServices = applicationServices;
             _siteSettingsStore = siteSettingsStore;
             _urlHelperFactory = urlHelperFactory;
-            _applicationServices = applicationServices;
+            _capturedRouter = capturedRouter;
         }
         
         public async Task<string> GetBaseUrlAsync()
@@ -121,7 +121,7 @@ namespace Plato.Internal.Hosting.Web
         {
             return await _siteSettingsStore.GetAsync();
         }
-        
+
     }
 
 }

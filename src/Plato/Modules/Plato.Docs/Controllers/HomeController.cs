@@ -784,7 +784,6 @@ namespace Plato.Docs.Controllers
                 return Unauthorized();
             }
 
-
             // Get any parents 
             var parents = await _entityStore.GetParentsByIdAsync(entity.Id);
 
@@ -1038,9 +1037,9 @@ namespace Plato.Docs.Controllers
 
                     })
                     .GetResultsAsync(opts, new PagerOptions
-                {
-                    Size = int.MaxValue
-                });
+                    {
+                        Size = int.MaxValue
+                    });
                 if (replies?.Data != null)
                 {
                     foreach (var reply in replies.Data)
@@ -1101,7 +1100,7 @@ namespace Plato.Docs.Controllers
             return Task.FromResult((IActionResult) View(viewModel));
 
         }
-        
+
         // -----------------
         // Entity Helpers
         // -----------------

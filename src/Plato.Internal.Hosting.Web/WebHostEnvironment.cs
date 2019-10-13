@@ -16,4 +16,5 @@ namespace Plato.Internal.Hosting.Web
        public IStringLocalizer T { get; set; }
 
     }
+
 }

@@ -21,7 +21,7 @@ namespace Plato.Internal.Hosting.Web.Middleware
         public PlatoContainerMiddleware(
             ILogger<PlatoContainerMiddleware> logger,
             IRunningShellTable runningShellTable,            
-             RequestDelegate next,
+            RequestDelegate next,
             IPlatoHost platoHost)
         {
             _runningShellTable = runningShellTable;
@@ -38,7 +38,7 @@ namespace Plato.Internal.Hosting.Web.Middleware
 
             // Get ShellSettings for current tenant
             var shellSettings = _runningShellTable.Match(httpContext);
-            
+
             // Register shell settings as a custom feature
             httpContext.Features[typeof(ShellSettings)] = shellSettings;
 
@@ -105,10 +105,11 @@ namespace Plato.Internal.Hosting.Web.Middleware
                         }
                     });
                 }
-                
+
             }
 
         }
 
     }
+
 }

@@ -1,14 +1,14 @@
-﻿using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Collections.Generic;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Internal.Hosting.Web.Routing
 {
     public class PrefixedRouteBuilder : IRouteBuilder
     {
-       
+
         private readonly IInlineConstraintResolver _constraintResolver;
         private readonly List<IRouter> _routes = new List<IRouter>();
         private readonly IRouteBuilder _baseRouteBuilder;
@@ -19,9 +19,9 @@ namespace Plato.Internal.Hosting.Web.Routing
             IRouteBuilder baseRouteBuilder,
             IInlineConstraintResolver constraintResolver)
         {
-            _constraintResolver = constraintResolver;
-            _routePrefix = routePrefix;
+            _constraintResolver = constraintResolver;            
             _baseRouteBuilder = baseRouteBuilder;
+            _routePrefix = routePrefix;
         }
 
         public IApplicationBuilder ApplicationBuilder => _baseRouteBuilder.ApplicationBuilder;
@@ -38,7 +38,7 @@ namespace Plato.Internal.Hosting.Web.Routing
 
         public IRouter Build()
         {
-      
+
             foreach (var route in Routes.OfType<Route>())
             {
 

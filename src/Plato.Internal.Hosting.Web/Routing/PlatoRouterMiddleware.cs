@@ -16,6 +16,7 @@ namespace Plato.Internal.Hosting.Web.Routing
 {
     public class PlatoRouterMiddleware
     {
+
         private readonly RequestDelegate _next;
         private readonly Dictionary<string, RequestDelegate> _pipelines = new Dictionary<string, RequestDelegate>();
         private readonly ILogger _logger;
@@ -35,7 +36,7 @@ namespace Plato.Internal.Hosting.Web.Routing
             {
                 _logger.LogInformation("Begin Routing Request");
             }
-                
+
             var shellSettings = (ShellSettings)context.Features[typeof(ShellSettings)];
 
             // Define a PathBase for the current request that is the RequestUrlPrefix.
@@ -47,7 +48,7 @@ namespace Plato.Internal.Hosting.Web.Routing
                 context.Request.Path = context.Request.Path.ToString()
                     .Substring(context.Request.PathBase.Value.Length);
             }
-            
+
             // Do we need to rebuild the pipeline ?
             var rebuildPipeline = context.Items["BuildPipeline"] != null;
             lock (_pipelines)
@@ -57,7 +58,7 @@ namespace Plato.Internal.Hosting.Web.Routing
                     _pipelines.Remove(shellSettings.Name);
                 }
             }
-            
+
             RequestDelegate pipeline;
 
             // Building a pipeline can't be done by two requests
@@ -72,9 +73,9 @@ namespace Plato.Internal.Hosting.Web.Routing
                     }
                 }
             }
-            
+
             await pipeline.Invoke(context);
-            
+
         }
 
         // Build the middleware pipeline for the current tenant
@@ -90,8 +91,10 @@ namespace Plato.Internal.Hosting.Web.Routing
 
             var routePrefix = "";
             if (!string.IsNullOrWhiteSpace(shellSettings.RequestedUrlPrefix))
+            {
                 routePrefix = shellSettings.RequestedUrlPrefix + "/";
-            
+            }
+
             var routeBuilder = new RouteBuilder(appBuilder)
             {
                 DefaultHandler = serviceProvider.GetRequiredService<MvcRouteHandler>()
@@ -108,8 +111,8 @@ namespace Plato.Internal.Hosting.Web.Routing
             {
                 startup.Configure(appBuilder, prefixedRouteBuilder, serviceProvider);
             }
-            
-            //// Add the default template route to each shell 
+
+            // Add the default template route to each shell 
             prefixedRouteBuilder.Routes.Add(new Route(
                 prefixedRouteBuilder.DefaultHandler,
                 "PlatoDefault",
@@ -122,38 +125,6 @@ namespace Plato.Internal.Hosting.Web.Routing
 
             // Add attribute routing
             routeBuilder.Routes.Insert(0, AttributeRouting.CreateAttributeMegaRoute(serviceProvider));
-
-            // TODO: The homepage route is not set via the Plato.Core module
-            // Attempt to get homepage route for tenant from site settings store
-            // If the tenant has not been created yet siteService will return null
-            // if siteService returns null users will be presented with the SetUp module
-            ////var siteService = routeBuilder.ServiceProvider.GetService<ISiteSettingsStore>();
-            ////if (siteService != null)
-            ////{
-            
-            ////    //// Add the default template route to each shell 
-            ////    prefixedRouteBuilder.Routes.Add(new Route(
-            ////        prefixedRouteBuilder.DefaultHandler,
-            ////        "PlatoHome",
-            ////        "",
-            ////        new HomeRoute(),
-            ////        null,
-            ////        null,
-            ////        inlineConstraintResolver)
-            ////    );
-
-            ////    // Add home page route matching
-            ////    var homeRoute = new HomePageRoute(
-            ////        shellSettings.RequestedUrlPrefix,
-            ////        siteService,
-            ////        routeBuilder,
-            ////        inlineConstraintResolver);
-
-            ////    routeBuilder.Routes.Add(homeRoute);
-                
-            ////}
-
-            // ------------------
 
             // Build router
             var router = prefixedRouteBuilder.Build();
@@ -172,7 +143,7 @@ namespace Plato.Internal.Hosting.Web.Routing
                 options.Router = router;
                 options.BaseUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.PathBase}";
             });
-        
+
             // Build & return new pipeline
             var pipeline = appBuilder.Build();
             return pipeline;
