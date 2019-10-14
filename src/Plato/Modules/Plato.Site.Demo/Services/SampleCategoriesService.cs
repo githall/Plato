@@ -153,7 +153,7 @@ namespace Plato.Site.Demo.Services
 
             for (var i = 0; i < 5; i++)
             {
-                var categoryResult = await InstallCategoryAsync(feature, i);
+                var categoryResult = await InstallCategoryAsync(feature, i + 1);
                 if (!categoryResult.Succeeded)
                 {
                     return result.Failed(categoryResult.Errors.ToArray());
