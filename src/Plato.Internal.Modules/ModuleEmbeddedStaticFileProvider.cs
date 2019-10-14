@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
+using Microsoft.Extensions.FileProviders;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.FileProviders.Physical;
 using Plato.Internal.Models.Modules;
 using Plato.Internal.Modules.Abstractions;
 using Plato.Internal.Modules.Models;
@@ -18,25 +18,30 @@ namespace Plato.Internal.Modules
     public class ModuleEmbeddedStaticFileProvider : IFileProvider
     {
 
+        // TODO: Look at reducing allocations in this class
+
         private readonly IOptions<ModuleOptions> _moduleOptions;
         private readonly IModuleManager _moduleManager;
 
-        private IList<IModuleEntry> _modules;        
-        private string _root;
-        private string _moduleRoot;
-        private IList<string> _staticFolders = new List<string>
+        // A array of folders that can contain static files 
+        // The default "wwwroot" folder is handled separately
+        private string[] _staticFolders = new string[]
             {
                 "/Sites",
                 "/Themes",
                 "/Locales"
             };
-        
+
+        private IList<IModuleEntry> _modules;
+        private readonly string _moduleRoot;
+        private readonly string _root;
+
         public ModuleEmbeddedStaticFileProvider(IHostingEnvironment eng, IServiceProvider services)
         {
             _moduleOptions = services.GetRequiredService<IOptions<ModuleOptions>>();
-            _moduleManager = services.GetRequiredService<IModuleManager>();            
-            _root = eng.ContentRootPath + "\\";
+            _moduleManager = services.GetRequiredService<IModuleManager>();                        
             _moduleRoot = _moduleOptions.Value.VirtualPathToModulesFolder;
+            _root = eng.ContentRootPath + "\\";
         }
 
         public IDirectoryContents GetDirectoryContents(string subpath)
@@ -46,11 +51,11 @@ namespace Plato.Internal.Modules
 
         public IFileInfo GetFileInfo(string subpath)
         {
+
             if (subpath == null)
             {
                 return new NotFoundFileInfo(subpath);
             }
-                    
 
             if (_modules == null)
             {
@@ -66,7 +71,7 @@ namespace Plato.Internal.Modules
             // "/**/*.*".
             if (index != -1)
             {
-                
+
                 // Resolve the module id.
                 var module = path.Substring(0, index);
 
@@ -80,23 +85,17 @@ namespace Plato.Internal.Modules
                     // We only serve static files from the modules "Content" directory
                     if (fileSubPath.StartsWith("Content", StringComparison.OrdinalIgnoreCase))
                     {
-                       
-                        var contentPath = Path.Combine(                                
+                        return new PhysicalFileInfo(new FileInfo(_root + Path.Combine(
                                 _moduleRoot,
                                 module,
-                                fileSubPath);
-
-                        //var filePath = _root + "\\" + ileSubPath.Replace("/", "\\")f;
-                        return new PhysicalFileInfo(new FileInfo(_root + contentPath));
+                                fileSubPath)));
                     }
-              
+
                 }
                 else
                 {
 
-
                     var fileSubPath = subpath.Replace("/", "\\");
-                                      
                     var isCustomStaticFolder = false;
                     foreach (var staticFolder in _staticFolders)
                     {
@@ -106,22 +105,24 @@ namespace Plato.Internal.Modules
                             break;
                         }
                     }
-                                       
+
                     if (isCustomStaticFolder)
-                    {                
+                    {
                         return new PhysicalFileInfo(new FileInfo(_root + fileSubPath));
                     }
                     else
                     {
                         var filePath = _root + "wwwroot" + fileSubPath;
                         return new PhysicalFileInfo(new FileInfo(filePath));
-                    }                       
-                  
+                    }
+
                 }
 
-            } else
+            }
+            else
             {
-                // Accomodate for files inside the root of the wwwroot folder i.e. favicon.ico etc              
+                // Accommodate for files inside the root of the "wwwroot" folder
+                // I.e. favicon.ico, security.txt + others
                 return new PhysicalFileInfo(new FileInfo(_root + Path.Combine("wwwroot", path)));
             }
 
@@ -138,5 +139,7 @@ namespace Plato.Internal.Modules
         {
             return path.Replace('\\', '/').Trim('/').Replace("//", "/");
         }
+
     }
+
 }

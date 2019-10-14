@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Plato.Internal.Abstractions.SetUp;
 using Plato.Internal.Data.Schemas.Abstractions;
 
@@ -25,7 +25,7 @@ namespace Plato.Core.Handlers
             SetUpContext context,
             Action<string, string> reportError)
         {
-            
+
             // --------------------------
             // Build core schemas
             // --------------------------
@@ -123,11 +123,12 @@ namespace Plato.Core.Handlers
                     }
                 }
             };
-            
+
             using (var builder = _schemaBuilder)
             {
 
-                // build dictionary store
+                // Build dictionary store
+                // --------------------------
 
                 builder
                     .Configure(options =>
@@ -135,15 +136,19 @@ namespace Plato.Core.Handlers
                         options.ModuleName = "Plato.Core";
                         options.Version = "1.0.0";
                     });
-                   builder.TableBuilder.CreateTable(dictionaryTable);
+                builder.TableBuilder.CreateTable(dictionaryTable);
 
-                   builder.ProcedureBuilder.CreateDefaultProcedures(dictionaryTable)
-                       .CreateProcedure(
-                           new SchemaProcedure("SelectDictionaryEntryByKey", StoredProcedureType.SelectByKey)
-                               .ForTable(dictionaryTable).WithParameter(new SchemaColumn()
-                                   {Name = "[Key]", DbType = DbType.Int32}));
+                builder.ProcedureBuilder.CreateDefaultProcedures(dictionaryTable)
+                    .CreateProcedure(
+                        new SchemaProcedure("SelectDictionaryEntryByKey", StoredProcedureType.SelectByKey)
+                            .ForTable(dictionaryTable).WithParameter(new SchemaColumn()
+                            {
+                                Name = "[Key]",
+                                DbType = DbType.Int32
+                            }));
 
-                // build document store
+                // Build document store
+                // --------------------------
 
                 builder
                     .Configure(options =>
@@ -152,15 +157,19 @@ namespace Plato.Core.Handlers
                         options.Version = "1.0.0";
                     });
 
-                    builder.TableBuilder.CreateTable(documentTable);
+                builder.TableBuilder.CreateTable(documentTable);
 
-                    builder.ProcedureBuilder
-                        .CreateDefaultProcedures(documentTable)
-                        .CreateProcedure(
-                            new SchemaProcedure("SelectDocumentEntryByType", StoredProcedureType.SelectByKey)
-                                .ForTable(documentTable)
-                                .WithParameter(new SchemaColumn()
-                                    {Name = "[Type]", Length = "500", DbType = DbType.String}));
+                builder.ProcedureBuilder
+                    .CreateDefaultProcedures(documentTable)
+                    .CreateProcedure(
+                        new SchemaProcedure("SelectDocumentEntryByType", StoredProcedureType.SelectByKey)
+                            .ForTable(documentTable)
+                            .WithParameter(new SchemaColumn()
+                            {
+                                Name = "[Type]",
+                                Length = "500",
+                                DbType = DbType.String
+                            }));
 
                 // Did any errors occur?
 
@@ -169,9 +178,9 @@ namespace Plato.Core.Handlers
                 {
                     reportError(error, $"SetUp within {this.GetType().FullName} - {error}");
                 }
-             
+
             }
-            
+
         }
 
     }

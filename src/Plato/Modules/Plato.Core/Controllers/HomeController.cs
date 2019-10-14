@@ -37,9 +37,9 @@ namespace Plato.Core.Controllers
             IAlerter alerter)
         {
 
-            _alerter = alerter;
             _breadCrumbManager = breadCrumbManager;
             _viewProvider = viewProvider;
+            _alerter = alerter;
 
             T = localizer;
             S = stringLocalizer;
@@ -51,30 +51,18 @@ namespace Plato.Core.Controllers
         #region "Actions"
 
         // ---------------------
-        // Homepage
+        // Index
         // ---------------------
 
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Index()
         {
-
-            //// Build breadcrumb
-            //_breadCrumbManager.Configure(builder =>
-            //{
-            //    builder
-            //        .Add(S["Home"], home => home
-            //            .Action("Index", "Home", "Plato.Core")
-            //            .LocalNav()
-            //        );
-            //});
-
             // Return view
             return View((LayoutViewModel)await _viewProvider.ProvideIndexAsync(new HomeIndex(), this));
-
         }
 
         // ---------------------
-        // Unauthorized - 401
+        // Denied / Unauthorized - 401
         // ---------------------
 
         [HttpGet, AllowAnonymous]
@@ -101,7 +89,7 @@ namespace Plato.Core.Controllers
         }
         
         // ---------------------
-        // Moved - 404
+        // Moved / Not Found - 404
         // ---------------------
 
         [HttpGet, AllowAnonymous]
@@ -159,7 +147,7 @@ namespace Plato.Core.Controllers
             return Task.FromResult((IActionResult)View(model));
 
         }
-        
+
         #endregion
 
     }

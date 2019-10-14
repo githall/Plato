@@ -9,7 +9,7 @@ namespace Plato.Core.Assets
 
     public class AssetProvider : IAssetProvider
     {
-        
+
         private readonly IOptions<ThemeOptions> _themeOptions;
         private readonly IOptions<SiteOptions> _siteOptions;
 
@@ -17,23 +17,17 @@ namespace Plato.Core.Assets
             IOptions<ThemeOptions> themeOptions,
             IOptions<SiteOptions> siteOptions)
         {
-            _siteOptions = siteOptions;
             _themeOptions = themeOptions;
+            _siteOptions = siteOptions;
         }
 
         public Task<IEnumerable<AssetEnvironment>> GetAssetEnvironments()
         {
 
-            var path = "";
-            if (!string.IsNullOrEmpty(_siteOptions.Value.Theme))
-            {
-                path = _siteOptions.Value.Theme;
-            }
-            else
-            {
-                path = _themeOptions.Value.VirtualPathToThemesFolder + "/default";
-            }
-            
+            var path = !string.IsNullOrEmpty(_siteOptions.Value.Theme)
+                ? _siteOptions.Value.Theme
+                : $"{_themeOptions.Value.VirtualPathToThemesFolder}/default";
+
             IEnumerable<AssetEnvironment> assets = new List<AssetEnvironment>
             {
 
