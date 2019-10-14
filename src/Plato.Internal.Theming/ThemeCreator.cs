@@ -11,22 +11,22 @@ namespace Plato.Internal.Theming
     
     public class ThemeCreator : IThemeCreator
     {
-
-        private readonly IThemeUpdater _themeUpdater;
+        
         private readonly ISiteThemeLoader _siteThemeLoader;
         private readonly IPlatoFileSystem _platoFileSystem;
+        private readonly IThemeUpdater _themeUpdater;
         public readonly IThemeLoader _themeLoader;
      
         public ThemeCreator(
             ISiteThemeLoader siteThemeLoader,
-            IPlatoFileSystem platoFileSystem,
-            IThemeLoader themeLoader,
-            IThemeUpdater themeUpdater)
+            IPlatoFileSystem platoFileSystem,            
+            IThemeUpdater themeUpdater,
+            IThemeLoader themeLoader)
         {
             _siteThemeLoader = siteThemeLoader;
             _platoFileSystem = platoFileSystem;
-            _themeLoader = themeLoader;
             _themeUpdater = themeUpdater;
+            _themeLoader = themeLoader;
         }
 
         public ICommandResult<IThemeDescriptor> CreateTheme(string sourceThemeId, string newThemeName)
@@ -60,7 +60,7 @@ namespace Plato.Internal.Theming
                 var targetPath = _platoFileSystem.Combine(
                     _siteThemeLoader.RootPath, newThemeId);
 
-                // Copy base theme to new directory within /sites/{SiteName/themes
+                // Copy base theme to new directory within /Sites/{SiteName}/themes/
                 _platoFileSystem.CopyDirectory(
                     baseDescriptor.FullPath,
                     targetPath,
@@ -88,4 +88,5 @@ namespace Plato.Internal.Theming
         }
 
     }
+
 }

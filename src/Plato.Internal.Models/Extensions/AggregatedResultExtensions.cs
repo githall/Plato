@@ -8,36 +8,36 @@ namespace Plato.Internal.Models.Extensions
 
     public static class AggregatedResultExtensions
     {
-        
-        public static string SerializeLabels<T>(this AggregatedResult<T> result) 
+
+        public static string SerializeLabels<T>(this AggregatedResult<T> result)
         {
             var output = new List<string>();
             if (result.Data != null)
             {
                 foreach (var item in result.Data)
-            {
-
-                string value = null;
-                if (item.Aggregate is DateTimeOffset)
                 {
-                    value = ((DateTimeOffset)Convert.ChangeType(item.Aggregate, typeof(DateTimeOffset))).ToPrettyDate();
-                }
 
-                if (value == null)
-                {
-                    value = item.Aggregate.ToString(); ;
-                }
+                    string value = null;
+                    if (item.Aggregate is DateTimeOffset)
+                    {
+                        value = ((DateTimeOffset)Convert.ChangeType(item.Aggregate, typeof(DateTimeOffset))).ToPrettyDate();
+                    }
 
-                output.Add(value);
+                    if (value == null)
+                    {
+                        value = item.Aggregate.ToString(); ;
+                    }
+
+                    output.Add(value);
+
+                }
 
             }
-
-                }
             return output.Serialize<string>();
 
         }
 
-        public static string SerializeCounts<T>(this AggregatedResult<T> result) 
+        public static string SerializeCounts<T>(this AggregatedResult<T> result)
         {
             var output = new List<int>();
             if (result.Data != null)
@@ -49,8 +49,8 @@ namespace Plato.Internal.Models.Extensions
             }
             return output.Serialize<int>();
         }
-        
-        public static AggregatedResult<T> MergeIntoRange<T>(this AggregatedResult<T> result, T start, T end) 
+
+        public static AggregatedResult<T> MergeIntoRange<T>(this AggregatedResult<T> result, T start, T end)
         {
 
             // Final output
@@ -88,7 +88,7 @@ namespace Plato.Internal.Models.Extensions
                             }
                         }
                     }
-                   
+
                     // Add data to 
                     output.Data.Add(new AggregatedCount<T>()
                     {
@@ -108,6 +108,7 @@ namespace Plato.Internal.Models.Extensions
             return new DateTimeOffset(input.Year, input.Month, input.Day,
                 0, 0, 0, new TimeSpan());
         }
+
     }
 
 }

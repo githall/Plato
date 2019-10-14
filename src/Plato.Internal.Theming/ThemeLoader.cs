@@ -11,16 +11,16 @@ namespace Plato.Internal.Theming
 {
     public class ThemeLoader : IThemeLoader
     {
-     
+
         private IEnumerable<IThemeDescriptor> _themeDescriptors;
 
         private readonly IThemeLocator _themeLocator;
 
         public ThemeLoader(
             IHostingEnvironment hostingEnvironment,
-            IOptions<ThemeOptions> themeOptions,
-            IThemeLocator themeLocator,
-            IPlatoFileSystem platoFileSystem)
+            IOptions<ThemeOptions> themeOptions,            
+            IPlatoFileSystem platoFileSystem,
+            IThemeLocator themeLocator)
         {
 
             _themeLocator = themeLocator;
@@ -35,7 +35,6 @@ namespace Plato.Internal.Theming
             InitializeThemes();
         }
 
-
         #region "Implementation"
 
         public string RootPath { get; private set; }
@@ -48,18 +47,15 @@ namespace Plato.Internal.Theming
                 return _themeDescriptors;
             }
         }
-        
+
         #endregion
-        
+
         #region "Private Methods"
-        
+
         void InitializeThemes()
-        {
-            //if (_themeDescriptors == null)
-            //{
-                _themeDescriptors = new List<IThemeDescriptor>();
-                LoadThemeDescriptors();
-            //}
+        {         
+            _themeDescriptors = new List<IThemeDescriptor>();
+            LoadThemeDescriptors();       
         }
 
         void LoadThemeDescriptors()
@@ -74,4 +70,5 @@ namespace Plato.Internal.Theming
         #endregion
 
     }
+
 }

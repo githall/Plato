@@ -214,8 +214,7 @@ namespace Plato.Articles.Categories.Follow.Subscribers
             if (users == null)
             {
                 return notifiedUsers;
-            }
-            
+            }            
 
             // Send notifications
             foreach (var user in users)

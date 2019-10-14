@@ -2,9 +2,8 @@
 {
     public class UserRegistration : User
     {
-        // UserProfile is simply a marker class so we can use
-        // a separate view provider for the front-end user registration page
-        // This class should not contain any code
+        // UserRegistration  is simply a marker class so we can use
+        // a separate view provider for the front-end user registration page        
 
         public bool IsNewUser { get; set; }
 

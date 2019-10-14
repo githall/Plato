@@ -1,15 +1,10 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Plato.Entities.Models;
-using Plato.Entities.Repositories;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using Plato.Internal.Layout.ViewProviders;
-using Plato.Internal.Models.Metrics;
 using Plato.Internal.Models.Users;
-using Plato.Internal.Security.Abstractions;
 using Plato.Internal.Stores.Abstractions.Users;
 
 namespace Plato.Entities.ViewProviders
@@ -18,22 +13,15 @@ namespace Plato.Entities.ViewProviders
     public class UserViewProvider : BaseViewProvider<EntityUserIndex>
     {
 
-        private readonly IFeatureEntityCountService _featureEntityCountService;
-        private readonly IAggregatedEntityRepository _aggregatedEntityRepository;
-        private readonly IAuthorizationService _authorizationService;
-        private readonly IPlatoUserStore<User> _platoUserStore;
-  
+        private readonly IFeatureEntityCountService _featureEntityCountService;        
+        private readonly IPlatoUserStore<User> _platoUserStore;  
 
-        public UserViewProvider(
-            IPlatoUserStore<User> platoUserStore,
-            IAggregatedEntityRepository aggregatedEntityRepository,
+        public UserViewProvider(                        
             IFeatureEntityCountService featureEntityCountService,
-            IAuthorizationService authorizationService)
+            IPlatoUserStore<User> platoUserStore)
         {
-            _platoUserStore = platoUserStore;
-            _aggregatedEntityRepository = aggregatedEntityRepository;
             _featureEntityCountService = featureEntityCountService;
-            _authorizationService = authorizationService;
+            _platoUserStore = platoUserStore;            
         }
         
         public override async Task<IViewProviderResult> BuildDisplayAsync(EntityUserIndex userIndex, IViewProviderContext context)
@@ -45,55 +33,26 @@ namespace Plato.Entities.ViewProviders
                 return await BuildIndexAsync(userIndex, context);
             }
 
+            // Get view model from context
             var indexViewModel = context.Controller.HttpContext.Items[typeof(EntityIndexViewModel<Entity>)] as EntityIndexViewModel<Entity>;
+
+            // We always need a view module
             if (indexViewModel == null)
             {
                 throw new Exception($"A view model of type {typeof(EntityIndexViewModel<Entity>).ToString()} has not been registered on the HttpContext!");
             }
-
-
-
 
             var featureEntityMetrics = new FeatureEntityCounts()
             {
                 Features = await _featureEntityCountService
                     .ConfigureQuery(q =>
                     {
-
+                        // Display all public entities for the given user                        
                         q.CreatedUserId.Equals(user.Id);
                         q.HideSpam.True();
                         q.HideHidden.True();
                         q.HideDeleted.True();
                         q.HidePrivate.True();
-
-                        //// Hide private?
-                        //if (!await _authorizationService.AuthorizeAsync(context.Controller.HttpContext.User,
-                        //    Permissions.ViewPrivateEntities))
-                        //{
-                        //    q.HidePrivate.True();
-                        //}
-
-                        //// Hide hidden?
-                        //if (!await _authorizationService.AuthorizeAsync(context.Controller.HttpContext.User,
-                        //    Permissions.ViewHiddenEntities))
-                        //{
-                        //    q.HideHidden.True();
-                        //}
-
-                        //// Hide spam?
-                        //if (!await _authorizationService.AuthorizeAsync(context.Controller.HttpContext.User,
-                        //    Permissions.ViewSpamEntities))
-                        //{
-                        //    q.HideSpam.True();
-                        //}
-
-                        //// Hide deleted?
-                        //if (!await _authorizationService.AuthorizeAsync(context.Controller.HttpContext.User,
-                        //    Permissions.ViewDeletedEntities))
-                        //{
-                        //    q.HideDeleted.True();
-                        //}
-
                     })
                     .GetResultsAsync()
             };
@@ -110,7 +69,7 @@ namespace Plato.Entities.ViewProviders
                 View<UserDisplayViewModel<Entity>>("User.Index.Content", model => userDisplayViewModel).Zone("content"),
                 View< UserDisplayViewModel>("User.Entities.Display.Sidebar", model => userDisplayViewModel).Zone("sidebar")
             );
-            
+
         }
 
         public override Task<IViewProviderResult> BuildIndexAsync(EntityUserIndex model, IViewProviderContext context)

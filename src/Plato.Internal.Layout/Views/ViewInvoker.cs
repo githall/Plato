@@ -66,7 +66,7 @@ namespace Plato.Internal.Layout.Views
                     .Contextualize(ViewContext)
                     .Build();
             }
-            
+
             // View components use an anonymous type for the parameters argument
             // this anonymous type is emitted as an actual type by the compiler but
             // marked with the CompilerGeneratedAttribute. If we find this attribute
@@ -78,7 +78,7 @@ namespace Plato.Internal.Layout.Views
 
             // else we have a partial view
             return await InvokePartialAsync(view.ViewName, view.Model);
-            
+
         }
 
         // privates
@@ -121,7 +121,7 @@ namespace Plato.Internal.Layout.Views
             }
                         
         }
-        
+
         bool IsViewModelAnonymousType(object model)
         {
 

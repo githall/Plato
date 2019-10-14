@@ -5,9 +5,7 @@ namespace Plato.Entities.ViewModels
 {
     public class UserDisplayViewModel<TModel>  : UserDisplayViewModel where TModel : class
     {
-        
         public EntityIndexViewModel<TModel> IndexViewModel { get; set; }
-
     }
 
     public class UserDisplayViewModel
@@ -17,4 +15,5 @@ namespace Plato.Entities.ViewModels
         public FeatureEntityCounts Counts { get; set; } = new FeatureEntityCounts();
 
     }
+
 }

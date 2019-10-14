@@ -12,9 +12,8 @@ namespace Plato.Internal.Text
         // before being stored to the database for later display, For performance reasons
         // we saves the HTML to display within the database as opposed to parsing the
         // message every time it's displayed. For this reason we must ensure the saved HTML
-        // is correctly HTML encoded as this may be displayed via the Html.Raw HtmlHelper
-        
-        // This class offers a default implementation fo the HtmlEncoder which can be
+        // is correctly HTML encoded as this may be displayed via the Html.Raw HtmlHelper        
+        // This class offers a default implementation of the HtmlEncoder which can be
         // overriden or replaced by modules as needed
 
         public string Encode(string html)

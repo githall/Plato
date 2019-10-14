@@ -66,7 +66,7 @@ namespace Plato.Articles.Categories.Follow.Subscribers
                 return follow;
             }
 
-            // Award reputation for following channel
+            // Award reputation for following category
             await _reputationAwarder.AwardAsync(Reputations.NewFollow, follow.CreatedUserId, "Followed an article category");
 
             return follow;
@@ -81,13 +81,13 @@ namespace Plato.Articles.Categories.Follow.Subscribers
                 return null;
             }
 
-            // Is this a discuss label follow?
+            // Is this the correct follow?
             if (!follow.Name.Equals(FollowTypes.Category.Name, StringComparison.OrdinalIgnoreCase))
             {
                 return follow;
             }
 
-            // Revoke reputation for following tag
+            // Revoke reputation for unfollowing category
             await _reputationAwarder.RevokeAsync(Reputations.NewFollow, follow.CreatedUserId, "Unfollowed an article category");
 
             return follow;
