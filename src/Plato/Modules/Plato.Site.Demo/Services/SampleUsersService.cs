@@ -2,10 +2,10 @@
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Plato.Internal.Abstractions;
-using Plato.Internal.Data.Abstractions;
-using Plato.Internal.Models.Users;
 using Plato.Users.Services;
+using Plato.Internal.Abstractions;
+using Plato.Internal.Models.Users;
+using Plato.Internal.Data.Abstractions;
 
 namespace Plato.Site.Demo.Services
 {
@@ -131,18 +131,15 @@ namespace Plato.Site.Demo.Services
             "00ffx"
         };
 
-        Random _random;
-
         private readonly IPlatoUserManager<User> _platoUserManager;
         private readonly IDbHelper _dbHelper;
 
         public SampleUsersService(
             IPlatoUserManager<User> platoUserManager,
             IDbHelper dbHelper)
-        {     
+        {
             _platoUserManager = platoUserManager;
             _dbHelper = dbHelper;
-            _random = new Random();
         }
 
         public async Task<ICommandResultBase> InstallAsync()
@@ -186,8 +183,8 @@ namespace Plato.Site.Demo.Services
         async Task<ICommandResultBase> UninstallInternalAsync()
         {
 
-            var sb = new StringBuilder();
             var i = 0;
+            var sb = new StringBuilder();
             foreach (var userName in Usernames)
             {
                 sb.Append("'")

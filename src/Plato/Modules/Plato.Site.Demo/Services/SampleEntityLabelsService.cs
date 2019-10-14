@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using Plato.Internal.Abstractions;
@@ -19,8 +19,6 @@ namespace Plato.Site.Demo.Services
 
     public class SampleEntityLabelsService : ISampleEntityLabelsService
     {
-
-        Random _random;
 
         private readonly List<SampleDataDescriptor> Descriptors = new List<SampleDataDescriptor>()
         {
@@ -55,6 +53,8 @@ namespace Plato.Site.Demo.Services
                 EntityType = "question"
             }
         };
+
+        private readonly Random _random;
 
         private readonly IEntityLabelManager<EntityLabel> _entityLabelManager;
         private readonly ILabelStore<LabelBase> _labelStore;
@@ -105,7 +105,6 @@ namespace Plato.Site.Demo.Services
             return output.Success();
 
         }
-
 
         public async Task<ICommandResultBase> UninstallAsync()
         {
@@ -178,6 +177,10 @@ namespace Plato.Site.Demo.Services
                 foreach (var label in labels?.Data)
                 {                 
                     var randomEntities = GetRandomEntities(entities?.Data, alreadyAdded);
+                    if (randomEntities == null)
+                    {
+                        return output.Success();
+                    }
                     foreach (var entity in randomEntities)
                     {
                         var result = await _entityLabelManager.CreateAsync(new EntityLabel()

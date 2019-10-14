@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Plato.Categories.Models;
 using Plato.Categories.Services;
 using Plato.Categories.Stores;
@@ -20,8 +20,6 @@ namespace Plato.Site.Demo.Services
 
     public class SampleEntityCategoriesService : ISampleEntityCategoriesService
     {
-
-        Random _random;
 
         private readonly List<SampleDataDescriptor> Descriptors = new List<SampleDataDescriptor>()
         {
@@ -56,7 +54,9 @@ namespace Plato.Site.Demo.Services
                 EntityType = "question"
             }
         };
-                
+
+        private readonly Random _random;
+
         private readonly IEntityCategoryManager _entityCategoryManager;
         private readonly ICategoryStore<CategoryBase> _categoryStore;
         private readonly IEntityManager<Entity> _entityManager;
@@ -189,15 +189,16 @@ namespace Plato.Site.Demo.Services
                 // Keeps track of entities already added to categories
                 var alreadyAdded = new Dictionary<int, Entity>();
 
-                // Interate categories getting random entities
-                // and adding them to the current category
+                // Interate categories building random entities
+                // not already added to a category and adding
+                // those random entities to the current category
                 foreach (var category in categories?.Data)
                 {
 
                     // Get random entities 
                     var randomEntities = GetRandomEntities(entities?.Data, alreadyAdded);
 
-                    // Ensure we have some entities, they may have already al been added
+                    // Ensure we have some random entities, they may have already al been added
                     if (randomEntities == null)
                     {
                         return output.Success();
@@ -207,14 +208,19 @@ namespace Plato.Site.Demo.Services
                     foreach (var randomEntity in randomEntities)
                     {
 
+                        // Get the full entity
                         var entity = await _entityStore.GetByIdAsync(randomEntity.Id);
+
+                        // Update
                         entity.CategoryId = category.Id;
                         entity.ModifiedUserId = user?.Id ?? 0;
                         entity.ModifiedDate =  DateTime.UtcNow;
 
+                        // Persist
                         var entityResult = await _entityManager.UpdateAsync(entity);
                         if (entityResult.Succeeded)
                         {
+                            // Add entity / category relationship
                             var result = await _entityCategoryManager.CreateAsync(new EntityCategory()
                             {
                                 EntityId = entityResult.Response.Id,

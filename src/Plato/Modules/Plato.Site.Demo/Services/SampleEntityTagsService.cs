@@ -1,14 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Plato.Entities.Models;
-using Plato.Entities.Stores;
+using System.Collections.Generic;
 using Plato.Internal.Abstractions;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Models.Features;
+using Plato.Entities.Models;
+using Plato.Entities.Stores;
 using Plato.Site.Demo.Models;
 using Plato.Tags.Models;
 using Plato.Tags.Services;
@@ -19,8 +19,6 @@ namespace Plato.Site.Demo.Services
 
     public class SampleEntityTagsService : ISampleEntityTagsService
     {
-
-        Random _random;
 
         private readonly List<SampleDataDescriptor> Descriptors = new List<SampleDataDescriptor>()
         {
@@ -55,6 +53,8 @@ namespace Plato.Site.Demo.Services
                 EntityType = "question"
             }
         };
+
+        private readonly Random _random;
 
         private readonly IEntityTagManager<EntityTag> _entityTagManager;
         private readonly IEntityStore<Entity> _entityStore;        
@@ -178,12 +178,19 @@ namespace Plato.Site.Demo.Services
                 var alreadyAdded = new Dictionary<int, Entity>();
                 foreach (var tag in tags?.Data)
                 {
+
                     var randomEntities = GetRandomEntities(entities?.Data, alreadyAdded);
-                    foreach (var entity in randomEntities)
+
+                    if (randomEntities == null)
+                    {
+                        return output.Success();
+                    }
+
+                    foreach (var randomEntity in randomEntities)
                     {
                         var result = await _entityTagManager.CreateAsync(new EntityTag()
                         {
-                            EntityId = entity.Id,
+                            EntityId = randomEntity.Id,
                             TagId = tag.Id,
                             CreatedUserId = user?.Id ?? 0,
                             CreatedDate = DateTime.UtcNow

@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Plato.Categories.Models;
 using Plato.Categories.Roles.Services;
 using Plato.Categories.Services;
@@ -16,9 +16,7 @@ namespace Plato.Site.Demo.Services
 {
   
     public class SampleCategoriesService : ISampleCategoriesService
-    {
-
-        Random _random;
+    {        
 
         private readonly List<SampleDataDescriptor> Descriptors = new List<SampleDataDescriptor>()
         {
@@ -53,6 +51,8 @@ namespace Plato.Site.Demo.Services
                 EntityType = "question"
             }
         };
+
+        private readonly Random _random;
 
         private readonly IDefaultCategoryRolesManager<CategoryBase> _defaultCategoryRolesManager;
         private readonly ICategoryManager<CategoryBase> _categoryManager;

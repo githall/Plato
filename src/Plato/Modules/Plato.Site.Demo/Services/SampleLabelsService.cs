@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Plato.Internal.Abstractions;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Features.Abstractions;
@@ -17,8 +17,6 @@ namespace Plato.Site.Demo.Services
 
     public class SampleLabelsService : ISampleLabelsService
     {
-
-        Random _random;
 
         private readonly List<SampleDataDescriptor> Descriptors = new List<SampleDataDescriptor>()
         {
@@ -54,10 +52,12 @@ namespace Plato.Site.Demo.Services
             }
         };
 
+        private readonly Random _random;
+
         private readonly ILabelManager<LabelBase> _labelManager;
-        private readonly IContextFacade _contextFacade;
-        private readonly IFeatureFacade _featureFacade;
         private readonly IUserColorProvider _colorProvider;
+        private readonly IContextFacade _contextFacade;
+        private readonly IFeatureFacade _featureFacade;        
         private readonly IDbHelper _dbHelper;
 
         public SampleLabelsService(
@@ -66,11 +66,11 @@ namespace Plato.Site.Demo.Services
             IContextFacade contextFacade,
             IFeatureFacade featureFacade,
             IDbHelper dbHelper)
-        {
-            _labelManager = labelManager;
+        {            
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
             _colorProvider = colorProvider;
+            _labelManager = labelManager;
             _dbHelper = dbHelper;
             _random = new Random();
         }

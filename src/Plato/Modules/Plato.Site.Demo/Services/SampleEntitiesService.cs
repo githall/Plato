@@ -54,7 +54,7 @@ namespace Plato.Site.Demo.Services
             }
         };
 
-        Random _random;
+        private readonly Random _random;
 
         private readonly IEntityReplyManager<EntityReply> _entityReplyManager;  
         private readonly ISampleUsersService _sampleUsersService;
