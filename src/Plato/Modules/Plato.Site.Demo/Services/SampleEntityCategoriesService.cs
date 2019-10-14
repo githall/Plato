@@ -14,7 +14,6 @@ using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Models.Features;
 using Plato.Site.Demo.Models;
-using Plato.Tags.Stores;
 
 namespace Plato.Site.Demo.Services
 {
@@ -187,19 +186,33 @@ namespace Plato.Site.Demo.Services
                     })
                     .ToList();
 
+                // Keeps track of entities already added to categories
                 var alreadyAdded = new Dictionary<int, Entity>();
+
+                // Interate categories getting random entities
+                // and adding them to the current category
                 foreach (var category in categories?.Data)
                 {
+
+                    // Get random entities 
                     var randomEntities = GetRandomEntities(entities?.Data, alreadyAdded);
-                    foreach (var entity in randomEntities)
+
+                    // Ensure we have some entities, they may have already al been added
+                    if (randomEntities == null)
+                    {
+                        return output.Success();
+                    }
+
+                    // Add random entities to category
+                    foreach (var randomEntity in randomEntities)
                     {
 
-                        var fullEntity = await _entityStore.GetByIdAsync(entity.Id);
-                        fullEntity.CategoryId = category.Id;
-                        fullEntity.ModifiedUserId = user?.Id ?? 0;
-                        fullEntity.ModifiedDate =  DateTime.UtcNow;
+                        var entity = await _entityStore.GetByIdAsync(randomEntity.Id);
+                        entity.CategoryId = category.Id;
+                        entity.ModifiedUserId = user?.Id ?? 0;
+                        entity.ModifiedDate =  DateTime.UtcNow;
 
-                        var entityResult = await _entityManager.UpdateAsync(fullEntity);
+                        var entityResult = await _entityManager.UpdateAsync(entity);
                         if (entityResult.Succeeded)
                         {
                             var result = await _entityCategoryManager.CreateAsync(new EntityCategory()
