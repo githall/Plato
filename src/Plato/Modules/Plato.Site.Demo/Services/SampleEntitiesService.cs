@@ -137,7 +137,7 @@ namespace Plato.Site.Demo.Services
 
             for (var i = 0; i < descriptor.EntitiesToCreate; i++)
             {
-                var result = await InstallEntitiesInternalAsync(descriptor, users?.Data);
+                var result = await InstallEntityInternalAsync(descriptor, users?.Data, i + 1);
                 if (!result.Succeeded)
                 {
                     return output.Failed(result.Errors.ToArray());
@@ -153,7 +153,7 @@ namespace Plato.Site.Demo.Services
             return await UninstallEntitiesInternalAsync(descriptor);
         }
 
-        async Task<ICommandResultBase> InstallEntitiesInternalAsync(SampleDataDescriptor descriptor, IList<User> users)
+        async Task<ICommandResultBase> InstallEntityInternalAsync(SampleDataDescriptor descriptor, IList<User> users, int sortOrder = 0)
         {
 
             // Validate
@@ -191,6 +191,7 @@ namespace Plato.Site.Demo.Services
                 Title = $"Example {entityTypeCapitalized} {_random.Next(0, 2000).ToString()}",
                 Message = GetEntityText(descriptor),
                 FeatureId = feature?.Id ?? 0,
+                SortOrder = sortOrder,
                 CreatedUserId = randomUser?.Id ?? 0,
                 CreatedDate = DateTimeOffset.UtcNow
             };
@@ -357,7 +358,7 @@ namespace Plato.Site.Demo.Services
                 : result.Success();
 
         }
-              
+
         string GetEntityText(SampleDataDescriptor descriptor)
         {
 
