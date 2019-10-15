@@ -2014,12 +2014,34 @@
                             },
                             callback: function(e, $target) {
 
+                                // Converts user supplied video url's into expected formats
+                                function normalizeUrl(url) {
+
+                                    // Converts shortened...
+                                    // https://youtu.be/6qAKwsbXCRE?t=715 
+                                    // style inks to full links...
+                                    // https://www.youtube.com/watch?v=6qAKwsbXCRE&t=715
+                                    if (url.toLowerCase().indexOf("youtu.be") >= 0) {                                     
+                                        var parts = url.toLowerCase()
+                                            .replace("https://", "")
+                                            .replace("http://", "")
+                                            .split("/");
+                                        var path = "";
+                                        if (parts.length > 0) {
+                                            path = parts[parts.length - 1].replace("?", "&");
+                                        }
+                                        if (path !== "") {
+                                            url = "https://www.youtube.com/watch?v=" + path.trim();
+                                        }
+                                    }
+                                    return url.trim();
+                                }
+
                                 var placeholderText = e.__localize("https://www.youtube.com/watch?v=mswPy5bt3TQ"),
                                     buttonText = e.__localize("Add Video"),
                                     notSupported =
                                         e.__localize(
                                             "You can only embed YouTube or Vimeo videos.");
-
                                 var $dropdown = e.$editor.find("#" + $target.attr("data-dropdown-target"));
                                 if ($dropdown.length === 0) {
                                     return;
@@ -2035,23 +2057,21 @@
                                 $btn.text(buttonText);
 
                                 $btn.unbind("click").bind("click",
-                                    function(ev) {
+                                    function (ev) {
 
                                         var chunk = null,
                                             cursor,
-                                            selected = e.getSelection(),
-                                            link = $input.val().trim() || "";
+                                            selected = e.getSelection(),                                          
+                                            link = normalizeUrl($input.val() || "");
 
-                                        if (link.toLowerCase().indexOf("youtube.com") > 0) {
-                                            chunk = "Video1";
-                                        }
-                                        if (link.toLowerCase().indexOf("vimeo.com") > 0) {
-                                            chunk = "Video2";
+                                        if (link.toLowerCase().indexOf("youtube.com") > 0 ||
+                                            link.toLowerCase().indexOf("vimeo.com") > 0) {
+                                            chunk = "Description";
                                         }
 
                                         // Url not supported
                                         if (link !== "" && chunk === null) {
-                                            ev.stopPropagation();
+                                            ev.stopPropagation();                                            
                                             alert(notSupported);
                                             $input.focus();
                                             return;
@@ -2061,7 +2081,7 @@
 
                                             var sanitizedLink = $('<div>' + link + '</div>').text();
                                             e.replaceSelection('![' + chunk + '](' + sanitizedLink + ')');
-                                            cursor = selected.start + 1;
+                                            cursor = selected.start + 2;
 
                                             // Set the cursor
                                             e.setSelection(cursor, cursor + chunk.length);
