@@ -118,7 +118,7 @@ namespace Plato.Site.Demo.Services
             "JimShelly",
             "cisco",
             "ToadRage",
-            "ericedgar ",
+            "ericedgar",
             "bryan",
             "joshuaharderr",
             "mvehar",
@@ -163,16 +163,16 @@ namespace Plato.Site.Demo.Services
             foreach (var username in Usernames)
             {
 
-                var userNAme = username;
-                var email = username + "@example.com";
+                var userName = username.Trim();
+                var email = userName + "@example.com";
                 var password = "34Fdckf#343";
 
                 var newUserResult = await _platoUserManager.CreateAsync(new User()
                 {
-                    UserName = userNAme,
+                    UserName = userName,
                     Email = email,
                     Password = password,
-                    DisplayName = userNAme
+                    DisplayName = userName
                 });
             }
 

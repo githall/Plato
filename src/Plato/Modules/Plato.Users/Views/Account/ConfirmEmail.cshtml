@@ -15,9 +15,8 @@
         <div class="layout-content">
             <div class="row">
                 <div class="col-lg-6 col-md-12">
-                    <form asp-controller="Account" asp-action="ConfirmEmail" method="post" data-disable-submit="true" role="form">
-        
-                        <div asp-validation-summary="All" class="text-danger"></div>
+                    <form asp-controller="Account" asp-action="ConfirmEmail" method="post" data-disable-submit="true" role="form">        
+                        <div asp-validation-summary="All"></div>
                         <div class="form-group">
                             <label asp-for="UserIdentifier" class="col-form-label font-weight-bold">@T["Email or username"]</label>
                             <input asp-for="UserIdentifier" placeholder="@T["email@address.com"]" class="form-control" autofocus />
