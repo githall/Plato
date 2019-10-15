@@ -42,7 +42,7 @@ Plato.Docs adds beautiful product documentation all written in Markdown to Plato
 
 ### Articles
 
-Plato.Articles adds a searchable online knowledgebase to Plato.
+Plato.Articles adds a searchable knowledgebase to Plato. 
 
 ![articles.png](https://plato.instantasp.co.uk/plato.site/content/images/articles.png)
 
@@ -60,7 +60,7 @@ Plato.Ideas adds public or private ideation to Plato.
 
 ### Issues
 
-Plato.Issues added public or private issues tracking to Plato.
+Plato.Issues adds public or private issues tracking to Plato.
 
 ![issues.png](https://plato.instantasp.co.uk/plato.site/content/images/issues.png)
 
