@@ -8,7 +8,7 @@ namespace Plato.Internal.Layout
 {
     public class LayoutComposition
     {
-        
+
         private readonly IEnumerable<IViewProviderResult> _results;
         private readonly ConcurrentDictionary<string, IList<IPositionedView>> _zonedViews =
             new ConcurrentDictionary<string, IList<IPositionedView>>();
@@ -21,9 +21,9 @@ namespace Plato.Internal.Layout
         public LayoutViewModel Compose()
         {
 
-            // Create a zoned ditionary 
+            // Create a zoned dictionary 
             ZoneResults();
-            
+
             // Return composed model
             return new LayoutViewModel()
             {
@@ -54,7 +54,7 @@ namespace Plato.Internal.Layout
 
         void ZoneResults()
         {
-            
+
             foreach (var result in _results)
             {
 
@@ -62,14 +62,13 @@ namespace Plato.Internal.Layout
                 {
                     continue;
                 }
-                
+
                 foreach (var view in result.Views)
                 {
-                    // We can only handle views that implement IPositionedView
+                    // We can only zone views that implement IPositionedView
                     if (view is IPositionedView positionedView)
                     {
-                        var key = positionedView.Position.Zone;
-                        _zonedViews.AddOrUpdate(key.ToLower(), new List<IPositionedView>()
+                        _zonedViews.AddOrUpdate(positionedView.Position.Zone.ToLower(), new List<IPositionedView>()
                         {
                             positionedView
                         }, (k, v) =>
@@ -77,12 +76,13 @@ namespace Plato.Internal.Layout
                             v.Add(positionedView);
                             return v;
                         });
-
                     }
                 }
+
             }
 
         }
-        
+
     }
+
 }
