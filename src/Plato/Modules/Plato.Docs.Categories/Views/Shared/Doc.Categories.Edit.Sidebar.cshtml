@@ -1,5 +1,7 @@
 ﻿@model CategoryDropDownViewModel
-
+@{ 
+    
+}
 @await DisplayAsync(new View("DocCategoryDropDown", new
 {
     Model
@@ -20,9 +22,25 @@
             .categoryDropdown({
                 onCategoryUpdated: function($caller, categoryId) {
 
-                    // Get entity dropdown
+                    // Get entity dropdown, body and featureId
                     var $dropdown = $('[data-provide="entity-dropdown"]'),
-                        $body = $dropdown.find('.dropdown-body');
+                        $body = $dropdown.find('.dropdown-body'),
+                        featureId = parseInt($dropdown.data("featureId"));
+
+                    // We need an entity dropdown to update upon category selection
+                    if ($dropdown.length === 0) {
+                        throw new Error("Am element [data-provide=\"entity-dropdown\"] is required!")
+                    }
+
+                    // We need the area to load the new entities into
+                    if ($body.length === 0) {
+                        throw new Error("A child element .dropdown-body is required!")
+                    }
+
+                    // We need to know which feature to load entities for
+                    if (isNaN(featureId)) {
+                        throw new Error("A valid feature id is required to load entities!")
+                    }                    
 
                     // Reset entity dropdown
                     $dropdown.entityDropdown("clear");
@@ -30,7 +48,9 @@
                     // Update entity dropdown
                     app.http({
                         method: "GET",
-                        url: 'Plato.Docs/Home/GetDocsTree?opts.featureId=115&opts.categoryId=' + categoryId
+                        url: 'Plato.Docs/Home/GetDocsTree?opts.featureId=' +
+                            featureId + '&opts.categoryId=' +
+                            categoryId
                     }).done(function(response) {
                         if ($body.length > 0) {
                             $body.empty();

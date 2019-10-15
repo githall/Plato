@@ -33,8 +33,7 @@ namespace Plato.Docs.Categories.ViewProviders
         private readonly ICategoryDetailsUpdater _categoryDetailsUpdater;
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IEntityStore<Doc> _entityStore;
-        private readonly IPostManager<Doc> _entityManager;
+        private readonly IEntityStore<Doc> _entityStore;        
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
         private readonly HttpRequest _request;
@@ -61,8 +60,7 @@ namespace Plato.Docs.Categories.ViewProviders
             _categoryDetailsUpdater = categoryDetailsUpdater;
             _entityCategoryStore = entityCategoryStore;
             _breadCrumbManager = breadCrumbManager;
-            _featureFacade = featureFacade;
-            _entityManager = entityManager;
+            _featureFacade = featureFacade;         
             _contextFacade = contextFacade;
             _categoryStore = categoryStore;
             _entityStore = entityStore;
@@ -299,7 +297,7 @@ namespace Plato.Docs.Categories.ViewProviders
             if (updater.ModelState.IsValid)
             {
                 var categoriesToAdd = GetCategoriesToAdd();
-                if (categoriesToAdd != null)
+                if (categoriesToAdd?.Count > 0)
                 {
                     foreach (var categoryId in categoriesToAdd)
                     {
@@ -308,6 +306,10 @@ namespace Plato.Docs.Categories.ViewProviders
                             doc.CategoryId = categoryId;
                         }
                     }
+                }
+                else
+                {
+                    doc.CategoryId = 0;
                 }
             }
 
@@ -329,7 +331,9 @@ namespace Plato.Docs.Categories.ViewProviders
                
                 // Get selected categories
                 var categoriesToAdd = GetCategoriesToAdd();
-                if (categoriesToAdd != null)
+
+                // Ensure we have categories to add
+                if (categoriesToAdd?.Count > 0)
                 {
                     
                     // Build categories to remove
@@ -386,20 +390,50 @@ namespace Plato.Docs.Categories.ViewProviders
                     }
 
                 }
+                else
+                {
+
+                    // Build categories to remove
+                    var categoriesToRemove = new List<int>();
+                    foreach (var categoryId in await GetCategoryIdsByEntityIdAsync(doc))
+                    {
+                        if (!categoriesToAdd.Contains(categoryId))
+                        {
+                            categoriesToRemove.Add(categoryId);
+                        }
+                    }
+
+                    // Remove categories
+                    foreach (var categoryId in categoriesToRemove)
+                    {
+                        var entityCategory = await _entityCategoryStore.GetByEntityIdAndCategoryIdAsync(doc.Id, categoryId);
+                        if (entityCategory != null)
+                        {
+                            await _entityCategoryManager.DeleteAsync(entityCategory);
+                        }
+                    }
+
+                    // Update removed category meta data
+                    foreach (var id in categoriesToRemove)
+                    {
+                        await _categoryDetailsUpdater.UpdateAsync(id);
+                    }
+
+                }
 
             }
-           
+
             return await BuildEditAsync(doc, context);
 
         }
-        
+
         #endregion
 
         #region "Private Methods"
-        
+
         List<int> GetCategoriesToAdd()
         {
-     
+
             // IMPORTANT: We always return a list here as the CategoryInputViewModel.SelectedCategories
             // property is [Required] but we don't always need to add docs to categories, for this
             // reason return an empty list to ensure ModelState validation passes even if no category is selected
@@ -453,7 +487,7 @@ namespace Plato.Docs.Categories.ViewProviders
         }
 
         #endregion
-        
+
     }
 
 }
