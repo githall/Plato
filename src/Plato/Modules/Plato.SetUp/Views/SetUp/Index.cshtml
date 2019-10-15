@@ -39,7 +39,7 @@
             {
                 <div class="form-group">
                     <h6>@T["Database"]</h6>
-                    @T["The database is used to store the site's configuration and contents."]
+                    @T["The Microsoft SQL Server database to store your Plato configuration and content. Please note during set-up Plato knows nothing about your database and cannot create the database for you. You will first need to create a new database within your instance of SQL Server and then point the connection string below to this new database."]
                 </div>
             }
             @if (Model.ConnectionStringPreset)
@@ -82,7 +82,7 @@
                         <label asp-for="TablePrefix">@T["Table Prefix"]</label>
                         <input asp-for="TablePrefix" class="form-control" />
                         <span asp-validation-for="TablePrefix" class="text-danger"></span>
-                        <span class="text-muted form-text small">@T["You can specify a custom table prefix if you intend to reuse the same database for multiple sites."]</span>
+                        <span class="text-muted form-text small">@T["You can specify a custom table prefix if you intend to reuse the same database for multiple unique instances of Plato."]</span>
                     </div>
                 </fieldset>
             }
