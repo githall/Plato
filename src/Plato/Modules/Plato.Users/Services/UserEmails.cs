@@ -85,7 +85,7 @@ namespace Plato.Users.Services
         public async Task<ICommandResult<EmailMessage>> SendEmailConfirmationTokenAsync(IUser user)
         {
 
-            // Get reset password email
+            // Get confirm account email
             var culture = await _contextFacade.GetCurrentCultureAsync();
             var email = await _localeStore.GetFirstOrDefaultByKeyAsync<LocaleEmail>(culture, "ConfirmEmail");
             if (email != null)
@@ -118,7 +118,7 @@ namespace Plato.Users.Services
             }
 
             var result = new CommandResult<EmailMessage>();
-            return result.Failed("An error occurred whilst attempting to send the email confirmation email.");
+            return result.Failed("An error occurred whilst attempting to send the account confirmation email.");
 
         }
 

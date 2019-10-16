@@ -35,8 +35,9 @@
 
   <!-- 
       Ensure 
-      \Modules\Bin\**
-      \Modules\Content\**      
+      \Modules\**\Bin\**
+      \Modules\**\Content\**
+      \Modules\**\Locales\**      
       \Themes\** 
       \Sites\** 
       Are all published for all publishing profiles
@@ -44,7 +45,7 @@
 
   <ItemGroup>
     
-    <_moduleFiles Include="$(MSBuildProjectDirectory)/Modules/**/Bin/**;$(MSBuildProjectDirectory)/Modules/**/Content/**" />
+    <_moduleFiles Include="$(MSBuildProjectDirectory)/Modules/**/Bin/**;$(MSBuildProjectDirectory)/Modules/**/Content/**;$(MSBuildProjectDirectory)/Modules/**/Locales/**" />
     <_themeFiles Include="$(MSBuildProjectDirectory)/Themes/**/*" />
     <_siteFiles Include="$(MSBuildProjectDirectory)/Sites/**/*" />
     <Content Remove="bundleconfig.json" />
