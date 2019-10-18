@@ -8,12 +8,12 @@ namespace Plato.Docs.Follow.NotificationTypes
 
     public class EmailNotifications : INotificationTypeProvider
     {
-        
-        public static readonly EmailNotification NewDocComment =
-            new EmailNotification("NewDocCommentEmail", "Doc Comments", "Send me an email notification for each new comment within articles I'm following.");
 
-        public static readonly EmailNotification UpdatedDoc =
-            new EmailNotification("UpdatedDocEmail", "Doc Updates", "Send me an email notification for changes within articles I'm following.");
+        public static readonly EmailNotification EntityReply =
+            new EmailNotification("DocReplyEmail", "Doc Comments", "Send me an email notification for each new comment within articles I'm following.");
+
+        public static readonly EmailNotification EntityUpdate =
+            new EmailNotification("DocUpdateEmail", "Doc Updates", "Send me an email notification for changes within articles I'm following.");
 
         public IEnumerable<DefaultNotificationTypes> GetNotificationTypes()
         {
@@ -24,8 +24,8 @@ namespace Plato.Docs.Follow.NotificationTypes
                     RoleName = DefaultRoles.Administrator,
                     NotificationTypes = new[]
                     {
-                        NewDocComment,
-                        UpdatedDoc
+                        EntityReply,
+                        EntityUpdate
                     }
                 },
                 new DefaultNotificationTypes
@@ -33,8 +33,8 @@ namespace Plato.Docs.Follow.NotificationTypes
                     RoleName = DefaultRoles.Staff,
                     NotificationTypes = new[]
                     {
-                        NewDocComment,
-                        UpdatedDoc
+                        EntityReply,
+                        EntityUpdate
                     }
                 },
                 new DefaultNotificationTypes
@@ -42,8 +42,8 @@ namespace Plato.Docs.Follow.NotificationTypes
                     RoleName = DefaultRoles.Member,
                     NotificationTypes = new[]
                     {
-                        NewDocComment,
-                        UpdatedDoc
+                        EntityReply,
+                        EntityUpdate
                     }
                 }
 
@@ -59,7 +59,8 @@ namespace Plato.Docs.Follow.NotificationTypes
                     RoleName = DefaultRoles.Administrator,
                     NotificationTypes = new[]
                     {
-                        NewDocComment
+                        EntityReply,
+                        EntityUpdate
                     }
                 },
                 new DefaultNotificationTypes
@@ -67,7 +68,8 @@ namespace Plato.Docs.Follow.NotificationTypes
                     RoleName = DefaultRoles.Staff,
                     NotificationTypes = new[]
                     {
-                        NewDocComment
+                        EntityReply,
+                        EntityUpdate
                     }
                 },
                 new DefaultNotificationTypes
@@ -75,14 +77,14 @@ namespace Plato.Docs.Follow.NotificationTypes
                     RoleName = DefaultRoles.Member,
                     NotificationTypes = new[]
                     {
-                        NewDocComment
+                        EntityReply,
+                        EntityUpdate
                     }
                 }
 
             };
 
         }
-
 
     }
 

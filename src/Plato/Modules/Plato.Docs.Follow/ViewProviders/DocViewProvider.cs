@@ -294,18 +294,18 @@ namespace Plato.Docs.Follow.ViewProviders
                 {
 
                     // Email notifications
-                    if (user.NotificationEnabled(_userNotificationTypeDefaults, EmailNotifications.UpdatedDoc))
+                    if (user.NotificationEnabled(_userNotificationTypeDefaults, EmailNotifications.EntityUpdate))
                     {
-                        await _notificationManager.SendAsync(new Notification(EmailNotifications.UpdatedDoc)
+                        await _notificationManager.SendAsync(new Notification(EmailNotifications.EntityUpdate)
                         {
                             To = user,
                         }, entity);
                     }
 
                     // Web notifications
-                    if (user.NotificationEnabled(_userNotificationTypeDefaults, WebNotifications.UpdatedDoc))
+                    if (user.NotificationEnabled(_userNotificationTypeDefaults, WebNotifications.EntityUpdate))
                     {
-                        await _notificationManager.SendAsync(new Notification(WebNotifications.UpdatedDoc)
+                        await _notificationManager.SendAsync(new Notification(WebNotifications.EntityUpdate)
                         {
                             To = user,
                             From = new User()

@@ -50,7 +50,7 @@ namespace Plato.Docs.Follow.Notifications
         {
             
             // Ensure correct notification provider
-            if (!context.Notification.Type.Name.Equals(EmailNotifications.NewDocComment.Name, StringComparison.Ordinal))
+            if (!context.Notification.Type.Name.Equals(EmailNotifications.EntityReply.Name, StringComparison.Ordinal))
             {
                 return null;
             }
@@ -62,7 +62,7 @@ namespace Plato.Docs.Follow.Notifications
             var entity = await _entityStore.GetByIdAsync(context.Model.EntityId);
             if (entity == null)
             {
-                return result.Failed($"No entity could be found with the Id of {context.Model.EntityId} when sending the follow notification '{EmailNotifications.NewDocComment.Name}'.");
+                return result.Failed($"No entity could be found with the Id of {context.Model.EntityId} when sending the follow notification '{EmailNotifications.EntityReply.Name}'.");
             }
 
             // Get email template

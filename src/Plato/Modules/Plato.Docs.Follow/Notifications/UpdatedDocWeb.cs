@@ -47,7 +47,7 @@ namespace Plato.Docs.Follow.Notifications
         {
             
             // Ensure correct notification provider
-            if (!context.Notification.Type.Name.Equals(WebNotifications.UpdatedDoc.Name, StringComparison.Ordinal))
+            if (!context.Notification.Type.Name.Equals(WebNotifications.EntityUpdate.Name, StringComparison.Ordinal))
             {
                 return null;
             }
