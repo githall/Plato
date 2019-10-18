@@ -6,18 +6,18 @@ namespace Plato.Issues.Votes
     public class Permissions : IPermissionsProvider<Permission>
     {
 
-        public static readonly Permission VoteIdeas =
+        public static readonly Permission VoteEntities =
             new Permission("VoteIssues", "Can up & down vote issues");
 
-        public static readonly Permission VoteIdeaComments =
+        public static readonly Permission VoteReplies =
             new Permission("VoteIssueComments", "Can up & down vote issue comments");
 
         public IEnumerable<Permission> GetPermissions()
         {
             return new[]
             {
-                VoteIdeas,
-                VoteIdeaComments
+                VoteEntities,
+                VoteReplies
             };
         }
 
@@ -30,8 +30,8 @@ namespace Plato.Issues.Votes
                     RoleName = DefaultRoles.Administrator,
                     Permissions = new[]
                     {
-                        VoteIdeas,
-                        VoteIdeaComments
+                        VoteEntities,
+                        VoteReplies
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -39,8 +39,8 @@ namespace Plato.Issues.Votes
                     RoleName = DefaultRoles.Member,
                     Permissions = new[]
                     {
-                        VoteIdeas,
-                        VoteIdeaComments
+                        VoteEntities,
+                        VoteReplies
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -48,8 +48,8 @@ namespace Plato.Issues.Votes
                     RoleName = DefaultRoles.Staff,
                     Permissions = new[]
                     {
-                        VoteIdeas,
-                        VoteIdeaComments
+                        VoteEntities,
+                        VoteReplies
                     }
                 }
             };

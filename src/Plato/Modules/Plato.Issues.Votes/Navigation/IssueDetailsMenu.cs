@@ -30,7 +30,7 @@ namespace Plato.Issues.Votes.Navigation
             {
                 return;
             }
-       
+
             // Add reaction menu view to navigation
             builder
                 .Add(T["Vote"], react => react
@@ -39,8 +39,8 @@ namespace Plato.Issues.Votes.Navigation
                         model = new VoteToggleViewModel()
                         {                     
                             Entity = entity,
-                            Permission = Permissions.VoteIdeas,
-                            ApiUrl = "api/ideas/vote/post"
+                            Permission = Permissions.VoteEntities,
+                            ApiUrl = "api/issues/vote/post"
                         }
                     })
                 );

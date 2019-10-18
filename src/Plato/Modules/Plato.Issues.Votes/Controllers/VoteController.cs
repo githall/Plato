@@ -68,8 +68,8 @@ namespace Plato.Issues.Votes.Controllers
             
             // Get permission
             var permission = model.EntityReplyId > 0
-                ? Permissions.VoteIdeaComments
-                : Permissions.VoteIdeas;
+                ? Permissions.VoteReplies
+                : Permissions.VoteEntities;
             
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, entity.CategoryId, permission))

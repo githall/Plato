@@ -106,7 +106,7 @@ namespace Plato.Site.Demo.ViewProviders
             return await BuildEditAsync(settings, context);
 
         }
-        
+
         async Task<DemoSettingsViewModel> GetModel()
         {
 

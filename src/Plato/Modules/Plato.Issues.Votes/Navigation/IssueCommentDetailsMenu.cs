@@ -1,24 +1,20 @@
 ﻿using System;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
+using Plato.Entities.Ratings.ViewModels;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Issues.Models;
-using Plato.Entities.Ratings.ViewModels;
 
 namespace Plato.Issues.Votes.Navigation
 {
-    
+
     public class IssueCommentDetailsMenu : INavigationProvider
     {
 
         public IStringLocalizer T { get; set; }
-        private readonly IAuthorizationService _authorizationService;
-        public IssueCommentDetailsMenu(
-            IStringLocalizer localizer,
-            IAuthorizationService authorizationService)
+
+        public IssueCommentDetailsMenu(IStringLocalizer localizer)
         {
             T = localizer;
-            _authorizationService = authorizationService;
         }
 
         public void BuildNavigation(string name, INavigationBuilder builder)
@@ -42,21 +38,21 @@ namespace Plato.Issues.Votes.Navigation
             {
                 return;
             }
-            
-                // Add vote toggle view to navigation
-                builder
-                .Add(T["Vote"], react => react
-                        .View("VoteToggle", new
+
+            // Add vote toggle view to navigation
+            builder
+            .Add(T["Vote"], react => react
+                    .View("VoteToggle", new
+                    {
+                        model = new VoteToggleViewModel()
                         {
-                            model = new VoteToggleViewModel()
-                            {
-                                Entity = entity,
-                                Reply = reply,
-                                Permission = Permissions.VoteIdeaComments,
-                                ApiUrl = "api/ideas/vote/post"
-                            }
-                        })
-                );
+                            Entity = entity,
+                            Reply = reply,
+                            Permission = Permissions.VoteReplies,
+                            ApiUrl = "api/issues/vote/post"
+                        }
+                    })
+            );
 
         }
 
