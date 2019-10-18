@@ -9,11 +9,11 @@ namespace Plato.Articles.Follow.NotificationTypes
     public class WebNotifications : INotificationTypeProvider
     {
         
-        public static readonly WebNotification NewArticleComment =
-            new WebNotification("NewArticleCommentWeb", "Article Comments", "Show me a web notification for each new comment within articles I'm following.");
+        public static readonly WebNotification EntityReply =
+            new WebNotification("ArticleReplyWeb", "Article Comments", "Show me a web notification for each new comment within articles I'm following.");
 
-        public static readonly WebNotification UpdatedArticle =
-            new WebNotification("UpdatedArticleWeb", "Article Updates", "Show me a web notification for updates within articles I'm following.");
+        public static readonly WebNotification EntityUpdate =
+            new WebNotification("ArticleUpdateWeb", "Article Updates", "Show me a web notification for updates within articles I'm following.");
 
         public IEnumerable<DefaultNotificationTypes> GetNotificationTypes()
         {
@@ -24,8 +24,8 @@ namespace Plato.Articles.Follow.NotificationTypes
                     RoleName = DefaultRoles.Administrator,
                     NotificationTypes = new[]
                     {
-                        NewArticleComment,
-                        UpdatedArticle
+                        EntityReply,
+                        EntityUpdate
                     }
                 },
                 new DefaultNotificationTypes
@@ -33,8 +33,8 @@ namespace Plato.Articles.Follow.NotificationTypes
                     RoleName = DefaultRoles.Staff,
                     NotificationTypes = new[]
                     {
-                        NewArticleComment,
-                        UpdatedArticle
+                        EntityReply,
+                        EntityUpdate
                     }
                 },
                 new DefaultNotificationTypes
@@ -42,8 +42,8 @@ namespace Plato.Articles.Follow.NotificationTypes
                     RoleName = DefaultRoles.Member,
                     NotificationTypes = new[]
                     {
-                        NewArticleComment,
-                        UpdatedArticle
+                        EntityReply,
+                        EntityUpdate
                     }
                 }
 
@@ -59,7 +59,8 @@ namespace Plato.Articles.Follow.NotificationTypes
                     RoleName = DefaultRoles.Administrator,
                     NotificationTypes = new[]
                     {
-                        NewArticleComment
+                        EntityReply,
+                        EntityUpdate
                     }
                 },
                 new DefaultNotificationTypes
@@ -67,7 +68,8 @@ namespace Plato.Articles.Follow.NotificationTypes
                     RoleName = DefaultRoles.Staff,
                     NotificationTypes = new[]
                     {
-                        NewArticleComment
+                        EntityReply,
+                        EntityUpdate
                     }
                 },
                 new DefaultNotificationTypes
@@ -75,7 +77,8 @@ namespace Plato.Articles.Follow.NotificationTypes
                     RoleName = DefaultRoles.Member,
                     NotificationTypes = new[]
                     {
-                        NewArticleComment
+                        EntityReply,
+                        EntityUpdate
                     }
                 }
 

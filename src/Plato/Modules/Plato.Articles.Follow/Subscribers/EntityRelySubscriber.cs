@@ -215,18 +215,18 @@ namespace Plato.Articles.Follow.Subscribers
                 {
 
                     // Email notifications
-                    if (user.NotificationEnabled(_userNotificationTypeDefaults, EmailNotifications.NewArticleComment))
+                    if (user.NotificationEnabled(_userNotificationTypeDefaults, EmailNotifications.EntityReply))
                     {
-                        await _notificationManager.SendAsync(new Notification(EmailNotifications.NewArticleComment)
+                        await _notificationManager.SendAsync(new Notification(EmailNotifications.EntityReply)
                         {
                             To = user,
                         }, reply);
                     }
 
                     // Web notifications
-                    if (user.NotificationEnabled(_userNotificationTypeDefaults, WebNotifications.NewArticleComment))
+                    if (user.NotificationEnabled(_userNotificationTypeDefaults, WebNotifications.EntityReply))
                     {
-                        await _notificationManager.SendAsync(new Notification(WebNotifications.NewArticleComment)
+                        await _notificationManager.SendAsync(new Notification(WebNotifications.EntityReply)
                         {
                             To = user,
                             From = new User()
