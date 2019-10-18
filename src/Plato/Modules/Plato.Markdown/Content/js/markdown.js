@@ -1526,7 +1526,6 @@
             e.setSelection(cursor, cursor + chunk.length);
 
         },
-
         // inserts markdown header syntax (H1 = #, H2 = ##, H3 = ### etc)
         insertHeader: function(e, $target) {
 
@@ -1569,10 +1568,10 @@
             e.setSelection(cursor, cursor + chunk.length);
 
         }
-
     };
 
     $.fn.markdown.defaults = {
+
         /* Editor Properties */
         autofocus: false,
         hideable: false,
@@ -1603,6 +1602,30 @@
                 'Attach files by dragging and dropping here, <a id="#dzUpload" href="#">click to browse</a> or paste from the clipboard'
         },
         enableDropDataUri: false,
+        footer: '',      
+        fullscreen: {
+            enable: true,
+            icons: {
+                fullscreenOn: {
+                    name: "fullscreenOn",
+                    icon: {
+                        fa: 'fal fa-expand',
+                        glyph: 'glyphicon glyphicon-fullscreen',
+                        'fa-3': 'icon-resize-full',
+                        octicons: 'octicon octicon-link-external'
+                    }
+                },
+                fullscreenOff: {
+                    name: "fullscreenOff",
+                    icon: {
+                        fa: 'fal fa-compress',
+                        glyph: 'glyphicon glyphicon-fullscreen',
+                        'fa-3': 'icon-resize-small',
+                        octicons: 'octicon octicon-browser'
+                    }
+                }
+            }
+        },
 
         /* Buttons Properties */
         buttons: [
@@ -2015,7 +2038,7 @@
                             callback: function(e, $target) {
 
                                 // Converts user supplied video url's into expected formats
-                                function normalizeUrl(url) {
+                                function normalizeVideoUrl(url) {
 
                                     // Converts shortened...
                                     // https://youtu.be/6qAKwsbXCRE?t=715 
@@ -2062,7 +2085,7 @@
                                         var chunk = null,
                                             cursor,
                                             selected = e.getSelection(),                                          
-                                            link = normalizeUrl($input.val() || "");
+                                            link = normalizeVideoUrl($input.val() || "");
 
                                         if (link.toLowerCase().indexOf("youtube.com") > 0 ||
                                             link.toLowerCase().indexOf("vimeo.com") > 0) {
@@ -2350,45 +2373,19 @@
         reorderButtonGroups: [],
         hiddenButtons: [], // Default hidden buttons
         disabledButtons: [], // Default disabled buttons
-        footer: '',
-        minRows: 4,
-        maxRows: 15,
-        fullscreen: {
-            enable: true,
-            icons: {
-                fullscreenOn: {
-                    name: "fullscreenOn",
-                    icon: {
-                        fa: 'fal fa-expand',
-                        glyph: 'glyphicon glyphicon-fullscreen',
-                        'fa-3': 'icon-resize-full',
-                        octicons: 'octicon octicon-link-external'
-                    }
-                },
-                fullscreenOff: {
-                    name: "fullscreenOff",
-                    icon: {
-                        fa: 'fal fa-compress',
-                        glyph: 'glyphicon glyphicon-fullscreen',
-                        'fa-3': 'icon-resize-small',
-                        octicons: 'octicon octicon-browser'
-                    }
-                }
-            }
-        },
         buttonContainer: "#markdownButtons",
 
-        /* Events hook */
-        onShow: function(e) {},
-        onPreview: function(e) {},
-        onPreviewEnd: function(e) {},
-        onSave: function(e) {},
-        onBlur: function(e) {},
-        onFocus: function(e) {},
-        onChange: function(e) {},
-        onFullscreen: function(e) {},
-        onFullscreenExit: function(e) {},
-        onSelect: function(e) {}
+        /* Events hooks */
+        onShow: function() {},
+        onPreview: function() {},
+        onPreviewEnd: function() {},
+        onSave: function() {},
+        onBlur: function() {},
+        onFocus: function() {},
+        onChange: function() {},
+        onFullscreen: function() {},
+        onFullscreenExit: function() {},
+        onSelect: function() {}
     };
 
     $.fn.markdown.Constructor = Markdown;

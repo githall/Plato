@@ -191,8 +191,7 @@ $(function (win, doc, $) {
                                                         },
                                                         "insert");
 
-                                        }
-                                          
+                                            }                                          
                                         },
                                         "show");
 

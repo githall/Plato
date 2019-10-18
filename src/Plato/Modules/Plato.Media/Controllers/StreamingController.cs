@@ -62,7 +62,6 @@ namespace Plato.Media.Controllers
         {
             return View();
         }
-        
 
         [HttpPost, DisableFormValueModelBinding, ValidateClientAntiForgeryToken]
         public async Task<IActionResult> Upload()
@@ -73,7 +72,7 @@ namespace Plato.Media.Controllers
             {
                 return base.UnauthorizedException();
             }
-            
+
             // Ensure we are dealing with a multipart request
             if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
             {
@@ -88,12 +87,12 @@ namespace Plato.Media.Controllers
                 _defaultFormOptions.MultipartBoundaryLengthLimit);
 
             var reader = new MultipartReader(boundary, HttpContext.Request.Body);
-            
+
             var name = string.Empty;
             var contentType = string.Empty;
             long contentLength = 0;
             byte[] bytes = null;
-            
+
             var section = await reader.ReadNextSectionAsync();
             while (section != null)
             {
@@ -106,7 +105,7 @@ namespace Plato.Media.Controllers
 
                         name = contentDisposition.FileName.ToString();
                         contentType = section.ContentType;
-                        
+
                         // Create an in-memory stream to get the bytes and length
                         using (var ms = new MemoryStream())
                         {
@@ -123,6 +122,7 @@ namespace Plato.Media.Controllers
                     }
                     else if (MultipartRequestHelper.HasFormDataContentDisposition(contentDisposition))
                     {
+
                         // Content-Disposition: form-data; name="key" value
                         // Do not limit the key name length here because the 
                         // multipart headers length limit is already in effect.
@@ -197,7 +197,7 @@ namespace Plato.Media.Controllers
         #endregion
 
         #region "Private Methods"
-        
+
         bool IsContentTypeSupported(string contentType, string[] supportedTypes)
         {
 
@@ -217,7 +217,7 @@ namespace Plato.Media.Controllers
             return false;
 
         }
-        
+
         Encoding GetEncoding(MultipartSection section)
         {
             var hasMediaTypeHeader = MediaTypeHeaderValue.TryParse(section.ContentType, out var mediaType);

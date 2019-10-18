@@ -79,7 +79,8 @@
 
 /* Style textarea and preview */
 .md-editor .md-textarea,
-.md-editor .md-preview {
+.md-editor .md-preview,
+.md-editor .text-field-mirror {
     outline: 0 !important;
     width: 100%;
     min-height: 75px;
@@ -145,7 +146,8 @@
 }
 
 .md-editor.md-fullscreen-mode .md-textarea,
-.md-editor.md-fullscreen-mode .md-preview {
+.md-editor.md-fullscreen-mode .md-preview,
+.md-editor.md-fullscreen-mode .text-field-mirror  {
     margin: 0 auto !important;
     height: 100% !important;
     font-size: 20px !important;
