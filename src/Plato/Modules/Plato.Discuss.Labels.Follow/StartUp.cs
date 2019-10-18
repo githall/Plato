@@ -21,6 +21,7 @@ using Plato.Internal.Features.Abstractions;
 
 namespace Plato.Discuss.Labels.Follow
 {
+
     public class Startup : StartupBase
     {
         private readonly IShellSettings _shellSettings;

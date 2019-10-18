@@ -10,7 +10,7 @@ namespace Plato.Discuss.Labels.Follow
 
         public static readonly Reputation NewFollow =
             new Reputation("Discuss Label Follow", 1);
-        
+
         public IEnumerable<Reputation> GetReputations()
         {
             return new[]
@@ -20,4 +20,5 @@ namespace Plato.Discuss.Labels.Follow
         }
 
     }
+
 }

@@ -15,7 +15,7 @@ namespace Plato.Discuss.Labels.Follow.ViewProviders
         private readonly IFollowStore<Follows.Models.Follow> _followStore;
         private readonly ILabelStore<Label> _labelStore;
         private readonly IContextFacade _contextFacade;
-        
+
         public LabelViewProvider(
             IFollowStore<Follows.Models.Follow> followStore,
             ILabelStore<Label> labelStore, 
@@ -50,7 +50,7 @@ namespace Plato.Discuss.Labels.Follow.ViewProviders
                     isFollowing = true;
                 }
             }
-            
+
             return Views(
                 View<FollowViewModel>("Follow.Display.Tools", model =>
                 {

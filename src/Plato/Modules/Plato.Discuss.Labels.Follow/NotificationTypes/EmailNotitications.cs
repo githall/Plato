@@ -8,7 +8,7 @@ namespace Plato.Discuss.Labels.Follow.NotificationTypes
 
     public class EmailNotifications : INotificationTypeProvider
     {
-        
+
         public static readonly EmailNotification NewLabel =
             new EmailNotification(
                 "NewTopicLabelEmail",
@@ -17,6 +17,7 @@ namespace Plato.Discuss.Labels.Follow.NotificationTypes
 
         public IEnumerable<DefaultNotificationTypes> GetNotificationTypes()
         {
+
             return new[]
             {
                 new DefaultNotificationTypes
@@ -43,12 +44,13 @@ namespace Plato.Discuss.Labels.Follow.NotificationTypes
                         NewLabel
                     }
                 }
-
             };
+
         }
 
         public IEnumerable<DefaultNotificationTypes> GetDefaultNotificationTypes()
         {
+
             return new[]
             {
                 new DefaultNotificationTypes
@@ -75,11 +77,10 @@ namespace Plato.Discuss.Labels.Follow.NotificationTypes
                         NewLabel
                     }
                 }
-
             };
 
         }
-        
+
     }
 
 }

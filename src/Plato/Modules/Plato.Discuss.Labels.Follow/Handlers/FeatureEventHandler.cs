@@ -14,7 +14,7 @@ namespace Plato.Discuss.Labels.Follow.Handlers
         {
             _defaultRolesManager = defaultRolesManager;
         }
-        
+
         public override Task InstallingAsync(IFeatureEventContext context)
         {
             return Task.CompletedTask;

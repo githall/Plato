@@ -127,10 +127,11 @@ namespace Plato.Discuss.Labels.Follow.Subscribers
                 // Revoke reputation for following tag
                 await _reputationAwarder.RevokeAsync(Reputations.NewFollow, follow.CreatedUserId, $"Unfollowed label \"{label.Name}\"");
             }
-            
+
             return follow;
 
         }
 
     }
+
 }

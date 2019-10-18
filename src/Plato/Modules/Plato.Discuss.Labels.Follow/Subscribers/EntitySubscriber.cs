@@ -115,6 +115,7 @@ namespace Plato.Discuss.Labels.Follow.Subscribers
             };
 
             return await SendAsync(entity, usersToExclude);
+
         }
 
         async Task<TEntity> EntityUpdated(TEntity entity)
@@ -190,10 +191,9 @@ namespace Plato.Discuss.Labels.Follow.Subscribers
                     {
                         labels.Add(entityLabel.LabelId);
                     }
-                    
                 }
             }
-            
+
             // Get all follows for entity labels
             var follows = await _followStore.QueryAsync()
                 .Select<FollowQueryParams>(q =>
@@ -219,7 +219,7 @@ namespace Plato.Discuss.Labels.Follow.Subscribers
             // Send notifications
             foreach (var user in users)
             {
-                
+
                 // Email notifications
                 if (user.NotificationEnabled(_userNotificationTypeDefaults, EmailNotifications.NewLabel))
                 {
@@ -366,7 +366,7 @@ namespace Plato.Discuss.Labels.Follow.Subscribers
             }
 
             return result.Count > 0 ? result.Values : null;
-            
+
         }
 
         #endregion

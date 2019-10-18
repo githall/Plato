@@ -3,12 +3,13 @@ using Plato.Internal.Security.Abstractions;
 
 namespace Plato.Discuss.Labels.Follow
 {
+
     public class Permissions : IPermissionsProvider<Permission>
     {
 
         public static readonly Permission FollowDiscussLabels =
             new Permission("FollowDiscussLabels", "Can follow labels");
-        
+
         public IEnumerable<Permission> GetPermissions()
         {
             return new[]
