@@ -16,8 +16,8 @@ using Plato.Internal.Messaging.Abstractions;
 using Plato.Internal.Notifications;
 using Plato.Internal.Notifications.Abstractions;
 using Plato.Internal.Security.Abstractions;
-using YamlDotNet.Core.Tokens;
-
+using Plato.Discuss.Labels.Follow.Handlers;
+using Plato.Internal.Features.Abstractions;
 
 namespace Plato.Discuss.Labels.Follow
 {
@@ -32,6 +32,9 @@ namespace Plato.Discuss.Labels.Follow
 
         public override void ConfigureServices(IServiceCollection services)
         {
+
+            // Feature installation event handler
+            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // Notification type providers
             services.AddScoped<INotificationTypeProvider, EmailNotifications>();
