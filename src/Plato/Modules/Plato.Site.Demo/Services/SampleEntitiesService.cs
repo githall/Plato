@@ -13,6 +13,7 @@ using Plato.Internal.Stores.Abstractions.Users;
 using Plato.Site.Demo.Models;
 using Microsoft.AspNetCore.Routing;
 using Plato.Internal.Hosting.Abstractions;
+using Plato.Entities.Stores;
 
 namespace Plato.Site.Demo.Services
 {
@@ -58,8 +59,9 @@ namespace Plato.Site.Demo.Services
 
         private readonly IEntityReplyManager<EntityReply> _entityReplyManager;  
         private readonly ISampleUsersService _sampleUsersService;
-        private readonly IEntityManager<Entity> _entityManager;        
-        private readonly IPlatoUserStore<User> _platoUserStore;    
+        private readonly IEntityManager<Entity> _entityManager;
+        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly IEntityStore<Entity> _entityStore;
         private readonly IFeatureFacade _featureFacade;
         private readonly IContextFacade _contextFacade;
         private readonly IDbHelper _dbHelper;
@@ -69,6 +71,7 @@ namespace Plato.Site.Demo.Services
             ISampleUsersService sampleUsersService,
             IEntityManager<Entity> entityManager,
             IPlatoUserStore<User> platoUserStore,
+            IEntityStore<Entity> entityStore,
             IContextFacade contextFacade,
             IFeatureFacade featureFacade,
             IDbHelper dbHelper)
@@ -79,6 +82,7 @@ namespace Plato.Site.Demo.Services
             _entityManager = entityManager;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
+            _entityStore = entityStore;
             _dbHelper = dbHelper;
             _random = new Random();
         }
@@ -135,9 +139,22 @@ namespace Plato.Site.Demo.Services
                 return output.Failed("You must create sample users first!");
             }
 
+            // Ensure the feature is enabled
+            var feature = await _featureFacade.GetFeatureByIdAsync(descriptor.ModuleId);
+
+            if (feature == null)
+            {
+                return output.Failed($"The feature {descriptor.ModuleId} is not enabled!");
+            }
+
+            // If we add sample entities multiple times ensure the sort order
+            // for new entities is always incremented starting from the highest 
+            // existing sort order for any existing entities
+            var sortOrder = await GetStartingEntitySortOrderAsync(feature.Id);
+
             for (var i = 0; i < descriptor.EntitiesToCreate; i++)
             {
-                var result = await InstallEntityInternalAsync(descriptor, users?.Data, i + 1);
+                var result = await InstallEntityInternalAsync(descriptor, users?.Data, sortOrder + i);
                 if (!result.Succeeded)
                 {
                     return output.Failed(result.Errors.ToArray());
@@ -177,7 +194,7 @@ namespace Plato.Site.Demo.Services
             if (feature == null)
             {
                 return result.Failed($"The feature {descriptor.ModuleId} is not enabled!");
-            }         
+            }
 
             // Get a random user for the post
             var randomUser = users[_random.Next(0, users.Count)];
@@ -191,7 +208,7 @@ namespace Plato.Site.Demo.Services
                 Title = $"Example {entityTypeCapitalized} {_random.Next(0, 2000).ToString()}",
                 Message = GetEntityText(descriptor),
                 FeatureId = feature?.Id ?? 0,
-                SortOrder = sortOrder,
+                SortOrder = sortOrder + 1,
                 CreatedUserId = randomUser?.Id ?? 0,
                 CreatedDate = DateTimeOffset.UtcNow
             };
@@ -394,6 +411,28 @@ namespace Plato.Site.Demo.Services
             input = input.Replace("{moduleId}", descriptor.ModuleId);
             input = input.Replace("{entityType}", descriptor.EntityType);
             return input;
+        }
+
+        async Task<int> GetStartingEntitySortOrderAsync(int featureId)
+        {
+
+            // Get the starting sort order for new entities within this feature       
+            var entities = await _entityStore.QueryAsync()
+                .Take(1)
+                .Select<EntityQueryParams>(q =>
+                {
+                    q.FeatureId.Equals(featureId);
+                })
+                .OrderBy("SortOrder", OrderBy.Desc)
+                .ToList();
+
+            if (entities?.Data != null)
+            {
+                return entities.Data[0].SortOrder;
+            }
+
+            return 0;
+
         }
 
         string[] _entityText = new string[]

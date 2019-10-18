@@ -84,7 +84,7 @@ namespace Plato.Site.Demo.Controllers
             return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new DemoSettings(), this));
 
         }
-        
+
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
         public async Task<IActionResult> IndexPost(DemoSettingsViewModel viewModel)
         {

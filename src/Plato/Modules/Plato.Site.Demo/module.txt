@@ -17,6 +17,10 @@ Dependencies:
 		Version: "1.0.0"
 	},
 	{
+		Id: "Plato.Categories.Roles",
+		Version: "1.0.0"
+	},
+	{
 		Id: "Plato.Labels",
 		Version: "1.0.0"
 	},
