@@ -224,20 +224,36 @@ a.label:hover, .label.active {
 }
 
 .btn-outline-secondary {
-    border-color: #ccc;
+    border-color: #ddd;
     color: #000;
 }
 
 .btn-secondary:hover {
-    background: #f2f2f2;
+    background: white;
     border-color: #aaa;
     color: #000;
 }
 
 .btn-outline-secondary:hover {
-    background: #aaa;
-    border-color: #aaa;
+    background: #007BFF;
+    border-color: #007bff;
     color: #fff;
+}
+
+.btn-outline-secondary:hover .text-muted {
+    color: #fff !important;
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled):active, .btn-outline-secondary:not(:disabled):not(.disabled).active,
+.show > .btn-outline-secondary.dropdown-toggle {
+    color: #fff;
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.btn-outline-secondary:not(:disabled):not(.disabled):active:focus, .btn-outline-secondary:not(:disabled):not(.disabled).active:focus,
+.show > .btn-outline-secondary.dropdown-toggle:focus {
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.5);
 }
 
 /* ------------------- */

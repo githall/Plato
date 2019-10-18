@@ -213,7 +213,7 @@ namespace Plato.Site.Demo.Services
                 CreatedDate = DateTimeOffset.UtcNow
             };
 
-            // create topic
+            // Create entity
             var entityResult = await _entityManager.CreateAsync(entity);
             if (entityResult.Succeeded)
             {
@@ -222,6 +222,7 @@ namespace Plato.Site.Demo.Services
                 var lastReplyUserName = string.Empty;
                 var lastReplyMessage = string.Empty;
 
+                // Create entity replies
                 for (var i = 0; i < descriptor.EntityRepliesToCreate; i++)
                 {
               
@@ -252,6 +253,7 @@ namespace Plato.Site.Demo.Services
                         ["opts.replyId"] = lastReplyId ?? ""
                     }));
 
+                    // Create reply
                     var reply = new EntityReply()
                     {
                         EntityId = entityResult.Response.Id,
@@ -259,6 +261,8 @@ namespace Plato.Site.Demo.Services
                         CreatedUserId = randomUser?.Id ?? 0,
                         CreatedDate = DateTimeOffset.UtcNow
                     };
+
+                    // Add reply
                     var replyResult = await _entityReplyManager.CreateAsync(reply);
                     if (!replyResult.Succeeded)
                     {
