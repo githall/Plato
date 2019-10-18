@@ -7,6 +7,7 @@ using Plato.Questions.Models;
 
 namespace Plato.Questions.Votes.Navigation
 {
+
     public class QuestionDetailsMenu : INavigationProvider
     {
         

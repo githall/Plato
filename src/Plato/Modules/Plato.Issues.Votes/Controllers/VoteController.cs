@@ -22,29 +22,29 @@ namespace Plato.Issues.Votes.Controllers
         private readonly IEntityReplyRatingAggregator<Comment> _entityReplyRatingsAggregator;
         private readonly IEntityRatingAggregator<Issue> _entityRatingsAggregator;
         private readonly IEntityRatingsManager<EntityRating> _entityRatingManager;
-        private readonly IEntityRatingsStore<EntityRating> _entityRatingsStore;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IEntityRatingsStore<EntityRating> _entityRatingsStore;        
         private readonly IEntityReplyStore<Comment> _entityReplyStore;
-        private readonly IEntityStore<Issue> _entityStore;
+        private readonly IAuthorizationService _authorizationService;
         private readonly IClientIpAddress _clientIpAddress;
+        private readonly IEntityStore<Issue> _entityStore;
 
         public VoteController(
             IEntityReplyRatingAggregator<Comment> entityReplyRatingsAggregator,
             IEntityRatingAggregator<Issue> entityRatingsAggregator,
             IEntityRatingsManager<EntityRating> entityRatingManager,
             IEntityRatingsStore<EntityRating> entityRatingsStore,
-            IAuthorizationService authorizationService,
             IEntityReplyStore<Comment> entityReplyStore,
-            IEntityStore<Issue> entityStore,
-            IClientIpAddress clientIpAddress)
+            IAuthorizationService authorizationService,                        
+            IClientIpAddress clientIpAddress,
+            IEntityStore<Issue> entityStore)
         {
             _entityReplyRatingsAggregator = entityReplyRatingsAggregator;
             _entityRatingsAggregator = entityRatingsAggregator;
             _authorizationService = authorizationService;
             _entityRatingManager = entityRatingManager;
-            _entityRatingsStore = entityRatingsStore;
-            _clientIpAddress = clientIpAddress;
+            _entityRatingsStore = entityRatingsStore;            
             _entityReplyStore = entityReplyStore;
+            _clientIpAddress = clientIpAddress;
             _entityStore = entityStore;
         }
 
@@ -185,7 +185,7 @@ namespace Plato.Issues.Votes.Controllers
             return base.InternalServerError();
 
         }
-        
+
         async Task<AggregateRating> UpdateEntityRating(int entityId)
         {
 

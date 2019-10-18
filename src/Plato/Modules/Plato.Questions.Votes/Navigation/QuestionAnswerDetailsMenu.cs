@@ -1,5 +1,4 @@
 ﻿using System;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.Localization;
 using Plato.Entities.Extensions;
 using Plato.Internal.Navigation.Abstractions;
@@ -8,18 +7,15 @@ using Plato.Entities.Ratings.ViewModels;
 
 namespace Plato.Questions.Votes.Navigation
 {
-    
+
     public class QuestionAnswerDetailsMenu : INavigationProvider
     {
 
         public IStringLocalizer T { get; set; }
-        private readonly IAuthorizationService _authorizationService;
-        public QuestionAnswerDetailsMenu(
-            IStringLocalizer localizer,
-            IAuthorizationService authorizationService)
+
+        public QuestionAnswerDetailsMenu(IStringLocalizer localizer)
         {
             T = localizer;
-            _authorizationService = authorizationService;
         }
 
         public void BuildNavigation(string name, INavigationBuilder builder)

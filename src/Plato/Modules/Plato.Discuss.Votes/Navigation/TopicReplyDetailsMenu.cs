@@ -6,10 +6,10 @@ using Plato.Entities.Ratings.ViewModels;
 
 namespace Plato.Discuss.Votes.Navigation
 {
-    
+
     public class TopicReplyDetailsMenu : INavigationProvider
     {
-        
+
         public IStringLocalizer T { get; set; }
 
         public TopicReplyDetailsMenu(IStringLocalizer localizer)
@@ -51,8 +51,7 @@ namespace Plato.Discuss.Votes.Navigation
                                 Permission = Permissions.VoteTopicReplies,
                                 ApiUrl = "api/discuss/vote/post"
                             }
-                        })
-                    //.Permission(Permissions.ReactToTopics)
+                        })                    
                 );
 
         }

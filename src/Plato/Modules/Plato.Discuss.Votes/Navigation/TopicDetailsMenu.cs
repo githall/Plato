@@ -6,16 +6,17 @@ using Plato.Discuss.Models;
 
 namespace Plato.Discuss.Votes.Navigation
 {
+
     public class TopicDetailsMenu : INavigationProvider
     {
-        
+
         public IStringLocalizer T { get; set; }
 
         public TopicDetailsMenu(IStringLocalizer localizer)
         {
             T = localizer;
         }
-        
+
         public void BuildNavigation(string name, INavigationBuilder builder)
         {
 
@@ -30,14 +31,14 @@ namespace Plato.Discuss.Votes.Navigation
             {
                 return;
             }
-       
+
             // Add reaction menu view to navigation
             builder
                 .Add(T["Vote"], react => react
                     .View("VoteToggle", new
                     {
                         model = new VoteToggleViewModel()
-                        {                     
+                        {
                             Entity = entity,
                             Permission = Permissions.VoteTopics,
                             ApiUrl = "api/discuss/vote/post"

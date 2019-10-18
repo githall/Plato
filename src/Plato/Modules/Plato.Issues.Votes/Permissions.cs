@@ -3,6 +3,7 @@ using Plato.Internal.Security.Abstractions;
 
 namespace Plato.Issues.Votes
 {
+
     public class Permissions : IPermissionsProvider<Permission>
     {
 
