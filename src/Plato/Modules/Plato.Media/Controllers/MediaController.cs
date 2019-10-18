@@ -4,32 +4,28 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Hosting;
-using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Stores.Abstractions.Files;
 using Plato.Media.Stores;
+using Microsoft.Net.Http.Headers;
 
 namespace Plato.Media.Controllers
 {
-    
+
     public class MediaController : Controller
     {
 
         private static string _pathToEmptyImage;
 
-        private readonly IContextFacade _contextFacade;
         private readonly IMediaStore<Models.Media> _mediaStore;
-        private readonly IHostingEnvironment _hostEnvironment;
         private readonly IFileStore _fileStore;
-    
-        public MediaController(
-            IContextFacade contextFacade,
+
+        public MediaController(    
             IMediaStore<Models.Media> mediaStore,
             IHostingEnvironment hostEnvironment,
             IFileStore fileStore)
         {
-            _contextFacade = contextFacade;
-            _mediaStore = mediaStore;
-            _hostEnvironment = hostEnvironment;
+
+            _mediaStore = mediaStore;       
             _fileStore = fileStore;
 
             if (_pathToEmptyImage == null)
@@ -41,89 +37,25 @@ namespace Plato.Media.Controllers
             }
    
         }
-        
-        // ----------
-        // Upload
-        // ----------
-        
-        //[HttpGet, AllowAnonymous]
-        //public async Task<IActionResult> Upload(string returnUrl = null)
-        //{
-
-        //    var user = await _contextFacade.GetAuthenticatedUserAsync();
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-        //    return View(user.Id);
-        //}
-
-        //[HttpPost]
-        //public async Task<IActionResult> Upload(IFormFile file)
-        //{
-       
-        //    if (file == null)
-        //        throw new ArgumentNullException(nameof(file));
-
-        //    var user = await _contextFacade.GetAuthenticatedUserAsync();
-        //    if (user == null)
-        //    {
-        //        return NotFound();
-        //    }
-                
-        //    byte[] bytes = null;
-        //    var stream = file.OpenReadStream();
-        //    if (stream != null)
-        //    {
-        //        bytes = stream.StreamToByteArray();
-        //    }
-        //    if (bytes == null)
-        //    {
-        //        return NotFound();
-        //    }
-                
-        //    var id = 0;
-          
-        //    var userPhoto = new Models.Media
-        //    {
-        //        Id = id,
-        //        Name = file.FileName,
-        //        ContentType = file.ContentType,
-        //        ContentLength = file.Length,
-        //        ContentBlob = bytes,
-        //        CreatedUserId = user.Id,
-        //        CreatedDate = DateTime.UtcNow
-        //    };
-
-        //    if (id > 0)
-        //        await _mediaStore.UpdateAsync(userPhoto);
-        //    else
-        //         await _mediaStore.CreateAsync(userPhoto);
-
-        //    return View();
-        //}
 
         // ----------
         // Serve
         // ----------
 
-        /// <summary>
-        /// Serves a media file from the media store.
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
         [HttpGet, AllowAnonymous]
         public async Task Serve(int id)
         {
-            
+
             var media = await _mediaStore.GetByIdAsync(id);
             var r = Response;
             r.Clear();
+
             if ((media != null) && (media.ContentLength >= 0))
             {
                 r.ContentType = media.ContentType;
-                r.Headers.Add("content-disposition", "filename=\"" + media.Name + "\"");
-                r.Headers.Add("content-length", Convert.ToString((long)media.ContentLength));
+                r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + media.Name + "\"");
+                r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)media.ContentLength));
+                r.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
                 r.Body.Write(media.ContentBlob, 0, (int)media.ContentLength);
             }
             else
@@ -132,13 +64,15 @@ namespace Plato.Media.Controllers
                 if (fileBytes != null)
                 {
                     r.ContentType = "image/png";
-                    r.Headers.Add("content-disposition", "filename=\"empty.png\"");
-                    r.Headers.Add("content-length", Convert.ToString((int)fileBytes.Length));
+                    r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"empty.png\"");
+                    r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((int)fileBytes.Length));
+                    r.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
                     r.Body.Write(fileBytes, 0, fileBytes.Length);
                 }
             }
-            
+
         }
 
     }
+
 }

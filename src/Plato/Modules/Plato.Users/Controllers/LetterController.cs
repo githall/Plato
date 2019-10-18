@@ -64,7 +64,7 @@ namespace Plato.Users.Controllers
                 r.ContentType = "image/png";
                 r.Headers.Add(HeaderNames.ContentDisposition, $"filename=\"{fileName}\"");
                 r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((int)existingFileBytes.Length));
-                r.Headers.Add(HeaderNames.CacheControl, "public,max-age=86400"); // 86400 = 24 hours
+                r.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
 
                 r.Body.Write(existingFileBytes, 0, existingFileBytes.Length);
             }
@@ -100,7 +100,7 @@ namespace Plato.Users.Controllers
                     r.ContentType = "image/png";
                     r.Headers.Add(HeaderNames.ContentDisposition, $"filename=\"{fileName}\"");
                     r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((int)fileBytes.Length));
-                    r.Headers.Add(HeaderNames.CacheControl, "public,max-age=86400"); // 86400 = 24 hours
+                    r.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
                     r.Body.Write(fileBytes, 0, fileBytes.Length);
 
                 }
