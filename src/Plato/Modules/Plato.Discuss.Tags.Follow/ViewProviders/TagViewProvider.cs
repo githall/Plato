@@ -4,7 +4,6 @@ using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
-using Plato.Internal.Models;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;
 

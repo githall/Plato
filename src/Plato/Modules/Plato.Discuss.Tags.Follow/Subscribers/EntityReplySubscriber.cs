@@ -117,6 +117,7 @@ namespace Plato.Discuss.Tags.Follow.Subscribers
             };
 
             return await SendAsync(reply, usersToExclude);
+
         }
 
         async Task<TEntityReply> EntityReplyUpdated(TEntityReply reply)
@@ -372,7 +373,7 @@ namespace Plato.Discuss.Tags.Follow.Subscribers
             }
 
             return result.Count > 0 ? result.Values : null;
-            
+
         }
 
         #endregion

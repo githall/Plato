@@ -16,14 +16,14 @@ namespace Plato.Discuss.Tags.Follow.Notifications
 
     public class NewTagWeb : INotificationProvider<Topic>
     {
-        
+
         private readonly IUserNotificationsManager<UserNotification> _userNotificationManager;
         private readonly ICapturedRouterUrlHelper _capturedRouterUrlHelper;
 
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public NewTagWeb(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
@@ -77,9 +77,9 @@ namespace Plato.Discuss.Tags.Follow.Notifications
             }
 
             return result.Failed(userNotificationResult.Errors?.ToArray());
-            
+
         }
 
     }
-    
+
 }

@@ -16,7 +16,6 @@ using Plato.Internal.Messaging.Abstractions;
 using Plato.Internal.Notifications;
 using Plato.Internal.Notifications.Abstractions;
 using Plato.Internal.Security.Abstractions;
-using Plato.Tags.Models;
 using Plato.Internal.Features.Abstractions;
 using Plato.Discuss.Tags.Follow.Handlers;
 

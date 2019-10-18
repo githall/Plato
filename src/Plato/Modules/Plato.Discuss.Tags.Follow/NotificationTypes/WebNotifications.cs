@@ -8,7 +8,7 @@ namespace Plato.Discuss.Tags.Follow.NotificationTypes
 
     public class WebNotifications : INotificationTypeProvider
     {
-        
+
         public static readonly WebNotification NewTag =
             new WebNotification("NewTopicTagWeb",
                 "Topic Tags",
@@ -50,12 +50,13 @@ namespace Plato.Discuss.Tags.Follow.NotificationTypes
                         NewReplyTag
                     }
                 }
-
             };
+
         }
 
         public IEnumerable<DefaultNotificationTypes> GetDefaultNotificationTypes()
         {
+
             return new[]
             {
                 new DefaultNotificationTypes
@@ -86,7 +87,7 @@ namespace Plato.Discuss.Tags.Follow.NotificationTypes
             };
 
         }
-        
+
     }
 
 }

@@ -14,7 +14,7 @@ namespace Plato.Discuss.Tags.Follow.Handlers
         {
             _defaultRolesManager = defaultRolesManager;
         }
-        
+
         public override Task InstallingAsync(IFeatureEventContext context)
         {
             return Task.CompletedTask;
@@ -35,7 +35,7 @@ namespace Plato.Discuss.Tags.Follow.Handlers
         {
             return Task.CompletedTask;
         }
-        
+
     }
 
 }

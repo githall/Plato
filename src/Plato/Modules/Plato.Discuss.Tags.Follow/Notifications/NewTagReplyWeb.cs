@@ -91,9 +91,9 @@ namespace Plato.Discuss.Tags.Follow.Notifications
             }
 
             return result.Failed(userNotificationResult.Errors?.ToArray());
-            
+
         }
 
     }
-    
+
 }

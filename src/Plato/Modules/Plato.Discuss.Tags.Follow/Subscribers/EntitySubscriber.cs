@@ -17,7 +17,6 @@ using Plato.Internal.Tasks.Abstractions;
 using Plato.Entities.Extensions;
 using Plato.Entities.Stores;
 using Plato.Follows.Models;
-using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Security.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;
@@ -114,6 +113,7 @@ namespace Plato.Discuss.Tags.Follow.Subscribers
             };
 
             return await SendAsync(entity, usersToExclude);
+
         }
 
         async Task<TEntity> EntityUpdated(TEntity entity)
@@ -363,7 +363,7 @@ namespace Plato.Discuss.Tags.Follow.Subscribers
             }
 
             return result.Count > 0 ? result.Values : null;
-            
+
         }
 
         #endregion

@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Plato.Discuss.Tags.Follow.NotificationTypes;
 using Plato.Discuss.Models;
@@ -119,5 +118,5 @@ namespace Plato.Discuss.Tags.Follow.Notifications
         }
 
     }
-    
+
 }
