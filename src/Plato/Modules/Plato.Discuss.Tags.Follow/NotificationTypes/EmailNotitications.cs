@@ -62,7 +62,8 @@ namespace Plato.Discuss.Tags.Follow.NotificationTypes
                     RoleName = DefaultRoles.Administrator,
                     NotificationTypes = new[]
                     {
-                        NewTag
+                        NewTag,
+                        NewReplyTag
                     }
                 },
                 new DefaultNotificationTypes
@@ -70,7 +71,8 @@ namespace Plato.Discuss.Tags.Follow.NotificationTypes
                     RoleName = DefaultRoles.Staff,
                     NotificationTypes = new[]
                     {
-                        NewTag
+                        NewTag,
+                        NewReplyTag
                     }
                 },
                 new DefaultNotificationTypes
@@ -78,7 +80,8 @@ namespace Plato.Discuss.Tags.Follow.NotificationTypes
                     RoleName = DefaultRoles.Member,
                     NotificationTypes = new[]
                     {
-                        NewTag
+                        NewTag,
+                        NewReplyTag
                     }
                 }
             };
