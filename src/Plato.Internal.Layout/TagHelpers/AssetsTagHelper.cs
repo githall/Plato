@@ -45,7 +45,7 @@ namespace Plato.Internal.Layout.TagHelpers
         
         #region "Implementation"
 
-        public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
+        public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
 
             output.TagName = "";
@@ -54,7 +54,7 @@ namespace Plato.Internal.Layout.TagHelpers
             var sw = new StringWriter();
          
             // Get provided assets
-            var assets = await GetAssetsAsync();
+            var assets = GetAssets();
 
             if (assets != null)
             {
@@ -98,7 +98,9 @@ namespace Plato.Internal.Layout.TagHelpers
 
             var sb = sw.GetStringBuilder();
             output.Content.SetHtmlContent(sb.ToString());
-            
+
+            return Task.CompletedTask;
+
         }
 
         #endregion
@@ -106,11 +108,11 @@ namespace Plato.Internal.Layout.TagHelpers
         #region "Private Methods"
         
         // Get all resources matching environment and section
-        async Task<IList<Asset>> GetAssetsAsync()
+        IList<Asset> GetAssets()
         {
 
             // Get all default and provided environments
-            var environments = await GetMergedEnvironmentsAsync();
+            var environments = GetMergedEnvironments();
 
             // Filter by environment
             var matchingEnvironment = environments.FirstOrDefault(g => g.TargetEnvironment == TargetEnvironment.All || g.TargetEnvironment == GetDeploymentMode());
@@ -284,11 +286,11 @@ namespace Plato.Internal.Layout.TagHelpers
 
         }
         
-        async Task<IEnumerable<AssetEnvironment>> GetMergedEnvironmentsAsync()
+        IEnumerable<AssetEnvironment> GetMergedEnvironments()
         {
-            
+
             // Get provided resources
-            var provided = await _assetManager.GetAssets();
+            var provided = _assetManager.GetAssets();
             var providedEnvironments = provided.ToList();
 
             // Get default resources

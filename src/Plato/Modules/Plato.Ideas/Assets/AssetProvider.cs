@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Plato.Internal.Assets.Abstractions;
 
 namespace Plato.Ideas.Assets
@@ -7,10 +6,10 @@ namespace Plato.Ideas.Assets
     public class AssetProvider : IAssetProvider
     {
         
-        public Task<IEnumerable<AssetEnvironment>> GetAssetEnvironments()
+        public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
 
-            IEnumerable<AssetEnvironment> result = new List<AssetEnvironment>
+            return new List<AssetEnvironment>
             {
 
                 // Development
@@ -66,10 +65,8 @@ namespace Plato.Ideas.Assets
 
             };
 
-            return Task.FromResult(result);
-
         }
-        
 
     }
+
 }

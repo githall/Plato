@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.Settings;
 using Plato.Internal.Assets.Abstractions;
@@ -21,14 +20,14 @@ namespace Plato.Core.Assets
             _siteOptions = siteOptions;
         }
 
-        public Task<IEnumerable<AssetEnvironment>> GetAssetEnvironments()
+        public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
 
             var path = !string.IsNullOrEmpty(_siteOptions.Value.Theme)
                 ? _siteOptions.Value.Theme
                 : $"{_themeOptions.Value.VirtualPathToThemesFolder}/default";
 
-            IEnumerable<AssetEnvironment> assets = new List<AssetEnvironment>
+            return new List<AssetEnvironment>
             {
 
                 // Development
@@ -70,8 +69,6 @@ namespace Plato.Core.Assets
                 })
 
             };
-
-            return Task.FromResult(assets);
 
         }
 

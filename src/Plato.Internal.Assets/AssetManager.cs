@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Plato.Internal.Assets.Abstractions;
 
@@ -9,7 +8,8 @@ namespace Plato.Internal.Assets
 
     public class AssetManager : IAssetManager
     {
-        private readonly IList<AssetEnvironment> _localAssets = new List<AssetEnvironment>();
+        private readonly IList<AssetEnvironment> _localAssets = 
+            new List<AssetEnvironment>();
 
         private readonly IEnumerable<IAssetProvider> _assetProviders;
         private readonly ILogger<AssetManager> _logger;
@@ -22,7 +22,7 @@ namespace Plato.Internal.Assets
             _logger = logger;
         }
         
-        public async Task<IEnumerable<AssetEnvironment>> GetAssets()
+        public IEnumerable<AssetEnvironment> GetAssets()
         {
 
             // Check providers for assets
@@ -31,18 +31,14 @@ namespace Plato.Internal.Assets
             {
                 try
                 {
-                    var environments = await provider.GetAssetEnvironments();
-                    if (environments != null)
-                    {
-                        output.AddRange(environments);
-                    }
+                    output.AddRange(provider.GetAssetEnvironments());                  
                 }
                 catch (Exception e)
                 {
                     _logger.LogError(e, $"An exception occurred whilst attempting to execute a resource provider of type {provider.GetType()}.");
                 }
             }
-            
+
             // Merge assets set via SetAssets();
             if (_localAssets.Count > 0)
             {
