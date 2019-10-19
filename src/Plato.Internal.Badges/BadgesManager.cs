@@ -13,16 +13,16 @@ namespace Plato.Internal.Badges
     public class BadgesManager<TBadge> : IBadgesManager<TBadge> where TBadge : class, IBadge
     {
 
-        private IEnumerable<TBadge> _badges;
-        
+        private List<TBadge> _badges;
+
         private readonly IEnumerable<IBadgesProvider<TBadge>> _providers;
         private readonly ITypedModuleProvider _typedModuleProvider;
         private readonly ILogger<BadgesManager<TBadge>> _logger;
 
         public BadgesManager(
-            IEnumerable<IBadgesProvider<TBadge>> providers,
-            ILogger<BadgesManager<TBadge>> logger,
-            ITypedModuleProvider typedModuleProvider)
+            IEnumerable<IBadgesProvider<TBadge>> providers,            
+            ITypedModuleProvider typedModuleProvider,
+            ILogger<BadgesManager<TBadge>> logger)
         {
             _typedModuleProvider = typedModuleProvider;
             _providers = providers;            
@@ -31,14 +31,15 @@ namespace Plato.Internal.Badges
 
         public IEnumerable<TBadge> GetBadges()
         {
+
             if (_badges == null)
             {
-                var badges = new List<TBadge>();
+                _badges = new List<TBadge>();
                 foreach (var provider in _providers)
                 {
                     try
                     {
-                        badges.AddRange(provider.GetBadges());
+                        _badges.AddRange(provider.GetBadges());
                     }
                     catch (Exception e)
                     {
@@ -47,11 +48,10 @@ namespace Plato.Internal.Badges
                         throw;
                     }
                 }
-
-                _badges = badges;
             }
 
             return _badges;
+
         }
 
         public async Task<IDictionary<string, IEnumerable<TBadge>>> GetCategorizedBadgesAsync()
@@ -83,6 +83,7 @@ namespace Plato.Internal.Badges
             }
 
             return output;
+
         }
 
     }

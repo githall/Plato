@@ -11,7 +11,7 @@ namespace Plato.Internal.Assets
         private readonly IList<AssetEnvironment> _localAssets = 
             new List<AssetEnvironment>();
 
-        private List<AssetEnvironment> _cachedEnvironment;
+        private List<AssetEnvironment> _environments;
 
         private readonly IEnumerable<IAssetProvider> _assetProviders;
         private readonly ILogger<AssetManager> _logger;
@@ -27,15 +27,15 @@ namespace Plato.Internal.Assets
         public IEnumerable<AssetEnvironment> GetAssets()
         {
 
-            if (_cachedEnvironment == null)
+            if (_environments == null)
             {
                 // Check providers for assets           
-                _cachedEnvironment = new List<AssetEnvironment>();
+                _environments = new List<AssetEnvironment>();
                 foreach (var provider in _assetProviders)
                 {
                     try
                     {
-                        _cachedEnvironment.AddRange(provider.GetAssetEnvironments());
+                        _environments.AddRange(provider.GetAssetEnvironments());
                     }
                     catch (Exception e)
                     {
@@ -47,10 +47,10 @@ namespace Plato.Internal.Assets
             // Merge assets set via SetAssets();
             if (_localAssets.Count > 0)
             {
-                _cachedEnvironment.AddRange(_localAssets);
+                _environments.AddRange(_localAssets);
             }
 
-            return _cachedEnvironment;
+            return _environments;
 
         }
 
@@ -66,4 +66,5 @@ namespace Plato.Internal.Assets
         }
 
     }
+
 }
