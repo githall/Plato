@@ -1942,11 +1942,11 @@
                             hotkey: 'Ctrl+Y',
                             dropdown: {
                                 title: "Add Emoji",
-                                width: "418px",
+                                width: "450px",
                                 css: "dropdown-menu-right",
                                 items: null,
                                 html:
-                                    '<div class="md-emoji-dropdown overflow-auto"><p class="my-4 text-center"><i class="fal my-4 fa-spinner fa-spin"></i></p></div>'
+                                    '<div class="md-emoji-dropdown"><p class="my-4 text-center"><i class="fal my-4 fa-spinner fa-spin"></i></p></div>'
                             },
                             icon: {
                                 glyph: 'glyphicon glyphicon-search',
@@ -1970,20 +1970,96 @@
                                         if (response.statusCode === 200) {
                                             if (response.result) {
 
-                                                // Build emoji dropdown
+                                                var i = 0;
+                                                
+                                                // -------------
+                                                // Clear
+                                                // -------------
+                                                
                                                 var $div = $dropdown.find(".md-emoji-dropdown");
                                                 $div.empty();
-                                                for (var i = 0; i < response.result.length - 1; i++) {
-                                                    $div.append($("<button>",
-                                                        {
-                                                            "type": "button",
-                                                            "role": "button",
-                                                            "title": response.result[i].key,
-                                                            "class":
-                                                                "dropdown-item d-inline float-left px-1 text-center"
-                                                        }).html(response.result[i].value));
+
+                                                // -------------
+                                                // Build tabs
+                                                // -------------
+
+                                                var $ul = $("<ul>", {
+                                                    "class": "nav nav-tabs",
+                                                    "role": "tablist"
+                                                });
+
+                                                for (i = 0; i < response.result.length; i++) {
+                                                    var result = response.result[i];
+                                                    var $li = $("<li>", {
+                                                        "title": result.name,
+                                                        "data-toggle": "tooltip",
+                                                        "class": i === 0 ? "nav-item ml-2" : "nav-item",                                          
+                                                    });
+                                                    var $a = $("<a>", {
+                                                        "class": i === 0 ? "nav-link active" : "nav-link",
+                                                        "data-toggle": "tab",
+                                                        "aria-controls": "emoji" + i,
+                                                        "href": "#emoji" + i
+                                                    }).text(result.emoji);
+                                                    $li.append($a);
+                                                    $ul.append($li);
                                                 }
-                                                $dropdown.data("emojiLoaded", true);
+
+                                                $div.append($ul);
+
+                                                // Initialize Bootstrap tooltips
+                                                $ul.find('[data-toggle="tooltip"]').tooltip(
+                                                    {
+                                                        trigger: "hover"
+                                                    });
+
+                                                // Initialize Bootstrap tabs
+                                                $ul.find('a').click(function (e) {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                    $(this).tab('show');
+                                                    $().tooltip('hide');
+                                                });
+
+                                                // -------------
+                                                // Build tab content
+                                                // -------------
+
+                                                // Build emoji dropdown
+                                                var $tabContent = $("<div>", {
+                                                    "class": "tab-content overflow-auto"
+                                                });
+
+                                                var $tabPane = null,
+                                                    emojis = null;
+
+                                                for (i = 0; i < response.result.length; i++) {
+
+                                                    $tabPane = $("<div>", {
+                                                        "id": "emoji" + i,
+                                                        "aria-labelledby": "emoji" + i,
+                                                        "role": "tabpanel",
+                                                        "class": i === 0 ? "tab-pane show active" : "tab-pane"
+                                                    });
+
+                                                    emojis = response.result[i].emojis;
+                                                    for (var emoji in emojis) {
+                                                        if (emojis.hasOwnProperty(emoji)) {                                                      
+                                                            $tabPane.append($("<button>",
+                                                                {
+                                                                    "type": "button",
+                                                                    "role": "button",
+                                                                    "title": emoji,
+                                                                    "class":
+                                                                        "dropdown-item d-inline float-left px-1 text-center"
+                                                                }).html(emojis[emoji]));
+
+                                                        }
+                                                    }
+                                                    $tabContent.append($tabPane);
+                                                }
+
+                                                $div.append($tabContent);
 
                                                 // Bind click events for emoji buttons
                                                 $div.find("button").on("click",
@@ -2009,6 +2085,10 @@
                                                         e.$textarea.focus();
 
                                                     });
+
+                                                // Ensure emojis are only loaded once
+                                                $dropdown.data("emojiLoaded", true);
+                                  
 
                                             }
                                         }
