@@ -1,0 +1,19 @@
+Name: Plato Ideas Labels Follow
+Description: Adds the ability to follow labels within Plato.Ideas.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Ideas
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.ideas.labels.follow/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Ideas.Labels",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Follows",
+		Version: "1.0.0"
+	}	
+]

@@ -3,7 +3,7 @@ using Plato.Internal.Models.Notifications;
 using Plato.Internal.Notifications.Abstractions;
 using Plato.Internal.Security.Abstractions;
 
-namespace Plato.Articles.Labels.Follow.NotificationTypes
+namespace Plato.Ideas.Labels.Follow.NotificationTypes
 {
 
     public class WebNotifications : INotificationTypeProvider
@@ -11,9 +11,9 @@ namespace Plato.Articles.Labels.Follow.NotificationTypes
 
         public static readonly WebNotification NewLabel =
             new WebNotification(
-                "NewArticleLabelWeb",
-                "Article Labels",
-                "Show me a web notification for each new article associated with a label I'm following.");
+                "NewIdeaLabelWeb",
+                "Idea Labels",
+                "Show me a web notification for each new idea associated with a label I'm following.");
 
         public IEnumerable<DefaultNotificationTypes> GetNotificationTypes()
         {

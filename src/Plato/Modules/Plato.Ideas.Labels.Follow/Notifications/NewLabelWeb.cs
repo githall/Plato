@@ -4,17 +4,18 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using Plato.Articles.Labels.Follow.NotificationTypes;
-using Plato.Articles.Models;
+using Plato.Ideas.Labels.Follow.NotificationTypes;
+using Plato.Ideas.Models;
+using Plato.Entities.Stores;
 using Plato.Internal.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Models.Notifications;
 using Plato.Internal.Notifications.Abstractions;
 
-namespace Plato.Articles.Labels.Follow.Notifications
+namespace Plato.Ideas.Labels.Follow.Notifications
 {
 
-    public class NewLabelWeb : INotificationProvider<Article>
+    public class NewLabelWeb : INotificationProvider<Idea>
     {
 
         private readonly IUserNotificationsManager<UserNotification> _userNotificationManager;
@@ -23,14 +24,14 @@ namespace Plato.Articles.Labels.Follow.Notifications
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-
+        
         public NewLabelWeb(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
             IUserNotificationsManager<UserNotification> userNotificationManager,
             ICapturedRouterUrlHelper capturedRouterUrlHelper)
         {
-
+        
             _userNotificationManager = userNotificationManager;
             _capturedRouterUrlHelper = capturedRouterUrlHelper;
 
@@ -39,11 +40,11 @@ namespace Plato.Articles.Labels.Follow.Notifications
 
         }
 
-        public async Task<ICommandResult<Article>> SendAsync(INotificationContext<Article> context)
+        public async Task<ICommandResult<Idea>> SendAsync(INotificationContext<Idea> context)
         {
 
             // Create result
-            var result = new CommandResult<Article>();
+            var result = new CommandResult<Idea>();
 
             // Ensure correct notification provider
             if (!context.Notification.Type.Name.Equals(WebNotifications.NewLabel.Name, StringComparison.Ordinal))
@@ -60,11 +61,11 @@ namespace Plato.Articles.Labels.Follow.Notifications
                 NotificationName = context.Notification.Type.Name,
                 UserId = context.Notification.To.Id,
                 Title = context.Model.Title,
-                Message = S["An article has been posted with a label your following"],
+                Message = S["An idea has been posted with a label your following"],
                 CreatedUserId = context.Model.CreatedUserId,
                 Url = _capturedRouterUrlHelper.GetRouteUrl(baseUri, new RouteValueDictionary()
                 {
-                    ["area"] = "Plato.Articles",
+                    ["area"] = "Plato.Ideas",
                     ["controller"] = "Home",
                     ["action"] = "Display",
                     ["opts.id"] = context.Model.Id,
