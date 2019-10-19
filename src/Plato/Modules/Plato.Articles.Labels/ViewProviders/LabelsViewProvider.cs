@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Data.Abstractions;
@@ -18,16 +17,13 @@ namespace Plato.Articles.Labels.ViewProviders
 
         private readonly ILabelStore<Label> _labelStore;
         private readonly IFeatureFacade _featureFacade;
-        private readonly IActionContextAccessor _actionContextAccessor;
 
         public LabelViewProvider(
             ILabelStore<Label> labelStore,
-            IFeatureFacade featureFacade,
-            IActionContextAccessor actionContextAccessor)
+            IFeatureFacade featureFacade)
         {
-            _labelStore = labelStore;
             _featureFacade = featureFacade;
-            _actionContextAccessor = actionContextAccessor;
+            _labelStore = labelStore;    
         }
         
         public override Task<IViewProviderResult> BuildIndexAsync(Label label, IViewProviderContext context)
@@ -52,18 +48,18 @@ namespace Plato.Articles.Labels.ViewProviders
         {
 
             // Get topic index view model from context
-            var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Article>)] as EntityIndexViewModel<Article>;
+            var viewModel = context.Controller.HttpContext.Items[typeof(EntityIndexViewModel<Article>)] as EntityIndexViewModel<Article>;
             if (viewModel == null)
             {
                 throw new Exception($"A view model of type {typeof(EntityIndexViewModel<Article>).ToString()} has not been registered on the HttpContext!");
             }
-            
+
             var indexViewModel = new EntityIndexViewModel<Article>
             {
                 Options = viewModel?.Options,
                 Pager = viewModel?.Pager
             };
-            
+
             // Get labels for feature
             var labels = await _labelStore.QueryAsync()
                 .Take(1, 10)
@@ -85,7 +81,7 @@ namespace Plato.Articles.Labels.ViewProviders
                     return model;
                 }).Zone("sidebar").Order(1)
             );
-            
+
         }
 
         public override Task<IViewProviderResult> BuildEditAsync(Label model, IViewProviderContext context)
@@ -108,7 +104,7 @@ namespace Plato.Articles.Labels.ViewProviders
 
             throw new Exception($"Could not find required feature registration for Plato.Articles");
         }
-        
+
     }
 
 }

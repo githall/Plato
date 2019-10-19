@@ -1970,7 +1970,9 @@
                                         if (response.statusCode === 200) {
                                             if (response.result) {
 
-                                                var i = 0;
+                                                var i = 0,
+                                                    $tabPane = null,
+                                                    emojis = null;
                                                 
                                                 // -------------
                                                 // Clear
@@ -1991,7 +1993,7 @@
                                                 for (i = 0; i < response.result.length; i++) {
                                                     var result = response.result[i];
                                                     var $li = $("<li>", {
-                                                        "title": result.name,
+                                                        "title": e.__localize(result.name),
                                                         "data-toggle": "tooltip",
                                                         "class": i === 0 ? "nav-item ml-2" : "nav-item",                                          
                                                     });
@@ -2018,7 +2020,6 @@
                                                     e.preventDefault();
                                                     e.stopPropagation();
                                                     $(this).tab('show');
-                                                    $().tooltip('hide');
                                                 });
 
                                                 // -------------
@@ -2029,9 +2030,6 @@
                                                 var $tabContent = $("<div>", {
                                                     "class": "tab-content overflow-auto"
                                                 });
-
-                                                var $tabPane = null,
-                                                    emojis = null;
 
                                                 for (i = 0; i < response.result.length; i++) {
 
@@ -2062,7 +2060,7 @@
                                                 $div.append($tabContent);
 
                                                 // Bind click events for emoji buttons
-                                                $div.find("button").on("click",
+                                                $tabContent.find("button").on("click",
                                                     function(ev) {
 
                                                         ev.preventDefault();
