@@ -11,6 +11,8 @@ namespace Plato.Internal.Assets
         private readonly IList<AssetEnvironment> _localAssets = 
             new List<AssetEnvironment>();
 
+        private List<AssetEnvironment> _cachedEnvironment;
+
         private readonly IEnumerable<IAssetProvider> _assetProviders;
         private readonly ILogger<AssetManager> _logger;
 
@@ -21,31 +23,34 @@ namespace Plato.Internal.Assets
             _assetProviders = assetProviders;
             _logger = logger;
         }
-        
+
         public IEnumerable<AssetEnvironment> GetAssets()
         {
 
-            // Check providers for assets
-            var output = new List<AssetEnvironment>();
-            foreach (var provider in _assetProviders)
+            if (_cachedEnvironment == null)
             {
-                try
+                // Check providers for assets           
+                _cachedEnvironment = new List<AssetEnvironment>();
+                foreach (var provider in _assetProviders)
                 {
-                    output.AddRange(provider.GetAssetEnvironments());                  
-                }
-                catch (Exception e)
-                {
-                    _logger.LogError(e, $"An exception occurred whilst attempting to execute a resource provider of type {provider.GetType()}.");
+                    try
+                    {
+                        _cachedEnvironment.AddRange(provider.GetAssetEnvironments());
+                    }
+                    catch (Exception e)
+                    {
+                        _logger.LogError(e, $"An exception occurred whilst attempting to execute a resource provider of type {provider.GetType()}.");
+                    }
                 }
             }
 
             // Merge assets set via SetAssets();
             if (_localAssets.Count > 0)
             {
-                output.AddRange(_localAssets);
+                _cachedEnvironment.AddRange(_localAssets);
             }
-           
-            return output;
+
+            return _cachedEnvironment;
 
         }
 
