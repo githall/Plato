@@ -5,6 +5,7 @@ using Plato.Categories.Models;
 
 namespace Plato.Issues.Categories.ViewModels
 {
+
     public class EditCategoryViewModel
     {
 
@@ -31,15 +32,14 @@ namespace Plato.Issues.Categories.ViewModels
 
         [StringLength(50)]
         public string BackColor { get; set; }
-        
+
         public string IconPrefix { get; set; }
 
         [StringLength(255)]
         public string IconCss { get; set; }
-        
-     
+
         public DefaultIcons ChannelIcons { get; set; }
 
-
     }
+
 }

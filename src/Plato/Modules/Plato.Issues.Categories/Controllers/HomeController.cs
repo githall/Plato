@@ -148,7 +148,7 @@ namespace Plato.Issues.Categories.Controllers
                 else
                 {
 
-                    builder.Add(S["Categories"], channels => channels
+                    builder.Add(S["Categories"], categories => categories
                         .Action("Index", "Home", "Plato.Issues.Categories", new RouteValueDictionary()
                         {
                             ["opts.categoryId"] = null,
@@ -161,7 +161,7 @@ namespace Plato.Issues.Categories.Controllers
                     {
                         if (parent.Id != category.Id)
                         {
-                            builder.Add(S[parent.Name], channel => channel
+                            builder.Add(S[parent.Name], c => c
                                 .Action("Index", "Home", "Plato.Issues.Categories", new RouteValueDictionary
                                 {
                                     ["opts.categoryId"] = parent.Id,
@@ -198,7 +198,7 @@ namespace Plato.Issues.Categories.Controllers
                 options.FeatureId = feature.Id;
             }
             
-            // Include child channels
+            // Include child categories
             if (category != null)
             {
                 if (category.Children.Any())

@@ -93,14 +93,14 @@ namespace Plato.Issues.Categories.Subscribers
             }
 
             // Ensure we found the category
-            var channel = await _categoryStore.GetByIdAsync(entity.CategoryId);
-            if (channel == null)
+            var category = await _categoryStore.GetByIdAsync(entity.CategoryId);
+            if (category == null)
             {
                 return entity;
             }
 
             // Update category details
-            await _categoryDetailsUpdater.UpdateAsync(channel.Id);
+            await _categoryDetailsUpdater.UpdateAsync(category.Id);
 
             // return 
             return entity;

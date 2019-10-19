@@ -90,7 +90,7 @@ namespace Plato.Issues.Categories.ViewProviders
                     ChannelIcons = defaultIcons,
                     IsNewCategory = true,
                     ParentId = categoryBase.ParentId,
-                    AvailableChannels = await GetAvailableChannels()
+                    AvailableChannels = await GetAvailableCategoriesAsync()
                 };
             }
             else
@@ -106,7 +106,7 @@ namespace Plato.Issues.Categories.ViewProviders
                     IconCss = categoryBase.IconCss,
                     IconPrefix = defaultIcons.Prefix,
                     ChannelIcons = defaultIcons,
-                    AvailableChannels = await GetAvailableChannels()
+                    AvailableChannels = await GetAvailableCategoriesAsync()
                 };
             }
             
@@ -168,7 +168,7 @@ namespace Plato.Issues.Categories.ViewProviders
 
         #region "Private Methods"
 
-        async Task<IEnumerable<SelectListItem>> GetAvailableChannels()
+        async Task<IEnumerable<SelectListItem>> GetAvailableCategoriesAsync()
         {
 
             var output = new List<SelectListItem>
@@ -186,10 +186,10 @@ namespace Plato.Issues.Categories.ViewProviders
                 throw new Exception($"No feature could be found for the Id 'Plato.Issues.Categories'");
             }
 
-            var channels = await _categoryStore.GetByFeatureIdAsync(feature.Id);
-            if (channels != null)
+            var categories = await _categoryStore.GetByFeatureIdAsync(feature.Id);
+            if (categories != null)
             {
-                var items = await RecurseChannels(channels);
+                var items = RecurseCategories(categories);
                 foreach (var item in items)
                 {
                     output.Add(item);
@@ -200,7 +200,7 @@ namespace Plato.Issues.Categories.ViewProviders
 
         }
 
-        Task<IList<SelectListItem>> RecurseChannels(
+        IList<SelectListItem> RecurseCategories(
             IEnumerable<ICategory> input,
             IList<SelectListItem> output = null,
             int id = 0)
@@ -226,11 +226,11 @@ namespace Plato.Issues.Categories.ViewProviders
                         Text = indent + category.Name,
                         Value = category.Id.ToString()
                     });
-                    RecurseChannels(categories, output, category.Id);
+                    RecurseCategories(categories, output, category.Id);
                 }
             }
 
-            return Task.FromResult(output);
+            return output;
 
         }
         

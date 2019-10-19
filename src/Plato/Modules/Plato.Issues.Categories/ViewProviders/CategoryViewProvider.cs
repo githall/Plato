@@ -50,8 +50,8 @@ namespace Plato.Issues.Categories.ViewProviders
                 throw new Exception($"A view model of type {typeof(EntityIndexViewModel<Issue>).ToString()} has not been registered on the HttpContext!");
             }
             
-            // channel filter options
-            var channelViewOpts = new CategoryIndexOptions
+            // category filter options
+            var categoryViewOpts = new CategoryIndexOptions
             {
                 CategoryId = existingCategory?.Id ?? 0,
                 FeatureId = feature.Id
@@ -59,7 +59,7 @@ namespace Plato.Issues.Categories.ViewProviders
             
             var indexViewModel = new CategoryIndexViewModel()
             {
-                Options = channelViewOpts,
+                Options = categoryViewOpts,
                 EntityIndexOptions = viewModel?.Options,
                 Pager = viewModel?.Pager
             };

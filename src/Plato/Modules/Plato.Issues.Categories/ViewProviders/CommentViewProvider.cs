@@ -14,25 +14,25 @@ namespace Plato.Issues.Categories.ViewProviders
 
     public class CommentViewProvider : BaseViewProvider<Comment>
     {
-
-        private readonly IEntityStore<Issue> _entityStore;
-        private readonly ICategoryStore<Category> _channelStore;
+        
+        private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly IEntityStore<Issue> _entityStore;
 
         public IStringLocalizer T;
 
         public IStringLocalizer S { get; }
 
-
         public CommentViewProvider(
-            IStringLocalizer<CommentViewProvider> stringLocalizer,
-            IEntityStore<Issue> entityStore,
-            ICategoryStore<Category> channelStore, 
-            IBreadCrumbManager breadCrumbManager)
+            IStringLocalizer<CommentViewProvider> stringLocalizer,            
+            ICategoryStore<Category> categoryStore, 
+            IBreadCrumbManager breadCrumbManager,
+            IEntityStore<Issue> entityStore)
         {
-            _entityStore = entityStore;
-            _channelStore = channelStore;
+
             _breadCrumbManager = breadCrumbManager;
+            _categoryStore = categoryStore;
+            _entityStore = entityStore;
 
             T = stringLocalizer;
             S = stringLocalizer;
@@ -63,7 +63,7 @@ namespace Plato.Issues.Categories.ViewProviders
             IEnumerable<CategoryAdmin> parents = null;
             if (topic.CategoryId > 0)
             {
-                parents = await _channelStore.GetParentsByIdAsync(topic.CategoryId);
+                parents = await _categoryStore.GetParentsByIdAsync(topic.CategoryId);
 
             }
 
@@ -90,7 +90,7 @@ namespace Plato.Issues.Categories.ViewProviders
                     );
                     foreach (var parent in parents)
                     {
-                        builder.Add(S[parent.Name], channel => channel
+                        builder.Add(S[parent.Name], c => c
                             .Action("Index", "Home", "Plato.Issues.Categories", new RouteValueDictionary
                             {
                                 ["opts.id"] = parent.Id,
@@ -122,5 +122,7 @@ namespace Plato.Issues.Categories.ViewProviders
         {
             return Task.FromResult(default(IViewProviderResult));
         }
+
     }
+
 }

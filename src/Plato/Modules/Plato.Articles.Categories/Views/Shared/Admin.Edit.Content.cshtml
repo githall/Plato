@@ -91,11 +91,11 @@
             <div class="form-group" asp-validation-class-for="Description">
                 <label asp-for="Name"><strong>@T["Description"]</strong></label>
                 <span asp-validation-for="Description" class="text-danger"></span>
-                <textarea placeholder="@T["optional channel description"]" asp-for="Description" rows="2" class="form-control"></textarea>
+                <textarea placeholder="@T["optional category description"]" asp-for="Description" rows="2" class="form-control"></textarea>
             </div>
             <div class="form-group">
                 <div asp-validation-class-for="ParentId">
-                    <label asp-for="ParentId"><strong>@T["Parent Channel"]</strong></label>
+                    <label asp-for="ParentId"><strong>@T["Parent Category"]</strong></label>
                     <span asp-validation-for="ParentId" class="text-danger"></span>
                     <div class="input-group">
                         <select class="form-control"

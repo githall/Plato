@@ -15,14 +15,14 @@ namespace Plato.Issues.Categories.ViewAdapters
     public class IssueListItemViewAdapter : BaseAdapterProvider
     {
            
-        private readonly ICategoryStore<Category> _channelStore;
+        private readonly ICategoryStore<Category> _categoryStore;
         private readonly IFeatureFacade _featureFacade;
 
         public IssueListItemViewAdapter(
-            ICategoryStore<Category> channelStore,
+            ICategoryStore<Category> categoryStore,
             IFeatureFacade featureFacade)
         {
-            _channelStore = channelStore;
+            _categoryStore = categoryStore;
             _featureFacade = featureFacade;
             ViewName = "IssueListItem"; 
         }
@@ -48,7 +48,7 @@ namespace Plato.Issues.Categories.ViewAdapters
                 }
 
                 // Get all categories for feature
-                _categories = await _channelStore.GetByFeatureIdAsync(feature.Id);
+                _categories = await _categoryStore.GetByFeatureIdAsync(feature.Id);
              
             }
 
@@ -60,8 +60,8 @@ namespace Plato.Issues.Categories.ViewAdapters
 
             // Plato.Issues does not have a dependency on Plato.Issues.Categories
             // Instead we update the model for the topic item view component
-            // here via our view adapter to include the channel information
-            // This way the channel data is only ever populated if the channels feature is enabled
+            // here via our view adapter to include the category information
+            // This way the category data is only ever populated if the categories feature is enabled
             return await Adapt(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Issue>>(model =>
@@ -86,11 +86,11 @@ namespace Plato.Issues.Categories.ViewAdapters
                         };
                     }
 
-                    // Get our channel
-                    var channel = _categories.FirstOrDefault(c => c.Id == model.Entity.CategoryId);
-                    if (channel != null)
+                    // Get our category
+                    var category = _categories.FirstOrDefault(c => c.Id == model.Entity.CategoryId);
+                    if (category != null)
                     {
-                        model.Category = channel;
+                        model.Category = category;
                     }
                     
                     // Return an anonymous type, we are adapting a view component

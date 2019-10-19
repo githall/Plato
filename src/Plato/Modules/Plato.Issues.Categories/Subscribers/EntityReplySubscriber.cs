@@ -16,22 +16,22 @@ namespace Plato.Issues.Categories.Subscribers
     /// <typeparam name="TEntityReply"></typeparam>
     public class EntityReplySubscriber<TEntityReply> : IBrokerSubscriber where TEntityReply : class, IEntityReply
     {
-        
+
         private readonly ICategoryDetailsUpdater _categoryDetailsUpdater;
-        private readonly ICategoryStore<Category> _channelStore;
+        private readonly ICategoryStore<Category> _categoryStore;
         private readonly IEntityStore<Issue> _entityStore;
         private readonly IBroker _broker;
 
         public EntityReplySubscriber(
-            IBroker broker,
-            ICategoryStore<Category> channelStore,
-            IEntityStore<Issue> entityStore,
-            ICategoryDetailsUpdater categoryDetailsUpdater)
+            ICategoryDetailsUpdater categoryDetailsUpdater,
+            ICategoryStore<Category> categoryStore,
+            IEntityStore<Issue> entityStore,            
+            IBroker broker)
         {
-            _broker = broker;
-            _channelStore = channelStore;
-            _entityStore = entityStore;
             _categoryDetailsUpdater = categoryDetailsUpdater;
+            _categoryStore = categoryStore;
+            _entityStore = entityStore;
+            _broker = broker;
         }
 
         #region "Implementation"
@@ -108,14 +108,14 @@ namespace Plato.Issues.Categories.Subscribers
             }
 
             // Ensure we found the category
-            var channel = await _channelStore.GetByIdAsync(entity.CategoryId);
-            if (channel == null)
+            var category = await _categoryStore.GetByIdAsync(entity.CategoryId);
+            if (category == null)
             {
                 return reply;
             }
 
-            // Update channel details
-            await _categoryDetailsUpdater.UpdateAsync(channel.Id);
+            // Update category details
+            await _categoryDetailsUpdater.UpdateAsync(category.Id);
             
             // return 
             return reply;
@@ -139,20 +139,20 @@ namespace Plato.Issues.Categories.Subscribers
             }
 
             // Ensure we found the category
-            var channel = await _channelStore.GetByIdAsync(entity.CategoryId);
-            if (channel == null)
+            var category = await _categoryStore.GetByIdAsync(entity.CategoryId);
+            if (category == null)
             {
                 return reply;
             }
 
-            // Update channel details
-            await _categoryDetailsUpdater.UpdateAsync(channel.Id);
+            // Update category details
+            await _categoryDetailsUpdater.UpdateAsync(category.Id);
 
             // return 
             return reply;
 
         }
-        
+
         #endregion
 
     }

@@ -122,7 +122,7 @@ namespace Plato.Issues.Categories.ViewProviders
 
                 if (parents != null)
                 {
-                    builder.Add(S["Categories"], channels => channels
+                    builder.Add(S["Categories"], c => c
                         .Action("Index", "Home", "Plato.Issues.Categories", new RouteValueDictionary()
                         {
                             ["opts.categoryId"] = null,
@@ -132,7 +132,7 @@ namespace Plato.Issues.Categories.ViewProviders
                     );
                     foreach (var parent in parents)
                     {
-                        builder.Add(S[parent.Name], channel => channel
+                        builder.Add(S[parent.Name], c => c
                             .Action("Index", "Home", "Plato.Issues.Categories", new RouteValueDictionary
                             {
                                 ["opts.categoryId"] = parent.Id,
