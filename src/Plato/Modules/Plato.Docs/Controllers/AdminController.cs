@@ -3,12 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using Plato.Docs.Models;
-using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout;
 using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Navigation.Abstractions;
-using Plato.Internal.Stores.Abstractions.Settings;
 using Plato.Internal.Layout.Alerts;
 
 namespace Plato.Docs.Controllers
@@ -83,7 +81,6 @@ namespace Plato.Docs.Controllers
             return await Index();
 
         }
-
 
     }
 
