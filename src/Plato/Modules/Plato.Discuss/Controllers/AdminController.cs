@@ -16,8 +16,6 @@ namespace Plato.Discuss.Controllers
     public class AdminController : Controller, IUpdateModel
     {
 
-        private readonly IContextFacade _contextFacade;
-        private readonly ISiteSettingsStore _settingsStore;
         private readonly IViewProviderManager<AdminIndex> _viewProvider;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IAlerter _alerter;
@@ -28,17 +26,14 @@ namespace Plato.Discuss.Controllers
 
         public AdminController(
             IHtmlLocalizer htmlLocalizer,
-            IStringLocalizer stringLocalizer,
-            ISiteSettingsStore settingsStore,
-            IContextFacade contextFacade,
+            IStringLocalizer stringLocalizer,    
             IViewProviderManager<AdminIndex> viewProvider,
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
         {
-            _settingsStore = settingsStore;
-            _contextFacade = contextFacade;
-            _viewProvider = viewProvider;
+
             _breadCrumbManager = breadCrumbManager;
+            _viewProvider = viewProvider;
             _alerter = alerter;
 
             T = htmlLocalizer;

@@ -9,15 +9,16 @@ using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Stores.Abstractions.Settings;
+using Plato.Internal.Layout.Alerts;
 
 namespace Plato.Docs.Controllers
 {
     public class AdminController : Controller, IUpdateModel
     {
-        private readonly IContextFacade _contextFacade;
-        private readonly ISiteSettingsStore _settingsStore;
+
         private readonly IViewProviderManager<AdminIndex> _viewProvider;
         private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
 
@@ -25,22 +26,21 @@ namespace Plato.Docs.Controllers
 
         public AdminController(
             IHtmlLocalizer htmlLocalizer,
-            IStringLocalizer stringLocalizer,
-            ISiteSettingsStore settingsStore,
-            IContextFacade contextFacade,
+            IStringLocalizer stringLocalizer,  
             IViewProviderManager<AdminIndex> viewProvider,
-            IBreadCrumbManager breadCrumbManager)
+            IBreadCrumbManager breadCrumbManager,
+            IAlerter alerter)
         {
-            _settingsStore = settingsStore;
-            _contextFacade = contextFacade;
-            _viewProvider = viewProvider;
+
             _breadCrumbManager = breadCrumbManager;
+            _viewProvider = viewProvider;
+            _alerter = alerter;
 
             T = htmlLocalizer;
             S = stringLocalizer;
 
         }
-        
+
         public async Task<IActionResult> Index()
         {
             _breadCrumbManager.Configure(builder =>
@@ -55,9 +55,36 @@ namespace Plato.Docs.Controllers
 
             // Return view
             return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new AdminIndex(), this));
-            
+
         }
-        
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
+        public async Task<IActionResult> IndexPost()
+        {
+
+            // Execute view providers
+            await _viewProvider.ProvideUpdateAsync(new AdminIndex(), this);
+
+            if (!ModelState.IsValid)
+            {
+
+                // if we reach this point some view model validation
+                // failed within a view provider, display model state errors
+                foreach (var modelState in ViewData.ModelState.Values)
+                {
+                    foreach (var error in modelState.Errors)
+                    {
+                        _alerter.Danger(T[error.ErrorMessage]);
+                    }
+                }
+
+            }
+
+            return await Index();
+
+        }
+
+
     }
 
 }
