@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Plato.Internal.Abstractions.Extensions;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
+using Plato.Internal.Models.Features;
+using Plato.Internal.Stores.Abstractions.Shell;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;
 using Plato.WebApi.Controllers;
@@ -13,44 +14,43 @@ using Plato.WebApi.Models;
 
 namespace Plato.Tags.Controllers
 {
-    
+
     public class TagController : BaseWebApiController
     {
 
-        private readonly ITagStore<TagBase> _entityStore;
+        private readonly IShellFeatureStore<ShellFeature> _shellFeatureStore;
+        private readonly ITagStore<TagBase> _tagStore;
         private readonly IContextFacade _contextFacade;
 
         public TagController(
-            IUrlHelperFactory urlHelperFactory,
+            IShellFeatureStore<ShellFeature> shellFeatureStore,
             IContextFacade contextFacade,
-            ITagStore<TagBase> entityStore)
+            ITagStore<TagBase> tagStore)
         {
+            _shellFeatureStore = shellFeatureStore;
             _contextFacade = contextFacade;
-            _entityStore = entityStore;
-        }
+            _tagStore = tagStore;
+        }        
 
-        #region "Actions"
-
-        [HttpGet]
-        [ResponseCache(NoStore = true)]
-        public async Task<IActionResult> Get(
-            int page = 1,
-            int size = 10,
-            string keywords = "",
-            string sort = "TotalEntities",
-            OrderBy order = OrderBy.Desc)
+        [HttpPost, ResponseCache(NoStore = true)]
+        public async Task<IActionResult> Post([FromBody] TagApiParams parameters)
         {
-            
-            var tags = await GetTags(
-                page,
-                size,
-                keywords,
-                sort,
-                order);
 
+            // Get tags
+            var tags = await GetTags(parameters);
+
+            // Build results
             IPagedResults<TagApiResult> results = null;
             if (tags != null)
             {
+
+                // Get feature for tags
+                IShellFeature feature = null;
+                if (parameters.FeatureId > 0)
+                {
+                    feature = await _shellFeatureStore.GetByIdAsync(parameters.FeatureId);
+                }
+                
                 results = new PagedResults<TagApiResult>
                 {
                     Total = tags.Total
@@ -59,10 +59,10 @@ namespace Plato.Tags.Controllers
                 var baseUrl = await _contextFacade.GetBaseUrlAsync();
                 foreach (var tag in tags.Data)
                 {
-                    
+
                     var url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
-                        ["area"] = "Plato.Tags",
+                        ["area"] = feature?.ModuleId ?? "Plato.Tags",
                         ["controller"] = "Home",
                         ["action"] = "Tag",
                         ["opts.id"] = tag.Id,
@@ -85,10 +85,10 @@ namespace Plato.Tags.Controllers
             {
                 output = new PagedApiResults<TagApiResult>()
                 {
-                    Page = page,
-                    Size = size,
+                    Page = parameters.Page,
+                    Size = parameters.Size,
                     Total = results.Total,
-                    TotalPages = results.Total.ToSafeCeilingDivision(size),
+                    TotalPages = results.Total.ToSafeCeilingDivision(parameters.Size),
                     Data = results.Data
                 };
             }
@@ -98,43 +98,38 @@ namespace Plato.Tags.Controllers
                 : base.NoResults();
 
         }
-        
-        [HttpDelete]
-        [ResponseCache(NoStore = true)]
+
+        [HttpDelete, ResponseCache(NoStore = true)]
         public Task<IActionResult> Delete(int id)
         {
             throw new NotImplementedException();
-        }
-        
-        #endregion
+        }        
+   
+        // ----------------
 
-        #region "Private Methods"
-
-        async Task<IPagedResults<TagBase>> GetTags(
-            int page,
-            int pageSize,
-            string keywords,
-            string sortBy,
-            OrderBy sortOrder)
+        async Task<IPagedResults<TagBase>> GetTags(TagApiParams parameters)
         {
 
-            return await _entityStore.QueryAsync()
-                .Take(page, pageSize)
+            return await _tagStore.QueryAsync()
+                .Take(parameters.Page, parameters.Size)
                 .Select<TagQueryParams>(q =>
                 {
 
-                    if (!String.IsNullOrEmpty(keywords))
+                    if (parameters.FeatureId > 0)
                     {
-                        q.Keywords.Like(keywords);
+                        q.FeatureId.Equals(parameters.FeatureId);
+                    }
+
+                    if (!String.IsNullOrEmpty(parameters.Keywords))
+                    {
+                        q.Keywords.Like(parameters.Keywords);
                     }
 
                 })
-                .OrderBy(sortBy, sortOrder)
+                .OrderBy(parameters.Sort, parameters.Order)
                 .ToList();
 
         }
-
-        #endregion
 
     }
 

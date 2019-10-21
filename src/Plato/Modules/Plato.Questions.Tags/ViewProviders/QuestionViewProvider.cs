@@ -22,36 +22,41 @@ namespace Plato.Questions.Tags.ViewProviders
 {
     public class QuestionViewProvider : BaseViewProvider<Question>
     {
+
+        private const string ModuleId = "Plato.Questions";
         private const string TagsHtmlName = "tags";
 
-        private readonly ITagStore<Tag> _tagStore;
-        private readonly IEntityTagStore<EntityTag> _entityTagStore;
-        private readonly IEntityStore<Question> _entityStore;
         private readonly IEntityTagManager<EntityTag> _entityTagManager;
-        private readonly ITagManager<Tag> _tagManager;
+        private readonly IEntityTagStore<EntityTag> _entityTagStore;
+        private readonly IEntityStore<Question> _entityStore;        
         private readonly IFeatureFacade _featureFacade;
         private readonly IContextFacade _contextFacade;
+        private readonly ITagManager<Tag> _tagManager;
+        private readonly ITagStore<Tag> _tagStore;
 
         private readonly HttpRequest _request;
         
         public QuestionViewProvider(
-            ITagStore<Tag> tagStore,
-            IEntityStore<Question> entityStore,
+            IEntityTagManager<EntityTag> entityTagManager,            
             IEntityTagStore<EntityTag> entityTagStore,
-            IHttpContextAccessor httpContextAccessor, 
-            IEntityTagManager<EntityTag> entityTagManager,
-            ITagManager<Tag> tagManager, 
+            IHttpContextAccessor httpContextAccessor,
+            IEntityStore<Question> entityStore,
             IFeatureFacade featureFacade,
-            IContextFacade contextFacade)
+            IContextFacade contextFacade,
+            ITagManager<Tag> tagManager,
+            ITagStore<Tag> tagStore)
         {
-            _tagStore = tagStore;
-            _entityStore = entityStore;
-            _entityTagStore = entityTagStore;
+
             _entityTagManager = entityTagManager;
-            _tagManager = tagManager;
+            _entityTagStore = entityTagStore;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
+            _entityStore = entityStore;
+            _tagManager = tagManager;
+            _tagStore = tagStore;
+
             _request = httpContextAccessor.HttpContext.Request;
+
         }
 
         #region "Implementation"
@@ -59,7 +64,7 @@ namespace Plato.Questions.Tags.ViewProviders
         public override async Task<IViewProviderResult> BuildIndexAsync(Question viewModel, IViewProviderContext context)
         {
 
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Questions");
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
             if (feature == null)
             {
                 return default(IViewProviderResult);
@@ -99,10 +104,15 @@ namespace Plato.Questions.Tags.ViewProviders
 
         public override async Task<IViewProviderResult> BuildEditAsync(Question topic, IViewProviderContext context)
         {
-            
-            var tagsJson = "";
-            
+
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
+
             // Ensures we persist the tag json between post backs
+            var tagsJson = "";
             if (_request.Method == "POST")
             {
                 foreach (string key in _request.Form.Keys)
@@ -158,18 +168,19 @@ namespace Plato.Questions.Tags.ViewProviders
 
             return Views(
                 View<EditEntityTagsViewModel>("Question.Tags.Edit.Footer", model => new EditEntityTagsViewModel()
-                    {
-                        Tags = tagsJson,
-                        HtmlName = TagsHtmlName,
-                        Permission = topic.Id == 0
+                {
+                    Tags = tagsJson,
+                    HtmlName = TagsHtmlName,
+                    FeatureId = feature?.Id ?? 0,
+                    Permission = topic.Id == 0
                             ? Permissions.PostQuestionTags
                             : Permissions.EditQuestionTags
-                    }).Zone("content")
+                }).Zone("content")
                     .Order(int.MaxValue)
             );
 
         }
-        
+
         public override Task<bool> ValidateModelAsync(Question topic, IUpdateModel updater)
         {
             // ensure tags are optional
@@ -178,6 +189,7 @@ namespace Plato.Questions.Tags.ViewProviders
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(Question topic, IViewProviderContext context)
         {
+
             // Ensure entity exists before attempting to update
             var entity = await _entityStore.GetByIdAsync(topic.Id);
             if (entity == null)
@@ -200,7 +212,7 @@ namespace Plato.Questions.Tags.ViewProviders
 
                 // Exclude replies
                 var existingTagsList = existingTags?.Where(t => t.EntityReplyId == 0).ToList();
-                
+
                 // Iterate over existing tags reducing our tags to add
                 if (existingTagsList != null)
                 {
@@ -219,7 +231,7 @@ namespace Plato.Questions.Tags.ViewProviders
                         }
                     }
                 }
-            
+
                 // Remove entity tags
                 foreach (var entityTag in tagsToRemove)
                 {
@@ -232,7 +244,7 @@ namespace Plato.Questions.Tags.ViewProviders
                         }
                     }
                 }
-                
+
                 // Get authenticated user
                 var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -335,7 +347,7 @@ namespace Plato.Questions.Tags.ViewProviders
             }
 
             // Get feature for tag
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Questions");
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
       
             // Create tag
             var result = await _tagManager.CreateAsync(new Tag()

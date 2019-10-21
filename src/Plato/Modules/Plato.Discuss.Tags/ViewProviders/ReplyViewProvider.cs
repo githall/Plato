@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
@@ -22,16 +22,16 @@ namespace Plato.Discuss.Tags.ViewProviders
     public class ReplyViewProvider : BaseViewProvider<Reply>
     {
 
+        private const string ModuleId = "Plato.Discuss";
         private const string TagsHtmlName = "tags";
 
-
-        private readonly IEntityReplyStore<Reply> _replyStore;
+        private readonly IEntityTagManager<EntityTag> _entityTagManager;        
         private readonly IEntityTagStore<EntityTag> _entityTagStore;
-        private readonly IEntityTagManager<EntityTag> _entityTagManager;
-        private readonly ITagStore<TagBase> _tagStore;
+        private readonly IEntityReplyStore<Reply> _replyStore;        
         private readonly ITagManager<TagBase> _tagManager;
         private readonly IFeatureFacade _featureFacade;
         private readonly IContextFacade _contextFacade;
+        private readonly ITagStore<TagBase> _tagStore;
 
         private readonly IStringLocalizer T;
 
@@ -40,25 +40,27 @@ namespace Plato.Discuss.Tags.ViewProviders
         public ReplyViewProvider(
             IHttpContextAccessor httpContextAccessor,
             IStringLocalizer<Discuss.ViewProviders.TopicViewProvider> stringLocalize,
-            
-            IEntityReplyStore<Reply> replyStore,
-            IEntityTagStore<EntityTag> entityTagStore, 
-            ITagStore<TagBase> tagStore, 
             IEntityTagManager<EntityTag> entityTagManager,
+            IEntityTagStore<EntityTag> entityTagStore,
+            IEntityReplyStore<Reply> replyStore,
             ITagManager<TagBase> tagManager,
             IFeatureFacade featureFacade,
-            IContextFacade contextFacade)
+            IContextFacade contextFacade,
+            ITagStore<TagBase> tagStore)
         {
-            _replyStore = replyStore;
-            _entityTagStore = entityTagStore;
-            _tagStore = tagStore;
+
             _entityTagManager = entityTagManager;
-            _tagManager = tagManager;
+            _entityTagStore = entityTagStore;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
+            _replyStore = replyStore;
+            _tagManager = tagManager;
+            _tagStore = tagStore;
+
             _request = httpContextAccessor.HttpContext.Request;
 
             T = stringLocalize;
+
         }
 
         #region "Implementation"
@@ -75,6 +77,12 @@ namespace Plato.Discuss.Tags.ViewProviders
 
         public override async Task<IViewProviderResult> BuildEditAsync(Reply reply, IViewProviderContext updater)
         {
+
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
 
             var tagsJson = "";
             var entityTags = await GetEntityTagsByEntityReplyIdAsync(reply.Id);
@@ -114,6 +122,7 @@ namespace Plato.Discuss.Tags.ViewProviders
             {
                 Tags = tagsJson,
                 HtmlName = TagsHtmlName,
+                FeatureId = feature?.Id ?? 0,
                 Permission = reply.Id == 0
                     ? Permissions.PostReplyTags
                     : Permissions.EditReplyTags
@@ -216,7 +225,7 @@ namespace Plato.Discuss.Tags.ViewProviders
         }
 
         #endregion
-        
+
         #region "Private Methods"
 
         async Task<List<TagBase>> GetTagsToAddAsync(Reply reply)
@@ -288,7 +297,7 @@ namespace Plato.Discuss.Tags.ViewProviders
             }
 
             // Get feature for tag
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Discuss");
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
 
             // We always need a feature
             if (feature == null)
@@ -313,7 +322,6 @@ namespace Plato.Discuss.Tags.ViewProviders
             return null;
 
         }
-
 
         async Task<IEnumerable<EntityTag>> GetEntityTagsByEntityReplyIdAsync(int entityId)
         {

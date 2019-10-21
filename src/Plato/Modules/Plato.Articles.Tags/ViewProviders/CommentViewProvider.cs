@@ -20,9 +20,11 @@ using Plato.Tags.ViewModels;
 
 namespace Plato.Articles.Tags.ViewProviders
 {
+
     public class CommentViewProvider : BaseViewProvider<Comment>
     {
 
+        private const string ModuleId = "Plato.Articles";
         private const string TagsHtmlName = "tags";
 
         private readonly IEntityTagManager<EntityTag> _entityTagManager;
@@ -77,6 +79,12 @@ namespace Plato.Articles.Tags.ViewProviders
         public override async Task<IViewProviderResult> BuildEditAsync(Comment comment, IViewProviderContext updater)
         {
 
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
+
             var tagsJson = "";
             var entityTags = await GetEntityTagsByEntityReplyIdAsync(comment.Id);
             if (entityTags != null)
@@ -115,6 +123,7 @@ namespace Plato.Articles.Tags.ViewProviders
             {
                 Tags = tagsJson,
                 HtmlName = TagsHtmlName,
+                FeatureId = feature?.Id ?? 0,
                 Permission = comment.Id == 0
                     ? Permissions.PostArticleCommentTags
                     : Permissions.EditArticleCommentTags
@@ -124,7 +133,6 @@ namespace Plato.Articles.Tags.ViewProviders
                 View<EditEntityTagsViewModel>("Article.Tags.Edit.Footer", model => viewModel).Zone("content")
                     .Order(int.MaxValue)
             );
-
 
         }
 
@@ -217,7 +225,7 @@ namespace Plato.Articles.Tags.ViewProviders
         }
 
         #endregion
-        
+
         #region "Private Methods"
 
         async Task<List<TagBase>> GetTagsToAddAsync()
@@ -330,7 +338,7 @@ namespace Plato.Articles.Tags.ViewProviders
         }
 
         #endregion
-        
+
     }
 
 }

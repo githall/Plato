@@ -57,7 +57,8 @@ $(function (win, doc, $) {
             bind: function($caller) {
                 
                 // Maximum number of allowed selections
-                var maxItems = methods.getMaxItems($caller);
+                var maxItems = methods.getMaxItems($caller),
+                    featureId = methods.getFeatureId($caller);
 
                 // init tagIt
                 $caller.tagIt($.extend({
@@ -85,7 +86,7 @@ $(function (win, doc, $) {
                     defaults,
                     options));
 
-                // user auto complete
+                // tag auto complete
                 methods.getInput($caller).tagAutoComplete($.extend({
                         onItemClick: function($input, result, e) {
 
@@ -211,7 +212,11 @@ $(function (win, doc, $) {
                     ? parseInt($caller.data("maxItems"))
                     : $caller.data(dataKey).maxItems;
             },
-
+            getFeatureId: function ($caller) {
+                return $caller.data("featureId")
+                    ? parseInt($caller.data("featureId"))
+                    : $caller.data(dataKey).maxItems;
+            }
         };
 
         return {
@@ -276,9 +281,13 @@ $(function (win, doc, $) {
         var defaults = {
             valueField: "keywords",
             config: {
-                method: "GET",
-                url: 'api/tags/tag/get?page={page}&size={pageSize}&keywords={keywords}',
+                method: "POST",
+                url: 'api/tags/tag/post',
                 data: {
+                    page: 1,
+                    size: 10,
+                    keywords: "",
+                    featureId: 0,
                     sort: "TotalEntities",
                     order: "Desc"
                 }
@@ -329,6 +338,21 @@ $(function (win, doc, $) {
                         alert(methodName + " is not a valid method!");
                     }
                     return null;
+                }
+
+                // A feature id can be set on the auto-complete input to restrict tags by feature
+                if ($caller.data("featureId")) {
+
+                    // For get requests replace url
+                    if ($caller.data(dataKey).config.method.toUpperCase() === "GET") {
+                        $caller.data(dataKey).config.url = config.url.replace("{featureId}", $caller.data("featureId"));
+                    }
+
+                    // For post requests add to post object
+                    if ($caller.data(dataKey).config.method.toUpperCase() === "POST") {
+                        $caller.data(dataKey).config.data["featureId"] = $caller.data("featureId");
+                    }
+
                 }
 
                 // init autoComplete

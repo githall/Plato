@@ -1576,21 +1576,21 @@ $(function (win, doc, $) {
                 if ($caller.data("autocompleteUrl")) {
                     config.url = $caller.data("autocompleteUrl");
                 }
-                
+
                 if (valueField) {
 
-                    // For get requests replace keywords in URL with auto complete value
+                    // For get requests replace url
                     if (config.method.toUpperCase() === "GET") {
                         config.url = config.url.replace("{" + valueField + "}", encodeURIComponent($caller.val()));
                     }
 
-                    // For post requests add keyword to data object literal
+                    // For post requests add to post object
                     if (config.method.toUpperCase() === "POST") {
                         config.data[valueField] = $caller.val();
                     }
 
                 }
-
+               
                 // Init pagedList
                 $target.pagedList($.extend({},
                     $caller.data(dataKey),

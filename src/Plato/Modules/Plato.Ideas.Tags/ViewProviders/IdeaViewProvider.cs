@@ -20,39 +20,44 @@ using Plato.Tags.ViewModels;
 
 namespace Plato.Ideas.Tags.ViewProviders
 {
+
     public class IdeaViewProvider : BaseViewProvider<Idea>
     {
 
+        private const string ModuleId = "Plato.Ideas";
         private const string TagsHtmlName = "tags";
 
-        private readonly ITagStore<Tag> _tagStore;
+        private readonly IEntityTagManager<EntityTag> _entityTagManager;        
         private readonly IEntityTagStore<EntityTag> _entityTagStore;
-        private readonly IEntityStore<Idea> _entityStore;
-        private readonly IEntityTagManager<EntityTag> _entityTagManager;
-        private readonly ITagManager<Tag> _tagManager;
+        private readonly IEntityStore<Idea> _entityStore;        
         private readonly IFeatureFacade _featureFacade;
         private readonly IContextFacade _contextFacade;
+        private readonly ITagManager<Tag> _tagManager;
+        private readonly ITagStore<Tag> _tagStore;
 
         private readonly HttpRequest _request;
-        
-        public IdeaViewProvider(
-            ITagStore<Tag> tagStore,
-            IEntityStore<Idea> entityStore,
-            IEntityTagStore<EntityTag> entityTagStore,
-            IHttpContextAccessor httpContextAccessor, 
+
+        public IdeaViewProvider(            
             IEntityTagManager<EntityTag> entityTagManager,
+            IEntityTagStore<EntityTag> entityTagStore,
+            IHttpContextAccessor httpContextAccessor,
+            IEntityStore<Idea> entityStore,
             ITagManager<Tag> tagManager, 
             IFeatureFacade featureFacade,
-            IContextFacade contextFacade)
+            IContextFacade contextFacade,
+            ITagStore<Tag> tagStore)
         {
-            _tagStore = tagStore;
-            _entityStore = entityStore;
-            _entityTagStore = entityTagStore;
+
             _entityTagManager = entityTagManager;
-            _tagManager = tagManager;
+            _entityTagStore = entityTagStore;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
+            _entityStore = entityStore;
+            _tagManager = tagManager;
+            _tagStore = tagStore;
+
             _request = httpContextAccessor.HttpContext.Request;
+
         }
 
         #region "Implementation"
@@ -60,7 +65,7 @@ namespace Plato.Ideas.Tags.ViewProviders
         public override async Task<IViewProviderResult> BuildIndexAsync(Idea viewModel, IViewProviderContext context)
         {
 
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Ideas");
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
             if (feature == null)
             {
                 return default(IViewProviderResult);
@@ -100,10 +105,15 @@ namespace Plato.Ideas.Tags.ViewProviders
 
         public override async Task<IViewProviderResult> BuildEditAsync(Idea idea, IViewProviderContext context)
         {
-            
-            var tagsJson = "";
-            
+
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
+
             // Ensures we persist the tag json between post backs
+            var tagsJson = "";
             if (_request.Method == "POST")
             {
                 foreach (string key in _request.Form.Keys)
@@ -159,18 +169,19 @@ namespace Plato.Ideas.Tags.ViewProviders
 
             return Views(
                 View<EditEntityTagsViewModel>("Idea.Tags.Edit.Footer", model => new EditEntityTagsViewModel()
-                    {
-                        Tags = tagsJson,
-                        HtmlName = TagsHtmlName,
-                        Permission = idea.Id == 0
+                {
+                    Tags = tagsJson,
+                    HtmlName = TagsHtmlName,
+                    FeatureId = feature?.Id ?? 0,
+                    Permission = idea.Id == 0
                             ? Permissions.PostIdeaTags
                             : Permissions.EditIdeaTags
-                    }).Zone("content")
+                }).Zone("content")
                     .Order(int.MaxValue)
             );
 
         }
-        
+
         public override Task<bool> ValidateModelAsync(Idea idea, IUpdateModel updater)
         {
             // ensure tags are optional
@@ -179,6 +190,7 @@ namespace Plato.Ideas.Tags.ViewProviders
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(Idea idea, IViewProviderContext context)
         {
+
             // Ensure entity exists before attempting to update
             var entity = await _entityStore.GetByIdAsync(idea.Id);
             if (entity == null)
@@ -268,7 +280,7 @@ namespace Plato.Ideas.Tags.ViewProviders
 
         async Task<List<TagBase>> GetTagsToAddAsync()
         {
-         
+
             var tagsToAdd = new List<TagBase>();
             foreach (var key in _request.Form.Keys)
             {
@@ -336,7 +348,7 @@ namespace Plato.Ideas.Tags.ViewProviders
             }
 
             // Get feature for tag
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Ideas");
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
       
             // Create tag
             var result = await _tagManager.CreateAsync(new Tag()

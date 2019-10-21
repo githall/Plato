@@ -22,6 +22,7 @@ namespace Plato.Questions.Tags.ViewProviders
     public class AnswerViewProvider : BaseViewProvider<Answer>
     {
 
+        private const string ModuleId = "Plato.Questions";
         private const string TagsHtmlName = "tags";
 
         private readonly IEntityTagManager<EntityTag> _entityTagManager;
@@ -37,18 +38,17 @@ namespace Plato.Questions.Tags.ViewProviders
         private readonly HttpRequest _request;
 
         public AnswerViewProvider(
-            IHttpContextAccessor httpContextAccessor,
-            IStringLocalizer stringLocalize,
             IEntityTagManager<EntityTag> entityTagManager,
             IEntityTagStore<EntityTag> entityTagStore,
+            IHttpContextAccessor httpContextAccessor,
             IEntityReplyStore<Answer> replyStore,
+            IStringLocalizer stringLocalize,
             ITagManager<TagBase> tagManager,
             IFeatureFacade featureFacade,
             IContextFacade contextFacade,
             ITagStore<TagBase> tagStore)
         {
 
-            _request = httpContextAccessor.HttpContext.Request;
             _entityTagManager = entityTagManager;
             _entityTagStore = entityTagStore;
             _featureFacade = featureFacade;
@@ -56,6 +56,8 @@ namespace Plato.Questions.Tags.ViewProviders
             _tagManager = tagManager;
             _tagStore = tagStore;
             _replyStore = replyStore;
+
+            _request = httpContextAccessor.HttpContext.Request;
 
             T = stringLocalize;
 
@@ -75,6 +77,12 @@ namespace Plato.Questions.Tags.ViewProviders
 
         public override async Task<IViewProviderResult> BuildEditAsync(Answer comment, IViewProviderContext updater)
         {
+
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
 
             var tagsJson = "";
             var entityTags = await GetEntityTagsByEntityReplyIdAsync(comment.Id);
@@ -114,6 +122,7 @@ namespace Plato.Questions.Tags.ViewProviders
             {
                 Tags = tagsJson,
                 HtmlName = TagsHtmlName,
+                FeatureId = feature?.Id ?? 0,
                 Permission = comment.Id == 0
                     ? Permissions.PostQuestionAnswerTags
                     : Permissions.EditQuestionAnswerTags
@@ -123,7 +132,7 @@ namespace Plato.Questions.Tags.ViewProviders
                 View<EditEntityTagsViewModel>("Article.Tags.Edit.Footer", model => viewModel).Zone("content")
                     .Order(int.MaxValue)
             );
-            
+
         }
 
         public override Task<bool> ValidateModelAsync(Answer comment, IUpdateModel updater)
@@ -215,7 +224,7 @@ namespace Plato.Questions.Tags.ViewProviders
         }
 
         #endregion
-        
+
         #region "Private Methods"
 
         async Task<List<TagBase>> GetTagsToAddAsync()
@@ -287,7 +296,7 @@ namespace Plato.Questions.Tags.ViewProviders
             }
 
             // Get feature for tag
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Questions");
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
 
             // We always need a feature
             if (feature == null)
@@ -313,7 +322,6 @@ namespace Plato.Questions.Tags.ViewProviders
 
         }
 
-
         async Task<IEnumerable<EntityTag>> GetEntityTagsByEntityReplyIdAsync(int entityId)
         {
 
@@ -328,7 +336,7 @@ namespace Plato.Questions.Tags.ViewProviders
         }
 
         #endregion
-        
+
     }
 
 }

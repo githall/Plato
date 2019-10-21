@@ -23,36 +23,40 @@ namespace Plato.Issues.Tags.ViewProviders
     public class IssueViewProvider : BaseViewProvider<Issue>
     {
 
+        private const string ModuleId = "Plato.Issues";
         private const string TagsHtmlName = "tags";
-
-        private readonly ITagStore<Tag> _tagStore;
+                
+        private readonly IEntityTagManager<EntityTag> _entityTagManager;
         private readonly IEntityTagStore<EntityTag> _entityTagStore;
         private readonly IEntityStore<Issue> _entityStore;
-        private readonly IEntityTagManager<EntityTag> _entityTagManager;
         private readonly ITagManager<Tag> _tagManager;
         private readonly IFeatureFacade _featureFacade;
         private readonly IContextFacade _contextFacade;
+        private readonly ITagStore<Tag> _tagStore;
 
         private readonly HttpRequest _request;
-        
+
         public IssueViewProvider(
-            ITagStore<Tag> tagStore,
-            IEntityStore<Issue> entityStore,
-            IEntityTagStore<EntityTag> entityTagStore,
-            IHttpContextAccessor httpContextAccessor, 
             IEntityTagManager<EntityTag> entityTagManager,
-            ITagManager<Tag> tagManager, 
+            IEntityTagStore<EntityTag> entityTagStore,
+            IHttpContextAccessor httpContextAccessor,
+            IEntityStore<Issue> entityStore,            
             IFeatureFacade featureFacade,
-            IContextFacade contextFacade)
+            IContextFacade contextFacade,
+            ITagManager<Tag> tagManager,
+            ITagStore<Tag> tagStore)
         {
-            _tagStore = tagStore;
-            _entityStore = entityStore;
-            _entityTagStore = entityTagStore;
+
             _entityTagManager = entityTagManager;
-            _tagManager = tagManager;
+            _entityTagStore = entityTagStore;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
+            _entityStore = entityStore;
+            _tagManager = tagManager;
+            _tagStore = tagStore;
+
             _request = httpContextAccessor.HttpContext.Request;
+
         }
 
         #region "Implementation"
@@ -60,7 +64,7 @@ namespace Plato.Issues.Tags.ViewProviders
         public override async Task<IViewProviderResult> BuildIndexAsync(Issue viewModel, IViewProviderContext context)
         {
 
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Issues");
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
             if (feature == null)
             {
                 return default(IViewProviderResult);
@@ -100,10 +104,15 @@ namespace Plato.Issues.Tags.ViewProviders
 
         public override async Task<IViewProviderResult> BuildEditAsync(Issue issue, IViewProviderContext context)
         {
-            
-            var tagsJson = "";
-            
+
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
+
             // Ensures we persist the tag json between post backs
+            var tagsJson = "";
             if (_request.Method == "POST")
             {
                 foreach (string key in _request.Form.Keys)
@@ -159,18 +168,19 @@ namespace Plato.Issues.Tags.ViewProviders
 
             return Views(
                 View<EditEntityTagsViewModel>("Issue.Tags.Edit.Footer", model => new EditEntityTagsViewModel()
-                    {
-                        Tags = tagsJson,
-                        HtmlName = TagsHtmlName,
-                        Permission = issue.Id == 0
+                {
+                    Tags = tagsJson,
+                    HtmlName = TagsHtmlName,
+                    FeatureId = feature?.Id ?? 0,
+                    Permission = issue.Id == 0
                             ? Permissions.PostIssueTags
                             : Permissions.EditIssueTags
-                    }).Zone("content")
+                }).Zone("content")
                     .Order(int.MaxValue)
             );
 
         }
-        
+
         public override Task<bool> ValidateModelAsync(Issue issue, IUpdateModel updater)
         {
             // ensure tags are optional
@@ -220,7 +230,7 @@ namespace Plato.Issues.Tags.ViewProviders
                         }
                     }
                 }
-            
+
                 // Remove entity tags
                 foreach (var entityTag in tagsToRemove)
                 {
@@ -233,7 +243,7 @@ namespace Plato.Issues.Tags.ViewProviders
                         }
                     }
                 }
-                
+
                 // Get authenticated user
                 var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -268,7 +278,7 @@ namespace Plato.Issues.Tags.ViewProviders
 
         async Task<List<TagBase>> GetTagsToAddAsync()
         {
-         
+
             var tagsToAdd = new List<TagBase>();
             foreach (var key in _request.Form.Keys)
             {
