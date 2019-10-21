@@ -130,7 +130,7 @@ namespace Plato.Discuss.Categories.Controllers
             {
                 _pageTitleBuilder.AddSegment(S[category.Name], int.MaxValue);
             }
-            
+
             // Build breadcrumb
             _breadCrumbManager.Configure(async builder =>
             {
@@ -186,7 +186,7 @@ namespace Plato.Discuss.Categories.Controllers
                 }
 
             });
-            
+
             // Return view
             return View((LayoutViewModel) await _categoryViewProvider.ProvideIndexAsync(category, this));
 
@@ -194,7 +194,7 @@ namespace Plato.Discuss.Categories.Controllers
 
         async Task<EntityIndexViewModel<Topic>> GetIndexViewModelAsync(Category category, EntityIndexOptions options, PagerOptions pager)
         {
-            
+
             // Get current feature
             var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Discuss");
 
