@@ -91,17 +91,25 @@ namespace Plato.Articles.Tags.ViewProviders
 
         }
 
-
-        public override Task<IViewProviderResult> BuildDisplayAsync(Article article, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildDisplayAsync(Article article, IViewProviderContext context)
         {
-            return Task.FromResult(Views(
+
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
+
+            return Views(
                 View<EditEntityTagsViewModel>("Article.Tags.Edit.Footer", model => new EditEntityTagsViewModel()
-                    {
-                        HtmlName = TagsHtmlName,
-                        Permission = Permissions.PostArticleCommentTags
-                    }).Zone("footer")
+                {
+                    HtmlName = TagsHtmlName,
+                    FeatureId = feature?.Id ?? 0,
+                    Permission = Permissions.PostArticleCommentTags
+                }).Zone("footer")
                     .Order(int.MaxValue)
-            ));
+            );
+
         }
 
         public override async Task<IViewProviderResult> BuildEditAsync(Article article, IViewProviderContext context)

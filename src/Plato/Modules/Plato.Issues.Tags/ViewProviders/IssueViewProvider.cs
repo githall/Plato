@@ -25,13 +25,13 @@ namespace Plato.Issues.Tags.ViewProviders
 
         private const string ModuleId = "Plato.Issues";
         private const string TagsHtmlName = "tags";
-                
+
         private readonly IEntityTagManager<EntityTag> _entityTagManager;
         private readonly IEntityTagStore<EntityTag> _entityTagStore;
-        private readonly IEntityStore<Issue> _entityStore;
-        private readonly ITagManager<Tag> _tagManager;
+        private readonly IEntityStore<Issue> _entityStore;        
         private readonly IFeatureFacade _featureFacade;
         private readonly IContextFacade _contextFacade;
+        private readonly ITagManager<Tag> _tagManager;
         private readonly ITagStore<Tag> _tagStore;
 
         private readonly HttpRequest _request;
@@ -60,7 +60,7 @@ namespace Plato.Issues.Tags.ViewProviders
         }
 
         #region "Implementation"
-        
+
         public override async Task<IViewProviderResult> BuildIndexAsync(Issue viewModel, IViewProviderContext context)
         {
 
@@ -89,17 +89,26 @@ namespace Plato.Issues.Tags.ViewProviders
             );
 
         }
-        
-        public override Task<IViewProviderResult> BuildDisplayAsync(Issue issue, IViewProviderContext context)
+
+        public override async Task<IViewProviderResult> BuildDisplayAsync(Issue issue, IViewProviderContext context)
         {
-            return Task.FromResult(Views(
+
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
+
+            return Views(
                 View<EditEntityTagsViewModel>("Issue.Tags.Edit.Footer", model => new EditEntityTagsViewModel()
-                    {
-                        HtmlName = TagsHtmlName,
-                        Permission = Permissions.PostIssueCommentTags
-                    }).Zone("footer")
+                {
+                    HtmlName = TagsHtmlName,
+                    FeatureId = feature?.Id ?? 0,
+                    Permission = Permissions.PostIssueCommentTags
+                }).Zone("footer")
                     .Order(int.MaxValue)
-            ));
+            );
+
         }
 
         public override async Task<IViewProviderResult> BuildEditAsync(Issue issue, IViewProviderContext context)

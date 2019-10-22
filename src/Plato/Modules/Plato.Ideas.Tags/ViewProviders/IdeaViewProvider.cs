@@ -37,14 +37,14 @@ namespace Plato.Ideas.Tags.ViewProviders
 
         private readonly HttpRequest _request;
 
-        public IdeaViewProvider(            
+        public IdeaViewProvider(
             IEntityTagManager<EntityTag> entityTagManager,
             IEntityTagStore<EntityTag> entityTagStore,
             IHttpContextAccessor httpContextAccessor,
-            IEntityStore<Idea> entityStore,
-            ITagManager<Tag> tagManager, 
+            IEntityStore<Idea> entityStore,             
             IFeatureFacade featureFacade,
             IContextFacade contextFacade,
+            ITagManager<Tag> tagManager,
             ITagStore<Tag> tagStore)
         {
 
@@ -61,7 +61,7 @@ namespace Plato.Ideas.Tags.ViewProviders
         }
 
         #region "Implementation"
-        
+
         public override async Task<IViewProviderResult> BuildIndexAsync(Idea viewModel, IViewProviderContext context)
         {
 
@@ -91,16 +91,25 @@ namespace Plato.Ideas.Tags.ViewProviders
 
         }
         
-        public override Task<IViewProviderResult> BuildDisplayAsync(Idea idea, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildDisplayAsync(Idea idea, IViewProviderContext context)
         {
-            return Task.FromResult(Views(
+
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+            if (feature == null)
+            {
+                return default(IViewProviderResult);
+            }
+
+            return Views(
                 View<EditEntityTagsViewModel>("Idea.Tags.Edit.Footer", model => new EditEntityTagsViewModel()
-                    {
-                        HtmlName = TagsHtmlName,
-                        Permission = Permissions.PostIdeaCommentTags
-                    }).Zone("footer")
+                {
+                    HtmlName = TagsHtmlName,
+                    FeatureId = feature?.Id ?? 0,
+                    Permission = Permissions.PostIdeaCommentTags
+                }).Zone("footer")
                     .Order(int.MaxValue)
-            ));
+            );
+
         }
 
         public override async Task<IViewProviderResult> BuildEditAsync(Idea idea, IViewProviderContext context)
