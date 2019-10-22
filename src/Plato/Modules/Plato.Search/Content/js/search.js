@@ -203,9 +203,34 @@ $(function (win, doc, $) {
                 return html;
 
             },
-            onKeyDown: function($caller, e) {
+            onKeyDown: function ($caller, e, $target) {
+       
                 if (e.keyCode === 13) {
-                    e.preventDefault();
+
+                    e.preventDefault();                    
+
+                    // If the auto complete target is visible upon
+                    // carriage return navigate to selected item                    
+                    var navigateTo = null;
+                    if ($target.data("pagedList")) {
+                        var itemCss = $target.data("pagedList").itemCss,
+                            itemSelection = $target.data("pagedList").itemSelection;
+                        if ($target.is(":visible")) {
+                            $target.find("." + itemCss).each(function () {
+                                if ($(this).hasClass(itemSelection.css)) {
+                                    navigateTo = $(this).attr("href");
+                                }
+                            });
+                        }
+                    }                   
+
+                    // Naviating to selection, no need to submit form
+                    if (navigateTo) {
+                        win.location.href = navigateTo;
+                        return;
+                    }
+
+                    // No selection, submit form
                     var $btn = $caller.parent().find(".btn");
                     if ($btn.length > 0) {
                         $btn[0].click();

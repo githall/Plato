@@ -1486,11 +1486,13 @@ $(function (win, doc, $) {
                                 }
 
                             }
+
+                            if ($caller.data(dataKey).onKeyDown) {
+                                $caller.data(dataKey).onKeyDown($caller, e, $target);
+                            }
+
                         }
 
-                        if ($caller.data(dataKey).onKeyDown) {
-                            $caller.data(dataKey).onKeyDown($caller, e);
-                        }
 
                     });
 
