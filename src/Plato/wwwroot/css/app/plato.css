@@ -1047,7 +1047,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 
     .nav-site > .navbar .navbar-search .nav-search {
         display: block;
-        margin-top: 3px;
+        margin: 3px 1rem 0 1rem;
     }
 
     .nav-site > .navbar-expand-lg .navbar-collapse {
