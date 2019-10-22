@@ -1424,7 +1424,7 @@ $(function (win, doc, $) {
                         if ($target) {
                             if ($target.is(":visible")) {
 
-                                var itemCss = $target.data("pagedList").itemCss,
+                                var itemCss = $target.data("pagedList").itemCss,                                  
                                     pageSize = $target.find("." + itemCss).length,
                                     itemSelection = $target.data("pagedList").itemSelection,
                                     newIndex = -1;
@@ -1434,7 +1434,7 @@ $(function (win, doc, $) {
                                     case 13: // carriage return
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        newIndex = -1;
+                                        newIndex = -1; // reset selection upon carriage return
                                         // find active and click
                                         $target.find("." + itemCss).each(function() {
                                             if ($(this).hasClass(itemSelection.css)) {                                                
@@ -1457,6 +1457,18 @@ $(function (win, doc, $) {
                                         if (newIndex > pageSize - 1) {
                                             newIndex = pageSize - 1;
                                         }
+                                        break;
+                                    case 37: // left
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        newIndex = 0;
+                                        $target.find(".prev-page").click();                                     
+                                        break;
+                                    case 39: // right                                        
+                                        e.preventDefault();
+                                        e.stopPropagation();
+                                        newIndex = 0;
+                                        $target.find(".next-page").click();
                                         break;
                                     }
 
@@ -1490,8 +1502,11 @@ $(function (win, doc, $) {
                             methods.hide($el);
                         }
                     },
-                    onChange: function($el, e) {
-
+                    onChange: function ($el, e) {
+                        // left or right arrow keys
+                        if (e.keyCode === 37 || e.keyCode === 39) {                         
+                            return;
+                        }
                         // !escape && !tab
                         if (e.keyCode !== 27 && e.keyCode !== 9) {
                             if ($el.val().length === 0) {
