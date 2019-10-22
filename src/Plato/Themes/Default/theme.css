@@ -342,6 +342,11 @@ a.label:hover, .label.active {
     border-bottom-color: #fff;
 }
 
+.dropdown-menu a.prev-page:hover,
+.dropdown-menu a.next-page:hover {
+    background: #007bff;
+    color: #fff;
+}
 
 /* ------------------- */
 /* Popper */

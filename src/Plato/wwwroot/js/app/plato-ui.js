@@ -1056,7 +1056,7 @@ $(function (win, doc, $) {
                 var icon = $("<i>").addClass("fa fa-chevron-left"),
                     $a = $("<a>")
                     .attr("href", "#")
-                    .addClass("list-group-item list-group-item-action float-left prev-page col-3 text-center")
+                        .addClass("list-group-item list-group-item-action float-left border-radius-0 border-0 prev-page col-3 text-center")
                     .append(icon);
 
                 $a.click(function (e) {
@@ -1073,7 +1073,7 @@ $(function (win, doc, $) {
                 var icon = $("<i>").addClass("fa fa-chevron-right"),
                     $a = $("<a>")
                     .attr("href", "#")
-                    .addClass("list-group-item list-group-item-action float-left next-page col-3 text-center")
+                        .addClass("list-group-item list-group-item-action border-radius-0 border-0 float-left next-page col-3 text-center")
                     .append(icon);
 
                 $a.click(function (e) {
@@ -1122,7 +1122,7 @@ $(function (win, doc, $) {
                 total = total.replace("{0}", results.total);
 
 
-                var $div = $('<div>').addClass("list-group-item float-left col-6 text-center");
+                var $div = $('<div>').addClass("list-group-item float-left border-radius-0 border-0 col-6 text-center");
                 $div.text(pages + ", " + total);
                 return $div;
 
