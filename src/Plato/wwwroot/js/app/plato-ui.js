@@ -1273,7 +1273,7 @@ $(function (win, doc, $) {
                         return;
                     }
                     var index = selection.index;
-                    var selector = "a." + itemCss,
+                    var selector = "." + itemCss,
                         tag = selection.tag,
                         css = selection.css,
                         $el = $caller.find(selector + ":eq(" + index + ")");
@@ -1434,9 +1434,10 @@ $(function (win, doc, $) {
                                     case 13: // carriage return
                                         e.preventDefault();
                                         e.stopPropagation();
+                                        newIndex = -1;
                                         // find active and click
                                         $target.find("." + itemCss).each(function() {
-                                            if ($(this).hasClass(itemSelection.css)) {
+                                            if ($(this).hasClass(itemSelection.css)) {                                                
                                                 $(this).click();
                                             }
                                         });
@@ -1459,13 +1460,16 @@ $(function (win, doc, $) {
                                         break;
                                     }
 
-                                    $target.pagedList({
+                                    if (newIndex >= 0) {
+                                        $target.pagedList({
                                             itemSelection: $.extend(itemSelection,
                                                 {
                                                     index: newIndex
                                                 })
                                         },
-                                        "setItemIndex");
+                                            "setItemIndex");
+                                    }
+                                  
 
                                 }
 

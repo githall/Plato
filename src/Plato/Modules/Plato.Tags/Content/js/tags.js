@@ -94,6 +94,7 @@ $(function (win, doc, $) {
 
                             // ensure we only add unique entries
                             var index = methods.getIndex($caller, result);
+                            
                             if (index === -1) {
                                 var isBelowMax = maxItems > 0 && $caller.data("tagIt").items.length < maxItems;
                                 if (isBelowMax) {
@@ -128,16 +129,20 @@ $(function (win, doc, $) {
 
                                 // Add dropdown selection if available
                                 var target = $input.data("autocompleteTarget") ||
-                                    $caller.data("autoComplete").target;
+                                    $caller.data("autoComplete").target,
+                                    hasSelection = false;
+
                                 if (target !== null) {
                                     var $target = $(target);
                                     if ($target) {
-                                        if ($target.data("pagedList")) {
-                                            var itemCss = $target.data("pagedList").itemCss;
-                                            if (itemCss) {
-                                                // Do we have a selection within our dropdown
-                                                $target.find("a." + itemCss).each(function() {
-                                                    if ($(this).hasClass("active")) {
+                                        if ($target.data("pagedList")) {                                            
+                                            var itemCss = $target.data("pagedList").itemCss,
+                                                itemSelection = $target.data("pagedList").itemSelection;
+                                            if (itemCss) {                                              
+                                                // Do we have a selection within our target
+                                                $target.find("." + itemCss).each(function () {                                                         
+                                                    if ($(this).hasClass(itemSelection.css)) {
+                                                        hasSelection = true;
                                                         return;
                                                     }
                                                 });
@@ -146,6 +151,10 @@ $(function (win, doc, $) {
                                     }
                                 }
 
+                                if (hasSelection) {
+                                    return;
+                                }
+                              
                                 // Ensure we have a value to add
                                 var value = $input.val();
                                 if (value === "") {
@@ -310,13 +319,13 @@ $(function (win, doc, $) {
                 if (result.entities && result.entities > 0) {
                     html = html.replace(/\{entities}/g, '<span data-toggle="tooltip" title="' + app.T("Occurences") + '" class="float-right badge badge-primary">' + result.entities + '</span>');
                 } else {
-                    html = html.replace(/\{entities}/g, "0");
+                    html = html.replace(/\{entities}/g, "");
                 }
 
                 if (result.follows && result.follows > 0) {
                     html = html.replace(/\{follows}/g, '<span data-toggle="tooltip" title="' + app.T("Followers") + '" class="float-right badge badge-primary ml-1">' + result.follows + '</span>');
                 } else {
-                    html = html.replace(/\{follows}/g, "0");
+                    html = html.replace(/\{follows}/g, "");
                 }
 
                 if (result.url) {
