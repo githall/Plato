@@ -100,7 +100,7 @@ $(function (win, doc, $) {
 
                                 },
                                 bind: function ($input, searchResult, e) {
-
+                                    
                                     var keywords = searchResult.value;
                                     if (!keywords) {
                                         return;
@@ -110,7 +110,7 @@ $(function (win, doc, $) {
                                     if (keywords.substring(0, 1) === "#") {
                                         keywords = keywords.substring(1, keywords.length);
                                     }
-
+                                    
                                     // Invoke suggester
                                     $caller.suggester({
                                         // pagedList options
@@ -209,7 +209,7 @@ $(function (win, doc, $) {
                                         },
                                         onPagerClick: function ($self, page, e) {
                                             e.preventDefault();
-                                            e.stopPropagation();
+                                            e.stopPropagation();                                         
                                             $caller.suggester({
                                                 page: page
                                             },

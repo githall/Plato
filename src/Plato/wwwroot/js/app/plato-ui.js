@@ -1467,7 +1467,7 @@ $(function (win, doc, $) {
                                     case 39: // right                                        
                                         e.preventDefault();
                                         e.stopPropagation();
-                                        newIndex = 0;
+                                        newIndex = 0;                                        
                                         $target.find(".next-page").click();
                                         break;
                                     }
@@ -1773,7 +1773,11 @@ $(function (win, doc, $) {
                                     $caller.data(dataKey).onComplete($(this), e);
                                 }
                                 return;
+                            case 37: // left
+                                return;
                             case 38: // up
+                                return;
+                            case 39: // right
                                 return;
                             case 40: // down
                                 return;
@@ -5242,10 +5246,14 @@ $(function (win, doc, $) {
                                     switch (e.which) {
                                         case 13: // carriage return
                                             return;
+                                        case 37: // left
+                                            return;
                                         case 38: // up
                                             return;
-                                        case 40: // down
+                                        case 39: // right
                                             return;
+                                        case 40: // down
+                                            return;                                       
                                         case 27: // escape
                                             return;
                                         default:
@@ -5583,9 +5591,7 @@ $(function (win, doc, $) {
                             $caller.textFieldMirror("hide");
 
                             // Invoke paged list
-                            $menu.pagedList($.extend($caller.data(dataKey),
-                                {
-                                }));
+                            $menu.pagedList($caller.data(dataKey));
 
                         }
 
@@ -5659,6 +5665,7 @@ $(function (win, doc, $) {
                           
                                         switch (e.which) {
                                             case 13: // carriage return
+                                                newIndex = -1;
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 // find active and click
@@ -5668,6 +5675,12 @@ $(function (win, doc, $) {
                                                     }
                                                 });
                                                 break;
+                                            case 37: // left
+                                                newIndex = 0;
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                $target.find(".prev-page").click();
+                                                break;
                                             case 38: // up
                                                 e.preventDefault();
                                                 e.stopPropagation();
@@ -5675,6 +5688,12 @@ $(function (win, doc, $) {
                                                 if (newIndex < 0) {
                                                     newIndex = 0;
                                                 }
+                                                break;
+                                            case 39: // right
+                                                newIndex = 0;
+                                                e.preventDefault();
+                                                e.stopPropagation();
+                                                $target.find(".next-page").click();
                                                 break;
                                             case 40: // down
                                                 e.preventDefault();
@@ -5685,6 +5704,7 @@ $(function (win, doc, $) {
                                                 }
                                                 break;
                                             case 27: // escape
+                                                newIndex = 0;
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 $target.hide();
