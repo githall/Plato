@@ -249,9 +249,6 @@
                 }
             }
 
-
-            container.find("button").tooltip({ trigger: "hover" });
-
             return container;
 
         },
@@ -334,7 +331,9 @@
 
             var $editor = this.$editor,
                 $textarea = this.$textarea,
-                height = $textarea.height();
+                $resizable = $editor.closest(".resizable"),
+                height = $textarea.height(),
+                resizableHeight = $resizable.height();
 
             if (mode === true) {
 
@@ -342,13 +341,19 @@
                 $('body').addClass('md-nooverflow');
                 this.$options.onFullscreen(this);
 
-                // Ensure textarea takes up 100%
+                // Ensure if editor is within resizable area this is set to 100%
+                $resizable.css({
+                    "height": '100%'
+                });
+
+                // Ensure textarea takes up 100%                
                 $textarea.css({
                     "height": '100%'
                 });
 
                 // Store original height
                 $textarea.data("height", height);
+                $resizable.data("height", resizableHeight);
 
                 $textarea.focus();
 
@@ -359,16 +364,21 @@
                 }
 
             } else {
-
+                
                 $editor.removeClass('md-fullscreen-mode');
                 $('body').removeClass('md-nooverflow');
                 this.$options.onFullscreenExit(this);
 
                 $textarea.focus();
 
-                // Apply original height
+                // Apply original heights
+
                 if ($textarea.data("height")) {
                     $textarea.css({ "height": $textarea.data("height") + "px" });
+                }
+
+                if ($resizable.data("height")) {
+                    $resizable.css({ "height": $resizable.data("height") + "px" });
                 }
 
                 if (this.$isPreview === true) {
@@ -706,6 +716,8 @@
                 this.$editor.attr('id', editorId);
                 this.$editor.on('click', '[data-provider="markdown"]', $.proxy(this.__handle, this));
 
+                // Bind bootstrap tooltips
+                this.$editor.find("button").tooltip({ trigger: "hover" });
 
                 if (this.$element.is(':disabled') || this.$element.is('[readonly]')) {
                     this.$editor.addClass('md-editor-disabled');

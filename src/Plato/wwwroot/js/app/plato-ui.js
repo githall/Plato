@@ -5657,7 +5657,7 @@ $(function (win, doc, $) {
                                 if ($target.is(":visible")) {
 
                                     var itemCss = $target.data("pagedList").itemCss,
-                                        pageSize = $target.find("." + itemCss).length,
+                                        itemCount = $target.find("." + itemCss).length,
                                         itemSelection = $target.data("pagedList").itemSelection,
                                         newIndex = -1;
 
@@ -5665,7 +5665,7 @@ $(function (win, doc, $) {
                           
                                         switch (e.which) {
                                             case 13: // carriage return
-                                                newIndex = -1;
+                                                newIndex = -1; // reset selection upon carriage return
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 // find active and click
@@ -5699,8 +5699,8 @@ $(function (win, doc, $) {
                                                 e.preventDefault();
                                                 e.stopPropagation();
                                                 newIndex = itemSelection.index + 1;
-                                                if (newIndex > pageSize - 1) {
-                                                    newIndex = pageSize - 1;
+                                                if (newIndex > itemCount - 1) {
+                                                    newIndex = itemCount - 1;
                                                 }
                                                 break;
                                             case 27: // escape
@@ -5721,7 +5721,6 @@ $(function (win, doc, $) {
                                         }
 
                                     }
-
 
                                 }
                             }
