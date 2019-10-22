@@ -172,7 +172,7 @@ namespace Plato.Metrics.Repositories
 		                r.[Name] AS [Aggregate],
 		                COUNT(m.Id) AS Count
 	                FROM 
-		                plato_Metrics m 
+		                {prefix}_Metrics m 
 		                RIGHT OUTER JOIN {prefix}_UserRoles ur ON ur.UserId = m.CreatedUserId
 		                RIGHT OUTER JOIN {prefix}_Roles r ON r.Id = ur.RoleId
                     WHERE 
