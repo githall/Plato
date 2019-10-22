@@ -280,19 +280,19 @@ $(function (win, doc, $) {
 
         var defaults = {
             valueField: "keywords",
+            page: 1,
+            pageSize: 5,
             config: {
                 method: "POST",
-                url: 'api/tags/tag/post',
+                url: 'api/tags/search',
                 data: {
-                    page: 1,
-                    size: 10,
                     keywords: "",
                     featureId: 0,
                     sort: "TotalEntities",
                     order: "Desc"
                 }
             },
-            itemTemplate: '<a class="{itemCss}" href="{url}">{name}</a>',
+            itemTemplate: '<a class="{itemCss}" href="{url}">{entities}{name}</a>',
             parseItemTemplate: function (html, result) {
 
                 if (result.id) {
@@ -305,6 +305,18 @@ $(function (win, doc, $) {
                     html = html.replace(/\{name}/g, app.text.htmlEncode(result.name));
                 } else {
                     html = html.replace(/\{name}/g, "(no name)");
+                }
+
+                if (result.entities && result.entities > 0) {
+                    html = html.replace(/\{entities}/g, '<span data-toggle="tooltip" title="' + app.T("Occurences") + '" class="float-right badge badge-primary">' + result.entities + '</span>');
+                } else {
+                    html = html.replace(/\{entities}/g, "0");
+                }
+
+                if (result.follows && result.follows > 0) {
+                    html = html.replace(/\{follows}/g, '<span data-toggle="tooltip" title="' + app.T("Followers") + '" class="float-right badge badge-primary ml-1">' + result.follows + '</span>');
+                } else {
+                    html = html.replace(/\{follows}/g, "0");
                 }
 
                 if (result.url) {
@@ -331,6 +343,7 @@ $(function (win, doc, $) {
                 if (func) {
                     return func(this);
                 }
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         this[methodName].apply(this, [$caller]);
@@ -340,15 +353,16 @@ $(function (win, doc, $) {
                     return null;
                 }
 
-                // A feature id can be set on the auto-complete input to restrict tags by feature
+                // A feature id can be set on the auto complete input 
+                // element to restrict results by a specific feature
                 if ($caller.data("featureId")) {
 
-                    // For get requests replace url
+                    // For GET requests replace url
                     if ($caller.data(dataKey).config.method.toUpperCase() === "GET") {
                         $caller.data(dataKey).config.url = config.url.replace("{featureId}", $caller.data("featureId"));
                     }
 
-                    // For post requests add to post object
+                    // For POST requests add to posted data
                     if ($caller.data(dataKey).config.method.toUpperCase() === "POST") {
                         $caller.data(dataKey).config.data["featureId"] = $caller.data("featureId");
                     }

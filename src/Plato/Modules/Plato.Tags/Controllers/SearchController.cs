@@ -15,14 +15,14 @@ using Plato.WebApi.Models;
 namespace Plato.Tags.Controllers
 {
 
-    public class TagController : BaseWebApiController
+    public class SearchController : BaseWebApiController
     {
 
         private readonly IShellFeatureStore<ShellFeature> _shellFeatureStore;
         private readonly ITagStore<TagBase> _tagStore;
         private readonly IContextFacade _contextFacade;
 
-        public TagController(
+        public SearchController(
             IShellFeatureStore<ShellFeature> shellFeatureStore,
             IContextFacade contextFacade,
             ITagStore<TagBase> tagStore)
@@ -33,7 +33,7 @@ namespace Plato.Tags.Controllers
         }        
 
         [HttpPost, ResponseCache(NoStore = true)]
-        public async Task<IActionResult> Post([FromBody] TagApiParams parameters)
+        public async Task<IActionResult> Index([FromBody] TagApiParams parameters)
         {
 
             // Get tags
@@ -73,6 +73,8 @@ namespace Plato.Tags.Controllers
                     {
                         Id = tag.Id,
                         Name = tag.Name,
+                        Entities = tag.TotalEntities.ToPrettyInt(),
+                        Follows = tag.TotalFollows.ToPrettyInt(),
                         Url = url
                     });
 
@@ -98,13 +100,7 @@ namespace Plato.Tags.Controllers
                 : base.NoResults();
 
         }
-
-        [HttpDelete, ResponseCache(NoStore = true)]
-        public Task<IActionResult> Delete(int id)
-        {
-            throw new NotImplementedException();
-        }        
-   
+           
         // ----------------
 
         async Task<IPagedResults<TagBase>> GetTags(TagApiParams parameters)

@@ -1204,33 +1204,42 @@ $(function (win, doc, $) {
 
                 var config = $.extend({}, $caller.data(dataKey).config),
                     url = $caller.data("pagedListUrl") || config.url,
-                    pageIndex = this.getPageIndex($caller) || 1,
-                    pageSize = this.getPageSize($caller) || 10;
-
-                // set content type for post data
+                    page = this.getPageIndex($caller) || 1,
+                    size = this.getPageSize($caller) || 10;
+                
                 if (config.method) {
-                    if (config.method.toUpperCase() === "POST") {
+
+                    // Set content type for post data
+                    if (config.method.toUpperCase() === "POST")
+                    {
                         config.headers = {
                             'Content-Type': 'application/json; charset=utf-8'
                         };
                     }
+
+                    if (config.method.toUpperCase() === "GET")
+                    {
+                        if (url) {
+                            if (url.indexOf("{page}") >= 0) {
+                                url = url.replace(/\{page}/g, page);
+                            }
+                            if (url.indexOf("{pageSize}") >= 0) {
+                                url = url.replace(/\{pageSize}/g, size);
+                            }
+                            config.url = url;
+                        }
+                    }
+                    else if (config.method.toUpperCase() === "POST")
+                    {
+                        config.data["page"] = page;
+                        config.data["size"] = size;
+                    }
+
                 }
 
-                // serialize post data 
+                // Finaly serialize post data 
                 if (typeof config.data !== "string") {
                     config.data = JSON.stringify(config.data);
-                }
-
-                if (url) {
-
-                    if (url.indexOf("{page}") >= 0) {
-                        url = url.replace(/\{page}/g, pageIndex);
-                    }
-                    if (url.indexOf("{pageSize}") >= 0) {
-                        url = url.replace(/\{pageSize}/g, pageSize);
-                    }
-
-                    config.url = url;
                 }
 
                 return config;
@@ -1361,6 +1370,8 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
+            page: 1, // the initial page
+            pageSize: 10, // number of results to display per page
             target: null, // optional target selector for auto complete results. if no target a dropdown-menu is used
             onShow: null, // triggers when the autocomplete target is displayed
             onHide: null, // triggers when the autocomplete target is hidden
@@ -1455,7 +1466,6 @@ $(function (win, doc, $) {
                                                 })
                                         },
                                         "setItemIndex");
-
 
                                 }
 
@@ -3558,11 +3568,11 @@ $(function (win, doc, $) {
                 var index = $caller.data(dataKey).highlightIndex,
                     $li = $caller.find("li:eq(" + index + ")");
                 if ($li.length > 0) {
-                    $li.addClass("bg-warning");
+                    $li.addClass("anim anim-2x anim-shake");
                     window.setTimeout(function() {
-                            $li.removeClass("bg-warning");
+                            $li.removeClass("anim anim-2x anim-shake");
                         },
-                        1000);
+                        250);
                 }
             },
             getInputLi: function($caller) {
