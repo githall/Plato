@@ -44,14 +44,14 @@ namespace Plato.Internal.Tasks
                 // constructed, in milliseconds. Specify Infinite to
                 // prevent the timer from restarting. Specify zero (0)
                 // to restart the timer immediately.
-                var dueTime = Options.RunOnStart ? 0 : Options.IntervalInSeconds * 1000;
+                var milliseconds = Options.RunOnStart ? 0 : Options.IntervalInSeconds * 1000;
          
-                _timer.Change(dueTime, Timeout.Infinite);
+                _timer.Change(milliseconds, Timeout.Infinite);
 
                 if (_logger.IsEnabled(LogLevel.Information))
                 {
-                    _logger.LogCritical(
-                        $"Started safe timer with dueTime of '{dueTime}' for type {Options.Owner?.ToString() ?? "Unknown"}.");
+                    _logger.LogInformation(
+                        $"Started safe timer with duration of '{milliseconds}ms' for type {Options.Owner?.ToString() ?? "Unknown"}.");
                 }
 
             }

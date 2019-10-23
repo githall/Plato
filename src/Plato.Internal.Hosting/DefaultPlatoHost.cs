@@ -14,39 +14,31 @@ namespace Plato.Internal.Hosting
     public class DefaultPlatoHost : IPlatoHost
     {
 
-        #region "Private Variables"
-
         private readonly IShellSettingsManager _shellSettingsManager;
         private readonly IShellContextFactory _shellContextFactory;
         private readonly IRunningShellTable _runningShellTable;
         private readonly IBackgroundTaskManager _taskManager;
         private readonly IBroker _broker;
         private readonly ILogger _logger;
-
+        
         static readonly object SyncLock = new object();
-        ConcurrentDictionary<string, ShellContext> _shellContexts;
-
-        #endregion
-
-        #region "Constructor"
+            ConcurrentDictionary<string, ShellContext> _shellContexts;
 
         public DefaultPlatoHost(
             IShellSettingsManager shellSettingsManager,
             IShellContextFactory shellContextFactory,
-            IRunningShellTable runningShellTable, 
+            IRunningShellTable runningShellTable,             
+            IBackgroundTaskManager taskManager,
             ILogger<DefaultPlatoHost> logger,
-            IBroker broker,
-            IBackgroundTaskManager taskManager)
+            IBroker broker)
         {
             _shellSettingsManager = shellSettingsManager;
             _shellContextFactory = shellContextFactory;
-            _runningShellTable = runningShellTable;
+            _runningShellTable = runningShellTable;        
+            _taskManager = taskManager;
             _logger = logger;
             _broker = broker;
-            _taskManager = taskManager;
         }
-
-        #endregion
 
         #region "Implementation"
 
@@ -76,7 +68,7 @@ namespace Plato.Internal.Hosting
             _shellSettingsManager.SaveSettings(settings);
             RecycleShellContext(settings);
         }
-        
+
         public ShellContext CreateShellContext(IShellSettings settings)
         {
             if (settings.State == TenantState.Uninitialized)

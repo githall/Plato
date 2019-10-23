@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Internal.Hosting.Web.Routing
 {
+
     public class PrefixedRouteBuilder : IRouteBuilder
     {
 

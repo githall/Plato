@@ -60,25 +60,24 @@ namespace Plato.Internal.Hosting.Web.Extensions
 
     public static class ServiceCollectionExtensions
     {
-        
+
         public static IServiceCollection AddPlato(this IServiceCollection services)
         {
             services.AddPlatoHost();
             services.ConfigureShell("Sites");
-            services.AddPlatoDataProtection();
-            services.AddPlatoAuthorization();
-            services.AddPlatoAuthentication();
-            services.AddPlatoMvc();
+            services.AddPlatoDataProtection();            
             return services;
         }
 
         public static IServiceCollection AddPlatoHost(this IServiceCollection services)
         {
+
             return services.AddHPlatoTennetHost(internalServices =>
             {
 
-                services.AddHttpContextAccessor();
-                internalServices.AddLogging();
+                // Mvc
+                // --------
+
                 internalServices.AddLogging(loggingBuilder =>
                 {
                     //loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
@@ -86,15 +85,18 @@ namespace Plato.Internal.Hosting.Web.Extensions
                     loggingBuilder.AddDebug();
                 });
 
+                internalServices.AddHttpContextAccessor();
+                internalServices.AddOptions();
+                internalServices.AddLocalization(options => options.ResourcesPath = "Resources");
+
+                // Plato
+                // --------
+
                 internalServices.AddSingleton<IHostEnvironment, WebHostEnvironment>();
                 internalServices.AddSingleton<IPlatoFileSystem, HostedFileSystem>();
+                internalServices.AddPlatoOptions();
                 internalServices.AddPlatoContextAccessor();
                 internalServices.AddPlatoRouting();
-
-                internalServices.AddOptions();
-                internalServices.AddLocalization();
-                
-                internalServices.AddPlatoOptions();
                 internalServices.AddPlatoLocalization();
                 internalServices.AddPlatoCaching();
                 internalServices.AddPlatoText();
@@ -118,6 +120,9 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 internalServices.AddPlatoDrawing();
                 internalServices.AddPlatoTasks();
                 internalServices.AddPlatoSearch();
+                internalServices.AddPlatoAuthorization();
+                internalServices.AddPlatoAuthentication();
+                internalServices.AddPlatoMvc();
 
             });
 
@@ -140,6 +145,12 @@ namespace Plato.Internal.Hosting.Web.Extensions
 
             return services;
 
+        }
+
+        public static IServiceCollection AddPlatoOptions(this IServiceCollection services)
+        {
+            services.AddSingleton<IConfigureOptions<PlatoOptions>, PlatoOptionsConfiguration>();
+            return services;
         }
 
         public static IServiceCollection AddPlatoAuthentication(this IServiceCollection services)
@@ -195,9 +206,6 @@ namespace Plato.Internal.Hosting.Web.Extensions
             // Add mvc core services
             // --------------
 
-            // localization
-            services.AddLocalization(options => options.ResourcesPath = "Resources");
-
             // Razor & Views
             var builder = services
                 .AddMvcCore()
@@ -217,7 +225,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
             services.AddPlatoViewAdapters();
 
             // Add module mvc
-            services.AddPlatoModuleMvc();
+            services.AddPlatoModularMvc();
 
             // Custom view model valiation
             services.AddPlatoModelValidation();
@@ -228,7 +236,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
             return services;
 
         }
-        
+
         private static IServiceCollection AddPlatoModularAppParts(this IServiceCollection services, ApplicationPartManager partManager)
         {
             var serviceProvider = services.BuildServiceProvider();
@@ -236,15 +244,15 @@ namespace Plato.Internal.Hosting.Web.Extensions
             partManager.FeatureProviders.Add(new ModuleViewFeatureProvider(serviceProvider));
             return services;
         }
-          
-        public static IServiceCollection AddPlatoModuleMvc(this IServiceCollection services)
+
+        public static IServiceCollection AddPlatoModularMvc(this IServiceCollection services)
         {
-            
-            // Location expander            
+
+            // Location expanders            
             services.AddScoped<IViewLocationExpanderProvider, ModularViewLocationExpander>();
             services.AddScoped<IViewLocationExpanderProvider, AreaViewLocationExpander>();
-                        
-            // Configure Razor options
+
+            // Configure razor options
             services.Configure<RazorViewEngineOptions>(options =>
             {
 
@@ -289,7 +297,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 .Where(x => !x.IsDynamic && !string.IsNullOrWhiteSpace(x.Location))
                 .Select(x => MetadataReference.CreateFromFile(x.Location))
                 .ToList();
-                 
+
             foreach (var moduleReference in moduleReferences)
             {
                 // TODO: Need to resolve for .NET 3.0 - AdditionalCompilationReferences is marked obsolete in 2.2.1
@@ -303,12 +311,6 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 options.AdditionalCompilationReferences.Add(moduleReference);
             }
 
-        }
-
-        public static IServiceCollection AddPlatoOptions(this IServiceCollection services)
-        {
-            services.AddSingleton<IConfigureOptions<PlatoOptions>, PlatoOptionsConfiguration>();
-            return services;
         }
 
         public static IServiceCollection AddPlatoRouting(this IServiceCollection services)

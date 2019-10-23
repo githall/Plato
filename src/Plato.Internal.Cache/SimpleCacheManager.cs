@@ -19,7 +19,7 @@ namespace Plato.Internal.Cache
     {
 
         public static ConcurrentDictionary<CacheToken, Type> Tokens { get; } =
-       new ConcurrentDictionary<CacheToken, Type>();
+            new ConcurrentDictionary<CacheToken, Type>();
         
         private readonly ICacheDependency _cacheDependency;
         private readonly ILogger<CacheManager> _logger;
@@ -127,6 +127,8 @@ namespace Plato.Internal.Cache
 
         }
 
+        // -------------
+
         IEnumerable<CacheToken> GetTokensForType(Type type)
         {
             return Tokens
@@ -134,7 +136,6 @@ namespace Plato.Internal.Cache
                 .Select(c => c.Key)
                 .ToList();
         }
-
 
     }
 

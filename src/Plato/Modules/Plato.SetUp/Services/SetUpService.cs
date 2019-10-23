@@ -16,17 +16,17 @@ namespace Plato.SetUp.Services
 
         private const string TablePrefixSeparator = "_";
 
-        private readonly IShellSettings _shellSettings;
         private readonly IShellContextFactory _shellContextFactory;
+        private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
-        public SetUpService(
-            IShellSettings shellSettings,
+        public SetUpService(            
             IShellContextFactory shellContextFactory,
+            IShellSettings shellSettings,
             IPlatoHost platoHost)
-        {
-            _shellSettings = shellSettings;
+        {            
             _shellContextFactory = shellContextFactory;
+            _shellSettings = shellSettings;
             _platoHost = platoHost;
         }
 
@@ -50,9 +50,13 @@ namespace Plato.SetUp.Services
 
             // Set shell state to "Initializing" so that subsequent HTTP requests are responded to with "Service Unavailable" while Orchard is setting up.
             _shellSettings.State = TenantState.Initializing;
-            
-            var shellSettings = new ShellSettings(_shellSettings.Configuration);
-            
+
+            var executionId = Guid.NewGuid().ToString("n");
+
+            var shellSettings = new ShellSettings(_shellSettings.Configuration);           
+            shellSettings.Name = context.SiteName;
+            shellSettings.Location = context.SiteName.ToSafeFileName();
+
             if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))
             {
                 var tablePrefix = context.DatabaseTablePrefix;
@@ -62,11 +66,7 @@ namespace Plato.SetUp.Services
                 shellSettings.ConnectionString = context.DatabaseConnectionString;
                 shellSettings.TablePrefix = tablePrefix;
             }
-
-            var executionId = Guid.NewGuid().ToString("n");
-
-            shellSettings.Location = context.SiteName;
-            
+       
             using (var shellContext = _shellContextFactory.CreateMinimalShellContext(shellSettings))
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
@@ -112,10 +112,11 @@ namespace Plato.SetUp.Services
 
             shellSettings.State = TenantState.Running;
             _platoHost.UpdateShellSettings(shellSettings);
-            
+
             return executionId;
 
         }
-        
+
     }
+
 }

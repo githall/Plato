@@ -17,6 +17,7 @@ namespace Plato.Internal.Cache.Abstractions
         void CancelTokens(Type type);
 
         void CancelTokens(Type type, params object[] varyBy);
+
     }
 
 }

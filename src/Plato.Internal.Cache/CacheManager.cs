@@ -163,7 +163,7 @@ namespace Plato.Internal.Cache
         }
 
         // ----------------
-        
+
         T GetFromCache<T>(string key)
         {
             try
