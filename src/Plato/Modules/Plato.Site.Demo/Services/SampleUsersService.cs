@@ -172,7 +172,8 @@ namespace Plato.Site.Demo.Services
                     UserName = userName,
                     Email = email,
                     Password = password,
-                    DisplayName = userName
+                    DisplayName = userName,
+                    EmailConfirmed = true
                 });
             }
 

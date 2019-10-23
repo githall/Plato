@@ -8,7 +8,7 @@ using Plato.Internal.Security.Abstractions;
 
 namespace Plato.Metrics.Repositories
 {
-    
+
     public class AggregatedMetricsRepository : IAggregatedMetricsRepository
     {
 

@@ -144,7 +144,8 @@ namespace Plato.Site.Demo.Services
 
             if (feature == null)
             {
-                return output.Failed($"The feature {descriptor.ModuleId} is not enabled!");
+                // Skip faeture if not enabled
+                return output.Success();
             }
 
             // If we add sample entities multiple times ensure the sort order
