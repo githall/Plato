@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Plato.Internal.Abstractions.Extensions;
@@ -53,8 +54,7 @@ namespace Plato.SetUp.Services
 
             var executionId = Guid.NewGuid().ToString("n");
 
-            var shellSettings = new ShellSettings(_shellSettings.Configuration);           
-            shellSettings.Name = context.SiteName;
+            var shellSettings = new ShellSettings(_shellSettings.Configuration);
             shellSettings.Location = context.SiteName.ToSafeFileName();
 
             if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))
@@ -71,6 +71,7 @@ namespace Plato.SetUp.Services
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
                 {
+
                     using (var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>())
                     {
 

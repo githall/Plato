@@ -63,9 +63,10 @@ namespace Plato.Internal.Hosting.Web.Extensions
 
         public static IServiceCollection AddPlato(this IServiceCollection services)
         {
+            services.ConfigureShell("Sites");            
+            services.AddHttpContextAccessor();
+            services.AddPlatoDataProtection();
             services.AddPlatoHost();
-            services.ConfigureShell("Sites");
-            services.AddPlatoDataProtection();            
             return services;
         }
 
@@ -84,8 +85,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
                     loggingBuilder.AddConsole();
                     loggingBuilder.AddDebug();
                 });
-
-                internalServices.AddHttpContextAccessor();
+                                
                 internalServices.AddOptions();
                 internalServices.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -162,11 +162,11 @@ namespace Plato.Internal.Hosting.Web.Extensions
 
             // Configure authentication services
             services.AddAuthentication(options =>
-                {
-                    options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-                    options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-                    options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-                })
+            {
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
+            })
                 .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
                     options => { options.LoginPath = new PathString("/login"); })
                 .AddCookie(IdentityConstants.ApplicationScheme, options =>
@@ -271,7 +271,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
 
             });
 
-            // implement our own conventions to automatically add [areas] route attributes
+            // Implement our own conventions to automatically add [areas] route attributes
             // https://docs.microsoft.com/en-us/aspnet/core/mvc/controllers/application-model?view=aspnetcore-2.1
             services.TryAddEnumerable(ServiceDescriptor
                 .Transient<IApplicationModelProvider, ModuleApplicationModelProvider>());
@@ -284,14 +284,14 @@ namespace Plato.Internal.Hosting.Web.Extensions
         {
 
             // We don't need this for production as views are pre-compiled
-            var hostingEnvironment = services.BuildServiceProvider().GetService<IHostingEnvironment>();            
+            var hostingEnvironment = services.BuildServiceProvider().GetService<IHostingEnvironment>();
             if (!hostingEnvironment.IsDevelopment())
             {
                 return;
             }
 
-            //Ensure loaded modules are aware of current context
-            var moduleManager = services.BuildServiceProvider().GetService<IModuleManager>();            
+            // Ensure loaded modules are aware of current context
+            var moduleManager = services.BuildServiceProvider().GetService<IModuleManager>();
             var assemblies = moduleManager.LoadModuleAssembliesAsync().Result;
             var moduleReferences = assemblies
                 .Where(x => !x.IsDynamic && !string.IsNullOrWhiteSpace(x.Location))

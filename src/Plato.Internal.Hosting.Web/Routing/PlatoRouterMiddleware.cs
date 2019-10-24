@@ -17,18 +17,16 @@ namespace Plato.Internal.Hosting.Web.Routing
     public class PlatoRouterMiddleware
     {
 
-        private readonly Dictionary<string, RequestDelegate> _pipelines = 
-            new Dictionary<string, RequestDelegate>();
-
         private readonly RequestDelegate _next;
+        private readonly Dictionary<string, RequestDelegate> _pipelines = new Dictionary<string, RequestDelegate>();
         private readonly ILogger _logger;
 
-        public PlatoRouterMiddleware(            
-            ILogger<PlatoRouterMiddleware> logger,
-            RequestDelegate next)
-        {            
-            _logger = logger;
+        public PlatoRouterMiddleware(
+            RequestDelegate next,
+            ILogger<PlatoRouterMiddleware> logger)
+        {
             _next = next;
+            _logger = logger;
         }
 
         public async Task Invoke(HttpContext context)

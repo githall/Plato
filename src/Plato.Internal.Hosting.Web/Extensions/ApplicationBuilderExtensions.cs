@@ -41,20 +41,20 @@ namespace Plato.Internal.Hosting.Web.Extensions
             // UseStatusCodePages should be called before any request
             // handling middleware in the pipeline (for example,
             // Static File middleware and MVC middleware).
-            //app.UseStatusCodePages(context =>
-            //{
-            //    switch (context.HttpContext.Response.StatusCode)
-            //    {
-            //        case 401:
-            //            context.HttpContext.Response.Redirect("/denied");
-            //            break;
-            //        case 404:
-            //            context.HttpContext.Response.Redirect("/moved");
-            //            break;
-            //    }
+            app.UseStatusCodePages(context =>
+            {
+                switch (context.HttpContext.Response.StatusCode)
+                {
+                    case 401:
+                        context.HttpContext.Response.Redirect("/denied");
+                        break;
+                    case 404:
+                        context.HttpContext.Response.Redirect("/moved");
+                        break;
+                }
 
-            //    return Task.CompletedTask;
-            //});
+                return Task.CompletedTask;
+            });
 
             // Add authentication middleware
             app.UseAuthentication();
