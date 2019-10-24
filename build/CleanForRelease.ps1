@@ -36,9 +36,13 @@ if($FoldersToRemove -ne $null)
     Write-Host 
 	foreach ($item in $FoldersToRemove) 
 	{ 
-		remove-item $item -Force -Recurse;
-		Write-Host "Removed: ." -nonewline; 
-		Write-Host $item.replace($CurrentPath, ""); 
+        if (Test-Path -Path $item -PathType Container)
+        {
+        	remove-item $item -Force -Recurse;
+		    Write-Host "Removed: ." -nonewline; 
+		    Write-Host $item.replace($CurrentPath, ""); 
+        }
+	
 	} 
 }
 

@@ -3,7 +3,6 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.DependencyInjection;
 using Plato.Internal.Cache.Abstractions;
 
-
 namespace Plato.Internal.Cache.Extensions
 {
     public static class ServiceCollectionExtensions
