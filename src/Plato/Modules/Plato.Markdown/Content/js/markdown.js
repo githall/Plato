@@ -794,10 +794,10 @@
                             };
 
                         }
-
+                                                
                         options.dropZoneOptions.init = function() {
 
-                            var caretPos = 0,
+                            var caretPos = 0,                                
                                 allowedUploadExtensions = options.allowedUploadExtensions;
 
                             this.on('addedfile',
@@ -844,29 +844,27 @@
 
                                         if (response && response.result) {
                                             for (var i = 0; i < response.result.length; i++) {
-                                                var result = response.result[i];
-                                                if (result.id > 0) {
-                                                    var text = textarea.val();
 
+                                                var result = response.result[i],
+                                                    text = textarea.val(),
+                                                    chunk = "";
+
+                                                if (result.id > 0) {
+
+                                                    // Image or file?
                                                     if (result.isImage) {
-                                                        textarea.val(text.substring(0, caretPos) +
-                                                            '![' +
-                                                            result.name +
-                                                            '](/media/' +
-                                                            result.id +
-                                                            ')' +
-                                                            text.substring(caretPos));
+                                                        chunk ='![' + result.name + '](/media/' + result.id + ')';
                                                     } else {
-                                                        textarea.val(text.substring(0, caretPos) +
-                                                            '[' +
-                                                            result.name +
-                                                            '](/media/' +
-                                                            result.id +
-                                                            ') - ' +
-                                                            result.friendlySize +
-                                                            text.substring(caretPos));
+                                                        chunk = '[' + result.name + '](/media/' + result.id + ') - ' + result.friendlySize;
                                                     }
 
+                                                    // Add markdown
+                                                    textarea.val(text.substring(0, caretPos) +
+                                                        chunk +
+                                                        text.substring(caretPos));
+
+                                                    // Set the cursor at the end of the newly inserted markdown tag
+                                                    instance.setSelection(caretPos + chunk.length, caretPos + chunk.length);
 
                                                 }
                                             }
