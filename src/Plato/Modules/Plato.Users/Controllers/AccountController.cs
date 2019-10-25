@@ -410,7 +410,7 @@ namespace Plato.Users.Controllers
 
             return RedirectToAction(nameof(ConfirmEmailConfirmation));
         }
-        
+
         [HttpGet, AllowAnonymous]
         public IActionResult ConfirmEmailConfirmation()
         {
@@ -429,7 +429,7 @@ namespace Plato.Users.Controllers
 
             return View();
         }
-        
+
         // -----------------
         // Activate Account
         // -----------------

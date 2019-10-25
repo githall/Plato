@@ -95,17 +95,20 @@ $(function (win, doc, $) {
 
                 var $content = $template.find(".lightbox-content");
                 if ($content.length > 0) {
-                    $content.empty().append($("<img/>",
+                    var $img = $("<img/>",
                         {
                             "src": $link.attr("href"),
                             "title": $link.attr("title") || ""
-                        }));
+                        });
+                    $img.css({
+                        "maxHeight": $(win).height()
+                    });
+                    $content.empty().append($img);
                 }
 
                 if (!$template.hasClass("lightbox-opened")) {
                     $template.addClass("lightbox-opened");
                 }
-
 
             },
             close: function ($caller) {

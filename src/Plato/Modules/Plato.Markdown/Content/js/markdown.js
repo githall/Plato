@@ -769,8 +769,6 @@
             // disable disabled buttons from options
             this.disableButtons(options.disabledButtons);
 
-            console.log(this.$editor.dropzone);
-
             // enable dropZone if available and configured
             if (options.dropZoneOptions) {
                 if (this.$editor.dropzone) {
@@ -909,7 +907,9 @@
                     for (var index in items) {
                         var item = items[index];
                         if (item.kind === 'file') {
-                            // add file to dropzone instance
+                            // Ensure text area has focus
+                            textarea.focus();
+                            // Add file via dropzone instance                            
                             $(this).data("dropzone").addFile(item.getAsFile());
                         }
                     }
