@@ -6,7 +6,8 @@
     <span asp-validation-for="UserName" class="text-danger"></span>
     <input asp-for="UserName" autocomplete="off" value="@Model.UserName" placeholder="@T["Username"]" class="form-control" autofocus />
 </div>
-<div class="form-group">
+<div class="form-group">    
+    <a class="col-form-label float-right" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="ForgotPassword" asp-route-returnurl="@ViewData["ReturnUrl"]">@T["Forgot your password?"]</a>    
     <label class="col-form-label font-weight-bold">@T["Password"]</label>
     <span asp-validation-for="Password" class="text-danger"></span>
     <input asp-for="Password" autocomplete="off" class="form-control" placeholder="@T["Password"]" />
