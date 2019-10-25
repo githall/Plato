@@ -2497,6 +2497,7 @@ $(function (win, doc, $) {
             loaderSelector: ".infinite-scroll-loader",
             loaderTemplate: '<p class="text-center"><i class="fal fa-2x fa-spinner fa-spin py-5"></i></p>',
             onPageLoaded: null,
+            onStateUpdated: null,
             css: {
                 item: "infinite-scroll-item",
                 active: "infinite-scroll-item-active",
@@ -2860,7 +2861,9 @@ $(function (win, doc, $) {
                 // Iterate each offset marker and detect the first
                 // visible marker within the client viewport
                 var $marker = null,
+                    url = "",
                     $markers = methods.getOffsetMarkers($caller);
+
                 if ($markers) {
                     $markers.each(function() {
                         if (methods.isElementInViewPort($caller, this)) {
@@ -2870,16 +2873,25 @@ $(function (win, doc, $) {
                     });
                 }
 
-                // Ensure we found a marker
-                if ($marker) {
-                    // Update url with offset if valid
+                // Ensure we found a valid offset marker
+                if ($marker) {               
                     var offset = parseInt($marker.data("infiniteScrollOffset"));
                     if (!isNaN(offset)) {
-
-                        // Use replaceState to ensure the address bar is updated
-                        // but we don't actually add new history state
-                        history.replaceState(state, doc.title, methods.getStateUrl($caller, offset));
+                        url = methods.getStateUrl($caller, offset);
+                    } else {
+                        url = methods.getStateUrl($caller);
                     }
+                } else {
+                    url = methods.getStateUrl($caller);
+                }
+
+                // Use replaceState to ensure the address bar is updated
+                // but we don't actually add new history state
+                history.replaceState(state, doc.title, url);
+
+                // Raise state updated event
+                if ($caller.data(dataKey).onStateUpdated) {
+                    $caller.data(dataKey).onStateUpdated($caller, state);
                 }
 
             },
@@ -2924,7 +2936,8 @@ $(function (win, doc, $) {
                   
                 }
 
-                var url = methods.getUrl($caller), parts = getUrl(url);
+                var url = methods.getUrl($caller),
+                    parts = getUrl(url);
                 
                 // Append offset if supplied
                 var offsetString = "";
