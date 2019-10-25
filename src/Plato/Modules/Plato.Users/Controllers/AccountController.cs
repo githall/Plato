@@ -371,8 +371,11 @@ namespace Plato.Users.Controllers
             {
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Home", "Plato.Core")
-                    .LocalNav()
-                ).Add(S["Confirm Email"]);
+                    .LocalNav())
+                .Add(S["Login"], login => login
+                    .Action("Login", "Account", "Plato.Users")
+                    .LocalNav())
+                .Add(S["Confirm Email"]);
             });
 
             return View(new ConfirmEmailViewModel());
@@ -417,8 +420,11 @@ namespace Plato.Users.Controllers
             {
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Home", "Plato.Core")
-                    .LocalNav()
-                ).Add(S["Confirm Email"]);
+                    .LocalNav())
+                .Add(S["Login"], login => login
+                    .Action("Login", "Account", "Plato.Users")
+                    .LocalNav())
+                .Add(S["Confirm Email"]);
             });
 
             return View();
@@ -535,8 +541,11 @@ namespace Plato.Users.Controllers
             {
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Home", "Plato.Core")
-                    .LocalNav()
-                ).Add(S["Forgot Password"]);
+                    .LocalNav())
+                .Add(S["Login"], login => login
+                    .Action("Login", "Account", "Plato.Users")
+                    .LocalNav())
+                .Add(S["Forgot Password"]);
             });
             
             return View(new ForgotPasswordViewModel());
@@ -586,8 +595,11 @@ namespace Plato.Users.Controllers
             {
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Home", "Plato.Core")
-                    .LocalNav()
-                ).Add(S["Forgot Password"]);
+                    .LocalNav())
+                .Add(S["Login"], login => login
+                    .Action("Login", "Account", "Plato.Users")
+                    .LocalNav())
+                .Add(S["Forgot Password"]);
             });
 
             return View();
@@ -606,8 +618,8 @@ namespace Plato.Users.Controllers
             {
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Home", "Plato.Core")
-                    .LocalNav()
-                ).Add(S["Reset Password"]);
+                    .LocalNav())              
+                .Add(S["Reset Password"]);
             });
 
             // Check token
