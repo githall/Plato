@@ -769,6 +769,8 @@
             // disable disabled buttons from options
             this.disableButtons(options.disabledButtons);
 
+            console.log(this.$editor.dropzone);
+
             // enable dropZone if available and configured
             if (options.dropZoneOptions) {
                 if (this.$editor.dropzone) {
@@ -881,8 +883,15 @@
                         };
                     }
 
-                    this.$editor.find(".md-dropzone").addClass('dropzone');
-                    this.$editor.find(".md-dropzone").dropzone(options.dropZoneOptions);
+                    // Init dropzone
+                    var $dropzone = this.$editor.find(".md-dropzone"),
+                        dropzone = new Dropzone($dropzone[0], options.dropZoneOptions);
+
+                    // Add dropzone css
+                    $dropzone.addClass('dropzone');
+
+                    // Store dropzone object in data for access within event handlers (i.e. paste)
+                    this.$editor.data("dropzone", dropzone);
 
                     // disable any links witin dropzone message area (i.e. Browse to select)
                     this.$editor.find(".dz-message").find("a").addClass("dz-clickable");
@@ -895,7 +904,7 @@
                 }
             }
 
-            // paste handler
+            // Paste handler
             this.$editor.on('paste',
                 function(event) {
                     var items = (event.clipboardData || event.originalEvent.clipboardData).items;
@@ -903,7 +912,7 @@
                         var item = items[index];
                         if (item.kind === 'file') {
                             // add file to dropzone instance
-                            this.dropzone.addFile(item.getAsFile());
+                            $(this).data("dropzone").addFile(item.getAsFile());
                         }
                     }
                 });
