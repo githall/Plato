@@ -2,17 +2,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Plato.Internal.Assets.Abstractions;
 using Plato.Internal.Models.Shell;
 using Plato.Internal.Hosting.Abstractions;
-using Plato.Media.LightBox.Assets;
+using Plato.Internal.Assets.Abstractions;
+using Plato.Anchorific.Assets;
 
-namespace Plato.Media.Lightbox
+namespace Plato.Anchorific
 {
 
     public class Startup : StartupBase
     {
-
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)

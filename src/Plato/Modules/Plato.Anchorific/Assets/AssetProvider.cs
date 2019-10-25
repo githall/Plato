@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Plato.Internal.Assets.Abstractions;
 
-namespace Plato.Media.LightBox.Assets
+namespace Plato.Anchorific.Assets
 {
     public class AssetProvider : IAssetProvider
     {
@@ -17,13 +17,13 @@ namespace Plato.Media.LightBox.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/js/lightbox.js",
+                        Url = "/plato.anchorific/content/js/anchorific.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/css/lightbox.css",
+                        Url = "/plato.anchorific/content/css/anchorific.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     }
@@ -34,13 +34,13 @@ namespace Plato.Media.LightBox.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/js/lightbox.js",
+                        Url = "/plato.anchorific/content/js/anchorific.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/css/lightbox.css",
+                        Url = "/plato.anchorific/content/css/anchorific.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     }
@@ -51,13 +51,13 @@ namespace Plato.Media.LightBox.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/js/lightbox.js",
+                        Url = "/plato.anchorific/content/js/anchorific.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/css/lightbox.css",
+                        Url = "/plato.anchorific/content/css/anchorific.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     }
