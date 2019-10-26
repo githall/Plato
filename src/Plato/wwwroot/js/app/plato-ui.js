@@ -2630,9 +2630,23 @@ $(function (win, doc, $) {
                     var $marker = methods.getOffsetMarker($caller, methods._offset),
                         $highlight = methods.getHighlightMarker($caller, methods._offset);
                     if ($marker && $highlight) {
+
+                        // If we have an anchor check to se if the anchor exists within the 
+                        // targeted inifiniteScroll element to highlight and if so scroll 
+                        // to the anchor instead of the inifiniteScroll marker
+                        var $anchor = null,
+                            hash = win.location.hash;
+                        if (hash && hash !== "") {                        
+                            $anchor = $highlight.find(hash);
+                            if ($anchor.length === 0) {
+                                $anchor = null;
+                            }
+                        }
+
+                        // Scroll to offset or anchor and deactivate hihlight
                         $().scrollTo({
                                 offset: -$caller.data(dataKey).scrollSpacing,
-                                target: $marker,
+                                target: $anchor !== null ? $anchor : $marker,
                                 onComplete: function() {
                                     // Apply css to deactivate selected offset css (set server side)
                                     // Css can be applied directly to marker or a child of the marker
@@ -2907,7 +2921,7 @@ $(function (win, doc, $) {
                 }
 
                 return {
-                    url: parts.url + offsetString + parts.qs,
+                    url: parts.url + offsetString + parts.qs + win.location.hash,
                     parts: parts
                 };                
 

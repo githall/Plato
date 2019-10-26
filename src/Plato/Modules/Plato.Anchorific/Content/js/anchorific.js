@@ -270,6 +270,7 @@ if (typeof Object.create !== 'function') {
 
     var app = win.$.Plato,
         $currentAnchor = null,
+        offset = 120,
         opts = {
             navigation: '.anchorific', // position of navigation
             headers: 'h1, h2, h3, h4, h5, h6', // headers that you wish to target      
@@ -277,7 +278,7 @@ if (typeof Object.create !== 'function') {
             anchorText: '#', // prepended or appended to anchor headings         
             spy: true, // scroll spy
             position: 'append', // position of anchor text
-            spyOffset: 120, // specify heading offset for spy scrolling
+            spyOffset: offset, // specify heading offset for spy scrolling
             onAnchorClick: function ($anchor, e) {          
 
                 e.preventDefault();
@@ -287,7 +288,7 @@ if (typeof Object.create !== 'function') {
 
                 // Scroll to clicked anchor
                 $().scrollTo({
-                    offset: -120,
+                    offset: -offset,
                     target: $anchor
                 }, "go");
 
@@ -297,7 +298,7 @@ if (typeof Object.create !== 'function') {
     app.ready(function () {
 
         // Add table of contents generated from headers
-        $("body").append($('<nav class="anchorific"></nav>'));        
+        //$("body").append($('<nav class="anchorific"></nav>'));        
 
         // anchorific
         $('[data-provide="markdownBody"]')
@@ -333,9 +334,6 @@ if (typeof Object.create !== 'function') {
                     stateParts.parts.qs +
                     $currentAnchor.attr("href");
                 history.replaceState(state, doc.title, anchorUrl);
-                console.log(anchorUrl);
-             
-                
 
             }
         }, function ($ele) {

@@ -1,4 +1,13 @@
 ﻿
+h1:hover a.anchor,
+h2:hover a.anchor,
+h3:hover a.anchor,
+h4:hover a.anchor,
+h5:hover a.anchor,
+h6:hover a.anchor {
+    display: inline-block;
+}
+
 a.anchor {
     text-decoration: none;
     padding-left: 1%;
@@ -6,9 +15,10 @@ a.anchor {
     color: #238b90;
     font-weight: none;
     font-size: 1em;
+    display:none;
 }
 
-a:hover.anchor {
+a.anchor:hover {
     opacity: 1;
 }
 
