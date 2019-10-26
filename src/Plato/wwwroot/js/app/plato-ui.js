@@ -2496,8 +2496,7 @@ $(function (win, doc, $) {
             pagerKey: "pager.page",
             loaderSelector: ".infinite-scroll-loader",
             loaderTemplate: '<p class="text-center"><i class="fal fa-2x fa-spinner fa-spin py-5"></i></p>',
-            onPageLoaded: null,
-            onStateUpdated: null,
+            onPageLoaded: null,       
             css: {
                 item: "infinite-scroll-item",
                 active: "infinite-scroll-item-active",
@@ -2509,7 +2508,7 @@ $(function (win, doc, $) {
             _loading: false, // track loading state
             _page: 1, // current page
             _rowOffset: 0, // starting row offset
-            _offset: 0, // optional selected offset
+            _offset: 0, // optional selected offset            
             _totalPages: 1, // total pages
             _loadedPages: [], // keep track of which pages have been loaded
             _readyList: [], // functions to execute when dom is updated
@@ -2574,7 +2573,7 @@ $(function (win, doc, $) {
 
                     // Bind scroll events
                     $(win).scrollSpy({
-                        onScrollEnd: function() {
+                        onScrollEnd: function () {                            
                             methods.updateState($caller);
                         },
                         onScroll: function(spy, e, $win) {
@@ -2875,7 +2874,7 @@ $(function (win, doc, $) {
                 // Iterate each offset marker and detect the first
                 // visible marker within the client viewport
                 var $marker = null,
-                    stateParts = null,
+                    url = null,
                     $markers = methods.getOffsetMarkers($caller);
 
                 if ($markers) {
@@ -2887,26 +2886,22 @@ $(function (win, doc, $) {
                     });
                 }
 
-                // Ensure we found a valid offset marker
-                if ($marker) {               
+                // Ensure a marker is visible within the viewport
+                if ($marker) {      
+
+                    // Ensure we can parse the marker offset
                     var offset = parseInt($marker.data("infiniteScrollOffset"));
                     if (!isNaN(offset)) {
-                        stateParts = methods.getStateUrl($caller, offset);
+                        url = methods.getStateUrl($caller, offset);
                     } else {
-                        stateParts = methods.getStateUrl($caller);
+                        url = methods.getStateUrl($caller);
                     }
-                } else {
-                    stateParts = methods.getStateUrl($caller);
-                }
 
-                // Use replaceState to ensure the address bar is updated
-                // but we don't actually add new history state
-                history.replaceState(state, doc.title, stateParts.url);
+                    // Use replaceState to ensure the address bar is updated
+                    // but we don't actually add new history state
+                    win.history.replaceState(state, doc.title, url);
 
-                // Raise state updated event
-                if ($caller.data(dataKey).onStateUpdated) {
-                    $caller.data(dataKey).onStateUpdated($caller, state, stateParts);
-                }
+                } 
 
             },
             getStateUrl: function($caller, offset) {
@@ -2920,10 +2915,7 @@ $(function (win, doc, $) {
                     offsetString = "/" + offset.toString();
                 }
 
-                return {
-                    url: parts.url + offsetString + parts.qs + win.location.hash,
-                    parts: parts
-                };                
+                return parts.url + offsetString + parts.qs;
 
             },
             resetState: function($caller) {
@@ -2931,7 +2923,7 @@ $(function (win, doc, $) {
                 $(win).scrollSpy("stop");
                 // Clear offset
                 if (state) {
-                    history.replaceState(state, doc.title, methods.getStateUrl($caller).url);
+                    win.history.replaceState(state, doc.title, methods.getStateUrl($caller));
                 }
             },
             scrollToPage: function($caller, pageNumber) {

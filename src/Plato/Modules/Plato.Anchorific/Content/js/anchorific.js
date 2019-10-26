@@ -11,28 +11,23 @@ if (typeof Object.create !== 'function') {
 
     "use strict";
 
-    var state = win.history.state || {},
-        anchorific = function (options) {
+    var anchorific = function () {
 
             var dataKey = "anchorific",
                 dataIdKey = dataKey + "Id";
 
             var defaults = {
                 navigation: '.anchorific', // position of navigation
-                headers: 'h1, h2, h3, h4, h5, h6', // custom headers selector
-                speed: 200, // speed of sliding back to top
+                headers: 'h1, h2, h3, h4, h5, h6', // custom headers selector                
                 anchorClass: 'anchor', // class of anchor links
-                anchorText: '#', // prepended or appended to anchor headings
-                top: '.top', // back to top button or link class
+                anchorText: '#', // prepended or appended to anchor headings                
                 spy: true, // scroll spy
                 position: 'append', // position of anchor text
                 spyOffset: !0, // specify heading offset for spy scrolling
-                onAnchorClick: null
+                onAnchorClick: null // triggers when an acnhor link is clicked
             };
 
-            var methods = {    
-                opt: defaults,
-                $anchor: null,
+            var methods = {
                 init: function ($caller, methodName) {
 
                     if (methodName) {
@@ -74,16 +69,17 @@ if (typeof Object.create !== 'function') {
                         };
                     }
 
+                    // Build navigation & anchors
                     for (var i = 0; i < self.headers.length; i++) {
                         obj = self.headers.eq(i);
                         navigations($caller, obj);
                         self.anchor($caller, obj);
                     }
 
-                    if (self.opt.spy) {
+                    if ($caller.data(dataKey).spy) {
                         self.spy($caller);
                     }
-                        
+                    
                 },
                 navigations: function ($caller, obj) {
 
@@ -178,7 +174,7 @@ if (typeof Object.create !== 'function') {
 
                         // get the header on top of the viewport
                         current = self.headers.map(function (e) {
-                            if (($(this).offset().top - $(win).scrollTop()) < $caller.data(dataKey).spyOffset) {
+                            if ($(this).offset().top - $(win).scrollTop() < $caller.data(dataKey).spyOffset) {
                                 return this;
                             }
                         });
@@ -269,7 +265,7 @@ if (typeof Object.create !== 'function') {
     // ---------------
 
     var app = win.$.Plato,
-        $currentAnchor = null,
+        state = win.history.state || {},        
         offset = 120,
         opts = {
             navigation: '.anchorific', // position of navigation
@@ -279,17 +275,47 @@ if (typeof Object.create !== 'function') {
             spy: true, // scroll spy
             position: 'append', // position of anchor text
             spyOffset: offset, // specify heading offset for spy scrolling
-            onAnchorClick: function ($anchor, e) {          
+            onAnchorClick: function ($anchor, e) {                      
 
                 e.preventDefault();
                 e.stopPropagation();
 
-                $currentAnchor = $anchor;
+                // Unbind all events from scrollSpy 
+                $(win).scrollSpy("unbind");
 
-                // Scroll to clicked anchor
+                // Scroll to anchor
                 $().scrollTo({
                     offset: -offset,
-                    target: $anchor
+                    target: $anchor,
+                    onComplete: function () {
+
+                        var $card = $anchor.closest(".card"),
+                            $parent = $card.find('[data-infinite-scroll-offset]');
+
+                        // Get parent infiniteScroll marker for anchor
+                        var offset = "";
+                        if ($parent.length > 0) {
+                            var o = parseInt($parent.data("infiniteScrollOffset"));
+                            if (!isNaN(o)) {
+                                offset = "/" + o;
+                            }
+                        }
+
+                        // Get url parts
+                        var hash = null,
+                            parts = win.location.href.split("#"),
+                            url = parts[0];
+                        if (parts.length > 1) {
+                            hash = "#" + parts[parts.length - 1];
+                        }                        
+
+                        // Replace url state
+                        win.history.replaceState(state, doc.title, url + $anchor.attr("href"));
+
+                        // Bind scrollSpy events
+                        $(win).scrollSpy("bind");
+
+                    }
                 }, "go");
 
             }
@@ -305,38 +331,7 @@ if (typeof Object.create !== 'function') {
             .anchorific(opts);        
      
         // Activate anchorific when loaded via infiniteScroll load
-        $().infiniteScroll({
-            onStateUpdated: function ($caller, state, stateParts) {
-
-                // The infiniteScroll plug-in will update the browser state
-                // to include the first infiniteScroll marker offset visible 
-                // within the viewport, here we override this and instead
-                // get the parent marker offset for the anchor we've clicked                
-            
-                // We need an anchor to update the state
-                if ($currentAnchor === null) {
-                    return;
-                }
-
-                var $card = $currentAnchor.closest(".card"),
-                    $parent = $card.find('[data-infinite-scroll-offset]');
-
-                var offset = "";
-                if ($parent.length > 0) {
-                    var o = parseInt($parent.data("infiniteScrollOffset"));
-                    if (!isNaN(o)) {
-                        offset = "/" + o;
-                    }
-                }
-               
-                var anchorUrl = stateParts.parts.url +
-                    offset +
-                    stateParts.parts.qs +
-                    $currentAnchor.attr("href");
-                history.replaceState(state, doc.title, anchorUrl);
-
-            }
-        }, function ($ele) {
+        $().infiniteScroll(function ($ele) {
             $ele.find('[data-provide="markdownBody"]')
                 .anchorific(opts);
         }, "ready");
