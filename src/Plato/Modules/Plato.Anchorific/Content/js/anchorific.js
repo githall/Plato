@@ -19,186 +19,185 @@ if (typeof window.$.Plato === "undefined") {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            navigation: '.anchorific', // position of navigation
-            headers: 'h1, h2, h3, h4, h5, h6', // custom headers selector                
-            anchorClass: 'anchor', // class of anchor links
-            anchorText: '#', // prepended or appended to anchor headings                
-            spy: true, // scroll spy
-            position: 'append', // position of anchor text
-            spyOffset: !0, // specify heading offset for spy scrolling
-            onAnchorClick: null // triggers when an acnhor link is clicked
-        };
+                navigation: '.anchorific', // position of navigation
+                headers: 'h1, h2, h3, h4, h5, h6', // custom headers selector                
+                anchorClass: 'anchor', // class of anchor links
+                anchorText: '#', // prepended or appended to anchor headings                
+                spy: true, // scroll spy
+                position: 'append', // position of anchor text
+                spyOffset: !0, // specify heading offset for spy scrolling
+                onAnchorClick: null // triggers when an acnhor link is clicked
+            },
+            methods = {
+                init: function ($caller, methodName) {
 
-        var methods = {
-            init: function ($caller, methodName) {
-
-                if (methodName) {
-                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
-                    } else {
-                        alert(methodName + " is not a valid method!");
+                    if (methodName) {
+                        if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                            this[methodName].apply(this, [$caller]);
+                        } else {
+                            alert(methodName + " is not a valid method!");
+                        }
+                        return null;
                     }
-                    return null;
-                }
 
-                this.bind($caller);
+                    this.bind($caller);
 
-            },
-            bind: function ($caller) {
-                                              
-                this.headers = $caller.find($caller.data(dataKey).headers);
-                this.previous = 0;
+                },
+                bind: function ($caller) {
 
-                if (this.headers.length !== 0) {
-                    this.first = parseInt(this.headers.prop('nodeName').substring(1), null);
-                }
+                    this.headers = $caller.find($caller.data(dataKey).headers);
+                    this.previous = 0;
 
-                this.build($caller);
+                    if (this.headers.length !== 0) {
+                        this.first = parseInt(this.headers.prop('nodeName').substring(1), null);
+                    }
 
-            },
-            build: function ($caller) {
+                    this.build($caller);
 
-                var self = this,
-                    obj,
-                    navigations = function () { };
+                },
+                build: function ($caller) {
 
-                // when navigation configuration is set
-                if ($caller.data(dataKey).navigation) {
-                    $($caller.data(dataKey).navigation).append('<ul />');
-                    self.previous = $($caller.data(dataKey).navigation).find('ul').last();
-                    navigations = function ($caller, obj) {
-                        return self.navigations($caller, obj);
-                    };
-                }
+                    var self = this,
+                        obj,
+                        navigations = function () { };
 
-                // Build navigation & anchors
-                for (var i = 0; i < self.headers.length; i++) {
-                    obj = self.headers.eq(i);
-                    navigations($caller, obj);
-                    self.anchor($caller, obj);
-                }
+                    // when navigation configuration is set
+                    if ($caller.data(dataKey).navigation) {
+                        $($caller.data(dataKey).navigation).append('<ul />');
+                        self.previous = $($caller.data(dataKey).navigation).find('ul').last();
+                        navigations = function ($caller, obj) {
+                            return self.navigations($caller, obj);
+                        };
+                    }
 
-                if ($caller.data(dataKey).spy) {
-                    self.spy($caller);
-                }
-                    
-            },
-            navigations: function ($caller, obj) {
+                    // Build navigation & anchors
+                    for (var i = 0; i < self.headers.length; i++) {
+                        obj = self.headers.eq(i);
+                        navigations($caller, obj);
+                        self.anchor($caller, obj);
+                    }
 
-                var self = this,
-                    link,
-                    list,
-                    which,
-                    name = self.name(obj);
+                    if ($caller.data(dataKey).spy) {
+                        self.spy($caller);
+                    }
 
-                if (obj.attr('id') !== undefined) {
-                    name = obj.attr('id');
-                }
-                        
-                link = $('<a />').attr('href', '#' + name).text(obj.text());
-                link.click(function (e) {
-                    if ($caller.data(dataKey).onAnchorClick) {
-                        $caller.data(dataKey).onAnchorClick($(this), e);
-                    }         
-                });
+                },
+                navigations: function ($caller, obj) {
 
-                list = $('<li />').append(link);
+                    var self = this,
+                        link,
+                        list,
+                        which,
+                        name = self.name(obj);
 
-                which = parseInt(obj.prop('nodeName').substring(1), null);
-                list.attr('data-tag', which);
+                    if (obj.attr('id') !== undefined) {
+                        name = obj.attr('id');
+                    }
 
-                self.subheadings($caller, which, list);
-
-                self.first = which;
-            },
-            subheadings: function ($caller, which, a) {
-
-                var self = this,
-                    ul = $($caller.data(dataKey).navigation).find('ul'),
-                    li = $($caller.data(dataKey).navigation).find('li');
-
-                if (which === self.first) {
-                    self.previous.append(a);
-                } else if (which > self.first) {
-                    li.last().append('<ul />');
-                    // can't use cache ul; need to find ul once more
-                    $($caller.data(dataKey).navigation).find('ul').last().append(a);
-                    self.previous = a.parent();
-                } else {
-                    $('li[data-tag=' + which + ']').last().parent().append(a);
-                    self.previous = a.parent();
-                }
-            },
-            name: function (obj) {
-                var name = obj.text().replace(/[^\w\s]/gi, '')
-                    .replace(/\s+/g, '-')
-                    .toLowerCase();
-                return name;
-            },
-            anchor: function ($caller, obj) {
-
-                var self = this,
-                    name = self.name(obj),
-                    anchor,
-                    text = $caller.data(dataKey).anchorText,
-                    klass = $caller.data(dataKey).anchorClass,
-                    id;
-
-                if (obj.attr('id') === undefined) {
-                    obj.attr('id', name);
-                }
-
-                id = obj.attr('id');
-
-                anchor = $('<a />').attr('href', '#' + id).html(text).addClass(klass);
-                anchor.click(function (e) {                                   
-                    if ($caller.data(dataKey).onAnchorClick) {
-                        $caller.data(dataKey).onAnchorClick($(this), e);
-                    }                        
-                });
-
-                if ($caller.data(dataKey).position === 'append') {
-                    obj.append(anchor);
-                } else {
-                    obj.prepend(anchor);
-                }
-            },
-            spy: function ($caller) {
-
-                var self = this,
-                    previous,
-                    current,
-                    list,
-                    top,
-                    prev;
-
-                $(win).scroll(function (e) {
-
-                    // get the header on top of the viewport
-                    current = self.headers.map(function (e) {
-                        if ($(this).offset().top - $(win).scrollTop() < $caller.data(dataKey).spyOffset) {
-                            return this;
+                    link = $('<a />').attr('href', '#' + name).text(obj.text());
+                    link.click(function (e) {
+                        if ($caller.data(dataKey).onAnchorClick) {
+                            $caller.data(dataKey).onAnchorClick($(this), e);
                         }
                     });
 
-                    // get only the latest header on the viewport
-                    current = $(current).eq(current.length - 1);
+                    list = $('<li />').append(link);
 
-                    if (current && current.length) {
-                        // get all li tag that contains href of # ( all the parents )
-                        list = $('li:has(a[href="#' + current.attr('id') + '"])');
+                    which = parseInt(obj.prop('nodeName').substring(1), null);
+                    list.attr('data-tag', which);
 
-                        if (prev !== undefined) {
-                            prev.removeClass('active');
-                        }
+                    self.subheadings($caller, which, list);
 
-                        list.addClass('active');
-                        prev = list;
+                    self.first = which;
+                },
+                subheadings: function ($caller, which, a) {
+
+                    var self = this,
+                        ul = $($caller.data(dataKey).navigation).find('ul'),
+                        li = $($caller.data(dataKey).navigation).find('li');
+
+                    if (which === self.first) {
+                        self.previous.append(a);
+                    } else if (which > self.first) {
+                        li.last().append('<ul />');
+                        // can't use cache ul; need to find ul once more
+                        $($caller.data(dataKey).navigation).find('ul').last().append(a);
+                        self.previous = a.parent();
+                    } else {
+                        $('li[data-tag=' + which + ']').last().parent().append(a);
+                        self.previous = a.parent();
                     }
-                });
-            }                      
-        };
-            
+                },
+                name: function (obj) {
+                    var name = obj.text().replace(/[^\w\s]/gi, '')
+                        .replace(/\s+/g, '-')
+                        .toLowerCase();
+                    return name;
+                },
+                anchor: function ($caller, obj) {
+
+                    var self = this,
+                        name = self.name(obj),
+                        anchor,
+                        text = $caller.data(dataKey).anchorText,
+                        klass = $caller.data(dataKey).anchorClass,
+                        id;
+
+                    if (obj.attr('id') === undefined) {
+                        obj.attr('id', name);
+                    }
+
+                    id = obj.attr('id');
+
+                    anchor = $('<a />').attr('href', '#' + id).html(text).addClass(klass);
+                    anchor.click(function (e) {
+                        if ($caller.data(dataKey).onAnchorClick) {
+                            $caller.data(dataKey).onAnchorClick($(this), e);
+                        }
+                    });
+
+                    if ($caller.data(dataKey).position === 'append') {
+                        obj.append(anchor);
+                    } else {
+                        obj.prepend(anchor);
+                    }
+                },
+                spy: function ($caller) {
+
+                    var self = this,
+                        previous,
+                        current,
+                        list,
+                        top,
+                        prev;
+
+                    $(win).scroll(function (e) {
+
+                        // get the header on top of the viewport
+                        current = self.headers.map(function (e) {
+                            if ($(this).offset().top - $(win).scrollTop() < $caller.data(dataKey).spyOffset) {
+                                return this;
+                            }
+                        });
+
+                        // get only the latest header on the viewport
+                        current = $(current).eq(current.length - 1);
+
+                        if (current && current.length) {
+                            // get all li tag that contains href of # ( all the parents )
+                            list = $('li:has(a[href="#' + current.attr('id') + '"])');
+
+                            if (prev !== undefined) {
+                                prev.removeClass('active');
+                            }
+
+                            list.addClass('active');
+                            prev = list;
+                        }
+                    });
+                }
+            };
+
         return {
             init: function () {
 
@@ -254,7 +253,7 @@ if (typeof window.$.Plato === "undefined") {
 
             }
         };
-            
+
     }();
 
     // ---------------
@@ -266,12 +265,12 @@ if (typeof window.$.Plato === "undefined") {
     // ---------------
 
     var app = win.$.Plato,
-        state = win.history.state || {},        
+        state = win.history.state || {},
         offset = 120,
         opts = {
             spyOffset: offset, // specify heading offset for spy scrolling
-            onAnchorClick: function ($anchor, e) {                      
-                                
+            onAnchorClick: function ($anchor, e) {
+
                 e.preventDefault();
                 e.stopPropagation();
 

@@ -2592,7 +2592,8 @@ $(function (win, doc, $) {
 
                             // Get container bounds
                             var top = $caller.offset().top,
-                                bottom = top + $caller.outerHeight();
+                                bottom = top + $caller.outerHeight(),
+                                scrollBottom = scrollTop + $win.height();
 
                             // Optional scroll spacing
                             var scrollSpacing = 0;
@@ -2600,12 +2601,20 @@ $(function (win, doc, $) {
                                 scrollSpacing = $caller.data(dataKey).scrollSpacing;
                             }
 
-                            // At the very top of the window remove offset from url
-                            if (spy.scrollTop === 0) {
+                            // Get first marker
+                            var $firstMarker = methods.getOffsetMarker($caller, 1),
+                                firstMarkerTop = 0;
+                            if ($firstMarker) {
+                                firstMarkerTop = $firstMarker.offset().top;
+                            }
+
+                            // Above the first offset marker or at the top of the page
+                            // reset the state to remove any offset
+                            if (scrollBottom <= firstMarkerTop || scrollTop === 0) {
                                 methods.resetState($caller);
                             } else {
                                 // When we reach the top of our container + any scroll spacing load previous page
-                                if (spy.scrollTop < top - scrollSpacing) {
+                                if (scrollTop < top - scrollSpacing) {
                                     methods.loadPrevious($caller, spy);
                                 }
                             }
@@ -3000,6 +3009,13 @@ $(function (win, doc, $) {
                 var $marker = $caller.find('[data-infinite-scroll-offset="' + offset + '"]');
                 if ($marker.length > 0) {
                     return $($marker[0]);
+                }
+                return null;
+            },
+            getHighlightMarkers: function ($container) {
+                var $markers = $container.find("[data-infinite-scroll-highlight]");
+                if ($markers.length > 0) {
+                    return $markers;
                 }
                 return null;
             },
