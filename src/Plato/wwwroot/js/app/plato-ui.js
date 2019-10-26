@@ -1,4 +1,5 @@
-﻿// <reference path="~/js/vendors/jquery.js" />
+﻿// <reference path="~/js/app/plato.js" />
+// <reference path="~/js/vendors/jquery.js" />
 // <reference path="~/js/vendors/bootstrap.js" />
 
 if (typeof window.jQuery === "undefined") {
