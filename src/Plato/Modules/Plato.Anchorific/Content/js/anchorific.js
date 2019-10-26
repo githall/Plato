@@ -1,27 +1,4 @@
-﻿/*
-	The MIT License (MIT)
-
-	Copyright (c) <2013> <Ren Aysha>
-
-	Permission is hereby granted, free of charge, to any person obtaining a copy
-	of this software and associated documentation files (the "Software"), to deal
-	in the Software without restriction, including without limitation the rights
-	to use, copy, modify, merge, publish, distribute, sublicense, and/or sell
-	copies of the Software, and to permit persons to whom the Software is
-	furnished to do so, subject to the following conditions:
-
-	The above copyright notice and this permission notice shall be included in
-	all copies or substantial portions of the Software.
-
-	THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
-	IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
-	FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE
-	AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER
-	LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM,
-	OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN
-	THE SOFTWARE.
-*/
-
+﻿
 if (typeof Object.create !== 'function') {
     Object.create = function (obj) {
         function F() { }
@@ -49,10 +26,12 @@ if (typeof Object.create !== 'function') {
                 top: '.top', // back to top button or link class
                 spy: true, // scroll spy
                 position: 'append', // position of anchor text
-                spyOffset: !0 // specify heading offset for spy scrolling
+                spyOffset: !0, // specify heading offset for spy scrolling
+                onAnchorClick: null
             };
 
-            var methods = {
+            var methods = {    
+                opt: defaults,
                 $anchor: null,
                 init: function ($caller, methodName) {
 
@@ -69,60 +48,60 @@ if (typeof Object.create !== 'function') {
 
                 },
                 bind: function ($caller) {
+                                              
+                    this.headers = $caller.find($caller.data(dataKey).headers);
+                    this.previous = 0;
 
-                    var self = this;
-                    self.$elem = $caller;
-                    self.opt = $.extend({}, defaults, options);
-                    self.headers = self.$elem.find(self.opt.headers);
-                    self.previous = 0;
-
-                    if (self.headers.length !== 0) {
-                        self.first = parseInt(self.headers.prop('nodeName').substring(1), null);
+                    if (this.headers.length !== 0) {
+                        this.first = parseInt(this.headers.prop('nodeName').substring(1), null);
                     }
 
-                    self.build();
+                    this.build($caller);
 
                 },
-                build: function () {
+                build: function ($caller) {
 
                     var self = this,
                         obj,
                         navigations = function () { };
 
                     // when navigation configuration is set
-                    if (self.opt.navigation) {
-                        $(self.opt.navigation).append('<ul />');
-                        self.previous = $(self.opt.navigation).find('ul').last();
-                        navigations = function (obj) {
-                            return self.navigations(obj);
+                    if ($caller.data(dataKey).navigation) {
+                        $($caller.data(dataKey).navigation).append('<ul />');
+                        self.previous = $($caller.data(dataKey).navigation).find('ul').last();
+                        navigations = function ($caller, obj) {
+                            return self.navigations($caller, obj);
                         };
                     }
 
                     for (var i = 0; i < self.headers.length; i++) {
                         obj = self.headers.eq(i);
-                        navigations(obj);
-                        self.anchor(obj);
+                        navigations($caller, obj);
+                        self.anchor($caller, obj);
                     }
 
-                    if (self.opt.spy)
-                        self.spy();
+                    if (self.opt.spy) {
+                        self.spy($caller);
+                    }
+                        
                 },
-                navigations: function (obj) {
-                    var self = this, link, list, which, name = self.name(obj);
+                navigations: function ($caller, obj) {
 
-                    if (obj.attr('id') !== undefined)
+                    var self = this,
+                        link,
+                        list,
+                        which,
+                        name = self.name(obj);
+
+                    if (obj.attr('id') !== undefined) {
                         name = obj.attr('id');
-
+                    }
+                        
                     link = $('<a />').attr('href', '#' + name).text(obj.text());
                     link.click(function (e) {
-                        e.preventDefault();
-                        $().scrollTo({
-                            offset: -120,
-                            target: $('#' + name),
-                            onComplete: function () {
-
-                            }
-                        }, "go"); // initialize scrollTo
+                        if ($caller.data(dataKey).onAnchorClick) {
+                            $caller.data(dataKey).onAnchorClick($(this), e);
+                        }         
                     });
 
                     list = $('<li />').append(link);
@@ -130,20 +109,22 @@ if (typeof Object.create !== 'function') {
                     which = parseInt(obj.prop('nodeName').substring(1), null);
                     list.attr('data-tag', which);
 
-                    self.subheadings(which, list);
+                    self.subheadings($caller, which, list);
 
                     self.first = which;
                 },
-                subheadings: function (which, a) {
-                    var self = this, ul = $(self.opt.navigation).find('ul'),
-                        li = $(self.opt.navigation).find('li');
+                subheadings: function ($caller, which, a) {
+
+                    var self = this,
+                        ul = $($caller.data(dataKey).navigation).find('ul'),
+                        li = $($caller.data(dataKey).navigation).find('li');
 
                     if (which === self.first) {
                         self.previous.append(a);
                     } else if (which > self.first) {
                         li.last().append('<ul />');
                         // can't use cache ul; need to find ul once more
-                        $(self.opt.navigation).find('ul').last().append(a);
+                        $($caller.data(dataKey).navigation).find('ul').last().append(a);
                         self.previous = a.parent();
                     } else {
                         $('li[data-tag=' + which + ']').last().parent().append(a);
@@ -156,13 +137,13 @@ if (typeof Object.create !== 'function') {
                         .toLowerCase();
                     return name;
                 },
-                anchor: function (obj) {
+                anchor: function ($caller, obj) {
 
                     var self = this,
                         name = self.name(obj),
                         anchor,
-                        text = self.opt.anchorText,
-                        klass = self.opt.anchorClass,
+                        text = $caller.data(dataKey).anchorText,
+                        klass = $caller.data(dataKey).anchorClass,
                         id;
 
                     if (obj.attr('id') === undefined) {
@@ -172,36 +153,32 @@ if (typeof Object.create !== 'function') {
                     id = obj.attr('id');
 
                     anchor = $('<a />').attr('href', '#' + id).html(text).addClass(klass);
-                    anchor.click(function (e) {
-
-                        e.preventDefault();
-                        e.stopPropagation();
-
-                        // Set clicked anchor
-                        methods.updateAnchor($(this));
-
-                        // Scroll to clicked anchor
-                        $().scrollTo({
-                            offset: -120,
-                            target: methods.$anchor                           
-                        }, "go");
-
+                    anchor.click(function (e) {                                   
+                        if ($caller.data(dataKey).onAnchorClick) {
+                            $caller.data(dataKey).onAnchorClick($(this), e);
+                        }                        
                     });
 
-                    if (self.opt.position === 'append') {
+                    if ($caller.data(dataKey).position === 'append') {
                         obj.append(anchor);
                     } else {
                         obj.prepend(anchor);
                     }
                 },
-                spy: function () {
-                    var self = this, previous, current, list, top, prev;
+                spy: function ($caller) {
+
+                    var self = this,
+                        previous,
+                        current,
+                        list,
+                        top,
+                        prev;
 
                     $(win).scroll(function (e) {
 
                         // get the header on top of the viewport
                         current = self.headers.map(function (e) {
-                            if (($(this).offset().top - $(win).scrollTop()) < self.opt.spyOffset) {
+                            if (($(this).offset().top - $(win).scrollTop()) < $caller.data(dataKey).spyOffset) {
                                 return this;
                             }
                         });
@@ -224,28 +201,7 @@ if (typeof Object.create !== 'function') {
                 },
                 updateAnchor: function ($anchor) {
                     this.$anchor = $anchor;
-                },
-                updateState: function () {
-
-                    // We need an anchor to update the state
-                    if (this.$anchor === null) {
-                        return;
-                    }
-
-                    var $card = this.$anchor.closest(".card"),
-                        $parent = $card.find('[data-infinite-scroll-offset]');
-
-                    var offset = 0;
-                    if ($parent.length > 0) {
-                        var o = parseInt($parent.data("infiniteScrollOffset"));
-                        if (!isNaN(o)) {
-                            offset = o;
-                        }
-                    }
-
-                    console.log(offset);
-
-                }
+                }              
             };
 
             return {
@@ -313,21 +269,35 @@ if (typeof Object.create !== 'function') {
     // ---------------
 
     var app = win.$.Plato,
+        $currentAnchor = null,
         opts = {
             navigation: '.anchorific', // position of navigation
-            headers: 'h1, h2, h3, h4, h5, h6', // headers that you wish to target
-            speed: 200, // speed of sliding back to top
+            headers: 'h1, h2, h3, h4, h5, h6', // headers that you wish to target      
             anchorClass: 'anchor', // class of anchor links
             anchorText: '#', // prepended or appended to anchor headings         
-            spy: false, // scroll spy
+            spy: true, // scroll spy
             position: 'append', // position of anchor text
-            spyOffset: 120 // specify heading offset for spy scrolling
+            spyOffset: 120, // specify heading offset for spy scrolling
+            onAnchorClick: function ($anchor, e) {          
+
+                e.preventDefault();
+                e.stopPropagation();
+
+                $currentAnchor = $anchor;
+
+                // Scroll to clicked anchor
+                $().scrollTo({
+                    offset: -120,
+                    target: $anchor
+                }, "go");
+
+            }
         };
 
     app.ready(function () {
 
         // Add table of contents generated from headers
-        //$("body").append($('<nav class="anchorific"></nav>'));        
+        $("body").append($('<nav class="anchorific"></nav>'));        
 
         // anchorific
         $('[data-provide="markdownBody"]')
@@ -335,15 +305,37 @@ if (typeof Object.create !== 'function') {
      
         // Activate anchorific when loaded via infiniteScroll load
         $().infiniteScroll({
-            onStateUpdated: function (state) {
+            onStateUpdated: function ($caller, state, stateParts) {
 
                 // The infiniteScroll plug-in will update the browser state
                 // to include the first infiniteScroll marker offset visible 
-                // within the viewport, for this reason we override this 
-                
+                // within the viewport, here we override this and instead
+                // get the parent marker offset for the anchor we've clicked                
+            
+                // We need an anchor to update the state
+                if ($currentAnchor === null) {
+                    return;
+                }
 
-                $('[data-provide="markdownBody"]')
-                    .anchorific("updateState");
+                var $card = $currentAnchor.closest(".card"),
+                    $parent = $card.find('[data-infinite-scroll-offset]');
+
+                var offset = "";
+                if ($parent.length > 0) {
+                    var o = parseInt($parent.data("infiniteScrollOffset"));
+                    if (!isNaN(o)) {
+                        offset = "/" + o;
+                    }
+                }
+               
+                var anchorUrl = stateParts.parts.url +
+                    offset +
+                    stateParts.parts.qs +
+                    $currentAnchor.attr("href");
+                history.replaceState(state, doc.title, anchorUrl);
+                console.log(anchorUrl);
+             
+                
 
             }
         }, function ($ele) {

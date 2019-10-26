@@ -2861,7 +2861,7 @@ $(function (win, doc, $) {
                 // Iterate each offset marker and detect the first
                 // visible marker within the client viewport
                 var $marker = null,
-                    url = "",
+                    stateParts = null,
                     $markers = methods.getOffsetMarkers($caller);
 
                 if ($markers) {
@@ -2877,67 +2877,28 @@ $(function (win, doc, $) {
                 if ($marker) {               
                     var offset = parseInt($marker.data("infiniteScrollOffset"));
                     if (!isNaN(offset)) {
-                        url = methods.getStateUrl($caller, offset);
+                        stateParts = methods.getStateUrl($caller, offset);
                     } else {
-                        url = methods.getStateUrl($caller);
+                        stateParts = methods.getStateUrl($caller);
                     }
                 } else {
-                    url = methods.getStateUrl($caller);
+                    stateParts = methods.getStateUrl($caller);
                 }
 
                 // Use replaceState to ensure the address bar is updated
                 // but we don't actually add new history state
-                history.replaceState(state, doc.title, url);
+                history.replaceState(state, doc.title, stateParts.url);
 
                 // Raise state updated event
                 if ($caller.data(dataKey).onStateUpdated) {
-                    $caller.data(dataKey).onStateUpdated($caller, state);
+                    $caller.data(dataKey).onStateUpdated($caller, state, stateParts);
                 }
 
             },
             getStateUrl: function($caller, offset) {
-                
-                function getUrl(input) {
-                    
-                    // We always need a Url
-                    if (!input) {
-                        throw new Error("A Url is required.");
-                    }
-
-                    var qs = null,
-                        parts = input.split("?"),
-                        url = parts[0];
-                    
-                    if (parts.length > 1) {
-                        qs = "?" + parts[parts.length - 1];
-                    }
-                    
-                    var params = null;
-                    if (qs) {
-                        params = [];
-                        var pairs = qs.split("&");
-                        for (var i = 0; i < pairs.length; i++) {
-                            var pair = pairs[i].split("=");
-                            if (pair.length > 1) {
-                                params.push({
-                                    key: pair[0],
-                                    value: pair[1]
-                                });
-                            }
-                        }
-                    }
-
-                    return {
-                        url: url,
-                        qs: qs ? qs : "",
-                        params: params
-                    };
-
-                  
-                }
-
+                            
                 var url = methods.getUrl($caller),
-                    parts = getUrl(url);
+                    parts = methods.getUrlParts(url);
                 
                 // Append offset if supplied
                 var offsetString = "";
@@ -2945,8 +2906,10 @@ $(function (win, doc, $) {
                     offsetString = "/" + offset.toString();
                 }
 
-                return parts.url + offsetString + parts.qs;
-                
+                return {
+                    url: parts.url + offsetString + parts.qs,
+                    parts: parts
+                };                
 
             },
             resetState: function($caller) {
@@ -2954,7 +2917,7 @@ $(function (win, doc, $) {
                 $(win).scrollSpy("stop");
                 // Clear offset
                 if (state) {
-                    history.replaceState(state, doc.title, methods.getStateUrl($caller));
+                    history.replaceState(state, doc.title, methods.getStateUrl($caller).url);
                 }
             },
             scrollToPage: function($caller, pageNumber) {
@@ -3104,6 +3067,43 @@ $(function (win, doc, $) {
                     return $caller.data("infiniteScrollUrl");
                 }
                 return "";
+            },
+            getUrlParts: function(input) {
+
+                // We always need a Url
+                if (!input) {
+                    throw new Error("A Url is required.");
+                }
+
+                var qs = null,
+                    parts = input.split("?"),
+                    url = parts[0];
+
+                if (parts.length > 1) {
+                    qs = "?" + parts[parts.length - 1];
+                }
+
+                var params = null;
+                if (qs) {
+                    params = [];
+                    var pairs = qs.split("&");
+                    for (var i = 0; i < pairs.length; i++) {
+                        var pair = pairs[i].split("=");
+                        if (pair.length > 1) {
+                            params.push({
+                                key: pair[0],
+                                value: pair[1]
+                            });
+                        }
+                    }
+                }
+
+                return {
+                    url: url,
+                    qs: qs ? qs : "",
+                    params: params
+                };
+
             },
             getUrlSuffix: function($caller) {
                 if ($caller.data("infiniteScrollUrlSuffix")) {
