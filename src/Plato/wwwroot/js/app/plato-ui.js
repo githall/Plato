@@ -2570,12 +2570,38 @@ $(function (win, doc, $) {
 
                 var bindScrollEvents = function () {
 
-                    var scrollTop = 0;
+                    var scrollTop = 0,
+                        scrollBottom = 0,
+                        scrollSpacing = 0;
+
+                    if ($caller.data(dataKey).scrollSpacing) {
+                        scrollSpacing = $caller.data(dataKey).scrollSpacing;
+                    }
 
                     // Bind scroll events
                     $(win).scrollSpy({
-                        onScrollEnd: function () {                            
-                            methods.updateState($caller);
+                        onScrollEnd: function () {
+
+                            // Perform these checks at the end of scrolling to prevent
+                            // navigation throttling caused via to many calles to 
+                            // win.history.replaceState
+
+                            // Get the very first offset marker
+                            var $firstMarker = methods.getOffsetMarker($caller, 1),
+                                firstMarkerTop = 0;
+                            if ($firstMarker) {
+                                firstMarkerTop = $firstMarker.offset().top;
+                            }
+
+                            // We are above the first offset marker
+                            if (scrollBottom <= firstMarkerTop) {
+                                // Reset the state (i.e. remove offset)
+                                methods.resetState($caller);
+                            } else {
+                                // Update the state (i.e. add first visible offset)
+                                methods.updateState($caller);
+                            }                            
+
                         },
                         onScroll: function(spy, e, $win) {
                             
@@ -2588,29 +2614,18 @@ $(function (win, doc, $) {
                                 return false;
                             }
 
+                            // Add scroll details to locals so we can halt scrolling during loading
+                            // and optionally perform checks aainst these via onScrollEnd
                             scrollTop = spy.scrollTop;
+                            scrollBottom = spy.scrollBottom;
 
                             // Get container bounds
                             var top = $caller.offset().top,
-                                bottom = top + $caller.outerHeight(),
-                                scrollBottom = scrollTop + $win.height();
-
-                            // Optional scroll spacing
-                            var scrollSpacing = 0;
-                            if ($caller.data(dataKey).scrollSpacing) {
-                                scrollSpacing = $caller.data(dataKey).scrollSpacing;
-                            }
-
-                            // Get first marker
-                            var $firstMarker = methods.getOffsetMarker($caller, 1),
-                                firstMarkerTop = 0;
-                            if ($firstMarker) {
-                                firstMarkerTop = $firstMarker.offset().top;
-                            }
-
+                                bottom = top + $caller.outerHeight();                                
+                          
                             // Above the first offset marker or at the top of the page
                             // reset the state to remove any offset
-                            if (scrollBottom <= firstMarkerTop || scrollTop === 0) {
+                            if (scrollTop === 0) {
                                 methods.resetState($caller);
                             } else {
                                 // When we reach the top of our container + any scroll spacing load previous page
@@ -2620,11 +2635,11 @@ $(function (win, doc, $) {
                             }
 
                             // At the very bottom of the page
-                            if (spy.scrollBottom === spy.docHeight) {
+                            if (scrollBottom === spy.docHeight) {
                                 methods.resetState($caller);
                             } else {
                                 // When we reach the bottom of our container load next page
-                                if (spy.scrollBottom > bottom) {
+                                if (scrollBottom > bottom) {
                                     methods.loadNext($caller, spy);
                                 }
                             }
@@ -2888,6 +2903,7 @@ $(function (win, doc, $) {
                     $markers = methods.getOffsetMarkers($caller);
 
                 if ($markers) {
+                    // Exit once we find the first visible offset marker
                     $markers.each(function() {
                         if (methods.isElementInViewPort($caller, this)) {
                             $marker = $(this);
@@ -2896,7 +2912,7 @@ $(function (win, doc, $) {
                     });
                 }
 
-                // Ensure a marker is visible within the viewport
+                // Ensure we found a marker visible within the viewport
                 if ($marker) {      
 
                     // Ensure we can parse the marker offset
