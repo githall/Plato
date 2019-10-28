@@ -280,78 +280,85 @@ if (typeof window.$.Plato === "undefined") {
 
     // ---------------
 
-    var app = win.$.Plato,
-        state = win.history.state || {},        
-        offset = 120,
-        opts = {
-            anchorTitle: app.T("Link to this section"),
-            spyOffset: offset, // specify heading offset for spy scrolling
-            onAnchorClick: function ($anchor, e) {
-
-                e.preventDefault();
-                e.stopPropagation();
-
-                // Detach infiniteScroll events
-                $(win).scrollSpy("unbind");                
-
-                // Scroll to anchor
-                $().scrollTo({
-                    offset: -offset,
-                    target: $anchor,
-                    onComplete: function () {                        
-
-                        var offsetString = "",
-                            infiniteScrollUrl = null,
-                            $infiniteScroll = $anchor.closest('[data-provide="infiniteScroll"]'),
-                            $offset = $anchor.closest(".card").find('[data-infinite-scroll-offset]'),
-                            offset = parseInt($offset.data("infiniteScrollOffset"));
-
-                        if (!isNaN(offset)) {
-                            offsetString = "/" + offset.toString();
-                        }
-
-                        if ($infiniteScroll.length > 0) {
-                            if ($infiniteScroll.data("infiniteScrollUrl")) {
-                                infiniteScrollUrl = $infiniteScroll.data("infiniteScrollUrl");
-                            }
-                        }
-
-                        // Get url minus any existing anchor
-                        var url = "";
-                        if (infiniteScrollUrl !== null) {
-                            url = infiniteScrollUrl + offsetString;
-                        } else {
-                            url = win.location.href.split("#")[0];
-                        }
-
-                        // Replace state
-                        if (url !== "") {
-                            win.history.replaceState(state, doc.title, url + $anchor.attr("href"));
-                        }
-
-                        // Attach infiniteScroll events
-                        $(win).scrollSpy("bind");
-
-                    }
-                }, "go");
-
-            }
-        };
+    var app = win.$.Plato;        
 
     app.ready(function () {
+
+        var $stickyHeader = $(".layout-header-sticky"),
+            state = win.history.state || {},
+            offset = $stickyHeader.length > 0 ? $stickyHeader.outerHeight() : 0,
+            $anchor = null,
+            opts = {
+                anchorTitle: app.T("Link to this section"),
+                spyOffset: offset, // specify heading offset for spy scrolling
+                onAnchorClick: function ($a, e) {
+
+                    // Prevent defaults
+                    e.preventDefault();
+                    e.stopPropagation();
+
+                    // Set clicked anchor for onScrollEnd event
+                    $anchor = $a;
+
+                    // Scroll to anchor
+                    $().scrollTo({
+                        offset: -offset,
+                        target: $anchor
+                    }, "go");
+
+                }
+            };
 
         // Add table of contents generated from headers
         //$("body").append($('<nav class="anchorific"></nav>'));        
 
         // anchorific
-        $('[data-provide="markdownBody"]')
-            .anchorific(opts);
+        $('[data-provide="markdownBody"]').anchorific(opts);
 
         // Activate anchorific when loaded via infiniteScroll load
-        $().infiniteScroll(function ($ele) {
-            $ele.find('[data-provide="markdownBody"]')
-                .anchorific(opts);
-        }, "ready");
+        $().infiniteScroll("scrollEnd", function () {
+
+            // Ensure we have a clicked anchor
+            if ($anchor === null) {
+                return;
+            }
+
+            var offsetString = "",
+                infiniteScrollUrl = null,
+                $infiniteScroll = $anchor.closest('[data-provide="infiniteScroll"]'),
+                $offset = $anchor.closest(".card").find('[data-infinite-scroll-offset]'),
+                offset = parseInt($offset.data("infiniteScrollOffset"));
+
+            if (!isNaN(offset)) {
+                offsetString = "/" + offset.toString();
+            }
+
+            if ($infiniteScroll.length > 0) {
+                if ($infiniteScroll.data("infiniteScrollUrl")) {
+                    infiniteScrollUrl = $infiniteScroll.data("infiniteScrollUrl");
+                }
+            }
+
+            // Get url minus any existing anchor
+            var url = "";
+            if (infiniteScrollUrl !== null) {
+                url = infiniteScrollUrl + offsetString;
+            } else {
+                url = win.location.href.split("#")[0];
+            }
+
+            // Replace state
+            if (url !== "") {
+                win.history.replaceState(state, doc.title, url + $anchor.attr("href"));
+            }
+
+            $anchor = null;
+
+        });
+
+        $().infiniteScroll("ready", function ($ele) {
+            $ele.find('[data-provide="markdownBody"]').anchorific(opts);
+        });
 
     });
 

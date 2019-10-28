@@ -60,11 +60,11 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function($caller, methodName) {
+            init: function($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -180,8 +180,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -196,6 +197,7 @@ $(function (win, doc, $) {
                         case Number:
                             break;
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -210,7 +212,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().dialog()
@@ -223,11 +225,10 @@ $(function (win, doc, $) {
                             alert(methodName + " is not a valid method!");
                         }
                     }
-                    methods.init($caller);
+                    methods.init($caller, methodName, func);
                 }
 
             }
-
         };
 
     }();
@@ -241,11 +242,11 @@ $(function (win, doc, $) {
         var defaults = {};
 
         var methods = {
-            init: function($caller, methodName) {
+            init: function($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -296,8 +297,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -306,12 +308,9 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                      
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -331,18 +330,19 @@ $(function (win, doc, $) {
                 } else {
                     // $().dialogSpy()
                     var $caller = $("body");
-                    if (methodName) {
-                        if (methods[methodName]) {
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                    }
+                        methods.init($caller, methodName, func);
+                    }                 
                 }
 
             }
-
         };
 
     }();
@@ -377,10 +377,11 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function ($caller, methodName) {
+            init: function ($caller, methodName, func) {
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -439,7 +440,7 @@ $(function (win, doc, $) {
                         $caller.data(dataKey).onBeforeComplete($caller, $target);
                     }
                 } else {
-                       if ($caller.data(dataKey).onBeforeComplete) {
+                    if ($caller.data(dataKey).onBeforeComplete) {
                         $caller.data(dataKey).onBeforeComplete($caller, $target);
                     }
                     $caller.scrollTop(top + offset);
@@ -454,8 +455,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -464,18 +466,15 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                      
                         case Function:
+                            func = a;
                             break;
                     }
                 }
 
                 if (this.length > 0) {
-                    // $(selector).markdownEditor
+                    // $(selector).scrollTo()
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -484,23 +483,24 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
-                    // $().markdownEditor 
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("html");
+                    // $().scrollTo()
+                    var $caller = $("html");
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
+                        methods.init($caller, methodName, func);
                     }
                 }
 
             }
-
         };
 
     }();
@@ -518,7 +518,16 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function ($caller) {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                        this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
 
                 // Initialize initial state
                 methods._setOriginalTop($caller);
@@ -536,6 +545,7 @@ $(function (win, doc, $) {
                 
                 // Bind events
                 this.bind($caller);
+
             },
             bind: function ($caller) {
 
@@ -552,7 +562,8 @@ $(function (win, doc, $) {
                 });
 
                 // Bind scroll events
-                $(win).scrollSpy({
+                $().scrollSpy({
+                    namespace: dataKey,
                     onScroll: function (spy, e, $win) {
 
                         var scrollTop = $win.scrollTop(),
@@ -588,6 +599,9 @@ $(function (win, doc, $) {
             unbind: function ($caller) {
                 var event = $caller.data(dataKey).event;
                 $caller.unbind(event);
+                $().scrollSpy({
+                    namespace: dataKey
+                }, "unbind");
             },
             update: function ($caller) {
 
@@ -628,8 +642,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     if (a) {
@@ -639,12 +654,9 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
-                            case Boolean:
-                                break;
-                            case Number:
-                                break;
+                                break;                        
                             case Function:
+                                func = a;
                                 break;
                         }
                     }
@@ -660,19 +672,21 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().sticky()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $("body");
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                    }
+                        methods.init($caller, methodName, func);
+                    }                 
                 }
 
             }
@@ -705,11 +719,11 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function ($caller, methodName) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -907,8 +921,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -917,18 +932,15 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                
                         case Function:
+                            func = a;
                             break;
                     }
                 }
 
                 if (this.length > 0) {
-                    // $(selector).markdownEditor
+                    // $(selector).treeView()
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -937,19 +949,21 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
-                    // $().markdownEditor 
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    // $().treeView()
+                    var $caller = $('[data-provide="tree"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                    }
+                        methods.init($caller, methodName, func);
+                    }                 
                 }
 
             }
@@ -1996,7 +2010,8 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id",
             eventsKey = dataKey + "Events";
 
-        var defaults = {      
+        var defaults = {
+            namespace: "scrollSpy",
             interval: 350, // the duration to wait in milliseconds before invoking the onScrollEnd event
             onScrollStart: null,
             onScrollEnd: null,
@@ -2005,12 +2020,12 @@ $(function (win, doc, $) {
 
         var methods = {
             _timer: null,
-            _scrolling: false,
-            init: function($caller, methodName) {
+            _scrolling: false,       
+            init: function($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -2026,20 +2041,18 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {
-
-                console.log("scrollSpy - bind");
-
+            bind: function ($caller) {
+                
                 // Bind scroll
-                $caller.on("scroll",
+                var eventName = this._getEventName($caller);
+                $caller.on(eventName,
                     function(e) {
 
                         // Events to execute
                         var i = 0,
-                            events = $caller.data(eventsKey);
+                            events = $caller.data(eventName);
 
-                        if (events === null) {
-                            console.log("no events");
+                        if (events === null) {                     
                             return;
                         }
 
@@ -2075,18 +2088,20 @@ $(function (win, doc, $) {
 
                     });
             },
-            unbind: function ($caller) {
-
-                console.log("scrollSpy - unbind");
-
-                $caller.off("scroll");
+            unbind: function ($caller) {                
+                var eventName = this._getEventName($caller);
+                if (eventName) {
+                    $caller.off(eventName);
+                    $caller.data(eventName, null);
+                }
             },
             start: function($caller, e) {
-                methods.stop($caller);
+                methods.stop($caller);                
                 methods._timer = win.setTimeout(function () {                    
                     methods._scrolling = false;
-                    var events = $caller.data(eventsKey);
-                    if (events) {
+                    var eventName = methods._getEventName($caller);
+                    var events = $caller.data(eventName);
+                    if (events) {                        
                         if (events.onScrollEnd.length > 0) {
                             for (var i = 0; i < events.onScrollEnd.length; i++) {
                                 events.onScrollEnd[i](e);
@@ -2095,30 +2110,28 @@ $(function (win, doc, $) {
                     }
                 }, $caller.data(dataKey).interval);
             },
-            stop: function($caller) {
+            stop: function ($caller) {                
                 win.clearTimeout(methods._timer);
                 methods._timer = null;
             },
-            detach: function ($caller) {
-                this._clearEvents($caller);
+            _getEventName: function ($caller) {
+                var ns = this._getNamespace($caller);
+                return "scroll." + ns;
             },
-            attach: function ($caller) {
-                this._storeEvents($caller);
+            _getNamespace: function ($caller) {
+                return $caller.data(dataKey).namespace || "scrollSpy";
             },
             _storeEvents: function ($caller) {
 
-                var events = {
+                var eventName = this._getEventName($caller),
+                    events = {
                         onScrollStart: [],
                         onScrollEnd: [],
                         onScroll: []
                     };                
 
-                if ($caller.data(eventsKey)) {
-                    events = $caller.data(eventsKey);
-                }
-
-                if (events === null) {
-                    return;
+                if ($caller.data(eventName)) {
+                    events = $caller.data(eventName);
                 }
 
                 var validEvent = function (arr, func) {
@@ -2137,9 +2150,9 @@ $(function (win, doc, $) {
                 if (validEvent(events.onScroll, $caller.data(dataKey).onScroll)) {
                     events.onScroll.push($caller.data(dataKey).onScroll);
                 }
-             
+                
                 // Store events on caller
-                $caller.data(eventsKey, events);
+                $caller.data(eventName, events);
 
             }           
         };
@@ -2147,8 +2160,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -2163,6 +2177,7 @@ $(function (win, doc, $) {
                         case Number:
                             break;
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -2190,7 +2205,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName);
+                        methods.init($caller, methodName, func);
                     }
               
                 }
@@ -2218,11 +2233,11 @@ $(function (win, doc, $) {
         var methods = {
             _timer: null,
             _resizing: false,
-            init: function ($caller, methodName) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -2391,8 +2406,19 @@ $(function (win, doc, $) {
 
         var methods = {
             timer: null,
-            init: function ($caller) {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                        this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
                 this.bind($caller);
+
             },
             bind: function ($caller) {
 
@@ -2468,8 +2494,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -2484,6 +2511,7 @@ $(function (win, doc, $) {
                         case Number:
                             break;
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -2498,11 +2526,10 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } 
             }
-
         };
 
     }();
@@ -2512,6 +2539,7 @@ $(function (win, doc, $) {
 
         var dataKey = "infiniteScroll",
             dataIdKey = dataKey + "Id",
+            eventKey = "." + dataKey,
             state = win.history.state || {};
 
         var defaults = {            
@@ -2521,7 +2549,7 @@ $(function (win, doc, $) {
             loaderSelector: ".infinite-scroll-loader",
             loaderTemplate: '<p class="text-center"><i class="fal fa-2x fa-spinner fa-spin py-5"></i></p>',
             onPageLoaded: null, 
-            onScrollEnd: function (e) { },
+            onScrollEnd: null,
             css: {
                 item: "infinite-scroll-item",
                 active: "infinite-scroll-item-active",
@@ -2536,12 +2564,9 @@ $(function (win, doc, $) {
             _offset: 0, // optional selected offset            
             _totalPages: 1, // total pages
             _loadedPages: [], // keep track of which pages have been loaded
-            _readyList: [], // functions to execute when dom is updated
-            ready: function ($caller, fn) { // Accepts functions that will be executed upon each load
-                if (fn) {
-                    methods._readyList.push(fn);
-                }                
-                return this;
+            events: {
+                ready: [], // functions to execute when dom is updated
+                scrollEnd: [] // funcitons to execute when 
             },
             init: function($caller, methodName, func) {
 
@@ -2616,7 +2641,7 @@ $(function (win, doc, $) {
                         // Scroll to offset or anchor and deactivate hihlight element
                         $().scrollTo({
                                 offset: -$caller.data(dataKey).scrollSpacing,
-                                target: $anchor !== null ? $anchor : $marker,
+                                target: $anchor !== null ? $anchor : $marker,                                
                                 onComplete: function() {
                                     // Apply css to deactivate selected offset css (set server side)
                                     // Css can be applied directly to marker or a child of the marker
@@ -2629,22 +2654,22 @@ $(function (win, doc, $) {
                                             .removeClass(defaults.css.active)
                                             .addClass(defaults.css.inactive);
                                     }
-                                    methods.bindEvents($caller);
+                                    methods.attach($caller);
                                 }
                             },
                             "go"); // initialize scrollTo
                     } else {
                         // If we didn't find a marker ensure we still bind scrollSpy
-                        methods.bindEvents($caller);
+                        methods.attach($caller);
                     }
 
                 } else {
                     // Bind events right away
-                    methods.bindEvents($caller);
+                    methods.attach($caller);
                 }
 
             },
-            bindEvents: function ($caller) {
+            attach: function ($caller) {
 
                 var scrollTop = 0,
                     scrollBottom = 0,
@@ -2653,14 +2678,11 @@ $(function (win, doc, $) {
                 if ($caller.data(dataKey).scrollSpacing) {
                     scrollSpacing = $caller.data(dataKey).scrollSpacing;
                 }
-
-                console.log("infiniteScroll - bindEvents");
-
+                
                 // Bind scroll events
-                $(win).scrollSpy({
+                $().scrollSpy({
+                    namespace: dataKey,
                     onScrollEnd: function (e) {
-
-                        console.log("onScrollEnd");
 
                         // Perform these checks at the end of scrolling to prevent
                         // navigation throttling caused via to many calles to 
@@ -2682,20 +2704,19 @@ $(function (win, doc, $) {
                             methods.updateState($caller);
                         }
 
-                        // onScrollEnd event for infiniteScroll
-                        if ($caller.data(dataKey).onScrollEnd) {
-                            $caller.data(dataKey).onScrollEnd($caller, e);
+                        for (var i = 0; i < methods.events.scrollEnd.length; i++) {
+                            if (typeof methods.events.scrollEnd[i] === "function") {
+                                methods.events.scrollEnd[i]($caller, e);
+                            }
                         }
 
                     },
                     onScroll: function (spy, e, $win) {
 
-                        console.log("onScroll");
-
                         // Ensure we are not already loading 
                         if (methods._loading) {
                             $win.scrollTop(scrollTop);
-                            $win.scrollSpy("stop");
+                            $().scrollSpy("stop");
                             e.preventDefault();
                             e.stopPropagation();
                             return false;
@@ -2734,14 +2755,17 @@ $(function (win, doc, $) {
                 });
 
             },
-            updateOffset: function ($caller) {
-
-            },
+            detach: function ($caller) {
+                $().scrollSpy({
+                    namesoace: dataKey
+                }, "unbind");
+            },          
             unbind: function($caller) {
-                $(win).scrollSpy("unbind");
-                methods._readyList = [];
-                methods._page = 1;
-                methods._loading = false;
+                this.detach($caller);
+                this.events.ready = [];
+                this.events.onScrollEnd = [];
+                this._page = 1;
+                this._loading = false;
             },
             loadPrevious: function($caller, spy) {
 
@@ -2784,12 +2808,12 @@ $(function (win, doc, $) {
                                 var previousPosition = page.spy.documentHeight - page.spy.scrollTop;
 
                                 // Persist scroll position after content load
-                                $(win).scrollSpy("unbind");
+                                $().scrollSpy("unbind");
                                 $().scrollTo({
                                         offset: $(doc).height() - previousPosition,
                                         interval: 100,
                                         onComplete: function() {
-                                            $(win).scrollSpy("bind");
+                                            $().scrollSpy("bind");
                                         }
                                     },
                                     "go");
@@ -2913,9 +2937,9 @@ $(function (win, doc, $) {
                     }
 
                     // Execute any externally registered functions
-                    for (var i = 0; i < methods._readyList.length; i++) {
-                        if (typeof methods._readyList[i] === "function") {
-                            methods._readyList[i]($caller);
+                    for (var i = 0; i < methods.events.ready.length; i++) {
+                        if (typeof methods.events.ready[i] === "function") {
+                            methods.events.ready[i]($caller);
                         }
                     }
 
@@ -2971,7 +2995,7 @@ $(function (win, doc, $) {
             },            
             resetState: function ($caller) {
                 // Stop scrollspy to prevent the OnScrollEnd event from executing
-                $(win).scrollSpy("stop");
+                $().scrollSpy("stop");
                 // Clear offset
                 if (state) {
                     win.history.replaceState(state, doc.title, methods.getStateUrl($caller));
@@ -2996,14 +3020,14 @@ $(function (win, doc, $) {
                 if (page) {
                     var $marker = methods.getOffsetMarker($caller, page.offset);
                     if ($marker) {
-                        $(win).scrollSpy("unbind");
+                        $().scrollSpy("unbind");
                         // Scroll to offset marker for page
                         $().scrollTo({
                                 offset: -75,
                                 interval: 0,
                                 target: $marker,
                                 onComplete: function() {
-                                    $(win).scrollSpy("bind");
+                                    $().scrollSpy("bind");
                                 }
                             },
                             "go");
@@ -3188,7 +3212,20 @@ $(function (win, doc, $) {
                     return $caller.data("infiniteScrollUrlSuffix");
                 }
                 return "/";
-            }          
+            },
+            // events
+            ready: function ($caller, fn) { // Accepts functions that will be executed upon each load
+                if (fn) {
+                    methods.events.ready.push(fn);
+                }
+                return this;
+            },
+            scrollEnd: function ($caller, fn) { // Accepts functions that will be executed upon each load
+                if (fn) {
+                    methods.events.scrollEnd.push(fn);
+                }
+                return this;
+            },
         };
 
         return {
@@ -3205,11 +3242,7 @@ $(function (win, doc, $) {
                         break;
                     case String:
                         methodName = a;
-                        break;
-                    case Boolean:
-                        break;
-                    case Number:
-                        break;
+                        break;                  
                     case Function:
                         func = a;
                         break;
@@ -3235,13 +3268,12 @@ $(function (win, doc, $) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
                             $caller.data(dataIdKey, id);
-                            $caller.data(dataKey, $.extend({}, defaults, options));
+                            $caller.data(dataKey, $.extend({}, defaults, options));                            
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
-                        }
+                        }                        
                         methods.init($caller, methodName, func);
-                    }
-          
+                    }          
                 }
 
             }
@@ -6691,7 +6723,7 @@ $(function (win, doc, $) {
                     breakPoint = $(win).height() / 3;
                 }
                                 
-                $(win).scrollSpy({
+                $().scrollSpy({
                     onScroll: function(spy) {
                         if (spy.scrollTop > breakPoint) {
                             if (!$caller.hasClass(activeCss)) {
@@ -6822,10 +6854,8 @@ $(function (win, doc, $) {
         this.find('[data-provide="markdownBody"]').markdownBody();
      
         /* infiniteScroll */
-        var $header = this.find(".layout-header-sticky");
-        this.find('[data-provide="infiniteScroll"]').infiniteScroll({
-            scrollSpacing: $header.length > 0 ? $header.outerHeight() : 0
-        });
+        /* Initialized via $().layout so we can set the ScrollSpacing correctly */
+        //this.find('[data-provide="infiniteScroll"]').infiniteScroll();
 
         /* resizeable */
         this.find('[data-provide="resizeable"]').resizeable();
@@ -6846,7 +6876,7 @@ $(function (win, doc, $) {
         this.find('[data-provide="slide-spy"]').slideSpy();
 
         // Bind scroll events
-        $(win).scrollSpy({
+        $().scrollSpy({
             onScrollStart: function () {
                 $().popper("hideAll");
             }
@@ -6864,7 +6894,7 @@ $(function (win, doc, $) {
         $("body").platoUI();
 
         // Activate plug-ins used within infiniteScroll load
-        $().infiniteScroll(function ($ele) {
+        $().infiniteScroll("ready", function ($ele) {
 
             /* tooltips */
             app.ui.initToolTips($ele);
@@ -6881,7 +6911,7 @@ $(function (win, doc, $) {
             /* popper */
             $ele.find('[data-provide="popper"]').popper();
 
-        }, "ready");
+        });
         
     });
 
@@ -7298,7 +7328,13 @@ $(function (win, doc, $) {
 
                         }
                     });
-                }
+                }                
+
+                // Update infinite default scroll spacing 
+                // to accomodate for fixed headers
+                $().infiniteScroll({
+                    scrollSpacing: sidebarOffsetTop
+                });
 
             },
             unbind: function ($caller) {
