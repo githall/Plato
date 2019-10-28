@@ -329,7 +329,7 @@ $(function (win, doc, $) {
                     });
                 } else {
                     // $().dialogSpy()
-                    var $caller = $("body");
+                    var $caller = $('[data-provide="dialog"]');
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -1180,11 +1180,11 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function($caller, methodName) {
+            init: function($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -1325,8 +1325,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     if (a) {
@@ -1336,12 +1337,9 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
-                            case Boolean:
-                                break;
-                            case Number:
-                                break;
+                                break;                           
                             case Function:
+                                func = a;
                                 break;
                         }
                     }
@@ -1357,23 +1355,24 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().pagedList()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $('[data-provide="paged-list"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                    }
+                        methods.init($caller, methodName, func);
+                    }                 
                 }
 
             }
-
         };
 
     }();
@@ -1395,11 +1394,11 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function($caller, methodName) {
+            init: function($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -1699,24 +1698,22 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     if (a) {
                         switch (a.constructor) {
-                        case Object:
-                            $.extend(options, a);
-                            break;
-                        case String:
-                            methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
-                        case Function:
-                            break;
+                            case Object:
+                                $.extend(options, a);
+                                break;
+                            case String:
+                                methodName = a;
+                                break;                      
+                            case Function:
+                                func = a;
+                                break;
                         }
                     }
                 }
@@ -1731,23 +1728,24 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().autoComplete()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $('[data-provide="autoComplete"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                    }
+                        methods.init($caller, methodName, func);
+                    }                
                 }
 
             }
-
         };
 
     }();
@@ -1767,8 +1765,19 @@ $(function (win, doc, $) {
 
         var methods = {
             timer: null,
-            init: function($caller) {
+            init: function ($caller, methodName, func) {
+                
+                if (methodName) {
+                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                        this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
                 this.bind($caller);
+
             },
             bind: function($caller) {
 
@@ -1838,8 +1847,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -1848,12 +1858,9 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                      
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -1868,23 +1875,24 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().typeSpy()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $('[data-provide="typeSpy"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                    }
+                        methods.init($caller, methodName, func);
+                    }              
                 }
 
             }
-
         };
 
     }();
@@ -1903,8 +1911,19 @@ $(function (win, doc, $) {
 
         var methods = {
             timer: null,
-            init: function($caller) {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                        this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
                 this.bind($caller);
+
             },
             bind: function($caller) {
 
@@ -1950,24 +1969,22 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     if (a) {
                         switch (a.constructor) {
-                        case Object:
-                            $.extend(options, a);
-                            break;
-                        case String:
-                            methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
-                        case Function:
-                            break;
+                            case Object:
+                                $.extend(options, a);
+                                break;
+                            case String:
+                                methodName = a;
+                                break;                    
+                            case Function:
+                                func = a;
+                                break;
                         }
                     }
                 }
@@ -1982,19 +1999,21 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().blurSpy()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $('[data-provide="blurSpy"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                    }
+                        methods.init($caller, methodName, func);
+                    }              
                 }
 
             }
@@ -2171,11 +2190,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                      
                         case Function:
                             func = a;
                             break;
@@ -2211,7 +2226,6 @@ $(function (win, doc, $) {
                 }
 
             }
-
         };
 
     }();
@@ -2338,8 +2352,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = a;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -2348,12 +2363,9 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                     
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -2368,7 +2380,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().resizeSpy()
@@ -2381,13 +2393,12 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName);
+                        methods.init($caller, methodName, func);
                     }
 
                 }
 
             }
-
         };
 
     }();
@@ -2505,17 +2516,13 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                       
                         case Function:
                             func = a;
                             break;
                     }
                 }
-
+                                
                 if (this.length > 0) {
                     // $(selector).leaveSpy()
                     return this.each(function () {
@@ -2528,7 +2535,23 @@ $(function (win, doc, $) {
                         }
                         methods.init($(this), methodName, func);
                     });
-                } 
+                } else {
+                    // $().leaveSpy()
+                    var $caller = $('[data-provide="leaveSpy"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
+                            $caller.data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
+                        }
+                        methods.init($caller, methodName, func);
+                    }
+                }
+
+
+
             }
         };
 
@@ -3237,15 +3260,15 @@ $(function (win, doc, $) {
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
-                    case Object:
-                        $.extend(options, a);
-                        break;
-                    case String:
-                        methodName = a;
-                        break;                  
-                    case Function:
-                        func = a;
-                        break;
+                        case Object:
+                            $.extend(options, a);
+                            break;
+                        case String:
+                            methodName = a;
+                            break;                  
+                        case Function:
+                            func = a;
+                            break;
                     }
                 }
 
@@ -3295,8 +3318,19 @@ $(function (win, doc, $) {
 
         var methods = {
             timer: null,
-            init: function($caller) {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                        this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
                 this.bind($caller);
+
             },
             bind: function($caller) {
                 $caller.bind('keydown',
@@ -3403,8 +3437,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     if (a) {
@@ -3414,12 +3449,9 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
-                            case Boolean:
-                                break;
-                            case Number:
-                                break;
+                                break;                         
                             case Function:
+                                func = a;
                                 break;
                         }
                     }
@@ -3435,23 +3467,24 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().filterList()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $('[data-provide="filter-list"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                    }
+                        methods.init($caller, methodName, func);
+                    }          
                 }
 
             }
-
         };
 
     }();
