@@ -1,8 +1,13 @@
 ﻿// <reference path="~/js/app/plato.js" />
 // <reference path="~/js/vendors/jquery.js" />
+// <reference path="~/js/vendors/bootstrap.js" />
 
 if (typeof window.jQuery === "undefined") {
     throw new Error("jQuery 3.3.1 or above Required");
+}
+
+if (typeof window.$().modal === 'undefined') {
+    throw new Error("BootStrap 4.1.1 or above Required");
 }
 
 if (typeof window.$.Plato === "undefined") {
@@ -21,10 +26,11 @@ if (typeof window.$.Plato === "undefined") {
         var defaults = {
                 navigation: '.anchorific', // position of navigation
                 headers: 'h1, h2, h3, h4, h5, h6', // custom headers selector                
-                anchorClass: 'anchor', // class of anchor links
-                anchorText: '#', // prepended or appended to anchor headings                
+                anchorClass: 'anchor text-muted', // class of anchor links                
+                anchorTitle: null,
+                iconCss: "fal fa-link",
                 spy: true, // scroll spy
-                position: 'append', // position of anchor text
+                position: 'append', // position of anchor icon
                 spyOffset: !0, // specify heading offset for spy scrolling
                 onAnchorClick: null // triggers when an acnhor link is clicked
             },
@@ -136,31 +142,41 @@ if (typeof window.$.Plato === "undefined") {
                 },
                 anchor: function ($caller, obj) {
 
-                    var self = this,
-                        name = self.name(obj),
-                        anchor,
-                        text = $caller.data(dataKey).anchorText,
-                        klass = $caller.data(dataKey).anchorClass,
+                    var name = this.name(obj),
+                        $anchor,                    
+                        iconCss = $caller.data(dataKey).iconCss,                        
+                        title = $caller.data(dataKey).anchorTitle,     
+                        css = $caller.data(dataKey).anchorClass,
                         id;
 
+                    // 
                     if (obj.attr('id') === undefined) {
                         obj.attr('id', name);
                     }
-
                     id = obj.attr('id');
 
-                    anchor = $('<a />').attr('href', '#' + id).html(text).addClass(klass);
-                    anchor.click(function (e) {
+                    $anchor = $('<a />', {
+                        "href": '#' + id,
+                        "class": css
+                    }).append($("<i />").addClass(iconCss));
+
+                    if (title) {                       
+                        $anchor.attr("title", title);
+                    }
+
+                    $anchor.click(function (e) {
+                        $(this).tooltip("hide");
                         if ($caller.data(dataKey).onAnchorClick) {
                             $caller.data(dataKey).onAnchorClick($(this), e);
                         }
                     });
 
                     if ($caller.data(dataKey).position === 'append') {
-                        obj.append(anchor);
+                        obj.append($anchor);
                     } else {
-                        obj.prepend(anchor);
+                        obj.prepend($anchor);
                     }
+
                 },
                 spy: function ($caller) {
 
@@ -265,55 +281,55 @@ if (typeof window.$.Plato === "undefined") {
     // ---------------
 
     var app = win.$.Plato,
-        state = win.history.state || {},
+        state = win.history.state || {},        
         offset = 120,
         opts = {
+            anchorTitle: app.T("Link to this section"),
             spyOffset: offset, // specify heading offset for spy scrolling
             onAnchorClick: function ($anchor, e) {
 
                 e.preventDefault();
                 e.stopPropagation();
 
-                // Ensures infiniteScroll does not override our anchorific state 
-                $(win).scrollSpy("unbind");
+                // Detach infiniteScroll events
+                $(win).scrollSpy("unbind");                
 
                 // Scroll to anchor
                 $().scrollTo({
                     offset: -offset,
                     target: $anchor,
-                    onComplete: function () {
-                        
+                    onComplete: function () {                        
+
                         var offsetString = "",
                             infiniteScrollUrl = null,
-                            $infiniteScroll = $anchor.closest('[data-provide="infiniteScroll"]'),                            
-                            $offset = $anchor.closest(".card").find('[data-infinite-scroll-offset]'),                            
+                            $infiniteScroll = $anchor.closest('[data-provide="infiniteScroll"]'),
+                            $offset = $anchor.closest(".card").find('[data-infinite-scroll-offset]'),
                             offset = parseInt($offset.data("infiniteScrollOffset"));
 
                         if (!isNaN(offset)) {
                             offsetString = "/" + offset.toString();
                         }
-                        
+
                         if ($infiniteScroll.length > 0) {
                             if ($infiniteScroll.data("infiniteScrollUrl")) {
                                 infiniteScrollUrl = $infiniteScroll.data("infiniteScrollUrl");
                             }
-                        }                      
+                        }
 
                         // Get url minus any existing anchor
                         var url = "";
                         if (infiniteScrollUrl !== null) {
                             url = infiniteScrollUrl + offsetString;
                         } else {
-                            url = win.location.href.split("#")[0];                                                               
-                        }                        
+                            url = win.location.href.split("#")[0];
+                        }
 
                         // Replace state
-                        if (url !== "") {                            
+                        if (url !== "") {
                             win.history.replaceState(state, doc.title, url + $anchor.attr("href"));
                         }
 
-                        // Rebind scrollSpy events to infiniteScroll can
-                        // now continue to update state
+                        // Attach infiniteScroll events
                         $(win).scrollSpy("bind");
 
                     }
@@ -329,8 +345,8 @@ if (typeof window.$.Plato === "undefined") {
 
         // anchorific
         $('[data-provide="markdownBody"]')
-            .anchorific(opts);        
-     
+            .anchorific(opts);
+
         // Activate anchorific when loaded via infiniteScroll load
         $().infiniteScroll(function ($ele) {
             $ele.find('[data-provide="markdownBody"]')

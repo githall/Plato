@@ -1996,7 +1996,7 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id",
             eventsKey = dataKey + "Events";
 
-        var defaults = {
+        var defaults = {      
             interval: 350, // the duration to wait in milliseconds before invoking the onScrollEnd event
             onScrollStart: null,
             onScrollEnd: null,
@@ -2018,7 +2018,7 @@ $(function (win, doc, $) {
                 }
 
                 // Store scrollSpy events on the caller as multiple 
-                // scrollSpy events could be tied to the same caller 
+                // scrollSpy events could be bound to the same caller 
                 // i.e.$(win).scrollSpy(opts)
                 this._storeEvents($caller);
 
@@ -2027,16 +2027,25 @@ $(function (win, doc, $) {
 
             },
             bind: function($caller) {
-                
+
+                console.log("scrollSpy - bind");
+
                 // Bind scroll
                 $caller.on("scroll",
                     function(e) {
-                        
+
+                        // Events to execute
+                        var i = 0,
+                            events = $caller.data(eventsKey);
+
+                        if (events === null) {
+                            console.log("no events");
+                            return;
+                        }
+
                         // Start timer to detect end of scroll
                         methods.start($caller, e);
 
-                        // Events to execute
-                        var i = 0, events = $caller.data(eventsKey);
                         // Raise onScrollStart event
                         // _scrolling is set to false when the scroll ends
                         if (methods._scrolling === false) {
@@ -2066,36 +2075,50 @@ $(function (win, doc, $) {
 
                     });
             },
-            unbind: function($caller) {
+            unbind: function ($caller) {
+
+                console.log("scrollSpy - unbind");
+
                 $caller.off("scroll");
             },
             start: function($caller, e) {
                 methods.stop($caller);
-                methods._timer = win.setTimeout(function() {
-                        methods._scrolling = false;
-                        var events = $caller.data(eventsKey);
+                methods._timer = win.setTimeout(function () {                    
+                    methods._scrolling = false;
+                    var events = $caller.data(eventsKey);
+                    if (events) {
                         if (events.onScrollEnd.length > 0) {
                             for (var i = 0; i < events.onScrollEnd.length; i++) {
                                 events.onScrollEnd[i](e);
                             }
                         }
-                    },
-                    $caller.data(dataKey).interval);
+                    }
+                }, $caller.data(dataKey).interval);
             },
             stop: function($caller) {
                 win.clearTimeout(methods._timer);
                 methods._timer = null;
             },
+            detach: function ($caller) {
+                this._clearEvents($caller);
+            },
+            attach: function ($caller) {
+                this._storeEvents($caller);
+            },
             _storeEvents: function ($caller) {
 
                 var events = {
-                    onScrollStart: [],
-                    onScrollEnd: [],
-                    onScroll: []
-                };
+                        onScrollStart: [],
+                        onScrollEnd: [],
+                        onScroll: []
+                    };                
 
                 if ($caller.data(eventsKey)) {
                     events = $caller.data(eventsKey);
+                }
+
+                if (events === null) {
+                    return;
                 }
 
                 var validEvent = function (arr, func) {
@@ -2118,7 +2141,7 @@ $(function (win, doc, $) {
                 // Store events on caller
                 $caller.data(eventsKey, events);
 
-            }
+            }           
         };
 
         return {
@@ -2321,7 +2344,7 @@ $(function (win, doc, $) {
                 }
 
                 if (this.length > 0) {
-                    // $(selector).scrollSpy()
+                    // $(selector).resizeSpy()
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -2333,7 +2356,7 @@ $(function (win, doc, $) {
                         methods.init($(this), methodName);
                     });
                 } else {
-                    // $().scrollSpy()
+                    // $().resizeSpy()
                     var $caller = $(win);
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
@@ -2491,13 +2514,14 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id",
             state = win.history.state || {};
 
-        var defaults = {
+        var defaults = {            
             scrollSpacing: 0, // optional spacing to apply when scrolling to selected offset
             offsetSuffix: "/",
             pagerKey: "pager.page",
             loaderSelector: ".infinite-scroll-loader",
             loaderTemplate: '<p class="text-center"><i class="fal fa-2x fa-spinner fa-spin py-5"></i></p>',
-            onPageLoaded: null,       
+            onPageLoaded: null, 
+            onScrollEnd: function (e) { },
             css: {
                 item: "infinite-scroll-item",
                 active: "infinite-scroll-item-active",
@@ -2513,8 +2537,10 @@ $(function (win, doc, $) {
             _totalPages: 1, // total pages
             _loadedPages: [], // keep track of which pages have been loaded
             _readyList: [], // functions to execute when dom is updated
-            ready: function($caller, fn) { // Accepts functions that will be executed upon each load
-                methods._readyList.push(fn);
+            ready: function ($caller, fn) { // Accepts functions that will be executed upon each load
+                if (fn) {
+                    methods._readyList.push(fn);
+                }                
                 return this;
             },
             init: function($caller, methodName, func) {
@@ -2566,87 +2592,7 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {
-
-                var bindScrollEvents = function () {
-
-                    var scrollTop = 0,
-                        scrollBottom = 0,
-                        scrollSpacing = 0;
-
-                    if ($caller.data(dataKey).scrollSpacing) {
-                        scrollSpacing = $caller.data(dataKey).scrollSpacing;
-                    }
-
-                    // Bind scroll events
-                    $(win).scrollSpy({
-                        onScrollEnd: function () {
-
-                            // Perform these checks at the end of scrolling to prevent
-                            // navigation throttling caused via to many calles to 
-                            // win.history.replaceState
-
-                            // Get the very first offset marker
-                            var $firstMarker = methods.getOffsetMarker($caller, 1),
-                                firstMarkerTop = 0;
-                            if ($firstMarker) {
-                                firstMarkerTop = $firstMarker.offset().top;
-                            }
-
-                            // We are above the first offset marker
-                            if (scrollBottom <= firstMarkerTop) {
-                                // Reset the state (i.e. remove offset)
-                                methods.resetState($caller);
-                            } else {
-                                // Update the state (i.e. add first visible offset)
-                                methods.updateState($caller);
-                            }                            
-
-                        },
-                        onScroll: function(spy, e, $win) {
-                            
-                            // Ensure we are not already loading 
-                            if (methods._loading) {
-                                $win.scrollTop(scrollTop);
-                                $win.scrollSpy("stop");
-                                e.preventDefault();
-                                e.stopPropagation();
-                                return false;
-                            }
-
-                            // Add scroll details to locals so we can halt scrolling during loading
-                            // and optionally perform checks aainst these via onScrollEnd
-                            scrollTop = spy.scrollTop;
-                            scrollBottom = spy.scrollBottom;
-
-                            // Get container bounds
-                            var top = $caller.offset().top,
-                                bottom = top + $caller.outerHeight();                                
-                          
-                            // Above the first offset marker or at the top of the page
-                            // reset the state to remove any offset
-                            if (scrollTop === 0) {
-                                methods.resetState($caller);
-                            } else {
-                                // When we reach the top of our container + any scroll spacing load previous page
-                                if (scrollTop < top - scrollSpacing) {
-                                    methods.loadPrevious($caller, spy);
-                                }
-                            }
-
-                            // At the very bottom of the page
-                            if (scrollBottom === spy.docHeight) {
-                                methods.resetState($caller);
-                            } else {
-                                // When we reach the bottom of our container load next page
-                                if (scrollBottom > bottom) {
-                                    methods.loadNext($caller, spy);
-                                }
-                            }
-                        }
-                    });
-
-                };
+            bind: function($caller) {                
 
                 // Scroll to any selected offset, wait until we complete
                 // scrolling before binding our scrollSpy events
@@ -2655,9 +2601,9 @@ $(function (win, doc, $) {
                         $highlight = methods.getHighlightMarker($caller, methods._offset);
                     if ($marker && $highlight) {
 
-                        // If we have an anchor check to se if the anchor exists within the 
-                        // targeted inifiniteScroll element to highlight and if so scroll 
-                        // to the anchor instead of the inifiniteScroll marker
+                        // If we have an anchor check to see if the anchor exists as a child of the 
+                        // targeted inifiniteScroll highlight element and if so scroll 
+                        // to the anchor instead of the inifiniteScroll highlight element
                         var $anchor = null,
                             hash = win.location.hash;
                         if (hash && hash !== "") {                        
@@ -2667,7 +2613,7 @@ $(function (win, doc, $) {
                             }
                         }
 
-                        // Scroll to offset or anchor and deactivate hihlight
+                        // Scroll to offset or anchor and deactivate hihlight element
                         $().scrollTo({
                                 offset: -$caller.data(dataKey).scrollSpacing,
                                 target: $anchor !== null ? $anchor : $marker,
@@ -2683,19 +2629,112 @@ $(function (win, doc, $) {
                                             .removeClass(defaults.css.active)
                                             .addClass(defaults.css.inactive);
                                     }
-                                    bindScrollEvents();
+                                    methods.bindEvents($caller);
                                 }
                             },
                             "go"); // initialize scrollTo
                     } else {
                         // If we didn't find a marker ensure we still bind scrollSpy
-                        bindScrollEvents();
+                        methods.bindEvents($caller);
                     }
 
                 } else {
                     // Bind events right away
-                    bindScrollEvents();
+                    methods.bindEvents($caller);
                 }
+
+            },
+            bindEvents: function ($caller) {
+
+                var scrollTop = 0,
+                    scrollBottom = 0,
+                    scrollSpacing = 0;
+
+                if ($caller.data(dataKey).scrollSpacing) {
+                    scrollSpacing = $caller.data(dataKey).scrollSpacing;
+                }
+
+                console.log("infiniteScroll - bindEvents");
+
+                // Bind scroll events
+                $(win).scrollSpy({
+                    onScrollEnd: function (e) {
+
+                        console.log("onScrollEnd");
+
+                        // Perform these checks at the end of scrolling to prevent
+                        // navigation throttling caused via to many calles to 
+                        // win.history.replaceState within $(win).scroll(function() {});
+
+                        // Get the very first offset marker
+                        var $firstMarker = methods.getOffsetMarker($caller, 1),
+                            firstMarkerTop = 0;
+                        if ($firstMarker) {
+                            firstMarkerTop = $firstMarker.offset().top;
+                        }
+
+                        // We are above the first offset marker
+                        if (scrollBottom <= firstMarkerTop) {
+                            // Reset the state (i.e. remove offset)
+                            methods.resetState($caller);
+                        } else {
+                            // Update the state (i.e. add first visible offset)
+                            methods.updateState($caller);
+                        }
+
+                        // onScrollEnd event for infiniteScroll
+                        if ($caller.data(dataKey).onScrollEnd) {
+                            $caller.data(dataKey).onScrollEnd($caller, e);
+                        }
+
+                    },
+                    onScroll: function (spy, e, $win) {
+
+                        console.log("onScroll");
+
+                        // Ensure we are not already loading 
+                        if (methods._loading) {
+                            $win.scrollTop(scrollTop);
+                            $win.scrollSpy("stop");
+                            e.preventDefault();
+                            e.stopPropagation();
+                            return false;
+                        }
+
+                        // Add scroll details to locals so we can halt scrolling during loading
+                        // and optionally perform checks aainst these via onScrollEnd
+                        scrollTop = spy.scrollTop;
+                        scrollBottom = spy.scrollBottom;
+
+                        // Get container bounds
+                        var top = $caller.offset().top,
+                            bottom = top + $caller.outerHeight();
+
+                        // Above the first offset marker or at the top of the page
+                        // reset the state to remove any offset
+                        if (scrollTop === 0) {
+                            methods.resetState($caller);
+                        } else {
+                            // When we reach the top of our container + any scroll spacing load previous page
+                            if (scrollTop < top - scrollSpacing) {
+                                methods.loadPrevious($caller, spy);
+                            }
+                        }
+
+                        // At the very bottom of the page
+                        if (scrollBottom === spy.docHeight) {
+                            methods.resetState($caller);
+                        } else {
+                            // When we reach the bottom of our container load next page
+                            if (scrollBottom > bottom) {
+                                methods.loadNext($caller, spy);
+                            }
+                        }
+                    }
+                });
+
+            },
+            updateOffset: function ($caller) {
 
             },
             unbind: function($caller) {
@@ -2929,12 +2968,20 @@ $(function (win, doc, $) {
 
                 } 
 
-            },
-            getStateUrl: function($caller, offset) {
-                            
+            },            
+            resetState: function ($caller) {
+                // Stop scrollspy to prevent the OnScrollEnd event from executing
+                $(win).scrollSpy("stop");
+                // Clear offset
+                if (state) {
+                    win.history.replaceState(state, doc.title, methods.getStateUrl($caller));
+                }
+            },          
+            getStateUrl: function ($caller, offset) {
+
                 var url = methods.getUrl($caller),
                     parts = methods.getUrlParts(url);
-                
+
                 // Append offset if supplied
                 var offsetString = "";
                 if (offset !== null && typeof offset !== "undefined") {
@@ -2943,14 +2990,6 @@ $(function (win, doc, $) {
 
                 return parts.url + offsetString + parts.qs;
 
-            },
-            resetState: function($caller) {
-                // Stop scrollspy to prevent the OnScrollEnd event from executing
-                $(win).scrollSpy("stop");
-                // Clear offset
-                if (state) {
-                    win.history.replaceState(state, doc.title, methods.getStateUrl($caller));
-                }
             },
             scrollToPage: function($caller, pageNumber) {
                 var page = methods.getLoadedPage(pageNumber);
@@ -3149,7 +3188,7 @@ $(function (win, doc, $) {
                     return $caller.data("infiniteScrollUrlSuffix");
                 }
                 return "/";
-            }
+            }          
         };
 
         return {
@@ -3191,7 +3230,7 @@ $(function (win, doc, $) {
                     });
                 } else {
                     // $().infiniteScroll()
-                    var $caller = $('[data-provide="infiniteScroll"]');
+                    var $caller = $('[data-provide="infiniteScroll"]');                    
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -4196,7 +4235,7 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            event: "click", // unique namespace
+            event: "click", 
             message: "Are you sure you wish to permanently delete this item?\n\nThis operation cannot be undone.\n\nClick OK to confirm..."
         };
 
@@ -6781,9 +6820,12 @@ $(function (win, doc, $) {
 
         /* markdownBody */
         this.find('[data-provide="markdownBody"]').markdownBody();
-
+     
         /* infiniteScroll */
-        this.find('[data-provide="infiniteScroll"]').infiniteScroll();
+        var $header = this.find(".layout-header-sticky");
+        this.find('[data-provide="infiniteScroll"]').infiniteScroll({
+            scrollSpacing: $header.length > 0 ? $header.outerHeight() : 0
+        });
 
         /* resizeable */
         this.find('[data-provide="resizeable"]').resizeable();
@@ -7197,12 +7239,6 @@ $(function (win, doc, $) {
                                 });
                             }
                         }
-                    });
-
-                    // Update infinite default scroll spacing 
-                    // to accomodate for fixed headers
-                    $().infiniteScroll({
-                        scrollSpacing: sidebarOffsetTop
                     });
 
                 }
