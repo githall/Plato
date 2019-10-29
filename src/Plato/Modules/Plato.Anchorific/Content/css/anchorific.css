@@ -52,19 +52,3 @@ a.anchor {
 .anchorific li.active > ul {
     display: block;
 }
-
-.top {
-    display: none;
-    background: url(../images/add_content_spr.gif) 5px -8px no-repeat #eceff5;
-    font-weight: bold;
-    font-family: tahoma;
-    font-size: 10px;
-    width: 70px;
-    color: #3b5998;
-    font-size: 11px;
-    text-decoration: none;
-    position: fixed;
-    right: 5px;
-    bottom: 5px;
-    padding: 7px 7px 7px 20px;
-}

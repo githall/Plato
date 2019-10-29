@@ -68,11 +68,12 @@ if (typeof window.$.Plato === "undefined") {
                         navigations = function () { };
 
                     // when navigation configuration is set
-                    if ($caller.data(dataKey).navigation) {
-                        $($caller.data(dataKey).navigation).append('<ul />');
-                        self.previous = $($caller.data(dataKey).navigation).find('ul').last();
-                        navigations = function ($caller, obj) {
-                            return self.navigations($caller, obj);
+                    var navSelector = $caller.data(dataKey).navigation;
+                    if (navSelector) {
+                        $(navSelector).append('<ul />');
+                        self.previous = $(navSelector).find('ul').last();
+                        navigations = function ($el, obj) {
+                            return self.navigations($el, obj);
                         };
                     }
 
@@ -103,7 +104,7 @@ if (typeof window.$.Plato === "undefined") {
                     link = $('<a />').attr('href', '#' + name).text(obj.text());
                     link.click(function (e) {
                         if ($caller.data(dataKey).onAnchorClick) {
-                            $caller.data(dataKey).onAnchorClick($(this), e);
+                            $caller.data(dataKey).onAnchorClick($caller, $(this), e);
                         }
                     });
 
@@ -119,15 +120,16 @@ if (typeof window.$.Plato === "undefined") {
                 subheadings: function ($caller, which, a) {
 
                     var self = this,
-                        ul = $($caller.data(dataKey).navigation).find('ul'),
-                        li = $($caller.data(dataKey).navigation).find('li');
+                        navSelector = $caller.data(dataKey).navigation,
+                        ul = $(navSelector).find('ul'),
+                        li = $(navSelector).find('li');
 
                     if (which === self.first) {
                         self.previous.append(a);
                     } else if (which > self.first) {
                         li.last().append('<ul />');
                         // can't use cache ul; need to find ul once more
-                        $($caller.data(dataKey).navigation).find('ul').last().append(a);
+                        $(navSelector).find('ul').last().append(a);
                         self.previous = a.parent();
                     } else {
                         $('li[data-tag=' + which + ']').last().parent().append(a);
@@ -148,8 +150,7 @@ if (typeof window.$.Plato === "undefined") {
                         title = $caller.data(dataKey).anchorTitle,     
                         css = $caller.data(dataKey).anchorClass,
                         id;
-
-                    // 
+           
                     if (obj.attr('id') === undefined) {
                         obj.attr('id', name);
                     }
@@ -164,10 +165,9 @@ if (typeof window.$.Plato === "undefined") {
                         $anchor.attr("title", title);
                     }
 
-                    $anchor.click(function (e) {
-                        $(this).tooltip("hide");
+                    $anchor.click(function (e) {                        
                         if ($caller.data(dataKey).onAnchorClick) {
-                            $caller.data(dataKey).onAnchorClick($(this), e);
+                            $caller.data(dataKey).onAnchorClick($caller, $(this), e);
                         }
                     });
 
@@ -283,22 +283,20 @@ if (typeof window.$.Plato === "undefined") {
     var app = win.$.Plato;        
 
     app.ready(function () {
-
-        var $stickyHeader = $(".layout-header-sticky"),
-            state = win.history.state || {},
-            offset = $stickyHeader.length > 0 ? $stickyHeader.outerHeight() : 0,
+        
+        var offset = $().layout("getHeaderHeight"),
             $anchor = null,
             opts = {
                 anchorTitle: app.T("Link to this section"),
                 spyOffset: offset, // specify heading offset for spy scrolling
-                onAnchorClick: function ($a, e) {
+                onAnchorClick: function ($caller, $this, e) {
 
                     // Prevent defaults
                     e.preventDefault();
                     e.stopPropagation();
 
                     // Set clicked anchor for onScrollEnd event
-                    $anchor = $a;
+                    $anchor = $caller.find($this.attr("href")) || $this;
 
                     // Scroll to anchor
                     $().scrollTo({
@@ -315,7 +313,7 @@ if (typeof window.$.Plato === "undefined") {
         // anchorific
         $('[data-provide="markdownBody"]').anchorific(opts);
 
-        // Activate anchorific when loaded via infiniteScroll load
+        // Update state if anchor was clicked after scrollEnd event
         $().infiniteScroll("scrollEnd", function () {
 
             // Ensure we have a clicked anchor
@@ -341,21 +339,25 @@ if (typeof window.$.Plato === "undefined") {
 
             // Get url minus any existing anchor
             var url = "";
-            if (infiniteScrollUrl !== null) {
+            if (infiniteScrollUrl) {
                 url = infiniteScrollUrl + offsetString;
             } else {
                 url = win.location.href.split("#")[0];
             }
 
+            console.log(url);
+            console.log($anchor.attr("href"));
+
             // Replace state
-            if (url !== "") {
-                win.history.replaceState(state, doc.title, url + $anchor.attr("href"));
+            if (url !== "") {           
+                win.history.replaceState(win.history.state || {}, doc.title, url + $anchor.attr("href"));
             }
 
             $anchor = null;
 
         });
 
+        // Activate anchorific when loaded via infiniteScroll load
         $().infiniteScroll("ready", function ($ele) {
             $ele.find('[data-provide="markdownBody"]').anchorific(opts);
         });

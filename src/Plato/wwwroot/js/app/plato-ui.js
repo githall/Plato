@@ -212,7 +212,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().dialog()
@@ -225,7 +225,7 @@ $(function (win, doc, $) {
                             alert(methodName + " is not a valid method!");
                         }
                     }
-                    methods.init($caller, methodName, func);
+                    return methods.init($caller, methodName, func);
                 }
 
             }
@@ -325,7 +325,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        return methods.init($(this), methodName);
                     });
                 } else {
                     // $().dialogSpy()
@@ -338,7 +338,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }                 
                 }
 
@@ -483,7 +483,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().scrollTo()
@@ -496,7 +496,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -672,7 +672,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().sticky()
@@ -685,7 +685,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }                 
                 }
 
@@ -949,7 +949,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().treeView()
@@ -962,7 +962,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }                 
                 }
 
@@ -1355,7 +1355,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().pagedList()
@@ -1368,7 +1368,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }                 
                 }
 
@@ -1728,7 +1728,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().autoComplete()
@@ -1741,7 +1741,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }                
                 }
 
@@ -1875,7 +1875,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().typeSpy()
@@ -1888,7 +1888,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }              
                 }
 
@@ -1999,7 +1999,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().blurSpy()
@@ -2012,7 +2012,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }              
                 }
 
@@ -2206,7 +2206,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().scrollSpy()
@@ -2219,7 +2219,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
               
                 }
@@ -2379,7 +2379,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().resizeSpy()
@@ -2392,7 +2392,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
 
                 }
@@ -2532,7 +2532,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().leaveSpy()
@@ -2545,7 +2545,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -3281,7 +3281,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().infiniteScroll()
@@ -3294,7 +3294,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }                        
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }          
                 }
 
@@ -3466,7 +3466,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().filterList()
@@ -3479,7 +3479,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }          
                 }
 
@@ -3853,7 +3853,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().tagIt()
@@ -3866,7 +3866,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }          
                 }
 
@@ -4265,7 +4265,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().selectDropdown()
@@ -4278,7 +4278,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -4361,7 +4361,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().confirm()
@@ -4374,7 +4374,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -4636,7 +4636,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().resizeable()
@@ -4649,7 +4649,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -4762,7 +4762,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().autoTargetBlank()
@@ -4775,7 +4775,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -4886,7 +4886,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().autoLinkImages()
@@ -4899,7 +4899,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -4984,7 +4984,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().markdownBody()
@@ -4997,7 +4997,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -5123,7 +5123,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().userAutoComplete()
@@ -5136,7 +5136,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -5304,7 +5304,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().userTagIt()
@@ -5317,7 +5317,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -5495,7 +5495,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().keyBinder()
@@ -5508,7 +5508,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -5639,7 +5639,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().textFieldMirror()
@@ -5652,7 +5652,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -6010,7 +6010,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().suggester()
@@ -6023,7 +6023,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -6458,7 +6458,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().popper()
@@ -6471,7 +6471,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -6577,7 +6577,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().password()
@@ -6592,7 +6592,7 @@ $(function (win, doc, $) {
                             } else {
                                 $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                             }
-                            methods.init($caller, methodName, func);
+                            return methods.init($caller, methodName, func);
                         });                     
                     }
                 }
@@ -6671,7 +6671,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {                    
                     // $().loader()
@@ -6686,7 +6686,7 @@ $(function (win, doc, $) {
                             } else {
                                 $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                             }
-                            methods.init($caller, methodName, func);
+                            return methods.init($caller, methodName, func);
                         });
                     }
                 }
@@ -6776,7 +6776,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().loaderSpy()
@@ -6791,7 +6791,7 @@ $(function (win, doc, $) {
                             } else {
                                 $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                             }
-                            methods.init($caller, methodName, func);
+                            return methods.init($caller, methodName, func);
                         });
                     }
                 }
@@ -6895,7 +6895,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName, func);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().slideSpy()
@@ -6910,7 +6910,7 @@ $(function (win, doc, $) {
                             } else {
                                 $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                             }
-                            methods.init($caller, methodName, func);
+                            return methods.init($caller, methodName, func);
                         });
                     }
                 }
@@ -7097,7 +7097,17 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function ($caller) {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName]) {
+                        return this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
                 this.bind($caller);
             },
             bind: function ($caller) {
@@ -7196,8 +7206,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -7206,12 +7217,9 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                      
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -7226,18 +7234,20 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().replySpy()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $("body");
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
+                        return methods.init($caller, methodName, func);                      
                     }
                 }
 
@@ -7258,7 +7268,18 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function ($caller) {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName]) {
+                        return this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
+
                 this.bind($caller);
             },
             bind: function ($caller) {
@@ -7310,8 +7331,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -7320,12 +7342,9 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                      
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -7340,18 +7359,20 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().navSite()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $("body");
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -7366,24 +7387,46 @@ $(function (win, doc, $) {
         var dataKey = "layout",
             dataIdKey = dataKey + "Id";
 
+        // Default options
         var defaults = {
             stickyHeaders: true,
             stickySidebars: true
         };
 
+        // CSS selectors for various layout elements
+        var selectors = {
+            body: ".layout-body",
+            content: ".layout-content",
+            footer: ".layout-footer",
+            stickyHeader: ".layout-header-sticky",
+            stickySideBar: ".layout-sidebar-sticky",
+            stickySideBarContent: ".layout-sidebar-content"
+        };
+
         var methods = {
-            init: function ($caller) {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName]) {
+                        return this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
                 this.bind($caller);
+
             },
             bind: function ($caller) {
 
                 // Layout elements
-                var $stickyHeader = $caller.find(".layout-header-sticky"),
-                    $stickySidebar = $caller.find(".layout-sidebar-sticky"),
-                    $stickySidebarContent = $stickySidebar.find(".layout-sidebar-content"),
-                    $body = $caller.find(".layout-body"),
-                    $content = $caller.find(".layout-content"),
-                    $footer = $caller.find(".layout-footer");
+                var $stickyHeader = $caller.find(selectors.stickyHeader),
+                    $stickySidebar = $caller.find(selectors.stickySideBar),
+                    $stickySidebarContent = $stickySidebar.find(selectors.stickySideBarContent),
+                    $body = $caller.find(selectors.body),
+                    $content = $caller.find(selectors.content),
+                    $footer = $caller.find(selectors.footer);
 
                 // Layout options
                 var sidebarOffsetTop = 0,
@@ -7480,9 +7523,10 @@ $(function (win, doc, $) {
 
                         }
                     });
+
                 }                
 
-                // Update infinite default scroll spacing 
+                // Initialize infiniteScroll with scroll spacing 
                 // to accomodate for fixed headers
                 $().infiniteScroll({
                     scrollSpacing: sidebarOffsetTop
@@ -7490,14 +7534,20 @@ $(function (win, doc, $) {
 
             },
             unbind: function ($caller) {
+                $().infiniteScroll("unbind");
+            },
+            getHeaderHeight: function ($caller) {                
+                var $el = $caller.find(selectors.stickyHeader);
+                return $el.length > 0 ? $el.outerHeight() : 0;                
             }
         };
 
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -7506,12 +7556,9 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                      
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -7526,18 +7573,20 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().layout()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $("body");
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -7555,8 +7604,19 @@ $(function (win, doc, $) {
         var defaults = {};
 
         var methods = {
-            init: function ($caller) {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName]) {
+                        return this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
                 this.bind($caller);
+
             },
             bind: function ($caller) {
                 
@@ -7586,8 +7646,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -7596,12 +7657,9 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                      
                         case Function:
+                            func = a;
                             break;
                     }
                 }
@@ -7616,18 +7674,20 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        return methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().badgeList()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    var $caller = $('[data-provide="badge-list"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
