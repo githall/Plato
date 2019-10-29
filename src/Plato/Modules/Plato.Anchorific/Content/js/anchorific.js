@@ -33,7 +33,8 @@ if (typeof window.$.Plato === "undefined") {
                 spy: true, // scroll spy
                 position: 'append', // position of anchor icon
                 spyOffset: !0, // specify heading offset for spy scrolling
-                onAnchorClick: null // triggers when an acnhor link is clicked
+                onAnchorClick: null, // triggers when an acnhor link is clicked
+                onNavClick: null
             },
             methods = {
                 alreadyAdded: [],
@@ -72,9 +73,19 @@ if (typeof window.$.Plato === "undefined") {
                     // when navigation configuration is set
                     var navSelector = $caller.data(dataKey).navigation;
                     if (navSelector) {
-                        var $header = $("<h1 />").text($caller.data(dataKey).title);
-                        $(navSelector).append($header);
-                        $(navSelector).append('<ul />');
+                 
+                        var $h = $("<h3 />")
+                            .append($("<i />", {
+                                class: "fal fa-align-left mr-2 small"
+                            }))
+                            .append($("<span/>").text($caller.data(dataKey).title));
+
+                        // Add table of contents generated from headers
+                        $caller.prepend($('<nav class="anchorific"></nav>'));                    
+                        $(navSelector).append($h);
+                        $(navSelector).append('<hr />');
+                        $(navSelector).append('<ul />');                        
+                        $(navSelector).append('<hr />');
                         self.previous = $(navSelector).find('ul').last();
                         navigations = function ($el, obj) {
                             return self.navigations($el, obj);
@@ -105,10 +116,14 @@ if (typeof window.$.Plato === "undefined") {
                         name = obj.attr('id');
                     }
 
-                    link = $('<a />').attr('href', '#' + name).text(obj.text());
+                    link = $('<a />')
+                        .attr('href', '#' + name)
+                        .addClass("text-muted")
+                        .text(obj.text());
+
                     link.click(function (e) {
                         if ($caller.data(dataKey).onAnchorClick) {
-                            $caller.data(dataKey).onAnchorClick($caller, $(this), e);
+                            $caller.data(dataKey).onAnchorClick($(this), e);
                         }
                     });
 
@@ -171,7 +186,7 @@ if (typeof window.$.Plato === "undefined") {
 
                     $anchor.click(function (e) {                        
                         if ($caller.data(dataKey).onAnchorClick) {
-                            $caller.data(dataKey).onAnchorClick($caller, $(this), e);
+                            $caller.data(dataKey).onAnchorClick($(this), e);
                         }
                     });
 
@@ -221,9 +236,9 @@ if (typeof window.$.Plato === "undefined") {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
-                var func = null;
+                var options = {},
+                    methodName = null,
+                    func = null;          
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -232,11 +247,7 @@ if (typeof window.$.Plato === "undefined") {
                             break;
                         case String:
                             methodName = a;
-                            break;
-                        case Boolean:
-                            break;
-                        case Number:
-                            break;
+                            break;                     
                         case Function:
                             func = a;
                             break;
@@ -257,7 +268,7 @@ if (typeof window.$.Plato === "undefined") {
                     });
                 } else {
                     // $().anchorific()
-                    var $caller = $('[data-provide="infiniteScroll"]');
+                    var $caller = $(".entity-body");
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -289,30 +300,32 @@ if (typeof window.$.Plato === "undefined") {
     app.ready(function () {
         
         var offset = $().layout("getHeaderHeight"),
-            $anchor = null,
+            $header = null,
             opts = {
+                title: app.T("Contents"),
                 anchorTitle: app.T("Link to this section"),
-                spyOffset: offset, // specify heading offset for spy scrolling
-                onAnchorClick: function ($caller, $this, e) {
+                spyOffset: offset, // specify heading offset for spy scrolling                
+                onAnchorClick: function ($link, e) {
 
                     // Prevent defaults
                     e.preventDefault();
                     e.stopPropagation();
-                    
-                    // Set clicked anchor for onScrollEnd event
-                    $anchor = $this;
+
+                    var href = $link.attr("href");
+                    $header = $(href);
+
+                    // Set clicked anchor for onScrollEnd event               
 
                     // Scroll to anchor
                     $().scrollTo({
                         offset: -offset,
-                        target: $anchor
+                        target: $header
                     }, "go");
 
                 }
             };
 
-        // Add table of contents generated from headers
-        $(".entity-body").prepend($('<nav class="anchorific"></nav>'));        
+        
 
         // Apply anchorific only to entity bodies
         $(".entity-body").anchorific(opts);
@@ -321,14 +334,14 @@ if (typeof window.$.Plato === "undefined") {
         $().infiniteScroll("scrollEnd", function () {
 
             // Ensure we have a clicked anchor
-            if (!$anchor) {
+            if (!$header) {
                 return;
             }
 
             var offsetString = "",
                 infiniteScrollUrl = null,
-                $infiniteScroll = $anchor.closest('[data-provide="infiniteScroll"]'),
-                $offset = $anchor.closest(".card").find('[data-infinite-scroll-offset]'),
+                $infiniteScroll = $header.closest('[data-provide="infiniteScroll"]'),
+                $offset = $header.closest(".card").find('[data-infinite-scroll-offset]'),
                 offset = parseInt($offset.data("infiniteScrollOffset"));
 
             if (!isNaN(offset)) {
@@ -350,8 +363,8 @@ if (typeof window.$.Plato === "undefined") {
             }
 
             var hash = "";
-            if ($anchor.attr("href")) {
-                hash = $anchor.attr("href");
+            if ($header.attr("id")) {
+                hash = "#" + $header.attr("id");
             }
             
             // Replace state
@@ -359,7 +372,7 @@ if (typeof window.$.Plato === "undefined") {
                 win.history.replaceState(win.history.state || {}, doc.title, url + hash);
             }
 
-            $anchor = null;
+            $header = null;
 
         });
 

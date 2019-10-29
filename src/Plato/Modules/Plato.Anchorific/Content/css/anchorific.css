@@ -20,18 +20,18 @@ a.anchor {
 }
 
 .anchorific h1:first-child,
-.anchorific h1:first-child,
-.anchorific h1:first-child,
-.anchorific h1:first-child,
-.anchorific h1:first-child,
-.anchorific h1:first-child {
+.anchorific h2:first-child,
+.anchorific h3:first-child,
+.anchorific h4:first-child,
+.anchorific h5:first-child,
+.anchorific h6:first-child {
     margin-top: 0;
 }
 
 .anchorific ul {
     list-style-type: none;
     margin: 0;
-    padding: 1rem 0;
+    padding: 0;
 }
 
 .anchorific li ul {
@@ -41,7 +41,7 @@ a.anchor {
 }
 
 .anchorific ul li a {
-    display: block; 
+    display: inline-block; 
     text-decoration: none;
  
 }
