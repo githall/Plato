@@ -24,6 +24,7 @@ if (typeof window.$.Plato === "undefined") {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
+                title: "Table of Contents",
                 navigation: '.anchorific', // position of navigation
                 headers: 'h1, h2, h3, h4, h5, h6', // custom headers selector                
                 anchorClass: 'anchor text-muted', // class of anchor links                
@@ -35,6 +36,7 @@ if (typeof window.$.Plato === "undefined") {
                 onAnchorClick: null // triggers when an acnhor link is clicked
             },
             methods = {
+                alreadyAdded: [],
                 init: function ($caller, methodName) {
 
                     if (methodName) {
@@ -70,6 +72,8 @@ if (typeof window.$.Plato === "undefined") {
                     // when navigation configuration is set
                     var navSelector = $caller.data(dataKey).navigation;
                     if (navSelector) {
+                        var $header = $("<h1 />").text($caller.data(dataKey).title);
+                        $(navSelector).append($header);
                         $(navSelector).append('<ul />');
                         self.previous = $(navSelector).find('ul').last();
                         navigations = function ($el, obj) {
@@ -294,9 +298,9 @@ if (typeof window.$.Plato === "undefined") {
                     // Prevent defaults
                     e.preventDefault();
                     e.stopPropagation();
-
+                    
                     // Set clicked anchor for onScrollEnd event
-                    $anchor = $caller.find($this.attr("href")) || $this;
+                    $anchor = $this;
 
                     // Scroll to anchor
                     $().scrollTo({
@@ -308,16 +312,16 @@ if (typeof window.$.Plato === "undefined") {
             };
 
         // Add table of contents generated from headers
-        //$("body").append($('<nav class="anchorific"></nav>'));        
+        $(".entity-body").prepend($('<nav class="anchorific"></nav>'));        
 
-        // anchorific
-        $('[data-provide="markdownBody"]').anchorific(opts);
+        // Apply anchorific only to entity bodies
+        $(".entity-body").anchorific(opts);
 
         // Update state if anchor was clicked after scrollEnd event
         $().infiniteScroll("scrollEnd", function () {
 
             // Ensure we have a clicked anchor
-            if ($anchor === null) {
+            if (!$anchor) {
                 return;
             }
 
@@ -345,12 +349,14 @@ if (typeof window.$.Plato === "undefined") {
                 url = win.location.href.split("#")[0];
             }
 
-            console.log(url);
-            console.log($anchor.attr("href"));
-
+            var hash = "";
+            if ($anchor.attr("href")) {
+                hash = $anchor.attr("href");
+            }
+            
             // Replace state
             if (url !== "") {           
-                win.history.replaceState(win.history.state || {}, doc.title, url + $anchor.attr("href"));
+                win.history.replaceState(win.history.state || {}, doc.title, url + hash);
             }
 
             $anchor = null;
@@ -359,7 +365,7 @@ if (typeof window.$.Plato === "undefined") {
 
         // Activate anchorific when loaded via infiniteScroll load
         $().infiniteScroll("ready", function ($ele) {
-            $ele.find('[data-provide="markdownBody"]').anchorific(opts);
+            //$ele.find('[data-provide="markdownBody"]').anchorific(opts);
         });
 
     });
