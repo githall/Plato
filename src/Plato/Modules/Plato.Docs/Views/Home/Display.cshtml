@@ -98,7 +98,9 @@
                 <div class="d-none d-lg-block col-lg-2 layout-asides layout-asides-sticky">
                     @if (Model.Asides != null)
                     {
-                        <view model="@Model.Asides"></view>
+                        <div class="layout-asides-content">
+                            <view model="@Model.Asides"></view>
+                        </div>
                     }
                 </div>
             </div>

@@ -41,7 +41,7 @@ namespace Plato.Docs.Follow
             services.AddScoped<IViewProvider<Doc>, DocViewProvider>();
             services.AddScoped<IViewProviderManager<DocComment>, ViewProviderManager<DocComment>>();
             services.AddScoped<IViewProvider<DocComment>, CommentViewProvider>();
-            
+
             // Follow subscribers
             services.AddScoped<IBrokerSubscriber, FollowSubscriber>();
             services.AddScoped<IBrokerSubscriber, EntityReplySubscriber<DocComment>>();
@@ -53,13 +53,13 @@ namespace Plato.Docs.Follow
             // Notification managers
             services.AddScoped<INotificationManager<Doc>, NotificationManager<Doc>>();
             services.AddScoped<INotificationManager<DocComment>, NotificationManager<DocComment>>();
-            
+
             // Notification Providers
             services.AddScoped<INotificationProvider<Doc>, UpdatedDocEmail>();
             services.AddScoped<INotificationProvider<Doc>, UpdatedDocWeb>();
             services.AddScoped<INotificationProvider<DocComment>, NewCommentEmail>();
             services.AddScoped<INotificationProvider<DocComment>, NewCommentWeb>();
-        
+
             // Query adapters 
             services.AddScoped<IQueryAdapterProvider<Doc>, DocQueryAdapter>();
 

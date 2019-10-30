@@ -1316,10 +1316,13 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .layout-meta,
 .layout-body,
 .layout-content,
+.layout-sidebar,
 .layout-sidebar-sticky,
 .layout-footer,
 .layout-footer-item,
-.layout-actions {}
+.layout-actions,
+.layout-asides,
+.layout-asides-sticky {}
 
 .layout-tools  {
     
@@ -1356,13 +1359,14 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     }
     
     /* When the sidebar becomes fixed, fix content */
-   .layout-sidebar.fixed > .layout-sidebar-content {
+    .layout-sidebar.fixed > .layout-sidebar-content,
+    .layout-asides.fixed > .layout-asides-content {
         position: fixed;
         display: flex;
-        -webkit-box-orient: vertical!important;
-        -webkit-box-direction: normal!important;
-        -ms-flex-direction: column!important;
-        flex-direction: column!important;
+        -webkit-box-orient: vertical !important;
+        -webkit-box-direction: normal !important;
+        -ms-flex-direction: column !important;
+        flex-direction: column !important;
     }
 
     /* Ensure collapse is visible by default for desktops */

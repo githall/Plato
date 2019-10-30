@@ -533,7 +533,8 @@ $(function (win, doc, $) {
             },
             layout: {
                 stickyHeaders: true,
-                stickySidebars: true
+                stickySidebars: true,
+                stickyAsides: true
             },
             validation: {
                 scrollToErrors: true

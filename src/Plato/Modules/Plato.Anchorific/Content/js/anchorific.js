@@ -25,7 +25,7 @@ if (typeof window.$.Plato === "undefined") {
             anchorClass: 'anchor text-muted', // class of anchor links                
             anchorTitle: null, // title text displayed when you hover over an anchor link
             iconCss: "fal fa-link", // the anchor link header icon
-            spy: false, // scroll spy enabled
+            spy: true, // scroll spy enabled
             position: 'append', // position of anchor icon relative to the header
             spyOffset: $().layout("getHeaderHeight") || !0 // specify heading offset for spy scrolling          
         };
@@ -99,7 +99,9 @@ if (typeof window.$.Plato === "undefined") {
                     self.anchor($caller, obj);
                 }
 
-
+                // Set the first list item as active
+                $nav.find("li").first().addClass("active");
+                
             },
             navigations: function ($caller, obj) {
 
@@ -122,7 +124,7 @@ if (typeof window.$.Plato === "undefined") {
                     // Prevent defaults
                     e.preventDefault();
                     e.stopPropagation();
-
+               
                     if ($(this).attr("href")) {
                         methods._$header = $($(this).attr("href"));
                         if (methods._$header.length > 0) {
@@ -226,13 +228,14 @@ if (typeof window.$.Plato === "undefined") {
                     current,
                     list,
                     top,
-                    prev;
+                    prev,
+                    offset = $caller.data(dataKey).spyOffset;
 
                 $(win).scroll(function (e) {
 
                     // get the header on top of the viewport
                     current = self.headers.map(function (e) {
-                        if ($(this).offset().top - $(win).scrollTop() < $caller.data(dataKey).spyOffset) {
+                        if (($(this).offset().top - offset) - $(win).scrollTop() < offset) {
                             return this;
                         }
                     });
@@ -241,6 +244,7 @@ if (typeof window.$.Plato === "undefined") {
                     current = $(current).eq(current.length - 1);
 
                     if (current && current.length) {
+
                         // get all li tag that contains href of # ( all the parents )
                         list = $('li:has(a[href="#' + current.attr('id') + '"])');
 
@@ -250,7 +254,9 @@ if (typeof window.$.Plato === "undefined") {
 
                         list.addClass('active');
                         prev = list;
+
                     }
+
                 });
             },
             clearHeader: function ($caller) {
@@ -320,52 +326,5 @@ if (typeof window.$.Plato === "undefined") {
     $.fn.extend({
         anchorific: anchorific.init
     });
-
-    // ---------------
-
-    //var app = win.$.Plato;
-    //app.ready(function () {
-        
-    //    var opts = {
-    //        title: app.T("Contents"),
-    //        anchorTitle: app.T("Link to this section")
-    //    };
-
-    //    // Apply anchorific only to entity bodies
-    //    $(".entity-body").anchorific(opts);
-
-    //    // Update state if anchor was clicked after scrollEnd event
-    //    $().infiniteScroll("scrollEnd", function () {
-
-    //        var $header = $(".entity-body").anchorific("getHeader");
-
-    //        // Ensure we have a clicked anchor
-    //        if (!$header) {
-    //            return;
-    //        }
-
-    //        // Get url minus any existing anchor
-    //        var url = win.location.href.split("#")[0];
-    //        var hash = "";
-    //        if ($header.attr("id")) {
-    //            hash = "#" + $header.attr("id");
-    //        }
-            
-    //        // Replace state
-    //        if (url !== "") {           
-    //            win.history.replaceState(win.history.state || {}, doc.title, url + hash);
-    //        }
-
-    //        $header = null;
-
-    //    });
-
-    //    // Activate anchorific when loaded via infiniteScroll load
-    //    $().infiniteScroll("ready", function ($ele) {
-    //        $(".entity-body").anchorific(opts);
-    //        //$ele.find('[data-provide="markdownBody"]').anchorific(opts);
-    //    });
-
-    //});
 
 })(jQuery, window, document);
