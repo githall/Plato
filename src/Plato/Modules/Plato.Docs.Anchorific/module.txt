@@ -1,0 +1,19 @@
+Name: Plato Docs Anchorific
+Description: Generates anchored headings and a table of contents from header tags within docs
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Docs
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.docs.anchorific/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Anchorific",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Docs",
+		Version: "1.0.0"
+	}
+]

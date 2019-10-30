@@ -392,14 +392,15 @@ $(function (win, doc, $) {
 
             },
             bind: function ($caller) {
-
+                
+                // Bind click events for anchor elements
                 var event = $caller.data(dataKey).event;
-                if (event) {
+                if (event && $caller.is("a")) {                
                     $caller.on(event,
                         function (e) {
                             e.preventDefault();
                             methods.go($caller);
-                        });
+                        });                                  
                 }
 
             },

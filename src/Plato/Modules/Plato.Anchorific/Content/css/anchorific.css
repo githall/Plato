@@ -29,23 +29,18 @@ a.anchor {
 }
 
 .anchorific ul {
-    list-style-type: none;
     margin: 0;
-    padding: 0;
+    padding: 0 0 0 1rem;
 }
 
 .anchorific li ul {
-    list-style-type: none;
+    list-style-type: disc;
     display: block;
-    padding:0 0 0 0.5rem;
+    padding:0 0 0 1.5rem;
 }
 
 .anchorific ul li a {
     display: inline-block; 
-    text-decoration: none;
  
-}
-
-.anchorific li ul {
-    display: block;
+ 
 }
