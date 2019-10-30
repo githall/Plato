@@ -18,8 +18,7 @@ if (typeof window.$.Plato === "undefined") {
         var dataKey = "anchorific",
             dataIdKey = dataKey + "Id";
 
-        var defaults = {
-            title: "Table of Contents", // the title for the automatically generated table of contents
+        var defaults = {            
             navigation: '.anchorific', // position of navigation
             headers: 'h1, h2, h3, h4, h5, h6', // custom headers selector                
             anchorClass: 'anchor text-muted', // class of anchor links                
@@ -27,16 +26,17 @@ if (typeof window.$.Plato === "undefined") {
             iconCss: "fal fa-link", // the anchor link header icon
             spy: true, // scroll spy enabled
             position: 'append', // position of anchor icon relative to the header
-            spyOffset: $().layout("getHeaderHeight") || !0 // specify heading offset for spy scrolling          
+            spyOffset: $().layout("getHeaderHeight") || !0, // specify heading offset for spy scrolling          
+            onClick: function ($caller, $header, $link) {
+            }
         };
 
-        var methods = {
-            _$header: null,
+        var methods = {            
             init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller, func]);
+                        return this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -97,10 +97,7 @@ if (typeof window.$.Plato === "undefined") {
                     obj = self.headers.eq(i);
                     navigations($caller, obj);
                     self.anchor($caller, obj);
-                }
-
-                // Set the first list item as active
-                $nav.find("li").first().addClass("active");
+                }          
                 
             },
             navigations: function ($caller, obj) {
@@ -120,22 +117,21 @@ if (typeof window.$.Plato === "undefined") {
                     .text(obj.text());
 
                 link.click(function (e) {
-
                     // Prevent defaults
                     e.preventDefault();
-                    e.stopPropagation();
-               
-                    if ($(this).attr("href")) {
-                        methods._$header = $($(this).attr("href"));
-                        if (methods._$header.length > 0) {
-                            // Scroll to header for anchor
-                            $().scrollTo({
-                                offset: -$caller.data(dataKey).spyOffset,
-                                target: methods._$header
-                            }, "go");
+                    e.stopPropagation();               
+                    var href = $(this).attr("href"),
+                        $header = $caller.find(href);
+                    if ($header.length > 0) {                                            
+                        // Scroll to header for anchor
+                        $().scrollTo({
+                            offset: -$caller.data(dataKey).spyOffset,
+                            target: $header
+                        }, "go");
+                        if ($caller.data(dataKey).onClick) {
+                            $caller.data(dataKey).onClick($caller, $header, $(this));
                         }
                     }
-
                 });
 
                 list = $('<li />').append(link);
@@ -146,6 +142,7 @@ if (typeof window.$.Plato === "undefined") {
                 self.subheadings($caller, which, list);
 
                 self.first = which;
+
             },
             subheadings: function ($caller, which, a) {
 
@@ -165,6 +162,7 @@ if (typeof window.$.Plato === "undefined") {
                     $('li[data-tag=' + which + ']').last().parent().append(a);
                     self.previous = a.parent();
                 }
+
             },
             name: function (obj) {
                 var name = obj.text().replace(/[^\w\s]/gi, '')
@@ -196,22 +194,21 @@ if (typeof window.$.Plato === "undefined") {
                 }
 
                 $anchor.click(function (e) {
-
                     // Prevent defaults
                     e.preventDefault();
                     e.stopPropagation();
-
-                    if ($(this).attr("href")) {
-                        methods._$header = $($(this).attr("href"));
-                        if (methods._$header.length > 0) {
-                            // Scroll to header for anchor
-                            $().scrollTo({
-                                offset: -$caller.data(dataKey).spyOffset,
-                                target: methods._$header
-                            }, "go");
+                    var href = $(this).attr("href"),
+                        $header = $caller.find(href);
+                    if ($header.length > 0) {
+                        // Scroll to header for anchor
+                        $().scrollTo({
+                            offset: -$caller.data(dataKey).spyOffset,
+                            target: $header
+                        }, "go");
+                        if ($caller.data(dataKey).onClick) {
+                            $caller.data(dataKey).onClick($caller, $header, $(this));
                         }
                     }
-
                 });
 
                 if ($caller.data(dataKey).position === 'append') {
@@ -229,42 +226,40 @@ if (typeof window.$.Plato === "undefined") {
                     list,
                     top,
                     prev,
-                    offset = $caller.data(dataKey).spyOffset;
+                    offset = $caller.data(dataKey).spyOffset,
+                    set = function () {
 
+                        // get the header on top of the viewport
+                        current = self.headers.map(function (e) {
+                            if ($(this).offset().top - offset - $(win).scrollTop() < offset) {
+                                return this;
+                            }
+                        });
+
+                        // get only the latest header on the viewport
+                        current = $(current).eq(current.length - 1);
+
+                        if (current && current.length) {
+
+                            // get all li tag that contains href of # ( all the parents )
+                            list = $('li:has(a[href="#' + current.attr('id') + '"])');
+
+                            if (prev !== undefined) {
+                                prev.removeClass('active');
+                            }
+
+                            list.addClass('active');
+                            prev = list;
+
+                        }
+                    };
+
+                set();
                 $(win).scroll(function (e) {
-
-                    // get the header on top of the viewport
-                    current = self.headers.map(function (e) {
-                        if (($(this).offset().top - offset) - $(win).scrollTop() < offset) {
-                            return this;
-                        }
-                    });
-
-                    // get only the latest header on the viewport
-                    current = $(current).eq(current.length - 1);
-
-                    if (current && current.length) {
-
-                        // get all li tag that contains href of # ( all the parents )
-                        list = $('li:has(a[href="#' + current.attr('id') + '"])');
-
-                        if (prev !== undefined) {
-                            prev.removeClass('active');
-                        }
-
-                        list.addClass('active');
-                        prev = list;
-
-                    }
-
+                    set();
                 });
-            },
-            clearHeader: function ($caller) {
-                methods._$header = null;
-            },
-            getHeader: function ($caller) {
-                return methods._$header;
-            }
+
+            }           
         };
 
         return {

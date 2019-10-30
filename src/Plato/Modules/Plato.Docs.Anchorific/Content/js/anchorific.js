@@ -20,38 +20,44 @@ if (typeof window.$.Plato === "undefined") {
 
     app.ready(function () {        
 
+        // Locals
         var $elem = $(".doc-body"),
-            opts = {
-                title: app.T("Contents"),
-                anchorTitle: app.T("Link to this section")
+            $target = null,
+            opts = {              
+                anchorTitle: app.T("Link to this section"),
+                onClick: function ($caller, $header, $link) {
+                    // Track targeted header so we can update
+                    // the history state after scrollEnd
+                    $target = $header;
+                }
             };
 
-        // Apply anchorific only to entity bodies
+        // Apply anchorific
         $elem.anchorific(opts);
 
         // Update state if anchor was clicked after scrollEnd event
         $().infiniteScroll("scrollEnd", function () {
-
-            var $header = $elem.anchorific("getHeader");
-
-            // Ensure we have a clicked anchor
-            if (!$header) {
+            
+            // Ensure we have a targeted header
+            if (!$target) {
                 return;
             }
 
             // Get url minus any existing anchor
-            var url = win.location.href.split("#")[0];
-            var hash = "";
-            if ($header.attr("id")) {
-                hash = "#" + $header.attr("id");
+            var hash = "",
+                url = win.location.href.split("#")[0];
+            // Build new anchor from targeted header id
+            if ($target.attr("id")) {
+                hash = "#" + $target.attr("id");
             }
 
             // Replace state
-            if (url !== "") {           
+            if (url && url !== "") {           
                 win.history.replaceState(win.history.state || {}, doc.title, url + hash);
             }          
 
-            $elem.anchorific("clearHeader");
+            // Clear header
+            _$header = null;
 
         });
 

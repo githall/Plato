@@ -2640,30 +2640,32 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {                
+            bind: function ($caller) {  
+                
+                var $anchor = null,
+                    hash = win.location.hash,
+                    scrollSpacing = $caller.data(dataKey).scrollSpacing;
 
+                // If we have an anchor check to see if the anchor exists as a child of the 
+                // targeted inifiniteScroll highlight element and if so scroll 
+                // to the anchor instead of the inifiniteScroll highlight element                        
+                if (hash && hash !== "") {
+                    $anchor = $(hash);
+                    if ($anchor.length === 0) {
+                        $anchor = null;
+                    }
+                }
+                
                 // Scroll to any selected offset, wait until we complete
                 // scrolling before binding our scrollSpy events
                 if (methods._offset > 0) {
+
                     var $marker = methods.getOffsetMarker($caller, methods._offset),
                         $highlight = methods.getHighlightMarker($caller, methods._offset);
                     if ($marker && $highlight) {
-
-                        // If we have an anchor check to see if the anchor exists as a child of the 
-                        // targeted inifiniteScroll highlight element and if so scroll 
-                        // to the anchor instead of the inifiniteScroll highlight element
-                        var $anchor = null,
-                            hash = win.location.hash;
-                        if (hash && hash !== "") {                        
-                            $anchor = $highlight.find(hash);
-                            if ($anchor.length === 0) {
-                                $anchor = null;
-                            }
-                        }
-
                         // Scroll to offset or anchor and deactivate hihlight element
                         $().scrollTo({
-                                offset: -$caller.data(dataKey).scrollSpacing,
+                                offset: -scrollSpacing,
                                 target: $anchor !== null ? $anchor : $marker,                                
                                 onComplete: function() {
                                     // Apply css to deactivate selected offset css (set server side)
@@ -2687,8 +2689,22 @@ $(function (win, doc, $) {
                     }
 
                 } else {
-                    // Bind events right away
-                    methods.attach($caller);
+
+                    // Scroll to any anchor
+                    if ($anchor !== null) {                        
+                        $().scrollTo({
+                            offset: -scrollSpacing,
+                            target: $anchor,
+                            onComplete: function () {
+                                // Bind events right away
+                                methods.attach($caller);
+                            }
+                        }, "go");
+                    } else {
+                        // Bind events right away
+                        methods.attach($caller);
+                    }
+                    
                 }
 
             },
@@ -7546,6 +7562,8 @@ $(function (win, doc, $) {
                             $content.css({ "minHeight": $body.height() });
                         }
                     }
+
+                    console.log(sidebarOffsetTop);
 
                     // Apply sticky asides?
                     $stickyAsides.sticky({
