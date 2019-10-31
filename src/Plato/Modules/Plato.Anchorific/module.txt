@@ -1,19 +1,8 @@
 Name: Plato Anchorific
-Description: Generates anchored headings and nested anchored-based navigations based on header tags
+Description: Generates anchored headings and a table of contents from headings within entities.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
-Category: UI
+Category: User Interface
 PlatoVersion: 1.0.0
 Version: 1.0.0
 Icon: /plato.anchorific/content/images/icon.png
-Dependencies: 
-[
-	{
-		Id: "Plato.WebAPI",
-		Version: "1.0.0"
-	},
-	{
-		Id: "Plato.Admin",
-		Version: "1.0.0"
-	}
-]

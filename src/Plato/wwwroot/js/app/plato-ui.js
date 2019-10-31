@@ -7562,9 +7562,7 @@ $(function (win, doc, $) {
                             $content.css({ "minHeight": $body.height() });
                         }
                     }
-
-                    console.log(sidebarOffsetTop);
-
+                    
                     // Apply sticky asides?
                     $stickyAsides.sticky({
                         offset: sidebarOffsetTop,

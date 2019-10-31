@@ -1,6 +1,5 @@
 ﻿// <reference path="~/js/app/plato.js" />
 // <reference path="~/js/vendors/jquery.js" />
-// <reference path="~/js/vendors/bootstrap.js" />
 
 if (typeof window.jQuery === "undefined") {
     throw new Error("jQuery 3.3.1 or above Required");
@@ -25,9 +24,10 @@ if (typeof window.$.Plato === "undefined") {
             $target = null,
             opts = {              
                 anchorTitle: app.T("Link to this section"),
+                emptyText: app.T("No sections found"),
                 onClick: function ($caller, $header, $link) {
-                    // Track targeted header so we can update
-                    // the history state after scrollEnd
+                    // Track targeted header so we can update the
+                    // history state after infiniteScrolls scrollEnd event
                     $target = $header;
                 }
             };
@@ -35,7 +35,7 @@ if (typeof window.$.Plato === "undefined") {
         // Apply anchorific
         $elem.anchorific(opts);
 
-        // Update state if anchor was clicked after scrollEnd event
+        // Update state if anchor was clicked after infiniteScrolls scrollEnd event
         $().infiniteScroll("scrollEnd", function () {
             
             // Ensure we have a targeted header
@@ -43,27 +43,27 @@ if (typeof window.$.Plato === "undefined") {
                 return;
             }
 
-            // Get url minus any existing anchor
+            // Get url minus any existing anchor tag
             var hash = "",
                 url = win.location.href.split("#")[0];
-            // Build new anchor from targeted header id
+            // Build new anchor from targeted header using the header id
             if ($target.attr("id")) {
                 hash = "#" + $target.attr("id");
             }
 
-            // Replace state
+            // Replace url state
             if (url && url !== "") {           
                 win.history.replaceState(win.history.state || {}, doc.title, url + hash);
             }          
 
-            // Clear header
-            _$header = null;
+            // Clear header, until next time...
+            $target = null;
 
         });
 
         // Activate anchorific when loaded via infiniteScroll load
         $().infiniteScroll("ready", function ($ele) {
-            $(".doc-body").anchorific(opts);            
+            $elem.anchorific(opts);            
         });
 
     });

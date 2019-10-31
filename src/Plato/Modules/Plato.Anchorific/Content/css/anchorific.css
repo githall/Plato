@@ -46,7 +46,7 @@ a.anchor {
 }
 
 .anchorific li > a {
-    border-left: 3px;
+    border-left: 2px;
     border-left-style: solid;
     border-left-color: transparent;
     padding: 0.25rem 0 0.25rem 0.25rem;

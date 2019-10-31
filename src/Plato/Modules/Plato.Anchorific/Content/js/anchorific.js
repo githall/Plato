@@ -18,7 +18,7 @@ if (typeof window.$.Plato === "undefined") {
         var dataKey = "anchorific",
             dataIdKey = dataKey + "Id";
 
-        var defaults = {            
+        var defaults = {
             navigation: '.anchorific', // position of navigation
             headers: 'h1, h2, h3, h4, h5, h6', // custom headers selector                
             anchorClass: 'anchor text-muted', // class of anchor links                
@@ -28,7 +28,8 @@ if (typeof window.$.Plato === "undefined") {
             position: 'append', // position of anchor icon relative to the header
             spyOffset: $().layout("getHeaderHeight") || !0, // specify heading offset for spy scrolling          
             onClick: function ($caller, $header, $link) {
-            }
+            },
+            emptyText: "No sections found!"
         };
 
         var methods = {            
@@ -72,13 +73,6 @@ if (typeof window.$.Plato === "undefined") {
                     $nav = $(navSelector),
                     navigations = function () { };
                 
-                // Prepend .anchorific to caller if we don't have an existing .anchorific element
-                if ($nav.length === 0) {
-                    $caller.prepend($('<nav class="anchorific"></nav>'));
-                    // Get added navigation
-                    $nav = $(navSelector);
-                }
-
                 // Ensure we have navigation                
                 if ($nav.length > 0) {                    
                     if (this.headers.length > 0) {
@@ -87,8 +81,8 @@ if (typeof window.$.Plato === "undefined") {
                         navigations = function ($el, obj) {
                             return self.navigations($el, obj);
                         };
-                    } else {
-                        $nav.empty().append('<ul />');
+                    } else {                
+                        $nav.empty().text($caller.data(dataKey).emptyText);
                     }
                 }
 
@@ -308,7 +302,6 @@ if (typeof window.$.Plato === "undefined") {
                         }
                         return methods.init($caller, methodName, func);
                     }
-
                 }
 
             }
