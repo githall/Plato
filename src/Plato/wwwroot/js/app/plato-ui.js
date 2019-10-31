@@ -7421,7 +7421,6 @@ $(function (win, doc, $) {
             stickySideBarContent: ".layout-sidebar-content",
             stickyAsides: ".layout-asides-sticky",
             stickyAsidesContent: ".layout-asides-content"
-
         };
 
         var methods = {
@@ -7659,7 +7658,7 @@ $(function (win, doc, $) {
                     });
                 } else {
                     // $().layout()
-                    var $caller = $("body");
+                    var $caller = $(".layout");
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
