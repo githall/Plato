@@ -1,5 +1,5 @@
 Name: Plato Categories Roles
-Description: Adds core services to restrict access to categories based on the role associated with the category.
+Description: Adds core services to restrict access to categories based on the roles associated with the category.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Categories
