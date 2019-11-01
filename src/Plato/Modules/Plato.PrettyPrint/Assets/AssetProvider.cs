@@ -8,6 +8,18 @@ namespace Plato.PrettyPrint.Assets
 
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
+            
+            var constraints = new AssetConstraints()
+            {
+                Routes = new List<AssetConstraint>() {
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Display",
+                    }
+                }
+            };
 
             return new List<AssetEnvironment>
             {
@@ -19,19 +31,22 @@ namespace Plato.PrettyPrint.Assets
                     {
                         Url = "/plato.prettyprint/content/js/prettify.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.prettyprint/content/js/prettyprint.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.prettyprint/content/css/prettyprint.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     }
                 }),
 
@@ -42,19 +57,22 @@ namespace Plato.PrettyPrint.Assets
                     {
                         Url = "/plato.prettyprint/content/js/prettify.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.prettyprint/content/js/prettyprint.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.prettyprint/content/css/prettyprint.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     }
                 }),
 
@@ -65,19 +83,22 @@ namespace Plato.PrettyPrint.Assets
                     {
                         Url = "/plato.prettyprint/content/js/prettify.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.prettyprint/content/js/prettyprint.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.prettyprint/content/css/prettyprint.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     }
                 })
 

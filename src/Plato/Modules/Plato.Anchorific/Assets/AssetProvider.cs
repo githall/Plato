@@ -9,6 +9,18 @@ namespace Plato.Anchorific.Assets
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
 
+            var constraints = new AssetConstraints()
+            {
+                Routes = new List<AssetConstraint>() {
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Display",
+                    }
+                }
+            };
+
             return new List<AssetEnvironment>
             {
 
@@ -19,13 +31,15 @@ namespace Plato.Anchorific.Assets
                     {
                         Url = "/plato.anchorific/content/js/anchorific.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.anchorific/content/css/anchorific.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     }
                 }),
 
@@ -36,13 +50,15 @@ namespace Plato.Anchorific.Assets
                     {
                         Url = "/plato.anchorific/content/js/anchorific.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.anchorific/content/css/anchorific.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     }
                 }),
 
@@ -53,13 +69,15 @@ namespace Plato.Anchorific.Assets
                     {
                         Url = "/plato.anchorific/content/js/anchorific.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.anchorific/content/css/anchorific.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     }
                 })
 

@@ -670,12 +670,12 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 
 .markdown-body pre {
     border-radius: 3px;
-    font-size: 85%;
-    line-height: 1.45;
+    font-family: 'Courier New', 'Droid Sans Mono','CPMono_v07 Bold','Droid Sans';
+    font-weight: bold;
+    font-size: 9pt;    
     overflow: auto;
-    padding: 16px;
-    word-wrap: normal;
-    margin-bottom: 16px;
+    padding: 16px;    
+    margin-bottom: 16px;    
     margin-top: 0;
 }
 

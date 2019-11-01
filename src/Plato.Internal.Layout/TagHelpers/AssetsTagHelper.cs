@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Html;
@@ -115,14 +116,18 @@ namespace Plato.Internal.Layout.TagHelpers
             var environments = GetMergedEnvironments();
 
             // Filter by environment
-            var matchingEnvironment = environments.FirstOrDefault(g => g.TargetEnvironment == TargetEnvironment.All || g.TargetEnvironment == GetDeploymentMode());
+            var matchingEnvironment = environments
+                .FirstOrDefault(g => g.TargetEnvironment == TargetEnvironment.All ||
+                    g.TargetEnvironment == GetDeploymentMode());
 
             // Filter by section
-            var assets = matchingEnvironment?.Resources.Where(r => r.Section == Section);
-          
+            var assets = matchingEnvironment?
+                .Resources
+                .Where(r => r.Section == Section);
+
             // Filter by layout consttaints
             assets = FilterLayoutContraints(assets);
-            
+
             // Filter by route consttaints
             assets = FilterRouteContraints(assets);
 
@@ -216,6 +221,11 @@ namespace Plato.Internal.Layout.TagHelpers
             foreach (var asset in assets)
             {
 
+                if (asset.Url.IndexOf("prettyprint") >= 0)
+                {
+                    var test = "";
+                }
+
                 // No constaints to test, add the asset and move along
                 if (asset.Constraints == null)
                 {
@@ -230,52 +240,85 @@ namespace Plato.Internal.Layout.TagHelpers
                     continue;
                 }
 
-                var match = false;
+                var exactMatch = false;
+                var regExMatch = false;
 
                 // Test constraints, adding only assets matching 
                 // any of the supplied route constraints
                 foreach (var contraint in asset.Constraints.Routes)
                 {
-                    
+
                     // Test area, controller & action
                     if (contraint.ContainsKey(AreaKey) &&
                         contraint.ContainsKey(ControllerKey) &&
                         contraint.ContainsKey(ActionKey))
                     {
-                        match =
-                            contraint[AreaKey].Equals(area, StringComparison.OrdinalIgnoreCase) &&
-                            contraint[ControllerKey].Equals(controller, StringComparison.OrdinalIgnoreCase) &&
-                            contraint[ActionKey].Equals(action, StringComparison.OrdinalIgnoreCase);
-                        break;
+
+                        exactMatch =
+                            area.Equals(contraint[AreaKey], StringComparison.OrdinalIgnoreCase) &&
+                            controller.Equals(contraint[ControllerKey], StringComparison.OrdinalIgnoreCase) &&
+                            action.Equals(contraint[ActionKey], StringComparison.OrdinalIgnoreCase);
+                        
+                        if (!exactMatch)
+                        {
+                            regExMatch = MatchRoutePattern(area, contraint[AreaKey]) &&
+                                 MatchRoutePattern(controller, contraint[ControllerKey]) &&
+                                 MatchRoutePattern(action, contraint[ActionKey]);
+                        }
+                     
+                        if (exactMatch || regExMatch)
+                        {
+                            break;
+                        }
                     }
 
                     // Test area & controller
                     if (contraint.ContainsKey(AreaKey) &&
-                        contraint.ContainsKey(ControllerKey))
+                        contraint.ContainsKey(ControllerKey) &&
+                        !contraint.ContainsKey(ActionKey))
                     {
-                        match =
-                            contraint[AreaKey].Equals(area, StringComparison.OrdinalIgnoreCase) &&
-                            contraint[ControllerKey].Equals(controller, StringComparison.OrdinalIgnoreCase);
-                        if (match)
+
+                        exactMatch =
+                            area.Equals(contraint[AreaKey], StringComparison.OrdinalIgnoreCase) &&
+                            controller.Equals(contraint[ControllerKey], StringComparison.OrdinalIgnoreCase);                        
+
+                        if (!exactMatch)
+                        {
+                            regExMatch = MatchRoutePattern(area, contraint[AreaKey]) &&
+                                MatchRoutePattern(controller, contraint[ControllerKey]);
+                        }
+
+                        if (exactMatch || regExMatch)
                         {
                             break;
                         }
+
                     }
 
                     // Test area
-                    if (contraint.ContainsKey(AreaKey))
+                    if (contraint.ContainsKey(AreaKey) &&
+                        !contraint.ContainsKey(ControllerKey) &&
+                        !contraint.ContainsKey(ActionKey))
                     {
-                        match = contraint[AreaKey].Equals(area, StringComparison.OrdinalIgnoreCase);
-                        if (match)
+
+                        exactMatch = area.Equals(contraint[AreaKey], StringComparison.OrdinalIgnoreCase);                        
+
+                        if (!exactMatch)
+                        {
+                            regExMatch = MatchRoutePattern(area, contraint[AreaKey]);
+                        }
+
+                        if (exactMatch || regExMatch)
                         {
                             break;
                         }
+
                     }
-                    
+
                 }
 
                 // Add the asset to the output if any of the constraints matched
-                if (match)
+                if (exactMatch || regExMatch)
                 {
                     output.Add(asset);
                 }
@@ -285,7 +328,12 @@ namespace Plato.Internal.Layout.TagHelpers
             return output;
 
         }
-        
+
+        bool MatchRoutePattern(string route, string constraint)
+        {            
+            return Regex.Match(route, constraint, RegexOptions.IgnoreCase).Success;
+        }
+
         IEnumerable<AssetEnvironment> GetMergedEnvironments()
         {
 

@@ -9,6 +9,19 @@ namespace Plato.Entities.History.Assets
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
 
+
+            var constraints = new AssetConstraints()
+            {
+                Routes = new List<AssetConstraint>() {
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Display",
+                    }
+                }
+            };
+
             return new List<AssetEnvironment>
             {
 
@@ -19,13 +32,15 @@ namespace Plato.Entities.History.Assets
                     {
                         Url = "/plato.entities.history/content/css/history.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.entities.history/content/js/history.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                 }),
 
@@ -36,13 +51,15 @@ namespace Plato.Entities.History.Assets
                     {
                         Url = "/plato.entities.history/content/css/history.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.entities.history/content/js/history.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                 }),
 
@@ -53,13 +70,15 @@ namespace Plato.Entities.History.Assets
                     {
                         Url = "/plato.entities.history/content/css/history.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.entities.history/content/js/history.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
 
                 })

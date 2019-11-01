@@ -1,5 +1,4 @@
 ﻿using System.Collections.Generic;
-using System.Threading.Tasks;
 using Plato.Internal.Assets.Abstractions;
 
 namespace Plato.Articles.Assets
@@ -9,6 +8,16 @@ namespace Plato.Articles.Assets
 
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
+
+            var constraints = new AssetConstraints()
+            {
+                Routes = new List<AssetConstraint>() {
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.Articles"
+                    }
+                }
+            };
 
             return new List<AssetEnvironment>
             {
@@ -20,13 +29,15 @@ namespace Plato.Articles.Assets
                     {
                         Url = "/plato.articles/content/css/articles.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.articles/content/js/articles.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                 }),
 
@@ -37,13 +48,15 @@ namespace Plato.Articles.Assets
                     {
                         Url = "/plato.articles/content/css/articles.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.articles/content/js/articles.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                 }),
 
@@ -54,13 +67,15 @@ namespace Plato.Articles.Assets
                     {
                         Url = "/plato.articles/content/css/articles.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.articles/content/js/articles.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                     
                 })

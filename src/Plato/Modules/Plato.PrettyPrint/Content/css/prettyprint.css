@@ -1,29 +1,23 @@
-﻿/* Doxy pretty-printing styles. Used with prettify.js.  */
-
-
+﻿
 pre.prettyprint,
 code.prettyprint,
 .markdown-body pre.prettyprint,
-.markdown-body code.prettyprint {
-    font-family: 'Courier New', 'Droid Sans Mono','CPMono_v07 Bold','Droid Sans';
-    font-weight: bold;
-    font-size: 9pt;
-    background-color: #1E1E1E;    
-    border-radius: 3px;
-    position: relative; 
+.markdown-body code.prettyprint {    
+    background-color: #1E1E1E;
     border: 0;
+    position:relative;
+    padding:0;
 }
 
 .prettyprint .btn-group {
     position: absolute;
     top: 6px;
     right: 6px;
+    display: none;
 }
 
-pre.prettyprint {
-    width: 100%;
-    margin: 1em 0;
-    padding: 1em;
+.prettyprint:hover .btn-group {
+    display:block;
 }
 
 pre.prettyprint a, 
@@ -36,12 +30,15 @@ ol.linenums {
     color: #27687B;    
     margin-top: 0;
     margin-bottom:0;
+    padding-top:16px;
+    padding-bottom:16px;
     list-style-type: decimal;
 }
 
 ol.linenums > li {
     border-left: 1px solid #444;    
-    padding: 0 0 0 .75rem;    
+    padding: 0 0 0 .75rem;   
+    margin:0;
 }
 
 pre .str, code .str { color: #fec243; } /* string  - eggyolk gold */

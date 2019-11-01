@@ -31,10 +31,8 @@
         </div>
     </div>
 
-<cache expires-after="@TimeSpan.FromMinutes(30)">
     <assets section="Body" />
     <scripts section="Body" />
-</cache>
 
 <cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">     
     @await DisplayAsync(new View("SiteHeader", new
@@ -132,10 +130,8 @@
     </footer>
 </cache>
     
-<cache expires-after="@TimeSpan.FromMinutes(30)">
-    <assets section="Footer" />
-    <scripts section="Footer" />
-</cache>
+<assets section="Footer" />
+<scripts section="Footer" />
 
 </body>
 </html>

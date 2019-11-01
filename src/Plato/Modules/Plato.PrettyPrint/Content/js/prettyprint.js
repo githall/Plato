@@ -75,10 +75,11 @@ if (typeof window.$.Plato === "undefined") {
                     $pre.prepend($buttons);
 
                 };
-                
+             
+                // Make a note of the code block height before applying prettyPrint
                 $caller.find("pre").each(function () {
-                    if (!$(this).data("isTidy")) {
-                        $(this).data("isTidy", "true");
+                    if (!$(this).data("height")) {
+                        $(this).data("height", $(this).height());
                         $(this).addClass("prettyprint linenums");
                         buildButtons($(this));
                     }
@@ -88,6 +89,12 @@ if (typeof window.$.Plato === "undefined") {
                     win.prettyPrint();
                 }
 
+                // Ensure original height is preserved after applying prettyPrint                
+                $caller.find("pre").each(function () {
+                    if ($(this).data("height")) {
+                        $(this).css({ "height": $(this).data("height") + 32 });
+                    }
+                });
             }
         };
 
