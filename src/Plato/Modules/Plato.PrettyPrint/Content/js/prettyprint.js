@@ -15,13 +15,14 @@ if (typeof window.$.Plato === "undefined") {
 
     var prettyprint = function () {
 
-        var dataKey = "anchorific",
+        var dataKey = "prettyprint",
             dataIdKey = dataKey + "Id";
 
-        var defaults = {         
+        var defaults = {    
+            title: "Code Example"
         };
 
-        var methods = {            
+        var methods = {
             init: function ($caller, methodName, func) {
 
                 if (methodName) {
@@ -38,33 +39,54 @@ if (typeof window.$.Plato === "undefined") {
             },
             bind: function ($caller) {
 
-                console.log("prettyprint - bind");
+                var buildButtons = function ($pre) {
 
-                // convert code blocks          
+                    var $buttons = $("<div/>", {
+                            "class": "btn-group"
+                        }),
+                        $select = $("<a/>", {
+                            "href": "#",
+                            "class": "btn btn-sm text-muted",
+                            "title": "Select All"
+                        }).on("click", function (e) {
+
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            var range,
+                                element = $pre[0];
+
+                            if (doc.selection) {
+                                range = doc.body.createTextRange();
+                                range.moveToElementText(element);
+                                range.select();
+                            } else {
+                                var selection = win.getSelection();
+                                range = doc.createRange();
+                                range.selectNodeContents(element);
+                                selection.removeAllRanges();
+                                selection.addRange(range);
+                            }
+
+                        }).append($("<i/>", { "class": "fal fa-copy" }));
+
+                    $buttons.append($select);
+
+                    $pre.prepend($buttons);
+
+                };
+                
                 $caller.find("pre").each(function () {
-                    // apply css to code block
-                    var item = $(this),
-                        isTidy = item.data("isTidy");
-                    if (!isTidy) {
-
-                        var lang = item.data("language"),
-                            langCss = (lang ? " lang-" + lang : ""),
-                            langToolTip = lang ? lang.toUpperCase() + " - " : "";
-
-                        item.data("isTidy", "true");
-                        item.addClass("prettyprint" + langCss);
-
-                        item.click(function () {
-                            
-                        });
-
+                    if (!$(this).data("isTidy")) {
+                        $(this).data("isTidy", "true");
+                        $(this).addClass("prettyprint linenums");
+                        buildButtons($(this));
                     }
                 });
 
                 if (win.prettyPrint) {
                     win.prettyPrint();
                 }
-
 
             }
         };

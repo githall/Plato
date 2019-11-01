@@ -1,49 +1,62 @@
 ﻿/* Doxy pretty-printing styles. Used with prettify.js.  */
 
-pre .str, code .str { color: #fec243; } /* string  - eggyolk gold */
-pre .kwd, code .kwd { color: #8470FF; } /* keyword - light slate blue */
-pre .com, code .com { color: #32cd32; font-style: italic; } /* comment - green */
-pre .typ, code .typ { color: #6ecbcc; } /* type - turq green */
-pre .lit, code .lit { color: #d06; } /* literal - cherry red */
-pre .pun, code .pun { color: #8B8970;  } /* punctuation - lemon chiffon4  */
-pre .pln, code .pln { color: #f0f0f0; } /* plaintext - white */
-pre .tag, code .tag { color: #9c9cff; } /* html/xml tag  (bluey)  */
-pre .htm, code .htm { color: #dda0dd; } /* html tag  light purply*/
-pre .xsl, code .xsl { color: #d0a0d0; } /* xslt tag  light purply*/
-pre .atn, code .atn { color: #46eeee; font-weight: normal;} /* html/xml attribute name  - lt turquoise */
-pre .atv, code .atv { color: #EEB4B4; } /* html/xml attribute value - rosy brown2 */
-pre .dec, code .dec { color: #3387CC; } /* decimal - blue */
 
-a {
-  text-decoration: none;
-}
-pre.prettyprint, 
+pre.prettyprint,
 code.prettyprint,
 .markdown-body pre.prettyprint,
 .markdown-body code.prettyprint {
-  font-family:'Droid Sans Mono','CPMono_v07 Bold','Droid Sans';
-  font-weight: bold;
-  font-size: 9pt;
-  background-color: #0f0f0f;  
-  border-radius: 3px;
-}  
+    font-family: 'Courier New', 'Droid Sans Mono','CPMono_v07 Bold','Droid Sans';
+    font-weight: bold;
+    font-size: 9pt;
+    background-color: #1E1E1E;    
+    border-radius: 3px;
+    position: relative; 
+    border: 0;
+}
+
+.prettyprint .btn-group {
+    position: absolute;
+    top: 6px;
+    right: 6px;
+}
 
 pre.prettyprint {
-  width: 100%;
-  margin: 1em 0;
-  padding: 1em;
-  white-space: pre-wrap;
+    width: 100%;
+    margin: 1em 0;
+    padding: 1em;
 }
 
 pre.prettyprint a, 
 code.prettyprint a {
    text-decoration:none;
 }
-/* Specify class=linenums on a pre to get line numbering; line numbers themselves are the same color as punctuation */
-ol.linenums { margin-top: 0; margin-bottom: 0; color: #8B8970; } /* IE indents via margin-left */
-li.L0,li.L1,li.L2,li.L3,li.L5,li.L6,li.L7,li.L8 { list-style-type: none }
-/* Alternate shading for lines */
-li.L1,li.L3,li.L5,li.L7,li.L9 { }
+
+/* line numbers */
+ol.linenums { 
+    color: #27687B;    
+    margin-top: 0;
+    margin-bottom:0;
+    list-style-type: decimal;
+}
+
+ol.linenums > li {
+    border-left: 1px solid #444;    
+    padding: 0 0 0 .75rem;    
+}
+
+pre .str, code .str { color: #fec243; } /* string  - eggyolk gold */
+pre .kwd, code .kwd { color: #8470FF; } /* keyword - light slate blue */
+pre .com, code .com { color: #32cd32; font-style: italic; } /* comment - green */
+pre .typ, code .typ { color: #6ecbcc; } /* type - turq green */
+pre .lit, code .lit { color: #d06; } /* literal - cherry red */
+pre .pun, code .pun { color: #8B8970;  } /* punctuation - lemon chiffon4  */
+pre .pln, code .pln { color: #D7BA7D; } /* plaintext - white */
+pre .tag, code .tag { color: #9c9cff; } /* html/xml tag  (bluey)  */
+pre .htm, code .htm { color: #dda0dd; } /* html tag  light purply*/
+pre .xsl, code .xsl { color: #d0a0d0; } /* xslt tag  light purply*/
+pre .atn, code .atn { color: #46eeee; font-weight: normal;} /* html/xml attribute name  - lt turquoise */
+pre .atv, code .atv { color: #EEB4B4; } /* html/xml attribute value - rosy brown2 */
+pre .dec, code .dec { color: #3387CC; } /* decimal - blue */
 
 /* print is mostly unchanged from default at present  */
 @media print {
