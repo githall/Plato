@@ -55,9 +55,10 @@ namespace Plato.References.Services
             for (var i = 0; i < input.Length; i++)
             {
                 var c = input[i];
+                var startChar = c == StartChar;
 
                 // Start char
-                if (c == StartChar)
+                if (startChar)
                 {
                     start = i;
                     sb = new StringBuilder();
@@ -65,33 +66,34 @@ namespace Plato.References.Services
 
                 if (sb != null)
                 {
-
-                    var notStartChar = c != StartChar;
+                    
                     var validChar = _validChars.Contains(c);
                     var isTerminator = _terminators.Contains(c);
                     var endOfInput = i == input.Length - 1;
 
                     // Not the start character or a terminator
-                    if (notStartChar && validChar)
+                    if (!startChar && !isTerminator)
                     {
-                        sb.Append(c);
-                    }
-                    else
-                    {
-                        // We've reached an invalid character within the token - reset
-                        if (notStartChar && !validChar && !isTerminator)
-                        {                            
+                        // Valid character?
+                        if (validChar)
+                        {
+                            sb.Append(c);
+                        }
+                        else
+                        {
+                            // Token contains an invalid character - reset
                             start = 0;
                             sb = null;
-                        }                        
-                    }
+                        }
+                    }                   
 
                     // We've reached a terminator or the end of the input
                     if (isTerminator || endOfInput)
                     {
-                        // Ensure we have a token to add
+                        // Ensure the token has not been reest due to invalid characters
                         if (sb != null)
                         {
+                            // Ensure we actually have a token value
                             if (!string.IsNullOrEmpty(sb.ToString()))
                             {
                                 if (output == null)

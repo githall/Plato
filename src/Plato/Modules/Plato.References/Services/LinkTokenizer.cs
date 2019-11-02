@@ -124,36 +124,40 @@ namespace Plato.References.Services
                 return null;
             }
             
-            // Holds out text & value
+            // Holds our text & value
             var text = new StringBuilder();
             var value = new StringBuilder();
 
             // Flags to indicate we are inside of text or value
             var inValue = false;
-            var inText = false;
+            var inText = false;                        
 
             foreach (var c in token)
             {
 
+                var startChar = c == StartChar;
+
                 // Keep track of our location within the token
-                if (c == StartChar && !inText) { inValue = true; }
+                if (startChar && !inText) { inValue = true; }
                 if (c == TextStart) { inValue = false; inText = true; }
                 if (c == TextEnd) { inValue = false; inText = false; }
 
-                // Extract digits #123
+                // Extract digits #123, ensuring all digits are valid
                 if (inValue)
                 {
-                    if (_validValueChars.Contains(c))
+                    if (!startChar)
                     {
-                        value.Append(c);
-                    } 
-                    else
-                    {
-                        // Not a valid value character or the value start character
-                        if (c != StartChar)
+                        if (_validValueChars.Contains(c))
                         {
-                            // Exit value
-                            inValue = false;
+                            if (value != null)
+                            {
+                                value.Append(c);
+                            }                            
+                        }
+                        else
+                        {
+                            // Not a valid value character - reset
+                            value = null;
                         }
                     }
                 }
@@ -166,7 +170,13 @@ namespace Plato.References.Services
 
             }
 
-            // We could not parse a valid entity id
+            // We could not parse a valid value
+            if (value == null)
+            {
+                return null;
+            }
+
+            // We could not parse a valid value
             if (string.IsNullOrEmpty(value.ToString()))
             {
                 return null;
