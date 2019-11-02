@@ -52,7 +52,7 @@ $(function (win, doc, $) {
                         // keyBinder options
                         keys: [
                             {
-                                match: /(^|\s|\()(#([a-z0-9\-_/]*))$/i,
+                                match: /(^|\s|\()(#{1}([a-z0-9\-_/]*))$/i,
                                 search: function ($input, selection) {
 
                                     // The result of the search method is tested
@@ -81,8 +81,16 @@ $(function (win, doc, $) {
                                         }
                                     }
 
-                                    // If we have a marker search forward from
-                                    // marker until terminator to get value
+                                    // Is the character before our marker also a marker?
+                                    // For example are we adding a markdown header tag
+                                    var prevChar = startIndex > 0 ? chars[startIndex - 1] : "";
+                                    if (prevChar === marker) {
+                                        startIndex = 0;
+                                        value = "";
+                                    }
+
+                                    // If we have a marker position search forward from
+                                    // marker position until terminator to get value
                                     if (startIndex >= 0) {
                                         value = "";
                                         for (i = startIndex; i <= chars.length - 1; i++) {
@@ -91,7 +99,7 @@ $(function (win, doc, $) {
                                             }
                                             value += chars[i];
                                         }
-                                    }
+                                    }                              
 
                                     return {
                                         startIndex: startIndex,
