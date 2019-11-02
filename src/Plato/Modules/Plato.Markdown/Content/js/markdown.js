@@ -27,7 +27,8 @@
     /* MARKDOWN CLASS DEFINITION
      * ========================== */
 
-    var Markdown = function(element, options) {
+    var Markdown = function (element, options, methodName, func) {
+
         // @TODO : remove this BC on next major release
         // @see : https://github.com/toopay/bootstrap-markdown/issues/109
         var opts = [
@@ -64,7 +65,17 @@
         this.$callback = [];
         this.$nextTab = [];
 
+        if (methodName) {
+            if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                return this[methodName].apply(this, [this.$element, func]);
+            } else {
+                alert(methodName + " is not a valid method!");
+            }
+            return null;
+        }
+
         this.showEditor();
+
     };
 
     Markdown.prototype = {
@@ -326,6 +337,10 @@
             } else {
                 return src;
             }
+        },
+        __parseButtonNameParam: function (names) {
+            return typeof names === 'string' ? names.split(' ') : names;
+
         },
         setFullscreen: function(mode) {
 
@@ -953,6 +968,13 @@
             // Trigger the onShow hook
             options.onShow(this);
 
+            // Raise any registered onPreview events
+            if (options.events) {
+                for (var i = 0; i < options.events.onReady.length; i++) {
+                    options.events.onReady[i]($previewTab);
+                }
+            }
+
             return this;
 
         },
@@ -982,7 +1004,8 @@
                 return this;
             }
 
-            var $editor = this.$editor,
+            var options = this.$options,
+                $editor = this.$editor,
                 $footer = $editor.find(".md-dropzone"),
                 $textarea = this.$textarea,
                 $writeTab = $("#writeTab" + $editor.attr("id")),
@@ -1027,9 +1050,19 @@
                 $previewTab.show();
 
                 if (response.statusCode === 200) {
+
+                    // Populate preview
                     $previewTab
                         .empty()
                         .html(response.result);
+
+                    // Raise any registered onPreview events
+                    if (options.events) {
+                        for (var i = 0; i < options.events.onPreview.length; i++) {
+                            options.events.onPreview[i]($previewTab);
+                        }
+                    }
+
                 }
 
             });
@@ -1219,11 +1252,7 @@
             }
 
             return;
-        },
-        __parseButtonNameParam: function(names) {
-            return typeof names === 'string' ? names.split(' ') : names;
-
-        },
+        },        
         enableButtons: function(name) {
             var buttons = this.__parseButtonNameParam(name),
                 that = this;
@@ -1456,6 +1485,18 @@
             }
 
             return this;
+        },
+        ready: function (e, fn) {
+            if (fn) {
+                this.$options.events.onReady.push(fn);
+            }
+            return this;
+        },
+        onPreview: function (e, fn) { 
+            if (fn) {
+                this.$options.events.onPreview.push(fn);
+            }
+            return this;
         }
     };
 
@@ -1464,14 +1505,44 @@
 
     var old = $.fn.markdown;
 
-    $.fn.markdown = function(option) {
-        return this.each(function() {
-            var $this = $(this),
-                data = $this.data('markdown'),
-                options = typeof option === 'object' && option;
-            if (!data)
-                $this.data('markdown', (data = new Markdown(this, options)));
-        });
+    $.fn.markdown = function () {
+
+        var options = {},
+            methodName = null,
+            func = null;
+        for (var i = 0; i < arguments.length; ++i) {
+            var a = arguments[i];
+            switch (a.constructor) {
+                case Object:
+                    $.extend(options, a);
+                    break;
+                case String:
+                    methodName = a;
+                    break;
+                case Function:
+                    func = a;
+                    break;
+            }
+        }        
+
+        if (this.length > 0) {
+            // $(selector).markdown()
+            return this.each(function () {
+                var data = $(this).data('markdown');                    
+                if (!data) {
+                    $(this).data('markdown', data = new Markdown(this, options, methodName, func));
+                }
+                    
+            });
+        } else {
+            var $elems = $('textarea[data-provide="markdown"]');
+            $elems.each(function () {
+                var data = $(this).data('markdown');
+                if (!data) {
+                    $(this).data('markdown', data = new Markdown(this, options, methodName, func));
+                }
+            });          
+        }
     };
 
     $.fn.markdown.messages = {};
@@ -2482,7 +2553,11 @@
         onChange: function() {},
         onFullscreen: function() {},
         onFullscreenExit: function() {},
-        onSelect: function() {}
+        onSelect: function () { },
+        events: {            
+            onReady: [], // funcitons to execute when editor is ready
+            onPreview: [] // funcitons to execute when preview is loaded
+        }
     };
 
     $.fn.markdown.Constructor = Markdown;
@@ -2536,7 +2611,8 @@
                 blurNonFocused(e);
             })
         .ready(function() {
-            $('textarea[data-provide="markdown"]').each(function() {
+            $('textarea[data-provide="markdown"]').each(function () {
+                //$(this).markdown();
                 initMarkdown($(this));
             });
         });

@@ -3264,7 +3264,7 @@ $(function (win, doc, $) {
                     methods.events.scrollEnd.push(fn);
                 }
                 return this;
-            },
+            }
         };
 
         return {

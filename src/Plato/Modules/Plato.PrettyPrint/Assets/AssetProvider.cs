@@ -17,6 +17,18 @@ namespace Plato.PrettyPrint.Assets
                         ["area"] = "Plato.*",
                         ["controller"] = "Home",
                         ["action"] = "Display",
+                    },
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Create",
+                    },
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Edit",
                     }
                 }
             };

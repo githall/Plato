@@ -363,7 +363,12 @@ if (typeof window.$.Plato === "undefined") {
         });
 
         // Activate anchorific when loaded via infiniteScroll load
-        $().infiniteScroll("ready", function ($ele) {
+        $().infiniteScroll("ready", function ($elem) {
+            $elem.anchorific(opts);
+        });
+
+        // Activate prettyPrint when previewing within markdown editor
+        $().markdown("onPreview", function ($elem) {            
             $elem.anchorific(opts);
         });
 
