@@ -66,30 +66,48 @@ namespace Plato.References.Services
                 if (sb != null)
                 {
 
+                    var notStartChar = c != StartChar;
+                    var validChar = _validChars.Contains(c);
+                    var isTerminator = _terminators.Contains(c);
+                    var endOfInput = i == input.Length - 1;
+
                     // Not the start character or a terminator
-                    if (c != StartChar && _validChars.Contains(c))
+                    if (notStartChar && validChar)
                     {
                         sb.Append(c);
                     }
+                    else
+                    {
+                        // We've reached an invalid character within the token - reset
+                        if (notStartChar && !validChar && !isTerminator)
+                        {                            
+                            start = 0;
+                            sb = null;
+                        }                        
+                    }
 
                     // We've reached a terminator or the end of the input
-                    if (_terminators.Contains(c) || i == input.Length - 1)
+                    if (isTerminator || endOfInput)
                     {
                         // Ensure we have a token to add
-                        if (!string.IsNullOrEmpty(sb.ToString()))
+                        if (sb != null)
                         {
-                            if (output == null)
+                            if (!string.IsNullOrEmpty(sb.ToString()))
                             {
-                                output = new List<Token>();
+                                if (output == null)
+                                {
+                                    output = new List<Token>();
+                                }
+                                output.Add(new Token()
+                                {
+                                    Start = start,
+                                    End = start + sb.ToString().Length,
+                                    Value = sb.ToString()
+                                });
                             }
-                            output.Add(new Token()
-                            {
-                                Start = start,
-                                End = start + sb.ToString().Length,
-                                Value = sb.ToString()
-                            });
+
                         }
-                       
+
                         start = 0;
                         sb = null;
                     }

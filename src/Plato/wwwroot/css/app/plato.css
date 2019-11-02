@@ -669,14 +669,9 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 /* code blocks */
 
 .markdown-body pre {
-    border-radius: 3px;
-    font-family: 'Courier New', 'Droid Sans Mono','CPMono_v07 Bold','Droid Sans';
-    font-weight: bold;
-    font-size: 9pt;    
+    border-radius: 3px;    
     overflow: auto;
-    padding: 16px;    
-    margin-bottom: 16px;    
-    margin-top: 0;
+    padding: 16px;               
 }
 
 /* Ensure embedded media files have minimum dimensions  */
