@@ -31,11 +31,11 @@ $(function (win, doc, $) {
         var defaults = {};
 
         var methods = {
-            init: function ($caller, methodName) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName]) {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -46,6 +46,8 @@ $(function (win, doc, $) {
 
             },
             bind: function ($caller) {
+
+                var marker = "#";
 
                 $caller.suggester($.extend($caller.data(dataKey)),
                     {
@@ -62,8 +64,7 @@ $(function (win, doc, $) {
                                     // This code executes on every key press so should be highly optimized
 
                                     var chars = $input.val().split(""),
-                                        value = null,
-                                        marker = "#",
+                                        value = null,                                        
                                         startIndex = -1,
                                         start = selection.start - 1,
                                         i;
@@ -82,15 +83,18 @@ $(function (win, doc, $) {
                                     }
 
                                     // Is the character before our marker also a marker?
-                                    // For example are we adding a markdown header tag
+                                    // For example are we adding a markdown header tag 
+                                    // i.e. (## header 2, ### header 3, #### header 4 etc)
                                     var prevChar = startIndex > 0 ? chars[startIndex - 1] : "";
+                                    console.log(prevChar);
                                     if (prevChar === marker) {
-                                        startIndex = 0;
-                                        value = "";
+                                        // Reset
+                                        startIndex = -1;
+                                        value = null;
                                     }
 
                                     // If we have a marker position search forward from
-                                    // marker position until terminator to get value
+                                    // the marker position until a terminator to get value
                                     if (startIndex >= 0) {
                                         value = "";
                                         for (i = startIndex; i <= chars.length - 1; i++) {
@@ -110,12 +114,14 @@ $(function (win, doc, $) {
                                 bind: function ($input, searchResult, e) {
                                     
                                     var keywords = searchResult.value;
+
+                                    // Ensure we have a value
                                     if (!keywords) {
                                         return;
                                     }
 
                                     // Remove any marker prefix from search keywords
-                                    if (keywords.substring(0, 1) === "#") {
+                                    if (keywords.substring(0, 1) === marker) {
                                         keywords = keywords.substring(1, keywords.length);
                                     }
                                     
@@ -258,8 +264,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     if (a) {
@@ -269,12 +276,9 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
-                            case Boolean:
-                                break;
-                            case Number:
-                                break;
+                                break;                          
                             case Function:
+                                func = a;
                                 break;
                         }
                     }
@@ -290,7 +294,7 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
                     // $().references
