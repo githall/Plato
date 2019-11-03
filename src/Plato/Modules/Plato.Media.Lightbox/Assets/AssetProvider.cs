@@ -17,6 +17,18 @@ namespace Plato.Media.LightBox.Assets
                         ["area"] = "Plato.*",
                         ["controller"] = "Home",
                         ["action"] = "Display",
+                    },
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Create",
+                    },
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Edit",
                     }
                 }
             };
@@ -48,14 +60,14 @@ namespace Plato.Media.LightBox.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/js/lightbox.js",
+                        Url = "/plato.media.lightbox/content/js/lightbox.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/css/lightbox.css",
+                        Url = "/plato.media.lightbox/content/css/lightbox.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
@@ -67,14 +79,14 @@ namespace Plato.Media.LightBox.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/js/lightbox.js",
+                        Url = "/plato.media.lightbox/content/js/lightbox.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.media.lightbox/content/css/lightbox.css",
+                        Url = "/plato.media.lightbox/content/css/lightbox.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints

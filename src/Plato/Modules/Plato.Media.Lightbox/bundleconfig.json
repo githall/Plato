@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "Content/js/lightbox.min.js",
+    "inputFiles": [
+      "Content/js/lightbox.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/css/lightbox.min.css",
+    "inputFiles": [
+      "Content/css/lightbox.css"
+    ]
+  }
+]

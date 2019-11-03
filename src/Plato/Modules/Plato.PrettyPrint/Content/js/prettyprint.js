@@ -180,9 +180,11 @@ if (typeof window.$.Plato === "undefined") {
         $elem.prettyprint(opts);
 
         // Activate anchorific when loaded via infiniteScroll load
-        $().infiniteScroll("ready", function ($elem) {
-            $elem.prettyprint(opts);
-        });
+        if ($().infiniteScroll) {
+            $().infiniteScroll("ready", function ($elem) {
+                $elem.prettyprint(opts);
+            });
+        }
 
         // Activate prettyPrint upon markdown preview
         if ($().markdown) {

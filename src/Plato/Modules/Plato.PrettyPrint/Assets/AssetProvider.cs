@@ -41,7 +41,7 @@ namespace Plato.PrettyPrint.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.prettyprint/content/js/prettify.js",
+                        Url = "/plato.prettyprint/content/js/prettify.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
@@ -67,21 +67,21 @@ namespace Plato.PrettyPrint.Assets
                 {
                      new Asset()
                     {
-                        Url = "/plato.prettyprint/content/js/prettify.js",
+                        Url = "/plato.prettyprint/content/js/prettify.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.prettyprint/content/js/prettyprint.js",
+                        Url = "/plato.prettyprint/content/js/prettyprint.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.prettyprint/content/css/prettyprint.css",
+                        Url = "/plato.prettyprint/content/css/prettyprint.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
@@ -93,21 +93,21 @@ namespace Plato.PrettyPrint.Assets
                 {
                      new Asset()
                     {
-                        Url = "/plato.prettyprint/content/js/prettify.js",
+                        Url = "/plato.prettyprint/content/js/prettify.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.prettyprint/content/js/prettyprint.js",
+                        Url = "/plato.prettyprint/content/js/prettyprint.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.prettyprint/content/css/prettyprint.css",
+                        Url = "/plato.prettyprint/content/css/prettyprint.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints

@@ -335,41 +335,44 @@ if (typeof window.$.Plato === "undefined") {
 
         // Apply anchorific
         $elem.anchorific(opts);
-
-        // Update state if anchor was clicked after infiniteScrolls scrollEnd event
-        $().infiniteScroll("scrollEnd", function () {
-
-            // Ensure we have a targeted header
-            if (!$target) {
-                return;
-            }
-
-            // Get url minus any existing anchor tag
-            var hash = "",
-                url = win.location.href.split("#")[0];
-            // Build new anchor from targeted header using the header id
-            if ($target.attr("id")) {
-                hash = "#" + $target.attr("id");
-            }
-
-            // Replace url state
-            if (url && url !== "") {
-                win.history.replaceState(win.history.state || {}, doc.title, url + hash);
-            }
-
-            // Clear header, until next time...
-            $target = null;
-
-        });
         
-        // Activate anchorific when loaded via infiniteScroll load
+        // Ensure infiniteScroll is available
         if ($().infiniteScroll) {
+
+            // Activate anchorific when loaded via infiniteScroll load
             $().infiniteScroll("ready", function ($elem) {
                 $elem.anchorific(opts);
             });
-        }        
+            
+            // Update state if anchor was clicked after infiniteScrolls scrollEnd event
+            $().infiniteScroll("scrollEnd", function () {
+
+                // Ensure we have a targeted header
+                if (!$target) {
+                    return;
+                }
+
+                // Get url minus any existing anchor tag
+                var hash = "",
+                    url = win.location.href.split("#")[0];
+                // Build new anchor from targeted header using the header id
+                if ($target.attr("id")) {
+                    hash = "#" + $target.attr("id");
+                }
+
+                // Replace url state
+                if (url && url !== "") {
+                    win.history.replaceState(win.history.state || {}, doc.title, url + hash);
+                }
+
+                // Clear header, until next time...
+                $target = null;
+
+            });        
         
-        // Activate prettyPrint when previewing within markdown editor
+        }
+        
+        // Activate anchorific when previewing within markdown editor
         if ($().markdown) {
             $().markdown("preview", function ($elem) {            
                 $elem.anchorific(opts);

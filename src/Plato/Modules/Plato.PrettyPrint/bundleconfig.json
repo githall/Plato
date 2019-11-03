@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "Content/js/prettyprint.min.js",
+    "inputFiles": [
+      "Content/js/prettyprint.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/css/prettyprint.min.css",
+    "inputFiles": [
+      "Content/css/prettyprint.css"
+    ]
+  }
+]

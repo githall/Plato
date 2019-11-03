@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "Content/js/anchorific.min.js",
+    "inputFiles": [
+      "Content/js/anchorific.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/css/anchorific.min.css",
+    "inputFiles": [
+      "Content/css/anchorific.css"
+    ]
+  }
+]

@@ -30,7 +30,7 @@ $(function (win, doc, $) {
         var $template = null;
 
         var methods = {
-            init: function ($caller, methodName) {
+            init: function ($caller, methodName, func) {
 
                 // Hydrate $template
                 this._build($caller);
@@ -38,7 +38,7 @@ $(function (win, doc, $) {
                 // Method calls
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
-                        this[methodName].apply(this, [$caller]);
+                        this[methodName].apply(this, [$caller, func]);
                     } else {
                         alert(methodName + " is not a valid method!");
                     }
@@ -165,8 +165,9 @@ $(function (win, doc, $) {
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     if (a) {
@@ -177,11 +178,8 @@ $(function (win, doc, $) {
                             case String:
                                 methodName = a;
                                 break;
-                            case Boolean:
-                                break;
-                            case Number:
-                                break;
                             case Function:
+                                func = a;
                                 break;
                         }
                     }
@@ -197,19 +195,24 @@ $(function (win, doc, $) {
                         } else {
                             $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
                         }
-                        methods.init($(this), methodName);
+                        methods.init($(this), methodName, func);
                     });
                 } else {
-                    // $().lightBox()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
-                            $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
-                        } else {
-                            alert(methodName + " is not a valid method!");
+                    // $().markdown()
+                    var $callers = $('[data-provide="markdownBody"]');
+                    $callers.each(function () {
+                        var $caller = $(this);
+                        if ($caller.length > 0) {
+                            if (!$caller.data(dataIdKey)) {
+                                var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                                $caller.data(dataIdKey, id);
+                                $caller.data(dataKey, $.extend({}, defaults, options));
+                            } else {
+                                $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
+                            }
+                            return methods.init($caller, methodName, func);
                         }
-                    }
+                    });
                 }
 
             }
@@ -228,15 +231,21 @@ $(function (win, doc, $) {
     app.ready(function () {
         
         // lightBox
-        $('[data-provide="markdownBody"]')
-            .lightBox();
+        $('[data-provide="markdownBody"]').lightBox();
 
         // Activate lightBox when loaded via infiniteScroll load
-        $().infiniteScroll(function($ele) {
-                $ele.find('[data-provide="markdownBody"]')
-                    .lightBox();
-            },
-            "ready");
+        if ($().infiniteScroll) {
+            $().infiniteScroll("ready", function ($ele) {
+                $ele.find('[data-provide="markdownBody"]').lightBox();
+            });
+        }
+
+        // Activate lightBox when previewing within markdown editor
+        if ($().markdown) {
+            $().markdown("preview", function ($elem) {
+                $elem.lightBox();
+            });
+        }
 
     });
 
