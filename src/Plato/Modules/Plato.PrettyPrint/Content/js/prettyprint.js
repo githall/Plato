@@ -184,10 +184,12 @@ if (typeof window.$.Plato === "undefined") {
             $elem.prettyprint(opts);
         });
 
-        // Activate prettyPrint when previewing within markdown editor
-        $().markdown("onPreview", function ($elem) {            
-            $elem.prettyprint(opts);
-        });
+        // Activate prettyPrint upon markdown preview
+        if ($().markdown) {
+            $().markdown("preview", function ($elem) {
+                $elem.prettyprint(opts);
+            });
+        }      
 
     });
 

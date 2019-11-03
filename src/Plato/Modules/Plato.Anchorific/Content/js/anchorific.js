@@ -361,16 +361,20 @@ if (typeof window.$.Plato === "undefined") {
             $target = null;
 
         });
-
+        
         // Activate anchorific when loaded via infiniteScroll load
-        $().infiniteScroll("ready", function ($elem) {
-            $elem.anchorific(opts);
-        });
-
+        if ($().infiniteScroll) {
+            $().infiniteScroll("ready", function ($elem) {
+                $elem.anchorific(opts);
+            });
+        }        
+        
         // Activate prettyPrint when previewing within markdown editor
-        $().markdown("onPreview", function ($elem) {            
-            $elem.anchorific(opts);
-        });
+        if ($().markdown) {
+            $().markdown("preview", function ($elem) {            
+                $elem.anchorific(opts);
+            });
+        }
 
     });
 
