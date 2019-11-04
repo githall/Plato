@@ -34,13 +34,13 @@ namespace Plato.Users.Notifications.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.users.notifications/content/css/notifications.css",
+                        Url = "/plato.users.notifications/content/css/notifications.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/plato.users.notifications/content/js/notifications.js",
+                        Url = "/plato.users.notifications/content/js/notifications.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }
@@ -51,13 +51,13 @@ namespace Plato.Users.Notifications.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.users.notifications/content/css/notifications.css",
+                        Url = "/plato.users.notifications/content/css/notifications.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/plato.users.notifications/content/js/notifications.js",
+                        Url = "/plato.users.notifications/content/js/notifications.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }

@@ -9,6 +9,30 @@ namespace Plato.Mentions.Assets
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
 
+            var constraints = new AssetConstraints()
+            {
+                Routes = new List<AssetConstraint>() {
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Display",
+                    },
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Create",
+                    },
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Edit",
+                    }
+                }
+            };
+
             return new List<AssetEnvironment>
             {
 
@@ -19,13 +43,15 @@ namespace Plato.Mentions.Assets
                     {
                         Url = "/plato.mentions/content/css/mentions.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.mentions/content/js/mentions.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                 }),
 
@@ -36,13 +62,15 @@ namespace Plato.Mentions.Assets
                     {
                         Url = "/plato.mentions/content/css/mentions.min.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.mentions/content/js/mentions.min.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                 }),
 
@@ -53,13 +81,15 @@ namespace Plato.Mentions.Assets
                     {
                         Url = "/plato.mentions/content/css/mentions.min.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.mentions/content/js/mentions.min.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
 
                 })

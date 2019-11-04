@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "Content/js/ratings.min.js",
+    "inputFiles": [
+      "Content/js/ratings.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/css/ratings.min.css",
+    "inputFiles": [
+      "Content/css/ratings.css"
+    ]
+  }
+]

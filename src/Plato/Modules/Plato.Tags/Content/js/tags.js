@@ -4,10 +4,6 @@ if (typeof window.jQuery === "undefined") {
     throw new Error("jQuery 3.3.1 or above Required");
 }
 
-if (typeof $().modal === 'undefined') {
-    throw new Error("BootStrap 4.1.1 or above Required");
-}
-
 if (typeof window.$.Plato === "undefined") {
     throw new Error("$.Plato Required");
 }

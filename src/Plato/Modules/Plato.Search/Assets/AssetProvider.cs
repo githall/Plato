@@ -34,13 +34,13 @@ namespace Plato.Search.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.search/content/css/search.css",
+                        Url = "/plato.search/content/css/search.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/plato.search/content/js/search.js",
+                        Url = "/plato.search/content/js/search.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }
@@ -51,13 +51,13 @@ namespace Plato.Search.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.search/content/css/search.css",
+                        Url = "/plato.search/content/css/search.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/plato.search/content/js/search.js",
+                        Url = "/plato.search/content/js/search.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }

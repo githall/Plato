@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "Content/css/search.min.css",
+    "inputFiles": [
+      "Content/css/search.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/js/search.min.js",
+    "inputFiles": [
+      "Content/js/search.js"
+    ]
+  }
+]

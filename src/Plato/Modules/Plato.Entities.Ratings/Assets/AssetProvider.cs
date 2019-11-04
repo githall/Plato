@@ -48,14 +48,14 @@ namespace Plato.Entities.Ratings.Assets
                 {
                       new Asset()
                     {
-                        Url = "/plato.entities.ratings/content/css/ratings.css",
+                        Url = "/plato.entities.ratings/content/css/ratings.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.entities.ratings/content/js/ratings.js",
+                        Url = "/plato.entities.ratings/content/js/ratings.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
@@ -67,14 +67,14 @@ namespace Plato.Entities.Ratings.Assets
                 {
                   new Asset()
                     {
-                        Url = "/plato.entities.ratings/content/css/ratings.css",
+                        Url = "/plato.entities.ratings/content/css/ratings.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.entities.ratings/content/js/ratings.js",
+                        Url = "/plato.entities.ratings/content/js/ratings.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
