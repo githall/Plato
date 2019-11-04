@@ -10,5 +10,17 @@
     "inputFiles": [
       "Content/css/markdown.css"
     ]
+  },
+  {
+    "outputFileName": "Content/js/markdown.min.js",
+    "inputFiles": [
+      "Content/js/markdown.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/js/dropzone.min.js",
+    "inputFiles": [
+      "Content/js/dropzone.js"
+    ]
   }
 ]

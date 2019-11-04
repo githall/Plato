@@ -50,7 +50,7 @@ if (typeof window.$.Plato === "undefined") {
                     autoDiscover: false,
                     disablePreview: true,
                     dictDefaultMessage:
-                        'Attach files by dragging and dropping here, <a id="#dzUpload" href="#">click to browse</a> or paste from the clipboard'
+                        'Attach files by dragging and dropping here, <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a> or paste from the clipboard'
                 },
                 enableDropDataUri: false,
                 footer: '',
@@ -1790,15 +1790,9 @@ if (typeof window.$.Plato === "undefined") {
                             // Init dropzone
                             var $dropzone = this.$editor.find(".md-dropzone"),
                                 dropzone = new Dropzone($dropzone[0], options.dropZoneOptions);                            
-                        
+                            
                             // Store dropzone object in data for access within event handlers (i.e. paste)
                             this.$editor.data("dropzone", dropzone);
-
-                            // disable any links witin dropzone message area (i.e. Browse to select)
-                            this.$editor.find(".dz-message").find("a").addClass("dz-clickable");
-                            this.$editor.find(".dz-message").find("a").click(function (e) {
-                                e.preventDefault();
-                            });
 
                         } else {
                             console.log('dropZoneOptions was configured, but DropZone was not detected.');
