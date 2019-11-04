@@ -46,14 +46,14 @@ namespace Plato.Issues.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.issues/content/css/issues.css",
+                        Url = "/plato.issues/content/css/issues.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.issues/content/js/issues.js",
+                        Url = "/plato.issues/content/js/issues.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
@@ -65,14 +65,14 @@ namespace Plato.Issues.Assets
                 {
                    new Asset()
                     {
-                        Url = "/plato.issues/content/css/issues.css",
+                        Url = "/plato.issues/content/css/issues.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.issues/content/js/issues.js",
+                        Url = "/plato.issues/content/js/issues.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints

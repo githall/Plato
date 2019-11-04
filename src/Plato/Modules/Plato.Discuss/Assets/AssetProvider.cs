@@ -46,14 +46,14 @@ namespace Plato.Discuss.Assets
                 {
                    new Asset()
                     {
-                        Url = "/plato.discuss/content/css/discuss.css",
+                        Url = "/plato.discuss/content/css/discuss.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.discuss/content/js/discuss.js",
+                        Url = "/plato.discuss/content/js/discuss.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
@@ -65,14 +65,14 @@ namespace Plato.Discuss.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.discuss/content/css/discuss.css",
+                        Url = "/plato.discuss/content/css/discuss.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.discuss/content/js/discuss.js",
+                        Url = "/plato.discuss/content/js/discuss.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints

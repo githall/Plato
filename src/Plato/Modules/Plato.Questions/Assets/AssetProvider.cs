@@ -46,14 +46,14 @@ namespace Plato.Questions.Assets
                 {
                    new Asset()
                     {
-                        Url = "/plato.questions/content/css/questions.css",
+                        Url = "/plato.questions/content/css/questions.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.questions/content/js/questions.js",
+                        Url = "/plato.questions/content/js/questions.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
@@ -65,14 +65,14 @@ namespace Plato.Questions.Assets
                 {
                    new Asset()
                     {
-                        Url = "/plato.questions/content/css/questions.css",
+                        Url = "/plato.questions/content/css/questions.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.questions/content/js/questions.js",
+                        Url = "/plato.questions/content/js/questions.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
