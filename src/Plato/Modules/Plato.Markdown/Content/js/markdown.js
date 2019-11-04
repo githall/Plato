@@ -47,6 +47,7 @@ if (typeof window.$.Plato === "undefined") {
                     url: '/api/media/streaming/upload',
                     fallbackClick: false,
                     autoProcessQueue: true,
+                    autoDiscover: false,
                     disablePreview: true,
                     dictDefaultMessage:
                         'Attach files by dragging and dropping here, <a id="#dzUpload" href="#">click to browse</a> or paste from the clipboard'
@@ -1424,12 +1425,10 @@ if (typeof window.$.Plato === "undefined") {
                                 'id': "previewTab" + editorId
                             });
 
-
                         var editorDropZone = $("<div/>",
                             {
-                                "class": "md-dropzone"
+                                "class": "md-dropzone dropzone"
                             });
-
 
                         var editorFooter = $("<div/>",
                             {
@@ -1679,6 +1678,7 @@ if (typeof window.$.Plato === "undefined") {
 
                     // enable dropZone if available and configured
                     if (options.dropZoneOptions) {
+                        
                         if (this.$editor.dropzone) {
                             if (!options.dropZoneOptions.init) {
 
@@ -1702,7 +1702,7 @@ if (typeof window.$.Plato === "undefined") {
                                 }
 
                                 options.dropZoneOptions.init = function () {
-
+                            
                                     var caretPos = 0,
                                         allowedUploadExtensions = options.allowedUploadExtensions;
 
@@ -1786,14 +1786,11 @@ if (typeof window.$.Plato === "undefined") {
                                         });
                                 };
                             }
-
+                            
                             // Init dropzone
                             var $dropzone = this.$editor.find(".md-dropzone"),
-                                dropzone = new Dropzone($dropzone[0], options.dropZoneOptions);
-
-                            // Add dropzone css
-                            $dropzone.addClass('dropzone');
-
+                                dropzone = new Dropzone($dropzone[0], options.dropZoneOptions);                            
+                        
                             // Store dropzone object in data for access within event handlers (i.e. paste)
                             this.$editor.data("dropzone", dropzone);
 

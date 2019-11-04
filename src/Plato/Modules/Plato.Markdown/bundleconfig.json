@@ -1,0 +1,14 @@
+[
+  {
+    "outputFileName": "Content/css/dropzone.min.css",
+    "inputFiles": [
+      "Content/css/dropzone.css"
+    ]
+  },
+  {
+    "outputFileName": "Content/css/markdown.min.css",
+    "inputFiles": [
+      "Content/css/markdown.css"
+    ]
+  }
+]
