@@ -34,13 +34,13 @@ namespace Plato.Mentions.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.mentions/content/css/mentions.css",
+                        Url = "/plato.mentions/content/css/mentions.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/plato.mentions/content/js/mentions.js",
+                        Url = "/plato.mentions/content/js/mentions.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }
@@ -51,13 +51,13 @@ namespace Plato.Mentions.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.mentions/content/css/mentions.css",
+                        Url = "/plato.mentions/content/css/mentions.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/plato.mentions/content/js/mentions.js",
+                        Url = "/plato.mentions/content/js/mentions.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }

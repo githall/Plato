@@ -20,12 +20,6 @@ namespace Plato.Stars.Assets
                         Url = "/plato.stars/content/js/star.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },
-                    new Asset()
-                    {
-                        Url = "/plato.stars/content/css/star.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
                     }
                 }),
 
@@ -34,15 +28,9 @@ namespace Plato.Stars.Assets
                 {
                      new Asset()
                     {
-                        Url = "/plato.stars/content/js/star.js",
+                        Url = "/plato.stars/content/js/star.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },
-                    new Asset()
-                    {
-                        Url = "/plato.stars/content/css/star.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
                     }
                 }),
 
@@ -51,15 +39,9 @@ namespace Plato.Stars.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.stars/content/js/star.js",
+                        Url = "/plato.stars/content/js/star.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },
-                    new Asset()
-                    {
-                        Url = "/plato.stars/content/css/star.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
                     }
                 })
 

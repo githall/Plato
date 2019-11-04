@@ -28,7 +28,7 @@ namespace Plato.Entities.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.entities/content/js/entities.js",
+                        Url = "/plato.entities/content/js/entities.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }
@@ -39,7 +39,7 @@ namespace Plato.Entities.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.entities/content/js/entities.js",
+                        Url = "/plato.entities/content/js/entities.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }

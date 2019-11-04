@@ -34,13 +34,13 @@ namespace Plato.References.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.references/content/css/references.css",
+                        Url = "/plato.references/content/css/references.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/plato.references/content/js/references.js",
+                        Url = "/plato.references/content/js/references.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }
@@ -51,13 +51,13 @@ namespace Plato.References.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.references/content/css/references.css",
+                        Url = "/plato.references/content/css/references.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     },
                     new Asset()
                     {
-                        Url = "/plato.references/content/js/references.js",
+                        Url = "/plato.references/content/js/references.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }

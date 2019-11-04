@@ -9,6 +9,18 @@ namespace Plato.Entities.Reactions.Assets
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
 
+            var constraints = new AssetConstraints()
+            {
+                Routes = new List<AssetConstraint>() {
+                    new AssetConstraint()
+                    {
+                        ["area"] = "Plato.*",
+                        ["controller"] = "Home",
+                        ["action"] = "Display",
+                    }
+                }
+            };
+
             return new List<AssetEnvironment>
             {
 
@@ -19,13 +31,15 @@ namespace Plato.Entities.Reactions.Assets
                     {
                         Url = "/plato.entities.reactions/content/css/reactions.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
                         Url = "/plato.entities.reactions/content/js/reactions.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                 }),
 
@@ -34,15 +48,17 @@ namespace Plato.Entities.Reactions.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.entities.reactions/content/css/reactions.css",
+                        Url = "/plato.entities.reactions/content/css/reactions.min.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.entities.reactions/content/js/reactions.js",
+                        Url = "/plato.entities.reactions/content/js/reactions.min.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                 }),
 
@@ -51,15 +67,17 @@ namespace Plato.Entities.Reactions.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.entities.reactions/content/css/reactions.css",
+                        Url = "/plato.entities.reactions/content/css/reactions.min.css",
                         Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
+                        Section = AssetSection.Header,
+                        Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.entities.reactions/content/js/reactions.js",
+                        Url = "/plato.entities.reactions/content/js/reactions.min.js",
                         Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
+                        Section = AssetSection.Footer,
+                        Constraints = constraints
                     }
                     
                 })

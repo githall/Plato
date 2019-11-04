@@ -1,5 +1,5 @@
 Name: Plato Media Lightbox
-Description: Provides lightbox funcitonlity for embedded images.
+Description: Provides lightbox funcitonlity for images embedded within content.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: User Interface

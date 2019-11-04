@@ -49,14 +49,14 @@ namespace Plato.Entities.History.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.entities.history/content/css/history.css",
+                        Url = "/plato.entities.history/content/css/history.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.entities.history/content/js/history.js",
+                        Url = "/plato.entities.history/content/js/history.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
@@ -68,14 +68,14 @@ namespace Plato.Entities.History.Assets
                 {
                     new Asset()
                     {
-                        Url = "/plato.entities.history/content/css/history.css",
+                        Url = "/plato.entities.history/content/css/history.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header,
                         Constraints = constraints
                     },
                     new Asset()
                     {
-                        Url = "/plato.entities.history/content/js/history.js",
+                        Url = "/plato.entities.history/content/js/history.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer,
                         Constraints = constraints
