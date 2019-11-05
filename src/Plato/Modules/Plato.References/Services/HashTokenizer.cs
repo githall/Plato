@@ -23,6 +23,7 @@ namespace Plato.References.Services
         private readonly IList<char> _terminators = new List<char>()
         {
             ',',
+            '.',
             ' ',
             '\r',
             '\n',
