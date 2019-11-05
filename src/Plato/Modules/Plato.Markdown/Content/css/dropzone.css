@@ -235,13 +235,8 @@
     display: none;
 }
 
-.dropzone.dz-drag-hover {
-    
-}
-
-.dropzone.dz-drag-hover .dz-message {
-    
-}
+.dropzone.dz-drag-hover {}
+.dropzone.dz-drag-hover .dz-message {}
 
 .dropzone .dz-message {
     padding: 14px;

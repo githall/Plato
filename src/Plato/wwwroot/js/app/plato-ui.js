@@ -417,7 +417,7 @@ $(function (win, doc, $) {
                 var interval = $caller.data(dataKey).interval,
                     position = $caller.data(dataKey).position,
                     offset = $caller.data(dataKey).offset;
-
+                
                 var top = 0;
                 if ($target) {
                     top = position === "top" ? $target.offset().top : $target.offset().bottom;
@@ -486,7 +486,7 @@ $(function (win, doc, $) {
                     });
                 } else {
                     // $().scrollTo()
-                    var $caller = $("html");
+                    var $caller = $("body,html");
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -2108,8 +2108,7 @@ $(function (win, doc, $) {
             unbind: function ($caller) {                
                 var eventName = this._getEventName($caller);
                 if (eventName) {
-                    $caller.off(eventName);
-                    $caller.data(eventName, null);
+                    $caller.off(eventName);                    
                 }
             },
             start: function($caller, e) {
@@ -2131,12 +2130,12 @@ $(function (win, doc, $) {
                 win.clearTimeout(methods._timer);
                 methods._timer = null;
             },
-            _getEventName: function ($caller) {
-                var ns = this._getNamespace($caller);
-                return "scroll." + ns;
+            _getEventName: function ($caller) {                
+                return "scroll." + this._getNamespace($caller);
             },
             _getNamespace: function ($caller) {
-                return $caller.data(dataKey).namespace || "scrollSpy";
+                return "scrollSpy";
+                //return $caller.data(dataKey).namespace || "scrollSpy";
             },
             _storeEvents: function ($caller) {
 
@@ -2559,8 +2558,7 @@ $(function (win, doc, $) {
     var infiniteScroll = function() {
 
         var dataKey = "infiniteScroll",
-            dataIdKey = dataKey + "Id",
-            eventKey = "." + dataKey,
+            dataIdKey = dataKey + "Id",            
             state = win.history.state || {};
 
         var defaults = {            
@@ -2640,31 +2638,19 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {  
                 
-                var $anchor = null,
-                    hash = win.location.hash,
-                    scrollSpacing = $caller.data(dataKey).scrollSpacing;
-
-                // If we have an anchor check to see if the anchor exists as a child of the 
-                // targeted inifiniteScroll highlight element and if so scroll 
-                // to the anchor instead of the inifiniteScroll highlight element                        
-                if (hash && hash !== "") {
-                    $anchor = $(hash);
-                    if ($anchor.length === 0) {
-                        $anchor = null;
-                    }
-                }
+                var scrollSpacing = $caller.data(dataKey).scrollSpacing;
                 
                 // Scroll to any selected offset, wait until we complete
                 // scrolling before binding our scrollSpy events
                 if (methods._offset > 0) {
-
+                   
                     var $marker = methods.getOffsetMarker($caller, methods._offset),
                         $highlight = methods.getHighlightMarker($caller, methods._offset);
                     if ($marker && $highlight) {
                         // Scroll to offset or anchor and deactivate hihlight element
                         $().scrollTo({
                                 offset: -scrollSpacing,
-                                target: $anchor !== null ? $anchor : $marker,                                
+                                target: $marker,                                
                                 onComplete: function() {
                                     // Apply css to deactivate selected offset css (set server side)
                                     // Css can be applied directly to marker or a child of the marker
@@ -2687,22 +2673,7 @@ $(function (win, doc, $) {
                     }
 
                 } else {
-
-                    // Scroll to any anchor
-                    if ($anchor !== null) {                        
-                        $().scrollTo({
-                            offset: -scrollSpacing,
-                            target: $anchor,
-                            onComplete: function () {
-                                // Bind events right away
-                                methods.attach($caller);
-                            }
-                        }, "go");
-                    } else {
-                        // Bind events right away
-                        methods.attach($caller);
-                    }
-                    
+                    methods.attach($caller);                    
                 }
 
             },
@@ -2733,14 +2704,15 @@ $(function (win, doc, $) {
                         }
 
                         // We are above the first offset marker
-                        if (scrollBottom <= firstMarkerTop) {
+                        if (scrollBottom <= firstMarkerTop) {                            
                             // Reset the state (i.e. remove offset)
-                            methods.resetState($caller);
+                            //methods.resetState($caller);
                         } else {
-                            // Update the state (i.e. add first visible offset)
+                            // Update the state (i.e. add first visible offset)                            
                             methods.updateState($caller);
                         }
 
+                        // Raise scrollEnd events
                         for (var i = 0; i < methods.events.scrollEnd.length; i++) {
                             if (typeof methods.events.scrollEnd[i] === "function") {
                                 methods.events.scrollEnd[i]($caller, e);
@@ -2753,7 +2725,7 @@ $(function (win, doc, $) {
                         // Ensure we are not already loading 
                         if (methods._loading) {
                             $win.scrollTop(scrollTop);
-                            $().scrollSpy("stop");
+                            $().scrollSpy({ namespace: dataKey }, "stop");
                             e.preventDefault();
                             e.stopPropagation();
                             return false;
@@ -2798,9 +2770,7 @@ $(function (win, doc, $) {
                 }, "unbind");
             },          
             unbind: function($caller) {
-                this.detach($caller);
-                this.events.ready = [];
-                this.events.onScrollEnd = [];
+                this.detach($caller);                
                 this._page = 1;
                 this._loading = false;
             },
@@ -2845,12 +2815,13 @@ $(function (win, doc, $) {
                                 var previousPosition = page.spy.documentHeight - page.spy.scrollTop;
 
                                 // Persist scroll position after content load
-                                $().scrollSpy("unbind");
+                                $().scrollSpy({ namespace: dataKey }, "unbind");
                                 $().scrollTo({
+                                        target: null,
                                         offset: $(doc).height() - previousPosition,
-                                        interval: 100,
-                                        onComplete: function() {
-                                            $().scrollSpy("bind");
+                                        animate:false,
+                                        onComplete: function () {                                            
+                                            $().scrollSpy({ namespace: dataKey }, "bind");
                                         }
                                     },
                                     "go");
@@ -2897,11 +2868,11 @@ $(function (win, doc, $) {
                     });
 
             },
-            load: function($caller, page, spy, func) {
+            load: function ($caller, pageNumber, spy, func) {
 
                 // Ensure we have a callback url
                 var url = methods.getUrl($caller),
-                    pageLoaded = methods.isPageLoaded($caller, page);
+                    pageLoaded = methods.isPageLoaded($caller, pageNumber);
                 if (url === "" || pageLoaded || methods._loading === true) {
                     return;
                 }
@@ -2916,7 +2887,7 @@ $(function (win, doc, $) {
 
                 // Append our page index to the callback url
                 url += url.indexOf("?") >= 0 ? "&" : "?";
-                url += defaults.pagerKey + "=" + page;
+                url += defaults.pagerKey + "=" + pageNumber;
 
                 // Request
                 app.http({
@@ -2928,7 +2899,6 @@ $(function (win, doc, $) {
                         methods._loading = false;
                     }
                 }).done(function(data) {
-
                
                     // Mark done loading 
                     methods._loading = false;
@@ -2956,12 +2926,12 @@ $(function (win, doc, $) {
                         // Add loaded page with offset and scrollSpy position
                         methods._loadedPages.push({
                             spy: spy,
-                            page: page,
+                            page: pageNumber,
                             offset: !isNaN(offset) ? offset : 0
                         });
 
                         // Update current page
-                        methods._page = page;
+                        methods._page = pageNumber;
 
                     }
 
@@ -3032,7 +3002,7 @@ $(function (win, doc, $) {
             },            
             resetState: function ($caller) {
                 // Stop scrollspy to prevent the OnScrollEnd event from executing
-                $().scrollSpy("stop");
+                $().scrollSpy({ namespace: dataKey }, "stop");
                 // Clear offset
                 if (state) {
                     win.history.replaceState(state, doc.title, methods.getStateUrl($caller));
@@ -3057,14 +3027,14 @@ $(function (win, doc, $) {
                 if (page) {
                     var $marker = methods.getOffsetMarker($caller, page.offset);
                     if ($marker) {
-                        $().scrollSpy("unbind");
+                        $().scrollSpy({ namespace: dataKey }, "unbind");
                         // Scroll to offset marker for page
                         $().scrollTo({
                                 offset: -75,
                                 interval: 0,
                                 target: $marker,
                                 onComplete: function() {
-                                    $().scrollSpy("bind");
+                                    $().scrollSpy({ namespace: dataKey }, "bind");
                                 }
                             },
                             "go");
@@ -7631,11 +7601,7 @@ $(function (win, doc, $) {
 
                 }  
 
-                // Initialize infiniteScroll with scroll spacing 
-                // to accomodate for fixed headers
-                $().infiniteScroll({
-                    scrollSpacing: sidebarOffsetTop
-                });
+                this._detectAndScrollToAnchor($caller);
 
             },
             unbind: function ($caller) {
@@ -7644,6 +7610,35 @@ $(function (win, doc, $) {
             getHeaderHeight: function ($caller) {                
                 var $el = $caller.find(selectors.stickyHeader);
                 return $el.length > 0 ? $el.outerHeight() : 0;                
+            },
+            _detectAndScrollToAnchor: function ($caller) {
+
+                var $anchor = null,
+                    offset = this.getHeaderHeight($caller),
+                    hash = win.location.hash;
+                // Locate anchor
+                if (hash && hash !== "") {
+                    $anchor = $(hash);
+                    if ($anchor.length === 0) {
+                        $anchor = null;
+                    }
+                }
+                if ($anchor !== null) {
+                    $().scrollTo({
+                        offset: -offset,
+                        target: $anchor,
+                        onComplete: function () {                            
+                            $().infiniteScroll({
+                                scrollSpacing: offset
+                            });
+                        }
+                    }, "go");
+                } else {                    
+                    $().infiniteScroll({
+                        scrollSpacing: offset
+                    });
+                }
+
             }
         };
 

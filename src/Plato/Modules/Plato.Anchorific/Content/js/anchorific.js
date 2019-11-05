@@ -335,38 +335,48 @@ if (typeof window.$.Plato === "undefined") {
 
         // Apply anchorific
         $elem.anchorific(opts);
+
+        // Update state with clicked anchor
+        var updateState = function () {
+
+            // Ensure we have a targeted header
+            if (!$target) {
+                return;
+            }
+
+            // Get url minus any existing anchor tag
+            var hash = "",
+                url = win.location.href.split("#")[0];
+            // Build new anchor from targeted header using the header id
+            if ($target.attr("id")) {
+                hash = "#" + $target.attr("id");
+            }
+
+            // Replace url state
+            if (url && url !== "") {
+                win.history.replaceState(win.history.state || {}, doc.title, url + hash);
+            }
+
+            // Clear header, until next time...
+            $target = null;
+
+        };
         
         // Ensure infiniteScroll is available
         if ($().infiniteScroll) {
-
             // Update state if anchor was clicked after infiniteScrolls scrollEnd event
             $().infiniteScroll("scrollEnd", function () {
-
-                // Ensure we have a targeted header
-                if (!$target) {
-                    return;
-                }
-
-                // Get url minus any existing anchor tag
-                var hash = "",
-                    url = win.location.href.split("#")[0];
-                // Build new anchor from targeted header using the header id
-                if ($target.attr("id")) {
-                    hash = "#" + $target.attr("id");
-                }
-
-                // Replace url state
-                if (url && url !== "") {
-                    win.history.replaceState(win.history.state || {}, doc.title, url + hash);
-                }
-
-                // Clear header, until next time...
-                $target = null;
-
+                updateState();
             });        
-        
         }
-        
+
+        // Update state after scroll if we have a target header
+        $().scrollSpy({
+            onScrollEnd: function () {
+                updateState();
+            }
+        });
+
         // Activate anchorific when previewing within markdown editor
         if ($().markdown) {
             $().markdown("preview", function ($elem) {            
