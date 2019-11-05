@@ -236,11 +236,11 @@
 }
 
 .dropzone.dz-drag-hover {
-    border-style: solid;
+    
 }
 
 .dropzone.dz-drag-hover .dz-message {
-    opacity: 0.5;
+    
 }
 
 .dropzone .dz-message {

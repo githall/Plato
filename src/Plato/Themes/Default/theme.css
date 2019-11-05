@@ -594,3 +594,7 @@ a.label:hover, .label.active {
 .md-editor .md-preview::-webkit-scrollbar-thumb:vertical:hover {
     background-color: #007bff;
 }
+
+/* Drop files over .dz-message */
+.dropzone.dz-drag-hover { background:#eee; }
+.dropzone.dz-drag-hover .dz-message { border-color:#aaa; }

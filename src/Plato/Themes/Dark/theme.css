@@ -535,8 +535,6 @@ a.label.active {
     background-color: #2A9FD6;
 }
 
-
-
 /* Buttons */
 .md-editor .btn-toolbar > .btn-group > .btn,
 .md-editor .btn-toolbar > .btn-group > .dropdown > .btn {
@@ -576,6 +574,10 @@ a.label.active {
     background-color: #1a1a1a;
 }
 .md-editor .md-textarea:focus { background-color: #1f1f1f; }
+
+/* Drop files over .dz-message */
+.dropzone.dz-drag-hover { background:#222; }
+.dropzone.dz-drag-hover .dz-message { border-color:#444; }
 
 /* ------------------- */
 /*  Bootswatch v4.3.1 overrides */

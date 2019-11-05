@@ -2546,12 +2546,10 @@ if (typeof window.$.Plato === "undefined") {
     $(doc).ready(function () {
 
         $('textarea[data-provide="markdown"]').markdown({
-            onPreview: function (e, $elem) {
-                console.log("preview");
+            onPreview: function (e, $elem) {                
                 $elem.markdownBody();                            
             }
         });
-
 
     });
 

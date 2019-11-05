@@ -598,9 +598,14 @@ a.label:hover, .label.active {
 .md-editor .md-textarea::-webkit-scrollbar-thumb:vertical:hover,
 .md-editor .md-preview::-webkit-scrollbar-thumb:vertical:hover { background-color: #007bff; }
 
+/* Drop files over .dz-message */
+.dropzone.dz-drag-hover { background:#eee; }
+.dropzone.dz-drag-hover .dz-message { border-color:#aaa; }
+
 /* ------------------------- */
 /* Custom Site Css */
 /* ------------------------- */
-
 .core-layout .layout-header,
-.core-layout .layout-tools { display: none; }
+.core-layout .layout-tools {
+    display: none;
+}
