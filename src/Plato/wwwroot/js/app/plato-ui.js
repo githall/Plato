@@ -128,9 +128,7 @@ $(function (win, doc, $) {
                             // confirm
                             $body.find('[data-provide="confirm"]').confirm();
                             // markdown body
-                            $body.find('[data-provide="markdownBody"]').markdownBody();
-                            /* popper */
-                            $body.find('[data-provide="popper"]').popper();
+                            $body.find('[data-provide="markdownBody"]').markdownBody();                            
                         }
                     }
                     
@@ -2485,7 +2483,7 @@ $(function (win, doc, $) {
 
             },
             unbind: function ($caller) {
-                $caller.off('mouseenter');
+                $caller.off('mouseleave');
                 $caller.off('mouseenter');
             },
             startTimer: function ($caller) {
@@ -4952,21 +4950,37 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
+
+                /* autoTargetBlank */
                 if ($caller.data(dataKey).autoTargetBlank) {
                     $caller.autoTargetBlank();
                 }
+
+                /* autoLinkImages */
                 if ($caller.data(dataKey).autoLinkImages) {
                     $caller.autoLinkImages();
                 }
+
+                /* popper */
+                $caller.find('[data-provide="popper"]').popper();
+
             },
             unbind: function ($caller) {
+
+                /* autoTargetBlank */
                 if ($caller.data(dataKey).autoTargetBlank) {
                     $caller.autoTargetBlank("unbind");
                 }
+
+                /* autoLinkImages */
                 if ($caller.data(dataKey).autoLinkImages) {
                     $caller.autoLinkImages("unbind");
                 }
+
+                /* popper */
+                $caller.find('[data-provide="popper"]').popper("unbind");
+
             }
         };
 
@@ -6089,29 +6103,42 @@ $(function (win, doc, $) {
             bind: function ($caller) {
 
                 var event = $caller.data(dataKey).event;
+                if (event) {
 
-                $caller.off(event).on(event,
-                    function(e) {
-                        if (event === "click") {
-                            e.preventDefault(e);
-                        }
-                        methods.show($(this));
-                    });
+                    $caller.off(event).on(event,
+                        function (e) {
+                            if (event === "click") {
+                                e.preventDefault(e);
+                            }
+                            methods.show($(this));
+                        });
+
+                    if (event === "mouseenter" || event === "mouseover") {
+
+                        $caller.leaveSpy({
+                            interval: 150,
+                            onLeave: function () {
+                                methods.hideAll();
+                            }
+                        });
+
+                        $caller.mouseleave(function () {
+                            methods._clearTimer();
+                        });
+                    }
+
+                }                
                 
-                if (event === "mouseenter" || event === "mouseover") {
-
-                    $caller.leaveSpy({
-                        interval: 150,
-                        onLeave: function () {
-                            methods.hideAll();
-                        }
-                    });
-
-                    $caller.mouseleave(function () {
-                        methods._clearTimer();
-                    });
+            },
+            unbind: function ($caller) {
+                var event = $caller.data(dataKey).event;
+                if (event) {
+                    $caller.off(event);
+                    if (event === "mouseenter" || event === "mouseover") {
+                        //$caller.off("mouseleave");
+                        $caller.leaveSpy("unbind");
+                    }
                 }
-                
             },
             show: function ($caller) {
 
@@ -7075,10 +7102,7 @@ $(function (win, doc, $) {
             $ele.find('[data-provide="dialog"]').dialogSpy();
 
             /* replySpy */
-            $ele.replySpy("bind");
-
-            /* popper */
-            $ele.find('[data-provide="popper"]').popper();
+            $ele.replySpy("bind");            
 
         });
         

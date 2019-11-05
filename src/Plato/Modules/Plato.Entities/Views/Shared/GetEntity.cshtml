@@ -1,10 +1,10 @@
 ﻿@model Entity
 @{
-    Layout = null;
-    var updatedDate = Model.ModifiedDate ?? Model.CreatedDate;
+    Layout = null;    
 }
 @if (Model != null)
 {
+    var updatedDate = Model.ModifiedDate ?? Model.CreatedDate;
     <div class="popper-content">
         <div class="p-3">
             <h6>@Model.Title</h6>

@@ -1855,7 +1855,7 @@ if (typeof window.$.Plato === "undefined") {
                     // Raise events
                     if (this._events) {
                         for (var i = 0; i < this._events.ready.length; i++) {
-                            this._events.ready[i]($previewTab);
+                            this._events.ready[i](this);
                         }
                     }
 
@@ -1942,6 +1942,8 @@ if (typeof window.$.Plato === "undefined") {
                                 .empty()
                                 .html(response.result);
 
+                            methods.$options.onPreview(this, $previewTab);
+
                             // Raise events                        
                             if (methods._events) {
                                 for (var i = 0; i < methods._events.preview.length; i++) {
@@ -2007,7 +2009,7 @@ if (typeof window.$.Plato === "undefined") {
                     $footer.show();
 
                     // Perform any callbacks
-                    this.$options.onPreviewEnd(this);
+                    this.$options.onPreviewEnd(this, $writeTab);
 
                     // Raise events                        
                     if (methods._events) {
@@ -2542,7 +2544,15 @@ if (typeof window.$.Plato === "undefined") {
 
     /* Initialize */
     $(doc).ready(function () {
-        $('textarea[data-provide="markdown"]').markdown();
+
+        $('textarea[data-provide="markdown"]').markdown({
+            onPreview: function (e, $elem) {
+                console.log("preview");
+                $elem.markdownBody();                            
+            }
+        });
+
+
     });
 
 })(jQuery, window, document);

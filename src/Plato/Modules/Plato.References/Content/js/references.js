@@ -85,8 +85,7 @@ $(function (win, doc, $) {
                                     // Is the character before our marker also a marker?
                                     // For example are we adding a markdown header tag 
                                     // i.e. (## header 2, ### header 3, #### header 4 etc)
-                                    var prevChar = startIndex > 0 ? chars[startIndex - 1] : "";
-                                    console.log(prevChar);
+                                    var prevChar = startIndex > 0 ? chars[startIndex - 1] : "";                                    
                                     if (prevChar === marker) {
                                         // Reset
                                         startIndex = -1;
