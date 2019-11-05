@@ -339,11 +339,6 @@ if (typeof window.$.Plato === "undefined") {
         // Ensure infiniteScroll is available
         if ($().infiniteScroll) {
 
-            // Activate anchorific when loaded via infiniteScroll load
-            $().infiniteScroll("ready", function ($elem) {
-                $elem.anchorific(opts);
-            });
-            
             // Update state if anchor was clicked after infiniteScrolls scrollEnd event
             $().infiniteScroll("scrollEnd", function () {
 
