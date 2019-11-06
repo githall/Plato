@@ -198,6 +198,8 @@ namespace Plato.Questions.Labels.Controllers
 
         }
 
+        // ---------------
+
         async Task<LabelIndexViewModel<Label>> GetIndexViewModelAsync(LabelIndexOptions options, PagerOptions pager)
         {
 

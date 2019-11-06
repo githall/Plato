@@ -17,6 +17,7 @@ using Plato.Internal.Layout.Titles;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.ViewModels;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Docs.Tags.Controllers
 {
@@ -35,23 +36,23 @@ namespace Plato.Docs.Tags.Controllers
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public HomeController(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
             IViewProviderManager<Tag> tagViewProvider,
             IBreadCrumbManager breadCrumbManager,
-            IContextFacade contextFacade1,
-            IFeatureFacade featureFacade,
-            ITagStore<TagBase> tagStore,
             IPageTitleBuilder pageTitleBuilder,
+            IContextFacade contextFacade,
+            IFeatureFacade featureFacade,
+            ITagStore<TagBase> tagStore,            
             IAlerter alerter)
         {
-            
+
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
             _tagViewProvider = tagViewProvider;
-            _contextFacade = contextFacade1;
+            _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _tagStore = tagStore;
             _alerter = alerter;
@@ -60,8 +61,6 @@ namespace Plato.Docs.Tags.Controllers
             S = stringLocalizer;
 
         }
-        
-        #region "Actions"
 
         public async Task<IActionResult> Index(TagIndexOptions opts, PagerOptions pager)
         {
@@ -77,7 +76,7 @@ namespace Plato.Docs.Tags.Controllers
             {
                 pager = new PagerOptions();
             }
-            
+
             // Get default options
             var defaultViewOptions = new TagIndexOptions();
             var defaultPagerOptions = new PagerOptions();
@@ -93,20 +92,28 @@ namespace Plato.Docs.Tags.Controllers
                 this.RouteData.Values.Add("pager.page", pager.Page);
             if (pager.Size != defaultPagerOptions.Size)
                 this.RouteData.Values.Add("pager.size", pager.Size);
-            
+
             // Build view model
             var viewModel = await GetIndexViewModelAsync(opts, pager);
 
             // Add view model to context
             HttpContext.Items[typeof(TagIndexViewModel<Tag>)] = viewModel;
-            
+
             // If we have a pager.page querystring value return paged results
             if (int.TryParse(HttpContext.Request.Query["pager.page"], out var page))
             {
                 if (page > 0)
                     return View("GetTags", viewModel);
             }
-            
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Docs.Tags",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+            });
+
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -179,6 +186,16 @@ namespace Plato.Docs.Tags.Controllers
                     return View("GetDocs", viewModel);
             }
 
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Docs.Tags",
+                ["controller"] = "Home",
+                ["action"] = "Display",
+                ["opts.tagId"] = tag != null ? tag.Id.ToString() : "",
+                ["opts.alias"] = tag != null ? tag.Alias.ToString() : ""
+            });
+
             // Build page title
             _pageTitleBuilder.AddSegment(S[tag.Name], int.MaxValue);
 
@@ -202,7 +219,7 @@ namespace Plato.Docs.Tags.Controllers
 
         }
 
-        #endregion
+        // ---------------
 
         async Task<TagIndexViewModel<Tag>> GetIndexViewModelAsync(TagIndexOptions options, PagerOptions pager)
         {
@@ -232,7 +249,6 @@ namespace Plato.Docs.Tags.Controllers
             };
 
         }
-
 
         async Task<EntityIndexViewModel<Doc>> GetDisplayViewModelAsync(EntityIndexOptions options, PagerOptions pager)
         {

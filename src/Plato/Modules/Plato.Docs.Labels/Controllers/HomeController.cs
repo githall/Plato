@@ -251,7 +251,7 @@ namespace Plato.Docs.Labels.Controllers
 
             throw new Exception($"Could not find required feature registration for Plato.Docs");
         }
-        
+
     }
 
 }

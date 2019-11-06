@@ -17,13 +17,14 @@ using Plato.Internal.Layout.Titles;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.ViewModels;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Questions.Tags.Controllers
 {
 
     public class HomeController : Controller, IUpdateModel
     {
-        
+
         private readonly IViewProviderManager<Tag> _tagViewProvider;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
@@ -41,17 +42,17 @@ namespace Plato.Questions.Tags.Controllers
             IStringLocalizer stringLocalizer,
             IViewProviderManager<Tag> tagViewProvider,
             IBreadCrumbManager breadCrumbManager,
-            IContextFacade contextFacade1,
-            IFeatureFacade featureFacade,
-            ITagStore<TagBase> tagStore,
             IPageTitleBuilder pageTitleBuilder,
+            IContextFacade contextFacade,
+            IFeatureFacade featureFacade,
+            ITagStore<TagBase> tagStore,            
             IAlerter alerter)
         {
-            
+
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
             _tagViewProvider = tagViewProvider;
-            _contextFacade = contextFacade1;
+            _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _tagStore = tagStore;
             _alerter = alerter;
@@ -60,8 +61,6 @@ namespace Plato.Questions.Tags.Controllers
             S = stringLocalizer;
 
         }
-        
-        #region "Actions"
 
         public async Task<IActionResult> Index(TagIndexOptions opts, PagerOptions pager)
         {
@@ -106,7 +105,15 @@ namespace Plato.Questions.Tags.Controllers
                 if (page > 0)
                     return View("GetTags", viewModel);
             }
-            
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Questions.Tags",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+            });
+
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -123,7 +130,7 @@ namespace Plato.Questions.Tags.Controllers
             return View((LayoutViewModel) await _tagViewProvider.ProvideIndexAsync(new Tag(), this));
 
         }
-        
+
         public async Task<IActionResult> Display(EntityIndexOptions opts, PagerOptions pager)
         {
             
@@ -179,6 +186,16 @@ namespace Plato.Questions.Tags.Controllers
                     return View("GetQuestions", viewModel);
             }
 
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Questions.Tags",
+                ["controller"] = "Home",
+                ["action"] = "Display",
+                ["opts.tagId"] = tag != null ? tag.Id.ToString() : "",
+                ["opts.alias"] = tag != null ? tag.Alias.ToString() : ""
+            });
+
             // Build page title
             _pageTitleBuilder.AddSegment(S[tag.Name], int.MaxValue);
 
@@ -191,7 +208,7 @@ namespace Plato.Questions.Tags.Controllers
                 ).Add(S["Questions"], questions => questions
                     .Action("Index", "Home", "Plato.Questions")
                     .LocalNav()
-                ).Add(S["Tags"], labels => labels
+                ).Add(S["Tags"], tags => tags
                     .Action("Index", "Home", "Plato.Questions.Tags")
                     .LocalNav()
                 ).Add(S[tag.Name]);
@@ -202,7 +219,7 @@ namespace Plato.Questions.Tags.Controllers
 
         }
 
-        #endregion
+        // ---------------
 
         async Task<TagIndexViewModel<Tag>> GetIndexViewModelAsync(TagIndexOptions options, PagerOptions pager)
         {
@@ -232,7 +249,6 @@ namespace Plato.Questions.Tags.Controllers
             };
 
         }
-
 
         async Task<EntityIndexViewModel<Question>> GetDisplayViewModelAsync(EntityIndexOptions options, PagerOptions pager)
         {

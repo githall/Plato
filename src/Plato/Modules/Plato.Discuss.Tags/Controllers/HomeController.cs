@@ -17,13 +17,14 @@ using Plato.Internal.Layout.Titles;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.ViewModels;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Discuss.Tags.Controllers
 {
 
     public class HomeController : Controller, IUpdateModel
     {
-        
+
         private readonly IViewProviderManager<Tag> _tagViewProvider;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
@@ -35,19 +36,19 @@ namespace Plato.Discuss.Tags.Controllers
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public HomeController(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
             IViewProviderManager<Tag> tagViewProvider,
             IBreadCrumbManager breadCrumbManager,
-            ITagStore<TagBase> tagStore,
+            IPageTitleBuilder pageTitleBuilder,            
             IContextFacade contextFacade,
             IFeatureFacade featureFacade,
-            IPageTitleBuilder pageTitleBuilder,
+            ITagStore<TagBase> tagStore,
             IAlerter alerter)
         {
-            
+
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
             _tagViewProvider = tagViewProvider;
@@ -55,14 +56,11 @@ namespace Plato.Discuss.Tags.Controllers
             _featureFacade = featureFacade;
             _tagStore = tagStore;
             _alerter = alerter;
-          
+
             T = htmlLocalizer;
             S = stringLocalizer;
 
         }
-
-   
-        #region "Actions"
 
         public async Task<IActionResult> Index(TagIndexOptions opts, PagerOptions pager)
         {
@@ -107,7 +105,15 @@ namespace Plato.Discuss.Tags.Controllers
                 if (page > 0)
                     return View("GetTags", viewModel);
             }
-            
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Discuss.Tags",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+            });
+
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -124,7 +130,7 @@ namespace Plato.Discuss.Tags.Controllers
             return View((LayoutViewModel) await _tagViewProvider.ProvideIndexAsync(new Tag(), this));
 
         }
-        
+
         public async Task<IActionResult> Display(EntityIndexOptions opts, PagerOptions pager)
         {
             
@@ -180,6 +186,16 @@ namespace Plato.Discuss.Tags.Controllers
                     return View("GetTopics", viewModel);
             }
 
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Discuss.Tags",
+                ["controller"] = "Home",
+                ["action"] = "Display",
+                ["opts.tagId"] = tag != null ? tag.Id.ToString() : "",
+                ["opts.alias"] = tag != null ? tag.Alias.ToString() : ""
+            });
+
             // Build page title
             _pageTitleBuilder.AddSegment(S[tag.Name], int.MaxValue);
 
@@ -192,7 +208,7 @@ namespace Plato.Discuss.Tags.Controllers
                 ).Add(S["Discuss"], discuss => discuss
                     .Action("Index", "Home", "Plato.Discuss")
                     .LocalNav()
-                ).Add(S["Tags"], labels => labels
+                ).Add(S["Tags"], tags => tags
                     .Action("Index", "Home", "Plato.Discuss.Tags")
                     .LocalNav()
                 ).Add(S[tag.Name]);
@@ -203,7 +219,7 @@ namespace Plato.Discuss.Tags.Controllers
 
         }
 
-        #endregion
+        // ---------------
 
         async Task<TagIndexViewModel<Tag>> GetIndexViewModelAsync(TagIndexOptions options, PagerOptions pager)
         {
@@ -234,10 +250,9 @@ namespace Plato.Discuss.Tags.Controllers
 
         }
 
-
         async Task<EntityIndexViewModel<Topic>> GetDisplayViewModelAsync(EntityIndexOptions options, PagerOptions pager)
         {
-            
+
             // Get current feature
             var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Discuss");
 
