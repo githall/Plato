@@ -56,8 +56,7 @@ namespace Plato.Issues.Controllers
 
         public IStringLocalizer S { get; }
 
-        public HomeController(
-            
+        public HomeController(            
             IHtmlLocalizer<HomeController> localizer,
             IViewProviderManager<UserIndex> userIndexProvider,
             IStringLocalizer<HomeController> stringLocalizer,
@@ -67,7 +66,7 @@ namespace Plato.Issues.Controllers
             IViewProviderManager<Issue> entityViewProvider,
             IEntityReplyStore<Comment> entityReplyStore,
             IAuthorizationService authorizationService,
-            IEntityReplyService<Comment> replyService,
+            IEntityReplyService<Comment> replyService,            
             IBreadCrumbManager breadCrumbManager,
             IPostManager<Comment> commentManager,
             IPageTitleBuilder pageTitleBuilder,
@@ -80,8 +79,8 @@ namespace Plato.Issues.Controllers
         {
 
             _authorizationService = authorizationService;
-            _reportEntityManager = reportEntityManager;
-            _reportReplyManager = reportReplyManager;
+            _reportEntityManager = reportEntityManager;            
+            _reportReplyManager = reportReplyManager;            
             _entityViewProvider = entityViewProvider;
             _replyViewProvider = replyViewProvider;
             _breadCrumbManager = breadCrumbManager;
@@ -154,7 +153,7 @@ namespace Plato.Issues.Controllers
                 if (page > 0)
                     return View("GetIssues", viewModel);
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
@@ -390,7 +389,7 @@ namespace Plato.Issues.Controllers
                     return View("GetIssueComments", viewModel);
                 }
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {

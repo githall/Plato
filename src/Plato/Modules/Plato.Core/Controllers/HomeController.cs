@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Core.Models;
 using Plato.Core.ViewModels;
@@ -22,6 +23,7 @@ namespace Plato.Core.Controllers
         
         private readonly IViewProviderManager<HomeIndex> _viewProvider;
         private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly IContextFacade _contextFacade;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -37,7 +39,8 @@ namespace Plato.Core.Controllers
             IAlerter alerter)
         {
 
-            _breadCrumbManager = breadCrumbManager;
+            _breadCrumbManager = breadCrumbManager;            
+            _contextFacade = contextFacade;
             _viewProvider = viewProvider;
             _alerter = alerter;
 
@@ -57,8 +60,18 @@ namespace Plato.Core.Controllers
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Index()
         {
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Core",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+            });
+
             // Return view
             return View((LayoutViewModel)await _viewProvider.ProvideIndexAsync(new HomeIndex(), this));
+
         }
 
         // ---------------------
@@ -96,6 +109,14 @@ namespace Plato.Core.Controllers
         public Task<IActionResult> Moved()
         {
 
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Core",
+                ["controller"] = "Home",
+                ["action"] = "Moved"
+            });
+
             // Build breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -125,6 +146,14 @@ namespace Plato.Core.Controllers
         [HttpGet, AllowAnonymous]
         public Task<IActionResult> Error()
         {
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Core",
+                ["controller"] = "Home",
+                ["action"] = "Error"
+            });
 
             // Build breadcrumb
             _breadCrumbManager.Configure(builder =>

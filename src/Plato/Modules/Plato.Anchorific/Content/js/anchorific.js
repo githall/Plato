@@ -344,10 +344,14 @@ if (typeof window.$.Plato === "undefined") {
             if (!$target) {
                 return;
             }
-           
-            // Get url minus any existing anchor tag
+            
+            // Get canonical url or use current url if not available
             var hash = "",
-                url = win.location.href.split("#")[0];
+                $canonical = $('link[rel="canonical"]'),
+                url = $canonical.length > 0
+                    ? $canonical.attr('href') 
+                    : win.location.href.split("#")[0];
+
             // Build new anchor from targeted header using the header id
             if ($target.attr("id")) {
                 hash = "#" + $target.attr("id");

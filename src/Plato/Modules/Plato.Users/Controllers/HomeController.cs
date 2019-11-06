@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.Extensions.Localization;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout;
@@ -22,6 +21,7 @@ using Plato.Internal.Stores.Abstractions.Users;
 using Plato.Users.Services;
 using Plato.Users.ViewModels;
 using Plato.Internal.Security.Abstractions;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Users.Controllers
 {
@@ -151,6 +151,14 @@ namespace Plato.Users.Controllers
                 if (page > 0)
                     return View("GetUsers", viewModel);
             }
+
+            // Return Url for authentication & canonical url purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Users",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+            });
 
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>

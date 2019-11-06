@@ -39,7 +39,7 @@ namespace Plato.Articles.Controllers
         private readonly IReportEntityManager<Comment> _reportReplyManager;
         private readonly IViewProviderManager<Article> _entityViewProvider;
         private readonly IViewProviderManager<Comment> _replyViewProvider;
-        private readonly IEntityReplyStore<Comment> _entityReplyStore;
+        private readonly IEntityReplyStore<Comment> _entityReplyStore;        
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityReplyService<Comment> _replyService;        
         private readonly IPostManager<Article> _articleManager;
@@ -65,7 +65,7 @@ namespace Plato.Articles.Controllers
             IViewProviderManager<Comment> replyViewProvider,
             IEntityReplyStore<Comment> entityReplyStore,
             IAuthorizationService authorizationService,
-            IEntityReplyService<Comment> replyService,
+            IEntityReplyService<Comment> replyService,            
             IPostManager<Article> articleManager,
             IPostManager<Comment> commentManager,            
             IBreadCrumbManager breadCrumbManager,
@@ -78,12 +78,12 @@ namespace Plato.Articles.Controllers
         {
 
             _authorizationService = authorizationService;
-            _reportEntityManager = reportEntityManager;
+            _reportEntityManager = reportEntityManager;            
             _reportReplyManager = reportReplyManager;
             _entityViewProvider = entityViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _replyViewProvider = replyViewProvider;
-            _pageTitleBuilder = pageTitleBuilder;
+            _pageTitleBuilder = pageTitleBuilder;            
             _entityReplyStore = entityReplyStore;
             _articleManager = articleManager;
             _commentManager = commentManager;            
@@ -152,7 +152,7 @@ namespace Plato.Articles.Controllers
                 if (page > 0)
                     return View("GetArticles", viewModel);
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
@@ -379,7 +379,7 @@ namespace Plato.Articles.Controllers
                     return View("GetArticleComments", viewModel);
                 }
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Entities.Models;
 using Plato.Entities.ViewModels;
@@ -95,7 +96,15 @@ namespace Plato.Search.Controllers
                 if (page > 0)
                     return View("GetEntities", viewModel);
             }
-            
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Search",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+            });
+
             // Build breadcrumb
             if (string.IsNullOrEmpty(opts.Search))
             {

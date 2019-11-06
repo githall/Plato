@@ -41,7 +41,7 @@ namespace Plato.Questions.Controllers
         private readonly IViewProviderManager<Answer> _replyViewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityReplyStore<Answer> _entityReplyStore;
-        private readonly IEntityReplyService<Answer> _replyService;
+        private readonly IEntityReplyService<Answer> _replyService;        
         private readonly IPostManager<Question> _questionManager;        
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
@@ -61,11 +61,10 @@ namespace Plato.Questions.Controllers
             IStringLocalizer<HomeController> stringLocalizer,
             IReportEntityManager<Question> reportEntityManager,
             IReportEntityManager<Answer> reportReplyManager,
-            IViewProviderManager<Question> entityViewProvider,
-            IViewProviderManager<UserIndex> userIndexProvider,
+            IViewProviderManager<Question> entityViewProvider,            
             IViewProviderManager<Answer> replyViewProvider,
             IEntityReplyStore<Answer> entityReplyStore,
-            IAuthorizationService authorizationService,
+            IAuthorizationService authorizationService,            
             IEntityReplyService<Answer> replyService,
             IPostManager<Question> questionManager,            
             IBreadCrumbManager breadCrumbManager,
@@ -79,11 +78,11 @@ namespace Plato.Questions.Controllers
         {
 
             _authorizationService = authorizationService;
-            _reportEntityManager = reportEntityManager;
+            _reportEntityManager = reportEntityManager;            
             _reportReplyManager = reportReplyManager;
             _entityViewProvider = entityViewProvider;
             _replyViewProvider = replyViewProvider;
-            _breadCrumbManager = breadCrumbManager;
+            _breadCrumbManager = breadCrumbManager;            
             _pageTitleBuilder = pageTitleBuilder;
             _entityReplyStore = entityReplyStore;
             _clientIpAddress = clientIpAddress;
@@ -153,7 +152,7 @@ namespace Plato.Questions.Controllers
                 if (page > 0)
                     return View("GetQuestions", viewModel);
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
@@ -382,7 +381,7 @@ namespace Plato.Questions.Controllers
                     return View("GetQuestionAnswers", viewModel);
                 }
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
@@ -526,7 +525,7 @@ namespace Plato.Questions.Controllers
             }, null);
 
         }
-      
+
         // -----------------
         // Edit Entity
         // -----------------

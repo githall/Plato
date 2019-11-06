@@ -106,7 +106,6 @@ namespace Plato.Internal.Hosting.Web
             return _urlHelper.RouteUrl(new UrlRouteContext {Values = routeValues});
         }
 
-
         public async Task<string> GetCurrentCultureAsync()
         {
 
@@ -124,7 +123,6 @@ namespace Plato.Internal.Hosting.Web
             return DefaultCulture;
 
         }
-
 
         public async Task<string> GetCurrentCultureAsync(IIdentity identity)
         {
@@ -170,7 +168,6 @@ namespace Plato.Internal.Hosting.Web
             return string.Empty;
 
         }
-
 
     }
 

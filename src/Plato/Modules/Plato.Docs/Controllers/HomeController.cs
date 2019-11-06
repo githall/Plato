@@ -63,23 +63,23 @@ namespace Plato.Docs.Controllers
             IReportEntityManager<DocComment> reportReplyManager,
             IReportEntityManager<Doc> reportEntityManager,
             IEntityReplyStore<DocComment> entityReplyStore,
-            IViewProviderManager<Doc> docViewProvider,
-            IAuthorizationService authorizationService,
             IEntityReplyService<DocComment> replyService,
+            IAuthorizationService authorizationService,
+            IViewProviderManager<Doc> docViewProvider,
             IPostManager<DocComment> replyManager,            
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
             IClientIpAddress clientIpAddress,
+            IEntityStore<Doc> entityStore,
             IFeatureFacade featureFacade,
             IContextFacade contextFacade,
-            IPostManager<Doc> docManager,
-            IEntityStore<Doc> entityStore,
+            IPostManager<Doc> docManager,            
             IAlerter alerter)
         {
       
             _docCommentViewProvider = docCommentViewProvider;
             _authorizationService = authorizationService;
-            _reportEntityManager = reportEntityManager;
+            _reportEntityManager = reportEntityManager;            
             _reportReplyManager = reportReplyManager;
             _breadCrumbManager = breadCrumbManager;
             _entityReplyStore = entityReplyStore;
@@ -408,7 +408,7 @@ namespace Plato.Docs.Controllers
                 if (page > 0)
                     return View("GetDocComments", viewModel);
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
@@ -419,11 +419,11 @@ namespace Plato.Docs.Controllers
                 ["opts.alias"] = entity.Alias
             });
 
-            // Get any parents 
-            var parents = await _entityStore.GetParentsByIdAsync(entity.Id);
-
             // Build page title
             _pageTitleBuilder.AddSegment(S[entity.Title], int.MaxValue);
+
+            // Get any parents 
+            var parents = await _entityStore.GetParentsByIdAsync(entity.Id);
 
             // Build breadcrumb
             _breadCrumbManager.Configure(builder =>

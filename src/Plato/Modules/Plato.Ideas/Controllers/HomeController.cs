@@ -24,11 +24,9 @@ using Plato.Internal.Layout.Alerts;
 using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.Titles;
 using Plato.Internal.Layout.ViewProviders;
-using Plato.Internal.Models.Users;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Net.Abstractions;
 using Plato.Internal.Security.Abstractions;
-using Plato.Internal.Stores.Abstractions.Users;
 
 namespace Plato.Ideas.Controllers
 {
@@ -43,8 +41,8 @@ namespace Plato.Ideas.Controllers
         private readonly IEntityReplyStore<IdeaComment> _entityReplyStore;
         private readonly IReportEntityManager<Idea> _reportEntityManager;
         private readonly IEntityReplyService<IdeaComment> _replyService;
-        private readonly IViewProviderManager<Idea> _entityViewProvider;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IViewProviderManager<Idea> _entityViewProvider;        
+        private readonly IAuthorizationService _authorizationService;        
         private readonly IPostManager<IdeaComment> _replyManager;
         private readonly IBreadCrumbManager _breadCrumbManager;        
         private readonly IPageTitleBuilder _pageTitleBuilder;
@@ -68,8 +66,8 @@ namespace Plato.Ideas.Controllers
             IEntityReplyStore<IdeaComment> entityReplyStore,
             IReportEntityManager<Idea> reportEntityManager,
             IEntityReplyService<IdeaComment> replyService,
-            IViewProviderManager<Idea> entityViewProvider,
-            IAuthorizationService authorizationService,
+            IViewProviderManager<Idea> entityViewProvider,            
+            IAuthorizationService authorizationService,            
             IPostManager<IdeaComment> replyManager,
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
@@ -81,9 +79,9 @@ namespace Plato.Ideas.Controllers
             IAlerter alerter)
         {
 
-            _authorizationService = authorizationService;
+            _authorizationService = authorizationService;            
             _reportEntityManager = reportEntityManager;
-            _reportReplyManager = reportReplyManager;
+            _reportReplyManager = reportReplyManager;            
             _ideaCommentManager = ideaCommentManager;
             _entityViewProvider = entityViewProvider;
             _breadCrumbManager = breadCrumbManager;
@@ -157,7 +155,7 @@ namespace Plato.Ideas.Controllers
                 if (page > 0)
                     return View("GetIdeas", viewModel);
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
@@ -387,7 +385,7 @@ namespace Plato.Ideas.Controllers
                     return View("GetIdeaComments", viewModel);
                 }
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
