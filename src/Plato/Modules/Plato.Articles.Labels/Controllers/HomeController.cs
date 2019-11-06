@@ -16,6 +16,7 @@ using Plato.Entities.ViewModels;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Layout;
 using Plato.Internal.Layout.Titles;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Articles.Labels.Controllers
 {
@@ -32,30 +33,30 @@ namespace Plato.Articles.Labels.Controllers
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public HomeController(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
             IViewProviderManager<Label> labelViewProvider,
             IBreadCrumbManager breadCrumbManager,
+            IPageTitleBuilder pageTitleBuilder,
             ILabelStore<Label> labelStore,
-            IContextFacade contextFacade1,
-            IFeatureFacade featureFacade,
-            IPageTitleBuilder pageTitleBuilder)
+            IContextFacade contextFacade,
+            IFeatureFacade featureFacade)
         {
-        
+
             _labelViewProvider = labelViewProvider;
             _breadCrumbManager = breadCrumbManager;
-            _contextFacade = contextFacade1;
-            _featureFacade = featureFacade;
             _pageTitleBuilder = pageTitleBuilder;
+            _contextFacade = contextFacade;
+            _featureFacade = featureFacade;            
             _labelStore = labelStore;
 
             T = htmlLocalizer;
             S = stringLocalizer;
 
         }
-        
+
         public async Task<IActionResult> Index(LabelIndexOptions opts, PagerOptions pager)
         {
 
@@ -68,7 +69,7 @@ namespace Plato.Articles.Labels.Controllers
             {
                 pager = new PagerOptions();
             }
-            
+
             // Get default options
             var defaultViewOptions = new LabelIndexOptions();
             var defaultPagerOptions = new PagerOptions();
@@ -84,7 +85,7 @@ namespace Plato.Articles.Labels.Controllers
                 this.RouteData.Values.Add("pager.page", pager.Page);
             if (pager.Size != defaultPagerOptions.Size && !this.RouteData.Values.ContainsKey("pager.size"))
                 this.RouteData.Values.Add("pager.size", pager.Size);
-            
+
             // Build view model
             var viewModel = await GetIndexViewModelAsync(opts, pager);
 
@@ -97,7 +98,15 @@ namespace Plato.Articles.Labels.Controllers
                 if (page > 0)
                     return View("GetLabels", viewModel);
             }
-            
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Articles.Labels",
+                ["controller"] = "Home",
+                ["action"] = "Index"                
+            });
+
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -156,6 +165,16 @@ namespace Plato.Articles.Labels.Controllers
                     return View("GetArticles", viewModel);
             }
 
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Articles.Labels",
+                ["controller"] = "Home",
+                ["action"] = "Display",
+                ["opts.labelId"] = label != null ? label.Id.ToString() : "",
+                ["opts.alias"] = label != null ? label.Alias.ToString() : ""
+            });
+
             // Build page title
             _pageTitleBuilder.AddSegment(S[label.Name], int.MaxValue);
 
@@ -178,6 +197,8 @@ namespace Plato.Articles.Labels.Controllers
             return View((LayoutViewModel) await _labelViewProvider.ProvideDisplayAsync(label, this));
 
         }
+
+        // ---------------
 
         async Task<LabelIndexViewModel<Label>> GetIndexViewModelAsync(LabelIndexOptions options, PagerOptions pager)
         {
@@ -230,7 +251,7 @@ namespace Plato.Articles.Labels.Controllers
 
             throw new Exception($"Could not find required feature registration for Plato.Articles");
         }
-        
+
     }
 
 }

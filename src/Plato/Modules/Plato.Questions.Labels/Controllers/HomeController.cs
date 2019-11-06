@@ -16,6 +16,7 @@ using Plato.Entities.ViewModels;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Layout;
 using Plato.Internal.Layout.Titles;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Questions.Labels.Controllers
 {
@@ -32,23 +33,23 @@ namespace Plato.Questions.Labels.Controllers
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public HomeController(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
             IViewProviderManager<Label> labelViewProvider,
             IBreadCrumbManager breadCrumbManager,
+            IPageTitleBuilder pageTitleBuilder,
             ILabelStore<Label> labelStore,
-            IContextFacade contextFacade1,
-            IFeatureFacade featureFacade,
-            IPageTitleBuilder pageTitleBuilder)
+            IContextFacade contextFacade,
+            IFeatureFacade featureFacade)
         {
-        
+
             _labelViewProvider = labelViewProvider;
             _breadCrumbManager = breadCrumbManager;
-            _contextFacade = contextFacade1;
-            _featureFacade = featureFacade;
             _pageTitleBuilder = pageTitleBuilder;
+            _contextFacade = contextFacade;
+            _featureFacade = featureFacade;            
             _labelStore = labelStore;
 
             T = htmlLocalizer;
@@ -97,7 +98,15 @@ namespace Plato.Questions.Labels.Controllers
                 if (page > 0)
                     return View("GetLabels", viewModel);
             }
-            
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Questions.Labels",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+            });
+
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -155,6 +164,16 @@ namespace Plato.Questions.Labels.Controllers
                 if (page > 0 && !pager.Enabled)
                     return View("GetQuestions", viewModel);
             }
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Questions.Labels",
+                ["controller"] = "Home",
+                ["action"] = "Display",
+                ["opts.labelId"] = label != null ? label.Id.ToString() : "",
+                ["opts.alias"] = label != null ? label.Alias.ToString() : ""
+            });
 
             // Build page title
             _pageTitleBuilder.AddSegment(S[label.Name], int.MaxValue);

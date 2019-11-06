@@ -16,6 +16,7 @@ using Plato.Entities.ViewModels;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Layout;
 using Plato.Internal.Layout.Titles;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Docs.Labels.Controllers
 {
@@ -38,17 +39,17 @@ namespace Plato.Docs.Labels.Controllers
             IStringLocalizer stringLocalizer,
             IViewProviderManager<Label> labelViewProvider,
             IBreadCrumbManager breadCrumbManager,
+            IPageTitleBuilder pageTitleBuilder,
             ILabelStore<Label> labelStore,
-            IContextFacade contextFacade1,
-            IFeatureFacade featureFacade,
-            IPageTitleBuilder pageTitleBuilder)
+            IContextFacade contextFacade,
+            IFeatureFacade featureFacade)
         {
-        
+
             _labelViewProvider = labelViewProvider;
             _breadCrumbManager = breadCrumbManager;
-            _contextFacade = contextFacade1;
-            _featureFacade = featureFacade;
             _pageTitleBuilder = pageTitleBuilder;
+            _contextFacade = contextFacade;
+            _featureFacade = featureFacade;            
             _labelStore = labelStore;
 
             T = htmlLocalizer;
@@ -97,7 +98,15 @@ namespace Plato.Docs.Labels.Controllers
                 if (page > 0)
                     return View("GetLabels", viewModel);
             }
-            
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Docs.Labels",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+            });
+
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -156,6 +165,16 @@ namespace Plato.Docs.Labels.Controllers
                     return View("GetDocs", viewModel);
             }
 
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Docs.Labels",
+                ["controller"] = "Home",
+                ["action"] = "Display",
+                ["opts.labelId"] = label != null ? label.Id.ToString() : "",
+                ["opts.alias"] = label != null ? label.Alias.ToString() : ""
+            });
+
             // Build page title
             _pageTitleBuilder.AddSegment(S[label.Name], int.MaxValue);
 
@@ -178,6 +197,8 @@ namespace Plato.Docs.Labels.Controllers
             return View((LayoutViewModel) await _labelViewProvider.ProvideDisplayAsync(label, this));
 
         }
+
+        // ---------------
 
         async Task<LabelIndexViewModel<Label>> GetIndexViewModelAsync(LabelIndexOptions options, PagerOptions pager)
         {
