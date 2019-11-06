@@ -27,6 +27,7 @@ using Plato.Internal.Layout;
 using Plato.Internal.Layout.Titles;
 using Plato.Internal.Net.Abstractions;
 using Plato.Internal.Abstractions;
+using Plato.Internal.Layout.Services;
 
 namespace Plato.Discuss.Controllers
 {
@@ -42,9 +43,10 @@ namespace Plato.Discuss.Controllers
         private readonly IViewProviderManager<Reply> _replyViewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityReplyStore<Reply> _entityReplyStore;
+        private readonly ICanonicalUrlBuilder _canonicalUrlBuilder;
         private readonly IEntityReplyService<Reply> _replyService;        
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IPageTitleBuilder _pageTitleBuilder;
+        private readonly IPageTitleBuilder _pageTitleBuilder;        
         private readonly IClientIpAddress _clientIpAddress;
         private readonly IPostManager<Topic> _topicManager;
         private readonly IPostManager<Reply> _replyManager;
@@ -66,6 +68,7 @@ namespace Plato.Discuss.Controllers
             IViewProviderManager<Reply> replyViewProvider,
             IAuthorizationService authorizationService,
             IEntityReplyStore<Reply> entityReplyStore,
+            ICanonicalUrlBuilder canonicalUrlBuilder,
             IEntityReplyService<Reply> replyService,            
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
@@ -79,12 +82,13 @@ namespace Plato.Discuss.Controllers
         {
             _authorizationService = authorizationService;
             _reportEntityManager = reportEntityManager;
+            _canonicalUrlBuilder = canonicalUrlBuilder;
             _reportReplyManager = reportReplyManager;
             _entityViewProvider = entityViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _replyViewProvider = replyViewProvider;
             _entityReplyStore = entityReplyStore;
-            _pageTitleBuilder = pageTitleBuilder;
+            _pageTitleBuilder = pageTitleBuilder;            
             _clientIpAddress = clientIpAddress;            
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
@@ -378,19 +382,25 @@ namespace Plato.Discuss.Controllers
                 if (page > 0)
                     return View("GetTopicReplies", viewModel);
             }
-            
-            // Return Url for authentication purposes
-            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+
+            // Build route values  for current view
+            var routeValues = new RouteValueDictionary()
             {
                 ["area"] = "Plato.Discuss",
                 ["controller"] = "Home",
                 ["action"] = "Display",
                 ["opts.id"] = entity.Id,
                 ["opts.alias"] = entity.Alias
-            });
+            };
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(routeValues);
 
             // Build page title
             _pageTitleBuilder.AddSegment(S[entity.Title], int.MaxValue);
+
+            // Build canonical url
+            _canonicalUrlBuilder.AddRoute(routeValues);
 
             // Build breadcrumb
             _breadCrumbManager.Configure(builder =>

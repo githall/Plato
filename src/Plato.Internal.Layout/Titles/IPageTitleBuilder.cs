@@ -12,6 +12,6 @@ namespace Plato.Internal.Layout.Titles
         
         IHtmlContent GenerateTitle(IHtmlContent separator);
 
-
     }
+
 }

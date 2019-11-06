@@ -404,7 +404,7 @@ $(function (win, doc, $) {
             },
             go: function($caller) {
                 
-                var $body = $("body,html");
+                var $body = $("html");
                 var $target = null,
                     href = $caller.prop("tagName") === "A" && $caller.attr("href");
                 if (href) {
@@ -486,7 +486,7 @@ $(function (win, doc, $) {
                     });
                 } else {
                     // $().scrollTo()
-                    var $caller = $("body,html");
+                    var $caller = $("html");
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -851,6 +851,7 @@ $(function (win, doc, $) {
                     var offset = $active.offset(),
                         top = offset.top - $caller.offset().top;
                     $caller.scrollTo({
+                            targat: null,
                             offset: top - 20,
                             interval: 500
                         },
@@ -2133,7 +2134,7 @@ $(function (win, doc, $) {
             _getEventName: function ($caller) {                
                 return "scroll." + this._getNamespace($caller);
             },
-            _getNamespace: function ($caller) {
+            _getNamespace: function ($caller) {                
                 return "scrollSpy";
                 //return $caller.data(dataKey).namespace || "scrollSpy";
             },
@@ -2638,16 +2639,17 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {  
                 
-                var scrollSpacing = $caller.data(dataKey).scrollSpacing;
+                var hash = win.location.hash,
+                    scrollSpacing = $caller.data(dataKey).scrollSpacing;
                 
                 // Scroll to any selected offset, wait until we complete
                 // scrolling before binding our scrollSpy events
                 if (methods._offset > 0) {
-                   
+                                       
                     var $marker = methods.getOffsetMarker($caller, methods._offset),
                         $highlight = methods.getHighlightMarker($caller, methods._offset);
                     if ($marker && $highlight) {
-                        // Scroll to offset or anchor and deactivate hihlight element
+                        // Scroll to offset  and deactivate hihlight element
                         $().scrollTo({
                                 offset: -scrollSpacing,
                                 target: $marker,                                
@@ -2723,7 +2725,7 @@ $(function (win, doc, $) {
                     onScroll: function (spy, e, $win) {
 
                         // Ensure we are not already loading 
-                        if (methods._loading) {
+                        if (methods._loading) {                     
                             $win.scrollTop(scrollTop);
                             $().scrollSpy({ namespace: dataKey }, "stop");
                             e.preventDefault();
@@ -2768,7 +2770,7 @@ $(function (win, doc, $) {
                 $().scrollSpy({
                     namesoace: dataKey
                 }, "unbind");
-            },          
+            },
             unbind: function($caller) {
                 this.detach($caller);                
                 this._page = 1;
@@ -2818,8 +2820,7 @@ $(function (win, doc, $) {
                                 $().scrollSpy({ namespace: dataKey }, "unbind");
                                 $().scrollTo({
                                         target: null,
-                                        offset: $(doc).height() - previousPosition,
-                                        animate:false,
+                                        offset: $(doc).height() - previousPosition,                                        
                                         onComplete: function () {                                            
                                             $().scrollSpy({ namespace: dataKey }, "bind");
                                         }
@@ -3023,15 +3024,15 @@ $(function (win, doc, $) {
 
             },
             scrollToPage: function($caller, pageNumber) {
-                var page = methods.getLoadedPage(pageNumber);
+                var page = methods.getLoadedPage(pageNumber),
+                    scrollSpacing = $caller.data(dataKey).scrollSpacing;
                 if (page) {
                     var $marker = methods.getOffsetMarker($caller, page.offset);
                     if ($marker) {
                         $().scrollSpy({ namespace: dataKey }, "unbind");
                         // Scroll to offset marker for page
                         $().scrollTo({
-                                offset: -75,
-                                interval: 0,
+                                offset: -scrollSpacing,                                
                                 target: $marker,
                                 onComplete: function() {
                                     $().scrollSpy({ namespace: dataKey }, "bind");

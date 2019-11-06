@@ -13,6 +13,7 @@ using Plato.Internal.Layout.ModelBinding;
 using Plato.Internal.Layout.Theming;
 using Plato.Internal.Layout.Titles;
 using Plato.Internal.Layout.Views;
+using Plato.Internal.Layout.Services;
 
 namespace Plato.Internal.Layout.Extensions
 {
@@ -44,7 +45,10 @@ namespace Plato.Internal.Layout.Extensions
             
             // Add page title builder
             services.AddScoped<IPageTitleBuilder, PageTitleBuilder>();
-            
+
+            // Add canonical url builder
+            services.AddScoped<ICanonicalUrlBuilder, CanonicalUrlBuilder>();
+
             // Add theming conventions - configures theme layout based on controller prefix
             services.AddSingleton<IApplicationFeatureProvider<ViewsFeature>, ThemingViewsFeatureProvider>();
 

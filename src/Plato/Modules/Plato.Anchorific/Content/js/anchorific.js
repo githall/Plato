@@ -116,10 +116,11 @@ if (typeof window.$.Plato === "undefined") {
                     var href = $(this).attr("href"),
                         $header = $caller.find(href);
                     if ($header.length > 0) {                                            
-                        // Scroll to header for anchor
+                        // Scroll to header for anchor                        
                         $().scrollTo({
                             offset: -$caller.data(dataKey).spyOffset,
-                            target: $header
+                            target: $header,
+                            onComplete: function () {}
                         }, "go");
                         if ($caller.data(dataKey).onClick) {
                             $caller.data(dataKey).onClick($caller, $header, $(this));
@@ -336,14 +337,14 @@ if (typeof window.$.Plato === "undefined") {
         // Apply anchorific
         $elem.anchorific(opts);
 
-        // Update state with clicked anchor
+        // Update state when an anchor is clicked
         var updateState = function () {
 
             // Ensure we have a targeted header
             if (!$target) {
                 return;
             }
-
+           
             // Get url minus any existing anchor tag
             var hash = "",
                 url = win.location.href.split("#")[0];
@@ -361,21 +362,23 @@ if (typeof window.$.Plato === "undefined") {
             $target = null;
 
         };
-        
-        // Ensure infiniteScroll is available
-        if ($().infiniteScroll) {
-            // Update state if anchor was clicked after infiniteScrolls scrollEnd event
-            $().infiniteScroll("scrollEnd", function () {
-                updateState();
-            });        
-        }
 
-        // Update state after scroll if we have a target header
-        $().scrollSpy({
-            onScrollEnd: function () {
-                updateState();
+        // Ensure infiniteScroll is available
+        if ($('[data-provide="infiniteScroll"]').length > 0) {            
+            if ($().infiniteScroll) {
+                // Update state if anchor was clicked after infiniteScrolls scrollEnd event
+                $().infiniteScroll("scrollEnd", function () {
+                    updateState();
+                });
             }
-        });
+        } else {
+            // Update state after scroll when infiniteScroll is not available
+            $().scrollSpy({
+                onScrollEnd: function () {
+                    updateState();
+                }
+            });
+        }      
 
         // Activate anchorific when previewing within markdown editor
         if ($().markdown) {
