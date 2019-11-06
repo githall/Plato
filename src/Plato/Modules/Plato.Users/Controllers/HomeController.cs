@@ -227,6 +227,16 @@ namespace Plato.Users.Controllers
                 }
             }
 
+            // Return Url for authentication & canonical url purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Users",
+                ["controller"] = "Home",
+                ["action"] = "Display",
+                ["opts.id"] = user != null ? user.Id.ToString() : "",
+                ["opts.alias"] = user != null ? user.Alias : ""
+            });;
+
             // Build page title
             _pageTitleBuilder.AddSegment(S[user.DisplayName], int.MaxValue);
 
@@ -304,6 +314,14 @@ namespace Plato.Users.Controllers
             {
                 return Unauthorized();
             }
+
+            // Return Url for authentication & canonical url purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Users",
+                ["controller"] = "Home",
+                ["action"] = "EditProfile"
+            });
 
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
@@ -404,6 +422,14 @@ namespace Plato.Users.Controllers
             {
                 return Unauthorized();
             }
+
+            // Return Url for authentication & canonical url purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Users",
+                ["controller"] = "Home",
+                ["action"] = "EditAccount"
+            });
 
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
@@ -576,6 +602,14 @@ namespace Plato.Users.Controllers
                 return Unauthorized();
             }
 
+            // Return Url for authentication & canonical url purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Users",
+                ["controller"] = "Home",
+                ["action"] = "EditSignature"
+            });
+
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -667,6 +701,14 @@ namespace Plato.Users.Controllers
             {
                 return Unauthorized();
             }
+
+            // Return Url for authentication & canonical url purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Users",
+                ["controller"] = "Home",
+                ["action"] = "EditSettings"
+            });
 
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
