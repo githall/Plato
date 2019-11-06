@@ -121,7 +121,7 @@ namespace Plato.Discuss.Categories.Controllers
                 ["area"] = "Plato.Discuss.Categories",
                 ["controller"] = "Home",
                 ["action"] = "Index",
-                ["opts.id"] = category != null ? category.Id.ToString() : "",
+                ["opts.categoryId"] = category != null ? category.Id.ToString() : "",
                 ["opts.alias"] = category != null ? category.Alias.ToString() : ""
             });
 

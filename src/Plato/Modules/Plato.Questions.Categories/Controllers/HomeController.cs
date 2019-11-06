@@ -21,14 +21,14 @@ namespace Plato.Questions.Categories.Controllers
 {
     public class HomeController : Controller, IUpdateModel
     {
-     
+
         private readonly IViewProviderManager<Category> _viewProvider;
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
-    
+
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
@@ -115,7 +115,7 @@ namespace Plato.Questions.Categories.Controllers
                 ["area"] = "Plato.Questions.Categories",
                 ["controller"] = "Home",
                 ["action"] = "Index",
-                ["opts.id"] = category != null ? category.Id.ToString() : "",
+                ["opts.categoryId"] = category != null ? category.Id.ToString() : "",
                 ["opts.alias"] = category != null ? category.Alias.ToString() : ""
             });
 

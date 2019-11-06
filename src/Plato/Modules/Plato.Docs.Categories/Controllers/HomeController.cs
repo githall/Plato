@@ -120,7 +120,7 @@ namespace Plato.Docs.Categories.Controllers
                 ["area"] = "Plato.Docs.Categories",
                 ["controller"] = "Home",
                 ["action"] = "Index",
-                ["opts.id"] = category != null ? category.Id.ToString() : string.Empty,
+                ["opts.categoryId"] = category != null ? category.Id.ToString() : string.Empty,
                 ["opts.alias"] = category != null ? category.Alias.ToString() : string.Empty
             });
 

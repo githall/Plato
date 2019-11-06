@@ -39,11 +39,11 @@ namespace Plato.Articles.Categories.Controllers
             IViewProviderManager<Category> viewProvider,
             IStringLocalizer<AdminController> stringLocalizer,
             IHtmlLocalizer<HomeController> localizer,
-            IBreadCrumbManager breadCrumbManager,
             ICategoryStore<Category> categoryStore,
-            IContextFacade contextFacade,
-            IFeatureFacade featureFacade,
+            IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
+            IContextFacade contextFacade,
+            IFeatureFacade featureFacade,            
             IAlerter alerter)
         {
             _breadCrumbManager = breadCrumbManager;
@@ -112,17 +112,17 @@ namespace Plato.Articles.Categories.Controllers
                 if (page > 0 && !pager.Enabled)
                     return View("GetArticles", viewModel);
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
                 ["area"] = "Plato.Articles.Categories",
                 ["controller"] = "Home",
                 ["action"] = "Index",
-                ["opts.id"] = category != null ? category.Id.ToString() : "",
+                ["opts.categoryId"] = category != null ? category.Id.ToString() : "",
                 ["opts.alias"] = category != null ? category.Alias.ToString() : ""
             });
-            
+
             // Build page title
             if (category != null)
             {

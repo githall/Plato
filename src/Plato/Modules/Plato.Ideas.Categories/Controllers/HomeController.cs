@@ -21,14 +21,14 @@ namespace Plato.Ideas.Categories.Controllers
 {
     public class HomeController : Controller, IUpdateModel
     {
-     
+
         private readonly IViewProviderManager<Category> _viewProvider;
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
-    
+
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
@@ -36,9 +36,9 @@ namespace Plato.Ideas.Categories.Controllers
         public HomeController(
             IStringLocalizer stringLocalizer,
             IHtmlLocalizer<HomeController> localizer,
-            IViewProviderManager<Category> viewProvider,
-            IBreadCrumbManager breadCrumbManager,
+            IViewProviderManager<Category> viewProvider,            
             ICategoryStore<Category> categoryStore,
+            IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
             IContextFacade contextFacade, 
             IFeatureFacade featureFacade)
@@ -108,17 +108,17 @@ namespace Plato.Ideas.Categories.Controllers
                 if (page > 0 && !pager.Enabled)
                     return View("GetIdeas", viewModel);
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
                 ["area"] = "Plato.Ideas.Categories",
                 ["controller"] = "Home",
                 ["action"] = "Index",
-                ["opts.id"] = category != null ? category.Id.ToString() : "",
+                ["opts.categoryId"] = category != null ? category.Id.ToString() : "",
                 ["opts.alias"] = category != null ? category.Alias.ToString() : ""
             });
-            
+
             // Build page title
             if (category != null)
             {

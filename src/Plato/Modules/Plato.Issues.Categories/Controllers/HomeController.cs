@@ -21,14 +21,14 @@ namespace Plato.Issues.Categories.Controllers
 {
     public class HomeController : Controller, IUpdateModel
     {
-     
+
         private readonly IViewProviderManager<Category> _viewProvider;
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
-    
+
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
@@ -108,23 +108,23 @@ namespace Plato.Issues.Categories.Controllers
                 if (page > 0 && !pager.Enabled)
                     return View("GetIssues", viewModel);
             }
-            
+
             // Return Url for authentication purposes
             ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
                 ["area"] = "Plato.Issues.Categories",
                 ["controller"] = "Home",
                 ["action"] = "Index",
-                ["opts.id"] = category != null ? category.Id.ToString() : "",
+                ["opts.categoryId"] = category != null ? category.Id.ToString() : "",
                 ["opts.alias"] = category != null ? category.Alias.ToString() : ""
             });
-            
+
             // Build page title
             if (category != null)
             {
                 _pageTitleBuilder.AddSegment(S[category.Name], int.MaxValue);
             }
-            
+
             // Build breadcrumb
             _breadCrumbManager.Configure(async builder =>
             {
