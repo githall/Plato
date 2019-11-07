@@ -611,12 +611,21 @@ namespace Plato.Discuss.Controllers
             {
                 return NotFound();
             }
-
+            
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
             // We always need to be logged in to edit entities
             if (user == null)
+            {
+                return Unauthorized();
+            }
+            
+            // Do we have permission
+            if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
+                user?.Id == entity.CreatedUserId
+                    ? Permissions.EditOwnTopics
+                    : Permissions.EditAnyTopic))
             {
                 return Unauthorized();
             }
@@ -721,6 +730,12 @@ namespace Plato.Discuss.Controllers
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
+            // We always need to be logged in to edit entities
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             // Do we have permission
             if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
                 user?.Id == reply.CreatedUserId
@@ -776,6 +791,21 @@ namespace Plato.Discuss.Controllers
             }
 
             var user = await _contextFacade.GetAuthenticatedUserAsync();
+
+            // We always need to be logged in to edit entities
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // Do we have permission
+            if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
+                user?.Id == reply.CreatedUserId
+                    ? Permissions.EditOwnReplies
+                    : Permissions.EditAnyReply))
+            {
+                return Unauthorized();
+            }
 
             // Only update edited information if the message changes
             if (model.Message != reply.Message)

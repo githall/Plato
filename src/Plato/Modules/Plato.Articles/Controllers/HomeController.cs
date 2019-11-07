@@ -617,7 +617,16 @@ namespace Plato.Articles.Controllers
             {
                 return Unauthorized();
             }
-            
+
+            // Do we have permission
+            if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
+                user?.Id == entity.CreatedUserId
+                    ? Permissions.EditOwnArticles
+                    : Permissions.EditAnyArticle))
+            {
+                return Unauthorized();
+            }
+
             // Only update edited information if the message changes
             if (viewModel.Message != entity.Message)
             {
@@ -721,6 +730,12 @@ namespace Plato.Articles.Controllers
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
+            // We always need to be logged in to edit entities
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
             // Do we have permission
             if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
                 user?.Id == reply.CreatedUserId
@@ -776,6 +791,21 @@ namespace Plato.Articles.Controllers
             }
 
             var user = await _contextFacade.GetAuthenticatedUserAsync();
+
+            // We always need to be logged in to edit entities
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            // Do we have permission
+            if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
+                user?.Id == reply.CreatedUserId
+                    ? Permissions.EditOwnArticleComment
+                    : Permissions.EditAnyArticleComment))
+            {
+                return Unauthorized();
+            }
 
             // Only update edited information if the message changes
             if (model.Message != reply.Message)
