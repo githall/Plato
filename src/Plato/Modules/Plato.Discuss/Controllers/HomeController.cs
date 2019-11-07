@@ -237,6 +237,12 @@ namespace Plato.Discuss.Controllers
                 // Get composed model from all involved view providers
                 entity = await _entityViewProvider.ComposeModelAsync(entity, this);
 
+                // Ensure we have permission 
+                if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.PostTopics))
+                {
+                    return Unauthorized();
+                }
+
                 // Create entity
                 var result = await _topicManager.CreateAsync(entity);
 
@@ -428,6 +434,12 @@ namespace Plato.Discuss.Controllers
                 return NotFound();
             }
 
+            // Ensure we have permission 
+            if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.PostReplies))
+            {
+                return Unauthorized();
+            }
+
             // Get authenticated user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -448,7 +460,7 @@ namespace Plato.Discuss.Controllers
 
                 // Get composed type from all involved view providers
                 reply = await _replyViewProvider.ComposeModelAsync(reply, this);
-                
+
                 // We need to first add the reply so we have a unique Id
                 // for all ProvideUpdateAsync methods within any involved view providers
                 var result = await _replyManager.CreateAsync(reply);

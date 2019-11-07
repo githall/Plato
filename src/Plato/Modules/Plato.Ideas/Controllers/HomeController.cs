@@ -240,6 +240,12 @@ namespace Plato.Ideas.Controllers
                 // Get composed type from all involved view providers
                 entity = await _entityViewProvider.ComposeModelAsync(entity, this);
 
+                // Ensure we have permission 
+                if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.PostIdeas))
+                {
+                    return Unauthorized();
+                }
+
                 // We need to first add the fully composed type
                 // so we have a unique entity Id for all ProvideUpdateAsync
                 // methods within any involved view provider
@@ -433,6 +439,12 @@ namespace Plato.Ideas.Controllers
             if (entity == null)
             {
                 return NotFound();
+            }
+
+            // Ensure we have permission 
+            if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.PostIdeaComments))
+            {
+                return Unauthorized();
             }
 
             // Get authenticated user

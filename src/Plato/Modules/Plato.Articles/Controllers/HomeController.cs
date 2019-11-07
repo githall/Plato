@@ -236,7 +236,13 @@ namespace Plato.Articles.Controllers
 
                 // Get composed model from all involved view providers
                 entity = await _entityViewProvider.ComposeModelAsync(entity, this);
-                
+
+                // Ensure we have permission 
+                if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.PostArticles))
+                {
+                    return Unauthorized();
+                }
+
                 // Create entity
                 var result = await _articleManager.CreateAsync(entity);
 
@@ -427,6 +433,12 @@ namespace Plato.Articles.Controllers
             if (entity == null)
             {
                 return NotFound();
+            }
+
+            // Ensure we have permission 
+            if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.PostArticleComments))
+            {
+                return Unauthorized();
             }
 
             // Get authenticated user
