@@ -47,14 +47,15 @@ namespace Plato.Moderation.Services
                 return;
             }
 
-            // We always need to be authenticated for moderator permissions to apply
-            if (!context.User.Identity.IsAuthenticated)
+            // The resource represents the category we are checking against
+            // For moderator permissions we always need a resource to test 
+            if (context.Resource == null)
             {
                 return;
             }
 
-            // The resource represents the category we are checking against
-            if (context.Resource == null)
+            // We always need to be authenticated for moderator permissions to apply
+            if (!context.User.Identity.IsAuthenticated)
             {
                 return;
             }

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Plato.Internal.Abstractions.Extensions;
 using Plato.Internal.Data.Abstractions;
@@ -15,7 +14,7 @@ using Plato.WebApi.Models;
 
 namespace Plato.Notifications.Controllers
 {
-    
+
     public class UserController : BaseWebApiController
     {
 
@@ -23,12 +22,11 @@ namespace Plato.Notifications.Controllers
         private readonly IContextFacade _contextFacade;
 
         public UserController(
-            IUrlHelperFactory urlHelperFactory,
-            IContextFacade contextFacade,
-            IUserNotificationsStore<UserNotification> userNotificationStore)
+            IUserNotificationsStore<UserNotification> userNotificationStore,
+            IContextFacade contextFacade)
         {
-            _contextFacade = contextFacade;
             _userNotificationStore = userNotificationStore;
+            _contextFacade = contextFacade;            
         }
 
         #region "Actions"
@@ -41,8 +39,7 @@ namespace Plato.Notifications.Controllers
         /// <param name="sort"></param>
         /// <param name="order"></param>
         /// <returns></returns>
-        [HttpGet]
-        [ResponseCache(NoStore = true)]
+        [HttpGet, ResponseCache(NoStore = true)]
         public async Task<IActionResult> Get(
             int page = 1,
             int size = 10,
@@ -163,8 +160,7 @@ namespace Plato.Notifications.Controllers
         /// Get the total number of notifications that have no read date. 
         /// </summary>
         /// <returns></returns>
-        [HttpGet]
-        [ResponseCache(NoStore = true)]
+        [HttpGet, ResponseCache(NoStore = true)]
         public async Task<IActionResult> Unread()
         {
 
@@ -195,8 +191,7 @@ namespace Plato.Notifications.Controllers
         /// Mark all notifications as read.
         /// </summary>
         /// <returns></returns>
-        [HttpPost, ValidateClientAntiForgeryToken]
-        [ResponseCache(NoStore = true)]
+        [HttpPost, ValidateClientAntiForgeryToken, ResponseCache(NoStore = true)]
         public async Task<IActionResult> MarkRead()
         {
 
@@ -213,14 +208,12 @@ namespace Plato.Notifications.Controllers
 
         }
 
-
         /// <summary>
         /// Delete a notification that belongs to the currently authenticated user.
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpDelete]
-        [ResponseCache(NoStore = true)]
+        [HttpDelete, ResponseCache(NoStore = true)]
         public async Task<IActionResult> Delete(int id)
         {
             // Ensure notification exists

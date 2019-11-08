@@ -15,6 +15,8 @@ namespace Plato.Entities.Metrics.ActionFilters
     public class EntityMetricFilter : IModularActionFilter
     {
 
+        public const string UserAgentHeader = "User-Agent";
+
         private readonly IEntityMetricsManager<EntityMetric> _entityMetricManager;
         private readonly IClientIpAddress _clientIpAddress;
 
@@ -73,22 +75,15 @@ namespace Plato.Entities.Metrics.ActionFilters
             // Get authenticated user from context
             var user = context.HttpContext.Features[typeof(User)] as User;
 
-            // Get client details
-            var ipV4Address = _clientIpAddress.GetIpV4Address();
-            var ipV6Address = _clientIpAddress.GetIpV6Address();
-            var userAgent = "";
-            if (context.HttpContext.Request.Headers.ContainsKey("User-Agent"))
-            {
-                userAgent = context.HttpContext.Request.Headers["User-Agent"].ToString();
-            }
-
             // Add metric
             await _entityMetricManager.CreateAsync(new EntityMetric()
             {
                 EntityId = entityId,
-                IpV4Address = ipV4Address,
-                IpV6Address = ipV6Address,
-                UserAgent = userAgent,
+                IpV4Address = _clientIpAddress.GetIpV4Address(),
+                IpV6Address = _clientIpAddress.GetIpV6Address(),
+                UserAgent = context.HttpContext.Request.Headers.ContainsKey(UserAgentHeader)
+                    ? context.HttpContext.Request.Headers[UserAgentHeader].ToString()
+                    : string.Empty,
                 CreatedUserId = user?.Id ?? 0,
                 CreatedDate = DateTimeOffset.UtcNow
             });
