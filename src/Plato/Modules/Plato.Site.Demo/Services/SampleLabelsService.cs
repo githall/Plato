@@ -178,16 +178,16 @@ namespace Plato.Site.Demo.Services
 
             // Our result
             var result = new CommandResultBase();
-                
+
             var foreColor = "#ffffff";
             var backColor = $"#{_colorProvider.GetColor()}";
-            
+
             var categoryResult = await _labelManager.CreateAsync(new LabelBase()
             {
                 FeatureId = feature.Id,
                 ParentId = 0,
                 Name = $"Example Label {_random.Next(0, 2000).ToString()}",
-                Description = $"This is just an example label desccription.",
+                Description = $"This is an example label description.",
                 ForeColor = foreColor,
                 BackColor = backColor,
                 SortOrder = sortOrder,
