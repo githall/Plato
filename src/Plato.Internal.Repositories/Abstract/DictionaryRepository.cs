@@ -12,26 +12,16 @@ namespace Plato.Internal.Repositories.Abstract
     public class DictionaryRepository : IDictionaryRepository<DictionaryEntry>
     {
 
-        #region Private Variables"
-
-        private readonly IDbContext _dbContext;
         private readonly ILogger<DictionaryRepository> _logger;
-     
-        #endregion
+        private readonly IDbContext _dbContext;
 
-        #region "Constructor"
-
-        public DictionaryRepository(
-            IDbContext dbContext,
-            ILogger<DictionaryRepository> logger)
+        public DictionaryRepository(            
+            ILogger<DictionaryRepository> logger,
+            IDbContext dbContext)
         {
             _dbContext = dbContext;
             _logger = logger;
         }
-
-        #endregion
-
-        #region "Implementation"
         
         public async Task<bool> DeleteAsync(int id)
         {
@@ -91,7 +81,7 @@ namespace Plato.Internal.Repositories.Abstract
                         }
 
                         return output;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -156,7 +146,7 @@ namespace Plato.Internal.Repositories.Abstract
                             return entry;
                         }, new IDbDataParameter[]
                         {
-                            new DbParam("Key", DbType.Int32, key)
+                            new DbParam("Key", DbType.String, key)
                         });
 
                 }
@@ -165,11 +155,34 @@ namespace Plato.Internal.Repositories.Abstract
             return entry;
 
         }
-        
-        public Task<bool> DeleteByKeyAsync(string key)
+
+        public async Task<bool> DeleteByKeyAsync(string key)
         {
-            // TODO
-            throw new NotImplementedException();
+
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (_logger.IsEnabled(LogLevel.Information))
+            {
+                _logger.LogInformation($"Deleting dicationary entry with key {key}.");
+            }
+
+            var success = 0;
+            using (var context = _dbContext)
+            {
+                success = await context.ExecuteScalarAsync<int>(
+                    CommandType.StoredProcedure,
+                    "DeleteDictionaryEntryByKey",
+                    new IDbDataParameter[]
+                    {
+                        new DbParam("[Key]", DbType.String, key)
+                    });
+            }
+
+            return success > 0 ? true : false;
+
         }
 
         public Task<IPagedResults<DictionaryEntry>> SelectAsync(IDbDataParameter[] dbParams)
@@ -178,20 +191,27 @@ namespace Plato.Internal.Repositories.Abstract
             throw new NotImplementedException();
         }
 
-        #endregion
+        // ------------
 
-        #region "Private Methods"
-
-        private async Task<int> InsertUpdateInternal(
+        async Task<int> InsertUpdateInternal(
             int id,   
             string key,
             string value,
             DateTimeOffset? createdDate,
             int createdUserId,
             DateTimeOffset? modifiedDate,
-            int modifiedUserId
-            )
+            int modifiedUserId)
         {
+
+            if (key == null)
+            {
+                throw new ArgumentNullException(nameof(key));
+            }
+
+            if (value == null)
+            {
+                throw new ArgumentNullException(nameof(value));
+            }            
 
             if (_logger.IsEnabled(LogLevel.Information))
             {
@@ -199,30 +219,32 @@ namespace Plato.Internal.Repositories.Abstract
                     ? $"Inserting dictionary entry with key: {key}"
                     : $"Updating dictionary entry with id: {id}");
             }
-              
+
+            var output = 0;
             using (var context = _dbContext)
             {
-                if (context == null)
-                    return 0;
-                return await context.ExecuteScalarAsync<int>(
-                    CommandType.StoredProcedure,
-                    "InsertUpdateDictionaryEntry",
-                    new IDbDataParameter[]
-                    {
-                        new DbParam("Id", DbType.Int32, id),
-                        new DbParam("Key", DbType.String, 255, key),
-                        new DbParam("Value", DbType.String, value),
-                        new DbParam("CreatedUserId", DbType.Int32, createdUserId),
-                        new DbParam("CreatedDate", DbType.DateTimeOffset, createdDate.ToDateIfNull()),
-                        new DbParam("ModifiedUserId", DbType.Int32, modifiedUserId),
-                        new DbParam("ModifiedDate", DbType.DateTimeOffset, modifiedDate),
-                        new DbParam("UniqueId", DbType.Int32, ParameterDirection.Output)
-                    });
+                if (context != null)
+                {
+                    output = await context.ExecuteScalarAsync<int>(
+                        CommandType.StoredProcedure,
+                        "InsertUpdateDictionaryEntry",
+                        new IDbDataParameter[]
+                        {
+                            new DbParam("Id", DbType.Int32, id),
+                            new DbParam("Key", DbType.String, 255, key),
+                            new DbParam("Value", DbType.String, value.ToEmptyIfNull()),
+                            new DbParam("CreatedUserId", DbType.Int32, createdUserId),
+                            new DbParam("CreatedDate", DbType.DateTimeOffset, createdDate.ToDateIfNull()),
+                            new DbParam("ModifiedUserId", DbType.Int32, modifiedUserId),
+                            new DbParam("ModifiedDate", DbType.DateTimeOffset, modifiedDate),
+                            new DbParam("UniqueId", DbType.Int32, ParameterDirection.Output)
+                        });
+                }
             }
 
+            return output;
+
         }
-        
-        #endregion
 
     }
 

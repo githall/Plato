@@ -219,12 +219,7 @@ namespace Plato.Internal.Layout.TagHelpers
          
             // Test all asset constraints
             foreach (var asset in assets)
-            {
-
-                if (asset.Url.IndexOf("prettyprint") >= 0)
-                {
-                    var test = "";
-                }
+            {               
 
                 // No constaints to test, add the asset and move along
                 if (asset.Constraints == null)

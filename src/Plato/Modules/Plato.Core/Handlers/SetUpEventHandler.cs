@@ -144,8 +144,18 @@ namespace Plato.Core.Handlers
                             .ForTable(dictionaryTable).WithParameter(new SchemaColumn()
                             {
                                 Name = "[Key]",
-                                DbType = DbType.Int32
+                                DbType = DbType.String
                             }));
+
+                builder.ProcedureBuilder.CreateDefaultProcedures(dictionaryTable)
+                    .CreateProcedure(
+                        new SchemaProcedure("DeleteDictionaryEntryByKey", StoredProcedureType.DeleteByKey)
+                            .ForTable(dictionaryTable).WithParameter(new SchemaColumn()
+                            {
+                                Name = "[Key]",
+                                DbType = DbType.String
+                            }));
+
 
                 // Build document store
                 // --------------------------

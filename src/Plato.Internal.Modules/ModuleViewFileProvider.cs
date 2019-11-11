@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
@@ -9,7 +8,6 @@ using Microsoft.Extensions.FileProviders.Internal;
 using Microsoft.Extensions.FileProviders.Physical;
 using Microsoft.Extensions.Options;
 using Microsoft.Extensions.Primitives;
-using Plato.Internal.Models.Modules;
 using Plato.Internal.Modules.Models;
 using Plato.Internal.Modules.Abstractions;
 
@@ -21,8 +19,6 @@ namespace Plato.Internal.Modules
         private readonly IOptions<ModuleOptions> _moduleOptions;
         private readonly IModuleManager _moduleManager;
 
-        private IList<IModuleEntry> _modules;
-        private string _baseNamespace = "Plato";
         private string _moduleRoot;
         private string _root;
 

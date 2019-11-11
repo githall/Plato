@@ -23,7 +23,6 @@ namespace Plato.Users.Notifications.Controllers
     public class HomeController : Controller, IUpdateModel
     {
 
-
         private readonly IViewProviderManager<EditNotificationsViewModel> _editProfileViewProvider;
         private readonly INotificationTypeManager _notificationTypeManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
@@ -34,7 +33,7 @@ namespace Plato.Users.Notifications.Controllers
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public HomeController(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
@@ -59,14 +58,14 @@ namespace Plato.Users.Notifications.Controllers
 
         public async Task<IActionResult> Index()
         {
-            
+
             // We need to be authenticated to access notification settings
             var user = await _contextFacade.GetAuthenticatedUserAsync();
             if (user == null)
             {
                 return NotFound();
             }
-            
+
             // Breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -78,7 +77,7 @@ namespace Plato.Users.Notifications.Controllers
 
             // Get saved notification types
             var userNotificationSettings = user.GetOrCreate<UserNotificationTypes>();
-            
+
             // Get all notification types to enable by default
             var defaultNotificationTypes = _notificationTypeManager.GetDefaultNotificationTypes(user.RoleNames);
             var defaultUserNotificationTypes = new List<UserNotificationType>();
