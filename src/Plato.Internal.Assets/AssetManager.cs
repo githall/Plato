@@ -8,6 +8,7 @@ namespace Plato.Internal.Assets
 
     public class AssetManager : IAssetManager
     {
+
         private readonly IList<AssetEnvironment> _localAssets = 
             new List<AssetEnvironment>();
 

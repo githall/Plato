@@ -20,9 +20,7 @@ if (typeof window.$.Plato === "undefined") {
             var dataKey = "markdown",
                 dataIdKey = dataKey + "Id";
 
-            var defaults = {
-
-                /* Editor Properties */
+            var defaults = {                
                 autofocus: false,
                 hideable: false,
                 savable: true,
@@ -78,7 +76,7 @@ if (typeof window.$.Plato === "undefined") {
                     }
                 },
 
-                /* Buttons Properties */
+                /* Buttons */
                 buttons: [
                     [
                         {
@@ -2542,15 +2540,33 @@ if (typeof window.$.Plato === "undefined") {
         }
     };
 
-    /* Initialize */
-    $(doc).ready(function () {
+    // Blur event
+    var blurNonFocused = function (e) {
+        var $activeElement = $(document.activeElement);        
+        $(doc).find('.md-editor').each(function () {
+            var $this = $(this),
+                focused = $activeElement.closest('.md-editor')[0] === this,
+                attachedMarkdown = $this.find('textarea').data('markdown') ||
+                    $this.find('div[data-provider="markdown-preview"]').data('markdown');
 
-        $('textarea[data-provide="markdown"]').markdown({
-            onPreview: function (e, $elem) {                
-                $elem.markdownBody();                            
+            if (attachedMarkdown && !focused) {
+                attachedMarkdown.blur();
             }
         });
+    };
 
-    });
+    /* Initialize */
+    $(doc)
+        .on('click focusin',
+            function (e) {
+                blurNonFocused(e);
+            })
+        .ready(function () {
+            $('textarea[data-provide="markdown"]').markdown({
+                onPreview: function (e, $elem) {
+                    $elem.markdownBody();
+                }
+            });
+        });
 
 })(jQuery, window, document);

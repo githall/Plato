@@ -20,21 +20,22 @@ namespace Plato.Benchmarks.Assets
         public void Setup()
         {
 
+            // Build providers with default assets
             _providers = new List<IAssetProvider>()
             {
                 new AssetProviderBase(DefaultAssets.GetDefaultResources())
             };
 
+            // Sample logger
             _logger = new BenchmarkLogger<AssetManager>();
 
         }
 
         [Benchmark(Description = "GetAssets")]
         public void GetAssets()
-        {            
+        {
 
             var assetManager = new AssetManager(_providers, _logger);
-
             for (var i = 0; i < N; i++)
             {
                 assetManager.GetAssets();
