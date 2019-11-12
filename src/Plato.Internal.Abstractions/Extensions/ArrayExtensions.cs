@@ -15,7 +15,8 @@ namespace Plato.Internal.Abstractions.Extensions
             {
                 for (var i = 0; i <= input.Length - 1; i++)
                 {
-                    sb.Append(input.GetValue(i)).Append(delimiter);
+                    sb.Append(input.GetValue(i).ToString())
+                        .Append(delimiter);
                 }
             }
 
@@ -23,9 +24,9 @@ namespace Plato.Internal.Abstractions.Extensions
 
         }
 
-
         public static string ToDelimitedString(
-            this int[] input, char delimiter = ',')
+            this int[] input, 
+            char delimiter = ',')
         {
 
             var sb = new StringBuilder();
@@ -41,7 +42,6 @@ namespace Plato.Internal.Abstractions.Extensions
 
         }
 
-
-
     }
+
 }

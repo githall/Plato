@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System.IO;
+﻿using System.IO;
 using System.Text;
+using Newtonsoft.Json;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using Newtonsoft.Json.Converters;
 
 namespace Plato.Internal.Abstractions.Extensions
 {
@@ -16,7 +16,7 @@ namespace Plato.Internal.Abstractions.Extensions
             // ToArray trims the excess space and speeds up access
             return new ReadOnlyCollection<T>(new List<T>(enumerable).ToArray());
         }
-        
+
         public static IDictionary<string, string> JsonToDictionary(this string json)
         { 
             return JsonConvert.DeserializeObject<IDictionary<string, string>>(json);
@@ -25,7 +25,7 @@ namespace Plato.Internal.Abstractions.Extensions
         public static string DictionaryToJson(this IDictionary<string, string> dictionary)
         {
 
-            JsonSerializer serializer = new JsonSerializer();
+            var serializer = new JsonSerializer();
             serializer.Converters.Add(new JavaScriptDateTimeConverter());
             serializer.NullValueHandling = NullValueHandling.Ignore;
 
@@ -50,11 +50,10 @@ namespace Plato.Internal.Abstractions.Extensions
 
                 return sb.ToString();
 
-
             }
 
-
         }
-        
+
     }
+
 }

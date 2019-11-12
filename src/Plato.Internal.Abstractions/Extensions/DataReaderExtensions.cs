@@ -2,12 +2,11 @@
 using System.Collections.Generic;
 using System.Data;
 
-
 namespace Plato.Internal.Abstractions.Extensions
 {
     public static class DataReaderExtensions
     {
-   
+
         public static bool ColumnIsNotNull(
             this IDataReader dr,
             string columnName)
@@ -17,13 +16,13 @@ namespace Plato.Internal.Abstractions.Extensions
         }
 
         public static bool ColumnIsNotNull(
-        this IDataReader dr,
-        string columnName,
-        IDbModel model)
+            this IDataReader dr,
+            string columnName,
+            IDbModel model)
         {            
             return ColumnIsNotNull(dr, model.GetOrdinal(columnName, dr));
         }
-        
+
         public static bool ColumnIsNotNull(
           this IDataReader dr,
           int columnIndex)
@@ -41,7 +40,8 @@ namespace Plato.Internal.Abstractions.Extensions
         }
 
         public static IEnumerable<T> Select<T>(
-        this IDataReader reader, Func<IDataReader, T> projection)
+            this IDataReader reader,
+            Func<IDataReader, T> projection)
         {
             while (reader.Read())
             {
@@ -50,4 +50,5 @@ namespace Plato.Internal.Abstractions.Extensions
         }
 
     }
+
 }
