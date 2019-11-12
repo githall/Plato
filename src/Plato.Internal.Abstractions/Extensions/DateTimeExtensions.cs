@@ -2,6 +2,7 @@
 
 namespace Plato.Internal.Abstractions.Extensions
 {
+
     public static class DateTimeExtensions
     {
 
@@ -9,7 +10,7 @@ namespace Plato.Internal.Abstractions.Extensions
         {
             return input ?? System.DateTime.UtcNow;
         }
-        
+
         public static string ToPrettyDate(this DateTime? d)
         {
             return d == null ? string.Empty : ToPrettyDate((DateTime) d);
@@ -91,9 +92,8 @@ namespace Plato.Internal.Abstractions.Extensions
         }
 
         public static int DayDifference(this DateTime input, DateTime date)
-        {
-            var timeSpan = date.Subtract(input);
-            return timeSpan.Days;
+        {       
+            return date.Subtract(input).Days;
         }
 
         public static string ToSortableDateTimePattern(this DateTime input)
@@ -112,4 +112,5 @@ namespace Plato.Internal.Abstractions.Extensions
         }
 
     }
+
 }

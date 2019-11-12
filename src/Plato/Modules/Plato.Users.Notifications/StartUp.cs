@@ -14,6 +14,7 @@ using Plato.Users.Notifications.ViewProviders;
 
 namespace Plato.Users.Notifications
 {
+
     public class Startup : StartupBase
     {
         private readonly IShellSettings _shellSettings;
@@ -29,11 +30,11 @@ namespace Plato.Users.Notifications
             // Register navigation provider
             services.AddScoped<INavigationProvider, SiteMenu>();
             services.AddScoped<INavigationProvider, EditProfileMenu>();
-            
+
             // Edit profile view provider
             services.AddScoped<IViewProviderManager<EditNotificationsViewModel>, ViewProviderManager<EditNotificationsViewModel>>();
             services.AddScoped<IViewProvider<EditNotificationsViewModel>, EditProfileViewProvider>();
-            
+
             // Register assets
             services.AddScoped<IAssetProvider, AssetProvider>();
 

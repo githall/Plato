@@ -1,9 +1,9 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
+using System.Collections.Generic;
 
 namespace Plato.Internal.Assets.Abstractions
 {
-    
+
     public class AssetEnvironment
     {
 
@@ -16,8 +16,9 @@ namespace Plato.Internal.Assets.Abstractions
             this.TargetEnvironment = env;
             this.Resources = resources.ToList();
         }
+
     }
-    
+
     public enum TargetEnvironment
     {
         All,
