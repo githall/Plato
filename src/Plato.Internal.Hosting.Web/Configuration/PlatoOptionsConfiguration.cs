@@ -5,7 +5,7 @@ using Plato.Internal.Abstractions.Settings;
 
 namespace Plato.Internal.Hosting.Web.Configuration
 {
-    
+
     public class PlatoOptionsConfiguration : IConfigureOptions<PlatoOptions>
     {
 
@@ -19,10 +19,11 @@ namespace Plato.Internal.Hosting.Web.Configuration
 
         public void Configure(PlatoOptions options)
         {
+
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-                var configuration = scope.ServiceProvider.GetRequiredService<IConfigurationRoot>();
 
+                var configuration = scope.ServiceProvider.GetRequiredService<IConfigurationRoot>();
                 var section = configuration.GetSection("Plato");
                 if (section != null)
                 {
@@ -58,7 +59,7 @@ namespace Plato.Internal.Hosting.Web.Configuration
                                 options.DemoMode = result;
                             }
                         }
-                         
+
                     }
 
                 }
