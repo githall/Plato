@@ -52,8 +52,6 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Internal.Layout.ViewFeatures;
 using Plato.Internal.Layout.LocationExpander;
 using Plato.Internal.Modules;
-using Plato.Internal.Modules.Abstractions;
-using Microsoft.AspNetCore.Hosting;
 
 namespace Plato.Internal.Hosting.Web.Extensions
 {
@@ -85,7 +83,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
                     loggingBuilder.AddConsole();
                     loggingBuilder.AddDebug();
                 });
-                                
+
                 internalServices.AddOptions();
                 internalServices.AddLocalization(options => options.ResourcesPath = "Resources");
 
@@ -201,9 +199,12 @@ namespace Plato.Internal.Hosting.Web.Extensions
         {
 
             // Configure site options
-            services.Configure<SiteOptions>(options => { options.SiteName = "Plato"; });
+            services.Configure<SiteOptions>(options =>
+            {
+                options.SiteName = "Plato";
+            });
 
-            // Add mvc core services
+            // Add MVC core services
             // --------------
 
             // Razor & Views
@@ -265,10 +266,6 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 // "Areas" folder, but they are still served from the file system by this custom provider.
                 options.FileProviders.Insert(0, new ModuleViewFileProvider(services.BuildServiceProvider()));
 
-                // Add compilation references for development mode
-                // TODO: To be removed
-                AddAdditionalCompilationReferences(services, options);
-
             });
 
             // Implement our own conventions to automatically add [areas] route attributes
@@ -277,39 +274,6 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 .Transient<IApplicationModelProvider, ModuleApplicationModelProvider>());
 
             return services;
-
-        }
-
-        public static void AddAdditionalCompilationReferences(this IServiceCollection services, RazorViewEngineOptions options)
-        {
-
-            // We don't need this for production as views are pre-compiled
-            var hostingEnvironment = services.BuildServiceProvider().GetService<IHostingEnvironment>();
-            if (!hostingEnvironment.IsDevelopment())
-            {
-                return;
-            }
-
-            // Ensure loaded modules are aware of current context
-            var moduleManager = services.BuildServiceProvider().GetService<IModuleManager>();
-            var assemblies = moduleManager.LoadModuleAssembliesAsync().Result;
-            var moduleReferences = assemblies
-                .Where(x => !x.IsDynamic && !string.IsNullOrWhiteSpace(x.Location))
-                .Select(x => MetadataReference.CreateFromFile(x.Location))
-                .ToList();
-
-            foreach (var moduleReference in moduleReferences)
-            {
-                // TODO: Need to resolve for .NET 3.0 - AdditionalCompilationReferences is marked obsolete in 2.2.1
-                // Apps using these APIs to add assembly references to the 
-                // compilation context for runtime compilation should instead
-                // use ApplicationPartManager.AddApplicationPart to add application
-                // parts for each assembly reference, or switch to a built-time compilation model(see Create reusable UI using the Razor Class Library project).
-                // https://github.com/aspnet/Announcements/issues/312
-                // https://github.com/aspnet/Mvc/issues/4497
-                // https://github.com/aspnet/Razor/issues/834
-                options.AdditionalCompilationReferences.Add(moduleReference);
-            }
 
         }
 

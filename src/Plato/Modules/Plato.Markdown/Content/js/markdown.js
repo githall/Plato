@@ -2542,7 +2542,7 @@ if (typeof window.$.Plato === "undefined") {
 
     // Blur event
     var blurNonFocused = function (e) {
-        var $activeElement = $(document.activeElement);        
+        var $activeElement = $(doc.activeElement);        
         $(doc).find('.md-editor').each(function () {
             var $this = $(this),
                 focused = $activeElement.closest('.md-editor')[0] === this,

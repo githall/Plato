@@ -188,6 +188,7 @@ namespace Plato.Internal.Modules
             }
 
             return fileInfo;
+
         }
 
     }
