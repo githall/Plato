@@ -1,0 +1,15 @@
+Name: Plato Googles
+Description: Adds settings to allow for various Google integrations.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Social
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.google/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Admin",
+		Version: "1.0.0"
+	}
+]

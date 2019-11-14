@@ -52,6 +52,7 @@ namespace Plato.Facebook.Stores
             }
 
             return settings;
+
         }
 
         public async Task<bool> DeleteAsync()
@@ -69,5 +70,7 @@ namespace Plato.Facebook.Stores
             return result;
 
         }
+
     }
+
 }

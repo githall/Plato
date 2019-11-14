@@ -1,0 +1,55 @@
+﻿@model GoogleSettingsViewModel
+
+<card>
+    <card-title>
+        <h6 class="card-title">@T["Google Sign In"]</h6>
+    </card-title>
+    <card-body>
+
+        <div class="row">
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="DefaultFrom">
+                        <label asp-for="@Model.ClientId">
+                            <strong>@T["Client ID"]</strong>
+                            <span asp-validation-for="@Model.ClientId" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["Your google client ID."]</span>
+                            <a href="https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin" target="_blank">@T["Get your client ID"]</a>
+                        </label>
+                        <input placeholder="@T["your google client id..."]" asp-for="@Model.ClientId" class="form-control" autofocus/>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="DefaultFrom">
+                        <label asp-for="@Model.ClientSecret">
+                            <strong>@T["Client Secret"]</strong>
+                            <span asp-validation-for="@Model.ClientSecret" class="text-danger"></span>
+                            <br/>
+                            <span class="text-muted">@T["Your google client secret."]</span>
+                            <a href="https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin" target="_blank">@T["Get your client secret"]</a>
+                        </label>
+                        <div class="search-input-group">
+                            <input asp-for="ClientSecret"
+                                   type="search" 
+                                   class="form-control" 
+                                   autocomplete="off"
+                                   data-provide="password"
+                                   placeholder="@T["your google client secret..."]" />
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
+                                <i class="fal fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+    </card-body>
+</card>
+
+<card class="card mt-4">
+    <card-footer>
+        <button class="btn btn-primary" type="submit">@T["Save"]</button>
+    </card-footer>
+</card>

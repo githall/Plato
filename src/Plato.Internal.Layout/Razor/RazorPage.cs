@@ -51,7 +51,7 @@ namespace Plato.Internal.Layout.Razor
                 return _t;
             }
         }
-        
+
         public IPageTitleBuilder Title =>
             _pageTitleBuilder ??
             (_pageTitleBuilder = Context.RequestServices.GetRequiredService<IPageTitleBuilder>());
@@ -70,7 +70,7 @@ namespace Plato.Internal.Layout.Razor
         {
             Title.AddSegment(new LocalizedString(segment.Name, segment.Value), order);
         }
-        
+
         private void EnsureViewHelper()
         {
             if (_viewDisplayHelper == null)
@@ -131,7 +131,7 @@ namespace Plato.Internal.Layout.Razor
             return ViewContext.RouteData.Values[key].ToString().Equals(value, StringComparison.OrdinalIgnoreCase);
 
         }
-        
+
     }
 
 }

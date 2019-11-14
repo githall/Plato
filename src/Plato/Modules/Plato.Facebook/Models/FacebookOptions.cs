@@ -1,9 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace Plato.Facebook.Models
+﻿namespace Plato.Facebook.Models
 {
+
     public class FacebookOptions
     {
 
@@ -12,4 +9,5 @@ namespace Plato.Facebook.Models
         public string AppSecret { get; set; }
 
     }
+
 }
