@@ -36,7 +36,7 @@ namespace Plato.Google
             services.AddScoped<INavigationProvider, AdminMenu>();
             
             // Configuration
-            services.AddTransient<IConfigureOptions<GoogleOptions>, GoogleOptionsConfiguration>();
+            services.AddTransient<IConfigureOptions<GoogleAuthenticationOptions>, GoogleAuthenticationOptionsConfiguration>();
 
             // Stores
             services.AddScoped<IGoogleSettingsStore<GoogleSettings>, GoogleSettingsStore>();

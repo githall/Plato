@@ -15,21 +15,21 @@ namespace Plato.Google.ViewProviders
     public class AdminViewProvider : BaseViewProvider<GoogleSettings>
     {
 
-        private readonly IGoogleSettingsStore<GoogleSettings> _facebookSettingsStore;
+        private readonly IGoogleSettingsStore<GoogleSettings> _googleSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
         public AdminViewProvider(
-            IGoogleSettingsStore<GoogleSettings> facebookSettingsStore,
+            IGoogleSettingsStore<GoogleSettings> googleSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
             IPlatoHost platoHost)
         {
             _dataProtectionProvider = dataProtectionProvider;
-            _facebookSettingsStore = facebookSettingsStore;
+            _googleSettingsStore = googleSettingsStore;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
@@ -57,7 +57,7 @@ namespace Plato.Google.ViewProviders
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(GoogleSettings settings, IViewProviderContext context)
         {
-            
+
             var model = new GoogleSettingsViewModel();
 
             // Validate model
@@ -76,12 +76,12 @@ namespace Plato.Google.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleAuthenticationOptionsConfiguration));
                         secret = protector.Protect(model.ClientSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Google client secret. {e.Message}");
+                        _logger.LogError($"There was a problem encrypting the google client secret. {e.Message}");
                     }
                 }
                 
@@ -93,7 +93,7 @@ namespace Plato.Google.ViewProviders
                 };
 
                 // Persist the settings
-                var result = await _facebookSettingsStore.SaveAsync(settings);
+                var result = await _googleSettingsStore.SaveAsync(settings);
                 if (result != null)
                 {
                     // Recycle shell context to ensure changes take effect
@@ -109,7 +109,7 @@ namespace Plato.Google.ViewProviders
         async Task<GoogleSettingsViewModel> GetModel()
         {
 
-            var settings = await _facebookSettingsStore.GetAsync();
+            var settings = await _googleSettingsStore.GetAsync();
             if (settings != null)
             {
 
@@ -119,12 +119,12 @@ namespace Plato.Google.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleAuthenticationOptionsConfiguration));
                         secret = protector.Unprotect(settings.AppSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Facebook app secret. {e.Message}");
+                        _logger.LogError($"There was a problem decrypting the google client secret. {e.Message}");
                     }
                 }
 
@@ -144,7 +144,7 @@ namespace Plato.Google.ViewProviders
             };
 
         }
-        
+
     }
 
 }

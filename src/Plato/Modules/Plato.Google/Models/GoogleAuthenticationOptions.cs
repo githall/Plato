@@ -1,6 +1,6 @@
 ﻿namespace Plato.Google.Models
 {
-    public class GoogleOptions
+    public class GoogleAuthenticationOptions
     {
 
         public string AppId { get; set; }

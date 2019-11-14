@@ -7,24 +7,24 @@ using Plato.Google.Stores;
 
 namespace Plato.Google.Configuration
 {
-    public class GoogleOptionsConfiguration : IConfigureOptions<GoogleOptions>
+    public class GoogleAuthenticationOptionsConfiguration : IConfigureOptions<GoogleAuthenticationOptions>
     {
 
         private readonly IGoogleSettingsStore<GoogleSettings> _googleSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
-        private readonly ILogger<GoogleOptionsConfiguration> _logger;
+        private readonly ILogger<GoogleAuthenticationOptionsConfiguration> _logger;
 
-        public GoogleOptionsConfiguration(
+        public GoogleAuthenticationOptionsConfiguration(
             IGoogleSettingsStore<GoogleSettings> googleSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
-            ILogger<GoogleOptionsConfiguration> logger)
+            ILogger<GoogleAuthenticationOptionsConfiguration> logger)
         {
             _googleSettingsStore = googleSettingsStore;
             _dataProtectionProvider = dataProtectionProvider;
             _logger = logger;
         }
 
-        public void Configure(GoogleOptions options)
+        public void Configure(GoogleAuthenticationOptions options)
         {
 
             var settings = _googleSettingsStore
@@ -41,7 +41,7 @@ namespace Plato.Google.Configuration
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleAuthenticationOptionsConfiguration));
                         options.AppSecret = protector.Unprotect(settings.AppSecret);
                     }
                     catch

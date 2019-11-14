@@ -1,0 +1,15 @@
+Name: Plato Google Sign In
+Description: Adds the ability for users to login to Plato via Google.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Authentication
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.authentication.google/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Google",
+		Version: "1.0.0"
+	}
+]
