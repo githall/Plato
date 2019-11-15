@@ -10,17 +10,17 @@ namespace Plato.Google.Configuration
     public class GoogleAuthenticationOptionsConfiguration : IConfigureOptions<GoogleAuthenticationOptions>
     {
 
-        private readonly IGoogleSettingsStore<GoogleSettings> _googleSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly IGoogleSettingsStore<GoogleSettings> _googleSettingsStore;        
         private readonly ILogger<GoogleAuthenticationOptionsConfiguration> _logger;
+        private readonly IDataProtectionProvider _dataProtectionProvider;
 
         public GoogleAuthenticationOptionsConfiguration(
-            IGoogleSettingsStore<GoogleSettings> googleSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
-            ILogger<GoogleAuthenticationOptionsConfiguration> logger)
+            IGoogleSettingsStore<GoogleSettings> googleSettingsStore,            
+            ILogger<GoogleAuthenticationOptionsConfiguration> logger,
+            IDataProtectionProvider dataProtectionProvider)
         {
-            _googleSettingsStore = googleSettingsStore;
-            _dataProtectionProvider = dataProtectionProvider;
+            _dataProtectionProvider = dataProtectionProvider; 
+            _googleSettingsStore = googleSettingsStore;            
             _logger = logger;
         }
 
@@ -34,15 +34,15 @@ namespace Plato.Google.Configuration
 
             if (settings != null)
             {
-                options.AppId = settings.AppId;
+                options.ClientId = settings.ClientId;
 
                 // Decrypt the secret
-                if (!String.IsNullOrWhiteSpace(settings.AppSecret))
+                if (!String.IsNullOrWhiteSpace(settings.ClientSecret))
                 {
                     try
                     {
                         var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleAuthenticationOptionsConfiguration));
-                        options.AppSecret = protector.Unprotect(settings.AppSecret);
+                        options.ClientSecret = protector.Unprotect(settings.ClientSecret);
                     }
                     catch
                     {

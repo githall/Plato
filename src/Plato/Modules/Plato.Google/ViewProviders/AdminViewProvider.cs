@@ -65,7 +65,7 @@ namespace Plato.Google.ViewProviders
             {
                 return await BuildEditAsync(settings, context);
             }
-            
+
             // Update settings
             if (context.Updater.ModelState.IsValid)
             {
@@ -84,12 +84,12 @@ namespace Plato.Google.ViewProviders
                         _logger.LogError($"There was a problem encrypting the google client secret. {e.Message}");
                     }
                 }
-                
+
                 // Create the model
                 settings = new GoogleSettings()
                 {
-                    AppId = model.ClientId,
-                    AppSecret = secret
+                    ClientId = model.ClientId,
+                    ClientSecret = secret
                 };
 
                 // Persist the settings
@@ -115,12 +115,12 @@ namespace Plato.Google.ViewProviders
 
                 // Decrypt the secret
                 var secret = string.Empty;
-                if (!string.IsNullOrWhiteSpace(settings.AppSecret))
+                if (!string.IsNullOrWhiteSpace(settings.ClientSecret))
                 {
                     try
                     {
                         var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleAuthenticationOptionsConfiguration));
-                        secret = protector.Unprotect(settings.AppSecret);
+                        secret = protector.Unprotect(settings.ClientSecret);
                     }
                     catch (Exception e)
                     {
@@ -128,12 +128,12 @@ namespace Plato.Google.ViewProviders
                     }
                 }
 
-
                 return new GoogleSettingsViewModel()
                 {
-                    ClientId = settings.AppId,
+                    ClientId = settings.ClientId,
                     ClientSecret = secret
                 };
+
             }
 
             // return default settings

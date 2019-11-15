@@ -31,6 +31,13 @@ using Plato.Users.Middleware;
 using Plato.Users.Navigation;
 using Plato.Users.Services;
 using Plato.Users.Subscribers;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.Extensions.Options;
+using Plato.Internal.Hosting.Web.Configuration;
+using Microsoft.AspNetCore.Antiforgery;
+using Microsoft.AspNetCore.Authentication;
+using Plato.Users.Configuration;
+using Plato.Internal.Security.Extensions;
 
 namespace Plato.Users
 {
@@ -42,8 +49,7 @@ namespace Plato.Users
         private readonly string _cookieSuffix;
         private readonly string _tenantPrefix;
 
-        public Startup(
-            IShellSettings shellSettings)
+        public Startup(IShellSettings shellSettings)
         {
             //_options = options;
             _tenantName = shellSettings.Name;
@@ -53,7 +59,15 @@ namespace Plato.Users
 
         public override void ConfigureServices(IServiceCollection services)
         {
-          
+
+            
+            // Configure authentication schemes
+            services.AddTransient<IConfigureOptions<AuthenticationOptions>, CookieSchemeConfiguration>();
+
+            // Configure default authentication
+
+            // --------
+
             // Register set-up event handler
             services.AddScoped<ISetUpEventHandler, SetUpEventHandler>();
 
@@ -112,7 +126,7 @@ namespace Plato.Users
             services.Configure<IdentityOptions>(options =>
             {
                 options.SignIn.RequireConfirmedEmail = true;
-                options.User.RequireUniqueEmail = true;
+                options.User.RequireUniqueEmail = true;                
             });
             
             // Navigation providers
@@ -173,6 +187,7 @@ namespace Plato.Users
             // Broker subscriptions
             services.AddScoped<IBrokerSubscriber, ParseSignatureHtmlSubscriber>();
 
+
         }
 
         public override void Configure(
@@ -180,15 +195,12 @@ namespace Plato.Users
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-
-            // add authentication middleware
-            app.UseAuthentication();
-
+            
             // Register authenticated user middleware
             // Must be registered after .NET authentication middleware has been registered
             // i.e. after app.UseAuthentication() above
             app.UseMiddleware<AuthenticatedUserMiddleware>();
-            
+
             // --------------
             // Account
             // --------------
@@ -248,7 +260,7 @@ namespace Plato.Users
                 template: "account/forgot",
                 defaults: new { controller = "Account", action = "ForgotPassword" }
             );
-            
+
             routes.MapAreaRoute(
                 name: "ForgotPasswordConfirmation",
                 areaName: "Plato.Users",
@@ -295,14 +307,13 @@ namespace Plato.Users
                 defaults: new { controller = "Home", action = "GetUser" }
             );
 
-
             routes.MapAreaRoute(
                 name: "UserLetter",
                 areaName: "Plato.Users",
                 template: "u/l/{letter}/{color}",
                 defaults: new { controller = "Letter", action = "Get" }
             );
-            
+
             // --------------
             // Profile
             // --------------
@@ -313,7 +324,7 @@ namespace Plato.Users
                 template: "profile",
                 defaults: new { controller = "Home", action = "EditProfile" }
             );
-            
+
             routes.MapAreaRoute(
                 name: "EditUserAccount",
                 areaName: "Plato.Users",
@@ -334,7 +345,7 @@ namespace Plato.Users
                 template: "profile/settings",
                 defaults: new { controller = "Home", action = "EditSettings" }
             );
-            
+
             // --------------
             // Admin Routes
             // --------------
@@ -352,9 +363,9 @@ namespace Plato.Users
                 template: "admin/users/{action}/{id?}",
                 defaults: new { controller = "Admin", action = "Index" }
             );
-            
+
         }
-    
+
     }
 
 }

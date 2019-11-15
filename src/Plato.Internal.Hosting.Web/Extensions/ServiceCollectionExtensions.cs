@@ -1,9 +1,6 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc.ApplicationModels;
 using Microsoft.AspNetCore.Mvc.ApplicationParts;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -118,10 +115,8 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 internalServices.AddPlatoDrawing();
                 internalServices.AddPlatoTasks();
                 internalServices.AddPlatoSearch();
-                internalServices.AddPlatoAuthorization();
-                internalServices.AddPlatoAuthentication();
+                internalServices.AddPlatoSecurity();
                 internalServices.AddPlatoMvc();
-
             });
 
         }
@@ -147,49 +142,14 @@ namespace Plato.Internal.Hosting.Web.Extensions
 
         public static IServiceCollection AddPlatoOptions(this IServiceCollection services)
         {
-            services.AddSingleton<IConfigureOptions<PlatoOptions>, PlatoOptionsConfiguration>();
-            return services;
-        }
 
-        public static IServiceCollection AddPlatoAuthentication(this IServiceCollection services)
-        {
+            // Configure plato options
+            services.AddSingleton<IConfigureOptions<PlatoOptions>, PlatoOptionsConfiguration>();
 
             // Configure antiForgery options
-            services.TryAddEnumerable(ServiceDescriptor
-                .Transient<IConfigureOptions<AntiforgeryOptions>, AntiForgeryOptionsConfiguration>());
-
-            // Configure authentication services
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;
-            })
-                .AddCookie(CookieAuthenticationDefaults.AuthenticationScheme,
-                    options => { options.LoginPath = new PathString("/login"); })
-                .AddCookie(IdentityConstants.ApplicationScheme, options =>
-                {
-                    options.LoginPath = new PathString("/login");
-                    options.Events = new CookieAuthenticationEvents
-                    {
-                        OnValidatePrincipal = async context =>
-                        {
-                            await SecurityStampValidator.ValidatePrincipalAsync(context);
-                        }
-                    };
-                })
-                .AddCookie(IdentityConstants.ExternalScheme, options =>
-                {
-                    options.Cookie.Name = IdentityConstants.ExternalScheme;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                })
-                .AddCookie(IdentityConstants.TwoFactorRememberMeScheme,
-                    options => { options.Cookie.Name = IdentityConstants.TwoFactorRememberMeScheme; })
-                .AddCookie(IdentityConstants.TwoFactorUserIdScheme, IdentityConstants.TwoFactorUserIdScheme, options =>
-                {
-                    options.Cookie.Name = IdentityConstants.TwoFactorUserIdScheme;
-                    options.ExpireTimeSpan = TimeSpan.FromMinutes(5);
-                });
+            services.TryAddEnumerable(
+                ServiceDescriptor.Transient<IConfigureOptions<AntiforgeryOptions>, AntiForgeryOptionsConfiguration>()
+            );
 
             return services;
 

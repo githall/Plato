@@ -1,0 +1,23 @@
+﻿@model GoogleLoginViewModel
+@inject SignInManager<User> _signInManager
+@{
+    var loginProviders = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+}
+
+@if (loginProviders.Count > 0)
+{
+    <section>
+        <h4>@T["Use another service to log in."]</h4>
+        <hr />
+        <form asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+            <div>
+                <p>
+                    @foreach (var provider in loginProviders)
+                    {
+                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
+                    }
+                </p>
+            </div>
+        </form>
+    </section>
+}

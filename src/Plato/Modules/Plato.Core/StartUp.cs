@@ -17,6 +17,8 @@ using Plato.Internal.Assets.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Localization.Abstractions.Models;
+using Microsoft.AspNetCore.Mvc;
+using Plato.Internal.Layout.ActionFilters;
 
 namespace Plato.Core
 {
@@ -53,7 +55,13 @@ namespace Plato.Core
                 options.WatchForChanges = false;
                 options.Culture = contextFacade.GetCurrentCultureAsync().Result;
             });
-            
+
+            // Action filters
+            services.Configure<MvcOptions>(options =>
+            {                
+                options.Filters.Add(typeof(ModularFilter));
+            });
+
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();
 

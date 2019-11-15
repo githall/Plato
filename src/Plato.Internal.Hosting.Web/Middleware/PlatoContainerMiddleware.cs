@@ -66,7 +66,7 @@ namespace Plato.Internal.Hosting.Web.Middleware
                                 // BuildPipeline ensures we always rebuild routes for new tenants
                                 httpContext.Items["BuildPipeline"] = true;
                                 shellContext.IsActivated = true;
-                                
+
                                 // Activate message broker subscriptions
                                 var subscribers = scope.ServiceProvider.GetServices<IBrokerSubscriber>();
                                 foreach (var subscriber in subscribers)

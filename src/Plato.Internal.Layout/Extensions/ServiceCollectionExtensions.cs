@@ -16,17 +16,15 @@ using Plato.Internal.Layout.Views;
 
 namespace Plato.Internal.Layout.Extensions
 {
+
     public static class ServiceCollectionExtensions
     {
 
         public static IServiceCollection AddPlatoViewAdapters(
             this IServiceCollection services)
         {
-            // view adapters
             services.TryAddScoped<IViewAdapterManager, ViewAdapterManager>();
-
             return services;
-
         }
 
         public static IServiceCollection AddPlatoViewFeature(
@@ -36,12 +34,12 @@ namespace Plato.Internal.Layout.Extensions
             // Layout updater
             services.AddSingleton<ILayoutUpdater, LayoutUpdater>();
 
-            // Views - these need to be scoped
+            // Views need to be scoped so new instances are created for each request
             services.AddScoped<IViewFactory, ViewFactory>(); 
             services.AddScoped<IPartialInvoker, PartialInvoker>();
             services.AddScoped<IViewInvoker, ViewInvoker>();
             services.AddScoped<IViewHelperFactory, ViewDisplayHelperFactory>();
-            
+
             // Add page title builder
             services.AddScoped<IPageTitleBuilder, PageTitleBuilder>();
 
@@ -61,7 +59,7 @@ namespace Plato.Internal.Layout.Extensions
 
             // Alerter
             services.AddScoped<IAlerter, Alerter>();
-            
+
             return services;
 
         }

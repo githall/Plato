@@ -1,13 +1,12 @@
-﻿using Microsoft.AspNetCore.Authentication;
+﻿using System;
+using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 using Plato.Google.Models;
-using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace Plato.Authentication.Google.Configuration
 {
+
     public class GoogleSchemaConfiguration :
         IConfigureOptions<AuthenticationOptions>,
         IConfigureNamedOptions<GoogleOptions>
@@ -30,20 +29,27 @@ namespace Plato.Authentication.Google.Configuration
                 builder.HandlerType = typeof(GoogleHandler);
             });
 
-
         }
 
         public void Configure(GoogleOptions options)
         {
-            options.ClientId = _googleOptions.AppId;
-            options.ClientSecret = _googleOptions.AppSecret;
-
+            options.ClientId = _googleOptions.ClientId;
+            options.ClientSecret = _googleOptions.ClientSecret;
         }
 
         public void Configure(string name, GoogleOptions options)
         {
-            throw new NotImplementedException();
+
+            if (!string.Equals(name, GoogleDefaults.AuthenticationScheme, StringComparison.Ordinal))
+            {
+                return;
+            }
+
+            options.ClientId = _googleOptions.ClientId;
+            options.ClientSecret = _googleOptions.ClientSecret;
+
         }
 
     }
+
 }

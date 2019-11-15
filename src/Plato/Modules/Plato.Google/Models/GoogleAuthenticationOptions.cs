@@ -3,9 +3,9 @@
     public class GoogleAuthenticationOptions
     {
 
-        public string AppId { get; set; }
+        public string ClientId { get; set; }
 
-        public string AppSecret { get; set; }
+        public string ClientSecret { get; set; }
 
     }
 }
