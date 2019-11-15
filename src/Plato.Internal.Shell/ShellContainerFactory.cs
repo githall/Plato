@@ -82,15 +82,15 @@ namespace Plato.Internal.Shell
 
             (moduleServiceProvider as IDisposable).Dispose();
 
-            // IAuthenticationSchemeProvider is registered at the host level.
-            // We need to register it again at the tenant level because it holds a reference to
-            // an underlying dictionary, responsible of storing the registered schemes 
-            // which need to be distinct for each tenant.
+            // We need to register IAuthenticationSchemeProvider again at the tenant level because 
+            // it holds a reference to an underlying dictionary (_schemes) representing registered 
+            // authentication schemes. These schemes can be distinct depending on the available modules 
+            // within Plato so we register IAuthenticationSchemeProvider again as a singletone within 
+            // the tenant services after module initialization.
             // https://github.com/aspnet/HttpAbstractions/blob/master/src/Microsoft.AspNetCore.Authentication.Core/AuthenticationSchemeProvider.cs
             tenantServiceCollection.AddSingleton<IAuthenticationSchemeProvider, AuthenticationSchemeProvider>();            
 
-            // return
-
+            // Return our tenant service provider
             var shellServiceProvider = tenantServiceCollection.BuildServiceProvider();
             return shellServiceProvider;
 

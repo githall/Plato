@@ -56,9 +56,6 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 return Task.CompletedTask;
             });
 
-            // Add authentication middleware
-            //app.UseAuthentication();
-
             // Load static files
             app.UserPlatoStaticFiles();
 

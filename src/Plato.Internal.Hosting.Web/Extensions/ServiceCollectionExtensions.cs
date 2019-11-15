@@ -137,7 +137,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
             // Let the app change the default tenant behavior and set of features
             configure?.Invoke(services);
 
-            // Register the list of services to be resolved later on via ShellContainerFactory
+            // Register the list of services to be resolved later via ShellContainerFactory
             services.AddSingleton(_ => services);
 
             return services;

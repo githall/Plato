@@ -47,7 +47,7 @@ namespace Plato.Users
         public override void ConfigureServices(IServiceCollection services)
         {   
 
-            // Add authentication & configure default authenticaiton scheme
+            // Add authentication services & configure default authenticaiton scheme
             services.AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
@@ -185,12 +185,12 @@ namespace Plato.Users
             IServiceProvider serviceProvider)
         {
 
-            // Register authenticaiton middleware
+            // Register tenant authenticaiton middleware
             app.UseAuthentication();
 
             // Register authenticated user middleware
-            // Must be registered after .NET authentication middleware has been registered
-            // i.e. after app.UseAuthentication() above
+            // Must be registered after .NET authentication middleware has been 
+            // registered i.e. after app.UseAuthentication() above
             app.UseMiddleware<AuthenticatedUserMiddleware>();
 
             // --------------
