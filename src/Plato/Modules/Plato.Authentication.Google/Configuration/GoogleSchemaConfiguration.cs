@@ -23,6 +23,16 @@ namespace Plato.Authentication.Google.Configuration
         public void Configure(AuthenticationOptions options)
         {
 
+            if (string.IsNullOrEmpty(_googleOptions.ClientId))
+            {
+                return;
+            }
+
+            if (string.IsNullOrEmpty(_googleOptions.ClientSecret))
+            {
+                return;
+            }
+
             options.AddScheme(GoogleDefaults.AuthenticationScheme, builder =>
             {
                 builder.DisplayName = "Google";

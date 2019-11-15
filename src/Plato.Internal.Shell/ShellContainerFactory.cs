@@ -9,6 +9,7 @@ using Plato.Internal.Abstractions.Extensions;
 using Plato.Internal.Models.Shell;
 using Plato.Internal.Features;
 using Plato.Internal.Features.Abstractions;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Plato.Internal.Shell
 {
@@ -80,6 +81,13 @@ namespace Plato.Internal.Shell
             }
 
             (moduleServiceProvider as IDisposable).Dispose();
+
+            // IAuthenticationSchemeProvider is registered at the host level.
+            // We need to register it again at the tenant level because it holds a reference to
+            // an underlying dictionary, responsible of storing the registered schemes 
+            // which need to be distinct for each tenant.
+            // https://github.com/aspnet/HttpAbstractions/blob/master/src/Microsoft.AspNetCore.Authentication.Core/AuthenticationSchemeProvider.cs
+            tenantServiceCollection.AddSingleton<IAuthenticationSchemeProvider, AuthenticationSchemeProvider>();            
 
             // return
 

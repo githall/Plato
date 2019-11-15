@@ -49,6 +49,7 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Internal.Layout.ViewFeatures;
 using Plato.Internal.Layout.LocationExpander;
 using Plato.Internal.Modules;
+using Microsoft.AspNetCore.Authentication;
 
 namespace Plato.Internal.Hosting.Web.Extensions
 {
@@ -75,8 +76,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 // --------
 
                 internalServices.AddLogging(loggingBuilder =>
-                {
-                    //loggingBuilder.AddConfiguration(Configuration.GetSection("Logging"));
+                {                    
                     loggingBuilder.AddConsole();
                     loggingBuilder.AddDebug();
                 });
@@ -115,8 +115,9 @@ namespace Plato.Internal.Hosting.Web.Extensions
                 internalServices.AddPlatoDrawing();
                 internalServices.AddPlatoTasks();
                 internalServices.AddPlatoSearch();
-                internalServices.AddPlatoSecurity();
-                internalServices.AddPlatoMvc();
+               
+                internalServices.AddPlatoMvc();  
+
             });
 
         }
@@ -129,6 +130,9 @@ namespace Plato.Internal.Hosting.Web.Extensions
 
             // Add shell
             services.AddPlatoShell();
+
+            // Add security
+            services.AddPlatoSecurity();
 
             // Let the app change the default tenant behavior and set of features
             configure?.Invoke(services);
@@ -143,13 +147,11 @@ namespace Plato.Internal.Hosting.Web.Extensions
         public static IServiceCollection AddPlatoOptions(this IServiceCollection services)
         {
 
-            // Configure plato options
-            services.AddSingleton<IConfigureOptions<PlatoOptions>, PlatoOptionsConfiguration>();
-
-            // Configure antiForgery options
-            services.TryAddEnumerable(
+            services.TryAddEnumerable(new[] 
+            {
+                ServiceDescriptor.Transient<IConfigureOptions<PlatoOptions>, PlatoOptionsConfiguration>(),
                 ServiceDescriptor.Transient<IConfigureOptions<AntiforgeryOptions>, AntiForgeryOptionsConfiguration>()
-            );
+            });
 
             return services;
 

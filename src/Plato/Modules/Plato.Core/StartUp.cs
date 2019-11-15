@@ -55,13 +55,7 @@ namespace Plato.Core
                 options.WatchForChanges = false;
                 options.Culture = contextFacade.GetCurrentCultureAsync().Result;
             });
-
-            // Action filters
-            services.Configure<MvcOptions>(options =>
-            {                
-                options.Filters.Add(typeof(ModularFilter));
-            });
-
+            
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();
 

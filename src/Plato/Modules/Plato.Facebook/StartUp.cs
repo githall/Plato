@@ -37,7 +37,7 @@ namespace Plato.Facebook
 
             // Navigation provider
             services.AddScoped<INavigationProvider, AdminMenu>();
-            
+
             // Configuration
             services.AddTransient<IConfigureOptions<FacebookOptions>, FacebookOptionsConfiguration>();
 

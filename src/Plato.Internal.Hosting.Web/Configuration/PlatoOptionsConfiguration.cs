@@ -11,8 +11,7 @@ namespace Plato.Internal.Hosting.Web.Configuration
 
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public PlatoOptionsConfiguration(
-            IServiceScopeFactory serviceScopeFactory)
+        public PlatoOptionsConfiguration(IServiceScopeFactory serviceScopeFactory)
         {
             _serviceScopeFactory = serviceScopeFactory;
         }

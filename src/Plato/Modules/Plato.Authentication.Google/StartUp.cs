@@ -35,10 +35,12 @@ namespace Plato.Authentication.Google
 
             // Configuration
             services.AddTransient<IConfigureOptions<AuthenticationOptions>, GoogleSchemaConfiguration>();
+            services.AddTransient<IConfigureOptions<GoogleOptions>, GoogleSchemaConfiguration>();
 
             // Login view provider
             services.AddScoped<IViewProviderManager<UserLogin>, ViewProviderManager<UserLogin>>();
             services.AddScoped<IViewProvider<UserLogin>, LoginViewProvider>();
+
 
         }
 

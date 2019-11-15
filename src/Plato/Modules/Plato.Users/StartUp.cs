@@ -13,7 +13,6 @@ using Plato.Internal.Layout.ActionFilters;
 using Plato.Internal.Models.Roles;
 using Plato.Internal.Models.Users;
 using Plato.Internal.Stores.Users;
-using Plato.Internal.Layout.ViewAdapters;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Messaging.Abstractions;
 using Plato.Internal.Models.Reputations;
@@ -21,7 +20,6 @@ using Plato.Internal.Models.Shell;
 using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Reputations.Abstractions;
 using Plato.Internal.Security;
-using Plato.Users.ViewAdaptors;
 using Plato.Users.Handlers;
 using Plato.Users.ViewModels;
 using Plato.Users.ViewProviders;
@@ -31,40 +29,32 @@ using Plato.Users.Middleware;
 using Plato.Users.Navigation;
 using Plato.Users.Services;
 using Plato.Users.Subscribers;
-using Microsoft.AspNetCore.Authentication.Cookies;
-using Microsoft.Extensions.Options;
-using Plato.Internal.Hosting.Web.Configuration;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.AspNetCore.Authentication;
-using Plato.Users.Configuration;
-using Plato.Internal.Security.Extensions;
 
 namespace Plato.Users
 {
     public class Startup : StartupBase
     {
-        //private readonly IdentityOptions _options;
 
-        private readonly string _tenantName;
         private readonly string _cookieSuffix;
         private readonly string _tenantPrefix;
 
         public Startup(IShellSettings shellSettings)
         {
-            //_options = options;
-            _tenantName = shellSettings.Name;
             _cookieSuffix = shellSettings.AuthCookieName;
             _tenantPrefix = shellSettings.RequestedUrlPrefix;
         }
 
         public override void ConfigureServices(IServiceCollection services)
-        {
+        {   
 
-            
-            // Configure authentication schemes
-            services.AddTransient<IConfigureOptions<AuthenticationOptions>, CookieSchemeConfiguration>();
-
-            // Configure default authentication
+            // Add authentication & configure default authenticaiton scheme
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
+                options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;           
+                options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+            }).AddIdentityCookies();
 
             // --------
 
@@ -187,7 +177,6 @@ namespace Plato.Users
             // Broker subscriptions
             services.AddScoped<IBrokerSubscriber, ParseSignatureHtmlSubscriber>();
 
-
         }
 
         public override void Configure(
@@ -195,7 +184,10 @@ namespace Plato.Users
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-            
+
+            // Register authenticaiton middleware
+            app.UseAuthentication();
+
             // Register authenticated user middleware
             // Must be registered after .NET authentication middleware has been registered
             // i.e. after app.UseAuthentication() above

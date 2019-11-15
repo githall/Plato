@@ -41,8 +41,10 @@ using Plato.Internal.Stores.Abstractions.QueryAdapters;
 
 namespace Plato.Discuss
 {
+
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)
@@ -70,7 +72,6 @@ namespace Plato.Discuss
             services.AddScoped<IEntityRepository<Topic>, EntityRepository<Topic>>();
             services.AddScoped<IEntityStore<Topic>, EntityStore<Topic>>();
             services.AddScoped<IEntityManager<Topic>, EntityManager<Topic>>();
-
             services.AddScoped<IEntityReplyRepository<Reply>, EntityReplyRepository<Reply>>();
             services.AddScoped<IEntityReplyStore<Reply>, EntityReplyStore<Reply>>();
             services.AddScoped<IEntityReplyManager<Reply>, EntityReplyManager<Reply>>();
@@ -105,10 +106,6 @@ namespace Plato.Discuss
             services.AddScoped<IViewProviderManager<Reply>, ViewProviderManager<Reply>>();
             services.AddScoped<IViewProvider<Reply>, ReplyViewProvider>();
 
-            //// Add profile views
-            //services.AddScoped<IViewProviderManager<Profile>, ViewProviderManager<Profile>>();
-            //services.AddScoped<IViewProvider<Profile>, ProfileViewProvider>();
-            
             // Add user views
             services.AddScoped<IViewProviderManager<UserIndex>, ViewProviderManager<UserIndex>>();
             services.AddScoped<IViewProvider<UserIndex>, UserViewProvider>();
@@ -169,7 +166,7 @@ namespace Plato.Discuss
                 template: "discuss/{pager.offset:int?}",
                 defaults: new { controller = "Home", action = "Index" }
             );
-            
+
             // Popular
             routes.MapAreaRoute(
                 name: "DiscussPopular",
@@ -227,5 +224,7 @@ namespace Plato.Discuss
             );
 
         }
+
     }
+
 }
