@@ -103,8 +103,8 @@ namespace Plato.Entities
             services.AddScoped<IQueryAdapterManager<FeatureEntityCount>, QueryAdapterManager<FeatureEntityCount>>();
 
             // Profile view providers
-            services.AddScoped<IViewProviderManager<Profile>, ViewProviderManager<Profile>>();
-            services.AddScoped<IViewProvider<Profile>, ProfileViewProvider>();
+            services.AddScoped<IViewProviderManager<ProfilePage>, ViewProviderManager<ProfilePage>>();
+            services.AddScoped<IViewProvider<ProfilePage>, ProfileViewProvider>();
 
             // User view providers
             services.AddScoped<IViewProviderManager<EntityUserIndex>, ViewProviderManager<EntityUserIndex>>();

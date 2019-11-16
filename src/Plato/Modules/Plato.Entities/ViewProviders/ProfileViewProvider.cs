@@ -12,7 +12,7 @@ using Plato.Internal.Security.Abstractions;
 namespace Plato.Entities.ViewProviders
 {
 
-    public class ProfileViewProvider : BaseViewProvider<Profile>
+    public class ProfileViewProvider : BaseViewProvider<ProfilePage>
     {
         
         private readonly IFeatureEntityCountService _featureEntityCountService;
@@ -29,7 +29,7 @@ namespace Plato.Entities.ViewProviders
             _platoUserStore = platoUserStore;
         }
 
-        public override async Task<IViewProviderResult> BuildDisplayAsync(Profile profile, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildDisplayAsync(ProfilePage profile, IViewProviderContext context)
         {
 
             // Get user
@@ -110,17 +110,17 @@ namespace Plato.Entities.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildIndexAsync(Profile model, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(ProfilePage model, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(Profile model, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildEditAsync(ProfilePage model, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildUpdateAsync(Profile model, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildUpdateAsync(ProfilePage model, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }

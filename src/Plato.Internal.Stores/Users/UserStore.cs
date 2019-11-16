@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Globalization;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
@@ -16,7 +17,8 @@ namespace Plato.Internal.Stores.Users
         IUserRoleStore<User>,
         IUserPasswordStore<User>,
         IUserEmailStore<User>,
-        IUserSecurityStampStore<User>
+        IUserSecurityStampStore<User>,
+        IUserLoginStore<User>
     {
         #region "Dispose"
 
@@ -447,5 +449,68 @@ namespace Plato.Internal.Stores.Users
 
         #endregion
 
+        #region "IUserLoginStore"
+
+        public Task AddLoginAsync(User user, UserLoginInfo login, CancellationToken cancellationToken)
+        {
+
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            if (login == null)
+            {
+                throw new ArgumentNullException(nameof(login));
+            }
+
+            if (((User)user).LoginInfos.Any(i => i.LoginProvider == login.LoginProvider))
+                throw new InvalidOperationException($"Provider {login.LoginProvider} is already linked for {user.UserName}");
+
+            ((User)user).LoginInfos.Add(login);
+
+            return Task.CompletedTask;
+        }
+
+        public Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            throw new NotImplementedException();
+            // return await _session.Query<User, UserByLoginInfoIndex>(u => u.LoginProvider == loginProvider && u.ProviderKey == providerKey).FirstOrDefaultAsync();
+        }
+
+        public Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            return Task.FromResult<IList<UserLoginInfo>>(((User)user).LoginInfos);
+        }
+
+        public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
+        {
+            if (user == null)
+            {
+                throw new ArgumentNullException(nameof(user));
+            }
+
+            var externalLogins = ((User)user).LoginInfos;
+            if (externalLogins != null)
+            {
+                var item = externalLogins.FirstOrDefault(c => c.LoginProvider == loginProvider && c.ProviderKey == providerKey);
+                if (item != null)
+                {
+                    externalLogins.Remove(item);
+                }
+            }
+
+            return Task.CompletedTask;
+
+        }
+
+        #endregion
+
     }
+
 }

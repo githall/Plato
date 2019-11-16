@@ -8,7 +8,7 @@ using Plato.Internal.Stores.Abstractions.Users;
 
 namespace Plato.Follow.Users.ViewProviders
 {
-    public class ProfileViewProvider : BaseViewProvider<Profile>
+    public class ProfileViewProvider : BaseViewProvider<ProfilePage>
     {
 
         private readonly IPlatoUserStore<User> _platoUserStore;
@@ -25,7 +25,7 @@ namespace Plato.Follow.Users.ViewProviders
             _followStore = followStore;
         }
 
-        public override async Task<IViewProviderResult> BuildDisplayAsync(Profile discuss, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildDisplayAsync(ProfilePage discuss, IViewProviderContext context)
         {
 
             var user = await _platoUserStore.GetByIdAsync(discuss.Id);
@@ -63,17 +63,17 @@ namespace Plato.Follow.Users.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildIndexAsync(Profile model, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(ProfilePage model, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(Profile discuss, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildEditAsync(ProfilePage discuss, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildUpdateAsync(Profile model, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildUpdateAsync(ProfilePage model, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }

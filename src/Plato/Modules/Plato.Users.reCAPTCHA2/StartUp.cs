@@ -31,8 +31,8 @@ namespace Plato.Users.reCAPTCHA2
             services.AddScoped<IReCaptchaSettingsStore<ReCaptchaSettings>, ReCaptchaSettingsStore>();
 
             // Login view provider
-            services.AddScoped<IViewProviderManager<UserLogin>, ViewProviderManager<UserLogin>>();
-            services.AddScoped<IViewProvider<UserLogin>, LoginViewProvider>();
+            services.AddScoped<IViewProviderManager<LoginPage>, ViewProviderManager<LoginPage>>();
+            services.AddScoped<IViewProvider<LoginPage>, LoginViewProvider>();
 
             // Register view provider
             services.AddScoped<IViewProviderManager<UserRegistration>, ViewProviderManager<UserRegistration>>();

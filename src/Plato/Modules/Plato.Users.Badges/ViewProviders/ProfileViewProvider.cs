@@ -11,7 +11,7 @@ using Plato.Users.Badges.ViewModels;
 namespace Plato.Users.Badges.ViewProviders
 {
 
-    public class ProfileViewProvider : BaseViewProvider<Profile>
+    public class ProfileViewProvider : BaseViewProvider<ProfilePage>
     {
         
         private readonly IPlatoUserStore<User> _platoUserStore;
@@ -26,7 +26,7 @@ namespace Plato.Users.Badges.ViewProviders
             _badgeEntriesStore = badgeEntriesStore;
         }
 
-        public override async Task<IViewProviderResult> BuildDisplayAsync(Profile profile,
+        public override async Task<IViewProviderResult> BuildDisplayAsync(ProfilePage profile,
             IViewProviderContext context)
         {
 
@@ -49,17 +49,17 @@ namespace Plato.Users.Badges.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildIndexAsync(Profile model, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(ProfilePage model, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(Profile model, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildEditAsync(ProfilePage model, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildUpdateAsync(Profile model, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildUpdateAsync(ProfilePage model, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }

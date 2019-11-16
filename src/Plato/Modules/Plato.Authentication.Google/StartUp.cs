@@ -39,8 +39,8 @@ namespace Plato.Authentication.Google
             services.AddTransient<IPostConfigureOptions<GoogleOptions>, OAuthPostConfigureOptions<GoogleOptions, GoogleHandler>>();
 
             // Login view provider
-            services.AddScoped<IViewProviderManager<UserLogin>, ViewProviderManager<UserLogin>>();
-            services.AddScoped<IViewProvider<UserLogin>, LoginViewProvider>();
+            services.AddScoped<IViewProviderManager<LoginPage>, ViewProviderManager<LoginPage>>();
+            services.AddScoped<IViewProvider<LoginPage>, LoginViewProvider>();
 
         }
 

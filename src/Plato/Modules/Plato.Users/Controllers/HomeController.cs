@@ -33,7 +33,7 @@ namespace Plato.Users.Controllers
         private readonly IViewProviderManager<EditSettingsViewModel> _editSettingsViewProvider;
         private readonly IViewProviderManager<EditSignatureViewModel> _editSignatureViewProvider;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IViewProviderManager<Profile> _viewProvider;
+        private readonly IViewProviderManager<ProfilePage> _viewProvider;
         private readonly IPlatoUserManager<User> _platoUserManager;
         private readonly IPlatoUserStore<User> _platoUserStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
@@ -56,7 +56,7 @@ namespace Plato.Users.Controllers
             IViewProviderManager<EditSettingsViewModel> editSettingsViewProvider,
             IViewProviderManager<EditSignatureViewModel> editSignatureViewProvider,
             IAuthorizationService authorizationService,
-            IViewProviderManager<Profile> viewProvider,
+            IViewProviderManager<ProfilePage> viewProvider,
             IPlatoUserManager<User> platoUserManager,
             IPlatoUserStore<User> platoUserStore,
             IBreadCrumbManager breadCrumbManager,
@@ -170,7 +170,7 @@ namespace Plato.Users.Controllers
             });
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new Profile(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new ProfilePage(), this));
 
         }
 
@@ -256,7 +256,7 @@ namespace Plato.Users.Controllers
             HttpContext.Items[typeof(User)] = user;
 
             // Build view model
-            var viewModel = new Profile()
+            var viewModel = new ProfilePage()
             {
                 Id = user.Id
             };

@@ -12,7 +12,7 @@ using Plato.Users.ViewModels;
 
 namespace Plato.Users.ViewProviders
 {
-    public class UserViewProvider : BaseViewProvider<Profile>
+    public class UserViewProvider : BaseViewProvider<ProfilePage>
     {
   
         private readonly UserManager<User> _userManager;
@@ -35,7 +35,7 @@ namespace Plato.Users.ViewProviders
             _sitesFolder = sitesFolder;
         }
 
-        public override Task<IViewProviderResult> BuildIndexAsync(Profile user, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(ProfilePage user, IViewProviderContext context)
         {
 
             var viewModel = context.Controller.HttpContext.Items[typeof(UserIndexViewModel)] as UserIndexViewModel;
@@ -53,7 +53,7 @@ namespace Plato.Users.ViewProviders
 
         }
         
-        public override async Task<IViewProviderResult> BuildDisplayAsync(Profile profile, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildDisplayAsync(ProfilePage profile, IViewProviderContext context)
         {
 
             var user = await _platoUserStore.GetByIdAsync(profile.Id);
@@ -70,12 +70,12 @@ namespace Plato.Users.ViewProviders
             );
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(Profile profile, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildEditAsync(ProfilePage profile, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
         
-        public override Task<IViewProviderResult> BuildUpdateAsync(Profile profile, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildUpdateAsync(ProfilePage profile, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }

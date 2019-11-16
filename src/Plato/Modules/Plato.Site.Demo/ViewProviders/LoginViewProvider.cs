@@ -10,7 +10,7 @@ using Plato.Users.ViewModels;
 
 namespace Plato.Site.Demo.ViewProviders
 {
-    public class LoginViewProvider : BaseViewProvider<UserLogin>
+    public class LoginViewProvider : BaseViewProvider<LoginPage>
     {
         
         public IHtmlLocalizer T { get; }
@@ -32,7 +32,7 @@ namespace Plato.Site.Demo.ViewProviders
         #region "Implementation"
 
         public override Task<IViewProviderResult> BuildIndexAsync(
-            UserLogin viewModel,
+            LoginPage viewModel,
             IViewProviderContext context)
         {
 
@@ -48,18 +48,18 @@ namespace Plato.Site.Demo.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildDisplayAsync(UserLogin viewModel,
+        public override Task<IViewProviderResult> BuildDisplayAsync(LoginPage viewModel,
             IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(UserLogin viewModel, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildEditAsync(LoginPage viewModel, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(UserLogin viewModel, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(LoginPage viewModel, IViewProviderContext context)
         {
             return await BuildIndexAsync(viewModel, context);
         }

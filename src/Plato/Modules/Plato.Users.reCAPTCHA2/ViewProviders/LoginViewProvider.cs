@@ -12,7 +12,7 @@ using Plato.Users.reCAPTCHA2.ViewModels;
 
 namespace Plato.Users.reCAPTCHA2.ViewProviders
 {
-    public class LoginViewProvider : BaseViewProvider<UserLogin>
+    public class LoginViewProvider : BaseViewProvider<LoginPage>
     {
 
         private readonly IReCaptchaService _recaptchaService;
@@ -29,7 +29,7 @@ namespace Plato.Users.reCAPTCHA2.ViewProviders
             _request = httpContextAccessor.HttpContext.Request;
         }
 
-        public override async Task<IViewProviderResult> BuildIndexAsync(UserLogin viewModel,
+        public override async Task<IViewProviderResult> BuildIndexAsync(LoginPage viewModel,
             IViewProviderContext context)
         {
 
@@ -51,18 +51,18 @@ namespace Plato.Users.reCAPTCHA2.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildDisplayAsync(UserLogin viewModel,
+        public override Task<IViewProviderResult> BuildDisplayAsync(LoginPage viewModel,
             IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(UserLogin viewModel, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildEditAsync(LoginPage viewModel, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<bool> ValidateModelAsync(UserLogin userLogin, IUpdateModel updater)
+        public override async Task<bool> ValidateModelAsync(LoginPage userLogin, IUpdateModel updater)
         {
 
             // Get settings
@@ -130,7 +130,7 @@ namespace Plato.Users.reCAPTCHA2.ViewProviders
         }
 
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(UserLogin viewModel,
+        public override async Task<IViewProviderResult> BuildUpdateAsync(LoginPage viewModel,
             IViewProviderContext context)
         {
             return await BuildIndexAsync(viewModel, context);

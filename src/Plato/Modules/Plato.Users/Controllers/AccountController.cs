@@ -35,7 +35,7 @@ namespace Plato.Users.Controllers
         #region "Constructor"
 
         private readonly IViewProviderManager<UserRegistration> _registerViewProvider;
-        private readonly IViewProviderManager<UserLogin> _loginViewProvider;
+        private readonly IViewProviderManager<LoginPage> _loginViewProvider;
         private readonly IOptions<IdentityOptions> _identityOptions;
         private readonly IPlatoUserManager<User> _platoUserManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
@@ -56,7 +56,7 @@ namespace Plato.Users.Controllers
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
             IViewProviderManager<UserRegistration> registerViewProvider,
-            IViewProviderManager<UserLogin> loginViewProvider,
+            IViewProviderManager<LoginPage> loginViewProvider,
             IOptions<IdentityOptions> identityOptions,
             IPlatoUserManager<User> platoUserManager,
             IPlatoUserStore<User> platoUserStore,
@@ -114,7 +114,7 @@ namespace Plato.Users.Controllers
             ViewData["ReturnUrl"] = returnUrl;
 
             // Return view
-            return View((LayoutViewModel) await _loginViewProvider.ProvideIndexAsync(new UserLogin(), this));
+            return View((LayoutViewModel) await _loginViewProvider.ProvideIndexAsync(new LoginPage(), this));
           
         }
 
@@ -126,7 +126,7 @@ namespace Plato.Users.Controllers
             ViewData["ReturnUrl"] = returnUrl;
 
             // Build view provider model
-            var userLogin = new UserLogin()
+            var userLogin = new LoginPage()
             {
                 UserName = model.UserName,
                 Password = model.Password,

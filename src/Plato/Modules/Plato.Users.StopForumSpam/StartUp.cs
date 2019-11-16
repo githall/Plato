@@ -41,8 +41,8 @@ namespace Plato.Users.StopForumSpam
             services.AddScoped<ISpamOperatorProvider<User>, LoginOperator>();
 
             // Login view provider
-            services.AddScoped<IViewProviderManager<UserLogin>, ViewProviderManager<UserLogin>>();
-            services.AddScoped<IViewProvider<UserLogin>, LoginViewProvider>();
+            services.AddScoped<IViewProviderManager<LoginPage>, ViewProviderManager<LoginPage>>();
+            services.AddScoped<IViewProvider<LoginPage>, LoginViewProvider>();
 
             // Registration view provider
             services.AddScoped<IViewProviderManager<UserRegistration>, ViewProviderManager<UserRegistration>>();

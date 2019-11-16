@@ -8,7 +8,7 @@ using Plato.StopForumSpam.Services;
 
 namespace Plato.Users.StopForumSpam.ViewProviders
 {
-    public class LoginViewProvider : BaseViewProvider<UserLogin>
+    public class LoginViewProvider : BaseViewProvider<LoginPage>
     {
 
         private readonly IPlatoUserStore<User> _platoUserStore;
@@ -25,24 +25,24 @@ namespace Plato.Users.StopForumSpam.ViewProviders
             _platoUserStore = platoUserStore;
         }
         
-        public override Task<IViewProviderResult> BuildIndexAsync(UserLogin viewModel,
+        public override Task<IViewProviderResult> BuildIndexAsync(LoginPage viewModel,
             IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildDisplayAsync(UserLogin viewModel,
+        public override Task<IViewProviderResult> BuildDisplayAsync(LoginPage viewModel,
             IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(UserLogin viewModel, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildEditAsync(LoginPage viewModel, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<bool> ValidateModelAsync(UserLogin userLogin, IUpdateModel updater)
+        public override async Task<bool> ValidateModelAsync(LoginPage userLogin, IUpdateModel updater)
         {
 
             // Build user to validate
@@ -81,7 +81,7 @@ namespace Plato.Users.StopForumSpam.ViewProviders
 
         }
         
-        public override async Task<IViewProviderResult> BuildUpdateAsync(UserLogin userLogin, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(LoginPage userLogin, IViewProviderContext context)
         {
 
             if (!context.Updater.ModelState.IsValid)
@@ -105,7 +105,7 @@ namespace Plato.Users.StopForumSpam.ViewProviders
 
         }
         
-        async Task<User> BuildUserAsync(UserLogin userLogin)
+        async Task<User> BuildUserAsync(LoginPage userLogin)
         {
 
             var user = await _platoUserStore.GetByUserNameAsync(userLogin.UserName);

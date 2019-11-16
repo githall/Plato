@@ -13,13 +13,13 @@ namespace Plato.Internal.Repositories.Roles
     {
 
         #region "Constructor"
-
-        private readonly IDbContext _dbContext;
+        
         private readonly ILogger<RoleRepository> _logger;
+        private readonly IDbContext _dbContext;
 
-        public RoleRepository(
-            IDbContext dbContext,
-            ILogger<RoleRepository> logger)
+        public RoleRepository(            
+            ILogger<RoleRepository> logger,
+            IDbContext dbContext)
         {
             _dbContext = dbContext;
             _logger = logger;

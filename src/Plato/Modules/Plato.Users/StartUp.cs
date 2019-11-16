@@ -120,8 +120,8 @@ namespace Plato.Users
             services.AddScoped<IViewProvider<User>, AdminViewProvider>();
           
             // Profile view providers
-            services.AddScoped<IViewProviderManager<Profile>, ViewProviderManager<Profile>>();
-            services.AddScoped<IViewProvider<Profile>, UserViewProvider>();
+            services.AddScoped<IViewProviderManager<ProfilePage>, ViewProviderManager<ProfilePage>>();
+            services.AddScoped<IViewProvider<ProfilePage>, UserViewProvider>();
 
             // Edit profile view provider
             services.AddScoped<IViewProviderManager<EditProfileViewModel>, ViewProviderManager<EditProfileViewModel>>();
@@ -140,8 +140,8 @@ namespace Plato.Users
             services.AddScoped<IViewProvider<EditSignatureViewModel>, EditSignatureViewProvider>();
 
             // Login view provider
-            services.AddScoped<IViewProviderManager<UserLogin>, ViewProviderManager<UserLogin>>();
-            services.AddScoped<IViewProvider<UserLogin>, LoginViewProvider>();
+            services.AddScoped<IViewProviderManager<LoginPage>, ViewProviderManager<LoginPage>>();
+            services.AddScoped<IViewProvider<LoginPage>, LoginViewProvider>();
 
             // Register view provider
             services.AddScoped<IViewProviderManager<UserRegistration>, ViewProviderManager<UserRegistration>>();
