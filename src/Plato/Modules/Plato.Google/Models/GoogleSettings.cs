@@ -1,4 +1,5 @@
-﻿using Plato.Internal.Abstractions;
+﻿using Microsoft.AspNetCore.Http;
+using Plato.Internal.Abstractions;
 
 namespace Plato.Google.Models
 {
@@ -8,6 +9,8 @@ namespace Plato.Google.Models
         public string ClientId { get; set; }
 
         public string ClientSecret { get; set; }
+
+        public PathString CallbackPath { get; set; }
 
     }
 

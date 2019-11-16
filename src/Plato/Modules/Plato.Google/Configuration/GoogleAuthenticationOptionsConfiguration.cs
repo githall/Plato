@@ -50,6 +50,11 @@ namespace Plato.Google.Configuration
                     }
                 }
 
+                if (settings.CallbackPath.HasValue)
+                {
+                    options.CallbackPath = settings.CallbackPath;
+                }
+
             }
 
         }

@@ -8,12 +8,10 @@ using Plato.Internal.Hosting.Abstractions;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
-using Microsoft.AspNetCore.Identity;
 using Plato.Authentication.Google.Configuration;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Users;
 using Plato.Authentication.Google.ViewProviders;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace Plato.Authentication.Google
 {
@@ -37,10 +35,12 @@ namespace Plato.Authentication.Google
             services.AddTransient<IConfigureOptions<AuthenticationOptions>, GoogleSchemaConfiguration>();
             services.AddTransient<IConfigureOptions<GoogleOptions>, GoogleSchemaConfiguration>();
 
+            // Built-in initializers:
+            services.AddTransient<IPostConfigureOptions<GoogleOptions>, OAuthPostConfigureOptions<GoogleOptions, GoogleHandler>>();
+
             // Login view provider
             services.AddScoped<IViewProviderManager<UserLogin>, ViewProviderManager<UserLogin>>();
             services.AddScoped<IViewProvider<UserLogin>, LoginViewProvider>();
-
 
         }
 

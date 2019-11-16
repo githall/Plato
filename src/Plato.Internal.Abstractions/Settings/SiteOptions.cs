@@ -23,6 +23,8 @@ namespace Plato.Internal.Abstractions.Settings
 
         public string HomeAlias { get; set; }
 
+        public bool AllowUserRegistration { get; set; } = true;
+
     }
 
 }

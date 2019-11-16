@@ -274,6 +274,27 @@ namespace Plato.Users
                 defaults: new { controller = "Account", action = "ResetPasswordConfirmation" }
             );
 
+            routes.MapAreaRoute(
+                name: "ExternalLogin",
+                areaName: "Plato.Users",
+                template: "external-login",
+                defaults: new { controller = "Account", action = "ExternalLogin" }
+            );
+
+            routes.MapAreaRoute(
+                name: "ExternalLoginCallback",
+                areaName: "Plato.Users",
+                template: "external-login-callback",
+                defaults: new { controller = "Account", action = "ExternalLoginCallback" }
+            );
+
+            routes.MapAreaRoute(
+                name: "ExternalLogins",
+                areaName: "Plato.Users",
+                template: "external-logins",
+                defaults: new { controller = "Account", action = "ExternalLogins" }
+            );
+
             // --------------
             // Users
             // --------------

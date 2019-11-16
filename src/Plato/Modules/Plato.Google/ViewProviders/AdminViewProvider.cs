@@ -89,7 +89,8 @@ namespace Plato.Google.ViewProviders
                 settings = new GoogleSettings()
                 {
                     ClientId = model.ClientId,
-                    ClientSecret = secret
+                    ClientSecret = secret,
+                    CallbackPath = model.CallbackPath
                 };
 
                 // Persist the settings
@@ -131,7 +132,8 @@ namespace Plato.Google.ViewProviders
                 return new GoogleSettingsViewModel()
                 {
                     ClientId = settings.ClientId,
-                    ClientSecret = secret
+                    ClientSecret = secret,
+                    CallbackPath = settings.CallbackPath
                 };
 
             }

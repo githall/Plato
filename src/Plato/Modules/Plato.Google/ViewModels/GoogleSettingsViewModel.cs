@@ -2,6 +2,7 @@
 
 namespace Plato.Google.ViewModels
 {
+
     public class GoogleSettingsViewModel
     {
 
@@ -11,5 +12,9 @@ namespace Plato.Google.ViewModels
         [StringLength(255), Display(Name = "client secret")]
         public string ClientSecret { get; set; }
 
+        [RegularExpression(@"\/[-A-Za-z0-9+&@#\/%?=~_|!:,.;]+[-A-Za-z0-9+&@#\/%=~_|]", ErrorMessage = "Invalid path")]
+        public string CallbackPath { get; set; }
+
     }
+
 }

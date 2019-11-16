@@ -10,9 +10,9 @@
             <div class="col">
                 <fieldset>
                     <div class="form-group" asp-validation-class-for="DefaultFrom">
-                        <label asp-for="@Model.ClientId">
+                        <label asp-for="ClientId">
                             <strong>@T["Client ID"]</strong>
-                            <span asp-validation-for="@Model.ClientId" class="text-danger"></span>
+                            <span asp-validation-for="ClientId" class="text-danger"></span>
                             <br />
                             <span class="text-muted">@T["Your google client ID."]</span>
                             <a href="https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin" target="_blank">@T["Get your client ID"]</a>
@@ -22,9 +22,9 @@
                 </fieldset>
                 <fieldset>
                     <div class="form-group" asp-validation-class-for="DefaultFrom">
-                        <label asp-for="@Model.ClientSecret">
+                        <label asp-for="ClientSecret">
                             <strong>@T["Client Secret"]</strong>
-                            <span asp-validation-for="@Model.ClientSecret" class="text-danger"></span>
+                            <span asp-validation-for="ClientSecret" class="text-danger"></span>
                             <br/>
                             <span class="text-muted">@T["Your google client secret."]</span>
                             <a href="https://developers.google.com/identity/sign-in/web/sign-in#before_you_begin" target="_blank">@T["Get your client secret"]</a>
@@ -39,6 +39,19 @@
                             <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
                                 <i class="fal fa-eye"></i>
                             </button>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group row" asp-validation-class-for="CallbackPath">
+                        <div class="col-lg">
+                            <label asp-for="CallbackPath">
+                                <strong>@T["Callback Path"]</strong>
+                                <br />
+                                <span class="text-muted">@T["The path within the application where the user-agent will be returned. The middleware will process this request when it arrives."]</span>
+                                <span asp-validation-for="CallbackPath"></span>
+                            </label>
+                            <input asp-for="CallbackPath" class="form-control" placeholder="/signin-google" />                            
                         </div>
                     </div>
                 </fieldset>

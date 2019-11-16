@@ -10,7 +10,6 @@ using Plato.Google.Navigation;
 using Plato.Google.Stores;
 using Plato.Google.ViewProviders;
 using Plato.Internal.Features.Abstractions;
-using Plato.Internal.Models.Shell;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Navigation.Abstractions;
@@ -55,7 +54,7 @@ namespace Plato.Google
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-
+      
             routes.MapAreaRoute(
                 name: "PlatoGoogleAdmin",
                 areaName: "Plato.Google",

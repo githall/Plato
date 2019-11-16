@@ -1,4 +1,6 @@
-﻿namespace Plato.Google.Models
+﻿using Microsoft.AspNetCore.Http;
+
+namespace Plato.Google.Models
 {
     public class GoogleAuthenticationOptions
     {
@@ -7,5 +9,8 @@
 
         public string ClientSecret { get; set; }
 
+        public PathString CallbackPath { get; set; }
+
     }
+
 }

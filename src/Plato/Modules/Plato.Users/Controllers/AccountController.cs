@@ -20,6 +20,12 @@ using Plato.Internal.Navigation.Abstractions;
 using Plato.Internal.Security.Abstractions;
 using Plato.Internal.Stores.Abstractions.Users;
 using Plato.Users.Services;
+using Microsoft.AspNetCore.Authentication;
+using System.Security.Claims;
+using Plato.Internal.Abstractions.Settings;
+
+using AspNet.Security.OpenIdConnect.Primitives;
+using System.Linq;
 
 namespace Plato.Users.Controllers
 {
@@ -40,7 +46,9 @@ namespace Plato.Users.Controllers
         private readonly UserManager<User> _userManager;
         private readonly IUserEmails _userEmails;
         private readonly IAlerter _alerter;
- 
+
+        private readonly SiteOptions _siteOptions;
+
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
@@ -54,9 +62,10 @@ namespace Plato.Users.Controllers
             IPlatoUserManager<User> platoUserManager,
             IPlatoUserStore<User> platoUserStore,
             IBreadCrumbManager breadCrumbManager,
+            IOptions<SiteOptions> siteOptions,
             ILogger<AccountController> logger,            
             SignInManager<User> signInManage,
-            UserManager<User> userManager,
+            UserManager<User> userManager,            
             IUserEmails userEmails,
             IAlerter alerter)
         {   
@@ -66,11 +75,12 @@ namespace Plato.Users.Controllers
             _platoUserManager = platoUserManager;
             _identityOptions = identityOptions;
             _platoUserStore = platoUserStore;
+            _siteOptions = siteOptions.Value;
             _signInManager = signInManage;
             _userManager = userManager;
             _userEmails = userEmails;
             _alerter = alerter;            
-            _logger = logger;
+            _logger = logger;            
 
             T = htmlLocalizer;
             S = stringLocalizer;
@@ -88,7 +98,10 @@ namespace Plato.Users.Controllers
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Login(string returnUrl = null)
         {
-                        
+
+            // Clear the existing external cookie to ensure a clean login process
+            await HttpContext.SignOutAsync(IdentityConstants.ExternalScheme);
+
             // Build breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
@@ -235,6 +248,183 @@ namespace Plato.Users.Controllers
 
             return await Login(returnUrl);
 
+        }
+
+        // -----------------
+        // External Login
+        // -----------------
+
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        public ActionResult ExternalLogin(string provider, string returnUrl = null)
+        {
+            // Request a redirect to the external login provider.
+            var redirectUrl = Url.Action(nameof(ExternalLoginCallback), "Account", new { returnUrl });
+            var properties = _signInManager.ConfigureExternalAuthenticationProperties(provider, redirectUrl);
+            return Challenge(properties, provider);
+        }
+
+        [HttpGet, AllowAnonymous]
+        public async Task<IActionResult> ExternalLoginCallback(string returnUrl = null, string remoteError = null)
+        {
+
+            if (remoteError != null)
+            {
+                _logger.LogError($"Error from external provider: {remoteError}");
+                return RedirectToAction(nameof(Login));
+            }
+
+            var info = await _signInManager.GetExternalLoginInfoAsync();
+            if (info == null)
+            {
+                _logger.LogError($"Could not get external login info");
+                return RedirectToAction(nameof(Login));
+            }
+
+            // Sign in the user with this external login provider if the user already has a login.
+            var result = await _signInManager.ExternalLoginSignInAsync(info.LoginProvider, info.ProviderKey, isPersistent: false, bypassTwoFactor: true);
+            if (result.Succeeded)
+            {
+                await _signInManager.UpdateExternalAuthenticationTokensAsync(info);
+                _logger.LogInformation("User logged in with {Name} provider.", info.LoginProvider);
+                return RedirectToLocal(returnUrl);
+            }
+
+            if (result.IsLockedOut)
+            {
+                _logger.LogError($"User is locked out");
+                return RedirectToAction(nameof(Login));
+                //return RedirectToAction(nameof(Lockout));
+            }
+            else
+            {
+
+                var model = new ExternalLoginViewModel();
+                IUser existingUser = null;
+
+                model.Email = info.Principal.FindFirstValue(ClaimTypes.Email) ?? info.Principal.FindFirstValue(OpenIdConnectConstants.Claims.Email);
+                if (model.Email != null)
+                {
+                    existingUser = await _userManager.FindByEmailAsync(model.Email);
+                }                    
+
+                if (model.IsExistingUser = (existingUser != null))
+                {
+                    model.UserName = existingUser.UserName;
+                }                    
+                else
+                {
+                    model.UserName = info.Principal.FindFirstValue(ClaimTypes.GivenName) ?? info.Principal.FindFirstValue(OpenIdConnectConstants.Claims.GivenName) ?? info.Principal.FindFirstValue(OpenIdConnectConstants.Claims.Name);
+                }                    
+
+                ViewData["ReturnUrl"] = returnUrl;
+
+                // If the user does not have an account, check if he can create an account.
+                if (!model.IsExistingUser && !_siteOptions.AllowUserRegistration)
+                {
+                    var message = T["Site does not allow user registration."];
+                    _logger.LogInformation(message.Value);
+                    ModelState.AddModelError("", message.Value);
+                    return View(nameof(Login));
+                }
+
+                ViewData["LoginProvider"] = info.LoginProvider;
+                return View("ExternalLogin", model);
+            }
+        }
+
+        [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
+        public async Task<IActionResult> ExternalLoginConfirmation(ExternalLoginViewModel model, string returnUrl = null, string loginProvider = null)
+        {
+
+            if (!model.IsExistingUser && !_siteOptions.AllowUserRegistration)
+            {
+                _logger.LogInformation("Site does not allow user registration.");
+                return NotFound();
+            }
+
+            ViewData["ReturnUrl"] = returnUrl;
+            ViewData["LoginProvider"] = loginProvider;
+
+            if (ModelState.IsValid)
+            {
+
+                User user = null;
+
+                var info = await _signInManager.GetExternalLoginInfoAsync();
+                if (info == null)
+                {
+                    throw new ApplicationException("Error loading external login information during confirmation.");
+                }
+                
+                if (!model.IsExistingUser)
+                {
+                    
+                    var result = await _platoUserManager.CreateAsync(
+                        model.UserName,                        
+                        model.Email,
+                        model.Password);
+                    if (result.Succeeded)
+                    {
+                        user = result.Response;
+                    } 
+                    else
+                    {
+                        foreach (var error in result.Errors)
+                        {
+                            ModelState.AddModelError(error.Description, error.Description);
+                        }
+                    }
+                    _logger.LogInformation(3, "User created an account with password.");
+                }
+                else
+                {
+                    user = await _userManager.FindByNameAsync(model.UserName);
+                }
+
+                if (user != null)
+                {
+                    var signInResult = await _signInManager.CheckPasswordSignInAsync(user, model.Password, false);
+                    if (!signInResult.Succeeded)
+                    {
+                        user = null;
+                        ModelState.AddModelError(string.Empty, "Invalid login attempt.");
+                    }
+                    else
+                    {
+                        var identityResult = await _signInManager.UserManager.AddLoginAsync(user, new UserLoginInfo(info.LoginProvider, info.ProviderKey, info.ProviderDisplayName));
+                        if (identityResult.Succeeded)
+                        {
+                            await _signInManager.SignInAsync(user, isPersistent: false);
+                            _logger.LogInformation(3, "User account linked to {Name} provider.", info.LoginProvider);
+                            return RedirectToLocal(returnUrl);
+                        }
+                        //AddErrors(identityResult);
+                    }
+                }
+            }
+            return View(nameof(ExternalLogin), model);
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ExternalLogins()
+        {
+            var user = await _userManager.GetUserAsync(User);
+            if (user == null)
+            {
+                return Unauthorized();
+            }
+
+            var model = new ExternalLoginsViewModel()
+            {
+                CurrentLogins = await _userManager.GetLoginsAsync(user)
+            };
+            model.OtherLogins = (await _signInManager.GetExternalAuthenticationSchemesAsync())
+                .Where(auth => model.CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
+                .ToList();
+            model.ShowRemoveButton = await _userManager.HasPasswordAsync(user) || model.CurrentLogins.Count > 1;
+            //model.StatusMessage = StatusMessage;
+
+            return View(model);
         }
 
         // -----------------
