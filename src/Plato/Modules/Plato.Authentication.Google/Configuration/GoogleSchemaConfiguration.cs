@@ -1,9 +1,7 @@
 ﻿using System;
 using System.Security.Claims;
-using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Google;
-using Microsoft.AspNetCore.Authentication.OAuth;
 using Microsoft.Extensions.Options;
 using Plato.Google.Models;
 
@@ -82,28 +80,28 @@ namespace Plato.Authentication.Google.Configuration
             options.ClaimActions.MapJsonKey("urn:google:profile", "link");
             options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
 
-            // Optional
-            options.Events = new OAuthEvents
-            {   
-                OnCreatingTicket = OnCreatingGoogleTicket()
-            }; // Event to capture when the authentication ticket is being created
+            //// Optional
+            //options.Events = new OAuthEvents
+            //{   
+            //    OnCreatingTicket = OnCreatingGoogleTicket()
+            //}; // Event to capture when the authentication ticket is being created
 
         }
 
-        private static Func<OAuthCreatingTicketContext, Task> OnCreatingGoogleTicket()
-        {
-            return async context =>
-            {
-                var firstName = context.Identity.FindFirst(ClaimTypes.GivenName).Value;
-                var lastName = context.Identity.FindFirst(ClaimTypes.Surname)?.Value;
-                var email = context.Identity.FindFirst(ClaimTypes.Email).Value;
+        //private static Func<OAuthCreatingTicketContext, Task> OnCreatingGoogleTicket()
+        //{
+        //    return async context =>
+        //    {
+        //        var firstName = context.Identity.FindFirst(ClaimTypes.GivenName).Value;
+        //        var lastName = context.Identity.FindFirst(ClaimTypes.Surname)?.Value;
+        //        var email = context.Identity.FindFirst(ClaimTypes.Email).Value;
 
-                //Todo: Add logic here to save info into database
+        //        //Todo: Add logic here to save info into database
 
-                // this Task.FromResult is purely to make the code compile as it requires a Task result
-                await Task.FromResult(true);
-            };
-        }
+        //        // this Task.FromResult is purely to make the code compile as it requires a Task result
+        //        await Task.FromResult(true);
+        //    };
+        //}
 
     }
 

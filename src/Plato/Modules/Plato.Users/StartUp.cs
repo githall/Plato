@@ -29,6 +29,7 @@ using Plato.Users.Middleware;
 using Plato.Users.Navigation;
 using Plato.Users.Services;
 using Plato.Users.Subscribers;
+using Plato.Internal.Abstractions.Extensions;
 
 namespace Plato.Users
 {
@@ -45,51 +46,39 @@ namespace Plato.Users
         }
 
         public override void ConfigureServices(IServiceCollection services)
-        {   
-
-            // Add authentication services & configure default authenticaiton scheme
-            services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultChallengeScheme = IdentityConstants.ApplicationScheme;
-                options.DefaultSignInScheme = IdentityConstants.ApplicationScheme;           
-                options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
-            }).AddIdentityCookies();
-
-            // --------
+        {
 
             // Register set-up event handler
             services.AddScoped<ISetUpEventHandler, SetUpEventHandler>();
 
             // Register feature event handlers
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
-            
-            // Adds default token providers
-            new IdentityBuilder(typeof(User), typeof(Role), services).AddDefaultTokenProviders();
-        
+
             // --------
 
-            // .NET core implementations
-            services.TryAddScoped<IUserValidator<User>, UserValidator<User>>();
-            services.TryAddScoped<IPasswordValidator<User>, PasswordValidator<User>>();
-            services.TryAddScoped<IPasswordHasher<User>, PasswordHasher<User>>();
-            services.TryAddScoped<ILookupNormalizer, UpperInvariantLookupNormalizer>();
+            // Adds the default token providers used to generate tokens for reset passwords, change email
+            // and change telephone number operations, and for two factor authentication token generation.
+            services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 
-            // No interface for the error describer so we can add errors without rev'ing the interface
-            services.TryAddScoped<IdentityErrorDescriber>();
-            services.TryAddScoped<ISecurityStampValidator, SecurityStampValidator<User>>();
+            // Add authentication services & configure default authenticaiton scheme
+            services.AddAuthentication(options =>
+            {                
+                options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
+            });
 
-            // Custom UserClaimsPrincipalFactory implementations
-            services.TryAddScoped<IUserClaimsPrincipalFactory<User>, PlatoClaimsPrincipalFactory<User, Role>>();
+            // --------
+
+            // Replace the default UserClaimsPrincipalFactory implementation added via AddIdentity()
+            // above with our own PlatoClaimsPrincipalFactory implementation, this ensures role claims
+            // are not stored within the client cookie
+            services.Replace<IUserClaimsPrincipalFactory<User>, PlatoUserClaimsPrincipalFactory<User, Role>>(ServiceLifetime.Scoped);
+
+            // Build a claim principal from the given user
             services.TryAddScoped<IDummyClaimsPrincipalFactory<User>, DummyClaimsPrincipalFactory<User>>();
             
             // Stores
             services.TryAddScoped<IUserStore<User>, UserStore>();
             services.TryAddScoped<IUserSecurityStampStore<User>, UserStore>();
-
-            // Managers
-            services.TryAddScoped<UserManager<User>>();
-            services.TryAddScoped<SignInManager<User>>();
 
             // User color provider 
             services.AddSingleton<IUserColorProvider, UserColorProvider>();
@@ -99,7 +88,7 @@ namespace Plato.Users
 
             // User account emails
             services.TryAddScoped<IUserEmails, UserEmails>();
-            
+
             // Configure authentication cookie options
             services.ConfigureApplicationCookie(options =>
             {

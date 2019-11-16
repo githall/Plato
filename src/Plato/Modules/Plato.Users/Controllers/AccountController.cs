@@ -23,7 +23,6 @@ using Plato.Users.Services;
 using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using Plato.Internal.Abstractions.Settings;
-
 using AspNet.Security.OpenIdConnect.Primitives;
 using System.Linq;
 
