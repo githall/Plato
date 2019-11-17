@@ -22,13 +22,6 @@ namespace Plato.Facebook
     public class Startup : StartupBase
     {
 
-        private readonly IShellSettings _shellSettings;
-
-        public Startup(IShellSettings shellSettings)
-        {
-            _shellSettings = shellSettings;
-        }
-
         public override void ConfigureServices(IServiceCollection services)
         {
 
@@ -39,7 +32,7 @@ namespace Plato.Facebook
             services.AddScoped<INavigationProvider, AdminMenu>();
 
             // Configuration
-            services.AddTransient<IConfigureOptions<FacebookOptions>, FacebookOptionsConfiguration>();
+            services.AddTransient<IConfigureOptions<FacebookAuthenticationOptions>, FacebookOptionsConfiguration>();
 
             // Stores
             services.AddScoped<IFacebookSettingsStore<FacebookSettings>, FacebookSettingsStore>();

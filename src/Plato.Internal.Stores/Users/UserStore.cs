@@ -1,12 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Globalization;
 using System.Linq;
 using System.Threading;
+using System.Globalization;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Models.Users;
+using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Stores.Abstractions.Roles;
 using Plato.Internal.Stores.Abstractions.Users;
 
@@ -55,23 +55,27 @@ namespace Plato.Internal.Stores.Users
             {
                 throw new ArgumentNullException(nameof(user));
             }
-                
+
             var newUser = await _platoUserStore.CreateAsync(user);
             if ((newUser != null) && (newUser.Id > 0))
+            {
                 return IdentityResult.Success;
+            }                
 
             return IdentityResult.Failed();
+
         }
 
         public async Task<IdentityResult> UpdateAsync(User user, CancellationToken cancellationToken)
         {
+
             cancellationToken.ThrowIfCancellationRequested();
 
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
-                
+
             try
             {
                 await _platoUserStore.UpdateAsync(user);
@@ -82,6 +86,7 @@ namespace Plato.Internal.Stores.Users
             }
 
             return IdentityResult.Success;
+
         }
 
         public async Task<IdentityResult> DeleteAsync(User user, CancellationToken cancellationToken)
@@ -358,13 +363,13 @@ namespace Plato.Internal.Stores.Users
             var role = await _platoRoleStore.GetByNameAsync(roleName);
             if (role != null)
             {
-                var userRole = await _platoUserRoleStore.CreateAsync(new UserRole()
+                await _platoUserRoleStore.CreateAsync(new UserRole()
                 {
                     RoleId = role.Id,
                     UserId = user.Id
                 });
             }
-         
+
         }
 
         public async Task RemoveFromRoleAsync(User user, string roleName, CancellationToken cancellationToken)
@@ -376,7 +381,7 @@ namespace Plato.Internal.Stores.Users
             {
                 await _platoUserRoleStore.DeleteUserRole(user.Id, role.Id);
             }
-               
+
         }
 
         public async Task<IList<string>> GetRolesAsync(User user, CancellationToken cancellationToken)

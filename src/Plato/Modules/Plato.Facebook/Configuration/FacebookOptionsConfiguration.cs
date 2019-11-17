@@ -7,7 +7,7 @@ using Plato.Facebook.Stores;
 
 namespace Plato.Facebook.Configuration
 {
-    public class FacebookOptionsConfiguration : IConfigureOptions<FacebookOptions>
+    public class FacebookOptionsConfiguration : IConfigureOptions<FacebookAuthenticationOptions>
     {
 
         private readonly IFacebookSettingsStore<FacebookSettings> _facebookSettingsStore;
@@ -24,7 +24,7 @@ namespace Plato.Facebook.Configuration
             _logger = logger;
         }
 
-        public void Configure(FacebookOptions options)
+        public void Configure(FacebookAuthenticationOptions options)
         {
 
             var settings = _facebookSettingsStore

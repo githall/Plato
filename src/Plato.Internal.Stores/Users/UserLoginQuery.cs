@@ -62,6 +62,7 @@ namespace Plato.Internal.Stores.Users
     {
 
         private WhereInt _id;
+        private WhereInt _userId;
         private WhereString _loginProvider;
         private WhereString _providerKey;
 
@@ -69,6 +70,12 @@ namespace Plato.Internal.Stores.Users
         {
             get => _id ?? (_id = new WhereInt());
             set => _id = value;
+        }
+
+        public WhereInt UserId
+        {
+            get => _userId ?? (_userId = new WhereInt());
+            set => _userId = value;
         }
 
         public WhereString LoginProvider
@@ -113,7 +120,6 @@ namespace Plato.Internal.Stores.Users
 
         public string BuildSqlPopulate()
         {
-            var tablePrefix = _query.Options.TablePrefix;
             var whereClause = BuildWhereClause();
             var orderBy = BuildOrderBy();
             var sb = new StringBuilder();
@@ -146,6 +152,7 @@ namespace Plato.Internal.Stores.Users
         {
             var sb = new StringBuilder();
 
+            // Id
             if (_query.Params.Id.Value > -1)
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
@@ -153,6 +160,15 @@ namespace Plato.Internal.Stores.Users
                 sb.Append(_query.Params.Id.ToSqlString("Id"));
             }
 
+            // UserId
+            if (_query.Params.UserId.Value > -1)
+            {
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                    sb.Append(_query.Params.UserId.Operator);
+                sb.Append(_query.Params.UserId.ToSqlString("UserId"));
+            }
+
+            // LoginProvider
             if (!string.IsNullOrEmpty(_query.Params.LoginProvider.Value))
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
@@ -160,6 +176,7 @@ namespace Plato.Internal.Stores.Users
                 sb.Append(_query.Params.LoginProvider.ToSqlString("LoginProvider"));
             }
 
+            // ProviderKey
             if (!string.IsNullOrEmpty(_query.Params.ProviderKey.Value))
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))

@@ -471,6 +471,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Google", "src\Plato\M
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Authentication.Google", "src\Plato\Modules\Plato.Authentication.Google\Plato.Authentication.Google.csproj", "{BADCC684-2DFF-4312-951E-8EDBA4ECBE65}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Authentication.Facebook", "src\Plato\Modules\Plato.Authentication.Facebook\Plato.Authentication.Facebook.csproj", "{CAB99E37-848E-4B93-AFAB-9B0AC6EA5D20}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1397,6 +1399,10 @@ Global
 		{BADCC684-2DFF-4312-951E-8EDBA4ECBE65}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{BADCC684-2DFF-4312-951E-8EDBA4ECBE65}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{BADCC684-2DFF-4312-951E-8EDBA4ECBE65}.Release|Any CPU.Build.0 = Release|Any CPU
+		{CAB99E37-848E-4B93-AFAB-9B0AC6EA5D20}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{CAB99E37-848E-4B93-AFAB-9B0AC6EA5D20}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{CAB99E37-848E-4B93-AFAB-9B0AC6EA5D20}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{CAB99E37-848E-4B93-AFAB-9B0AC6EA5D20}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1633,6 +1639,7 @@ Global
 		{09EA4C56-D18C-4510-AA10-A6461F86D70E} = {D358F128-F8E0-4008-8615-85F0F7021F8F}
 		{0235F2F0-7F99-4261-A7B6-27D77F2E3AEB} = {D358F128-F8E0-4008-8615-85F0F7021F8F}
 		{BADCC684-2DFF-4312-951E-8EDBA4ECBE65} = {D358F128-F8E0-4008-8615-85F0F7021F8F}
+		{CAB99E37-848E-4B93-AFAB-9B0AC6EA5D20} = {D358F128-F8E0-4008-8615-85F0F7021F8F}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {7C0D07DC-FF4F-4F46-9D46-263DE79274E9}

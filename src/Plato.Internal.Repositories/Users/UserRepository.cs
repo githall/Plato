@@ -22,8 +22,7 @@ namespace Plato.Internal.Repositories.Users
         private readonly IDbContext _dbContext;
 
         public UserRepository(
-            IUserLoginRepository<UserLogin> userLoginRepository,
-        IUserSecretRepository<UserSecret> userSecretRepository,
+            IUserLoginRepository<UserLogin> userLoginRepository,        
             IUserDataRepository<UserData> userDataRepository,
             ILogger<UserSecretRepository> logger,
             IDbContext dbContext)
@@ -63,7 +62,7 @@ namespace Plato.Internal.Repositories.Users
             {
                 throw new ArgumentNullException(nameof(userNameNormalized));
             }
-                
+
             User user = null;
             using (var context = _dbContext)
             {
@@ -87,7 +86,7 @@ namespace Plato.Internal.Repositories.Users
             {
                 throw new ArgumentNullException(nameof(email));
             }
-                
+
             User user = null;
             using (var context = _dbContext)
             {
@@ -126,6 +125,7 @@ namespace Plato.Internal.Repositories.Users
             }
 
             return user;
+
         }
 
         public async Task<User> SelectByUserNameAsync(string userName)
@@ -486,6 +486,23 @@ namespace Plato.Internal.Repositories.Users
                 if (user.UserRoles != null)
                 {
                     user.RoleNames = user.UserRoles.Select(r => r.Name).ToList();
+                }
+
+                // logins
+
+                if (await reader.NextResultAsync())
+                {
+                    if (reader.HasRows)
+                    {
+                        var data = new List<UserLogin>();
+                        while (await reader.ReadAsync())
+                        {
+                            var userLogin = new UserLogin();
+                            userLogin.PopulateModel(reader);
+                            data.Add(userLogin);
+                        }
+                        user.LoginInfos = data;
+                    }
                 }
 
             }
