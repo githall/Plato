@@ -1,5 +1,5 @@
 Name: Plato Authentication Facebook
-Description: Adds the ability for users to login to Plato via Facebook.
+Description: Adds the ability for users to login via Facebook.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Authentication

@@ -485,7 +485,7 @@ namespace Plato.Internal.Stores.Users
         public async Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
 
-            // Has the login provider already been added?
+            // Locate the login provider
             var logins = await _platoUserLoginStore.QueryAsync()
                 .Select<UserLoginQueryParams>(q =>
                 {
@@ -494,6 +494,7 @@ namespace Plato.Internal.Stores.Users
                 })
                 .ToList();
 
+            // Return the user for the found login provider if any
             var userId = logins?.FirstOrDefault().UserId ?? 0;
             if (userId > 0)
             {
@@ -517,7 +518,7 @@ namespace Plato.Internal.Stores.Users
             {
                 var newInfo = new UserLoginInfo(info.LoginProvider, info.ProviderKey, info.ProviderDisplayName);
                 infos.Add(newInfo);
-            } 
+            }
 
             return Task.FromResult<IList<UserLoginInfo>>(infos);
 

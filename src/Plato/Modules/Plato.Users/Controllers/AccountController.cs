@@ -415,11 +415,13 @@ namespace Plato.Users.Controllers
                 }
             }
             return View(nameof(ExternalLogin), model);
+
         }
 
         [HttpGet]
         public async Task<IActionResult> ExternalLogins()
         {
+
             var user = await _userManager.GetUserAsync(User);
             if (user == null)
             {
@@ -434,9 +436,9 @@ namespace Plato.Users.Controllers
                 .Where(auth => model.CurrentLogins.All(ul => auth.Name != ul.LoginProvider))
                 .ToList();
             model.ShowRemoveButton = await _userManager.HasPasswordAsync(user) || model.CurrentLogins.Count > 1;
-            //model.StatusMessage = StatusMessage;
-
+            
             return View(model);
+
         }
 
         // -----------------
@@ -458,7 +460,7 @@ namespace Plato.Users.Controllers
 
             // Add return Url to viewData
             ViewData["ReturnUrl"] = returnUrl;
-                        
+
             // Return view
             return View((LayoutViewModel) await _registerViewProvider.ProvideIndexAsync(new UserRegistration(), this));
 
@@ -492,7 +494,7 @@ namespace Plato.Users.Controllers
                     registration.UserName,
                     registration.Email,
                     registration.Password);
-        
+
                 //var result = await _userManager.CreateAsync(registerViewModel, registerViewModel.Password);
                 if (result.Succeeded)
                 {
@@ -503,7 +505,7 @@ namespace Plato.Users.Controllers
 
                     // Execute ProvideUpdateAsync
                     await _registerViewProvider.ProvideUpdateAsync(registration, this);
-                    
+
                     // Success - Redirect to confirmation page
                     return RedirectToAction(nameof(RegisterConfirmation));
 
@@ -516,9 +518,9 @@ namespace Plato.Users.Controllers
                         ViewData.ModelState.AddModelError(string.Empty, error.Description);
                     }
                 }
-             
+
             }
-        
+
             // if we reach this point some view model validation
             // failed within a view provider, display model state errors
             foreach (var modelState in ViewData.ModelState.Values)

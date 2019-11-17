@@ -28,7 +28,6 @@ namespace Plato.Internal.Stores.Users
         public const string ByApiKey = "ByApiKey";
         public const string ByPlatoBot = "PlatoBot";
 
-
         private readonly IPlatoUserLoginStore<UserLogin> _platoUserLoginStore; 
         private readonly IUserDataStore<UserData> _userDataStore;        
         private readonly IUserRepository<User> _userRepository;
