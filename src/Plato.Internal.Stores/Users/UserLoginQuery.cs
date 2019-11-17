@@ -3,42 +3,42 @@ using System.Data;
 using System.Text;
 using System.Threading.Tasks;
 using Plato.Internal.Data.Abstractions;
-using Plato.Internal.Models.Roles;
+using Plato.Internal.Models.Users;
 using Plato.Internal.Stores.Abstractions;
 
-namespace Plato.Internal.Stores.Roles
+namespace Plato.Internal.Stores.Users
 {
 
-    #region "RoleQuery"
+    #region "UserLoginQuery"
 
-    public class RoleQuery : DefaultQuery<Role>
+    public class UserLoginQuery : DefaultQuery<UserLogin>
     {
 
-        private readonly IStore<Role> _store;
+        private readonly IStore<UserLogin> _store;
 
-        public RoleQuery(IStore<Role> store)
+        public UserLoginQuery(IStore<UserLogin> store)
         {
             _store = store;
         }
 
-        public RoleQueryParams Params { get; set; }
+        public UserLoginQueryParams Params { get; set; }
 
-        public override IQuery<Role> Select<TParams>(Action<TParams> configure)
+        public override IQuery<UserLogin> Select<TParams>(Action<TParams> configure)
         {
             var defaultParams = new TParams();
             configure(defaultParams);
-            Params = (RoleQueryParams)Convert.ChangeType(defaultParams, typeof(RoleQueryParams));
+            Params = (UserLoginQueryParams)Convert.ChangeType(defaultParams, typeof(UserLoginQueryParams));
             return this;
         }
-        
-        public override async Task<IPagedResults<Role>> ToList()
+
+        public override async Task<IPagedResults<UserLogin>> ToList()
         {
 
-            var builder = new RoleQueryBuilder(this);
+            var builder = new UserLoginQueryBuilder(this);
             var populateSql = builder.BuildSqlPopulate();
-            var countSql = builder.BuildSqlCount();
-            var id = Params.Id.Value;
-            var keywords = Params.Keywords.Value ?? string.Empty;
+            var countSql = builder.BuildSqlCount();            
+            var loginProvider = Params.LoginProvider.Value ?? string.Empty;
+            var providerKey = Params.ProviderKey.Value ?? string.Empty;
 
             return await _store.SelectAsync(new[]
             {
@@ -46,8 +46,8 @@ namespace Plato.Internal.Stores.Roles
                 new DbParam("PageSize", DbType.Int32, PageSize),
                 new DbParam("SqlPopulate", DbType.String, populateSql),
                 new DbParam("SqlCount", DbType.String, countSql),
-                new DbParam("Id", DbType.Int32, id),
-                new DbParam("Keywords", DbType.String, keywords)
+                new DbParam("LoginProvider", DbType.String, loginProvider),
+                new DbParam("ProviderKey", DbType.String, providerKey)
             });
 
         }
@@ -56,13 +56,14 @@ namespace Plato.Internal.Stores.Roles
 
     #endregion
 
-    #region "RoleQueryParams"
+    #region "UserLoginQueryParams"
 
-    public class RoleQueryParams
+    public class UserLoginQueryParams
     {
-        
+
         private WhereInt _id;
-         private WhereString _keywords;
+        private WhereString _loginProvider;
+        private WhereString _providerKey;
 
         public WhereInt Id
         {
@@ -70,29 +71,35 @@ namespace Plato.Internal.Stores.Roles
             set => _id = value;
         }
 
-        public WhereString Keywords
+        public WhereString LoginProvider
         {
-            get => _keywords ?? (_keywords = new WhereString());
-            set => _keywords = value;
+            get => _loginProvider ?? (_loginProvider = new WhereString());
+            set => _loginProvider = value;
+        }
+
+        public WhereString ProviderKey
+        {
+            get => _providerKey ?? (_providerKey = new WhereString());
+            set => _providerKey = value;
         }
 
     }
 
     #endregion
 
-    #region "RoleQueryBuilder"
+    #region "UserLoginQueryBuilder"
 
-    public class RoleQueryBuilder : IQueryBuilder
+    public class UserLoginQueryBuilder : IQueryBuilder
     {
 
         #region "Constructor"
 
         private readonly string _tableName;
-        private const string TableName = "Roles";
+        private const string TableName = "UserLogins";
 
-        private readonly RoleQuery _query;
+        private readonly UserLoginQuery _query;
 
-        public RoleQueryBuilder(RoleQuery query)
+        public UserLoginQueryBuilder(UserLoginQuery query)
         {
             _query = query;
             _tableName = !string.IsNullOrEmpty(_query.Options.TablePrefix)
@@ -134,11 +141,11 @@ namespace Plato.Internal.Stores.Roles
         #endregion
 
         #region "Private Methods"
-        
+
         private string BuildWhereClause()
         {
             var sb = new StringBuilder();
-            
+
             if (_query.Params.Id.Value > -1)
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
@@ -146,13 +153,20 @@ namespace Plato.Internal.Stores.Roles
                 sb.Append(_query.Params.Id.ToSqlString("Id"));
             }
 
-            if (!string.IsNullOrEmpty(_query.Params.Keywords.Value))
+            if (!string.IsNullOrEmpty(_query.Params.LoginProvider.Value))
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.Keywords.Operator);
-                sb.Append(_query.Params.Keywords.ToSqlString("RoleName", "Keywords"));
+                    sb.Append(_query.Params.LoginProvider.Operator);
+                sb.Append(_query.Params.LoginProvider.ToSqlString("LoginProvider"));
             }
-            
+
+            if (!string.IsNullOrEmpty(_query.Params.ProviderKey.Value))
+            {
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                    sb.Append(_query.Params.ProviderKey.Operator);
+                sb.Append(_query.Params.ProviderKey.ToSqlString("ProviderKey"));
+            }
+
             return sb.ToString();
         }
 

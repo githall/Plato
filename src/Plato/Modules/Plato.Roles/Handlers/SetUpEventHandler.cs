@@ -106,24 +106,18 @@ namespace Plato.Roles.Handlers
                 }
             }
         };
-        
+
+        private readonly IDefaultRolesManager _defaultRolesManager;
         private readonly ISchemaBuilder _schemaBuilder;
         private readonly ISchemaManager _schemaManager;
-        private readonly IDefaultRolesManager _defaultRolesManager;
-        private readonly RoleManager<Role> _roleManager;
-        private readonly UserManager<User> _userManager;
-
+        
         public SetUpEventHandler(
-            ISchemaBuilder schemaBuilder,
             IDefaultRolesManager defaultRolesManager,
-            UserManager<User> userManager, 
-            RoleManager<Role> roleManager,
+            ISchemaBuilder schemaBuilder,                        
             ISchemaManager schemaManager)
         {
-            _schemaBuilder = schemaBuilder;
             _defaultRolesManager = defaultRolesManager;
-            _userManager = userManager;
-            _roleManager = roleManager;
+            _schemaBuilder = schemaBuilder;                        
             _schemaManager = schemaManager;
         }
         

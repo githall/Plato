@@ -1,8 +1,8 @@
 ﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Data;
 using Microsoft.Extensions.Logging;
 using Plato.Internal.Cache.Abstractions;
 using Plato.Internal.Data.Abstractions;
@@ -90,6 +90,11 @@ namespace Plato.Internal.Stores.Users
             if (newUser != null)
             {
 
+                if (user.LoginInfos != null)
+                {
+
+                }
+
                 // Ensure new users have an API key, update this after adding the user
                 // so we can append the newly generated unique userId to the guid
                 if (String.IsNullOrEmpty(newUser.ApiKey))
@@ -137,14 +142,21 @@ namespace Plato.Internal.Stores.Users
                 CancelTokens(user);
                 // Cancel tokens for updated user
                 CancelTokens(updatedUser);
+
+                if (user.LoginInfos != null)
+                {
+
+                }
+
             }
 
             return updatedUser;
+
         }
-        
+
         public async Task<bool> DeleteAsync(User user)
         {
-            
+
             // Delete user
             var success = await _userRepository.DeleteAsync(user.Id);
             if (success)
@@ -264,15 +276,16 @@ namespace Plato.Internal.Stores.Users
                 return await _userDataDecorator.DecorateAsync(user);
             });
         }
-        
+
         public IQuery<User> QueryAsync()
         {
             var query = new UserQuery(this);
             return _dbQuery.ConfigureQuery(query); ;
         }
-        
+
         public async Task<IPagedResults<User>> SelectAsync(IDbDataParameter[] dbParams)
         {
+
             var token = _cacheManager.GetOrCreateToken(this.GetType(), dbParams.Select(p => p.Value).ToArray());
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {

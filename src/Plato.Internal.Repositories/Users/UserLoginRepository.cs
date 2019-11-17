@@ -9,16 +9,16 @@ using Plato.Internal.Models.Users;
 namespace Plato.Internal.Repositories.Users
 {
 
-    public class UserLoginsRepository : IUserLoginsRepository<UserLogin>
+    public class UserLoginRepository : IUserLoginRepository<UserLogin>
     {
 
         #region "Constructor"
 
-        private readonly ILogger<UserLoginsRepository> _logger;
+        private readonly ILogger<UserLoginRepository> _logger;
         private readonly IDbContext _dbContext;
 
-        public UserLoginsRepository(
-            ILogger<UserLoginsRepository> logger,
+        public UserLoginRepository(
+            ILogger<UserLoginRepository> logger,
             IDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -70,7 +70,9 @@ namespace Plato.Internal.Repositories.Users
                 model.CreatedDate);
 
             if (id > 0)
+            {
                 return await SelectByIdAsync(id);
+            }
 
             return null;
 
@@ -104,14 +106,13 @@ namespace Plato.Internal.Repositories.Users
                                     await reader.ReadAsync();
                                     output.PopulateTotal(reader);
                                 }
-
                             }
                         }
 
                         return output;
+
                     },
                     dbParams);
-
 
             }
 

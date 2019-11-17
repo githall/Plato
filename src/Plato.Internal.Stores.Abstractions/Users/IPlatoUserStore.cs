@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Plato.Internal.Models.Users;
 
 namespace Plato.Internal.Stores.Abstractions.Users
 {
@@ -13,15 +12,15 @@ namespace Plato.Internal.Stores.Abstractions.Users
         Task<T> GetByEmailAsync(string email);
 
         Task<T> GetByEmailNormalizedAsync(string emailNormalized);
-        
+
         Task<T> GetByResetToken(string resetToken);
 
         Task<T> GetByConfirmationToken(string confirmationToken);
-        
+
         Task<T> GetByApiKeyAsync(string apiKey);
 
         Task<T> GetPlatoBotAsync();
-        
+
     }
 
 }

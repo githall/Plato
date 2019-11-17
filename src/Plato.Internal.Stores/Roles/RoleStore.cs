@@ -1,16 +1,16 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading;
 using System.Threading.Tasks;
+using System.Security.Claims;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
 using Plato.Internal.Models.Roles;
 using Plato.Internal.Stores.Abstractions.Roles;
 
 namespace Plato.Internal.Stores.Roles
 {
-    
+
     public class RoleStore :
         IRoleStore<Role>, 
         IRoleClaimStore<Role>
@@ -233,9 +233,9 @@ namespace Plato.Internal.Stores.Roles
 
             return Task.CompletedTask;
         }
-        
+
         #endregion
 
     }
-    
+
 }

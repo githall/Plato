@@ -30,20 +30,22 @@ namespace Plato.Internal.Stores.Users
 
         #region "UserStore"
 
+        private readonly IPlatoUserLoginStore<UserLogin> _platoUserLoginStore;
         private readonly IPlatoUserRoleStore<UserRole> _platoUserRoleStore;
         private readonly IPlatoUserStore<User> _platoUserStore;
         private readonly IPlatoRoleStore _platoRoleStore;
 
         public UserStore(
+            IPlatoUserRoleStore<UserRole> platoUserRoleStore,
+            IPlatoUserLoginStore<UserLogin> userLoginStore,
             IPlatoUserStore<User> platoUserStore,
-            IPlatoRoleStore platoRoleStore,
-            IPlatoUserRoleStore<UserRole> platoUserRoleStore)
-        {
+            IPlatoRoleStore platoRoleStore)
+        {            
+            _platoUserRoleStore = platoUserRoleStore;
+            _platoUserLoginStore = userLoginStore;
             _platoUserStore = platoUserStore;
             _platoRoleStore = platoRoleStore;
-            _platoUserRoleStore = platoUserRoleStore;
         }
-
 
         public async Task<IdentityResult> CreateAsync(User user, CancellationToken cancellationToken)
         {
@@ -465,31 +467,70 @@ namespace Plato.Internal.Stores.Users
             }
 
             if (((User)user).LoginInfos.Any(i => i.LoginProvider == login.LoginProvider))
+            {
                 throw new InvalidOperationException($"Provider {login.LoginProvider} is already linked for {user.UserName}");
+            }                
 
-            ((User)user).LoginInfos.Add(login);
+            ((User)user).LoginInfos.Add(new UserLogin(login));
 
             return Task.CompletedTask;
+
         }
 
-        public Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
+        public async Task<User> FindByLoginAsync(string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
-            throw new NotImplementedException();
+
+            // Locate login
+            var logins = await _platoUserLoginStore.QueryAsync()
+                .Select<UserLoginQueryParams>(q =>
+                {
+                    q.LoginProvider.Equals(loginProvider);
+                    q.ProviderKey.Equals(providerKey);
+                })
+                .ToList();
+
+            var userId = string.Empty;
+            if (logins?.Data != null)
+            {
+                foreach (var login in logins.Data)
+                {
+                    userId = login.UserId;
+                }
+            }
+
+            var ok = int.TryParse(userId, out var id);
+            if (ok)
+            {
+                return await _platoUserStore.GetByIdAsync(id);
+            }
+            
+            return null;
+
             // return await _session.Query<User, UserByLoginInfoIndex>(u => u.LoginProvider == loginProvider && u.ProviderKey == providerKey).FirstOrDefaultAsync();
         }
 
         public Task<IList<UserLoginInfo>> GetLoginsAsync(User user, CancellationToken cancellationToken)
         {
+
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));
             }
 
-            return Task.FromResult<IList<UserLoginInfo>>(((User)user).LoginInfos);
+            var infos = new List<UserLoginInfo>();
+            foreach (var info in ((User)user).LoginInfos)
+            {
+                var newInfo = new UserLoginInfo(info.LoginProvider, info.ProviderKey, info.ProviderDisplayName);
+                infos.Add(newInfo);
+            } 
+
+            return Task.FromResult<IList<UserLoginInfo>>(infos);
+
         }
 
         public Task RemoveLoginAsync(User user, string loginProvider, string providerKey, CancellationToken cancellationToken)
         {
+
             if (user == null)
             {
                 throw new ArgumentNullException(nameof(user));

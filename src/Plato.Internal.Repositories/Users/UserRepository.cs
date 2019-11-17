@@ -1,43 +1,39 @@
 ﻿using System;
+using System.Linq;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Linq;
 using Microsoft.Extensions.Logging;
 using Plato.Internal.Models.Users;
 using Plato.Internal.Data.Abstractions;
 using Plato.Internal.Abstractions.Extensions;
 using Plato.Internal.Models.Roles;
+using Microsoft.AspNetCore.Identity;
 
 namespace Plato.Internal.Repositories.Users
 {
     public class UserRepository : IUserRepository<User>
     {
 
-        #region "Private Variables"
-
-        private readonly IUserDataRepository<UserData> _userDataRepository;
+        private readonly IUserLoginRepository<UserLogin> _userLoginRepository;
+        private readonly IUserDataRepository<UserData> _userDataRepository;        
         private readonly ILogger<UserSecretRepository> _logger;
         private readonly IDbContext _dbContext;
 
-        #endregion
-
-        #region "Constructor"
-
         public UserRepository(
-            IUserSecretRepository<UserSecret> userSecretRepository,
+            IUserLoginRepository<UserLogin> userLoginRepository,
+        IUserSecretRepository<UserSecret> userSecretRepository,
             IUserDataRepository<UserData> userDataRepository,
             ILogger<UserSecretRepository> logger,
             IDbContext dbContext)
         {
+            _userLoginRepository = userLoginRepository;
             _userDataRepository = userDataRepository;
             _dbContext = dbContext;
             _logger = logger;
         }
 
-        #endregion
-        
         #region "Implementation"
 
         public async Task<User> SelectByIdAsync(int id)
@@ -426,7 +422,8 @@ namespace Plato.Internal.Repositories.Users
                 user.ModifiedUserId,
                 user.ModifiedDate,
                 user.LastLoginDate,
-                user.Data);
+                user.Data,
+                user.LoginInfos);
 
             if (userId > 0)
             {
@@ -563,7 +560,8 @@ namespace Plato.Internal.Repositories.Users
             int modifiedUserId,
             DateTimeOffset? modifiedDate,
             DateTimeOffset? lastLoginDate,
-            IEnumerable<UserData> data)
+            IEnumerable<UserData> data,
+            IEnumerable<UserLogin> logins) 
         {
      
             var userId = 0;
@@ -647,6 +645,7 @@ namespace Plato.Internal.Repositories.Users
             // Add user data
             if (userId > 0)
             {
+
                 if (data != null)
                 {
                     foreach (var item in data)
@@ -656,8 +655,17 @@ namespace Plato.Internal.Repositories.Users
                     }
                 }
 
+                if (logins != null)
+                {
+                    foreach (var item in logins)
+                    {
+                        item.UserId = userId.ToString();
+                        await _userLoginRepository.InsertUpdateAsync(item);
+                    }
+                }
+
             }
-            
+
             return userId;
 
         }

@@ -9,7 +9,7 @@ namespace Plato.Users
 {
     public class Migrations : BaseMigrationProvider
     {
-        
+
         private readonly ISchemaBuilder _schemaBuilder;
 
         public Migrations(ISchemaBuilder schemaBuilder)
@@ -29,12 +29,20 @@ namespace Plato.Users
                     ModuleId = ModuleId,
                     Version = "1.0.8",
                     Statements = v_1_0_8()
+                },
+                new PreparedMigration()
+                {
+                    ModuleId = ModuleId,
+                    Version = "1.0.9",
+                    Statements = v_1_0_9()
                 }
             };
 
         }
- 
-        public ICollection<string> v_1_0_1()
+
+        // --------------
+
+        private ICollection<string> v_1_0_1()
         {
 
             var users = new SchemaTable()
@@ -448,7 +456,7 @@ namespace Plato.Users
 
         }
 
-        public ICollection<string> v_1_0_8()
+        private ICollection<string> v_1_0_8()
         {
 
             // Add IsStaff fields
@@ -869,6 +877,98 @@ namespace Plato.Users
                     new SchemaProcedure($"InsertUpdateUser",
                             StoredProcedureType.InsertUpdate)
                         .ForTable(users));
+
+                // Add builder results to output
+                output.AddRange(builder.Statements);
+
+            }
+
+            return output;
+
+        }
+
+        private ICollection<string> v_1_0_9()
+        {
+
+            var userLogin = new SchemaTable()
+            {
+                Name = "UserLogins",
+                Columns = new List<SchemaColumn>()
+                {
+                    new SchemaColumn()
+                    {
+                        PrimaryKey = true,
+                        Name = "Id",
+                        DbType = DbType.Int32
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "UserId",
+                        Length = "128",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "LoginProvider",
+                        Length = "128",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "ProviderKey",
+                        Length = "128",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "ProviderDisplayName",
+                        Length = "max",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "CreatedUserId",
+                        DbType = DbType.Int32
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "CreatedDate",
+                        DbType = DbType.DateTimeOffset
+                    }
+                }
+            };
+
+            var output = new List<string>();
+            using (var builder = _schemaBuilder)
+            {
+
+                builder.Configure(options =>
+                    {
+                        options.ModuleName = ModuleId;
+                        options.Version = "1.0.9";
+                    });
+
+                builder.TableBuilder.CreateTable(userLogin);
+
+                builder.ProcedureBuilder
+                    .CreateDefaultProcedures(userLogin)
+                    .CreateProcedure(new SchemaProcedure("SelectUserLoginsPaged", StoredProcedureType.SelectPaged)
+                        .ForTable(userLogin)
+                        .WithParameters(new List<SchemaColumn>() {
+                            new SchemaColumn()
+                            {
+                                Name = "LoginProvider",
+                                DbType = DbType.String,
+                                Length = "128"
+                            },
+                             new SchemaColumn()
+                            {
+                                Name = "ProviderKey",
+                                DbType = DbType.String,
+                                Length = "128"
+                            }
+                        }));
+
 
                 // Add builder results to output
                 output.AddRange(builder.Statements);

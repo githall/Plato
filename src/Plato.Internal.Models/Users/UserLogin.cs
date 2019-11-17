@@ -1,23 +1,34 @@
 ﻿using System;
 using System.Data;
+using Microsoft.AspNetCore.Identity;
 using Plato.Internal.Abstractions;
 using Plato.Internal.Abstractions.Extensions;
 
 namespace Plato.Internal.Models.Users
 {
 
-    public class UserLogin : IDbModel
+    public class UserLogin : UserLoginInfo, IDbModel
     {
+
+        public UserLogin() : base(string.Empty, string.Empty, string.Empty)
+        {
+
+        }
+
+        public UserLogin(UserLoginInfo info)
+            : base(info.LoginProvider, info.ProviderKey, info.ProviderDisplayName)
+        {
+
+        }
+
+        public UserLogin(string loginProvider, string providerKey, string displayName)
+            : base(loginProvider, providerKey, displayName)
+        {
+        }
 
         public int Id { get; set; }
 
         public string UserId { get; set; }
-
-        public string LoginProvider { get; set; }
-
-        public string ProviderKey { get; set; }
-
-        public string ProviderDisplayName { get; set; }
 
         public int CreatedUserId { get; set; }
 

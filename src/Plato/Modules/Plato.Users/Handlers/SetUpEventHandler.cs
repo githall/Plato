@@ -1,13 +1,13 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Identity;
-using Plato.Internal.Abstractions.SetUp;
-using Plato.Internal.Data.Schemas.Abstractions;
 using Plato.Internal.Models.Roles;
 using Plato.Internal.Models.Users;
+using Plato.Internal.Abstractions.SetUp;
 using Plato.Internal.Security.Abstractions;
+using Plato.Internal.Data.Schemas.Abstractions;
 using Plato.Users.Services;
 
 namespace Plato.Users.Handlers
@@ -564,7 +564,55 @@ namespace Plato.Users.Handlers
                 }
             }
         };
-        
+                
+        private readonly SchemaTable _userLogin = new SchemaTable()
+        {
+            Name = "UserLogins",
+            Columns = new List<SchemaColumn>()
+            {
+                new SchemaColumn()
+                {
+                    PrimaryKey = true,
+                    Name = "Id",
+                    DbType = DbType.Int32
+                },
+                new SchemaColumn()
+                {
+                    Name = "UserId",
+                    Length = "128",
+                    DbType = DbType.String
+                },
+                new SchemaColumn()
+                {
+                    Name = "LoginProvider",
+                    Length = "128",
+                    DbType = DbType.String
+                },
+                new SchemaColumn()
+                {
+                    Name = "ProviderKey",
+                    Length = "128",
+                    DbType = DbType.String
+                },
+                new SchemaColumn()
+                {
+                    Name = "ProviderDisplayName",
+                    Length = "max",
+                    DbType = DbType.String
+                },              
+                new SchemaColumn()
+                {
+                    Name = "CreatedUserId",
+                    DbType = DbType.Int32
+                },
+                new SchemaColumn()
+                {
+                    Name = "CreatedDate",
+                    DbType = DbType.DateTimeOffset
+                }               
+            }
+        };
+
         private readonly ISchemaBuilder _schemaBuilder;
         private readonly ISchemaManager _schemaManager;
 
@@ -606,6 +654,9 @@ namespace Plato.Users.Handlers
 
                 // banner schema
                 UserBanner(builder);
+
+                // user logins schema
+                UserLogin(builder);
 
                 // meta data schema
                 UserData(builder);
@@ -884,6 +935,33 @@ namespace Plato.Users.Handlers
             
         }
 
+        void UserLogin(ISchemaBuilder builder)
+        {
+
+            builder.TableBuilder.CreateTable(_userLogin);
+
+            builder.ProcedureBuilder
+                .CreateDefaultProcedures(_userLogin)
+                .CreateProcedure(new SchemaProcedure("SelectUserLoginsPaged", StoredProcedureType.SelectPaged)
+                    .ForTable(_userLogin)
+                    .WithParameters(new List<SchemaColumn>()
+                    {
+                        new SchemaColumn()
+                        {
+                            Name = "LoginProvider",
+                            DbType = DbType.String,
+                            Length = "128"
+                        },
+                         new SchemaColumn()
+                        {
+                            Name = "ProviderKey",
+                            DbType = DbType.String,
+                            Length = "128"
+                        }
+                    }));
+
+        }
+
         async Task ConfigureDefaultUsers(SetUpContext context, Action<string, string> reportError)
         {
 
@@ -983,7 +1061,7 @@ namespace Plato.Users.Handlers
             }
 
         }
-        
+
         #endregion
 
     }

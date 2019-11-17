@@ -38,6 +38,7 @@ namespace Plato.Internal.Repositories.Extensions
             services.AddScoped<IUserRepository<User>, UserRepository>();
             services.AddScoped<IUserSecretRepository<UserSecret>, UserSecretRepository>();
             services.AddScoped<IUserDataRepository<UserData>, UserDataRepository>();
+            services.AddScoped<IUserLoginRepository<UserLogin>, UserLoginRepository>();
             services.AddScoped<IUserPhotoRepository<UserPhoto>, UserPhotoRepository>();
             services.AddScoped<IUserBannerRepository<UserBanner>, UserBannerRepository>();
             services.AddScoped<IUserRolesRepository<UserRole>, UserRolesRepository>();
@@ -49,7 +50,7 @@ namespace Plato.Internal.Repositories.Extensions
 
             // User badges
             services.AddScoped<IUserBadgeRepository<UserBadge>, UserBadgeRepository>();
-            
+
             // Schema 
             services.AddScoped<IConstraintRepository, ConstraintRepository>();
 
@@ -60,7 +61,7 @@ namespace Plato.Internal.Repositories.Extensions
             return services;
 
         }
-     
+
     }
 
 }

@@ -141,8 +141,7 @@ namespace Plato.Internal.Models.Users
 
         public IEnumerable<UserData> Data { get; set; } = new List<UserData>();
 
-        public IList<UserLoginInfo> LoginInfos { get; set; } = new List<UserLoginInfo>();
-
+        public IList<UserLogin> LoginInfos { get; set; } = new List<UserLogin>();
 
         #endregion
 

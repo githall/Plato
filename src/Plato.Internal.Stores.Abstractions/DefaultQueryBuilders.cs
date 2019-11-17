@@ -9,6 +9,7 @@ namespace Plato.Internal.Stores.Abstractions
 
     public class WhereString
     {
+
         private readonly StringBuilder _builder;
 
         private QueryOperator _operator = QueryOperator.And;
@@ -22,7 +23,7 @@ namespace Plato.Internal.Stores.Abstractions
         {
             ParameterIndex = parameterIndex;
         }
-        
+
         public string Value { get; private set; }
 
         public string Operator => _operator == QueryOperator.And ? " AND " : " OR ";
@@ -46,7 +47,7 @@ namespace Plato.Internal.Stores.Abstractions
             _operator = queryOperator;
             return this;
         }
-        
+
         public WhereString Equals(string value)
         {
             if (!string.IsNullOrEmpty(_builder.ToString()))
@@ -55,7 +56,7 @@ namespace Plato.Internal.Stores.Abstractions
             _builder.Append("{columnName} = @{paramName}");
             return this;
         }
-        
+
         public WhereString IsIn(string[] values)
         {
             if (!string.IsNullOrEmpty(_builder.ToString()))
@@ -64,7 +65,7 @@ namespace Plato.Internal.Stores.Abstractions
             _builder.Append("'|' + @{paramName} + '|' LIKE '%|' + {columnName} + '|%'");
             return this;
         }
-        
+
         public WhereString StartsWith(string value)
         {
             if (!string.IsNullOrEmpty(_builder.ToString()))
@@ -91,7 +92,15 @@ namespace Plato.Internal.Stores.Abstractions
             _builder.Append("{columnName} LIKE '%' + @{paramName} + '%'");
             return this;
         }
-        
+
+        public string ToSqlString(string columnAndParamName)
+        {
+            return _builder
+                .ToString()
+                .Replace("{columnName}", columnAndParamName)
+                .Replace("{paramName}", columnAndParamName);
+        }
+
         public string ToSqlString(string columnName, string paramName)
         {
             return _builder
