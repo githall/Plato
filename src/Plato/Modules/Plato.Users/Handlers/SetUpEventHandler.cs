@@ -578,9 +578,8 @@ namespace Plato.Users.Handlers
                 },
                 new SchemaColumn()
                 {
-                    Name = "UserId",
-                    Length = "128",
-                    DbType = DbType.String
+                    Name = "UserId",                    
+                    DbType = DbType.Int32
                 },
                 new SchemaColumn()
                 {
@@ -599,11 +598,6 @@ namespace Plato.Users.Handlers
                     Name = "ProviderDisplayName",
                     Length = "max",
                     DbType = DbType.String
-                },              
-                new SchemaColumn()
-                {
-                    Name = "CreatedUserId",
-                    DbType = DbType.Int32
                 },
                 new SchemaColumn()
                 {

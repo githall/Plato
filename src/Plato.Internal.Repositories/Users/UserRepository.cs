@@ -659,7 +659,7 @@ namespace Plato.Internal.Repositories.Users
                 {
                     foreach (var item in logins)
                     {
-                        item.UserId = userId.ToString();
+                        item.UserId = userId;
                         await _userLoginRepository.InsertUpdateAsync(item);
                     }
                 }
@@ -673,4 +673,5 @@ namespace Plato.Internal.Repositories.Users
         #endregion
 
     }
+
 }

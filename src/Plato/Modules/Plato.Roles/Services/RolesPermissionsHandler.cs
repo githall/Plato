@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Security.Principal;
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Authorization;
+using Plato.Internal.Models.Roles;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Security.Abstractions;
 using Plato.Internal.Stores.Abstractions.Roles;
-using Plato.Internal.Models.Roles;
-using System.Security.Principal;
-using System.Collections.Concurrent;
 
 namespace Plato.Roles.Services
 {
@@ -94,17 +94,32 @@ namespace Plato.Roles.Services
             if (user != null)
             {
                 if (!_scopedUserRoles.ContainsKey(user.Id))
-                {                    
-                    _scopedUserRoles.TryAdd(user.Id, await _platoRoleStore.GetRolesByUserIdAsync(user.Id));
-                }                
+                {
+                    var roles = await _platoRoleStore.GetRolesByUserIdAsync(user.Id);
+                    if (roles != null)
+                    {
+                        _scopedUserRoles.TryAdd(user.Id, roles);
+                    }
+                    else
+                    {
+                        // If the user does not belong to any roles ensure we check the default member role
+                        var memberRole = await _platoRoleStore.GetByNameAsync(DefaultRoles.Member);
+                        if (memberRole != null)
+                        {
+                            _scopedUserRoles.TryAdd(user.Id, new List<Role>() { memberRole });
+                        }
+                    }
+                }
             }
             else
             {
                 if (!_scopedUserRoles.ContainsKey(0))
                 {
-                    _scopedUserRoles.TryAdd(0, new List<Role>() {
-                        await _platoRoleStore.GetByNameAsync(DefaultRoles.Anonymous)
-                    });
+                    var anonymousRole = await _platoRoleStore.GetByNameAsync(DefaultRoles.Anonymous);
+                    if (anonymousRole != null)
+                    {
+                        _scopedUserRoles.TryAdd(0, new List<Role>() { anonymousRole });
+                    }                    
                 }                
             }
 

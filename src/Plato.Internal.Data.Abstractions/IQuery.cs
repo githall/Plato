@@ -23,7 +23,7 @@ namespace Plato.Internal.Data.Abstractions
         IQuery<TModel> OrderBy(IDictionary<string, OrderBy> columns);
         
         Task<IPagedResults<TModel>> ToList();
-
+        
         IDictionary<string, OrderBy> SortColumns { get; }
 
     }

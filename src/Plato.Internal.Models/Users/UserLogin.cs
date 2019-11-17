@@ -28,12 +28,9 @@ namespace Plato.Internal.Models.Users
 
         public int Id { get; set; }
 
-        public string UserId { get; set; }
-
-        public int CreatedUserId { get; set; }
+        public int UserId { get; set; }
 
         public DateTimeOffset? CreatedDate { get; set; }
-
 
         public void PopulateModel(IDataReader dr)
         {
@@ -42,7 +39,7 @@ namespace Plato.Internal.Models.Users
                 Id = Convert.ToInt32(dr["Id"]);
 
             if (dr.ColumnIsNotNull("UserId"))
-                UserId = Convert.ToString(dr["UserId"]);
+                UserId = Convert.ToInt32(dr["UserId"]);
 
             if (dr.ColumnIsNotNull("LoginProvider"))
                 LoginProvider = Convert.ToString(dr["LoginProvider"]);
@@ -52,10 +49,7 @@ namespace Plato.Internal.Models.Users
 
             if (dr.ColumnIsNotNull("ProviderDisplayName"))
                 ProviderDisplayName = Convert.ToString(dr["ProviderDisplayName"]);
-
-            if (dr.ColumnIsNotNull("CreatedUserId"))
-                CreatedUserId = Convert.ToInt32(dr["CreatedUserId"]);
-
+                        
             if (dr.ColumnIsNotNull("CreatedDate"))
                 CreatedDate = (DateTimeOffset)dr["CreatedDate"];
 

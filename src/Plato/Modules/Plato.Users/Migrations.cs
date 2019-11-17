@@ -903,9 +903,8 @@ namespace Plato.Users
                     },
                     new SchemaColumn()
                     {
-                        Name = "UserId",
-                        Length = "128",
-                        DbType = DbType.String
+                        Name = "UserId",                        
+                        DbType = DbType.Int32
                     },
                     new SchemaColumn()
                     {
@@ -924,12 +923,7 @@ namespace Plato.Users
                         Name = "ProviderDisplayName",
                         Length = "max",
                         DbType = DbType.String
-                    },
-                    new SchemaColumn()
-                    {
-                        Name = "CreatedUserId",
-                        DbType = DbType.Int32
-                    },
+                    },                    
                     new SchemaColumn()
                     {
                         Name = "CreatedDate",
@@ -946,6 +940,8 @@ namespace Plato.Users
                     {
                         options.ModuleName = ModuleId;
                         options.Version = "1.0.9";
+                        options.DropTablesBeforeCreate = true;
+                        options.DropProceduresBeforeCreate = true;
                     });
 
                 builder.TableBuilder.CreateTable(userLogin);

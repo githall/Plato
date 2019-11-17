@@ -1,24 +1,20 @@
 ﻿@model GoogleLoginViewModel
 @inject SignInManager<User> _signInManager
 @{
+    var providerName = "Google";
     var loginProviders = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
+    var loginProvider = loginProviders.First(p => p.Name.Equals(providerName, StringComparison.OrdinalIgnoreCase));
 }
 
-@if (loginProviders.Count > 0)
-{
-    <section>
-
-        <h4>@T["Use another service to log in."]</h4>
-        <hr />        
-        <form asp-area="Plato.Users" asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">        
-            <div>
-                <p>
-                    @foreach (var provider in loginProviders)
-                    {
-                        <button type="submit" class="btn btn-primary" name="provider" value="@provider.Name" title="Log in using your @provider.DisplayName account">@provider.DisplayName</button>
-                    }
-                </p>
+@if (loginProvider != null)
+{    
+    <form asp-area="Plato.Users" asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
+        <fieldset>
+            <div class="form-group">
+                <button type="submit" class="btn btn-lg btn-secondary btn-block" name="provider" value="@loginProvider.Name" title="Log in using your @loginProvider.DisplayName account">
+                    <img aria-hidden="true" alt="@T["Google Icon"]" src="/plato.authentication.google/content/images/google-icon.png" class="max-w-30 d-inline-block" /> @T["Login with"] @loginProvider.DisplayName
+                </button>
             </div>
-        </form>        
-    </section>
+        </fieldset>
+    </form>
 }

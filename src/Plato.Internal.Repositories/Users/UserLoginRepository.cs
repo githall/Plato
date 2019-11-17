@@ -65,8 +65,7 @@ namespace Plato.Internal.Repositories.Users
                 model.UserId,
                 model.LoginProvider,
                 model.ProviderKey,
-                model.ProviderDisplayName,
-                model.CreatedUserId,
+                model.ProviderDisplayName,                
                 model.CreatedDate);
 
             if (id > 0)
@@ -156,11 +155,10 @@ namespace Plato.Internal.Repositories.Users
 
         private async Task<int> InsertUpdateInternal(
             int id,
-            string userId,
+            int userId,
             string loginPrrovider,
             string providerKey,
-            string providerDisplayName,
-            int createdUserId,
+            string providerDisplayName,            
             DateTimeOffset? createdDate)
         {
             
@@ -172,11 +170,10 @@ namespace Plato.Internal.Repositories.Users
                     new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
-                        new DbParam("UserId", DbType.String, 450, userId.ToEmptyIfNull()),
+                        new DbParam("UserId", DbType.Int32, userId),
                         new DbParam("LoginProvider", DbType.String, 128, loginPrrovider.ToEmptyIfNull()),
                         new DbParam("ProviderKey", DbType.String, 128, providerKey.ToEmptyIfNull()),
-                        new DbParam("ProviderDisplayName", DbType.String, providerDisplayName.ToEmptyIfNull()),                        
-                        new DbParam("CreatedUserId", DbType.Int32, createdUserId),
+                        new DbParam("ProviderDisplayName", DbType.String, providerDisplayName.ToEmptyIfNull()),                                                
                         new DbParam("CreatedDate", DbType.DateTimeOffset, createdDate.ToDateIfNull()),                        
                         new DbParam("UniqueId", DbType.Int32, ParameterDirection.Output),
                     });

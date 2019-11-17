@@ -11,6 +11,10 @@ namespace Plato.Internal.Data.Abstractions
 
         void PopulateTotal(IDataReader reader);
 
+        T First();
+
+        T FirstOrDefault();
+
     }
 
 }

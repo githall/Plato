@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using Plato.Internal.Security.Attributes;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Users.ViewModels
@@ -8,15 +9,13 @@ namespace Plato.Users.ViewModels
     {
         public bool IsExistingUser { get; set; }
 
-        [Required]
+        [Required, UserNameValidator, Display(Name = "username"), StringLength(100)]
         public string UserName { get; set; }
 
-        [Required]
-        [EmailAddress]
+        [Required, EmailAddress, DataType(DataType.EmailAddress), Display(Name = "email")]
         public string Email { get; set; }
 
-        [Required]
-        [DataType(DataType.Password)]
+        [Required, DataType(DataType.Password)]
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
@@ -37,6 +36,7 @@ namespace Plato.Users.ViewModels
                 }
             }
         }
+
     }
 
 }

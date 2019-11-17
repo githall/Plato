@@ -297,6 +297,15 @@ namespace Plato.Users.Controllers
             else
             {
 
+                // Build breadcrumb
+                _breadCrumbManager.Configure(builder =>
+                {
+                    builder.Add(S["Home"], home => home
+                        .Action("Index", "Home", "Plato.Core")
+                        .LocalNav()
+                    ).Add(S["Register"]);
+                });
+
                 var model = new ExternalLoginViewModel();
                 IUser existingUser = null;
 
@@ -328,7 +337,9 @@ namespace Plato.Users.Controllers
 
                 ViewData["LoginProvider"] = info.LoginProvider;
                 return View("ExternalLogin", model);
+
             }
+
         }
 
         [HttpPost, AllowAnonymous, ValidateAntiForgeryToken]
@@ -348,20 +359,24 @@ namespace Plato.Users.Controllers
             {
 
                 User user = null;
-
                 var info = await _signInManager.GetExternalLoginInfoAsync();
                 if (info == null)
                 {
                     throw new ApplicationException("Error loading external login information during confirmation.");
                 }
-                
+
                 if (!model.IsExistingUser)
-                {
-                    
-                    var result = await _platoUserManager.CreateAsync(
-                        model.UserName,                        
-                        model.Email,
-                        model.Password);
+                {                    
+                    var result = await _platoUserManager.CreateAsync(new User()
+                    {
+                        UserName = model.UserName,
+                        Email = model.Email,
+                        EmailConfirmed = true,
+                        RoleNames = new[]
+                        {
+                            DefaultRoles.Member
+                        }
+                    }, model.Password);
                     if (result.Succeeded)
                     {
                         user = result.Response;
@@ -433,7 +448,7 @@ namespace Plato.Users.Controllers
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> Register(string returnUrl = null)
         {
-       
+
             // Build breadcrumb
             _breadCrumbManager.Configure(builder =>
             {
