@@ -76,7 +76,7 @@ namespace Plato.Roles.Services
 
         #region "Private Methods"
 
-        private ConcurrentDictionary<int, IList<Role>> _scopedUserRoles
+        private readonly ConcurrentDictionary<int, IList<Role>> _scopedUserRoles
             = new ConcurrentDictionary<int, IList<Role>>();
 
         async Task<IList<Role>> GetRolesToExamine(IIdentity identity)

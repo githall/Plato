@@ -28,7 +28,9 @@ namespace Plato.Internal.Stores.Users
         public const string ByApiKey = "ByApiKey";
         public const string ByPlatoBot = "PlatoBot";
 
-        private readonly IUserDataStore<UserData> _userDataStore;
+
+        private readonly IPlatoUserLoginStore<UserLogin> _platoUserLoginStore; 
+        private readonly IUserDataStore<UserData> _userDataStore;        
         private readonly IUserRepository<User> _userRepository;
         private readonly IUserDataDecorator _userDataDecorator;
         private readonly IUserRoleDecorator _userRoleDecorator;
@@ -43,16 +45,18 @@ namespace Plato.Internal.Stores.Users
         #region "constructor"
 
         public PlatoUserStore(
-            IDbQueryConfiguration dbQuery,
-            IUserRepository<User> userRepository,
-            ILogger<PlatoUserStore> logger,
-            ICacheManager cacheManager, 
+            IPlatoUserLoginStore<UserLogin> platoUserLoginStore,
             IUserDataStore<UserData> userDataStore,
-            IAliasCreator aliasCreator,
-            IKeyGenerator keyGenerator,
+            IUserRepository<User> userRepository,
             IUserDataDecorator userDataDecorator,
-            IUserRoleDecorator userRoleDecorator)
+            IUserRoleDecorator userRoleDecorator,
+            ILogger<PlatoUserStore> logger,
+            IDbQueryConfiguration dbQuery,            
+            ICacheManager cacheManager,            
+            IAliasCreator aliasCreator,
+            IKeyGenerator keyGenerator)
         {
+            _platoUserLoginStore = platoUserLoginStore;
             _userDataDecorator = userDataDecorator;
             _userRoleDecorator = userRoleDecorator;
             _userRepository = userRepository;
@@ -89,11 +93,6 @@ namespace Plato.Internal.Stores.Users
             var newUser = await _userRepository.InsertUpdateAsync(user);
             if (newUser != null)
             {
-
-                if (user.LoginInfos != null)
-                {
-
-                }
 
                 // Ensure new users have an API key, update this after adding the user
                 // so we can append the newly generated unique userId to the guid
@@ -167,7 +166,7 @@ namespace Plato.Internal.Stores.Users
                 {
                     await _userDataStore.DeleteAsync(userData);
                 }
-           
+
                 // Cancel tokens
                 CancelTokens(user);
 
@@ -208,6 +207,7 @@ namespace Plato.Internal.Stores.Users
                 var user = await _userRepository.SelectByUserNameNormalizedAsync(userNameNormalized);
                 return await _userDataDecorator.DecorateAsync(user);
             });
+
         }
 
         public async Task<User> GetByUserNameAsync(string userName)
@@ -229,16 +229,29 @@ namespace Plato.Internal.Stores.Users
 
         public async Task<User> GetByEmailAsync(string email)
         {
+
+            if (String.IsNullOrEmpty(email))
+            {
+                throw new ArgumentNullException(nameof(email));
+            }
+
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ByEmail, email);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByEmailAsync(email);
                 return await _userDataDecorator.DecorateAsync(user);
             });
+
         }
 
         public async Task<User> GetByEmailNormalizedAsync(string emailNormalized)
         {
+
+            if (String.IsNullOrEmpty(emailNormalized))
+            {
+                throw new ArgumentNullException(nameof(emailNormalized));
+            }
+
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ByEmailNormalized, emailNormalized);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
@@ -249,32 +262,53 @@ namespace Plato.Internal.Stores.Users
 
         public async Task<User> GetByResetToken(string resetToken)
         {
+
+            if (String.IsNullOrEmpty(resetToken))
+            {
+                throw new ArgumentNullException(nameof(resetToken));
+            }
+
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ByResetToken, resetToken);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByResetTokenAsync(resetToken);
                 return await _userDataDecorator.DecorateAsync(user);
             });
+
         }
 
         public async Task<User> GetByConfirmationToken(string confirmationToken)
         {
+
+            if (String.IsNullOrEmpty(confirmationToken))
+            {
+                throw new ArgumentNullException(nameof(confirmationToken));
+            }
+
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ByConfirmationToken, confirmationToken);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByConfirmationTokenAsync(confirmationToken);
                 return await _userDataDecorator.DecorateAsync(user);
             });
+
         }
 
         public async Task<User> GetByApiKeyAsync(string apiKey)
         {
+
+            if (String.IsNullOrEmpty(apiKey))
+            {
+                throw new ArgumentNullException(nameof(apiKey));
+            }
+
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ByApiKey, apiKey);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByApiKeyAsync(apiKey);
                 return await _userDataDecorator.DecorateAsync(user);
             });
+
         }
 
         public IQuery<User> QueryAsync()
@@ -371,7 +405,7 @@ namespace Plato.Internal.Stores.Users
             return output;
 
         }
-        
+
         void CancelTokensInternal(User user)
         {
 
@@ -387,8 +421,11 @@ namespace Plato.Internal.Stores.Users
             _cacheManager.CancelTokens(this.GetType(), ByApiKey, user.ApiKey);
 
             // Expire user data cache tokens
-            _cacheManager.CancelTokens(typeof(UserDataStore));
-            _cacheManager.CancelTokens(typeof(UserDataStore), UserDataStore.ByUser, user.Id);
+            _cacheManager.CancelTokens(_userDataStore.GetType());
+            _cacheManager.CancelTokens(_userDataStore.GetType(), UserDataStore.ByUser, user.Id);
+
+            // Expire user login tokens
+            _cacheManager.CancelTokens(_platoUserLoginStore.GetType());
 
         }
 

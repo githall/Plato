@@ -43,8 +43,7 @@ namespace Plato.Users.Controllers
         private readonly SignInManager<User> _signInManager;
         private readonly ILogger<AccountController> _logger;        
         private readonly UserManager<User> _userManager;
-        private readonly IUserEmails _userEmails;
-        private readonly IAlerter _alerter;
+        private readonly IUserEmails _userEmails;  
 
         private readonly SiteOptions _siteOptions;
 
@@ -65,8 +64,7 @@ namespace Plato.Users.Controllers
             ILogger<AccountController> logger,            
             SignInManager<User> signInManage,
             UserManager<User> userManager,            
-            IUserEmails userEmails,
-            IAlerter alerter)
+            IUserEmails userEmails)
         {   
             _registerViewProvider = registerViewProvider;
             _breadCrumbManager = breadCrumbManager;
@@ -78,7 +76,7 @@ namespace Plato.Users.Controllers
             _signInManager = signInManage;
             _userManager = userManager;
             _userEmails = userEmails;
-            _alerter = alerter;            
+                    
             _logger = logger;            
 
             T = htmlLocalizer;
@@ -677,11 +675,6 @@ namespace Plato.Users.Controllers
         public async Task<IActionResult> ActivateAccount(ActivateAccountViewModel model)
         {
 
-            var rolesToAdd = new List<string>()
-            {
-                DefaultRoles.Member
-            };
-            
             if (ModelState.IsValid)
             {
                 var user = await _userManager.FindByEmailAsync(model.Email);

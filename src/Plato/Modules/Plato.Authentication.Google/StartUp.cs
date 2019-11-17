@@ -25,8 +25,8 @@ namespace Plato.Authentication.Google
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // Configuration
-            services.AddTransient<IConfigureOptions<AuthenticationOptions>, GoogleSchemaConfiguration>();
-            services.AddTransient<IConfigureOptions<GoogleOptions>, GoogleSchemaConfiguration>();
+            services.AddTransient<IConfigureOptions<AuthenticationOptions>, GoogleSchemeConfiguration>();
+            services.AddTransient<IConfigureOptions<GoogleOptions>, GoogleSchemeConfiguration>();
 
             // Built-in initializers:
             services.AddTransient<IPostConfigureOptions<GoogleOptions>, OAuthPostConfigureOptions<GoogleOptions, GoogleHandler>>();

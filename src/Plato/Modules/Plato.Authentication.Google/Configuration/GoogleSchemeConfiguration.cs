@@ -8,14 +8,14 @@ using Plato.Google.Models;
 namespace Plato.Authentication.Google.Configuration
 {
 
-    public class GoogleSchemaConfiguration :
+    public class GoogleSchemeConfiguration :
         IConfigureOptions<AuthenticationOptions>,
         IConfigureNamedOptions<GoogleOptions>
     {
 
         private readonly GoogleAuthenticationOptions _googleAuthenticationOptions;
 
-        public GoogleSchemaConfiguration(
+        public GoogleSchemeConfiguration(
             IOptions<GoogleAuthenticationOptions> googleOptions)
         {
             _googleAuthenticationOptions = googleOptions.Value;
@@ -23,13 +23,8 @@ namespace Plato.Authentication.Google.Configuration
 
         public void Configure(AuthenticationOptions options)
         {
-
-            if (string.IsNullOrEmpty(_googleAuthenticationOptions.ClientId))
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(_googleAuthenticationOptions.ClientSecret))
+            
+            if (!ValidSettings())
             {
                 return;
             }
@@ -53,12 +48,7 @@ namespace Plato.Authentication.Google.Configuration
                 return;
             }
 
-            if (string.IsNullOrEmpty(_googleAuthenticationOptions.ClientId))
-            {
-                return;
-            }
-
-            if (string.IsNullOrEmpty(_googleAuthenticationOptions.ClientSecret))
+            if (!ValidSettings())
             {
                 return;
             }
@@ -80,28 +70,20 @@ namespace Plato.Authentication.Google.Configuration
             options.ClaimActions.MapJsonKey("urn:google:profile", "link");
             options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
 
-            //// Optional
-            //options.Events = new OAuthEvents
-            //{   
-            //    OnCreatingTicket = OnCreatingGoogleTicket()
-            //}; // Event to capture when the authentication ticket is being created
-
         }
 
-        //private static Func<OAuthCreatingTicketContext, Task> OnCreatingGoogleTicket()
-        //{
-        //    return async context =>
-        //    {
-        //        var firstName = context.Identity.FindFirst(ClaimTypes.GivenName).Value;
-        //        var lastName = context.Identity.FindFirst(ClaimTypes.Surname)?.Value;
-        //        var email = context.Identity.FindFirst(ClaimTypes.Email).Value;
+        bool ValidSettings()
+        {
 
-        //        //Todo: Add logic here to save info into database
+            if (string.IsNullOrEmpty(_googleAuthenticationOptions.ClientId)
+                || string.IsNullOrEmpty(_googleAuthenticationOptions.ClientSecret))
+            {
+                return false;
+            }
 
-        //        // this Task.FromResult is purely to make the code compile as it requires a Task result
-        //        await Task.FromResult(true);
-        //    };
-        //}
+            return true;
+
+        }
 
     }
 

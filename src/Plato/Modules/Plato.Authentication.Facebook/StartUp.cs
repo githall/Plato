@@ -25,8 +25,8 @@ namespace Plato.Authentication.Facebook
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // Configuration
-            services.AddTransient<IConfigureOptions<AuthenticationOptions>, FacebookSchemaConfiguration>();
-            services.AddTransient<IConfigureOptions<FacebookOptions>, FacebookSchemaConfiguration>();
+            services.AddTransient<IConfigureOptions<AuthenticationOptions>, FacebookSchemeConfiguration>();
+            services.AddTransient<IConfigureOptions<FacebookOptions>, FacebookSchemeConfiguration>();
 
             // Built-in initializers:
             services.AddTransient<IPostConfigureOptions<FacebookOptions>, OAuthPostConfigureOptions<FacebookOptions, FacebookHandler>>();

@@ -717,6 +717,11 @@ namespace Plato.Users.Handlers
                                 INNER JOIN {prefix}_Roles r ON ur.RoleId = r.Id 
                                 WHERE (
                                     ur.UserId = @Id
+                                )
+                                /* logins */
+                                SELECT l.* FROM {prefix}_UserLogins l WITH (nolock)                                 
+                                WHERE (
+                                    l.UserId = @Id
                                 )")
                         .ForTable(_users)
                         .WithParameter(_users.PrimaryKeyColumn))
