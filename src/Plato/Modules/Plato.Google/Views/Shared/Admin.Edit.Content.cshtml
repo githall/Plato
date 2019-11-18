@@ -1,5 +1,8 @@
 ﻿@model GoogleSettingsViewModel
-
+@{ 
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
+}
 <card>
     <card-title>
         <h6 class="card-title">@T["Google Sign In"]</h6>
@@ -63,6 +66,17 @@
 
 <card class="card mt-4">
     <card-footer>
-        <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        @if (isDemo)
+        {
+            <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                <a href="#" class="btn btn-primary disabled">
+                    @T["Save"]
+                </a>
+            </span>
+        }
+        else
+        {
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        }
     </card-footer>
 </card>

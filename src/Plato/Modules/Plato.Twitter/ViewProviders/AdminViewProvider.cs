@@ -9,6 +9,8 @@ using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
 using Plato.Twitter.Configuration;
+using Microsoft.Extensions.Options;
+using Plato.Internal.Abstractions.Settings;
 
 namespace Plato.Twitter.ViewProviders
 {
@@ -21,15 +23,19 @@ namespace Plato.Twitter.ViewProviders
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
+        private readonly PlatoOptions _platoOptions;
+
         public AdminViewProvider(
             ITwitterSettingsStore<TwitterSettings> twitterSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
+            IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
             IPlatoHost platoHost)
         {
             _dataProtectionProvider = dataProtectionProvider;
             _twitterSettingsStore = twitterSettingsStore;
+            _platoOptions = platoOptionsAccessor.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
@@ -164,11 +170,11 @@ namespace Plato.Twitter.ViewProviders
 
                 return new TwitterSettingsViewModel()
                 {
-                  ConsumerKey = settings.ConsumerKey,
-                  ConsumerSecret = consumerSecret,
-                  CallbackPath = settings.CallbackPath,
-                  AccessToken = settings.AccessToken,
-                  AccessTokenSecret = accessTokenSecret 
+                    ConsumerKey = _platoOptions.DemoMode ? "123456789" : settings.ConsumerKey,
+                    ConsumerSecret = _platoOptions.DemoMode ? "xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx" : consumerSecret,
+                    CallbackPath = _platoOptions.DemoMode ? string.Empty : settings.CallbackPath.ToString(),
+                    AccessToken = _platoOptions.DemoMode ? "123456789" : settings.AccessToken,
+                    AccessTokenSecret = _platoOptions.DemoMode ? "xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx" : accessTokenSecret
                 };
 
             }

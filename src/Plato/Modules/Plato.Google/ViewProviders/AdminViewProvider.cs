@@ -9,6 +9,8 @@ using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
 using Plato.Google.Configuration;
+using Microsoft.Extensions.Options;
+using Plato.Internal.Abstractions.Settings;
 
 namespace Plato.Google.ViewProviders
 {
@@ -21,15 +23,19 @@ namespace Plato.Google.ViewProviders
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
+        private readonly PlatoOptions _platoOptions;
+
         public AdminViewProvider(
             IGoogleSettingsStore<GoogleSettings> googleSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
+            IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
             IPlatoHost platoHost)
         {
             _dataProtectionProvider = dataProtectionProvider;
             _googleSettingsStore = googleSettingsStore;
+            _platoOptions = platoOptionsAccessor.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
@@ -100,13 +106,13 @@ namespace Plato.Google.ViewProviders
                     // Recycle shell context to ensure changes take effect
                     _platoHost.RecycleShellContext(_shellSettings);
                 }
-              
+
             }
 
             return await BuildEditAsync(settings, context);
 
         }
-        
+
         async Task<GoogleSettingsViewModel> GetModel()
         {
 
@@ -131,9 +137,9 @@ namespace Plato.Google.ViewProviders
 
                 return new GoogleSettingsViewModel()
                 {
-                    ClientId = settings.ClientId,
-                    ClientSecret = secret,
-                    CallbackPath = settings.CallbackPath
+                    ClientId = _platoOptions.DemoMode ? "123456789" : settings.ClientId,
+                    ClientSecret = _platoOptions.DemoMode ? "xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx" : secret,
+                    CallbackPath = _platoOptions.DemoMode ? string.Empty : settings.CallbackPath.ToString()
                 };
 
             }

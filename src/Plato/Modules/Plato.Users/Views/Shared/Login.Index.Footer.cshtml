@@ -2,12 +2,12 @@
 
 <div class="form-group">
     <a class="float-right" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="ForgotPassword" asp-route-returnurl="@ViewData["ReturnUrl"]">@T["Forgot your password?"]</a>
-    <label asp-for="RememberMe" data-toggle="tooltip" title="@T["Only enable this option if you are logging in from a secure device"]">
+    <label asp-for="RememberMe">
         <span class="switch switch-round mr-2">
             <input data-toggle="collapse" class="form-check-input" asp-for="RememberMe" />
             <span class="switch-slider"></span>
         </span>
-        @T["Remember me for 30 days"]
+        @T["Remember me for 30 days"] <i class="fal fa-info-circle" data-toggle="tooltip" title="@T["Only enable if you are logging in from a secure device only you have acces to"]"></i>
     </label>
 </div>
 

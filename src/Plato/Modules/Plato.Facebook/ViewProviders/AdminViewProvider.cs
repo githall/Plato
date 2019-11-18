@@ -9,6 +9,8 @@ using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
 using Plato.Facebook.Configuration;
+using Plato.Internal.Abstractions.Settings;
+using Microsoft.Extensions.Options;
 
 namespace Plato.Facebook.ViewProviders
 {
@@ -21,15 +23,19 @@ namespace Plato.Facebook.ViewProviders
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
+        private readonly PlatoOptions _platoOptions;
+
         public AdminViewProvider(
             IFacebookSettingsStore<FacebookSettings> facebookSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
+            IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
             IPlatoHost platoHost)
         {
             _dataProtectionProvider = dataProtectionProvider;
             _facebookSettingsStore = facebookSettingsStore;
+            _platoOptions = platoOptionsAccessor.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
@@ -131,9 +137,9 @@ namespace Plato.Facebook.ViewProviders
 
                 return new FacebookSettingsViewModel()
                 {
-                  AppId = settings.AppId,
-                  AppSecret = secret,
-                  CallbackPath = settings.CallbackPath
+                    AppId = _platoOptions.DemoMode ? "123456789" : settings.AppId,
+                    AppSecret = _platoOptions.DemoMode ? "xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx" : secret,
+                    CallbackPath = _platoOptions.DemoMode ? string.Empty : settings.CallbackPath.ToString()
                 };
 
             }

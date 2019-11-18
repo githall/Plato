@@ -1,4 +1,8 @@
 ﻿@model FacebookSettingsViewModel
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
+}
 
 <card>
     <card-title>
@@ -31,7 +35,7 @@
                         </label>
                         <div class="search-input-group">
                             <input asp-for="AppSecret"
-                                   type="search"
+                                   type="text"
                                    class="form-control"
                                    autocomplete="off"
                                    data-provide="password"
@@ -63,6 +67,17 @@
 
 <card class="card mt-4">
     <card-footer>
-        <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        @if (isDemo)
+        {
+            <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                <a href="#" class="btn btn-primary disabled">
+                    @T["Save"]
+                </a>
+            </span>
+        }
+        else
+        {
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        }
     </card-footer>
 </card>
