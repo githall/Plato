@@ -1,18 +1,22 @@
 ﻿@model TwitterLoginViewModel
 @inject SignInManager<User> _signInManager
 @{
-    var providerName = "Twitter";
-    var loginProviders = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-    var loginProvider = loginProviders?.First(p => p.Name.Equals(providerName, StringComparison.OrdinalIgnoreCase));
+    var name = "Twitter";
+    var schemes = await _signInManager.GetExternalAuthenticationSchemesAsync();
+    AuthenticationScheme scheme = null;
+    if (schemes != null)
+    {
+        scheme = schemes.FirstOrDefault(p => name.Equals(p.Name, StringComparison.OrdinalIgnoreCase));
+    }    
 }
 
-@if (loginProvider != null)
+@if (scheme != null)
 {    
     <form asp-area="Plato.Users" asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
         <fieldset>
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-secondary btn-block" name="provider" value="@loginProvider.Name" title="Log in using your @loginProvider.DisplayName account">                    
-                    <img aria-hidden="true" alt="@T["Facebook Icon"]" src="/plato.authentication.twitter/content/images/twitter-icon.png" class="img-24 d-inline-block" /> @T["Login with"] @loginProvider.DisplayName
+                <button type="submit" class="btn btn-lg btn-secondary btn-block" name="provider" value="@scheme.Name" title="Log in using your @scheme.DisplayName account">                    
+                    <img aria-hidden="true" alt="@T["Facebook Icon"]" src="/plato.authentication.twitter/content/images/twitter-icon.png" class="img-24 d-inline-block" /> @T["Login with"] @scheme.DisplayName
                 </button>
             </div>
         </fieldset>
