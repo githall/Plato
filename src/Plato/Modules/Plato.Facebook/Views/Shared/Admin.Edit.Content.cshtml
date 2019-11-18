@@ -17,7 +17,7 @@
                             <span class="text-muted">@T["Your facebook App ID."]</span>
                             <a href="https://developers.facebook.com/docs/apps/" target="_blank">@T["Get your App ID"]</a>
                         </label>
-                        <input placeholder="@T["your facebook app id..."]" asp-for="@Model.AppId" class="form-control" autofocus/>
+                        <input placeholder="@T["your facebook app id..."]" asp-for="@Model.AppId" class="form-control" autofocus />
                     </div>
                 </fieldset>
                 <fieldset>
@@ -25,20 +25,33 @@
                         <label asp-for="@Model.AppSecret">
                             <strong>@T["App Secret"]</strong>
                             <span asp-validation-for="@Model.AppSecret" class="text-danger"></span>
-                            <br/>
+                            <br />
                             <span class="text-muted">@T["Your facebook app secret."]</span>
                             <a href="https://developers.facebook.com/apps/">@T["Manage your Facebook apps"]</a>
                         </label>
                         <div class="search-input-group">
                             <input asp-for="AppSecret"
-                                   type="search" 
-                                   class="form-control" 
+                                   type="search"
+                                   class="form-control"
                                    autocomplete="off"
                                    data-provide="password"
                                    placeholder="@T["your facebook app secret..."]" />
                             <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
                                 <i class="fal fa-eye"></i>
                             </button>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group row" asp-validation-class-for="CallbackPath">
+                        <div class="col-lg">
+                            <label asp-for="CallbackPath">
+                                <strong>@T["Callback Path"]</strong>
+                                <br />
+                                <span class="text-muted">@T["The path within the application where the user-agent will be returned. The middleware will process this request when it arrives."]</span>
+                                <span asp-validation-for="CallbackPath"></span>
+                            </label>
+                            <input asp-for="CallbackPath" class="form-control" placeholder="/signin-facebook" />
                         </div>
                     </div>
                 </fieldset>

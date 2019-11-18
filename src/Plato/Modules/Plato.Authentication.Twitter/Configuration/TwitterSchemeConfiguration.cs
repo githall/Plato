@@ -55,6 +55,11 @@ namespace Plato.Authentication.Twitter.Configuration
             options.ConsumerKey = _twitterAuthenticationOptions.ConsumerKey;
             options.ConsumerSecret = _twitterAuthenticationOptions.ConsumerSecret;
 
+            if (_twitterAuthenticationOptions.CallbackPath.HasValue)
+            {
+                options.CallbackPath = _twitterAuthenticationOptions.CallbackPath;
+            }
+
         }
 
         bool ValidSettings()

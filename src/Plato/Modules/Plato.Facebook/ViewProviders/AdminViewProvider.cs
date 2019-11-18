@@ -65,7 +65,7 @@ namespace Plato.Facebook.ViewProviders
             {
                 return await BuildEditAsync(settings, context);
             }
-            
+
             // Update settings
             if (context.Updater.ModelState.IsValid)
             {
@@ -84,12 +84,13 @@ namespace Plato.Facebook.ViewProviders
                         _logger.LogError($"There was a problem encrypting the Facebook app secret. {e.Message}");
                     }
                 }
-                
+
                 // Create the model
                 settings = new FacebookSettings()
                 {
                     AppId = model.AppId,
-                    AppSecret = secret
+                    AppSecret = secret,
+                    CallbackPath = model.CallbackPath
                 };
 
                 // Persist the settings
@@ -99,13 +100,13 @@ namespace Plato.Facebook.ViewProviders
                     // Recycle shell context to ensure changes take effect
                     _platoHost.RecycleShellContext(_shellSettings);
                 }
-              
+
             }
 
             return await BuildEditAsync(settings, context);
 
         }
-        
+
         async Task<FacebookSettingsViewModel> GetModel()
         {
 
@@ -128,12 +129,13 @@ namespace Plato.Facebook.ViewProviders
                     }
                 }
 
-
                 return new FacebookSettingsViewModel()
                 {
                   AppId = settings.AppId,
-                  AppSecret = secret
+                  AppSecret = secret,
+                  CallbackPath = settings.CallbackPath
                 };
+
             }
 
             // return default settings
@@ -144,7 +146,7 @@ namespace Plato.Facebook.ViewProviders
             };
 
         }
-        
+
     }
 
 }

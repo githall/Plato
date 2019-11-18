@@ -42,6 +42,19 @@
                         </div>
                     </div>
                 </fieldset>
+                <fieldset>
+                    <div class="form-group row" asp-validation-class-for="CallbackPath">
+                        <div class="col-lg">
+                            <label asp-for="CallbackPath">
+                                <strong>@T["Callback Path"]</strong>
+                                <br />
+                                <span class="text-muted">@T["The path within the application where the user-agent will be returned. The middleware will process this request when it arrives."]</span>
+                                <span asp-validation-for="CallbackPath"></span>
+                            </label>
+                            <input asp-for="CallbackPath" class="form-control" placeholder="/signin-twitter" />
+                        </div>
+                    </div>
+                </fieldset>
             </div>
         </div>
 

@@ -10,7 +10,10 @@ namespace Plato.Twitter.ViewModels
 
         [StringLength(255), Display(Name = "consumer secret")]
         public string ConsumerSecret { get; set; }
-        
+
+        [RegularExpression(@"\/[-A-Za-z0-9+&@#\/%?=~_|!:,.;]+[-A-Za-z0-9+&@#\/%=~_|]", ErrorMessage = "Invalid path")]
+        public string CallbackPath { get; set; }
+
         [StringLength(255), Display(Name = "access token")]
         public string AccessToken { get; set; }
 

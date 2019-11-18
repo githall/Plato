@@ -15,6 +15,8 @@ namespace Plato.Users.Handlers
     public class SetUpEventHandler : BaseSetUpEventHandler
     {
 
+        private const string Version = "1.0.9";
+
         private readonly SchemaTable _userPhoto = new SchemaTable()
         {
             Name = "UserPhoto",
@@ -607,25 +609,24 @@ namespace Plato.Users.Handlers
             }
         };
 
-        private readonly ISchemaBuilder _schemaBuilder;
-        private readonly ISchemaManager _schemaManager;
-
         private readonly IUserColorProvider _userColorProvider;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
-        
+        private readonly ISchemaBuilder _schemaBuilder;
+        private readonly ISchemaManager _schemaManager;
+
         public SetUpEventHandler(
-            ISchemaBuilder schemaBuilder,
-            UserManager<User> userManager,
-            IUserColorProvider userColorProvider,
+            IUserColorProvider userColorProvider,            
+            UserManager<User> userManager,            
             RoleManager<Role> roleManager,
-            ISchemaManager schemaManager)
+            ISchemaManager schemaManager,
+            ISchemaBuilder schemaBuilder)
         {
-            _schemaBuilder = schemaBuilder;
-            _userManager = userManager;
             _userColorProvider = userColorProvider;
-            _roleManager = roleManager;
+            _schemaBuilder = schemaBuilder;
             _schemaManager = schemaManager;
+            _userManager = userManager;            
+            _roleManager = roleManager;
         }
 
         #region "Implementation"
@@ -683,7 +684,7 @@ namespace Plato.Users.Handlers
                 .Configure(options =>
                 {
                     options.ModuleName = base.ModuleId;
-                    options.Version = "1.0.0";
+                    options.Version = Version;
                     options.DropTablesBeforeCreate = true;
                     options.DropProceduresBeforeCreate = true;
                 });

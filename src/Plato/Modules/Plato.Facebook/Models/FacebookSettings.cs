@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using Microsoft.AspNetCore.Http;
 using Plato.Internal.Abstractions;
 
 namespace Plato.Facebook.Models
@@ -12,5 +10,8 @@ namespace Plato.Facebook.Models
 
         public string AppSecret { get; set; }
 
+        public PathString CallbackPath { get; set; }
+
     }
+
 }

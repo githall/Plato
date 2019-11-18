@@ -34,12 +34,12 @@ namespace Plato.Twitter.ViewProviders
             _platoHost = platoHost;
             _logger = logger;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(TwitterSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
         public override Task<IViewProviderResult> BuildDisplayAsync(TwitterSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
@@ -57,7 +57,7 @@ namespace Plato.Twitter.ViewProviders
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(TwitterSettings settings, IViewProviderContext context)
         {
-            
+
             var model = new TwitterSettingsViewModel();
 
             // Validate model
@@ -65,7 +65,7 @@ namespace Plato.Twitter.ViewProviders
             {
                 return await BuildEditAsync(settings, context);
             }
-            
+
             // Update settings
             if (context.Updater.ModelState.IsValid)
             {
@@ -106,6 +106,7 @@ namespace Plato.Twitter.ViewProviders
                 {
                     ConsumerKey = model.ConsumerKey,
                     ConsumerSecret = consumerSecret,
+                    CallbackPath = model.CallbackPath,
                     AccessToken = model.AccessToken,
                     AccessTokenSecret = accessTokenSecret
                 };
@@ -117,13 +118,13 @@ namespace Plato.Twitter.ViewProviders
                     // Recycle shell context to ensure changes take effect
                     _platoHost.RecycleShellContext(_shellSettings);
                 }
-              
+
             }
 
             return await BuildEditAsync(settings, context);
 
         }
-        
+
         async Task<TwitterSettingsViewModel> GetModel()
         {
 
@@ -148,7 +149,6 @@ namespace Plato.Twitter.ViewProviders
                     }
                 }
 
-
                 if (!string.IsNullOrWhiteSpace(settings.AccessTokenSecret))
                 {
                     try
@@ -161,11 +161,12 @@ namespace Plato.Twitter.ViewProviders
                         _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
                     }
                 }
-                
+
                 return new TwitterSettingsViewModel()
                 {
                   ConsumerKey = settings.ConsumerKey,
                   ConsumerSecret = consumerSecret,
+                  CallbackPath = settings.CallbackPath,
                   AccessToken = settings.AccessToken,
                   AccessTokenSecret = accessTokenSecret 
                 };
@@ -176,7 +177,7 @@ namespace Plato.Twitter.ViewProviders
             return new TwitterSettingsViewModel();
 
         }
-        
+
     }
 
 }

@@ -1137,8 +1137,8 @@ select.form-control:focus::-ms-value {
 
 .btn-secondary {
     color: #fff;
-    background-color: #555;
-    border-color: #555
+    background-color: #333;
+    border-color: #444;
 }
 
 .btn-secondary:hover {
@@ -1885,7 +1885,6 @@ select.form-control:focus::-ms-value {
 .custom-range:disabled::-webkit-slider-thumb {
     background-color: #888
 }
-
 
 .custom-range:disabled::-moz-range-thumb {
     background-color: #888
@@ -2898,7 +2897,8 @@ a.text-dark:hover, a.text-dark:focus {
 }
 
 .btn-secondary {
-    background-color: #555
+    background-color: #1a1a1a;
+    border-color:#333;
 }
 
 .btn-success {

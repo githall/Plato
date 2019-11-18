@@ -55,6 +55,11 @@ namespace Plato.Authentication.Facebook.Configuration
             options.AppId = _facebookAuthenticationOptions.AppId;
             options.AppSecret = _facebookAuthenticationOptions.AppSecret;
 
+            if (_facebookAuthenticationOptions.CallbackPath.HasValue)
+            {
+                options.CallbackPath = _facebookAuthenticationOptions.CallbackPath;
+            }
+
         }
 
         bool ValidSettings()
