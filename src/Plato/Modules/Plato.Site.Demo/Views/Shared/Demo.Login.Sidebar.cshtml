@@ -6,53 +6,14 @@
 
 @if (hasUsername && hasPassword)
 {
-    <p>
-        <img src="/plato.site.demo/content/images/dashboard.png" alt="Plato Dashboard" title="Plato Dashboard" class="img-fluid" />
-    </p>
-    <h6 class="font-weight-bold">
-        @T["Plato Dashboard"]
-    </h6>
-    <p>
-        @T["Use the button below to automatically login using the demo administrator account and visit the Plato administrator dashboard. Once logged in you can fully explore Plato using the demo administrator account..."]
-    </p>
-    <button id="btnDemoLogin" asp-route-area="Plato.Site.Demo" asp-route-controller="Home" asp-route-action="Login" class="btn btn-primary" type="button" role="button">@T["Goto Dashboard"]</button>      
-    <script section="Footer">
-        $(function (win, doc, $) {
-
-            'use strict';
-
-            var app = win.$.Plato,
-                $btn = $("#btnDemoLogin");
-
-            app.ready(function () {
-
-                $btn.click(function () {
-
-                    var formAction = null;
-                    var attr = $(this).attr("formaction");
-                    if (attr) {
-                        formAction = attr;
-                    }
-
-                    var $form = $(this).closest("form");
-                    if ($form.length === 0) {
-                        throw new Error("Could not locate a parent form")
-                    }
-
-                    if (formAction) {
-                        $form[0].action = formAction;
-                        formAction = null;
-                    }
-
-                    // Note don't call $(form).submit() as this
-                    // internally calls the validators submitHandler again
-                    $form[0].submit();
-
-                });
-
-            })
-
-        }(window, document, jQuery));
-    </script>
+    <form asp-area="Plato.Site.Demo" asp-controller="Home" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">        
+        <h6 class="font-weight-bold">
+            @T["Demo Login"]
+        </h6>
+        <p>
+            @T["Use the button below to login using the demo administrator account and visit the Plato administrator dashboard. Once logged in you can fully explore Plato using the demo administrator account. Click \"Login to Dashboard\" to fully explore..."]
+        </p>
+        <button type="submit" class="btn btn-lg btn-secondary btn-block" role="button">@T["Login to Dashboard"]</button>
+    </form>
 }
 
