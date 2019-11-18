@@ -2,8 +2,9 @@
 @using Newtonsoft.Json
 @{
     var json = JsonConvert.SerializeObject(Model.SpamLevels);
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
 }
-@ViewData["Test"]
 
 <form asp-route-action="Index" method="post" enctype="multipart/form-data">
     <card>
@@ -184,7 +185,18 @@
 
     <card class="card mt-4">
         <card-footer>
-            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+            @if (isDemo)
+            {
+                <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                    <a href="#" class="btn btn-primary disabled">
+                        @T["Save"]
+                    </a>
+                </span>
+            }
+            else
+            {
+                <button class="btn btn-primary" type="submit">@T["Save"]</button>
+            }
         </card-footer>
     </card>
 
