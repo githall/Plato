@@ -1,0 +1,82 @@
+﻿@model GoogleSettingsViewModel
+@{ 
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
+}
+<card>
+    <card-title>
+        <h6 class="card-title">@T["GitHub Sign In"]</h6>
+    </card-title>
+    <card-body>
+
+        <div class="row">
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="DefaultFrom">
+                        <label asp-for="ClientId">
+                            <strong>@T["Client ID"]</strong>
+                            <span asp-validation-for="ClientId" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["Your GitHub client ID."]</span>
+                            <a href="https://github.com/settings/developers" target="_blank">@T["Get your client ID"]</a>
+                        </label>
+                        <input placeholder="@T["your github client id..."]" asp-for="@Model.ClientId" class="form-control" autofocus/>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="DefaultFrom">
+                        <label asp-for="ClientSecret">
+                            <strong>@T["Client Secret"]</strong>
+                            <span asp-validation-for="ClientSecret" class="text-danger"></span>
+                            <br/>
+                            <span class="text-muted">@T["Your GitHub client secret."]</span>
+                            <a href="https://github.com/settings/developers" target="_blank">@T["Get your client secret"]</a>
+                        </label>
+                        <div class="search-input-group">
+                            <input asp-for="ClientSecret"
+                                   type="search" 
+                                   class="form-control" 
+                                   autocomplete="off"
+                                   data-provide="password"
+                                   placeholder="@T["your github client secret..."]" />
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
+                                <i class="fal fa-eye"></i>
+                            </button>
+                        </div>
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group row" asp-validation-class-for="CallbackPath">
+                        <div class="col-lg">
+                            <label asp-for="CallbackPath">
+                                <strong>@T["Callback Path"]</strong>
+                                <br />
+                                <span class="text-muted">@T["The path within the application where the user-agent will be returned. The middleware will process this request when it arrives."]</span>
+                                <span asp-validation-for="CallbackPath"></span>
+                            </label>
+                            <input asp-for="CallbackPath" class="form-control" placeholder="/signin-github" />                            
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+    </card-body>
+</card>
+
+<card class="card mt-4">
+    <card-footer>
+        @if (isDemo)
+        {
+            <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                <a href="#" class="btn btn-primary disabled">
+                    @T["Save"]
+                </a>
+            </span>
+        }
+        else
+        {
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
+        }
+    </card-footer>
+</card>
