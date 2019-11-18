@@ -1,0 +1,15 @@
+Name: Plato Authentication Twitter
+Description: Adds the ability for users to login via Twitter.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Authentication
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.authentication.twitter/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Twitter",
+		Version: "1.0.0"
+	}
+]

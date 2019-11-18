@@ -3,7 +3,7 @@
 @{
     var providerName = "Facebook";
     var loginProviders = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
-    var loginProvider = loginProviders.First(p => p.Name.Equals(providerName, StringComparison.OrdinalIgnoreCase));
+    var loginProvider = loginProviders?.First(p => p.Name.Equals(providerName, StringComparison.OrdinalIgnoreCase));
 }
 
 @if (loginProvider != null)

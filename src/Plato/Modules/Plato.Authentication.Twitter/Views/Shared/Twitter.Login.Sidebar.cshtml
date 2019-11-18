@@ -1,7 +1,7 @@
-﻿@model GoogleLoginViewModel
+﻿@model TwitterLoginViewModel
 @inject SignInManager<User> _signInManager
 @{
-    var providerName = "Google";
+    var providerName = "Twitter";
     var loginProviders = (await _signInManager.GetExternalAuthenticationSchemesAsync()).ToList();
     var loginProvider = loginProviders?.First(p => p.Name.Equals(providerName, StringComparison.OrdinalIgnoreCase));
 }
@@ -11,8 +11,8 @@
     <form asp-area="Plato.Users" asp-controller="Account" asp-action="ExternalLogin" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal">
         <fieldset>
             <div class="form-group">
-                <button type="submit" class="btn btn-lg btn-secondary btn-block" name="provider" value="@loginProvider.Name" title="Log in using your @loginProvider.DisplayName account">
-                    <img aria-hidden="true" alt="@T["Google Icon"]" src="/plato.authentication.google/content/images/google-icon.png" class="img-24 d-inline-block" /> @T["Login with"] @loginProvider.DisplayName
+                <button type="submit" class="btn btn-lg btn-secondary btn-block" name="provider" value="@loginProvider.Name" title="Log in using your @loginProvider.DisplayName account">                    
+                    <img aria-hidden="true" alt="@T["Facebook Icon"]" src="/plato.authentication.twitter/content/images/twitter-icon.png" class="img-24 d-inline-block" /> @T["Login with"] @loginProvider.DisplayName
                 </button>
             </div>
         </fieldset>

@@ -7,7 +7,7 @@ using Plato.Twitter.Stores;
 
 namespace Plato.Twitter.Configuration
 {
-    public class TwitterOptionsConfiguration : IConfigureOptions<TwitterOptions>
+    public class TwitterOptionsConfiguration : IConfigureOptions<TwitterAuthenticationOptions>
     {
 
         private readonly ITwitterSettingsStore<TwitterSettings> _TwitterSettingsStore;
@@ -24,7 +24,7 @@ namespace Plato.Twitter.Configuration
             _logger = logger;
         }
 
-        public void Configure(TwitterOptions options)
+        public void Configure(TwitterAuthenticationOptions options)
         {
 
             var settings = _TwitterSettingsStore

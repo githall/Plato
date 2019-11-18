@@ -39,7 +39,7 @@ namespace Plato.Twitter
             services.AddScoped<INavigationProvider, AdminMenu>();
             
             // Configuration
-            services.AddTransient<IConfigureOptions<TwitterOptions>, TwitterOptionsConfiguration>();
+            services.AddTransient<IConfigureOptions<TwitterAuthenticationOptions>, TwitterOptionsConfiguration>();
 
             // Stores
             services.AddScoped<ITwitterSettingsStore<TwitterSettings>, TwitterSettingsStore>();
