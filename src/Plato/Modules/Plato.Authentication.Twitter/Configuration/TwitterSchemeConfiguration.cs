@@ -12,12 +12,12 @@ namespace Plato.Authentication.Twitter.Configuration
         IConfigureNamedOptions<TwitterOptions>
     {
 
-        private readonly TwitterAuthenticationOptions _twitterAuthenticationOptions;
+        private readonly PlatoTwitterOptions _platoTwitterOptions;
 
         public TwitterSchemeConfiguration(
-            IOptions<TwitterAuthenticationOptions> twitterAuthenticationOptions)
+            IOptions<PlatoTwitterOptions> platoTwitterOptions)
         {
-            _twitterAuthenticationOptions = twitterAuthenticationOptions.Value;
+            _platoTwitterOptions = platoTwitterOptions.Value;
         }
 
         public void Configure(AuthenticationOptions options)
@@ -52,12 +52,12 @@ namespace Plato.Authentication.Twitter.Configuration
                 return;
             }
 
-            options.ConsumerKey = _twitterAuthenticationOptions.ConsumerKey;
-            options.ConsumerSecret = _twitterAuthenticationOptions.ConsumerSecret;
+            options.ConsumerKey = _platoTwitterOptions.ConsumerKey;
+            options.ConsumerSecret = _platoTwitterOptions.ConsumerSecret;
 
-            if (_twitterAuthenticationOptions.CallbackPath.HasValue)
+            if (_platoTwitterOptions.CallbackPath.HasValue)
             {
-                options.CallbackPath = _twitterAuthenticationOptions.CallbackPath;
+                options.CallbackPath = _platoTwitterOptions.CallbackPath;
             }
 
         }
@@ -65,8 +65,8 @@ namespace Plato.Authentication.Twitter.Configuration
         bool ValidSettings()
         {
 
-            if (string.IsNullOrEmpty(_twitterAuthenticationOptions.ConsumerKey)
-                || string.IsNullOrEmpty(_twitterAuthenticationOptions.ConsumerSecret))
+            if (string.IsNullOrEmpty(_platoTwitterOptions.ConsumerKey)
+                || string.IsNullOrEmpty(_platoTwitterOptions.ConsumerSecret))
             {
                 return false;
             }

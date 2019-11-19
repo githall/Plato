@@ -21,7 +21,7 @@ namespace Plato.Google.Controllers
         
         private readonly IAuthorizationService _authorizationService;
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IViewProviderManager<GoogleSettings> _viewProvider;
+        private readonly IViewProviderManager<PlatoGoogleSettings> _viewProvider;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -31,7 +31,7 @@ namespace Plato.Google.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-            IViewProviderManager<GoogleSettings> viewProvider,
+            IViewProviderManager<PlatoGoogleSettings> viewProvider,
             IAuthorizationService authorizationService,
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
@@ -68,7 +68,7 @@ namespace Plato.Google.Controllers
             });
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new GoogleSettings(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new PlatoGoogleSettings(), this));
 
         }
 
@@ -83,7 +83,7 @@ namespace Plato.Google.Controllers
             }
 
             // Execute view providers ProvideUpdateAsync method
-            await _viewProvider.ProvideUpdateAsync(new GoogleSettings(), this);
+            await _viewProvider.ProvideUpdateAsync(new PlatoGoogleSettings(), this);
         
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);

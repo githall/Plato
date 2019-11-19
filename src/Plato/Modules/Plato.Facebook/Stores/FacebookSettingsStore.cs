@@ -7,7 +7,7 @@ using Plato.Internal.Stores.Abstract;
 namespace Plato.Facebook.Stores
 {
     
-    public class FacebookSettingsStore : IFacebookSettingsStore<FacebookSettings>
+    public class FacebookSettingsStore : IFacebookSettingsStore<PlatoFacebookSettings>
     {
 
         private const string SettingsKey = "FacebookSettings";
@@ -25,14 +25,14 @@ namespace Plato.Facebook.Stores
             _cacheManager = cacheManager;
             _logger = logger;
         }
-        public async Task<FacebookSettings> GetAsync()
+        public async Task<PlatoFacebookSettings> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType());
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _dictionaryStore.GetAsync<FacebookSettings>(SettingsKey));
+                async (cacheEntry) => await _dictionaryStore.GetAsync<PlatoFacebookSettings>(SettingsKey));
         }
 
-        public async Task<FacebookSettings> SaveAsync(FacebookSettings model)
+        public async Task<PlatoFacebookSettings> SaveAsync(PlatoFacebookSettings model)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -40,7 +40,7 @@ namespace Plato.Facebook.Stores
                 _logger.LogInformation("Facebook settings updating");
             }
 
-            var settings = await _dictionaryStore.UpdateAsync<FacebookSettings>(SettingsKey, model);
+            var settings = await _dictionaryStore.UpdateAsync<PlatoFacebookSettings>(SettingsKey, model);
             if (settings != null)
             {
                 _cacheManager.CancelTokens(this.GetType());

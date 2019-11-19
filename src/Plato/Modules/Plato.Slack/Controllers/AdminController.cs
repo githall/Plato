@@ -18,7 +18,7 @@ namespace Plato.Slack.Controllers
 
     public class AdminController : Controller, IUpdateModel
     {
-        private readonly IViewProviderManager<SlackSettings> _viewProvider;
+        private readonly IViewProviderManager<PlatoSlackSettings> _viewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IAlerter _alerter;
@@ -30,7 +30,7 @@ namespace Plato.Slack.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-            IViewProviderManager<SlackSettings> viewProvider,
+            IViewProviderManager<PlatoSlackSettings> viewProvider,
             IAuthorizationService authorizationService,
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
@@ -67,7 +67,7 @@ namespace Plato.Slack.Controllers
             });
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new SlackSettings(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new PlatoSlackSettings(), this));
             
         }
         
@@ -82,7 +82,7 @@ namespace Plato.Slack.Controllers
             }
 
             // Execute view providers ProvideUpdateAsync method
-            await _viewProvider.ProvideUpdateAsync(new SlackSettings(), this);
+            await _viewProvider.ProvideUpdateAsync(new PlatoSlackSettings(), this);
         
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);

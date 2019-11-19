@@ -35,14 +35,14 @@ namespace Plato.GitHub
             services.AddScoped<INavigationProvider, AdminMenu>();
             
             // Configuration
-            services.AddTransient<IConfigureOptions<GitHubAuthenticationOptions>, GitHubAuthenticationOptionsConfiguration>();
+            services.AddTransient<IConfigureOptions<PlatoGitHubOptions>, GitHubAuthenticationOptionsConfiguration>();
 
             // Stores
-            services.AddScoped<IGitHubSettingsStore<GitHubSettings>, GitHubSettingsStore>();
+            services.AddScoped<IGitHubSettingsStore<PlatoGitHubSettings>, GitHubSettingsStore>();
          
             // View providers
-            services.AddScoped<IViewProviderManager<GitHubSettings>, ViewProviderManager<GitHubSettings>>();
-            services.AddScoped<IViewProvider<GitHubSettings>, AdminViewProvider>();
+            services.AddScoped<IViewProviderManager<PlatoGitHubSettings>, ViewProviderManager<PlatoGitHubSettings>>();
+            services.AddScoped<IViewProvider<PlatoGitHubSettings>, AdminViewProvider>();
             
             // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();

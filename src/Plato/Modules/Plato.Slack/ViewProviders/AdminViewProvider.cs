@@ -12,17 +12,17 @@ using Plato.Slack.ViewModels;
 
 namespace Plato.Slack.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<SlackSettings>
+    public class AdminViewProvider : BaseViewProvider<PlatoSlackSettings>
     {
 
-        private readonly ISlackSettingsStore<SlackSettings> _TwitterSettingsStore;
+        private readonly ISlackSettingsStore<PlatoSlackSettings> _TwitterSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
         public AdminViewProvider(
-            ISlackSettingsStore<SlackSettings> TwitterSettingsStore,
+            ISlackSettingsStore<PlatoSlackSettings> TwitterSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
@@ -35,17 +35,17 @@ namespace Plato.Slack.ViewProviders
             _logger = logger;
         }
         
-        public override Task<IViewProviderResult> BuildIndexAsync(SlackSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(PlatoSlackSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
         
-        public override Task<IViewProviderResult> BuildDisplayAsync(SlackSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildDisplayAsync(PlatoSlackSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<IViewProviderResult> BuildEditAsync(SlackSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(PlatoSlackSettings settings, IViewProviderContext context)
         {
             var viewModel = await GetModel();
             return Views(
@@ -55,7 +55,7 @@ namespace Plato.Slack.ViewProviders
             );
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(SlackSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(PlatoSlackSettings settings, IViewProviderContext context)
         {
             
             var model = new SlackSettingsViewModel();
@@ -89,7 +89,7 @@ namespace Plato.Slack.ViewProviders
                 }
 
                 // Create the model
-                settings = new SlackSettings()
+                settings = new PlatoSlackSettings()
                 {
                     WebHookUrl = webHookUrl
                 };

@@ -14,10 +14,10 @@ using Plato.Internal.Abstractions.Settings;
 
 namespace Plato.Twitter.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<TwitterSettings>
+    public class AdminViewProvider : BaseViewProvider<PlatoTwitterSettings>
     {
 
-        private readonly ITwitterSettingsStore<TwitterSettings> _twitterSettingsStore;
+        private readonly ITwitterSettingsStore<PlatoTwitterSettings> _twitterSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
@@ -26,7 +26,7 @@ namespace Plato.Twitter.ViewProviders
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            ITwitterSettingsStore<TwitterSettings> twitterSettingsStore,
+            ITwitterSettingsStore<PlatoTwitterSettings> twitterSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
@@ -41,17 +41,17 @@ namespace Plato.Twitter.ViewProviders
             _logger = logger;
         }
 
-        public override Task<IViewProviderResult> BuildIndexAsync(TwitterSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(PlatoTwitterSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildDisplayAsync(TwitterSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildDisplayAsync(PlatoTwitterSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<IViewProviderResult> BuildEditAsync(TwitterSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(PlatoTwitterSettings settings, IViewProviderContext context)
         {
             var viewModel = await GetModel();
             return Views(
@@ -61,7 +61,7 @@ namespace Plato.Twitter.ViewProviders
             );
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(TwitterSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(PlatoTwitterSettings settings, IViewProviderContext context)
         {
 
             var model = new TwitterSettingsViewModel();
@@ -108,7 +108,7 @@ namespace Plato.Twitter.ViewProviders
                 }
 
                 // Create the model
-                settings = new TwitterSettings()
+                settings = new PlatoTwitterSettings()
                 {
                     ConsumerKey = model.ConsumerKey,
                     ConsumerSecret = consumerSecret,

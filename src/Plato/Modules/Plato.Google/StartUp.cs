@@ -35,14 +35,14 @@ namespace Plato.Google
             services.AddScoped<INavigationProvider, AdminMenu>();
             
             // Configuration
-            services.AddTransient<IConfigureOptions<GoogleAuthenticationOptions>, GoogleAuthenticationOptionsConfiguration>();
+            services.AddTransient<IConfigureOptions<PlatoGoogleOptions>, GoogleAuthenticationOptionsConfiguration>();
 
             // Stores
-            services.AddScoped<IGoogleSettingsStore<GoogleSettings>, GoogleSettingsStore>();
+            services.AddScoped<IGoogleSettingsStore<PlatoGoogleSettings>, GoogleSettingsStore>();
          
             // View providers
-            services.AddScoped<IViewProviderManager<GoogleSettings>, ViewProviderManager<GoogleSettings>>();
-            services.AddScoped<IViewProvider<GoogleSettings>, AdminViewProvider>();
+            services.AddScoped<IViewProviderManager<PlatoGoogleSettings>, ViewProviderManager<PlatoGoogleSettings>>();
+            services.AddScoped<IViewProvider<PlatoGoogleSettings>, AdminViewProvider>();
             
             // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();

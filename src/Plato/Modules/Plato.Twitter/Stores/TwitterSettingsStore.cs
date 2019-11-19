@@ -7,7 +7,7 @@ using Plato.Internal.Stores.Abstract;
 namespace Plato.Twitter.Stores
 {
     
-    public class TwitterSettingsStore : ITwitterSettingsStore<TwitterSettings>
+    public class TwitterSettingsStore : ITwitterSettingsStore<PlatoTwitterSettings>
     {
 
         private const string SettingsKey = "TwitterSettings";
@@ -25,14 +25,14 @@ namespace Plato.Twitter.Stores
             _cacheManager = cacheManager;
             _logger = logger;
         }
-        public async Task<TwitterSettings> GetAsync()
+        public async Task<PlatoTwitterSettings> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType());
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _dictionaryStore.GetAsync<TwitterSettings>(SettingsKey));
+                async (cacheEntry) => await _dictionaryStore.GetAsync<PlatoTwitterSettings>(SettingsKey));
         }
 
-        public async Task<TwitterSettings> SaveAsync(TwitterSettings model)
+        public async Task<PlatoTwitterSettings> SaveAsync(PlatoTwitterSettings model)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -40,7 +40,7 @@ namespace Plato.Twitter.Stores
                 _logger.LogInformation("Twitter settings updating");
             }
 
-            var settings = await _dictionaryStore.UpdateAsync<TwitterSettings>(SettingsKey, model);
+            var settings = await _dictionaryStore.UpdateAsync<PlatoTwitterSettings>(SettingsKey, model);
             if (settings != null)
             {
                 _cacheManager.CancelTokens(this.GetType());

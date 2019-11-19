@@ -14,10 +14,10 @@ using Plato.Internal.Abstractions.Settings;
 
 namespace Plato.Google.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<GoogleSettings>
+    public class AdminViewProvider : BaseViewProvider<PlatoGoogleSettings>
     {
 
-        private readonly IGoogleSettingsStore<GoogleSettings> _googleSettingsStore;
+        private readonly IGoogleSettingsStore<PlatoGoogleSettings> _googleSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
@@ -26,7 +26,7 @@ namespace Plato.Google.ViewProviders
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IGoogleSettingsStore<GoogleSettings> googleSettingsStore,
+            IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
@@ -41,17 +41,17 @@ namespace Plato.Google.ViewProviders
             _logger = logger;
         }
         
-        public override Task<IViewProviderResult> BuildIndexAsync(GoogleSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(PlatoGoogleSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
         
-        public override Task<IViewProviderResult> BuildDisplayAsync(GoogleSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildDisplayAsync(PlatoGoogleSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<IViewProviderResult> BuildEditAsync(GoogleSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(PlatoGoogleSettings settings, IViewProviderContext context)
         {
             var viewModel = await GetModel();
             return Views(
@@ -61,7 +61,7 @@ namespace Plato.Google.ViewProviders
             );
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(GoogleSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(PlatoGoogleSettings settings, IViewProviderContext context)
         {
 
             var model = new GoogleSettingsViewModel();
@@ -92,7 +92,7 @@ namespace Plato.Google.ViewProviders
                 }
 
                 // Create the model
-                settings = new GoogleSettings()
+                settings = new PlatoGoogleSettings()
                 {
                     ClientId = model.ClientId,
                     ClientSecret = secret,

@@ -7,7 +7,7 @@ using Plato.Internal.Stores.Abstract;
 namespace Plato.Google.Stores
 {
     
-    public class GoogleSettingsStore : IGoogleSettingsStore<GoogleSettings>
+    public class GoogleSettingsStore : IGoogleSettingsStore<PlatoGoogleSettings>
     {
 
         private const string SettingsKey = "GoogleSettings";
@@ -25,14 +25,14 @@ namespace Plato.Google.Stores
             _cacheManager = cacheManager;
             _logger = logger;
         }
-        public async Task<GoogleSettings> GetAsync()
+        public async Task<PlatoGoogleSettings> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType());
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _dictionaryStore.GetAsync<GoogleSettings>(SettingsKey));
+                async (cacheEntry) => await _dictionaryStore.GetAsync<PlatoGoogleSettings>(SettingsKey));
         }
 
-        public async Task<GoogleSettings> SaveAsync(GoogleSettings model)
+        public async Task<PlatoGoogleSettings> SaveAsync(PlatoGoogleSettings model)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -40,7 +40,7 @@ namespace Plato.Google.Stores
                 _logger.LogInformation("Google settings updating");
             }
 
-            var settings = await _dictionaryStore.UpdateAsync<GoogleSettings>(SettingsKey, model);
+            var settings = await _dictionaryStore.UpdateAsync<PlatoGoogleSettings>(SettingsKey, model);
             if (settings != null)
             {
                 _cacheManager.CancelTokens(this.GetType());

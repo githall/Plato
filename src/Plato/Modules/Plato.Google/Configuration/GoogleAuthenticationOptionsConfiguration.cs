@@ -7,15 +7,15 @@ using Plato.Google.Stores;
 
 namespace Plato.Google.Configuration
 {
-    public class GoogleAuthenticationOptionsConfiguration : IConfigureOptions<GoogleAuthenticationOptions>
+    public class GoogleAuthenticationOptionsConfiguration : IConfigureOptions<PlatoGoogleOptions>
     {
 
-        private readonly IGoogleSettingsStore<GoogleSettings> _googleSettingsStore;        
+        private readonly IGoogleSettingsStore<PlatoGoogleSettings> _googleSettingsStore;        
         private readonly ILogger<GoogleAuthenticationOptionsConfiguration> _logger;
         private readonly IDataProtectionProvider _dataProtectionProvider;
 
         public GoogleAuthenticationOptionsConfiguration(
-            IGoogleSettingsStore<GoogleSettings> googleSettingsStore,            
+            IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,            
             ILogger<GoogleAuthenticationOptionsConfiguration> logger,
             IDataProtectionProvider dataProtectionProvider)
         {
@@ -24,7 +24,7 @@ namespace Plato.Google.Configuration
             _logger = logger;
         }
 
-        public void Configure(GoogleAuthenticationOptions options)
+        public void Configure(PlatoGoogleOptions options)
         {
 
             var settings = _googleSettingsStore

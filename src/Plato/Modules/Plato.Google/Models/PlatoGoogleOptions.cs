@@ -1,9 +1,8 @@
 ﻿using Microsoft.AspNetCore.Http;
-using Plato.Internal.Abstractions;
 
-namespace Plato.GitHub.Models
+namespace Plato.Google.Models
 {
-    public class GitHubSettings : Serializable
+    public class PlatoGoogleOptions
     {
 
         public string ClientId { get; set; }

@@ -7,15 +7,15 @@ using Plato.Slack.Stores;
 
 namespace Plato.Slack.Configuration
 {
-    public class SlackOptionsConfiguration : IConfigureOptions<SlackOptions>
+    public class SlackOptionsConfiguration : IConfigureOptions<PlatoSlackOptions>
     {
 
-        private readonly ISlackSettingsStore<SlackSettings> _slackSettingsStore;
+        private readonly ISlackSettingsStore<PlatoSlackSettings> _slackSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<SlackOptionsConfiguration> _logger;
 
         public SlackOptionsConfiguration(
-            ISlackSettingsStore<SlackSettings> slackSettingsStore,
+            ISlackSettingsStore<PlatoSlackSettings> slackSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             ILogger<SlackOptionsConfiguration> logger)
         {
@@ -24,7 +24,7 @@ namespace Plato.Slack.Configuration
             _logger = logger;
         }
 
-        public void Configure(SlackOptions options)
+        public void Configure(PlatoSlackOptions options)
         {
 
             var settings = _slackSettingsStore

@@ -13,12 +13,12 @@ namespace Plato.Authentication.Google.Configuration
         IConfigureNamedOptions<GoogleOptions>
     {
 
-        private readonly GoogleAuthenticationOptions _googleAuthenticationOptions;
+        private readonly PlatoGoogleOptions _platoGoogleOptions;
 
         public GoogleSchemeConfiguration(
-            IOptions<GoogleAuthenticationOptions> googleOptions)
+            IOptions<PlatoGoogleOptions> platoGoogleOptions)
         {
-            _googleAuthenticationOptions = googleOptions.Value;
+            _platoGoogleOptions = platoGoogleOptions.Value;
         }
 
         public void Configure(AuthenticationOptions options)
@@ -53,12 +53,12 @@ namespace Plato.Authentication.Google.Configuration
                 return;
             }
 
-            options.ClientId = _googleAuthenticationOptions.ClientId;
-            options.ClientSecret = _googleAuthenticationOptions.ClientSecret;
+            options.ClientId = _platoGoogleOptions.ClientId;
+            options.ClientSecret = _platoGoogleOptions.ClientSecret;
 
-            if (_googleAuthenticationOptions.CallbackPath.HasValue)
+            if (_platoGoogleOptions.CallbackPath.HasValue)
             {
-                options.CallbackPath = _googleAuthenticationOptions.CallbackPath;
+                options.CallbackPath = _platoGoogleOptions.CallbackPath;
             }
 
             options.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
@@ -75,8 +75,8 @@ namespace Plato.Authentication.Google.Configuration
         bool ValidSettings()
         {
 
-            if (string.IsNullOrEmpty(_googleAuthenticationOptions.ClientId)
-                || string.IsNullOrEmpty(_googleAuthenticationOptions.ClientSecret))
+            if (string.IsNullOrEmpty(_platoGoogleOptions.ClientId)
+                || string.IsNullOrEmpty(_platoGoogleOptions.ClientSecret))
             {
                 return false;
             }

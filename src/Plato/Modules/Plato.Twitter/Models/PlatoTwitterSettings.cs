@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Plato.Internal.Abstractions;
 
 namespace Plato.Twitter.Models
 {
-    public class TwitterAuthenticationOptions
+    public class PlatoTwitterSettings : Serializable
     {
 
         public string ConsumerKey { get; set; }
@@ -14,7 +15,6 @@ namespace Plato.Twitter.Models
         public string AccessToken { get; set; }
 
         public string AccessTokenSecret { get; set; }
-        
-    }
 
+    }
 }

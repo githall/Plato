@@ -21,7 +21,7 @@ namespace Plato.Facebook.Controllers
         
         private readonly IAuthorizationService _authorizationService;
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IViewProviderManager<FacebookSettings> _viewProvider;
+        private readonly IViewProviderManager<PlatoFacebookSettings> _viewProvider;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -31,7 +31,7 @@ namespace Plato.Facebook.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-            IViewProviderManager<FacebookSettings> viewProvider,
+            IViewProviderManager<PlatoFacebookSettings> viewProvider,
             IAuthorizationService authorizationService,
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
@@ -68,7 +68,7 @@ namespace Plato.Facebook.Controllers
             });
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new FacebookSettings(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new PlatoFacebookSettings(), this));
             
         }
         
@@ -83,7 +83,7 @@ namespace Plato.Facebook.Controllers
             }
 
             // Execute view providers ProvideUpdateAsync method
-            await _viewProvider.ProvideUpdateAsync(new FacebookSettings(), this);
+            await _viewProvider.ProvideUpdateAsync(new PlatoFacebookSettings(), this);
         
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);

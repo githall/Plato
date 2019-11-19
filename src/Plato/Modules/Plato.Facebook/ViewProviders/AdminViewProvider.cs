@@ -14,10 +14,10 @@ using Microsoft.Extensions.Options;
 
 namespace Plato.Facebook.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<FacebookSettings>
+    public class AdminViewProvider : BaseViewProvider<PlatoFacebookSettings>
     {
 
-        private readonly IFacebookSettingsStore<FacebookSettings> _facebookSettingsStore;
+        private readonly IFacebookSettingsStore<PlatoFacebookSettings> _facebookSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
@@ -26,7 +26,7 @@ namespace Plato.Facebook.ViewProviders
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IFacebookSettingsStore<FacebookSettings> facebookSettingsStore,
+            IFacebookSettingsStore<PlatoFacebookSettings> facebookSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
@@ -41,17 +41,17 @@ namespace Plato.Facebook.ViewProviders
             _logger = logger;
         }
         
-        public override Task<IViewProviderResult> BuildIndexAsync(FacebookSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(PlatoFacebookSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
         
-        public override Task<IViewProviderResult> BuildDisplayAsync(FacebookSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildDisplayAsync(PlatoFacebookSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<IViewProviderResult> BuildEditAsync(FacebookSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(PlatoFacebookSettings settings, IViewProviderContext context)
         {
             var viewModel = await GetModel();
             return Views(
@@ -61,7 +61,7 @@ namespace Plato.Facebook.ViewProviders
             );
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(FacebookSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(PlatoFacebookSettings settings, IViewProviderContext context)
         {
             
             var model = new FacebookSettingsViewModel();
@@ -92,7 +92,7 @@ namespace Plato.Facebook.ViewProviders
                 }
 
                 // Create the model
-                settings = new FacebookSettings()
+                settings = new PlatoFacebookSettings()
                 {
                     AppId = model.AppId,
                     AppSecret = secret,

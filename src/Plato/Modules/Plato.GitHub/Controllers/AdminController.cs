@@ -21,7 +21,7 @@ namespace Plato.GitHub.Controllers
         
         private readonly IAuthorizationService _authorizationService;
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IViewProviderManager<GitHubSettings> _viewProvider;
+        private readonly IViewProviderManager<PlatoGitHubSettings> _viewProvider;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -31,7 +31,7 @@ namespace Plato.GitHub.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-            IViewProviderManager<GitHubSettings> viewProvider,
+            IViewProviderManager<PlatoGitHubSettings> viewProvider,
             IAuthorizationService authorizationService,
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
@@ -68,7 +68,7 @@ namespace Plato.GitHub.Controllers
             });
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new GitHubSettings(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new PlatoGitHubSettings(), this));
 
         }
 
@@ -83,7 +83,7 @@ namespace Plato.GitHub.Controllers
             }
 
             // Execute view providers ProvideUpdateAsync method
-            await _viewProvider.ProvideUpdateAsync(new GitHubSettings(), this);
+            await _viewProvider.ProvideUpdateAsync(new PlatoGitHubSettings(), this);
         
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);

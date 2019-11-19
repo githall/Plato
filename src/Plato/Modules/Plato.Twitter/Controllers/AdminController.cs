@@ -18,7 +18,7 @@ namespace Plato.Twitter.Controllers
 
     public class AdminController : Controller, IUpdateModel
     {
-        private readonly IViewProviderManager<TwitterSettings> _viewProvider;
+        private readonly IViewProviderManager<PlatoTwitterSettings> _viewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IAlerter _alerter;
@@ -30,7 +30,7 @@ namespace Plato.Twitter.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-            IViewProviderManager<TwitterSettings> viewProvider,
+            IViewProviderManager<PlatoTwitterSettings> viewProvider,
             IAuthorizationService authorizationService,
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
@@ -67,7 +67,7 @@ namespace Plato.Twitter.Controllers
             });
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new TwitterSettings(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new PlatoTwitterSettings(), this));
             
         }
         
@@ -82,7 +82,7 @@ namespace Plato.Twitter.Controllers
             }
 
             // Execute view providers ProvideUpdateAsync method
-            await _viewProvider.ProvideUpdateAsync(new TwitterSettings(), this);
+            await _viewProvider.ProvideUpdateAsync(new PlatoTwitterSettings(), this);
         
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);

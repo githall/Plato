@@ -35,11 +35,11 @@ namespace Plato.Facebook
             services.AddTransient<IConfigureOptions<FacebookAuthenticationOptions>, FacebookOptionsConfiguration>();
 
             // Stores
-            services.AddScoped<IFacebookSettingsStore<FacebookSettings>, FacebookSettingsStore>();
+            services.AddScoped<IFacebookSettingsStore<PlatoFacebookSettings>, FacebookSettingsStore>();
          
             // View providers
-            services.AddScoped<IViewProviderManager<FacebookSettings>, ViewProviderManager<FacebookSettings>>();
-            services.AddScoped<IViewProvider<FacebookSettings>, AdminViewProvider>();
+            services.AddScoped<IViewProviderManager<PlatoFacebookSettings>, ViewProviderManager<PlatoFacebookSettings>>();
+            services.AddScoped<IViewProvider<PlatoFacebookSettings>, AdminViewProvider>();
             
             // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();

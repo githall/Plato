@@ -11,13 +11,13 @@ namespace Plato.Slack.Services
     public class SlackService : ISlackService
     {
         
-        private readonly SlackOptions _slackOptions;
+        private readonly PlatoSlackOptions _slackOptions;
         private readonly IHttpClient _httpClient;
 
         private const string ByFormat = "json";
 
         public SlackService(IHttpClient httpClient,
-            IOptions<SlackOptions> slackOptions)
+            IOptions<PlatoSlackOptions> slackOptions)
         {
             _slackOptions = slackOptions.Value;
             _httpClient = httpClient;

@@ -1,8 +1,9 @@
 ﻿using Microsoft.AspNetCore.Http;
+using Plato.Internal.Abstractions;
 
 namespace Plato.Google.Models
 {
-    public class GoogleAuthenticationOptions
+    public class PlatoGoogleSettings : Serializable
     {
 
         public string ClientId { get; set; }

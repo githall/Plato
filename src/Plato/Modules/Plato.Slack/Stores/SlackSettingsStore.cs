@@ -7,7 +7,7 @@ using Plato.Slack.Models;
 namespace Plato.Slack.Stores
 {
     
-    public class SlackSettingsStore : ISlackSettingsStore<SlackSettings>
+    public class SlackSettingsStore : ISlackSettingsStore<PlatoSlackSettings>
     {
 
         private const string SettingsKey = "SlackSettings";
@@ -25,14 +25,14 @@ namespace Plato.Slack.Stores
             _cacheManager = cacheManager;
             _logger = logger;
         }
-        public async Task<SlackSettings> GetAsync()
+        public async Task<PlatoSlackSettings> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType());
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _dictionaryStore.GetAsync<SlackSettings>(SettingsKey));
+                async (cacheEntry) => await _dictionaryStore.GetAsync<PlatoSlackSettings>(SettingsKey));
         }
 
-        public async Task<SlackSettings> SaveAsync(SlackSettings model)
+        public async Task<PlatoSlackSettings> SaveAsync(PlatoSlackSettings model)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -40,7 +40,7 @@ namespace Plato.Slack.Stores
                 _logger.LogInformation("Slack settings updating");
             }
 
-            var settings = await _dictionaryStore.UpdateAsync<SlackSettings>(SettingsKey, model);
+            var settings = await _dictionaryStore.UpdateAsync<PlatoSlackSettings>(SettingsKey, model);
             if (settings != null)
             {
                 _cacheManager.CancelTokens(this.GetType());

@@ -14,10 +14,10 @@ using Plato.Internal.Abstractions.Settings;
 
 namespace Plato.GitHub.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<GitHubSettings>
+    public class AdminViewProvider : BaseViewProvider<PlatoGitHubSettings>
     {
 
-        private readonly IGitHubSettingsStore<GitHubSettings> _googleSettingsStore;
+        private readonly IGitHubSettingsStore<PlatoGitHubSettings> _googleSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
@@ -26,7 +26,7 @@ namespace Plato.GitHub.ViewProviders
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IGitHubSettingsStore<GitHubSettings> googleSettingsStore,
+            IGitHubSettingsStore<PlatoGitHubSettings> googleSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
@@ -41,17 +41,17 @@ namespace Plato.GitHub.ViewProviders
             _logger = logger;
         }
         
-        public override Task<IViewProviderResult> BuildIndexAsync(GitHubSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(PlatoGitHubSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
         
-        public override Task<IViewProviderResult> BuildDisplayAsync(GitHubSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildDisplayAsync(PlatoGitHubSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<IViewProviderResult> BuildEditAsync(GitHubSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(PlatoGitHubSettings settings, IViewProviderContext context)
         {
             var viewModel = await GetModel();
             return Views(
@@ -61,7 +61,7 @@ namespace Plato.GitHub.ViewProviders
             );
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(GitHubSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(PlatoGitHubSettings settings, IViewProviderContext context)
         {
 
             var model = new GoogleSettingsViewModel();
@@ -92,7 +92,7 @@ namespace Plato.GitHub.ViewProviders
                 }
 
                 // Create the model
-                settings = new GitHubSettings()
+                settings = new PlatoGitHubSettings()
                 {
                     ClientId = model.ClientId,
                     ClientSecret = secret,

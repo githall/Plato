@@ -7,7 +7,7 @@ using Plato.Internal.Stores.Abstract;
 namespace Plato.GitHub.Stores
 {
     
-    public class GitHubSettingsStore : IGitHubSettingsStore<GitHubSettings>
+    public class GitHubSettingsStore : IGitHubSettingsStore<PlatoGitHubSettings>
     {
 
         private const string SettingsKey = "GitHubSettings";
@@ -25,14 +25,14 @@ namespace Plato.GitHub.Stores
             _cacheManager = cacheManager;
             _logger = logger;
         }
-        public async Task<GitHubSettings> GetAsync()
+        public async Task<PlatoGitHubSettings> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType());
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _dictionaryStore.GetAsync<GitHubSettings>(SettingsKey));
+                async (cacheEntry) => await _dictionaryStore.GetAsync<PlatoGitHubSettings>(SettingsKey));
         }
 
-        public async Task<GitHubSettings> SaveAsync(GitHubSettings model)
+        public async Task<PlatoGitHubSettings> SaveAsync(PlatoGitHubSettings model)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -40,7 +40,7 @@ namespace Plato.GitHub.Stores
                 _logger.LogInformation("Google settings updating");
             }
 
-            var settings = await _dictionaryStore.UpdateAsync<GitHubSettings>(SettingsKey, model);
+            var settings = await _dictionaryStore.UpdateAsync<PlatoGitHubSettings>(SettingsKey, model);
             if (settings != null)
             {
                 _cacheManager.CancelTokens(this.GetType());

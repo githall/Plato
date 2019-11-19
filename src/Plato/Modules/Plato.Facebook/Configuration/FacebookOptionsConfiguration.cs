@@ -10,12 +10,12 @@ namespace Plato.Facebook.Configuration
     public class FacebookOptionsConfiguration : IConfigureOptions<FacebookAuthenticationOptions>
     {
 
-        private readonly IFacebookSettingsStore<FacebookSettings> _facebookSettingsStore;
+        private readonly IFacebookSettingsStore<PlatoFacebookSettings> _facebookSettingsStore;
         private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<FacebookOptionsConfiguration> _logger;
 
         public FacebookOptionsConfiguration(
-            IFacebookSettingsStore<FacebookSettings> facebookSettingsStore,
+            IFacebookSettingsStore<PlatoFacebookSettings> facebookSettingsStore,
             IDataProtectionProvider dataProtectionProvider,
             ILogger<FacebookOptionsConfiguration> logger)
         {

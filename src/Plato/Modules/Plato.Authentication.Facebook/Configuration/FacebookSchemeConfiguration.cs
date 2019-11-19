@@ -12,12 +12,12 @@ namespace Plato.Authentication.Facebook.Configuration
         IConfigureNamedOptions<FacebookOptions>
     {
 
-        private readonly FacebookAuthenticationOptions _facebookAuthenticationOptions;
+        private readonly FacebookAuthenticationOptions _platoFacebookOptions;
 
         public FacebookSchemeConfiguration(
-            IOptions<FacebookAuthenticationOptions> facebookAuthenticationOptions)
+            IOptions<FacebookAuthenticationOptions> platoFacebookOptions)
         {
-            _facebookAuthenticationOptions = facebookAuthenticationOptions.Value;
+            _platoFacebookOptions = platoFacebookOptions.Value;
         }
 
         public void Configure(AuthenticationOptions options)
@@ -52,12 +52,12 @@ namespace Plato.Authentication.Facebook.Configuration
                 return;
             }
 
-            options.AppId = _facebookAuthenticationOptions.AppId;
-            options.AppSecret = _facebookAuthenticationOptions.AppSecret;
+            options.AppId = _platoFacebookOptions.AppId;
+            options.AppSecret = _platoFacebookOptions.AppSecret;
 
-            if (_facebookAuthenticationOptions.CallbackPath.HasValue)
+            if (_platoFacebookOptions.CallbackPath.HasValue)
             {
-                options.CallbackPath = _facebookAuthenticationOptions.CallbackPath;
+                options.CallbackPath = _platoFacebookOptions.CallbackPath;
             }
 
         }
@@ -65,8 +65,8 @@ namespace Plato.Authentication.Facebook.Configuration
         bool ValidSettings()
         {
 
-            if (string.IsNullOrEmpty(_facebookAuthenticationOptions.AppId)
-                || string.IsNullOrEmpty(_facebookAuthenticationOptions.AppSecret))
+            if (string.IsNullOrEmpty(_platoFacebookOptions.AppId)
+                || string.IsNullOrEmpty(_platoFacebookOptions.AppSecret))
             {
                 return false;
             }

@@ -7,15 +7,15 @@ using Plato.GitHub.Stores;
 
 namespace Plato.GitHub.Configuration
 {
-    public class GitHubAuthenticationOptionsConfiguration : IConfigureOptions<GitHubAuthenticationOptions>
+    public class GitHubAuthenticationOptionsConfiguration : IConfigureOptions<PlatoGitHubOptions>
     {
 
-        private readonly IGitHubSettingsStore<GitHubSettings> _googleSettingsStore;        
+        private readonly IGitHubSettingsStore<PlatoGitHubSettings> _googleSettingsStore;        
         private readonly ILogger<GitHubAuthenticationOptionsConfiguration> _logger;
         private readonly IDataProtectionProvider _dataProtectionProvider;
 
         public GitHubAuthenticationOptionsConfiguration(
-            IGitHubSettingsStore<GitHubSettings> googleSettingsStore,            
+            IGitHubSettingsStore<PlatoGitHubSettings> googleSettingsStore,            
             ILogger<GitHubAuthenticationOptionsConfiguration> logger,
             IDataProtectionProvider dataProtectionProvider)
         {
@@ -24,7 +24,7 @@ namespace Plato.GitHub.Configuration
             _logger = logger;
         }
 
-        public void Configure(GitHubAuthenticationOptions options)
+        public void Configure(PlatoGitHubOptions options)
         {
 
             var settings = _googleSettingsStore

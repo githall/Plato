@@ -39,14 +39,14 @@ namespace Plato.Slack
             services.AddScoped<INavigationProvider, AdminMenu>();
 
             // Configuration
-            services.AddTransient<IConfigureOptions<SlackOptions>, SlackOptionsConfiguration>();
+            services.AddTransient<IConfigureOptions<PlatoSlackOptions>, SlackOptionsConfiguration>();
 
             // Stores
-            services.AddScoped<ISlackSettingsStore<SlackSettings>, SlackSettingsStore>();
+            services.AddScoped<ISlackSettingsStore<PlatoSlackSettings>, SlackSettingsStore>();
 
             // View providers
-            services.AddScoped<IViewProviderManager<SlackSettings>, ViewProviderManager<SlackSettings>>();
-            services.AddScoped<IViewProvider<SlackSettings>, AdminViewProvider>();
+            services.AddScoped<IViewProviderManager<PlatoSlackSettings>, ViewProviderManager<PlatoSlackSettings>>();
+            services.AddScoped<IViewProvider<PlatoSlackSettings>, AdminViewProvider>();
 
             // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
