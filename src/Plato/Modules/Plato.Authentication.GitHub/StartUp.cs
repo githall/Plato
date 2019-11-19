@@ -1,16 +1,16 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Plato.Authentication.Twitter.Handlers;
+using Plato.Authentication.GitHub.Handlers;
 using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
-using Plato.Authentication.Twitter.Configuration;
+using Plato.Authentication.GitHub.Configuration;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Users;
-using Plato.Authentication.Twitter.ViewProviders;
-using Microsoft.AspNetCore.Authentication.Twitter;
+using Plato.Authentication.GitHub.ViewProviders;
+using AspNet.Security.OAuth.GitHub;
 
-namespace Plato.Authentication.Twitter
+namespace Plato.Authentication.GitHub
 {
     public class Startup : StartupBase
     {
@@ -22,11 +22,11 @@ namespace Plato.Authentication.Twitter
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // Configuration
-            services.AddTransient<IConfigureOptions<AuthenticationOptions>, TwitterSchemeConfiguration>();
-            services.AddTransient<IConfigureOptions<TwitterOptions>, TwitterSchemeConfiguration>();
+            services.AddTransient<IConfigureOptions<AuthenticationOptions>, GitHubSchemeConfiguration>();
+            services.AddTransient<IConfigureOptions<GitHubAuthenticationOptions>, GitHubSchemeConfiguration>();
 
             // Built-in initializers:
-            services.AddTransient<IPostConfigureOptions<TwitterOptions>, TwitterPostConfigureOptions>();
+            services.AddTransient<IPostConfigureOptions<GitHubAuthenticationOptions>, OAuthPostConfigureOptions<GitHubAuthenticationOptions, GitHubAuthenticationHandler>>();
 
             // Login view provider
             services.AddScoped<IViewProviderManager<LoginPage>, ViewProviderManager<LoginPage>>();

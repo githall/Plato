@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Authentication.Facebook.Handlers;
 using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
@@ -17,6 +14,9 @@ namespace Plato.Authentication.Facebook
 {
     public class Startup : StartupBase
     {
+
+        // Uses the great AspNet.Security.OAuth.Providers project @
+        // https://github.com/aspnet-contrib/AspNet.Security.OAuth.Providers
 
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -35,13 +35,6 @@ namespace Plato.Authentication.Facebook
             services.AddScoped<IViewProviderManager<LoginPage>, ViewProviderManager<LoginPage>>();
             services.AddScoped<IViewProvider<LoginPage>, LoginViewProvider>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

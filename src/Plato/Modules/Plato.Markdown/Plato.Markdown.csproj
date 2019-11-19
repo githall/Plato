@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <Reference Include="Markdig">
-      <HintPath>lib\Markdig.dll</HintPath>
+      <HintPath>lib\2.2.0\Markdig.dll</HintPath>
     </Reference>
   </ItemGroup>
 

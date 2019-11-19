@@ -1,0 +1,15 @@
+Name: Plato Authentication GitHub
+Description: Adds the ability for users to login via GitHub.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Authentication
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.authentication.github/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.GitHub",
+		Version: "1.0.0"
+	}
+]

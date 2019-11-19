@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Authentication.Google.Handlers;
 using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
@@ -35,13 +32,6 @@ namespace Plato.Authentication.Google
             services.AddScoped<IViewProviderManager<LoginPage>, ViewProviderManager<LoginPage>>();
             services.AddScoped<IViewProvider<LoginPage>, LoginViewProvider>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }
