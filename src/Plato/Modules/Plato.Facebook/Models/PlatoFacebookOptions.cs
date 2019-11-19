@@ -3,7 +3,7 @@
 namespace Plato.Facebook.Models
 {
 
-    public class FacebookAuthenticationOptions
+    public class PlatoFacebookOptions
     {
 
         public string AppId { get; set; }

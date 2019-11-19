@@ -2,21 +2,21 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Plato.GitHub.Models;
-using Plato.GitHub.Stores;
+using Plato.Google.Models;
+using Plato.Google.Stores;
 
-namespace Plato.GitHub.Configuration
+namespace Plato.Google.Configuration
 {
-    public class GitHubAuthenticationOptionsConfiguration : IConfigureOptions<PlatoGitHubOptions>
+    public class PlatoGoogleOptionsConfiguration : IConfigureOptions<PlatoGoogleOptions>
     {
 
-        private readonly IGitHubSettingsStore<PlatoGitHubSettings> _googleSettingsStore;        
-        private readonly ILogger<GitHubAuthenticationOptionsConfiguration> _logger;
+        private readonly IGoogleSettingsStore<PlatoGoogleSettings> _googleSettingsStore;        
+        private readonly ILogger<PlatoGoogleOptionsConfiguration> _logger;
         private readonly IDataProtectionProvider _dataProtectionProvider;
 
-        public GitHubAuthenticationOptionsConfiguration(
-            IGitHubSettingsStore<PlatoGitHubSettings> googleSettingsStore,            
-            ILogger<GitHubAuthenticationOptionsConfiguration> logger,
+        public PlatoGoogleOptionsConfiguration(
+            IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,            
+            ILogger<PlatoGoogleOptionsConfiguration> logger,
             IDataProtectionProvider dataProtectionProvider)
         {
             _dataProtectionProvider = dataProtectionProvider; 
@@ -24,7 +24,7 @@ namespace Plato.GitHub.Configuration
             _logger = logger;
         }
 
-        public void Configure(PlatoGitHubOptions options)
+        public void Configure(PlatoGoogleOptions options)
         {
 
             var settings = _googleSettingsStore
@@ -34,6 +34,9 @@ namespace Plato.GitHub.Configuration
 
             if (settings != null)
             {
+
+                // Authentication
+
                 options.ClientId = settings.ClientId;
 
                 // Decrypt the secret
@@ -41,7 +44,7 @@ namespace Plato.GitHub.Configuration
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GitHubAuthenticationOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGoogleOptionsConfiguration));
                         options.ClientSecret = protector.Unprotect(settings.ClientSecret);
                     }
                     catch
@@ -54,6 +57,10 @@ namespace Plato.GitHub.Configuration
                 {
                     options.CallbackPath = settings.CallbackPath;
                 }
+
+                // Analytics
+
+                options.TrackingId = settings.TrackingId;
 
             }
 

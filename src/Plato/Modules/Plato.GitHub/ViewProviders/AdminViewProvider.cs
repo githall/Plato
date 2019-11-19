@@ -82,7 +82,7 @@ namespace Plato.GitHub.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GitHubAuthenticationOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGitHubOptionsConfiguration));
                         secret = protector.Protect(model.ClientSecret);
                     }
                     catch (Exception e)
@@ -126,7 +126,7 @@ namespace Plato.GitHub.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GitHubAuthenticationOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGitHubOptionsConfiguration));
                         secret = protector.Unprotect(settings.ClientSecret);
                     }
                     catch (Exception e)

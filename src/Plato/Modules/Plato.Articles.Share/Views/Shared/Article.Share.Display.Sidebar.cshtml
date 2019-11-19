@@ -3,7 +3,7 @@
 @using Plato.Facebook.Models
 @model ShareViewModel
 @{
-    var facebookOptions = GetOptions<FacebookAuthenticationOptions>();
+    var facebookOptions = GetOptions<PlatoFacebookOptions>();
     RouteValueDictionary dialogRouteValues = null;
     var entity = Context.Items[typeof(Article)] as Article;
     if (entity != null)

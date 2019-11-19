@@ -33,9 +33,9 @@ namespace Plato.GitHub
 
             // Navigation provider
             services.AddScoped<INavigationProvider, AdminMenu>();
-            
+
             // Configuration
-            services.AddTransient<IConfigureOptions<PlatoGitHubOptions>, GitHubAuthenticationOptionsConfiguration>();
+            services.AddTransient<IConfigureOptions<PlatoGitHubOptions>, PlatoGitHubOptionsConfiguration>();
 
             // Stores
             services.AddScoped<IGitHubSettingsStore<PlatoGitHubSettings>, GitHubSettingsStore>();

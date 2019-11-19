@@ -10,7 +10,6 @@ using Plato.Facebook.Navigation;
 using Plato.Facebook.Stores;
 using Plato.Facebook.ViewProviders;
 using Plato.Internal.Features.Abstractions;
-using Plato.Internal.Models.Shell;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Navigation.Abstractions;
@@ -32,15 +31,15 @@ namespace Plato.Facebook
             services.AddScoped<INavigationProvider, AdminMenu>();
 
             // Configuration
-            services.AddTransient<IConfigureOptions<FacebookAuthenticationOptions>, FacebookOptionsConfiguration>();
+            services.AddTransient<IConfigureOptions<PlatoFacebookOptions>, PlatoFacebookOptionsConfiguration>();
 
             // Stores
             services.AddScoped<IFacebookSettingsStore<PlatoFacebookSettings>, FacebookSettingsStore>();
-         
+
             // View providers
             services.AddScoped<IViewProviderManager<PlatoFacebookSettings>, ViewProviderManager<PlatoFacebookSettings>>();
             services.AddScoped<IViewProvider<PlatoFacebookSettings>, AdminViewProvider>();
-            
+
             // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 

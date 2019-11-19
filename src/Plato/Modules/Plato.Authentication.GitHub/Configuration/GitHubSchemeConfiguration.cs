@@ -61,15 +61,6 @@ namespace Plato.Authentication.GitHub.Configuration
                 options.CallbackPath = _platoGitHubOptions.CallbackPath;
             }
 
-            options.UserInformationEndpoint = "https://www.googleapis.com/oauth2/v2/userinfo";
-            options.ClaimActions.Clear();
-            options.ClaimActions.MapJsonKey(ClaimTypes.NameIdentifier, "id");
-            options.ClaimActions.MapJsonKey(ClaimTypes.Name, "name");
-            options.ClaimActions.MapJsonKey(ClaimTypes.GivenName, "given_name");
-            options.ClaimActions.MapJsonKey(ClaimTypes.Surname, "family_name");
-            options.ClaimActions.MapJsonKey("urn:google:profile", "link");
-            options.ClaimActions.MapJsonKey(ClaimTypes.Email, "email");
-
         }
 
         bool ValidSettings()

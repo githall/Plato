@@ -84,7 +84,7 @@ namespace Plato.Twitter.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(TwitterOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
                         consumerSecret = protector.Protect(model.ConsumerSecret);
                
                     }
@@ -98,7 +98,7 @@ namespace Plato.Twitter.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(TwitterOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
                         accessTokenSecret = protector.Protect(model.AccessTokenSecret);
                     }
                     catch (Exception e)
@@ -146,7 +146,7 @@ namespace Plato.Twitter.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(TwitterOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
                         consumerSecret = protector.Unprotect(settings.ConsumerSecret);
                     }
                     catch (Exception e)
@@ -159,7 +159,7 @@ namespace Plato.Twitter.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(TwitterOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
                         accessTokenSecret = protector.Unprotect(settings.AccessTokenSecret);
                     }
                     catch (Exception e)

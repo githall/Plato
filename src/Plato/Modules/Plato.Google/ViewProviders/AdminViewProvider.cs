@@ -82,7 +82,7 @@ namespace Plato.Google.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleAuthenticationOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGoogleOptionsConfiguration));
                         secret = protector.Protect(model.ClientSecret);
                     }
                     catch (Exception e)
@@ -96,7 +96,8 @@ namespace Plato.Google.ViewProviders
                 {
                     ClientId = model.ClientId,
                     ClientSecret = secret,
-                    CallbackPath = model.CallbackPath
+                    CallbackPath = model.CallbackPath,
+                    TrackingId = model.TrackingId
                 };
 
                 // Persist the settings
@@ -126,7 +127,7 @@ namespace Plato.Google.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleAuthenticationOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGoogleOptionsConfiguration));
                         secret = protector.Unprotect(settings.ClientSecret);
                     }
                     catch (Exception e)
@@ -139,7 +140,8 @@ namespace Plato.Google.ViewProviders
                 {
                     ClientId = _platoOptions.DemoMode ? "123456789" : settings.ClientId,
                     ClientSecret = _platoOptions.DemoMode ? "xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx-xxxx" : secret,
-                    CallbackPath = _platoOptions.DemoMode ? string.Empty : settings.CallbackPath.ToString()
+                    CallbackPath = _platoOptions.DemoMode ? string.Empty : settings.CallbackPath.ToString(),
+                    TrackingId = _platoOptions.DemoMode ? "UA-123456789-0" : settings.TrackingId
                 };
 
             }
@@ -148,7 +150,9 @@ namespace Plato.Google.ViewProviders
             return new GoogleSettingsViewModel()
             {
                 ClientId = string.Empty,
-                ClientSecret = string.Empty
+                ClientSecret = string.Empty,
+                CallbackPath = string.Empty,
+                TrackingId  = string.Empty
             };
 
         }

@@ -12,10 +12,10 @@ namespace Plato.Authentication.Facebook.Configuration
         IConfigureNamedOptions<FacebookOptions>
     {
 
-        private readonly FacebookAuthenticationOptions _platoFacebookOptions;
+        private readonly PlatoFacebookOptions _platoFacebookOptions;
 
         public FacebookSchemeConfiguration(
-            IOptions<FacebookAuthenticationOptions> platoFacebookOptions)
+            IOptions<PlatoFacebookOptions> platoFacebookOptions)
         {
             _platoFacebookOptions = platoFacebookOptions.Value;
         }

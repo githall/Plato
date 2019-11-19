@@ -2,32 +2,32 @@
 using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Plato.Google.Models;
-using Plato.Google.Stores;
+using Plato.GitHub.Models;
+using Plato.GitHub.Stores;
 
-namespace Plato.Google.Configuration
+namespace Plato.GitHub.Configuration
 {
-    public class GoogleAuthenticationOptionsConfiguration : IConfigureOptions<PlatoGoogleOptions>
+    public class PlatoGitHubOptionsConfiguration : IConfigureOptions<PlatoGitHubOptions>
     {
 
-        private readonly IGoogleSettingsStore<PlatoGoogleSettings> _googleSettingsStore;        
-        private readonly ILogger<GoogleAuthenticationOptionsConfiguration> _logger;
+        private readonly IGitHubSettingsStore<PlatoGitHubSettings> _githubSettingsStore;        
+        private readonly ILogger<PlatoGitHubOptionsConfiguration> _logger;
         private readonly IDataProtectionProvider _dataProtectionProvider;
 
-        public GoogleAuthenticationOptionsConfiguration(
-            IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,            
-            ILogger<GoogleAuthenticationOptionsConfiguration> logger,
+        public PlatoGitHubOptionsConfiguration(
+            IGitHubSettingsStore<PlatoGitHubSettings> githubSettingsStore,            
+            ILogger<PlatoGitHubOptionsConfiguration> logger,
             IDataProtectionProvider dataProtectionProvider)
         {
-            _dataProtectionProvider = dataProtectionProvider; 
-            _googleSettingsStore = googleSettingsStore;            
+            _dataProtectionProvider = dataProtectionProvider;
+            _githubSettingsStore = githubSettingsStore;            
             _logger = logger;
         }
 
-        public void Configure(PlatoGoogleOptions options)
+        public void Configure(PlatoGitHubOptions options)
         {
 
-            var settings = _googleSettingsStore
+            var settings = _githubSettingsStore
                 .GetAsync()
                 .GetAwaiter()
                 .GetResult();
@@ -41,7 +41,7 @@ namespace Plato.Google.Configuration
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(GoogleAuthenticationOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGitHubOptionsConfiguration));
                         options.ClientSecret = protector.Unprotect(settings.ClientSecret);
                     }
                     catch

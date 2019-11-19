@@ -82,7 +82,7 @@ namespace Plato.Facebook.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(FacebookOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoFacebookOptionsConfiguration));
                         secret = protector.Protect(model.AppSecret);
                     }
                     catch (Exception e)
@@ -126,7 +126,7 @@ namespace Plato.Facebook.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(FacebookOptionsConfiguration));
+                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoFacebookOptionsConfiguration));
                         secret = protector.Unprotect(settings.AppSecret);
                     }
                     catch (Exception e)
