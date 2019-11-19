@@ -5,7 +5,7 @@ namespace Plato.Internal.Assets.Abstractions
     public class DefaultAssets
     {
 
-        public static IEnumerable<AssetEnvironment> GetDefaultResources()
+        public static IEnumerable<AssetEnvironment> GetDefaultAssets()
         {
 
             return new List<AssetEnvironment>

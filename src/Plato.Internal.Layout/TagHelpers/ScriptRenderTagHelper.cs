@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using Plato.Internal.Scripting.Abstractions;
+using Microsoft.AspNetCore.Html;
 
 namespace Plato.Internal.Layout.TagHelpers
 {
@@ -80,19 +81,34 @@ namespace Plato.Internal.Layout.TagHelpers
 
             foreach (var block in blocks)
             {
-                var tagBuilder = new TagBuilder(ScriptTag)
+
+                if (block.DisableScriptTag)
                 {
-                    TagRenderMode = TagRenderMode.Normal
-                };
+                    var builder = new HtmlContentBuilder();
+                    builder
+                        .AppendHtml(System.Environment.NewLine)
+                        .AppendHtml(block.Content);
+                    builder.WriteTo(textWriter, NullHtmlEncoder.Default);
+                    await textWriter.WriteLineAsync();
+                }
+                else
+                {
 
-                tagBuilder.InnerHtml
-                    .AppendHtml(System.Environment.NewLine)
-                    .AppendHtml(block.Content)
-                    .AppendHtml(System.Environment.NewLine);
+                    var tagBuilder = new TagBuilder(ScriptTag)
+                    {
+                        TagRenderMode = TagRenderMode.Normal
+                    };
 
-                tagBuilder.MergeAttributes(block.Attributes, replaceExisting: true);
-                tagBuilder.WriteTo(textWriter, NullHtmlEncoder.Default);
-                await textWriter.WriteLineAsync();
+                    tagBuilder.InnerHtml
+                        .AppendHtml(System.Environment.NewLine)
+                        .AppendHtml(block.Content);
+
+                    tagBuilder.MergeAttributes(block.Attributes, replaceExisting: true);
+                    tagBuilder.WriteTo(textWriter, NullHtmlEncoder.Default);
+                    await textWriter.WriteLineAsync();
+
+                }
+
             }
 
         }
@@ -116,8 +132,7 @@ namespace Plato.Internal.Layout.TagHelpers
             {
                 tagBuilder.InnerHtml
                     .AppendHtml(System.Environment.NewLine)
-                    .AppendHtml(block.Content)
-                    .AppendHtml(System.Environment.NewLine);
+                    .AppendHtml(block.Content);                    
                 tagBuilder.MergeAttributes(block.Attributes, replaceExisting: true);
             }
 

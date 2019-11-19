@@ -38,7 +38,7 @@ namespace Plato.WebApi.Middleware
             await _next.Invoke(context);
 
         }
-        
+
         async Task<ScriptBlock> BuildScriptBlock(HttpContext context)
         {
 
@@ -52,15 +52,15 @@ namespace Plato.WebApi.Middleware
 
             // Register client options for $.Plato.Http by extending $.Plato.defaults
             // i.e. $.extend($.Plato.defaults, newOptions);
-            var script = "$(function (win) { $.extend(win.$.Plato.defaults, { url: '{url}', apiKey: '{apiKey}', csrfCookieName: '{csrfCookieName}' }); } (window));";
+            var script = "      $(function (win) { $.extend(win.$.Plato.defaults, { url: '{url}', apiKey: '{apiKey}', csrfCookieName: '{csrfCookieName}' }); } (window));";
             script = script.Replace("{url}", settings.Url);
             script = script.Replace("{apiKey}", settings.ApiKey);
             script = script.Replace("{csrfCookieName}", PlatoAntiForgeryOptions.AjaxCsrfTokenCookieName);
 
-            return new ScriptBlock(script, int.MinValue);
+            return new ScriptBlock(script);
 
         }
-        
+
     }
 
 }

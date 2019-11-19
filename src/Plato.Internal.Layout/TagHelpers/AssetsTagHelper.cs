@@ -108,7 +108,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
         #region "Private Methods"
         
-        // Get all resources matching environment and section
+        // Get all assets matching environment and section
         IList<Asset> GetAssets()
         {
 
@@ -117,13 +117,11 @@ namespace Plato.Internal.Layout.TagHelpers
 
             // Filter by environment
             var matchingEnvironment = environments
-                .FirstOrDefault(g => g.TargetEnvironment == TargetEnvironment.All ||
-                    g.TargetEnvironment == GetDeploymentMode());
+                .FirstOrDefault(g => g.TargetEnvironment == GetDeploymentMode());
 
             // Filter by section
             var assets = matchingEnvironment?
-                .Resources
-                .Where(r => r.Section == Section);
+                .Assets.Where(r => r.Section == Section);
 
             // Filter by layout consttaints
             assets = FilterLayoutContraints(assets);
@@ -332,40 +330,37 @@ namespace Plato.Internal.Layout.TagHelpers
         IEnumerable<AssetEnvironment> GetMergedEnvironments()
         {
 
-            // Get provided resources
+            // Get provided assets
             var provided = _assetManager.GetAssets();
             var providedEnvironments = provided.ToList();
 
-            // Get default resources
-            var defaults = DefaultAssets.GetDefaultResources();
+            // Get default assets
+            var defaults = DefaultAssets.GetDefaultAssets();
             var defaultEnvironments = defaults.ToList();
 
-            // Merge provided resources into default groups
+            // Merge provided assets into default assets
             var output = defaultEnvironments.ToDictionary(p => p.TargetEnvironment);
             foreach (var defaultEnvironment in defaultEnvironments)
             {
 
-                // Get provided resources matching our current environment
-                var matchingEnvironments = providedEnvironments
-                    .Where(g => g.TargetEnvironment == defaultEnvironment.TargetEnvironment)
-                    .ToList();
-
                 // Iterate through each matching provided environment adding
-                // resources from that environment into our default environments
-                foreach (var group in matchingEnvironments)
+                // assets from that environment into our default environments
+                foreach (var environment in providedEnvironments
+                        .Where(g => g.TargetEnvironment == defaultEnvironment.TargetEnvironment || g.TargetEnvironment == TargetEnvironment.All)
+                        .ToList())
                 {
-                    foreach (var resource in group.Resources)
+                    foreach (var asset in environment.Assets)
                     {
-                        output[defaultEnvironment.TargetEnvironment].Resources.Add(resource);
+                        output[defaultEnvironment.TargetEnvironment].Assets.Add(asset);
                     }
                 }
-                
+
             }
 
             return output.Values.ToList();
 
         }
-        
+
         TargetEnvironment GetDeploymentMode()
         {
             if (_hostingEnvironment.IsProduction())
@@ -406,11 +401,17 @@ namespace Plato.Internal.Layout.TagHelpers
             var sb = new StringBuilder();
             foreach (var attribute in asset.Attributes)
             {
-                sb
-                    .Append(attribute.Key)
-                    .Append("=\"")
-                    .Append(attribute.Value)
-                    .Append("\" ");
+                sb.Append(attribute.Key);                    
+                if (!string.IsNullOrEmpty(attribute.Value))
+                {
+                    sb.Append("=\"")
+                        .Append(attribute.Value)
+                        .Append("\" ");
+                } 
+                else
+                {
+                    sb.Append(" ");
+                }
             }
 
             return sb.ToString();

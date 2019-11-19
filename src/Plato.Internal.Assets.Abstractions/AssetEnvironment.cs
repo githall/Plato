@@ -9,12 +9,12 @@ namespace Plato.Internal.Assets.Abstractions
 
         public TargetEnvironment TargetEnvironment { get; set; }
 
-        public IList<Asset> Resources { get; set; }
+        public IList<Asset> Assets { get; set; }
 
-        public AssetEnvironment(TargetEnvironment env, IEnumerable<Asset> resources)
+        public AssetEnvironment(TargetEnvironment env, IEnumerable<Asset> assets)
         {
-            this.TargetEnvironment = env;
-            this.Resources = resources.ToList();
+            TargetEnvironment = env;
+            Assets = assets.ToList();
         }
 
     }

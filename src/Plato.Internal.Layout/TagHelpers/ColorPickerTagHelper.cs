@@ -48,18 +48,18 @@ namespace Plato.Internal.Layout.TagHelpers
                     new AssetEnvironment(TargetEnvironment.Staging,
                         new List<Asset>()
                         {
-                        new Asset()
-                        {
-                            Url = "/css/vendors/bootstrap-colorpicker.css",
-                            Type = AssetType.IncludeCss,
-                            Section = AssetSection.Header
-                        },
-                        new Asset()
-                        {
-                            Url = "/js/vendors/bootstrap-colorpicker.js",
-                            Type = AssetType.IncludeJavaScript,
-                            Section = AssetSection.Footer
-                        }
+                            new Asset()
+                            {
+                                Url = "/css/vendors/bootstrap-colorpicker.css",
+                                Type = AssetType.IncludeCss,
+                                Section = AssetSection.Header
+                            },
+                            new Asset()
+                            {
+                                Url = "/js/vendors/bootstrap-colorpicker.js",
+                                Type = AssetType.IncludeJavaScript,
+                                Section = AssetSection.Footer
+                            }
                         }),
                     new AssetEnvironment(TargetEnvironment.Production,
                         new List<Asset>()
