@@ -119,7 +119,6 @@ hr.light { border-color: #fff }
     transform: translate(-50%, -50%);
 }
 
-
 /* Responsive images */
 
 .img-md-fluid { width: 100%; }
@@ -173,5 +172,7 @@ a.img-thumbnail:hover .img-caption {
 .accordion a[data-toggle="collapse"][aria-expanded="true"] .fa-chevron-right {
     transform: rotate(90deg);
 }
+
+/* GitHub button */
 
 .github-button .star-count { display: none; }

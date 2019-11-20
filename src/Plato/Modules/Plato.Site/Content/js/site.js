@@ -133,9 +133,6 @@ $(function (win, doc, $) {
                         return methods.init($caller, methodName, func);
                     }
                 }
-
-
-
             }
         };
 
@@ -165,8 +162,10 @@ $(function (win, doc, $) {
     // app ready
     app.ready(function () {
 
+        // Init site
         site.init();
 
+        // gitHubButton
         $(".github-button").gitHubButton();
 
     });
