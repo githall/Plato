@@ -52,7 +52,7 @@ namespace Plato.Core.Middleware
 
             // Register core client options by extending $.Plato.defaults
             // i.e. $.extend($.Plato.defaults, newOptions);
-            var script = "      $(function (win) { $.extend(win.$.Plato.defaults, { locale: '{locale}' }); } (window));";
+            var script = "$(function (win) { $.extend(win.$.Plato.defaults, { locale: '{locale}' }); } (window));";
             script = script.Replace("{locale}", siteSettings.Culture);
             return new ScriptBlock(script);
 

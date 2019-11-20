@@ -50,8 +50,8 @@ namespace Plato.Google.Analytics.ActionFilters
             // Should only run on the front-end for a full view
             if (context.Result is ViewResult || context.Result is PageResult)
             {
-                _scriptManager?.RegisterScriptBlock(new ScriptBlock($"  <script src=\"https://www.googletagmanager.com/gtag/js?id={_googleOptions.TrackingId}\"></script>", true), ScriptSection.Footer);
-                _scriptManager?.RegisterScriptBlock(new ScriptBlock($"  <script>window.dataLayer = window.dataLayer || [];function gtag() {{ dataLayer.push(arguments); }}gtag('js', new Date());gtag('config', '{_googleOptions.TrackingId}');</script>", int.MaxValue, true), ScriptSection.Footer);
+                _scriptManager?.RegisterScriptBlock(new ScriptBlock($"	<script src=\"https://www.googletagmanager.com/gtag/js?id={_googleOptions.TrackingId}\"></script>", true), ScriptSection.Footer);
+                _scriptManager?.RegisterScriptBlock(new ScriptBlock($"	<script>window.dataLayer = window.dataLayer || [];function gtag() {{ dataLayer.push(arguments); }}gtag('js', new Date());gtag('config', '{_googleOptions.TrackingId}');</script>", int.MaxValue, true), ScriptSection.Footer);
             }
 
             return Task.CompletedTask;

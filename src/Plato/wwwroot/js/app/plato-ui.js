@@ -2472,8 +2472,7 @@ $(function (win, doc, $) {
                             if (nodeList[i] === elem) { return true; }
                         }
                         return false;
-                    };
-
+                    }
                 });
 
                 $caller.on("mouseenter", function (e) {

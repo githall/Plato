@@ -85,9 +85,7 @@ namespace Plato.Internal.Layout.TagHelpers
                 if (block.DisableScriptTag)
                 {
                     var builder = new HtmlContentBuilder();
-                    builder
-                        .AppendHtml(System.Environment.NewLine)
-                        .AppendHtml(block.Content);
+                    builder.AppendHtml(block.Content);
                     builder.WriteTo(textWriter, NullHtmlEncoder.Default);
                     await textWriter.WriteLineAsync();
                 }
@@ -99,10 +97,7 @@ namespace Plato.Internal.Layout.TagHelpers
                         TagRenderMode = TagRenderMode.Normal
                     };
 
-                    tagBuilder.InnerHtml
-                        .AppendHtml(System.Environment.NewLine)
-                        .AppendHtml(block.Content);
-
+                    tagBuilder.InnerHtml.AppendHtml(block.Content);
                     tagBuilder.MergeAttributes(block.Attributes, replaceExisting: true);
                     tagBuilder.WriteTo(textWriter, NullHtmlEncoder.Default);
                     await textWriter.WriteLineAsync();
@@ -130,9 +125,7 @@ namespace Plato.Internal.Layout.TagHelpers
 
             foreach (var block in blockList)
             {
-                tagBuilder.InnerHtml
-                    .AppendHtml(System.Environment.NewLine)
-                    .AppendHtml(block.Content);                    
+                tagBuilder.InnerHtml.AppendHtml(block.Content);                    
                 tagBuilder.MergeAttributes(block.Attributes, replaceExisting: true);
             }
 
