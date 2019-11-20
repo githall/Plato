@@ -1,5 +1,5 @@
 Name: Plato Authentication Google
-Description: Adds the ability for users to login via Google.
+Description: Adds the ability for users to login to Plato via Google.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Authentication

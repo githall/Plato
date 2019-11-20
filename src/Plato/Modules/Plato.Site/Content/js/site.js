@@ -59,6 +59,7 @@ $(function (win, doc, $) {
                             var count = methods._xhr.stargazers_count,
                                 text = count + " stargazers";
                             stars.attr("aria-label", text).text(count);
+                            stars.show();
                         } else {
                             stars.hide();
                         }

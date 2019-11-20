@@ -1,5 +1,5 @@
 Name: Plato Authentication GitHub
-Description: Adds the ability for users to login via GitHub.
+Description: Adds the ability for users to login to Plato via GitHub.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Authentication

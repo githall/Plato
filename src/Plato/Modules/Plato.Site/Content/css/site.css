@@ -173,3 +173,5 @@ a.img-thumbnail:hover .img-caption {
 .accordion a[data-toggle="collapse"][aria-expanded="true"] .fa-chevron-right {
     transform: rotate(90deg);
 }
+
+.github-button .star-count { display: none; }
