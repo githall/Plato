@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Plato.Email.Stores;
@@ -10,41 +9,42 @@ using Plato.Internal.Emails.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Email.ViewProviders
 {
     public class AdminViewProvider : BaseViewProvider<EmailSettings>
     {
 
-        private readonly IEmailSettingsStore<EmailSettings> _emailSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly IEmailSettingsStore<EmailSettings> _emailSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
+        private readonly IEncrypter _encrypter;
 
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IEmailSettingsStore<EmailSettings> emailSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
-            ILogger<AdminViewProvider> logger,
-            IShellSettings shellSettings,
+            IEmailSettingsStore<EmailSettings> emailSettingsStore,            
+            ILogger<AdminViewProvider> logger,            
             IOptions<PlatoOptions> platoOptions,
+            IShellSettings shellSettings,
+            IEncrypter encrypter,
             IPlatoHost platoHost)
-        {
-            _dataProtectionProvider = dataProtectionProvider;
+        {            
             _emailSettingsStore = emailSettingsStore;
-            _shellSettings = shellSettings;
-            _platoHost = platoHost;
             _platoOptions = platoOptions.Value;
+            _shellSettings = shellSettings;
+            _platoHost = platoHost;            
+            _encrypter = encrypter;
             _logger = logger;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(EmailSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
         public override Task<IViewProviderResult> BuildDisplayAsync(EmailSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
@@ -81,16 +81,15 @@ namespace Plato.Email.ViewProviders
                 if (!string.IsNullOrWhiteSpace(model.SmtpSettings.Password))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(SmtpSettings));
-                        password = protector.Protect(model.SmtpSettings.Password);
+                    {                        
+                        password = _encrypter.Encrypt(model.SmtpSettings.Password);
                     }
                     catch (Exception e)
                     {
                         _logger.LogError($"There was a problem encrypting the SMTP password. {e.Message}");
                     }
                 }
-                
+
                 settings = new EmailSettings()
                 {
                     SmtpSettings = new SmtpSettings()
@@ -121,7 +120,7 @@ namespace Plato.Email.ViewProviders
             return await BuildEditAsync(settings, context);
 
         }
-        
+
         async Task<EmailSettingsViewModel> GetModel()
         {
 

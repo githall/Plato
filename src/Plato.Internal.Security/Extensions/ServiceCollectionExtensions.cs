@@ -5,7 +5,10 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.Settings;
 using Plato.Internal.Security.Abstractions;
+using Plato.Internal.Security.Abstractions.Encryption;
 using Plato.Internal.Security.Attributes;
+using Plato.Internal.Security.Configuration;
+using Plato.Internal.Security.Encryption;
 
 namespace Plato.Internal.Security.Extensions
 {
@@ -16,7 +19,8 @@ namespace Plato.Internal.Security.Extensions
             this IServiceCollection services)
         {
             services.AddPlatoAuthentication(); 
-            services.AddPlatoAuthorization();            
+            services.AddPlatoAuthorization();
+            services.AddPlatoEncryption();
             return services;
         }
 
@@ -65,6 +69,23 @@ namespace Plato.Internal.Security.Extensions
             // Custom validation providers
             services.AddSingleton<IValidationAttributeAdapterProvider, CustomValidatiomAttributeAdapterProvider>();
             return services;
+        }
+
+        public static IServiceCollection AddPlatoEncryption(this IServiceCollection services)
+        {
+
+            // Private key store
+            services.AddSingleton<IPlatoKeyStore, PlatoKeyStore>();
+
+            // Configuration
+            services.AddSingleton<IConfigureOptions<PlatoKeyOptions>, PlatoKeyOptionsConfiguration>();
+
+            // Default encryption
+            services.AddTransient<IAesEncrypter, AesEncrypter>();
+            services.AddTransient<IEncrypter, DefaultEncrypter>();
+
+            return services;
+
         }
 
     }

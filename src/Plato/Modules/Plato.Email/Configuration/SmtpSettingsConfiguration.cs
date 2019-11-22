@@ -1,27 +1,27 @@
 ﻿using System;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Plato.Email.Stores;
 using Plato.Internal.Emails.Abstractions;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Email.Configuration
 {
 
     public class SmtpSettingsConfiguration : IConfigureOptions<SmtpSettings>
     {
-        
+
         private readonly IEmailSettingsStore<EmailSettings> _emailSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
         private readonly ILogger<SmtpSettingsConfiguration> _logger;
+        private readonly IEncrypter _encrypter;
 
         public SmtpSettingsConfiguration(
-            IEmailSettingsStore<EmailSettings> emailSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
-            ILogger<SmtpSettingsConfiguration> logger)
+            IEmailSettingsStore<EmailSettings> emailSettingsStore,            
+            ILogger<SmtpSettingsConfiguration> logger,
+            IEncrypter encrypter)
         {
-            _dataProtectionProvider = dataProtectionProvider;
             _emailSettingsStore = emailSettingsStore;
+            _encrypter = encrypter;
             _logger = logger;
         }
 
@@ -53,9 +53,8 @@ namespace Plato.Email.Configuration
                 if (!String.IsNullOrWhiteSpace(smtpSettings.Password))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(SmtpSettings));
-                        options.Password = protector.Unprotect(smtpSettings.Password);
+                    {                        
+                        options.Password = _encrypter.Decrypt(smtpSettings.Password);
                     }
                     catch (Exception e)
                     {

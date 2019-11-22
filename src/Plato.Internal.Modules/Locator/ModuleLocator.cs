@@ -229,8 +229,8 @@ namespace Plato.Internal.Modules.Locator
 
         static Dictionary<string, string> ParseManifest(string manifestText)
         {
-            var manifest = new Dictionary<string, string>();
 
+            var manifest = new Dictionary<string, string>();
             using (var reader = new StringReader(manifestText))
             {
                 string line;
