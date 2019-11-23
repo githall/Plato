@@ -358,7 +358,7 @@ namespace Plato.Internal.Abstractions.Extensions
             {
                 return false;
             }
-                
+
             var index = value.Length - 1;
             if (value[index] == '=')
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Plato.Facebook.Models;
 using Plato.Facebook.Stores;
@@ -8,36 +7,36 @@ using Plato.Facebook.ViewModels;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
-using Plato.Facebook.Configuration;
 using Plato.Internal.Abstractions.Settings;
 using Microsoft.Extensions.Options;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Facebook.ViewProviders
 {
     public class AdminViewProvider : BaseViewProvider<PlatoFacebookSettings>
     {
 
-        private readonly IFacebookSettingsStore<PlatoFacebookSettings> _facebookSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly IFacebookSettingsStore<PlatoFacebookSettings> _facebookSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
+        private readonly IEncrypter _encrypter;
         private readonly IPlatoHost _platoHost;
 
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IFacebookSettingsStore<PlatoFacebookSettings> facebookSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
+            IFacebookSettingsStore<PlatoFacebookSettings> facebookSettingsStore,            
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
+            IEncrypter encrypter,
             IPlatoHost platoHost)
-        {
-            _dataProtectionProvider = dataProtectionProvider;
+        {            
             _facebookSettingsStore = facebookSettingsStore;
             _platoOptions = platoOptionsAccessor.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
+            _encrypter = encrypter;
             _logger = logger;
         }
         
@@ -82,12 +81,15 @@ namespace Plato.Facebook.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoFacebookOptionsConfiguration));
-                        secret = protector.Protect(model.AppSecret);
+                        
+                        secret = _encrypter.Encrypt(model.AppSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Facebook app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem encrypting the Facebook app secret. {e.Message}");
+                        }
                     }
                 }
 
@@ -125,13 +127,15 @@ namespace Plato.Facebook.ViewProviders
                 if (!string.IsNullOrWhiteSpace(settings.AppSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoFacebookOptionsConfiguration));
-                        secret = protector.Unprotect(settings.AppSecret);
+                    {                        
+                        secret = _encrypter.Decrypt(settings.AppSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Facebook app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the Facebook app secret. {e.Message}");
+                        }
                     }
                 }
 

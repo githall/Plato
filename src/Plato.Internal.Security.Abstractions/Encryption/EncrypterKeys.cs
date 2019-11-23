@@ -1,7 +1,7 @@
 ﻿namespace Plato.Internal.Security.Abstractions.Encryption
 {
 
-    public class PlatoKeys
+    public class EncrypterKeys
     {
 
         public string Key { get; set; }

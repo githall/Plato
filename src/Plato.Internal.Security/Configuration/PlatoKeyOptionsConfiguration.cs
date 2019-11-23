@@ -7,9 +7,9 @@ namespace Plato.Internal.Security.Configuration
     class PlatoKeyOptionsConfiguration : IConfigureOptions<PlatoKeyOptions>
     {
 
-        private readonly IPlatoKeyStore _keyStore;
+        private readonly IEncrypterKeyStore _keyStore;
 
-        public PlatoKeyOptionsConfiguration(IPlatoKeyStore keyStore)
+        public PlatoKeyOptionsConfiguration(IEncrypterKeyStore keyStore)
         {
             _keyStore = keyStore;
         }

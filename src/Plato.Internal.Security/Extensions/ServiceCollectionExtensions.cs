@@ -74,14 +74,14 @@ namespace Plato.Internal.Security.Extensions
         public static IServiceCollection AddPlatoEncryption(this IServiceCollection services)
         {
 
-            // Private key store
-            services.AddSingleton<IPlatoKeyStore, PlatoKeyStore>();
+            // Key store
+            services.AddSingleton<IEncrypterKeyStore, DefaultEncrypterKeyStore>();
 
             // Configuration
             services.AddSingleton<IConfigureOptions<PlatoKeyOptions>, PlatoKeyOptionsConfiguration>();
 
-            // Default encryption
-            services.AddTransient<IAesEncrypter, AesEncrypter>();
+            // Default AES implementations
+            services.AddSingleton<IEncrypterKeyBuilder, DefaultEncrypterKeyBuilder>();
             services.AddTransient<IEncrypter, DefaultEncrypter>();
 
             return services;

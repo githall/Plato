@@ -3,9 +3,9 @@
 namespace Plato.Internal.Security.Abstractions.Encryption
 {
 
-    public interface IPlatoKeyStore
+    public interface IEncrypterKeyStore
     {
-        Task<PlatoKeys> GetOrCreateKeysAsync();        
+        Task<EncrypterKeys> GetOrCreateKeysAsync();        
     }
 
 }

@@ -1,26 +1,26 @@
 ﻿using System;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Plato.Facebook.Models;
 using Plato.Facebook.Stores;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Facebook.Configuration
 {
     public class PlatoFacebookOptionsConfiguration : IConfigureOptions<PlatoFacebookOptions>
     {
 
-        private readonly IFacebookSettingsStore<PlatoFacebookSettings> _facebookSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly IFacebookSettingsStore<PlatoFacebookSettings> _facebookSettingsStore;        
         private readonly ILogger<PlatoFacebookOptionsConfiguration> _logger;
+        private readonly IEncrypter _encrypter;
 
         public PlatoFacebookOptionsConfiguration(
-            IFacebookSettingsStore<PlatoFacebookSettings> facebookSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
-            ILogger<PlatoFacebookOptionsConfiguration> logger)
+            IFacebookSettingsStore<PlatoFacebookSettings> facebookSettingsStore,            
+            ILogger<PlatoFacebookOptionsConfiguration> logger,
+            IEncrypter encrypter)
         {
-            _facebookSettingsStore = facebookSettingsStore;
-            _dataProtectionProvider = dataProtectionProvider;
+            _facebookSettingsStore = facebookSettingsStore;            
+            _encrypter = encrypter;
             _logger = logger;
         }
 
@@ -40,13 +40,15 @@ namespace Plato.Facebook.Configuration
                 if (!String.IsNullOrWhiteSpace(settings.AppSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoFacebookOptionsConfiguration));
-                        options.AppSecret = protector.Unprotect(settings.AppSecret);
+                    {                        
+                        options.AppSecret = _encrypter.Decrypt(settings.AppSecret);
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        _logger.LogError("There was a problem decrypting the SMTP password.");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the Facebook app secret. {e.Message}");
+                        }                        
                     }
                 }
 
