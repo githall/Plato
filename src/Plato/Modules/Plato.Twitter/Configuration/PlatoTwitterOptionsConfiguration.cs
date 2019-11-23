@@ -1,26 +1,27 @@
 ﻿using System;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Plato.Twitter.Models;
 using Plato.Twitter.Stores;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Twitter.Configuration
 {
+
     public class PlatoTwitterOptionsConfiguration : IConfigureOptions<PlatoTwitterOptions>
     {
 
-        private readonly ITwitterSettingsStore<PlatoTwitterSettings> _TwitterSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly ITwitterSettingsStore<PlatoTwitterSettings> _TwitterSettingsStore;        
         private readonly ILogger<PlatoTwitterOptionsConfiguration> _logger;
+        private readonly IEncrypter _encrypter;
 
         public PlatoTwitterOptionsConfiguration(
             ITwitterSettingsStore<PlatoTwitterSettings> TwitterSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
-            ILogger<PlatoTwitterOptionsConfiguration> logger)
+            ILogger<PlatoTwitterOptionsConfiguration> logger,
+            IEncrypter encrypter)
         {
-            _TwitterSettingsStore = TwitterSettingsStore;
-            _dataProtectionProvider = dataProtectionProvider;
+            _TwitterSettingsStore = TwitterSettingsStore;            
+            _encrypter = encrypter;
             _logger = logger;
         }
 
@@ -46,12 +47,14 @@ namespace Plato.Twitter.Configuration
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
-                        options.ConsumerSecret = protector.Unprotect(settings.ConsumerSecret);
+                        options.ConsumerSecret = _encrypter.Decrypt(settings.ConsumerSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem decrypting the twitter consumer key secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the Twitter consumer key secret. {e.Message}");
+                        }
                     }
                 }
 
@@ -65,13 +68,15 @@ namespace Plato.Twitter.Configuration
                 if (!String.IsNullOrWhiteSpace(settings.AccessTokenSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
-                        options.AccessTokenSecret = protector.Unprotect(settings.AccessTokenSecret);
+                    {                        
+                        options.AccessTokenSecret = _encrypter.Decrypt(settings.AccessTokenSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem decrypting the twitter access token secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the Twitter access token secret. {e.Message}");
+                        }
                     }
                 }
                 

@@ -86,7 +86,10 @@ namespace Plato.Email.ViewProviders
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the SMTP password. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError($"There was a problem encrypting the SMTP server password. {e.Message}");
+                        }
                     }
                 }
 
@@ -142,7 +145,7 @@ namespace Plato.Email.ViewProviders
                             ? "email@example.com"
                             : settings.SmtpSettings.UserName,
                         Password = _platoOptions.DemoMode
-                            ? "" 
+                            ? ""
                             : settings.SmtpSettings.Password,
                         RequireCredentials = settings.SmtpSettings.RequireCredentials,
                         EnableSsl = settings.SmtpSettings.EnableSsl,
@@ -161,7 +164,7 @@ namespace Plato.Email.ViewProviders
             };
 
         }
-        
+
     }
 
 }

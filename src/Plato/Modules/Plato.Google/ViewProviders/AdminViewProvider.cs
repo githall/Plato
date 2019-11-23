@@ -25,13 +25,13 @@ namespace Plato.Google.ViewProviders
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,            
+            IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
             IEncrypter encrypter,
             IPlatoHost platoHost)
-        {            
+        {
             _googleSettingsStore = googleSettingsStore;
             _platoOptions = platoOptionsAccessor.Value;
             _shellSettings = shellSettings;
@@ -39,12 +39,12 @@ namespace Plato.Google.ViewProviders
             _encrypter = encrypter;
             _logger = logger;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(PlatoGoogleSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
         public override Task<IViewProviderResult> BuildDisplayAsync(PlatoGoogleSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));

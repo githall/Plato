@@ -11,33 +11,34 @@ using Plato.Internal.Models.Shell;
 using Plato.Twitter.Configuration;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.Settings;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Twitter.ViewProviders
 {
     public class AdminViewProvider : BaseViewProvider<PlatoTwitterSettings>
     {
 
-        private readonly ITwitterSettingsStore<PlatoTwitterSettings> _twitterSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly ITwitterSettingsStore<PlatoTwitterSettings> _twitterSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
+        private readonly IEncrypter _encrypter;
 
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
             ITwitterSettingsStore<PlatoTwitterSettings> twitterSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
+            IEncrypter encrypter,
             IPlatoHost platoHost)
         {
-            _dataProtectionProvider = dataProtectionProvider;
             _twitterSettingsStore = twitterSettingsStore;
             _platoOptions = platoOptionsAccessor.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
+            _encrypter = encrypter;
             _logger = logger;
         }
 
@@ -83,27 +84,30 @@ namespace Plato.Twitter.ViewProviders
                 if (!string.IsNullOrWhiteSpace(model.ConsumerSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
-                        consumerSecret = protector.Protect(model.ConsumerSecret);
-               
+                    {                        
+                        consumerSecret = _encrypter.Encrypt(model.ConsumerSecret);               
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem encrypting the Twitter consumer secret. {e.Message}");
+                        }
                     }
                 }
 
                 if (!string.IsNullOrWhiteSpace(model.AccessTokenSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
-                        accessTokenSecret = protector.Protect(model.AccessTokenSecret);
+                    {                        
+                        accessTokenSecret = _encrypter.Encrypt(model.AccessTokenSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem encrypting the Twitter access token secret. {e.Message}");
+                        }
                     }
                 }
 
@@ -146,25 +150,29 @@ namespace Plato.Twitter.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
-                        consumerSecret = protector.Unprotect(settings.ConsumerSecret);
+                        consumerSecret = _encrypter.Decrypt(settings.ConsumerSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the Twitter consumer secret. {e.Message}");
+                        }
                     }
                 }
 
                 if (!string.IsNullOrWhiteSpace(settings.AccessTokenSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoTwitterOptionsConfiguration));
-                        accessTokenSecret = protector.Unprotect(settings.AccessTokenSecret);
+                    {                        
+                        accessTokenSecret = _encrypter.Decrypt(settings.AccessTokenSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError($"There was a problem decrypting the Twitter access token secret. {e.Message}");
+                        }
                     }
                 }
 

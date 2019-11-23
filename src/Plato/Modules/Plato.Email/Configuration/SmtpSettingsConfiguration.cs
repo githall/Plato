@@ -58,7 +58,10 @@ namespace Plato.Email.Configuration
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError(e, $"There was a problem decrypting the SMTP password. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the SMTP password. {e.Message}");
+                        }
                     }
                 }
 
