@@ -83,23 +83,23 @@ namespace Plato.Internal.Security.Encryption
         byte[] EncryptInternal(string plainText)
         {
 
-            byte[] encrypted;
-            using (var aesAlg = Aes.Create())
+            byte[] encrypted = null;
+            using (var aes = Aes.Create())
             {
 
-                aesAlg.Key = _keyInfo.Key;
-                aesAlg.IV = _keyInfo.Iv;
+                aes.Key = _keyInfo.Key;
+                aes.IV = _keyInfo.Iv;
 
-                var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
-                using (var msEncrypt = new MemoryStream())
+                var encryptor = aes.CreateEncryptor(aes.Key, aes.IV);
+                using (var ms = new MemoryStream())
                 {
-                    using (var csEncrypt = new CryptoStream(msEncrypt, encryptor, CryptoStreamMode.Write))
+                    using (var cs = new CryptoStream(ms, encryptor, CryptoStreamMode.Write))
                     {
-                        using (var swEncrypt = new StreamWriter(csEncrypt))
+                        using (var sw = new StreamWriter(cs))
                         {
-                            swEncrypt.Write(plainText);
+                            sw.Write(plainText);
                         }
-                        encrypted = msEncrypt.ToArray();
+                        encrypted = ms.ToArray();
                     }
                 }
             }
@@ -111,28 +111,28 @@ namespace Plato.Internal.Security.Encryption
         string DecryptInternal(byte[] cipherText)
         {
 
-            string plaintext;
-            using (var aesAlg = Aes.Create())
+            string plainText = null;
+            using (var aes = Aes.Create())
             {
 
-                aesAlg.Key = _keyInfo.Key;
-                aesAlg.IV = _keyInfo.Iv;
+                aes.Key = _keyInfo.Key;
+                aes.IV = _keyInfo.Iv;
 
-                var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
-                using (var msDecrypt = new MemoryStream(cipherText))
+                var decryptor = aes.CreateDecryptor(aes.Key, aes.IV);
+                using (var ms = new MemoryStream(cipherText))
                 {
-                    using (var csDecrypt = new CryptoStream(msDecrypt, decryptor, CryptoStreamMode.Read))
+                    using (var cs = new CryptoStream(ms, decryptor, CryptoStreamMode.Read))
                     {
-                        using (var srDecrypt = new StreamReader(csDecrypt))
+                        using (var sr = new StreamReader(cs))
                         {
-                            plaintext = srDecrypt.ReadToEnd();
+                            plainText = sr.ReadToEnd();
                         }
                     }
                 }
 
             }
 
-            return plaintext;
+            return plainText;
 
         }
 

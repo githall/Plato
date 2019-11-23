@@ -1,6 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Plato.Authentication.Google.Handlers;
-using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
@@ -17,9 +15,6 @@ namespace Plato.Authentication.Google
 
         public override void ConfigureServices(IServiceCollection services)
         {
-
-            // Feature installation event handler
-            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // Configuration
             services.AddTransient<IConfigureOptions<AuthenticationOptions>, GoogleSchemeConfiguration>();

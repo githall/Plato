@@ -15,7 +15,6 @@ namespace Plato.Internal.Security.Abstractions.Encryption
 
         protected KeyInfo()
         {
-
         }
 
         public KeyInfo(string key, string iv)
