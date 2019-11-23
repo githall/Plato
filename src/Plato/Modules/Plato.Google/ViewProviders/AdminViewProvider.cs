@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Plato.Google.Models;
 using Plato.Google.Stores;
@@ -8,36 +7,36 @@ using Plato.Google.ViewModels;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
-using Plato.Google.Configuration;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.Settings;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Google.ViewProviders
 {
     public class AdminViewProvider : BaseViewProvider<PlatoGoogleSettings>
     {
 
-        private readonly IGoogleSettingsStore<PlatoGoogleSettings> _googleSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly IGoogleSettingsStore<PlatoGoogleSettings> _googleSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
+        private readonly IEncrypter _encrypter;
 
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
+            IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,            
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
+            IEncrypter encrypter,
             IPlatoHost platoHost)
-        {
-            _dataProtectionProvider = dataProtectionProvider;
+        {            
             _googleSettingsStore = googleSettingsStore;
             _platoOptions = platoOptionsAccessor.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
+            _encrypter = encrypter;
             _logger = logger;
         }
         
@@ -81,13 +80,15 @@ namespace Plato.Google.ViewProviders
                 if (!string.IsNullOrWhiteSpace(model.ClientSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGoogleOptionsConfiguration));
-                        secret = protector.Protect(model.ClientSecret);
+                    {                        
+                        secret = _encrypter.Encrypt(model.ClientSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the google client secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem encrypting the Google client secret. {e.Message}");
+                        }
                     }
                 }
 
@@ -126,13 +127,15 @@ namespace Plato.Google.ViewProviders
                 if (!string.IsNullOrWhiteSpace(settings.ClientSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGoogleOptionsConfiguration));
-                        secret = protector.Unprotect(settings.ClientSecret);
+                    {                        
+                        secret = _encrypter.Decrypt(settings.ClientSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem decrypting the google client secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the Google client secret. {e.Message}");
+                        }
                     }
                 }
 

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Plato.GitHub.Models;
 using Plato.GitHub.Stores;
@@ -8,44 +7,44 @@ using Plato.GitHub.ViewModels;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
-using Plato.GitHub.Configuration;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.Settings;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.GitHub.ViewProviders
 {
     public class AdminViewProvider : BaseViewProvider<PlatoGitHubSettings>
     {
 
-        private readonly IGitHubSettingsStore<PlatoGitHubSettings> _googleSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly IGitHubSettingsStore<PlatoGitHubSettings> _gitHubSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
+        private readonly IEncrypter _encrypter;
 
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IGitHubSettingsStore<PlatoGitHubSettings> googleSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
+            IGitHubSettingsStore<PlatoGitHubSettings> gitHubSettingsStore,            
             IOptions<PlatoOptions> platoOptionsAccessor,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
+            IEncrypter encrypter,
             IPlatoHost platoHost)
         {
-            _dataProtectionProvider = dataProtectionProvider;
-            _googleSettingsStore = googleSettingsStore;
+            _gitHubSettingsStore = gitHubSettingsStore;
             _platoOptions = platoOptionsAccessor.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
+            _encrypter = encrypter;
             _logger = logger;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(PlatoGitHubSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
         public override Task<IViewProviderResult> BuildDisplayAsync(PlatoGitHubSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
@@ -82,12 +81,14 @@ namespace Plato.GitHub.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGitHubOptionsConfiguration));
-                        secret = protector.Protect(model.ClientSecret);
+                        secret = _encrypter.Encrypt(model.ClientSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the google client secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem encrypting the GitHub client secret. {e.Message}");
+                        }
                     }
                 }
 
@@ -100,7 +101,7 @@ namespace Plato.GitHub.ViewProviders
                 };
 
                 // Persist the settings
-                var result = await _googleSettingsStore.SaveAsync(settings);
+                var result = await _gitHubSettingsStore.SaveAsync(settings);
                 if (result != null)
                 {
                     // Recycle shell context to ensure changes take effect
@@ -116,7 +117,7 @@ namespace Plato.GitHub.ViewProviders
         async Task<GoogleSettingsViewModel> GetModel()
         {
 
-            var settings = await _googleSettingsStore.GetAsync();
+            var settings = await _gitHubSettingsStore.GetAsync();
             if (settings != null)
             {
 
@@ -126,12 +127,14 @@ namespace Plato.GitHub.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGitHubOptionsConfiguration));
-                        secret = protector.Unprotect(settings.ClientSecret);
+                        secret = _encrypter.Decrypt(settings.ClientSecret);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem decrypting the google client secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the GitHub client secret. {e.Message}");
+                        }
                     }
                 }
 

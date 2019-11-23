@@ -1,9 +1,9 @@
 ﻿using System;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Plato.Google.Models;
 using Plato.Google.Stores;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Google.Configuration
 {
@@ -11,16 +11,16 @@ namespace Plato.Google.Configuration
     {
 
         private readonly IGoogleSettingsStore<PlatoGoogleSettings> _googleSettingsStore;        
-        private readonly ILogger<PlatoGoogleOptionsConfiguration> _logger;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly ILogger<PlatoGoogleOptionsConfiguration> _logger;        
+        private readonly IEncrypter _encrypter;
 
         public PlatoGoogleOptionsConfiguration(
             IGoogleSettingsStore<PlatoGoogleSettings> googleSettingsStore,            
-            ILogger<PlatoGoogleOptionsConfiguration> logger,
-            IDataProtectionProvider dataProtectionProvider)
-        {
-            _dataProtectionProvider = dataProtectionProvider; 
-            _googleSettingsStore = googleSettingsStore;            
+            ILogger<PlatoGoogleOptionsConfiguration> logger,            
+            IEncrypter encrypter)
+        {            
+            _googleSettingsStore = googleSettingsStore;
+            _encrypter = encrypter;
             _logger = logger;
         }
 
@@ -44,12 +44,14 @@ namespace Plato.Google.Configuration
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGoogleOptionsConfiguration));
-                        options.ClientSecret = protector.Unprotect(settings.ClientSecret);
+                        options.ClientSecret = _encrypter.Decrypt(settings.ClientSecret);
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        _logger.LogError("There was a problem decrypting the SMTP password.");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the Google client secret. {e.Message}");
+                        }
                     }
                 }
 

@@ -25,7 +25,7 @@ namespace Plato.Internal.Security.Abstractions
                 new PermissionRequirement(permission));
             return result.Succeeded;
         }
-        
+
     }
 
 }

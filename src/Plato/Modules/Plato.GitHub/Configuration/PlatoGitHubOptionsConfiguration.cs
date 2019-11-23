@@ -1,9 +1,9 @@
 ﻿using System;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Plato.GitHub.Models;
 using Plato.GitHub.Stores;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.GitHub.Configuration
 {
@@ -11,16 +11,16 @@ namespace Plato.GitHub.Configuration
     {
 
         private readonly IGitHubSettingsStore<PlatoGitHubSettings> _githubSettingsStore;        
-        private readonly ILogger<PlatoGitHubOptionsConfiguration> _logger;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly ILogger<PlatoGitHubOptionsConfiguration> _logger;        
+        private readonly IEncrypter _encrypter;
 
         public PlatoGitHubOptionsConfiguration(
             IGitHubSettingsStore<PlatoGitHubSettings> githubSettingsStore,            
-            ILogger<PlatoGitHubOptionsConfiguration> logger,
-            IDataProtectionProvider dataProtectionProvider)
-        {
-            _dataProtectionProvider = dataProtectionProvider;
-            _githubSettingsStore = githubSettingsStore;            
+            ILogger<PlatoGitHubOptionsConfiguration> logger,            
+            IEncrypter encrypter)
+        {            
+            _githubSettingsStore = githubSettingsStore;
+            _encrypter = encrypter;
             _logger = logger;
         }
 
@@ -40,13 +40,15 @@ namespace Plato.GitHub.Configuration
                 if (!String.IsNullOrWhiteSpace(settings.ClientSecret))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(PlatoGitHubOptionsConfiguration));
-                        options.ClientSecret = protector.Unprotect(settings.ClientSecret);
+                    {                        
+                        options.ClientSecret = _encrypter.Decrypt(settings.ClientSecret);
                     }
-                    catch
+                    catch (Exception e)
                     {
-                        _logger.LogError("There was a problem decrypting the SMTP password.");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the GitHub client secret. {e.Message}");
+                        }
                     }
                 }
 
