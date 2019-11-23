@@ -14,10 +14,10 @@ namespace Plato.Internal.Security.Encryption
     public class DefaultEncrypterKeyStore : IEncrypterKeyStore
     {
 
-        private const string KeySection = "key";
+        private const string KeyFileName = "plato-keys.txt";
         private const string VectorSection = "vector";
+        private const string KeySection = "key";
         private const string Separator = ":";
-        private const string KeyFile = "plato-keys.txt";
 
         private readonly ILogger<DefaultEncrypterKeyStore> _logger;
         private readonly IEncrypterKeyBuilder _keyBuilder;
@@ -44,11 +44,11 @@ namespace Plato.Internal.Security.Encryption
             // No secrets path specified, return default keys
             if (string.IsNullOrEmpty(_platoOptions.SecretsPath))
             {
-                return ParseKeys(BuildDefaultKeys());
+                return DefaultKeys();
             }
 
             // Build path to persistent key store
-            var path = Path.Combine(_platoOptions.SecretsPath, KeyFile);
+            var path = Path.Combine(_platoOptions.SecretsPath, KeyFileName);
             
             // Store does not exist 
             if (!File.Exists(path))
@@ -80,7 +80,7 @@ namespace Plato.Internal.Security.Encryption
             }
 
             // Just return default keys if anything went wrong
-            return ParseKeys(BuildDefaultKeys());            
+            return DefaultKeys();            
 
         }
 
@@ -90,7 +90,7 @@ namespace Plato.Internal.Security.Encryption
             // Build keys
             var keys = BuildKeys(_keyBuilder.Key, _keyBuilder.Vector);
 
-            // Attempt to persist keys to secrets path
+            // Attempt to persist keys
             var success = true;
             try
             {
@@ -113,7 +113,7 @@ namespace Plato.Internal.Security.Encryption
             if (success)
             {
                 // Attempt to read the newly created key file to 
-                // ensure it was created and populated successfully
+                // ensure it was created and can be read successfully
                 if (File.Exists(path))
                 {
                     return await ReadFileAsync(path);
@@ -124,9 +124,17 @@ namespace Plato.Internal.Security.Encryption
 
         }
 
+        EncrypterKeys DefaultKeys()
+        {
+            return ParseKeys(BuildDefaultKeys());
+        }
+
         string BuildDefaultKeys()
         {
-            return BuildKeys("45BLO2yoJkvBwz99kBEMlNkxvL40vUSGaqr/WBu3+Vg=", "Ou3fn+I9SVicGWMLkFEgZQ==");
+            // The default keys are only ever used if no secrets path is
+            // specified (i.e. in development) or if errors occur 
+            // whilst persisting or loading the keys
+            return BuildKeys("KsGwDJpG2qW51PmoWy2xLg34egR/z6gITbjN3mBSgs4=", "KElBLMef/AXJx+ce3f3szA==");
         }
 
         string BuildKeys(string key, string vector)
@@ -188,8 +196,8 @@ namespace Plato.Internal.Security.Encryption
 
             return new EncrypterKeys()
             {
-                Key = dict.ContainsKey(KeySection) ? dict[KeySection] : throw new Exception($"A problem occurred parsing the 'Key' parameter within {Path.Combine(_platoOptions.SecretsPath, KeyFile)}"),
-                Vector = dict.ContainsKey(VectorSection) ? dict[VectorSection] : throw new Exception($"A problem occurred parsing the 'Vector' parameter within {Path.Combine(_platoOptions.SecretsPath, KeyFile)}")
+                Key = dict.ContainsKey(KeySection) ? dict[KeySection] : throw new Exception($"A problem occurred parsing the 'Key' parameter within {Path.Combine(_platoOptions.SecretsPath, KeyFileName)}"),
+                Vector = dict.ContainsKey(VectorSection) ? dict[VectorSection] : throw new Exception($"A problem occurred parsing the 'Vector' parameter within {Path.Combine(_platoOptions.SecretsPath, KeyFileName)}")
             };
 
         }

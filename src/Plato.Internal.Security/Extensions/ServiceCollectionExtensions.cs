@@ -75,10 +75,10 @@ namespace Plato.Internal.Security.Extensions
         {
 
             // Key store
-            services.AddSingleton<IEncrypterKeyStore, DefaultEncrypterKeyStore>();
+            services.AddScoped<IEncrypterKeyStore, DefaultEncrypterKeyStore>();
 
             // Configuration
-            services.AddSingleton<IConfigureOptions<PlatoKeyOptions>, PlatoKeyOptionsConfiguration>();
+            services.AddScoped<IConfigureOptions<PlatoKeyOptions>, PlatoKeyOptionsConfiguration>();
 
             // Default AES implementations
             services.AddSingleton<IEncrypterKeyBuilder, DefaultEncrypterKeyBuilder>();
