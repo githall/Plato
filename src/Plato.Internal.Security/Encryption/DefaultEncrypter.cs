@@ -19,33 +19,31 @@ namespace Plato.Internal.Security.Encryption
             _platoKeyOptions = optionsAccessor.Value;
         }
 
-        public string Encrypt(string input)
+        public string Encrypt(string plainText)
         {
 
             // We need input to encrypt
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(plainText))
             {
-                throw new ArgumentNullException(nameof(input));
+                throw new ArgumentNullException(nameof(plainText));
             }
 
-            EnsureKeyInfo();
-            var enc = EncryptInternal(input, _keyInfo.Key, _keyInfo.Iv);
-            return Convert.ToBase64String(enc);
+            EnsureKeyInfo();            
+            return Convert.ToBase64String(EncryptInternal(plainText));
 
         }
 
-        public string Decrypt(string input)
+        public string Decrypt(string cipherText)
         {
 
             // We need input to decrypt
-            if (string.IsNullOrEmpty(input))
+            if (string.IsNullOrEmpty(cipherText))
             {
-                throw new ArgumentNullException(nameof(input));
+                throw new ArgumentNullException(nameof(cipherText));
             }
 
-            EnsureKeyInfo();
-            var cipherBytes = Convert.FromBase64String(input);
-            return DecryptInternal(cipherBytes, _keyInfo.Key, _keyInfo.Iv);
+            EnsureKeyInfo();            ;
+            return DecryptInternal(Convert.FromBase64String(cipherText));
 
         }
 
@@ -56,41 +54,41 @@ namespace Plato.Internal.Security.Encryption
             if (_keyInfo == null)
             {
 
-                if (string.IsNullOrEmpty(_platoKeyOptions.Key) || string.IsNullOrEmpty(_platoKeyOptions.Vector))
+                if (string.IsNullOrEmpty(_platoKeyOptions.Key))
                 {
-                    throw new Exception("Plato keys have not been configured correctly!");
+                    throw new ArgumentNullException(nameof(_platoKeyOptions.Key));
+                }
+
+                if (string.IsNullOrEmpty(_platoKeyOptions.Vector))
+                {
+                    throw new ArgumentNullException(nameof(_platoKeyOptions.Vector));
                 }
 
                 _keyInfo = new KeyInfo(_platoKeyOptions.Key, _platoKeyOptions.Vector);
 
+                if (_keyInfo.Key == null || _keyInfo.Key.Length <= 0)
+                {
+                    throw new ArgumentNullException(nameof(_keyInfo.Key));
+                }
+
+                if (_keyInfo.Iv == null || _keyInfo.Iv.Length <= 0)
+                {
+                    throw new ArgumentNullException(nameof(_keyInfo.Iv));
+                }
+
             }
-            
+
         }
 
-        static byte[] EncryptInternal(string plainText, byte[] key, byte[] iv)
+        byte[] EncryptInternal(string plainText)
         {
 
-            if (plainText == null || plainText.Length <= 0)
-            {
-                throw new ArgumentNullException(nameof(plainText));
-            }
-
-            if (key == null || key.Length <= 0)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
-
-            if (iv == null || iv.Length <= 0)
-            {
-                throw new ArgumentNullException(nameof(iv));
-            }
-
             byte[] encrypted;
-
             using (var aesAlg = Aes.Create())
             {
-                aesAlg.Key = key;
-                aesAlg.IV = iv;
+
+                aesAlg.Key = _keyInfo.Key;
+                aesAlg.IV = _keyInfo.Iv;
 
                 var encryptor = aesAlg.CreateEncryptor(aesAlg.Key, aesAlg.IV);
                 using (var msEncrypt = new MemoryStream())
@@ -110,30 +108,15 @@ namespace Plato.Internal.Security.Encryption
 
         }
 
-        static string DecryptInternal(byte[] cipherText, byte[] key, byte[] iv)
+        string DecryptInternal(byte[] cipherText)
         {
-
-            if (cipherText == null || cipherText.Length <= 0)
-            {
-                throw new ArgumentNullException(nameof(cipherText));
-            }
-
-            if (key == null || key.Length <= 0)
-            {
-                throw new ArgumentNullException(nameof(key));
-            }
-
-            if (iv == null || iv.Length <= 0)
-            {
-                throw new ArgumentNullException(nameof(iv));
-            }                
 
             string plaintext;
             using (var aesAlg = Aes.Create())
             {
 
-                aesAlg.Key = key;
-                aesAlg.IV = iv;
+                aesAlg.Key = _keyInfo.Key;
+                aesAlg.IV = _keyInfo.Iv;
 
                 var decryptor = aesAlg.CreateDecryptor(aesAlg.Key, aesAlg.IV);
                 using (var msDecrypt = new MemoryStream(cipherText))

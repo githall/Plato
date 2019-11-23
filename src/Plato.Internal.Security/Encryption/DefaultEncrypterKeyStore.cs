@@ -60,7 +60,7 @@ namespace Plato.Internal.Security.Encryption
                     return ParseKeys(newKeys);
                 }                
             }
-            
+
             // Attempt to read any existing key file
             var keys = await ReadFileAsync(path);
             if (!string.IsNullOrEmpty(keys))

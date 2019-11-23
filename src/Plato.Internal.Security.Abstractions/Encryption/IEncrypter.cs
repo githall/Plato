@@ -3,9 +3,9 @@
     public interface IEncrypter
     {
 
-        string Encrypt(string input);
+        string Encrypt(string plainText);
 
-        string Decrypt(string input);
+        string Decrypt(string cipherText);
 
     }
 

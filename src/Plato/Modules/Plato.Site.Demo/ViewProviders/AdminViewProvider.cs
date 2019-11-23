@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Plato.Site.Demo.Models;
 using Plato.Site.Demo.Stores;
@@ -8,33 +7,33 @@ using Plato.Site.Demo.ViewModels;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
-using Plato.Site.Demo.Configuration;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Site.Demo.ViewProviders
 {
     public class AdminViewProvider : BaseViewProvider<DemoSettings>
     {
 
-        private readonly IDemoSettingsStore<DemoSettings> _demoSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly IDemoSettingsStore<DemoSettings> _demoSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
+        private readonly IEncrypter _encrypter;
 
         public AdminViewProvider(
-            IDemoSettingsStore<DemoSettings> demoSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
+            IDemoSettingsStore<DemoSettings> demoSettingsStore,            
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
+            IEncrypter encrypter,
             IPlatoHost platoHost)
         {
-            _dataProtectionProvider = dataProtectionProvider;
             _demoSettingsStore = demoSettingsStore;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
+            _encrypter = encrypter;
             _logger = logger;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(DemoSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
@@ -65,7 +64,7 @@ namespace Plato.Site.Demo.ViewProviders
             {
                 return await BuildEditAsync(settings, context);
             }
-            
+
             // Update settings
             if (context.Updater.ModelState.IsValid)
             {
@@ -76,13 +75,14 @@ namespace Plato.Site.Demo.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(DemoOptionsConfiguration));
-                        adminPassword = protector.Protect(model.AdminPassword);
-
+                        adminPassword = _encrypter.Encrypt(model.AdminPassword);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem encrypting the demo administrator password. {e.Message}");
+                        }
                     }
                 }
 
@@ -100,7 +100,7 @@ namespace Plato.Site.Demo.ViewProviders
                     // Recycle shell context to ensure changes take effect
                     _platoHost.RecycleShellContext(_shellSettings);
                 }
-              
+
             }
 
             return await BuildEditAsync(settings, context);
@@ -120,13 +120,15 @@ namespace Plato.Site.Demo.ViewProviders
                 if (!string.IsNullOrWhiteSpace(settings.AdminPassword))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(DemoOptionsConfiguration));
-                        adminPassword = protector.Unprotect(settings.AdminPassword);
+                    {                        
+                        adminPassword = _encrypter.Decrypt(settings.AdminPassword);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the demo administrator password. {e.Message}");
+                        }
                     }
                 }
 

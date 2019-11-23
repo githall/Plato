@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.DataProtection;
 using Plato.Site.Demo.Models;
 using Plato.Site.Demo.Stores;
+using Plato.Internal.Security.Abstractions.Encryption;
 
 namespace Plato.Site.Demo.Configuration
 {
@@ -11,17 +11,17 @@ namespace Plato.Site.Demo.Configuration
     public class DemoOptionsConfiguration : IConfigureOptions<DemoOptions>
     {
 
-        private readonly IDemoSettingsStore<DemoSettings> _demoSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly IDemoSettingsStore<DemoSettings> _demoSettingsStore;        
         private readonly ILogger<DemoOptionsConfiguration> _logger;
+        private readonly IEncrypter _encrypter;
 
         public DemoOptionsConfiguration(
-            IDemoSettingsStore<DemoSettings> demoSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
-            ILogger<DemoOptionsConfiguration> logger)
+            IDemoSettingsStore<DemoSettings> demoSettingsStore,            
+            ILogger<DemoOptionsConfiguration> logger,
+            IEncrypter encrypter)
         {
-            _demoSettingsStore = demoSettingsStore;
-            _dataProtectionProvider = dataProtectionProvider;
+            _demoSettingsStore = demoSettingsStore;            
+            _encrypter = encrypter;
             _logger = logger;
         }
 
@@ -36,8 +36,6 @@ namespace Plato.Site.Demo.Configuration
             if (settings != null)
             {
 
-                options.DemoEnabled = settings.DemoEnabled;
-
                 // ------------------
                 // Default administrator account
                 // ------------------
@@ -48,13 +46,15 @@ namespace Plato.Site.Demo.Configuration
                 if (!String.IsNullOrWhiteSpace(settings.AdminPassword))
                 {
                     try
-                    {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(DemoOptionsConfiguration));
-                        options.AdminPassword = protector.Unprotect(settings.AdminPassword);
+                    {                        
+                        options.AdminPassword = _encrypter.Decrypt(settings.AdminPassword);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem decrypting the twitter consumer key secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem decrypting the demo administrator password. {e.Message}");
+                        }
                     }
                 }
 
