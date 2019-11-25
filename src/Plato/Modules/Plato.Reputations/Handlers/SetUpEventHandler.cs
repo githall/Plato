@@ -124,7 +124,7 @@ namespace Plato.Reputations.Handlers
                 }));
 
         }
-        
+
     }
 
 }

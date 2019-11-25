@@ -96,7 +96,7 @@ namespace Plato.Internal.Shell
 
             return CreateDescribedContext(settings, descriptor);
         }
-        
+
         public ShellDescriptor MinimumShellDescriptor()
         {
             var descriptor = new ShellDescriptor();
@@ -111,7 +111,7 @@ namespace Plato.Internal.Shell
             descriptor.Modules.Add(new ShellModule { ModuleId = "Plato.Users.Badges" });
             return descriptor;
         }
-        
+
     }
 
 }

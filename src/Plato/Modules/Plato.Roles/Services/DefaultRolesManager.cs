@@ -88,7 +88,7 @@ namespace Plato.Roles.Services
 
                     // Merge the default permissions into the new or existing role
                     var defaultPermissionNames = (defaultPermission.Permissions ?? Enumerable.Empty<Permission>()).Select(x => x.Name);
-                    var currentPermissionNames = ((Role)role).RoleClaims.Where(x => x.ClaimType == Permission.ClaimTypeName).Select(x => x.ClaimValue).ToList();
+                    var currentPermissionNames = role.RoleClaims.Where(x => x.ClaimType == Permission.ClaimTypeName).Select(x => x.ClaimValue).ToList();
 
                     var distinctPermissionNames = currentPermissionNames
                         .Union(defaultPermissionNames)

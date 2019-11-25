@@ -169,7 +169,7 @@ namespace Plato.Twitter.ViewProviders
                     {
                         if (_logger.IsEnabled(LogLevel.Error))
                         {
-                            _logger.LogError($"There was a problem decrypting the Twitter access token secret. {e.Message}");
+                            _logger.LogError(e, $"There was a problem decrypting the Twitter access token secret. {e.Message}");
                         }
                     }
                 }

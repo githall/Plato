@@ -2,15 +2,13 @@
 using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Plato.Internal.Abstractions.SetUp;
 using Plato.Internal.Data.Schemas.Abstractions;
-using Plato.Internal.Models.Roles;
-using Plato.Internal.Models.Users;
 using Plato.Internal.Security.Abstractions;
 
 namespace Plato.Roles.Handlers
 {
+
     public class SetUpEventHandler : BaseSetUpEventHandler
     {
 
@@ -110,7 +108,7 @@ namespace Plato.Roles.Handlers
         private readonly IDefaultRolesManager _defaultRolesManager;
         private readonly ISchemaBuilder _schemaBuilder;
         private readonly ISchemaManager _schemaManager;
-        
+
         public SetUpEventHandler(
             IDefaultRolesManager defaultRolesManager,
             ISchemaBuilder schemaBuilder,                        
@@ -143,12 +141,12 @@ namespace Plato.Roles.Handlers
                 }
                 
             }
-            
+
             // Install default roles & permissions on first set-up
             await _defaultRolesManager.InstallDefaultRolesAsync();
-            
+
         }
- 
+
         void Configure(ISchemaBuilder builder)
         {
 
@@ -171,7 +169,6 @@ namespace Plato.Roles.Handlers
             builder.ProcedureBuilder.CreateDefaultProcedures(_roles)
 
                 // create unique stored procedures
-
             
                 .CreateProcedure(
                     new SchemaProcedure("SelectRoleByName", StoredProcedureType.SelectByKey)

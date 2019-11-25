@@ -1,9 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Plato.Internal.Abstractions.SetUp;
 using Plato.Internal.Data.Schemas.Abstractions;
+using Plato.Internal.Security.Abstractions;
 
 namespace Plato.Email.Handlers
 {
@@ -94,11 +95,9 @@ namespace Plato.Email.Handlers
             _schemaManager = schemaManager;
         }
 
-
         public override async Task SetUp(SetUpContext context, Action<string, string> reportError)
         {
-        
-            //var schemaBuilder = context.ServiceProvider.GetRequiredService<ISchemaBuilder>();
+
             using (var builder = _schemaBuilder)
             {
 
@@ -114,7 +113,6 @@ namespace Plato.Email.Handlers
                     reportError(error, $"SetUp within {this.GetType().FullName} - {error}");
                 }
 
-                
             }
 
         }
@@ -159,4 +157,5 @@ namespace Plato.Email.Handlers
         #endregion
 
     }
+
 }

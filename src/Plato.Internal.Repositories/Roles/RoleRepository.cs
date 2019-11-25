@@ -13,7 +13,7 @@ namespace Plato.Internal.Repositories.Roles
     {
 
         #region "Constructor"
-        
+
         private readonly ILogger<RoleRepository> _logger;
         private readonly IDbContext _dbContext;
 
@@ -26,7 +26,7 @@ namespace Plato.Internal.Repositories.Roles
         }
 
         #endregion
-        
+
         #region "Implementation"
 
         public async Task<bool> DeleteAsync(int id)
@@ -79,9 +79,12 @@ namespace Plato.Internal.Repositories.Roles
                 role.ConcurrencyStamp);
 
             if (id > 0)
+            {
                 return await SelectByIdAsync(id);
+            }                
 
             return null;
+
         }
 
         public async Task<Role> SelectByIdAsync(int id)

@@ -11,7 +11,6 @@ namespace Plato.Settings.Handlers
     public class SetUpEventHandler : BaseSetUpEventHandler
     {
 
-
         private readonly ISiteSettingsStore _siteSettingsStore;
         private readonly IKeyGenerator _keyGenerator;
 
@@ -28,7 +27,7 @@ namespace Plato.Settings.Handlers
             SetUpContext context,
             Action<string, string> reportError)
         {
-            
+
             // --------------------------
             // Add default settings to dictionary store
             // --------------------------
@@ -41,15 +40,13 @@ namespace Plato.Settings.Handlers
                 siteSettings.SuperUser = context.AdminUsername;
                 siteSettings.ApiKey = _keyGenerator.GenerateKey();
                 siteSettings.HomeRoute = new HomeRoute();
-
                 await _siteSettingsStore.SaveAsync(siteSettings);
             }
             catch (Exception ex)
             {
                 reportError(ex.Message, ex.StackTrace);
             }
-          
-         
+
         }
 
     }

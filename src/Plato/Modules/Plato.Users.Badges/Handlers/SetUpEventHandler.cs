@@ -11,7 +11,7 @@ namespace Plato.Users.Badges.Handlers
     {
 
         public string Version { get; } = "1.0.0";
-        
+
         // EntityFollows table
         private readonly SchemaTable _userBadges = new SchemaTable()
         {
@@ -111,7 +111,7 @@ namespace Plato.Users.Badges.Handlers
                 }));
 
         }
-        
+
     }
 
 }

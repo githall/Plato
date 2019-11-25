@@ -144,6 +144,7 @@ namespace Plato.Core.Handlers
                             .ForTable(dictionaryTable).WithParameter(new SchemaColumn()
                             {
                                 Name = "[Key]",
+                                Length = "255",
                                 DbType = DbType.String
                             }));
 
@@ -153,9 +154,9 @@ namespace Plato.Core.Handlers
                             .ForTable(dictionaryTable).WithParameter(new SchemaColumn()
                             {
                                 Name = "[Key]",
+                                Length = "255",
                                 DbType = DbType.String
                             }));
-
 
                 // Build document store
                 // --------------------------

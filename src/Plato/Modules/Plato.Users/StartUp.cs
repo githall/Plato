@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using Plato.Internal.Abstractions.SetUp;
 using Plato.Internal.Data.Migrations.Abstractions;
-using Plato.Internal.Features.Abstractions;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ActionFilters;
 using Plato.Internal.Models.Roles;
@@ -50,9 +49,6 @@ namespace Plato.Users
 
             // Register set-up event handler
             services.AddScoped<ISetUpEventHandler, SetUpEventHandler>();
-
-            // Register feature event handlers
-            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // --------
 

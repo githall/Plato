@@ -4,8 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Plato.Email.Configuration;
-using Plato.Internal.Features.Abstractions;
-using Plato.Internal.Models.Shell;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Email.Handlers;
 using Plato.Email.Navigation;
@@ -26,19 +24,12 @@ using Plato.Internal.Tasks.Abstractions;
 namespace Plato.Email
 {
     public class Startup : StartupBase
-    {
-        private readonly IShellSettings _shellSettings;
-
-        public Startup(IShellSettings shellSettings)
-        {
-            _shellSettings = shellSettings;
-        }
+    {     
 
         public override void ConfigureServices(IServiceCollection services)
         {
 
-            // Feature installation event handler
-            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
+            // Feature installation event handler            
             services.AddScoped<ISetUpEventHandler, SetUpEventHandler>();
 
             // Navigation provider
@@ -72,7 +63,7 @@ namespace Plato.Email
 
             // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
-            
+
         }
 
         public override void Configure(
@@ -87,7 +78,6 @@ namespace Plato.Email
                 template: "admin/settings/email",
                 defaults: new { controller = "Admin", action = "Index" }
             );
-
 
         }
 
