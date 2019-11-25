@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
-using Microsoft.AspNetCore.DataProtection;
+﻿using Microsoft.Extensions.Options;
 using Plato.Site.Models;
 using Plato.Site.Stores;
 
@@ -11,18 +8,11 @@ namespace Plato.Site.Configuration
     public class PlatoSiteOptionsConfiguration : IConfigureOptions<PlatoSiteOptions>
     {
 
-        private readonly IPlatoSiteSettingsStore<PlatoSiteSettings> _platoSiteSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
-        private readonly ILogger<PlatoSiteOptionsConfiguration> _logger;
+        private readonly IPlatoSiteSettingsStore<PlatoSiteSettings> _platoSiteSettingsStore;                
 
-        public PlatoSiteOptionsConfiguration(
-            IPlatoSiteSettingsStore<PlatoSiteSettings> platoSiteSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
-            ILogger<PlatoSiteOptionsConfiguration> logger)
+        public PlatoSiteOptionsConfiguration(IPlatoSiteSettingsStore<PlatoSiteSettings> platoSiteSettingsStore)
         {
             _platoSiteSettingsStore = platoSiteSettingsStore;
-            _dataProtectionProvider = dataProtectionProvider;
-            _logger = logger;
         }
 
         public void Configure(PlatoSiteOptions options)
@@ -35,9 +25,7 @@ namespace Plato.Site.Configuration
 
             if (settings != null)
             {
-
                 options.DemoUrl = settings.DemoUrl;
-
             }
 
         }

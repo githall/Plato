@@ -1,6 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
+﻿using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Plato.Site.Models;
 using Plato.Site.Stores;
@@ -8,7 +6,6 @@ using Plato.Site.ViewModels;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
-using Plato.Site.Configuration;
 
 namespace Plato.Site.ViewProviders
 {
@@ -105,7 +102,7 @@ namespace Plato.Site.ViewProviders
             return new PlatoSiteSettingsViewModel();
 
         }
-        
+
     }
 
 }

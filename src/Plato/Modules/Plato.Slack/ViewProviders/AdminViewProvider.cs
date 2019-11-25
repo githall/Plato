@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.DataProtection;
 using Microsoft.Extensions.Logging;
 using Plato.Internal.Hosting.Abstractions;
 using Plato.Internal.Layout.ViewProviders;
 using Plato.Internal.Models.Shell;
-using Plato.Slack.Configuration;
+using Plato.Internal.Security.Abstractions.Encryption;
 using Plato.Slack.Models;
 using Plato.Slack.Stores;
 using Plato.Slack.ViewModels;
@@ -15,31 +14,31 @@ namespace Plato.Slack.ViewProviders
     public class AdminViewProvider : BaseViewProvider<PlatoSlackSettings>
     {
 
-        private readonly ISlackSettingsStore<PlatoSlackSettings> _TwitterSettingsStore;
-        private readonly IDataProtectionProvider _dataProtectionProvider;
+        private readonly ISlackSettingsStore<PlatoSlackSettings> _TwitterSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
+        private readonly IEncrypter _encrypter;
 
         public AdminViewProvider(
-            ISlackSettingsStore<PlatoSlackSettings> TwitterSettingsStore,
-            IDataProtectionProvider dataProtectionProvider,
+            ISlackSettingsStore<PlatoSlackSettings> TwitterSettingsStore,            
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
+            IEncrypter encrypter,
             IPlatoHost platoHost)
-        {
-            _dataProtectionProvider = dataProtectionProvider;
+        {            
             _TwitterSettingsStore = TwitterSettingsStore;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
+            _encrypter = encrypter;
             _logger = logger;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(PlatoSlackSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
         public override Task<IViewProviderResult> BuildDisplayAsync(PlatoSlackSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
@@ -57,7 +56,7 @@ namespace Plato.Slack.ViewProviders
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(PlatoSlackSettings settings, IViewProviderContext context)
         {
-            
+
             var model = new SlackSettingsViewModel();
 
             // Validate model
@@ -65,7 +64,7 @@ namespace Plato.Slack.ViewProviders
             {
                 return await BuildEditAsync(settings, context);
             }
-            
+
             // Update settings
             if (context.Updater.ModelState.IsValid)
             {
@@ -78,13 +77,14 @@ namespace Plato.Slack.ViewProviders
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(SlackOptionsConfiguration));
-                        webHookUrl = protector.Protect(model.WebHookUrl);
-               
+                        webHookUrl = _encrypter.Encrypt(model.WebHookUrl);               
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError(e, $"There was a problem encrypting the Slack Web Hook URL. {e.Message}");
+                        }
                     }
                 }
 
@@ -101,13 +101,13 @@ namespace Plato.Slack.ViewProviders
                     // Recycle shell context to ensure changes take effect
                     _platoHost.RecycleShellContext(_shellSettings);
                 }
-              
+
             }
 
             return await BuildEditAsync(settings, context);
 
         }
-        
+
         async Task<SlackSettingsViewModel> GetModel()
         {
 
@@ -117,17 +117,19 @@ namespace Plato.Slack.ViewProviders
 
                 // Decrypt the secret
                 var webHookUrl = string.Empty;
-         
+
                 if (!string.IsNullOrWhiteSpace(settings.WebHookUrl))
                 {
                     try
                     {
-                        var protector = _dataProtectionProvider.CreateProtector(nameof(SlackOptionsConfiguration));
-                        webHookUrl = protector.Unprotect(settings.WebHookUrl);
+                        webHookUrl = _encrypter.Decrypt(settings.WebHookUrl);
                     }
                     catch (Exception e)
                     {
-                        _logger.LogError($"There was a problem encrypting the Twitter app secret. {e.Message}");
+                        if (_logger.IsEnabled(LogLevel.Error))
+                        {
+                            _logger.LogError($"There was a problem dencrypting the Slack Web Hook URL. {e.Message}");
+                        }
                     }
                 }
 
@@ -142,7 +144,7 @@ namespace Plato.Slack.ViewProviders
             return new SlackSettingsViewModel();
 
         }
-        
+
     }
 
 }
