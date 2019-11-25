@@ -77,13 +77,23 @@ namespace Plato.Roles.Services
 
                 foreach (var defaultPermission in defaultPermissions)
                 {
+
+                    // Attempt to get existing role
                     var role = await _roleManager.FindByNameAsync(defaultPermission.RoleName);
 
-                    // Create the role
+                    // No existing role
                     if (role == null)
                     {
-                        role = new Role { Name = defaultPermission.RoleName };
-                        await _roleManager.CreateAsync(role);
+                        // Create the role                        
+                        var result = await _roleManager.CreateAsync(new Role
+                        {
+                            Name = defaultPermission.RoleName
+                        });
+                        if (result.Succeeded)
+                        {
+                            // Get the newly created role
+                            role = await _roleManager.FindByNameAsync(defaultPermission.RoleName);
+                        }
                     }
 
                     // Merge the default permissions into the new or existing role

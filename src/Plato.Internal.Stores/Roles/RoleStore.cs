@@ -202,7 +202,7 @@ namespace Plato.Internal.Stores.Roles
                 throw new ArgumentNullException(nameof(claim));
             }
 
-            ((Role)role).RoleClaims.Add(new RoleClaim { ClaimType = claim.Type, ClaimValue = claim.Value });
+            role.RoleClaims.Add(new RoleClaim { ClaimType = claim.Type, ClaimValue = claim.Value });
 
             return Task.CompletedTask;
         }
@@ -214,7 +214,7 @@ namespace Plato.Internal.Stores.Roles
                 throw new ArgumentNullException(nameof(role));
             }
 
-            return Task.FromResult<IList<Claim>>(((Role)role).RoleClaims.Select(x => x.ToClaim()).ToList());
+            return Task.FromResult<IList<Claim>>(role.RoleClaims.Select(x => x.ToClaim()).ToList());
         }
 
         public Task RemoveClaimAsync(Role role, Claim claim, CancellationToken cancellationToken = default(CancellationToken))
@@ -229,7 +229,7 @@ namespace Plato.Internal.Stores.Roles
                 throw new ArgumentNullException(nameof(claim));
             }
 
-            ((Role)role).RoleClaims.RemoveAll(x => x.ClaimType == claim.Type && x.ClaimValue == claim.Value);
+            role.RoleClaims.RemoveAll(x => x.ClaimType == claim.Type && x.ClaimValue == claim.Value);
 
             return Task.CompletedTask;
         }

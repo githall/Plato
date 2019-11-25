@@ -36,26 +36,26 @@ namespace Plato.Roles
             // Replace dummy role stores registered via User StartUp with real implementations
             services.TryAddScoped<IRoleStore<Role>, RoleStore>();
             services.TryAddScoped<IRoleClaimStore<Role>, RoleStore>();
-       
+
             // Register role manager
             services.TryAddScoped<RoleManager<Role>>();
 
             // User view providers
             services.AddScoped<IViewProviderManager<User>, ViewProviderManager<User>>();
             services.AddScoped<IViewProvider<User>, UserViewProvider>();
-            
+
             // Role view provider
             services.AddScoped<IViewProviderManager<Role>, ViewProviderManager<Role>>();
             services.AddScoped<IViewProvider<Role>, AdminViewProvider>();
-            
-            // Register navigation provider
+
+            // Register navigation providers
             services.AddScoped<INavigationProvider, AdminMenu>();
             services.AddScoped<INavigationProvider, SiteMenu>();
 
             // Register moderation permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
-            // Register feature & set-up event handler
+            // Register default role manager
             services.AddScoped<IDefaultRolesManager, DefaultRolesManager>();
 
             // Register feature & set-up event handler
@@ -71,14 +71,14 @@ namespace Plato.Roles
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-            
+
             routes.MapAreaRoute(
                 name: "ManageRoles",
                 areaName: "Plato.Roles",
                 template: "admin/roles",
                 defaults: new { controller = "Admin", action = "Index" }
             );
-            
+
         }
 
     }

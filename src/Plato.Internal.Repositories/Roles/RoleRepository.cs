@@ -61,7 +61,7 @@ namespace Plato.Internal.Repositories.Roles
             }
 
             var claims = "";
-            if (role.RoleClaims != null)
+            if (role.RoleClaims?.Count > 0)
             {
                 claims = role.RoleClaims.Serialize();
             }
