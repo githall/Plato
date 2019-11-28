@@ -3,7 +3,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Plato.Internal.Abstractions.Settings;
 
-namespace Plato.Internal.Theming
+namespace Plato.Internal.Theming.Configuration
 {
     public class ThemeOptionsConfigure : IConfigureOptions<ThemeOptions>
     {

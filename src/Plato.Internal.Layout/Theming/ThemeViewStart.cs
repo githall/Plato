@@ -1,8 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Options;
-using Plato.Internal.Abstractions.Settings;
 using Plato.Internal.Layout.Razor;
+using Plato.Internal.Theming.Abstractions;
 
 namespace Plato.Internal.Layout.Theming
 {
@@ -14,27 +13,15 @@ namespace Plato.Internal.Layout.Theming
 
             // Compute layout based on controller type
 
-            var themeOptions = Context.RequestServices.GetService<IOptions<ThemeOptions>>();
-            var siteOptions = Context.RequestServices.GetService<IOptions<SiteOptions>>();
-
-            var path = "";
-            if (!string.IsNullOrEmpty(siteOptions.Value.Theme))
-            {
-                path = siteOptions.Value.Theme;
-            }
-            else
-            {
-                path = themeOptions.Value.VirtualPathToThemesFolder + "/default";
-            }
-            
+            var themeSelector = Context.RequestServices.GetService<IThemeSelector>();
             var controllerName = ViewContext.RouteData.Values["controller"].ToString();
             switch (controllerName)
             {
                 case "Admin":
-                    Layout = $"~/{path}/Shared/_AdminLayout.cshtml";
+                    Layout = $"~/{themeSelector.GetThemePath()}/Shared/_AdminLayout.cshtml";
                     break;
                 default:
-                    Layout = $"~/{path}/Shared/_Layout.cshtml";
+                    Layout = $"~/{themeSelector.GetThemePath()}/Shared/_Layout.cshtml";
                     break;
             }
                       

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
-using Microsoft.Extensions.Options;
-using Plato.Internal.Abstractions.Settings;
 using Plato.Internal.Assets.Abstractions;
+using Plato.Internal.Theming.Abstractions;
 
 namespace Plato.Core.Assets
 {
@@ -9,24 +8,17 @@ namespace Plato.Core.Assets
     public class AssetProvider : IAssetProvider
     {
 
-        private readonly IOptions<ThemeOptions> _themeOptions;
-        private readonly IOptions<SiteOptions> _siteOptions;
-
-        public AssetProvider(
-            IOptions<ThemeOptions> themeOptions,
-            IOptions<SiteOptions> siteOptions)
+        private readonly IThemeSelector _themeSelector;
+        
+        public AssetProvider(IThemeSelector themeSelector)
         {
-            _themeOptions = themeOptions;
-            _siteOptions = siteOptions;
+            _themeSelector = themeSelector;
         }
 
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
 
-            var path = !string.IsNullOrEmpty(_siteOptions.Value.Theme)
-                ? _siteOptions.Value.Theme
-                : $"{_themeOptions.Value.VirtualPathToThemesFolder}/default";
-
+            var path = _themeSelector.GetThemePath();
             return new List<AssetEnvironment>
             {
 
