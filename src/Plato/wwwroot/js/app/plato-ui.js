@@ -404,7 +404,7 @@ $(function (win, doc, $) {
             },
             go: function($caller) {
                 
-                var $body = $("html");
+                var $body = $("html,body");
                 var $target = null,
                     href = $caller.prop("tagName") === "A" && $caller.attr("href");
                 if (href) {
@@ -486,7 +486,7 @@ $(function (win, doc, $) {
                     });
                 } else {
                     // $().scrollTo()
-                    var $caller = $("html");
+                    var $caller = $("html,body");
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();

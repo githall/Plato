@@ -32,7 +32,7 @@ namespace Plato.Internal.Theming
         public string GetThemePath()
         {
 
-            // Theme can also be set via request headers or cookies
+            // Theme can be set via request headers or cookies
             var theme = GetHttpTheme();
             if (!string.IsNullOrEmpty(theme))
             {
@@ -48,8 +48,7 @@ namespace Plato.Internal.Theming
             // Use default theme
             return _themeOptions.VirtualPathToThemesFolder + LightThemeFolder;
 
-        }
-        
+        }        
 
         string GetHttpTheme()
         {

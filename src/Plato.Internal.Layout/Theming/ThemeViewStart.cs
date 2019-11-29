@@ -12,7 +12,6 @@ namespace Plato.Internal.Layout.Theming
         {
 
             // Compute layout based on controller type
-
             var themeSelector = Context.RequestServices.GetService<IThemeSelector>();
             var controllerName = ViewContext.RouteData.Values["controller"].ToString();
             switch (controllerName)
@@ -24,11 +23,10 @@ namespace Plato.Internal.Layout.Theming
                     Layout = $"~/{themeSelector.GetThemePath()}/Shared/_Layout.cshtml";
                     break;
             }
-                      
+
             return Task.CompletedTask;
 
         }
-
 
     }
 
