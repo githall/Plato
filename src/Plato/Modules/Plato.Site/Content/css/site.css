@@ -176,3 +176,23 @@ a.img-thumbnail:hover .img-caption {
 /* GitHub button */
 
 .github-button .star-count { display: none; }
+
+/* Download content */
+
+.download-content .badge + .badge {
+    margin-left: 10px;
+}
+
+.download-content .badge {
+    display: inline-block;
+    position: relative;
+    width: 135px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.download-content .badge.windows {
+    display: block;
+    margin: 5px auto;
+    height: 49px;
+}

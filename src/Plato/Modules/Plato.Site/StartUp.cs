@@ -85,6 +85,14 @@ namespace Plato.Site
                 defaults: new { controller = "Home", action = "Modules" }
             );
 
+            // Download
+            routes.MapAreaRoute(
+                name: "PlatoSiteDownload",
+                areaName: "Plato.Site",
+                template: "download",
+                defaults: new { controller = "Home", action = "Download" }
+            );
+
             // Pricing
             routes.MapAreaRoute(
                 name: "PlatoSitePricing",
