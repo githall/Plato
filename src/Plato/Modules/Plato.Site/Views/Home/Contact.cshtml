@@ -36,7 +36,7 @@
                             To benefit everyone please consider posting your questions via <a asp-route-area="Plato.Core" asp-route-controller="Home" asp-action="Index" data-provide="loader-spy">our support site</a>.
                         </p>
                         <hr class="my-2" />
-                      
+
                         <div class="form-group mt-4">
                             <span asp-validation-for="Name" class="text-danger"></span>
                             <input asp-for="Name" placeholder="@T["your name"]" class="form-control" autofocus />
@@ -46,7 +46,7 @@
                             <span asp-validation-for="Email" class="text-danger"></span>
                             <input asp-for="Email" placeholder="@T["your email"]" class="form-control" />
                         </div>
-                     
+
                         <div class="form-group">
                             <span asp-validation-for="Message" class="text-danger"></span>
                             <textarea asp-for="Message" rows="9" placeholder="@T["your message"]" class="form-control"></textarea>
@@ -115,15 +115,15 @@
 </section>
 
 <!-- Call to action -->
-<section class="page bg-primary">
+<section class="page bg-primary-people">
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <h1 class="text-uppercase font-weight-bold text-white">
-                    Ready to make Plato your support hub?
-                </h1>
+                <h4 class="font-weight-bold text-white">
+                    Plato can help you help your users & reduce inbound support
+                </h4>
                 <a class="btn btn-light text-primary btn-lg mt-4" asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Pricing" data-provide="loader-spy">
-                    Get Started
+                    Get Started For Free
                 </a>
             </div>
         </div>
