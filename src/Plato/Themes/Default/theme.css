@@ -3,9 +3,8 @@
 /* Fixed Header & Sidebar */
 /* ------------------- */
 
-.layout-sidebar.fixed > .layout-sidebar-content,
 .layout-header.fixed > .layout-header-content { background-color: white; }
-.layout-header-content { border-color: #eee;}
+.layout-header-content { border-color:  rgba(125, 125, 125, 0.2); }
 
 /* ------------------- */
 /* Navigation  */

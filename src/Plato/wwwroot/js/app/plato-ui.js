@@ -2135,8 +2135,8 @@ $(function (win, doc, $) {
                 return "scroll." + this._getNamespace($caller);
             },
             _getNamespace: function ($caller) {                
-                return "scrollSpy";
-                //return $caller.data(dataKey).namespace || "scrollSpy";
+                //return "scrollSpy";
+                return $caller.data(dataKey).namespace || "scrollSpy";
             },
             _storeEvents: function ($caller) {
 
@@ -7604,8 +7604,8 @@ $(function (win, doc, $) {
                 this._detectAndScrollToAnchor($caller);
 
             },
-            unbind: function ($caller) {
-                $().infiniteScroll("unbind");
+            unbind: function ($caller) {             
+                $().sticky("unbind");
             },
             getHeaderHeight: function ($caller) {                
                 var $el = $caller.find(selectors.stickyHeader);

@@ -1334,8 +1334,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .layout-asides,
 .layout-asides-sticky {}
 
-.layout-tools  {
-    
+.layout-tools  {    
     display: flex;
     flex-flow: nowrap;
     flex-direction: row;
@@ -1348,14 +1347,14 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     via JavaScript upon the initial load before the header actually becomes "fixed" */
 
 .layout-header  { padding-bottom: 1rem; }
-.layout-header > .layout-header-content { 
+.layout-header-content { 
     padding: 1rem 0;
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
 
 /* To be removed once all HR elements have been removed from layout-header-content */
-.layout-header > .layout-header-content hr { display: none; }
+.layout-header .layout-header-content hr { display: none; }
 
 /* Only apply fixed layout for screen sizes above 992px */
 @media (min-width: 992px) {

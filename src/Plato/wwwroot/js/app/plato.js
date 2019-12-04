@@ -510,7 +510,29 @@ $(function (win, doc, $) {
             }
         }
     };
-    
+
+    /* Plato Utilities */
+    var platoUtils = {       
+        addCss: function (path) {
+            var head = doc.head;
+            if (head) {
+                var link = doc.createElement("link");
+                link.type = "text/css";
+                link.rel = "stylesheet";
+                link.href = path;
+                head.appendChild(link);
+            }
+        },
+        addScript: function (path) {
+            var body = doc.body;
+            if (body) {
+                var script = doc.createElement("script");             
+                script.src = path;
+                body.appendChild(script);
+            }
+        }
+    };
+
     /* Global */
     /* ---------------------------------------------*/
 
@@ -571,7 +593,8 @@ $(function (win, doc, $) {
         http: platoHttp,
         storage: platoStorage,
         text: platoText,
-        social: platoSocial
+        social: platoSocial,
+        utils: platoUtils
     };
     
     /* Initialize */
