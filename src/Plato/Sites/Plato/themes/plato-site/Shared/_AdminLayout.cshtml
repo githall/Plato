@@ -12,6 +12,7 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <assets section="Header" />
+    <link rel="manifest" href="/manifest.json" crossOrigin="use-credentials" />
     <link rel="icon" href="/favicon.ico" />
     <scripts section="Header" />
 </head>
@@ -137,6 +138,9 @@
 
     <assets section="Footer" />
     <scripts section="Footer" />
+    <script>
+        navigator.serviceWorker.register('/service-worker.js');
+    </script>
 
 </body>
 </html>

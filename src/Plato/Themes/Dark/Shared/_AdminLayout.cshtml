@@ -12,6 +12,7 @@
     <base href="/" />
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <assets section="Header" />
+    <link rel="manifest" href="/manifest.json" crossOrigin="use-credentials" />
     <link rel="icon" href="/favicon.ico" />
     <scripts section="Header" />
 </head>
@@ -68,7 +69,7 @@
                             collaspsable="true"
                             class="navbar-nav d-lg-block"
                             child-ul-css-class="nav flex-column"
-                            link-css-class="nav-link"/>
+                            link-css-class="nav-link" />
             </div>
         </div>
 
@@ -114,7 +115,7 @@
             </div>
             <div class="w-100 px-3">
                 @RenderBody()
-                <hr/>
+                <hr />
                 <footer class="row">
                     <div class="col-lg-6">
                         <p>&copy; @siteOpts.SiteName @System.DateTime.Now.Year</p>
@@ -133,6 +134,9 @@
 
     <assets section="Footer" />
     <scripts section="Footer" />
+    <script>
+        navigator.serviceWorker.register('/service-worker.js');
+    </script>
 
 </body>
 </html>

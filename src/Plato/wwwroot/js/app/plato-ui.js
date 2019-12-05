@@ -41,15 +41,28 @@ $(function (win, doc, $) {
                 html: null,
                 url: null
             },
-            buttons: [
-                {
-                    text: "Close",
-                    id: "dialog",
-                    click: function($modal) {
-                        $modal.dismiss();
+            /*            
+                buttons: [
+                    {
+                        id: "cancel",
+                        text: "Cancel",
+                        css: "btn btn-secondary",
+                        click: function ($modal, e) {
+                            console.log("cancel clicked!");
+                            $().dialog("hide");
+                        }
+                    },
+                    {
+                        id: "ok",
+                        text: "OK",
+                        css: "btn btn-primary",
+                        click: function ($modal, e) {
+                            return true;
+                        }
                     }
-                }
-            ],
+                ]            
+            */
+            buttons: null,  // see above comment for example
             css: {
                 modal: "modal fade",
                 dialog: "modal-dialog" // add modal-lg,  modal-sm for sizing
@@ -142,7 +155,8 @@ $(function (win, doc, $) {
             },
             populate: function ($caller) {
 
-                var title = $caller.data(dataKey).title,
+                var $dialog = methods.getOrCreate($caller),
+                    title = $caller.data(dataKey).title,
                     html = $caller.data(dataKey).body.html,     
                     buttons = $caller.data(dataKey).buttons,
                     $content = $caller.find(".modal-content");
@@ -156,7 +170,7 @@ $(function (win, doc, $) {
                             }),
                         $h5 = $("<h5>", {
                                 "class": "modal-title"
-                            }).text(title);
+                            }).text(app.T(title));
 
                     $header.append($h5);
                     $content.append($header);
@@ -174,21 +188,23 @@ $(function (win, doc, $) {
                     var $footer = $("<div>",
                         {
                             "class": "modal-footer"
-                        }),
-                        button = null,
+                        }),                       
                         $button = null;
-                    for (var i = 0; i < buttons.length; i++) {
-                        button = buttons[i];
+                    for (var i = 0; i < buttons.length; i++) {                        
                         $button = $("<button>",
                             {
-                                "id": button.id,
-                                "class": button.css || "btn btn-secondary"
-                            }).text(button.text);                      
-                            $button.on("click", function (e) {
-                                if (button.click) {
-                                    return button.click($caller, e);
-                                }   
-                            });                                             
+                                "id": buttons[i].id,
+                                "class": buttons[i].css || "btn btn-secondary"
+                            })
+                            .text(app.T(buttons[i].text))
+                            .data("clickFunc", buttons[i].click)
+                            ;                      
+                        $button.on("click", function (e) {
+                            var func = $(this).data("clickFunc");
+                            if (func) {
+                                func($caller, $(this), e);
+                            }
+                        });                                             
                         $footer.append($button);
                     }
                     $content.append($footer);
@@ -230,7 +246,7 @@ $(function (win, doc, $) {
 
                 return $dialog;
 
-            }
+            }            
         };
 
         return {
@@ -4363,20 +4379,30 @@ $(function (win, doc, $) {
                 $caller.on(event,
                     function (e) {
 
-                        $().dialog({
-                            id: "confirm",
+                        // Emulate window.confirm behaviour
+
+                        var $this = $(this),
+                            confirmedFlagKey = "confirmed";
+
+                        // Confirmed via dialog
+                        if ($this.data(confirmedFlagKey) === true) {
+                            return true;
+                        }
+
+                        // Show confirmation dialog
+                        $().dialog({                       
                             title: "Confirm",
                             body: {
                                 url: null,
-                                html: "Are you sure you wish to continue?"
+                                html: message
                             },
                             buttons: [
                                 {
                                     id: "cancel",
                                     text: "Cancel",
                                     css: "btn btn-secondary",                                    
-                                    click: function ($modal, e) {
-                                        $().dialog("hide");                                        
+                                    click: function () {                                     
+                                        $().dialog("hide");
                                         return false;
                                     }
                                 },
@@ -4384,16 +4410,25 @@ $(function (win, doc, $) {
                                     id: "ok",
                                     text: "OK",
                                     css: "btn btn-primary",                           
-                                    click: function ($modal, e) {                                        
-                                        return true;
+                                    click: function ($dialog, $button) {     
+                                        // Disable button
+                                        $button
+                                            .addClass("disabled")
+                                            .attr("disabled", "disabled");
+                                        // Click the original button but this time 
+                                        // set a flag so the click event hander returns true 
+                                        // invoking navigation
+                                        $this.data(confirmedFlagKey, true);                                           
+                                        $this[0].click();                                      
                                     }
                                 }
                             ]
                         },
                             "show");
 
+                        // Return false to ensure navigation does not occurr
                         return false;
-                        //return win.confirm(message);
+                
                     });
             },
             unbind: function ($caller) {
@@ -8159,64 +8194,3 @@ $(function (win, doc, $) {
     adapters.addBool("password");
     
 }(window, document, jQuery));
-
-
-///** confirm as noty.JS **/
-//var calleeMethod2 = null;
-//var returnValueOfConfirm = null;
-//var args = null;
-//var calleeMethod = null;
-//var refreshAfterClose = null;
-//var savedConfirm = window.confirm;
-//window.confirm = function (obj) {
-//    // check if the callee is a real method
-//    if (arguments.callee.caller) {
-//        args = arguments.callee.caller.arguments;
-//        calleeMethod = arguments.callee.caller.name;
-//    } else {
-//        // if confirm is called as if / else - rewrite orig js confirm box
-//        window.confirm = savedConfirm;
-//        return confirm(obj);
-//    }
-//    if (calleeMethod !== null && calleeMethod === calleeMethod2) {
-//        calleeMethod2 = null;
-//        return returnValueOfConfirm;
-//    }
-
-
-//    //noty({
-//    //    text: obj,
-//    //    buttons: [{
-//    //        text: 'Yes',
-//    //        onClick: function ($noty) {
-//    //            $noty.close();
-//    //            noty({
-//    //                text: 'YES',
-//    //                type: 'success'
-//    //            });
-//    //        }
-//    //    }, {
-//    //        text: 'No',
-//    //        onClick: function ($noty) {
-//    //            $noty.close();
-//    //            noty({
-//    //                text: 'NO',
-//    //                type: 'error'
-//    //            });
-//    //        }
-//    //    }]
-//    //});
-//    throw new FatalError("!! Stop JavaScript Execution !!");
-//};
-
-//function runConfirmAgain() {
-//    calleeMethod2 = calleeMethod;
-//    // is a method
-//    if (calleeMethod !== null) {
-//        var argsString = $(args).toArray().join("','");
-//        eval(calleeMethod2 + "('" + argsString + "')");
-//    } else {
-//        // is a if else confirm call
-//        alert('confirm error');
-//    }
-//}
