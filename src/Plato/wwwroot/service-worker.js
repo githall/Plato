@@ -36,8 +36,7 @@ self.addEventListener('fetch', (event) => {
     // Don't interfere with API calls
     if (event.request.method !== 'GET'
         || event.request.url.indexOf('/_framework/debug') >= 0
-        || event.request.url.indexOf('/css/webfonts') >= 0) {
-        console.log("skipping fetch " + event.request.url)
+        || event.request.url.indexOf('/css/webfonts') >= 0) {        
         return;
     }
     // We only want to call event.respondWith() if this is a navigation request

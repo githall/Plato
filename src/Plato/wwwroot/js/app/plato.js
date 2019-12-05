@@ -621,4 +621,9 @@ $(function (win, doc, $) {
 
     });
 
+    // Offline service worker
+    if (win.navigator.serviceWorker) {
+        win.navigator.serviceWorker.register('/service-worker.js');
+    }        
+
 }(window, document, jQuery));

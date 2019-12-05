@@ -4379,7 +4379,7 @@ $(function (win, doc, $) {
                 $caller.on(event,
                     function (e) {
 
-                        // Emulate window.confirm behaviour
+                        // Emulate window.confirm behaviour but with a custom dialog UI
 
                         var $this = $(this),
                             confirmedFlagKey = "confirmed";
