@@ -7878,7 +7878,7 @@ $(function (win, doc, $) {
     // --------------
 
     app.ready(function () {     
-        $("body").appUI(win.$.Plato.defaults);
+        $("body").appUI(win.$.Plato.defaults); 
     });
 
 }(window, document, jQuery));
@@ -7923,8 +7923,10 @@ $(function (win, doc, $) {
         focusInvalid: true,
         submitHandler: function(form) {
 
+            // Ensure page is not flagged as dirty when submitting if validation passes
             $("body").first().attr("data-page-is-dirty", false);
 
+            // Disable the submit button?
             var $form = $(form);
             if ($form.data("disableSubmit")) {
                 $form.find('*[type="submit"]')

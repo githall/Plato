@@ -964,9 +964,6 @@ if (typeof window.$.Plato === "undefined") {
                         return null;
                     }
 
-
-
-
                     this.showEditor();
 
                 },
@@ -1653,6 +1650,7 @@ if (typeof window.$.Plato === "undefined") {
                             this.setFullscreen(true);
                         }
 
+                        // Track changes and set a dirty flag on the body element
                         this.$textarea.on('keyup keypress paste',
                             function () {
                                 if (!$("body").first().attr("data-page-is-dirty")) {
@@ -2574,7 +2572,7 @@ if (typeof window.$.Plato === "undefined") {
 
     $(win)
         .on('beforeunload', function (e) {
-            var msg = "Discard Changes?";
+            var msg = plato.T("Discard changes?");
             if ($("body").first().attr("data-page-is-dirty") === "true") {
                 e.returnValue = msg;
                 return msg;

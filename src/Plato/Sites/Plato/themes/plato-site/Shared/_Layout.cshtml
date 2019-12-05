@@ -15,6 +15,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
     <assets section="Header" />
     <canonical href="@ViewData["ReturnUrl"]" />
+    <link rel="manifest" href="/manifest.json" crossOrigin="use-credentials" />
     <link rel="icon" href="/favicon.ico" />
     <scripts section="Header" />
 </head>
@@ -35,12 +36,12 @@
     <assets section="Body" />
     <scripts section="Body" />
 
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">     
-    @await DisplayAsync(new View("SiteHeader", new
-    {
-        sticky = false
-    }))
-</cache>
+    <cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+        @await DisplayAsync(new View("SiteHeader", new
+        {
+            sticky = false
+        }))
+    </cache>
 
     <!-- Plato Nav  -->
     <nav class="nav-site bg-white">
@@ -84,7 +85,7 @@
     @if (RouteEquals("Plato.Core", "Home", "Index"))
     {
         <div class="bg-light mb-4">
-            <div class="container-fluid container-fluid-1280">
+            <div class="container-fluid container-fluid-1400">
                 <div class="row">
                     <div class="col-12  my-6 text-center">
                         <h1 class="font-weight-bold text-primary text-uppercase">
@@ -113,7 +114,7 @@
         </div>
     }
 
-    <div class="container-fluid container-fluid-1280 pt-2">
+    <div class="container-fluid container-fluid-1400 pt-2">
         @if (!RouteEquals("Plato.Core", "Home", "Index"))
         {
             <nav aria-label="breadcrumb" class="mt-3">
@@ -122,17 +123,20 @@
         }
         @RenderBody()
     </div>
-        
-<cache expires-after="@TimeSpan.FromMinutes(30)">
-    <footer>
-        @await DisplayAsync(new View("SiteFooterMinimal", new
-        {
-        }))
-    </footer>
-</cache>
-    
+
+    <cache expires-after="@TimeSpan.FromMinutes(30)">
+        <footer>
+            @await DisplayAsync(new View("SiteFooterMinimal", new
+            {
+            }))
+        </footer>
+    </cache>
+
     <assets section="Footer" />
     <scripts section="Footer" />
+    <script>
+        navigator.serviceWorker.register('service-worker.js');
+    </script>
 
 </body>
 </html>

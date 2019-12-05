@@ -65,6 +65,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .plato-brand-md { padding: 16px; border-width: 16px; }
 .plato-brand-lg { padding: 24px; border-width: 24px; }
 .plato-brand-xl { padding: 48px; border-width: 48px; }
+.plato-brand-xxl { padding: 88px; border-width: 88px; }
 
 /* ------------------------- */
 /* Plato Loader */
