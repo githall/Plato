@@ -7923,6 +7923,8 @@ $(function (win, doc, $) {
         focusInvalid: true,
         submitHandler: function(form) {
 
+            $("body").first().attr("data-page-is-dirty", false);
+
             var $form = $(form);
             if ($form.data("disableSubmit")) {
                 $form.find('*[type="submit"]')

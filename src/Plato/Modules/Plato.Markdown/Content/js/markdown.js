@@ -964,6 +964,9 @@ if (typeof window.$.Plato === "undefined") {
                         return null;
                     }
 
+
+
+
                     this.showEditor();
 
                 },
@@ -2560,13 +2563,22 @@ if (typeof window.$.Plato === "undefined") {
         .on('click focusin',
             function (e) {
                 blurNonFocused(e);
-            })
+            })       
         .ready(function () {
             $('textarea[data-provide="markdown"]').markdown({
                 onPreview: function (e, $elem) {
                     $elem.markdownBody();
                 }
             });
+        });
+
+    $(win)
+        .on('beforeunload', function (e) {
+            var msg = "Discard Changes?";
+            if ($("body").first().attr("data-page-is-dirty") === "true") {
+                e.returnValue = msg;
+                return msg;
+            }
         });
 
 })(jQuery, window, document);
