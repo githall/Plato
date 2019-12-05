@@ -38,19 +38,25 @@
             <div class="row gutter-sm">
                 <div class="col-lg-3 layout-sidebar layout-sidebar-sticky">
                     <div class="layout-sidebar-content">
-                        <div class="d-block navbar-expand-lg">
-                            <a href="#" class="w-100 navbar-toggler p-0 border-0 bg-transparent" data-toggle="collapse" data-target="#sidebar-collapse" aria-controls="sidebar-collapse" aria-expanded="false" aria-label="Toggle navigation" role="button">
-                                <span class="btn btn-block btn-primary mb-3">
-                                    <i class="fal fa-bars"></i> @T["Table of contents"]
-                                </span>
-                            </a>
-                            <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
-                                @if (Model.SideBar != null)
-                                {
-                                    <view model="@Model.SideBar"></view>
-                                }
-                            </div>
-                        </div>
+
+                        <card class="card">
+                            <card-body class="card-body p-2">
+                                <div class="d-block navbar-expand-lg">
+                                    <a href="#" class="w-100 navbar-toggler p-0 border-0 bg-transparent" data-toggle="collapse" data-target="#sidebar-collapse" aria-controls="sidebar-collapse" aria-expanded="false" aria-label="Toggle navigation" role="button">
+                                        <span class="btn btn-block btn-primary mb-3">
+                                            <i class="fal fa-bars"></i> @T["Table of contents"]
+                                        </span>
+                                    </a>
+                                    <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
+                                        @if (Model.SideBar != null)
+                                        {
+                                            <view model="@Model.SideBar"></view>
+                                        }
+                                    </div>
+                                </div>
+                            </card-body>
+                        </card>
+
                     </div>
                 </div>
                 <div class="col-lg-7 layout-content">
@@ -98,9 +104,13 @@
                 <div class="d-none d-lg-block col-lg-2 layout-asides layout-asides-sticky">
                     @if (Model.Asides != null)
                     {
-                        <div class="layout-asides-content">
-                            <view model="@Model.Asides"></view>
-                        </div>
+                    <div class="layout-asides-content">
+                        <card class="card">
+                            <card-body>
+                                <view model="@Model.Asides"></view>
+                            </card-body>
+                        </card>
+                    </div>
                     }
                 </div>
             </div>
@@ -110,21 +120,23 @@
         <div class="row gutter-sm">
             <div class="col-lg-3 layout-sidebar layout-sidebar-sticky">
                 <div class="layout-sidebar-content">
-
-                    <div class="d-block navbar-expand-lg">
-                        <a href="#" class="w-100 navbar-toggler p-0 border-0 bg-transparent" data-toggle="collapse" data-target="#sidebar-collapse" aria-controls="sidebar-collapse" aria-expanded="false" aria-label="Toggle navigation" role="button">
-                            <span class="btn btn-block btn-primary mb-3">
-                                <i class="fal fa-bars"></i> @T["Table of contents"]
-                            </span>
-                        </a>
-                        <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
-                            @if (Model.SideBar != null)
-                            {
-                                <view model="@Model.SideBar"></view>
-                            }
-                        </div>
-                    </div>
-
+                    <card class="card">
+                        <card-body class="card-body p-2">
+                            <div class="d-block navbar-expand-lg">
+                                <a href="#" class="w-100 navbar-toggler p-0 border-0 bg-transparent" data-toggle="collapse" data-target="#sidebar-collapse" aria-controls="sidebar-collapse" aria-expanded="false" aria-label="Toggle navigation" role="button">
+                                    <span class="btn btn-block btn-primary mb-3">
+                                        <i class="fal fa-bars"></i> @T["Table of contents"]
+                                    </span>
+                                </a>
+                                <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
+                                    @if (Model.SideBar != null)
+                                    {
+                                        <view model="@Model.SideBar"></view>
+                                    }
+                                </div>
+                            </div>
+                        </card-body>
+                    </card>
                 </div>
             </div>
             <div class="col-lg-9 layout-content">
@@ -196,7 +208,6 @@
                                 child-ul-css-class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" />
                 </div>
                 <div class="resizable-body">
-
                     <form asp-controller="Home" asp-action="Display" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
                         @if (Model.Footer != null)
                         {

@@ -4,7 +4,7 @@
 /* ------------------- */
 
 .layout-header.fixed > .layout-header-content { background-color: #0a0a0a; }
-.layout-header-content { border-color: rgba(10, 10, 10, 0.5); }
+.layout-header-content { border-color: rgba(75, 75, 75, 0.5); }
 
 /* ------------------- */
 /* Navigation  */
@@ -2884,7 +2884,8 @@ a.text-dark:hover, a.text-dark:focus {
 
 .navbar.bg-dark {
     background-color: #060606 !important;
-    border: 1px solid #282828
+    border:0;
+    border-bottom: 1px solid #282828
 }
 
 .navbar.bg-light {

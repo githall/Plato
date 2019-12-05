@@ -28,7 +28,14 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     }
 }
 
-/* above 1280px limit to 1600px */
+/* above 1400px limit to 1400px */
+@media (min-width: 1400px) {
+    .container-fluid-1400 {
+        max-width: 1400px;
+    }
+}
+
+/* above 1600px limit to 1600px */
 @media (min-width: 1600px) {  
     .container-fluid-1600 {
         max-width: 1600px;
@@ -1379,7 +1386,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     }
 
     /* Ensure collapse is visible by default for desktops */
-    .layout-sidebar .collapse { display: block !important; }
+    .layout-sidebar .navbar-collapse { display: block !important; }
 
 }
 

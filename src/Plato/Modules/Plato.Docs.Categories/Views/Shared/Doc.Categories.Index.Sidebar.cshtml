@@ -3,8 +3,7 @@
     var postPermission = Plato.Docs.Permissions.PostDocs;
 }
 
-<div class="position-relative">
-    
+<div class="mb-2">
     <authorize asp-permission="@postPermission.Name">
         <authorize-success>
             <div class="position-absolute" style="right: 0; z-index: 1;">
@@ -14,11 +13,8 @@
             </div>
         </authorize-success>
     </authorize>
-
     @await DisplayAsync(new View("DocCategoryListSidebar", new
     {
         options = Model.Options
     }))
-
-
 </div>

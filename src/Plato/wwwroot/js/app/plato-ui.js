@@ -7517,8 +7517,7 @@ $(function (win, doc, $) {
                         onUpdate: function ($this) {
                             if ($this.hasClass("fixed")) {
                                 // Setup content when container becomes fixed
-                                $stickySidebarContent.css({
-                                    "overflowY": "auto",
+                                $stickySidebarContent.css({                                   
                                     "top": sidebarOffsetTop,
                                     "width": $this.width()
                                 });
@@ -7528,8 +7527,7 @@ $(function (win, doc, $) {
                                 }
                             } else {
                                 // Reset
-                                $stickySidebarContent.css({
-                                    "overflowY": "visible",
+                                $stickySidebarContent.css({                                
                                     "top": "auto",
                                     "width": "auto"
                                 });
@@ -7879,11 +7877,8 @@ $(function (win, doc, $) {
     // ready
     // --------------
 
-    app.ready(function () {
-
-        // Init app UI
+    app.ready(function () {     
         $("body").appUI(win.$.Plato.defaults);
-
     });
 
 }(window, document, jQuery));
