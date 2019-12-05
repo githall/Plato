@@ -86,6 +86,7 @@ $(function (win, doc, $) {
                 $dialog.modal("show");
                 
                 methods.load($caller);
+                methods.populate($caller);
 
                 // onShow event
                 if ($caller.data(dataKey).onShow) {
@@ -118,17 +119,17 @@ $(function (win, doc, $) {
                     method: "GET",
                     url: url
                 }).done(function(response) {
-                    var $body = $caller.find(".modal-content");
-                    if ($body.length > 0) {
-                        $body.empty();
+                    var $content = $caller.find(".modal-content");
+                    if ($content.length > 0) {
+                        $content.empty();
                         if (response !== "") {
-                            $body.html(response);
+                            $content.html(response);
                             // Enable tooltips within loaded content
-                            app.ui.initToolTips($body);
+                            app.ui.initToolTips($content);
                             // confirm
-                            $body.find('[data-provide="confirm"]').confirm();
+                            $content.find('[data-provide="confirm"]').confirm();
                             // markdown body
-                            $body.find('[data-provide="markdownBody"]').markdownBody();                            
+                            $content.find('[data-provide="markdownBody"]').markdownBody();                            
                         }
                     }
                     
@@ -139,9 +140,65 @@ $(function (win, doc, $) {
                 });
 
             },
+            populate: function ($caller) {
+
+                var title = $caller.data(dataKey).title,
+                    html = $caller.data(dataKey).body.html,     
+                    buttons = $caller.data(dataKey).buttons,
+                    $content = $caller.find(".modal-content");
+
+                $content.empty();
+
+                if (title && title !== "") {
+                    var $header = $("<div>",
+                            {
+                                "class": "modal-header"
+                            }),
+                        $h5 = $("<h5>", {
+                                "class": "modal-title"
+                            }).text(title);
+
+                    $header.append($h5);
+                    $content.append($header);
+                }
+              
+                if (html && html !== "") {
+                    var $body = $("<div>",
+                        {
+                            "class": "modal-body"
+                        }).html(html);
+                    $content.append($body);
+                }
+
+                if (buttons) {
+                    var $footer = $("<div>",
+                        {
+                            "class": "modal-footer"
+                        }),
+                        button = null,
+                        $button = null;
+                    for (var i = 0; i < buttons.length; i++) {
+                        button = buttons[i];
+                        $button = $("<button>",
+                            {
+                                "id": button.id,
+                                "class": button.css || "btn btn-secondary"
+                            }).text(button.text);                      
+                            $button.on("click", function (e) {
+                                if (button.click) {
+                                    return button.click($caller, e);
+                                }   
+                            });                                             
+                        $footer.append($button);
+                    }
+                    $content.append($footer);
+                }
+
+            },
             getOrCreate: function($caller) {
 
                 var id = $caller.data(dataKey).id,
+                    title = $caller.data(dataKey).title,
                     $dialog = $("#" + id);
 
                 if ($dialog.length === 0) {
@@ -157,11 +214,12 @@ $(function (win, doc, $) {
                     var $model = $("<div>",
                             {
                                 "class": $caller.data(dataKey).css.dialog
-                            }),
+                            }),                    
                         $content = $("<div>",
                             {
                                 "class": "modal-content"
                             }).append($('<p class="my-4 text-center"><i class="fal my-4 fa-spinner fa-spin"></i></p>'));
+
 
                     $model.append($content);
                     $dialog.append($model);
@@ -4304,7 +4362,38 @@ $(function (win, doc, $) {
                     message = $caller.data("confirmMessage") || $caller.data(dataKey).message;
                 $caller.on(event,
                     function (e) {
-                        return win.confirm(message);
+
+                        $().dialog({
+                            id: "confirm",
+                            title: "Confirm",
+                            body: {
+                                url: null,
+                                html: "Are you sure you wish to continue?"
+                            },
+                            buttons: [
+                                {
+                                    id: "cancel",
+                                    text: "Cancel",
+                                    css: "btn btn-secondary",                                    
+                                    click: function ($modal, e) {
+                                        $().dialog("hide");                                        
+                                        return false;
+                                    }
+                                },
+                                {
+                                    id: "ok",
+                                    text: "OK",
+                                    css: "btn btn-primary",                           
+                                    click: function ($modal, e) {                                        
+                                        return true;
+                                    }
+                                }
+                            ]
+                        },
+                            "show");
+
+                        return false;
+                        //return win.confirm(message);
                     });
             },
             unbind: function ($caller) {
@@ -8070,3 +8159,64 @@ $(function (win, doc, $) {
     adapters.addBool("password");
     
 }(window, document, jQuery));
+
+
+///** confirm as noty.JS **/
+//var calleeMethod2 = null;
+//var returnValueOfConfirm = null;
+//var args = null;
+//var calleeMethod = null;
+//var refreshAfterClose = null;
+//var savedConfirm = window.confirm;
+//window.confirm = function (obj) {
+//    // check if the callee is a real method
+//    if (arguments.callee.caller) {
+//        args = arguments.callee.caller.arguments;
+//        calleeMethod = arguments.callee.caller.name;
+//    } else {
+//        // if confirm is called as if / else - rewrite orig js confirm box
+//        window.confirm = savedConfirm;
+//        return confirm(obj);
+//    }
+//    if (calleeMethod !== null && calleeMethod === calleeMethod2) {
+//        calleeMethod2 = null;
+//        return returnValueOfConfirm;
+//    }
+
+
+//    //noty({
+//    //    text: obj,
+//    //    buttons: [{
+//    //        text: 'Yes',
+//    //        onClick: function ($noty) {
+//    //            $noty.close();
+//    //            noty({
+//    //                text: 'YES',
+//    //                type: 'success'
+//    //            });
+//    //        }
+//    //    }, {
+//    //        text: 'No',
+//    //        onClick: function ($noty) {
+//    //            $noty.close();
+//    //            noty({
+//    //                text: 'NO',
+//    //                type: 'error'
+//    //            });
+//    //        }
+//    //    }]
+//    //});
+//    throw new FatalError("!! Stop JavaScript Execution !!");
+//};
+
+//function runConfirmAgain() {
+//    calleeMethod2 = calleeMethod;
+//    // is a method
+//    if (calleeMethod !== null) {
+//        var argsString = $(args).toArray().join("','");
+//        eval(calleeMethod2 + "('" + argsString + "')");
+//    } else {
+//        // is a if else confirm call
+//        alert('confirm error');
+//    }
+//}
