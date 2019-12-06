@@ -4394,7 +4394,7 @@ $(function (win, doc, $) {
                             title: "Confirm",
                             body: {
                                 url: null,
-                                html: message
+                                html: message.replace(/\n/g, "<br/>")
                             },
                             buttons: [
                                 {

@@ -1660,17 +1660,17 @@ if (typeof window.$.Plato === "undefined") {
                                 plato.storage.set(win.location.href, $(this).val());
                             });     
 
-                        var value = plato.storage.get(win.location.href);
-                        if (value) {
-                            if (value.trim() !== "") {
-                                if (textarea.val().trim() === "") {
+                        var storedValue = plato.storage.get(win.location.href);
+                        if (storedValue) {
+                            if (storedValue.trim() !== "") {
+                                if (this.$textarea.val().trim() === "") {
                                     // No text simply restore any existing saved text
-                                    textarea.val(value);
+                                    this.$textarea.val(storedValue);
                                 } else {
 
                                     // We already have text confirm if we want to overwrite existing text                                 
                                     $().dialog({
-                                        title: "Restore unsaved changes?",
+                                        title: "Restore changes?",
                                         body: {
                                             url: null,
                                             html: "We've detected you have some unsaved changes. Would you like to discard or restore these changes?"
@@ -1691,7 +1691,7 @@ if (typeof window.$.Plato === "undefined") {
                                                 css: "btn btn-primary",
                                                 click: function ($dialog, $button) {
                                                     $().dialog("hide");
-                                                    textarea.val(value);
+                                                    textarea.val(storedValue);
                                                 }
                                             }
                                         ]

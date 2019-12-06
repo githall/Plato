@@ -130,7 +130,14 @@ namespace Plato.Discuss.Categories.Moderators.Navigation
                             .DividerCss("dropdown-divider").LocalNav()
                         )
                         .Add(topic.IsDeleted ? T["Restore"] : T["Delete"], "1", int.MaxValue, delete => delete
-                                .Action(topic.IsDeleted ? "RestoreTopic" : "DeleteTopic", "Home",
+                                .Attributes(!topic.IsDeleted
+                                    ? new Dictionary<string, object>()
+                                    {
+                                        ["data-provide"] = "confirm",
+                                        ["data-confirm-message"] = "Are you sure you want to delete this topic?\n\nClick OK to confirm..."
+                                    }
+                                    : new Dictionary<string, object>())
+                                .Action(topic.IsDeleted ? "Restore" : "Delete", "Home",
                                     "Plato.Discuss.Categories.Moderators", new RouteValueDictionary()
                                     {
                                         ["id"] = topic.Id
