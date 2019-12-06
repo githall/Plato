@@ -75,6 +75,7 @@ if (typeof window.$.Plato === "undefined") {
                         }
                     }
                 },
+                localStorageKey: "plato-markdown",
 
                 /* Buttons */
                 buttons: [
@@ -1653,10 +1654,53 @@ if (typeof window.$.Plato === "undefined") {
                         // Track changes and set a dirty flag on the body element
                         this.$textarea.on('keyup keypress paste',
                             function () {
-                                if (!$("body").first().attr("data-page-is-dirty")) {
-                                    $("body").first().attr("data-page-is-dirty", true);
+                                //if (!$("body").first().attr("data-page-is-dirty")) {
+                                //    $("body").first().attr("data-page-is-dirty", true);
+                                //}
+                                plato.storage.set(win.location.href, $(this).val());
+                            });     
+
+                        var value = plato.storage.get(win.location.href);
+                        if (value) {
+                            if (value.trim() !== "") {
+                                if (textarea.val().trim() === "") {
+                                    // No text simply restore any existing saved text
+                                    textarea.val(value);
+                                } else {
+
+                                    // We already have text confirm if we want to overwrite existing text                                 
+                                    $().dialog({
+                                        title: "Restore unsaved changes?",
+                                        body: {
+                                            url: null,
+                                            html: "We've detected you have some unsaved changes. Would you like to discard or restore these changes?"
+                                        },
+                                        buttons: [
+                                            {
+                                                id: "discard",
+                                                text: "Dicard",
+                                                css: "btn btn-secondary",
+                                                click: function () {
+                                                    plato.storage.remove(win.location.href);
+                                                    $().dialog("hide");
+                                                }
+                                            },
+                                            {
+                                                id: "restore",
+                                                text: "Restore",
+                                                css: "btn btn-primary",
+                                                click: function ($dialog, $button) {
+                                                    $().dialog("hide");
+                                                    textarea.val(value);
+                                                }
+                                            }
+                                        ]
+                                    }, "show");
+
                                 }
-                            });
+                             
+                            }                                
+                        }                                                 
 
                     } else {
 

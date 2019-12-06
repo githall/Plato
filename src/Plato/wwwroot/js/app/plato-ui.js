@@ -8047,6 +8047,9 @@ $(function (win, doc, $) {
         focusInvalid: true,
         submitHandler: function(form) {
 
+            // Remove any local storage for the page upon submission
+            app.storage.remove(win.location.href);
+
             // Ensure page is not flagged as dirty when submitting if validation passes
             $("body").first().attr("data-page-is-dirty", false);
 

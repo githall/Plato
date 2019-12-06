@@ -414,6 +414,22 @@ $(function (win, doc, $) {
         clearCookie: function (key) {
             this.setCookie(key, null, -1);
             return this;
+        },
+        set: function (key, value) {     
+            if (win.localStorage) {             
+                win.localStorage.setItem(key, value);
+            }            
+        },
+        get: function (key) {
+            if (win.localStorage) {             
+                return win.localStorage.getItem(key);
+            }
+            return null;
+        },
+        remove: function (key) {
+            if (win.localStorage) {
+                win.localStorage.removeItem(key);
+            }
         }
     };
 
@@ -621,9 +637,12 @@ $(function (win, doc, $) {
 
     });
 
-    // Offline service worker
-    if (win.navigator.serviceWorker) {
-        win.navigator.serviceWorker.register('/service-worker.js');
-    }        
+    // Register an offline service worker for better PWA support
+    // Delay registration until everything has loaded to improve first visit perf
+    $(win).on("load", function () {        
+        if ('serviceWorker' in win.navigator) {
+            win.navigator.serviceWorker.register('/service-worker.js');
+        }     
+    });    
 
 }(window, document, jQuery));
