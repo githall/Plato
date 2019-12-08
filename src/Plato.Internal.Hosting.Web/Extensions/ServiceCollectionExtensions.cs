@@ -219,13 +219,13 @@ namespace Plato.Internal.Hosting.Web.Extensions
             services.Configure<RazorViewEngineOptions>(options =>
             {
 
-                options.AllowRecompilingViewsOnFileChange = false;
+                //options.AllowRecompilingViewsOnFileChange = false;
 
                 // Add composite view location expander
                 options.ViewLocationExpanders.Add(new CompositeViewLocationExpander());
 
                 // To let the application behave as a module, its razor files are requested under the virtual
-                // "Areas" folder, but they are still served from the file system by this custom provider.
+                // "Modules" folder, but they are still served from the file system by this custom provider.
                 options.FileProviders.Insert(0, new ModuleViewFileProvider(services.BuildServiceProvider()));
 
             });

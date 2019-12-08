@@ -605,7 +605,13 @@ a.label:hover, .label.active {
 /* ------------------------- */
 /* Custom Site Css */
 /* ------------------------- */
+
 .core-layout .layout-header,
 .core-layout .layout-tools {
     display: none;
+}
+
+.layout-sidebar-content > .card,
+.layout-asides-content > .card {
+    border: 0 !important;
 }

@@ -55,6 +55,7 @@ $(function (win, doc, $) {
                 $caller.autoLinkImages("unbind");
 
                 var selector = $caller.data(dataKey).selector;
+                console.log(selector)
                 $caller.find(selector).each(function (i) {
                     var src = $(this).attr("src");
                     if (src) {

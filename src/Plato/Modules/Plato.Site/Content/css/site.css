@@ -2,8 +2,8 @@
 /* Colors */
 
 .bg-black { background: black; }
-
 .bg-purple { background: #5C2D91; }
+
 .border-purple { border-color: #5C2D91; }
 .purple { background: #5C2D91; border-color: #5C2D91; }
 .text-purple { color: #5C2D91; }
@@ -177,17 +177,23 @@ a.img-thumbnail:hover .img-caption {
     transform: rotate(90deg);
 }
 
+.accordion .card-header {
+    border:0;
+}
+
 /* GitHub button */
+.github-button .star-count {
+    display: none;
+}
 
-.github-button .star-count { display: none; }
 
-/* Download content */
+/* Download */
 
-.download-content .badge + .badge {
+.download-content .download-badge + .download-badge {
     margin-left: 10px;
 }
 
-.download-content .badge {
+.download-content .download-badge {
     display: inline-block;
     position: relative;
     width: 135px;
@@ -195,8 +201,8 @@ a.img-thumbnail:hover .img-caption {
     overflow: hidden;
 }
 
-.download-content .badge.windows {
-    display: block;
+.download-content .download-badge.windows {
+    display: inline-block;
     margin: 5px auto;
     height: 49px;
 }

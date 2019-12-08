@@ -14,7 +14,7 @@
                 </h1>
                 <hr class="divider border-primary" />
                 <h2 class="font-weight-light my-4 mx-auto max-w-800">
-                    Everything you need within a single platform to build an amazing community & support experience
+                    Everything you need within a single platform to build an amazing user community & support experience
                 </h2>
             </div>
         </div>
@@ -22,7 +22,7 @@
 </section>
 
 <!-- Features -->
-<section class="page bg-light">
+<section id="features" class="page bg-light">
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
@@ -36,12 +36,12 @@
                 <h3 class="font-weight-light my-4">
                     Provide a civilized, spam free community to discuss your products
                 </h3>
-                <a href="~/plato.site/content/images/discuss.png" class="img-thumbnail mt-4 border box-shadow" target="_blank">
+                <div class="img-thumbnail mt-4 border box-shadow">
                     <img alt="Plato.Discuss Screen Grab" src="~/plato.site/content/images/discuss.png" class="img-fluid mx-auto w-100 d-block" />
                     <div class="img-caption">
                         <i class="fal fa-image"></i> Click to enlarge
                     </div>
-                </a>
+                </div>
             </div>
         </div>
         <div class="row mt-6">
@@ -56,12 +56,12 @@
                 <h3 class="font-weight-light my-4">
                     Create beautiful documentation to support your products
                 </h3>
-                <a href="~/plato.site/content/images/docs.png" class="img-thumbnail mt-4 border box-shadow" target="_blank">
+                <div class="img-thumbnail mt-4 border box-shadow">
                     <img alt="Plato.Docs Screen Grab" src="~/plato.site/content/images/docs.png" class="img-fluid mx-auto w-100 d-block" />
                     <div class="img-caption">
                         <i class="fal fa-image"></i> Click to enlarge
                     </div>
-                </a>
+                </div>
 
             </div>
         </div>
@@ -77,12 +77,12 @@
                 <h3 class="font-weight-light my-4">
                     Share articles or guides to help your users learn your products
                 </h3>
-                <a href="~/plato.site/content/images/articles.png" class="img-thumbnail mt-4 border box-shadow" target="_blank">
+                <div class="img-thumbnail mt-4 border box-shadow">
                     <img alt="Plato.Articles Screen Grab" src="~/plato.site/content/images/articles.png" class="img-fluid mx-auto w-100 d-block" />
                     <div class="img-caption">
                         <i class="fal fa-image"></i> Click to enlarge
                     </div>
-                </a>
+                </div>
             </div>
         </div>
         <div class="row mt-6">
@@ -97,12 +97,12 @@
                 <h3 class="font-weight-light my-4">
                     Help your users find the answers they need with public or private Q&A
                 </h3>
-                <a href="~/plato.site/content/images/questions.png" class="img-thumbnail mt-4 border box-shadow" target="_blank">
+                <div class="img-thumbnail mt-4 border box-shadow">
                     <img alt="Plato.Questions Screen Grab" src="~/plato.site/content/images/questions.png" class="img-fluid mx-auto w-100 d-block" />
                     <div class="img-caption">
                         <i class="fal fa-image"></i> Click to enlarge
                     </div>
-                </a>
+                </div>
             </div>
         </div>
         <div class="row mt-6">
@@ -117,12 +117,12 @@
                 <h3 class="font-weight-light my-4">
                     Generate & prioritize ideas to shape your products with public or private ideation
                 </h3>
-                <a href="~/plato.site/content/images/ideas.png" class="img-thumbnail mt-4 border box-shadow" target="_blank">
+                <div class="img-thumbnail mt-4 border box-shadow">
                     <img alt="Plato.Ideas Screen Grab" src="~/plato.site/content/images/ideas.png" class="img-fluid mx-auto w-100 d-block" />
                     <div class="img-caption">
                         <i class="fal fa-image"></i> Click to enlarge
                     </div>
-                </a>
+                </div>
             </div>
         </div>
         <div class="row mt-6">
@@ -137,12 +137,12 @@
                 <h3 class="font-weight-light my-4">
                     Identify the most important issues with public or private issue tracking
                 </h3>
-                <a href="~/plato.site/content/images/issues.png" class="img-thumbnail mt-4 border box-shadow" target="_blank">
+                <div class="img-thumbnail mt-4 border box-shadow">
                     <img alt="Plato.Issues Screen Grab" src="~/plato.site/content/images/issues.png" class="img-fluid mx-auto w-100 d-block" />
                     <div class="img-caption">
                         <i class="fal fa-image"></i> Click to enlarge
                     </div>
-                </a>
+                </div>
             </div>
         </div>
         <div class="row mt-6">
@@ -203,3 +203,18 @@
         </div>
     </div>
 </section>
+
+@section Header {<link rel="stylesheet" href="/plato.media.lightbox/content/css/lightbox.min.css" />}
+@section Scripts {
+    <script src="/plato.media.lightbox/content/js/lightbox.min.js"></script>
+    <script>
+
+        $(function (win, doc, $) {
+            $(doc).ready(function() {
+                $('#features').lightBox({
+                    selector: ".img-fluid"
+                });
+            });
+        }(window, document, jQuery));
+    </script>
+}

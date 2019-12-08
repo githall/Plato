@@ -64,7 +64,7 @@ namespace Plato.Internal.Modules
             // Under the root.
             if (folder == "")
             {
-                // Add the virtual folder "Areas" containing all modules.
+                // Add the virtual folder "Modules" containing all modules.
                 entries.Add(new EmbeddedDirectoryInfo(_modulesFolder));
             }
             // Under "Modules".
