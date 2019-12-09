@@ -39,8 +39,8 @@ namespace Plato.Users.Badges.ViewComponents
             return new BadgesIndexViewModel()
             {
                 Badges = options.UserId > 0
-                    ? entries.OrderByDescending(b => b.Details.LastAwardedDate)
-                    : entries.OrderBy(b => b.Level)
+                    ? entries?.OrderByDescending(b => b.Details.LastAwardedDate)
+                    : entries?.OrderBy(b => b.Level)
             };
 
         }

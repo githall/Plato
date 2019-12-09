@@ -2,9 +2,9 @@
 @model BadgesIndexViewModel
 @{
     var badgesList = Model.Badges?.ToList();
-    var goldBadges = @badgesList?.Where(b => b.Level == BadgeLevel.Gold).ToList().Count;
-    var silverBadges = @badgesList?.Where(b => b.Level == BadgeLevel.Silver).ToList().Count;
-    var bronzeBadges = @badgesList?.Where(b => b.Level == BadgeLevel.Bronze).ToList().Count;
+    var goldBadges = badgesList?.Where(b => b.Level == BadgeLevel.Gold).ToList().Count;
+    var silverBadges = badgesList?.Where(b => b.Level == BadgeLevel.Silver).ToList().Count;
+    var bronzeBadges = badgesList?.Where(b => b.Level == BadgeLevel.Bronze).ToList().Count;
     var badgesText = badgesList?.Count == 1
         ? "Badge"
         : "Badges";
@@ -13,7 +13,7 @@
 <card class="card card-body-flush">
     <card-title>
         <h6 class="card-title float-left">
-            @badgesList.Count @T[badgesText]
+            @badgesList?.Count @T[badgesText]
         </h6>
         <span class="text-muted float-right">
             @goldBadges
