@@ -219,8 +219,6 @@ namespace Plato.Internal.Hosting.Web.Extensions
             services.Configure<RazorViewEngineOptions>(options =>
             {
 
-                //options.AllowRecompilingViewsOnFileChange = false;
-
                 // Add composite view location expander
                 options.ViewLocationExpanders.Add(new CompositeViewLocationExpander());
 

@@ -19,7 +19,8 @@ namespace Plato.Core.ViewComponents
             LocalizedHtmlString placeHolderText,
             string htmlName,
             bool autoFocus,
-            int rows)
+            int rows,
+            int tabIndex)
         {
 
             var model = new EditorViewModel
@@ -29,7 +30,8 @@ namespace Plato.Core.ViewComponents
                 PlaceHolderText = placeHolderText?.Value ?? string.Empty,
                 Value = value,
                 AutoFocus = autoFocus,
-                Rows = rows > 0 ? rows : 10
+                Rows = rows > 0 ? rows : 10,
+                TabIndex = tabIndex
             };
 
             return Task.FromResult((IViewComponentResult)View(model));

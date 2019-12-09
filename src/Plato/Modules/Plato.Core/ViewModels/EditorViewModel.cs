@@ -15,6 +15,8 @@
 
         public int Rows { get; set; } = 10;
 
+        public int TabIndex { get; set; }
+
     }
 
 }

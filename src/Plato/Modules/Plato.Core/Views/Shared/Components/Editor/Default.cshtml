@@ -6,5 +6,6 @@
     data-val-required="The message field is required"
     class="form-control md-textarea" 
     placeholder="@Model.PlaceHolderText" 
-    asp-autofocus="@Model.AutoFocus"
+    asp-autofocus="@Model.AutoFocus"    
+    tabindex="@Model.TabIndex"
     rows="@Model.Rows">@Model.Value</textarea>
