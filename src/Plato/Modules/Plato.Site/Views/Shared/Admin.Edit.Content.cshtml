@@ -22,7 +22,18 @@
                         </label>
                         <input placeholder="@T["https://demos.domain.com/plato"]" asp-for="DemoUrl" class="form-control" autofocus />
                     </div>
-                </fieldset>             
+                </fieldset>
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="DefaultFrom">
+                        <label asp-for="PlatoDesktopUrl">
+                            <strong>@T["Plato Desktop Url"]</strong>
+                            <span asp-validation-for="PlatoDesktopUrl" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["The Microsoft Store URL to download Plato Desktop"]</span>
+                        </label>
+                        <input placeholder="@T["https://www.microsoft.com/"]" asp-for="PlatoDesktopUrl" class="form-control" autofocus />
+                    </div>
+                </fieldset>
             </div>
         </div>
     </card-body>

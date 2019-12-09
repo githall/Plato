@@ -67,7 +67,8 @@ namespace Plato.Site.ViewProviders
                 // Create the model
                 settings = new PlatoSiteSettings()
                 {
-                    DemoUrl = model.DemoUrl
+                    DemoUrl = model.DemoUrl,
+                    PlatoDesktopUrl = model.PlatoDesktopUrl
                 };
 
                 // Persist the settings
@@ -90,12 +91,11 @@ namespace Plato.Site.ViewProviders
             var settings = await _demoSettingsStore.GetAsync();
             if (settings != null)
             {
-
                 return new PlatoSiteSettingsViewModel()
                 {
-                    DemoUrl = settings.DemoUrl            
+                    DemoUrl = settings.DemoUrl,
+                    PlatoDesktopUrl = settings.PlatoDesktopUrl
                 };
-
             }
 
             // return default settings

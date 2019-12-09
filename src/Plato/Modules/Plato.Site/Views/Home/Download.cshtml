@@ -1,6 +1,9 @@
 ﻿@{
     AddTitleSegment(T["Desktop"]);
 }
+@{
+    var platoSiteOptions = GetOptions<PlatoSiteOptions>();
+}
 
 <section class="page">
     <div class="container">
@@ -20,7 +23,7 @@
                             Offer a simple native experience to ease accessing your Plato site. Great for those authoring Plato content. Plato Desktop requires Windows 10 and an active internet connection.
                         </p>
                         <p class="download-content">
-                            <a class="download-badge windows" href="https://www.microsoft.com/en-us/">
+                            <a class="download-badge windows" href="@platoSiteOptions.PlatoDesktopUrl" target="_blank">
                                 <img src="~/plato.site/content/images/download/windowsstore_badge_en.svg" />
                             </a>
                         </p>
@@ -30,7 +33,6 @@
         </div>
     </div>
 </section>
-
 
 <!-- Get the Code -->
 <section class="page">
@@ -46,7 +48,7 @@
                     <h3 class="font-weight-light">
                         Plato Desktop is free and open source. You can customtize the code or contribute to improve the project on GitHub.
                     </h3>
-                    <a class="btn btn-primary btn-lg mt-4" target="_blank" href="https://github.com/InstantASP/" data-provide="loader-spy">
+                    <a class="btn btn-primary btn-lg mt-4" target="_blank" href="https://github.com/InstantASP/plato.UWP" data-provide="loader-spy">
                         <i class="fab fa-github"></i>
                         Plato Desktop on GitHub
                     </a>

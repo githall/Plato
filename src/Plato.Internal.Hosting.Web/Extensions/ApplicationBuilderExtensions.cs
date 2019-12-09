@@ -107,7 +107,7 @@ namespace Plato.Internal.Hosting.Web.Extensions
             var viewFeatureProvider = app.ApplicationServices.GetRequiredService<IApplicationFeatureProvider<ViewsFeature>>();
             partManager.FeatureProviders.Add(viewFeatureProvider);
         }
-        
+
     }
 
 }

@@ -8,6 +8,8 @@ namespace Plato.Site.ViewModels
         [Required, StringLength(255), DataType(DataType.Url)]
         public string DemoUrl { get; set; }
 
+        public string PlatoDesktopUrl { get; set; }
+
     }
 
 }

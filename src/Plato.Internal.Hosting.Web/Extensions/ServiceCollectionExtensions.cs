@@ -49,7 +49,6 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Internal.Layout.ViewFeatures;
 using Plato.Internal.Layout.LocationExpander;
 using Plato.Internal.Modules;
-using Microsoft.AspNetCore.Authentication;
 
 namespace Plato.Internal.Hosting.Web.Extensions
 {

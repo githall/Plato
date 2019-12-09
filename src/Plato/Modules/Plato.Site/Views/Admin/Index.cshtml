@@ -6,7 +6,7 @@
 }
 
 <form asp-route-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
-    <div class="layout">
+    <div class="layout px-4">
         <div class="layout-header">
             <div class="layout-header-content">
                 @if (Model.Alerts != null)
@@ -57,9 +57,9 @@
             {
                 @if (Model.Content != null)
                  {
-                     <div class="layout-content">
-                         <view model="@Model.Content"></view>
-                     </div>
+                    <div class="layout-content">
+                        <view model="@Model.Content"></view>
+                    </div>
                  }
             }
         </div>
