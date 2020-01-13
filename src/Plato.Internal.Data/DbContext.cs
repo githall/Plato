@@ -10,9 +10,9 @@ namespace Plato.Internal.Data
 {
     public class DbContext : IDbContext
     {
-     
+
         public DbContextOptions Configuration { get; private set; }
-        
+
         private readonly ILogger<DbContext> _logger;
         private readonly IDataProvider _provider;
 
