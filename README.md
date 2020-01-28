@@ -1,11 +1,11 @@
 
 ![logo.png](https://plato.instantasp.co.uk/plato.site/content/images/logo-text.png)
 
-![dotNetCore22](https://img.shields.io/static/v1?label=.NET+Core&message=2.2&color=green) ![mvc6](https://img.shields.io/static/v1?label=MVC&message=6&color=green) ![csharp8](https://img.shields.io/static/v1?label=C%23&message=7&color=green) ![bootstrap4](https://img.shields.io/static/v1?label=Bootstrap&message=4&color=green) 
+![dotNetCore31](https://img.shields.io/static/v1?label=.NET+Core&message=3.1&color=green) ![mvc6](https://img.shields.io/static/v1?label=MVC&message=6&color=green) ![csharp8](https://img.shields.io/static/v1?label=C%23&message=8&color=green) ![bootstrap4](https://img.shields.io/static/v1?label=Bootstrap&message=4&color=green) 
 
 Welcome to the official repository for Plato.
 
-Plato is free, open source user community & customer support software built upon .NET Core. Plato offers a complete stack of fully integrated tools to help anyone provide a simple, branded support site for your users or customers.
+Plato is free, open source user community & customer support software built upon .NET Core. Plato offers a complete suite of fully integrated tools to help anyone provide a simple, branded support site for your users or customers.
 
 Plato can be used to...
 
@@ -16,11 +16,11 @@ Plato can be used to...
 - Shape products through public or private product ideation & voting
 - Improve products through public or private issue tracking & voting
 
-Plato is written in C# using .NET Core 2.2, MVC6 & Bootstrap 4.
+Plato is written in C# using ASP.NET Core 3.1, MVC6 & Bootstrap 4.
 
 ## Live Demo
 
-Our demo provides access to the Plato administrator dashaboard allowing you to fully explore Plato...
+Our demo provides full access to the Plato administrator dashaboard allowing you to explore Plato...
 
 https://plato.instantasp.co.uk/discuss/t/160/plato-demo
 
@@ -86,21 +86,21 @@ https://plato.instantasp.co.uk/support/
 
 ### Core
 
-All projects within the Plato core are namespaced Plato.Internal. You can browse all Plato core projects here...
+You can browse the PlatoCore project here...
 
-https://github.com/InstantASP/plato/tree/master/src
+https://github.com/InstantASP/Plato/tree/master/src/Core
 
 ### Modules
 
 Modules provide the real funcitonality offered by Plato. You can browse all official modules here...
 
-https://github.com/InstantASP/plato/tree/master/src/Plato/Modules
+https://github.com/InstantASP/Plato/tree/master/src/Web/Modules
 
 ### Web Site
 
 The Plato web site is minimal but can be found here...
 
-https://github.com/InstantASP/plato/tree/master/src/Plato
+https://github.com/InstantASP/Plato/tree/master/src/Web
 
 # Versions
 
