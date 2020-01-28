@@ -1,0 +1,23 @@
+Name: Plato Users
+Description: Provides core functionality to manage and authenticate users.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Core
+PlatoVersion: 1.0.0
+Version: 1.0.9
+Icon: /plato.users/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Admin",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Email",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Roles",
+		Version: "1.0.0"
+	}
+]

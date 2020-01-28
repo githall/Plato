@@ -1,0 +1,50 @@
+﻿@model UserDisplayViewModel<Entity>
+@{
+    var total = Model.Counts?.Total();
+    var text = total == 1
+        ? T["contribution"].Value
+        : T["contributions"].Value;
+    var title = $"{total} {text}";
+    var tooltip = T["Show all {0}"].Value.Replace("{0}", $"{total} {text}");
+}
+
+@if (total > 0)
+{
+    <card class="card card-body-flush">
+        <card-title>
+            <div class="float-left">
+                <h6 class="card-title d-inline-block">
+                    @title
+                </h6>
+            </div>
+            <div class="nav navbar p-0 float-right">
+                <div class="nav-item">
+                    <a asp-route-area="Plato.Entities" asp-route-controller="User" asp-route-action="Index" asp-route-opts.createdByUserId="@Model.User.Id" asp-route-opts.alias="@Model.User.Alias" class="nav-link text-muted" data-toggle="tooltip" title="@tooltip">
+                          <i class="fa fa-ellipsis-h"></i>
+                    </a>
+                </div>
+            </div>
+        </card-title>
+        <card-body>
+            <ul class="list-group list-group-flush list-group-hover">
+                @await DisplayAsync(new View("GetEntityList", new
+                {
+                    options = @Model.IndexViewModel.Options,
+                    pager = @Model.IndexViewModel.Pager
+                }))
+            </ul>
+        </card-body>
+    </card>
+}
+else
+{
+    <card>
+        <card-title>
+            <h6 class="card-title">@T["Contributions"]</h6>
+        </card-title>
+        <card-body>
+            @T["No contributions"]
+        </card-body>
+    </card>
+}
+   

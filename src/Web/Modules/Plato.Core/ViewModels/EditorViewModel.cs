@@ -1,0 +1,22 @@
+﻿namespace Plato.Core.ViewModels
+{
+    public class EditorViewModel
+    {
+
+        public string Id { get; set;  }
+
+        public string HtmlName { get; set; }
+
+        public string Value { get; set; }
+
+        public string PlaceHolderText { get; set; }
+        
+        public bool AutoFocus { get; set; }
+
+        public int Rows { get; set; } = 10;
+
+        public int TabIndex { get; set; }
+
+    }
+
+}

@@ -1,0 +1,103 @@
+﻿@model CategoryListViewModel<Category>
+
+@if (Model.Options.CategoryId == 0)
+{
+    if (Model.Categories.Any())
+    {
+        @foreach (var channel in Model.Categories)
+        {
+            var details = channel.GetOrCreate<CategoryDetails>();
+            var cardHeaderCss = channel.Children.Any()
+                ? "card-header"
+                : "card-header border-bottom-0";
+            <card class="card card-body-flush">
+                <card-title class="@cardHeaderCss">
+                    <ol class="list-inline text-muted float-right">
+                        <li class="list-inline-item">
+                            <span title="@T["Topics"]" data-toggle="tooltip">
+                                @details.TotalEntities.ToPrettyInt() <i class="fal fa-comment-alt-lines"></i>
+                            </span>
+                        </li>
+                        <li class="list-inline-item">
+                            <span title="@T["Replies"]" data-toggle="tooltip">
+                                @details.TotalReplies.ToPrettyInt() <i class="fal fa-comment-alt fa-flip-horizontal"></i>
+                            </span>
+                        </li>
+                    </ol>
+                    <h6 class="card-title">
+                        <a asp-route-area="Plato.Ideas.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="@channel.Id" asp-route-opts.alias="@channel.Alias">
+                            @channel.Name
+                        </a>
+                    </h6>
+                    @if (!String.IsNullOrEmpty(@channel.Description))
+                    {
+                        <span class="text-muted">
+                            @channel.Description
+                        </span>
+                    }
+
+                </card-title>
+                <card-body>
+
+                    @if (channel.Children.Any())
+                    {
+                        <ul class="list-group list-group-flush list-group-hover">
+                            @foreach (var child in channel.Children)
+                            {
+                                <li class="list-group-item list-group-item-action">
+                                    @await DisplayAsync(new View("IdeaCategoryListItem", new
+                                    {
+                                        category = child,
+                                        options = Model.Options
+                                    }))
+                                </li>
+                            }
+                        </ul>
+                    }
+                </card-body>
+            </card>
+         }
+    }
+    else
+    {
+        <card class="card card-body-flush">
+            <card-title>
+                <h6 class="card-title">@T["Categories"]</h6>
+            </card-title>
+            <card-body>
+                <ul class="list-group list-group-flush list-group-hover">
+                    <li class="list-group-item">
+                        @T["No categories found"]
+                    </li>
+                </ul>
+            </card-body>
+        </card>
+    }
+}
+else
+{
+    @if (Model.Categories.Any())
+     {
+         <card class="card card-body-flush">
+             <card-title>
+                 <h6 class="card-title">@T["Child Categories"]</h6>
+             </card-title>
+             <card-body>
+                 <ul class="list-group list-group-flush list-group-hover">
+                     @foreach (var category in Model.Categories)
+                     {
+                         <li class="list-group-item list-group-item-action">
+                             @await DisplayAsync(new View("IdeaCategoryListItem", new
+                             {
+                                 category = category,
+                                 options = Model.Options
+                             }))
+                         </li>
+                     }
+                 </ul>
+             </card-body>
+         </card>
+    }
+  
+}
+

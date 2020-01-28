@@ -1,0 +1,208 @@
+﻿
+/* Colors */
+
+.bg-black { background: black; }
+.bg-purple { background: #5C2D91; }
+
+.border-purple { border-color: #5C2D91; }
+.purple { background: #5C2D91; border-color: #5C2D91; }
+.text-purple { color: #5C2D91; }
+
+.bg-primary-75 { background: rgba(0, 123, 255, 0.75); }
+.bg-primary-50 { background: rgba(0, 123, 255, 0.50); }
+.bg-primary-25 { background: rgba(0, 123, 255, 0.25); }
+
+.bg-primary-people {
+    background: #007bff url(/plato.site/content/images/bg-people.png) center center repeat-x;
+}
+
+/* full screen */
+@media (min-width: 992px) {
+
+    .bg-primary-85-percent {
+        padding: 3em 0;
+        background: #BFDEFF; 
+        background: linear-gradient(135deg,#BFDEFF 0,#BFDEFF 100%); 
+        background-size: 85%; 
+        background-repeat: no-repeat;
+        background-position: center center;
+    }
+    
+}
+
+/* Widths */
+
+.w-md-100 { width: 100%; }
+.w-md-90 { width: 90%; }
+.w-md-80 { width: 80%; }
+.w-md-70 { width: 70%; }
+.w-md-60 { width: 60%; }
+.w-md-50 { width: 50%; }
+.w-md-40 { width: 40%; }
+.w-md-30 { width: 30%; }
+.w-md-20 { width: 20%; }
+.w-md-10 { width: 10%; }
+
+/* full screen */
+@media (min-width: 992px) {
+    .w-md-100, 
+    .w-md-90,
+    .w-md-80,
+    .w-md-70,
+    .w-md-60,
+    .w-md-50,
+    .w-md-40,
+    .w-md-30,
+    .w-md-20,
+    .w-md-10 { width: 100%; }
+}
+
+.my-12, .mt-12 { margin-top: 12rem; }
+.my-12, .mb-12 { margin-bottom: 12rem; }
+.my-10, .mt-10 { margin-top: 10rem; }
+.my-10, .mb-10 { margin-bottom: 10rem; }
+.my-8, .mt-8 { margin-top: 8rem; }
+.my-8, .mb-8 { margin-bottom: 8rem; }
+.my-6, .mt-6 { margin-top: 6rem; }
+.my-6, .mb-6 { margin-bottom: 6rem; }
+
+/* Box shadows */
+
+.box-shadow { box-shadow: 0 0 25px rgba(75, 75, 75, 0.1); }
+
+/* Dividers */
+
+hr.divider { max-width: 3.25rem; border-width: .2rem; border-color: #007BFF }
+hr.divider-left { display: inline-block; width: 3.25rem; }
+hr.light { border-color: #fff }
+
+/* Page container */
+
+.page {
+    display: block;
+    position: relative;
+    padding: 0;
+    margin: 0;
+}
+
+.page .container,
+.page .container-fluid {
+    display: block;
+    margin: 3rem auto;
+}
+
+/* full screen */
+@media (min-width: 992px) {
+    
+    .page .container,
+    .page .container-fluid {
+        margin: 8rem auto;
+    }
+}
+
+/* Icon circles */
+
+.icon-circle {
+    width: 80px;
+    height: 80px;
+    display: inline-block;
+    border-radius: 50%;
+    background: #BFDEFF;
+    text-align: center;
+    border: 0;
+    box-shadow: 0 0 0 10px rgba(0,0,0,0.1);
+    position: relative;
+    color: white;
+}
+
+.icon-circle i {
+    font-size: 2.75rem;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Responsive images */
+
+.img-md-fluid { width: 100%; }
+
+/* full screen */
+@media (min-width: 992px) {    
+    .img-md-fluid {
+        width: initial !important;
+    }
+}
+
+/* Thumbnail images */
+
+.img-thumbnail {
+    position: relative;
+    display: inline-block;
+}
+
+a.img-thumbnail .img-caption {
+    position: absolute;
+    display: block;
+    bottom: 0;
+    left: 0;
+    text-align: left;
+    width: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    padding: 1rem;
+    color: white;
+    z-index: 1;
+    transition: opacity 0.50s ease;
+    opacity: 0;
+    border-radius: 0.25rem;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+}
+
+a.img-thumbnail:hover .img-caption {
+    opacity: 1;
+}
+
+/* Accordion */
+
+.accordion a[data-toggle="collapse"] .fa-chevron-right {
+    transition: transform .35s ease;
+}
+
+.accordion a[data-toggle="collapse"] .fa-chevron-right {
+    transform: rotate(0);
+}
+
+.accordion a[data-toggle="collapse"][aria-expanded="true"] .fa-chevron-right {
+    transform: rotate(90deg);
+}
+
+.accordion .card-header {
+    border:0;
+}
+
+/* GitHub button */
+.github-button .star-count {
+    display: none;
+}
+
+
+/* Download */
+
+.download-content .download-badge + .download-badge {
+    margin-left: 10px;
+}
+
+.download-content .download-badge {
+    display: inline-block;
+    position: relative;
+    width: 135px;
+    height: 40px;
+    overflow: hidden;
+}
+
+.download-content .download-badge.windows {
+    display: inline-block;
+    margin: 5px auto;
+    height: 49px;
+}

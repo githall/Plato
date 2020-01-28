@@ -1,0 +1,96 @@
+﻿@using Plato.Features.ViewModels
+@model ReportOptions
+@{
+    var manageFeaturesPermission = Plato.Features.Permissions.ManageFeatures;
+}
+
+@await DisplayAsync(new View("UserStatsByDateChart", new
+{
+    options = @Model
+}))
+
+
+@await DisplayAsync(new View("ViewsByDateChart", new
+{
+    options = @Model
+}))
+
+<div class="row">
+    <div class="col-md-4">
+
+        @await DisplayAsync(new View("ViewsByFeatureChart", new
+        {
+            options = @Model
+        }))
+
+    </div>
+    <div class="col-md-4">
+
+        @await DisplayAsync(new View("ViewsByRoleChart", new
+        {
+            options = @Model
+        }))
+
+
+    </div>
+    <div class="col-md-4">
+
+        @await DisplayAsync(new View("UserRepByFeatureChart", new
+        {
+            options = @Model
+        }))
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-lg-6 col-md-12 col-sm-12">
+
+        @await DisplayAsync(new View("NewUsersByDateChart", new
+        {
+            options = @Model
+        }))
+
+
+    </div>
+    <div class="col-lg-6 col-md-12 col-sm-12">
+
+        @await DisplayAsync(new View("LoginsByDateChart", new
+        {
+            options = @Model
+        }))
+
+    </div>
+</div>
+
+@await DisplayAsync(new View("UserRepByDateChart", new
+{
+    options = @Model
+}))
+
+<authorize asp-permission="@manageFeaturesPermission.Name">
+    <authorize-success>
+        <card class="card card-body-flush">
+            <card-title>
+                <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Index" asp-route-opts.category="Reports" class="btn btn-secondary float-right">
+                    @T["All Features"]
+                </a>
+                <h6 class="card-title">@T["Enhance Plato.Reports"]</h6>
+                <div class="text-muted">@T["Additional features available to enhance reporting."]</div>
+            </card-title>
+            <card-body>
+
+                @await DisplayAsync(new View("SimpleFeatureList", new
+                {
+                    options = new FeatureIndexOptions()
+                    {
+                        Category = "Reports",
+                        HideEnabled = true
+                    }
+                }))
+
+            </card-body>
+        </card>
+    </authorize-success>
+</authorize>
+
+

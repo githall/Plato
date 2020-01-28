@@ -1,0 +1,31 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Plato Setup</title>
+    <link rel="stylesheet" href="/css/vendors/bootstrap.css" />
+    <link rel="stylesheet" href="/css/vendors/font-awesome.css" />
+    <link rel="stylesheet" href="/css/app/plato.css" />
+    <link rel="stylesheet" href="/themes/default/theme.css" />
+    <link rel="icon" href="/plato.core/content/fav.ico" />
+    @RenderSection("Header", required: false)
+</head>
+<body class="bg-light">
+
+    <div class="container container-fluid-1024">
+        @RenderBody()
+        <hr />
+        <footer>
+            @RenderSection("Footer", required: false)
+        </footer>
+    </div>
+
+    <script src="~/js/vendors/jquery.js"></script>
+    <script src="~/js/vendors/bootstrap.js"></script>
+    <script src="~/js/app/plato.js" asp-append-version="true"></script>
+    <script src="~/js/app/plato-ui.js" asp-append-version="true"></script>
+
+</body>
+</html>

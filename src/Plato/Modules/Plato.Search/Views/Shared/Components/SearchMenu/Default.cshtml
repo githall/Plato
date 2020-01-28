@@ -1,8 +1,0 @@
-﻿@model EntityIndexOptions
-
-<form asp-route-area="Plato.Search" asp-route-controller="Home" asp-route-action="Index" method="get" role="form">
-    @await DisplayAsync(new View("Search", new
-    {
-        options = Model
-    }))
-</form>

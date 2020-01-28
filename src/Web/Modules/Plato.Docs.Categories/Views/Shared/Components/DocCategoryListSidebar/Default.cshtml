@@ -1,0 +1,91 @@
+﻿@model CategoryListViewModel<Category>
+@{
+    var selectedCategory = Model.Categories?.FirstOrDefault(c => c.Id == Model.Options.CategoryId);
+    Category parentCategory = null;
+    if (selectedCategory != null)
+    {
+        parentCategory = Model.Categories?.FirstOrDefault(c => c.Id == selectedCategory.ParentId);
+    }
+    var childCategories = Model.Categories?
+        .Where(c => c.ParentId == Model.Options.CategoryId)
+        .ToList();
+    var allText = "All Categories";
+}
+
+<div class="dropdown">
+    <a href="#" class="btn btn-sm" id="allCategoriesDropdown" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+        @if (selectedCategory != null)
+        {
+            @selectedCategory.Name
+        }
+        else
+        {
+            @T[allText]
+        }
+        <i class="fal fa-chevron-down"></i>
+    </a>
+    <div class="dropdown-menu w-100 anim anim-2x anim-scale-in" aria-labelledby="allCategoriesDropdown">
+        <div class="max-h-300 overflow-auto">
+            <div class="list-group list-group-flush list-group-hover">
+                
+                @if (parentCategory != null)
+                {
+                    <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="@parentCategory.Id" asp-route-opts.alias="@parentCategory.Alias" title="@parentCategory.Description" class="list-group-item list-group-item-action">
+                        <i class="fal fa-level-up mr-2"></i> @parentCategory.Name
+                    </a>
+                }
+                else
+                {
+                    if (selectedCategory != null)
+                    {
+                        <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="" asp-route-opts.alias="" title="@T["All Categories"]" class="list-group-item list-group-item-action">
+                            <i class="fal fa-level-up mr-2"></i> @T[allText]
+                        </a>
+                    }
+           
+                }
+
+                @if (childCategories != null && childCategories.Any())
+                {
+
+                    @foreach (var category in childCategories)
+                     {
+                         var css = category.Id == Model.Options.CategoryId ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action";
+                         var categoryDetails = category.GetOrCreate<CategoryDetails>();
+                         <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="@category.Id" asp-route-opts.alias="@category.Alias" title="@category.Description" class="@css">
+                             @*<span data-toggle="tooltip" title="@T["Public Docs"]" class="badge badge-info float-right">
+                                 @categoryDetails.TotalEntities.ToPrettyInt()
+                             </span>
+                             @if (!String.IsNullOrWhiteSpace(category.IconCss))
+                             {
+                                 <div class="float-left mr-3">
+                                     <span class="icon-wrapper icon-wrapper-sm" style="background-color: @category.BackColor; color: @category.ForeColor">
+                                         <i class="@category.IconCss"></i>
+                                     </span>
+                                 </div>
+                             }
+                             else
+                             {
+                                 <div class="float-left mr-3">
+                                     <span class="icon-wrapper icon-wrapper-sm">
+                                         <i class="fal fa-folder"></i>
+                                     </span>
+                                 </div>
+                             }*@
+                             @category.Name
+                         </a>
+                     }
+
+                }
+                else
+                {
+                    <div class="list-group-item">
+                        @T["No categories found"]
+                    </div>
+                }
+
+            </div>
+            
+        </div>
+    </div>
+</div>

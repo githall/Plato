@@ -1,0 +1,19 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\PlatoCore.csproj" />
+    <ProjectReference Include="..\Plato.Discuss\Plato.Discuss.csproj" />
+    <ProjectReference Include="..\Plato.Stars\Plato.Stars.csproj" />
+    <ProjectReference Include="..\Plato.WebApi\Plato.WebApi.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>

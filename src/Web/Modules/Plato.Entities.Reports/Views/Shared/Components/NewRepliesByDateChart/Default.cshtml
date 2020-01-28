@@ -1,0 +1,100 @@
+﻿@model ChartViewModel<AggregatedResult<DateTimeOffset>>
+@{
+    var labels = Model.Data?.SerializeLabels() ?? "[]";
+    var data = Model.Data?.SerializeCounts() ?? "[]";
+    var chartId = "newRepliesByDateChart";
+}
+
+<card>
+    <card-body>
+        <div class="row">
+            <div class="col-5">
+                @if (Model.Data != null)
+                {
+                    <h5 class="d-inline text-primary">@Model.Data.Total().ToPrettyInt()</h5>
+                }
+                else
+                {
+                    <h5 class="d-inline text-primary">0</h5>
+                }
+                <div class="text-muted">
+  
+                    @if (string.IsNullOrEmpty(Model.Options.Title))
+                    {
+                        @T["New Replies"]
+                    }
+                    else
+                    {
+                        @T[Model.Options.Title]
+                    }
+                </div>
+            </div>
+            <div class="col-7">
+                <div class="chart" style="height: 150px;">
+                    <canvas id="@chartId" class="w-100"></canvas>
+                </div>
+            </div>
+        </div>
+
+    </card-body>
+</card>
+
+<script section="Footer">
+    
+    if (typeof window.$.Plato.Reports === "undefined") {
+        throw new Error("$.Plato.Reports Required");
+    }
+
+    if (typeof window.$.Plato.Charts === "undefined") {
+        throw new Error("$.Plato.Charts Required");
+    }
+
+    $(function (win, doc, $) {
+
+        "use strict";
+
+        var app = win.$.Plato,
+            charts = win.$.Plato.Charts;
+
+        app.ready(function() {
+
+            charts.initBar("@chartId", {
+                labels: @Html.Raw(labels),
+                datasets: [
+                    {
+                        label: 'New Replies',
+                        fill: true,
+                        backgroundColor: Chart.helpers.color(charts.colors.blue).alpha(0.7).rgbString(),
+                        borderColor: charts.colors.blue,
+                        borderWidth: 0,
+                        lineWidth: 1,
+                        pointRadius: 0,
+                        pointHoverRadius: 0,
+                        data: @Html.Raw(data)
+                    }
+                ]
+            },
+                {
+                    scales: {
+                        xAxes: [
+                            {
+                                display: !1,
+                                stacked: true,
+                                barPercentage: .2
+                            }
+                        ],
+                        yAxes: [
+                            {
+                                display: !1,
+                                stacked: true
+                            }
+                        ]
+                    }
+                });
+
+        });
+
+
+    }(window, document, jQuery));
+
+</script>

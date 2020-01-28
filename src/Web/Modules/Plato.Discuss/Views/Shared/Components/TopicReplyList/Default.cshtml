@@ -1,0 +1,126 @@
+﻿@using Plato.Discuss
+@using Plato.Entities.Extensions
+@model EntityViewModel<Topic, Reply>
+@{
+    var replyText = T["reply"];
+    var repliesText = T["replies"];
+    var replyPermission = Permissions.PostReplies;
+}
+
+@if (Model.Replies != null)
+{
+    var offset = Model.Pager.Offset;
+    var rowOffset = Model.Pager.RowOffset;
+    var title = Model.Pager.Total == 1
+        ? $"{Model.Pager.Total.ToPrettyInt()} {replyText.Value}"
+        : $"{Model.Pager.Total.ToPrettyInt()} {repliesText.Value}";
+
+    <h6>@title</h6>
+    <hr />
+
+    <div data-provide="infiniteScroll"
+         data-infinite-scroll-url="@Model.Pager.Url"
+         data-infinite-scroll-offset="@offset"
+         data-infinite-scroll-row-offset="@rowOffset"
+         data-infinite-scroll-page="@Model.Pager.Page"
+         data-infinite-scroll-total-pages="@Model.Pager.TotalPages"
+         class="infinite-scroll">
+        <div class="infinite-scroll-loader" data-type="previous"></div>
+        @foreach (var reply in Model.Replies.Data)
+        {
+            reply.Offset = rowOffset;
+            reply.SelectedOffset = offset;
+            @await DisplayAsync(new View("TopicReplyListItem", new
+            {
+                model = new EntityReplyListItemViewModel<Topic, Reply>()
+                {
+                    Entity = Model.Entity,
+                    Reply = reply,
+                }
+            }))
+            {
+                rowOffset++;
+            }
+        }
+        <div class="infinite-scroll-loader" data-type="next"></div>
+    </div>
+
+    @if (!Model.Entity.IsHidden() && !Model.Entity.IsLocked)
+    {
+        <div class="my-4">
+            <card>
+                <card-body>
+                    <div class="text-muted">
+                        <authorize asp-permission="@replyPermission.Name">
+                            <authorize-success>
+                                <i class="fal fa-reply mr-2"></i>
+                                <a href="#" data-provide="postReply">@T["Post a reply"]</a>
+                            </authorize-success>
+                            <authorize-fail>
+                                @if (base.CurrentUser == null)
+                                {
+                                    <i class="fal fa-bullhorn mr-2"></i>
+                                    @T["Enjoying the conversation?"]
+                                    <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@Context.Request.Path">@T["Login"]</a>
+                                    @T["or"]
+                                    <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Register" asp-route-returnUrl="@Context.Request.Path">@T["register"]</a>
+                                    @T["to post your reply"]
+                                }
+                                else
+                                {
+                                    <i class="fal fa-lock mr-2"></i>
+                                    @T["You don't have permission to post replies"]
+                                }
+                            </authorize-fail>
+                        </authorize>
+                    </div>
+                </card-body>
+            </card>
+        </div>
+    }
+}
+else
+{
+    @if (!Model.Entity.IsHidden() && !Model.Entity.IsLocked)
+    {
+        <div class="my-4">
+            <card>
+                <card-body>
+                    <div class="text-muted">
+                        <authorize asp-permission="@replyPermission.Name">
+                            <authorize-success>
+                                <i class="fal fa-reply mr-2"></i>
+                                @T["No replies have been posted yet."]
+                                <a href="#" data-provide="postReply">@T["Be the first"]</a>
+                            </authorize-success>
+                            <authorize-fail>
+                                @if (base.CurrentUser == null)
+                                {
+                                    <i class="fal fa-bullhorn mr-2"></i>
+                                    @T["Have something to say?"]
+                                    <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@Context.Request.Path">@T["Login"]</a>
+                                    @T["or"]
+                                    <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Register" asp-route-returnUrl="@Context.Request.Path">@T["register"]</a>
+                                    @T["to post your reply"]
+                                }
+                                else
+                                {
+                                    <i class="fal fa-lock mr-2"></i>
+                                    @T["You don't have permission to post replies"]
+                                }
+                            </authorize-fail>
+                        </authorize>
+                    </div>
+                </card-body>
+            </card>
+        </div>
+    }
+
+}
+
+@if (Model.Pager.Enabled)
+{
+    <div class="mt-4">
+        <pager model="@Model.Pager"></pager>
+    </div>
+}

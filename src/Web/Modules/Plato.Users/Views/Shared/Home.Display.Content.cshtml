@@ -1,0 +1,79 @@
+﻿@using PlatoCore.Abstractions.Extensions
+@model User
+
+<card>
+    <card-title>
+
+        <div class="nav navbar p-0 navbar-expand-lg navbar-light">
+            <div class="d-flex align-items-center">
+                <button class="navbar-toggler my-2" type="button" data-toggle="collapse" data-target="#navbar-collapse" aria-controls="navbar-collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+            </div>
+            <div class="collapse navbar-collapse w-100" id="navbar-collapse" role="navigation">
+                <navigation name="profile"
+                            class="nav nav-tabs card-header-tabs w-100"
+                            child-ul-css-class="dropdown-menu" />
+            </div>
+        </div>
+
+    </card-title>
+    <card-body>
+        <div class="row">
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-3 text-center">
+                        <i class="fal fa-hashtag fa-2x text-muted m-3"></i>
+                    </div>
+                    <div class="col-9">
+                        <h1 class="d-inline-block" data-toggle="tooltip" title=" @T["rank"] #@Model.Rank.ToPrettyInt(true)">@Model.Rank.ToPrettyInt(true)</h1><br />
+                        <span class="text-muted">
+                            @T["rank"]
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-3 text-center">
+                        <i class="fal fa-gem fa-2x text-muted m-3"></i>
+                    </div>
+                    <div class="col-9">
+                        <h1 class="d-inline-block" data-toggle="tooltip" title="@Model.Reputation.ToPrettyInt(true) @T["reputation"]">@Model.Reputation.ToPrettyInt()</h1><br />
+                        <span class="text-muted">
+                            @T["reputation"]
+                        </span>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-4">
+                <div class="row">
+                    <div class="col-3 text-center">
+                        <i class="fal fa-heart fa-2x text-muted m-3"></i>
+                    </div>
+                    <div class="col-9">
+                        <h1 class="d-inline-block" data-toggle="tooltip" title="@Model.Visits.ToPrettyInt(true) @T["visits"]">@Model.Visits.ToPrettyInt()</h1><br />
+                        <span class="text-muted">
+                            @T["visits:"]
+                        </span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </card-body>
+</card>
+
+@if (!string.IsNullOrWhiteSpace(Model.Biography))
+{
+    <card>
+        <card-title>
+            <h6 class="card-title">
+                @T["A bit about me"]
+            </h6>
+        </card-title>
+        <card-body>
+            @Model.Biography
+        </card-body>
+    </card>
+}
+

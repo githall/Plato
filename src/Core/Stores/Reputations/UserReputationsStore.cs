@@ -1,0 +1,153 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Data;
+using System.Linq;
+using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
+using PlatoCore.Cache.Abstractions;
+using PlatoCore.Data.Abstractions;
+using PlatoCore.Models.Reputations;
+using PlatoCore.Repositories.Reputations;
+using PlatoCore.Stores.Abstractions.Reputations;
+
+namespace PlatoCore.Stores.Reputations
+{
+
+    public class UserReputationsStore : IUserReputationsStore<UserReputation>
+    {
+
+        private readonly IUserReputationsRepository<UserReputation> _userReputationsRepository;
+        private readonly IDbQueryConfiguration _dbQuery;
+        private readonly ICacheManager _cacheManager;
+        private readonly ILogger<UserReputationsStore> _logger;
+   
+        public UserReputationsStore(
+            IUserReputationsRepository<UserReputation> userReputationsRepository,
+            IDbQueryConfiguration dbQuery,
+            ICacheManager cacheManager,
+            ILogger<UserReputationsStore> logger)
+        {
+            _userReputationsRepository = userReputationsRepository;
+            _dbQuery = dbQuery;
+            _cacheManager = cacheManager;
+            _logger = logger;
+        }
+
+        public async Task<UserReputation> CreateAsync(UserReputation model)
+        {
+
+            var result = await _userReputationsRepository.InsertUpdateAsync(model);
+            if (result != null)
+            {
+                CancelTokens(result);
+            }
+
+            return result;
+
+        }
+
+        public async Task<UserReputation> UpdateAsync(UserReputation model)
+        {
+
+            var result = await _userReputationsRepository.InsertUpdateAsync(model);
+            if (result != null)
+            {
+                CancelTokens(result);
+            }
+
+            return result;
+
+        }
+
+        public async Task<bool> DeleteAsync(UserReputation model)
+        {
+
+            var success = await _userReputationsRepository.DeleteAsync(model.Id);
+            if (success)
+            {
+                if (_logger.IsEnabled(LogLevel.Information))
+                {
+                    _logger.LogInformation("Deleted user reputation '{0}' with id {1}",
+                        model.Name, model.Id);
+                }
+
+                CancelTokens(model);
+
+            }
+
+            return success;
+
+        }
+
+        public async Task<UserReputation> GetByIdAsync(int id)
+        {
+            var token = _cacheManager.GetOrCreateToken(this.GetType(), id);
+            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) => await _userReputationsRepository.SelectByIdAsync(id));
+        }
+
+        public IQuery<UserReputation> QueryAsync()
+        {
+            var query = new UserReputationQuery(this);
+            return _dbQuery.ConfigureQuery<UserReputation>(query); ;
+        }
+
+        public async Task<IPagedResults<UserReputation>> SelectAsync(IDbDataParameter[] dbParams)
+        {
+            var token = _cacheManager.GetOrCreateToken(this.GetType(), dbParams.Select(p => p.Value).ToArray());
+            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
+            {
+
+                if (_logger.IsEnabled(LogLevel.Information))
+                {
+                    _logger.LogInformation("Selecting user badges for key '{0}' with the following parameters: {1}",
+                        token.ToString(), dbParams.Select(p => p.Value));
+                }
+
+                return await _userReputationsRepository.SelectAsync(dbParams);
+
+            });
+        }
+
+        public async Task<IEnumerable<IReputation>> GetUserReputationsAsync(int userId, IEnumerable<IReputation> reputations)
+        {
+            
+            var reputationList = reputations.ToList();
+            if (reputationList.Count == 0)
+            {
+                return null;
+            }
+
+            var userReputations = await QueryAsync()
+                .Select<UserReputationsQueryParams>(q =>
+                {
+                    q.UserId.Equals(userId);
+                })
+                .OrderBy("Id", OrderBy.Asc)
+                .ToList();
+
+            var output = new List<IReputation>();
+            if (userReputations != null)
+            {
+                foreach (var userReputation in userReputations.Data)
+                {
+                    var reputation = reputationList.FirstOrDefault(b => b.Name.Equals(userReputation.Name, StringComparison.OrdinalIgnoreCase));
+                    if (reputation != null)
+                    {
+                        //reputation.AwardedDate = userReputation.CreatedDate;
+                        output.Add(reputation);
+                    }
+                }
+            }
+
+            return output;
+
+        }
+
+        public void CancelTokens(UserReputation model = null)
+        {
+            _cacheManager.CancelTokens(this.GetType());
+        }
+    }
+
+
+}

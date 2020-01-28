@@ -1,0 +1,21 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Razor">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <AddRazorSupportForMvc>true</AddRazorSupportForMvc>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\..\..\Core\PlatoCore.csproj" />
+    <ProjectReference Include="..\Plato.Entities\Plato.Entities.csproj" />
+    <ProjectReference Include="..\Plato.Labels\Plato.Labels.csproj" />
+    <ProjectReference Include="..\Plato.Tags\Plato.Tags.csproj" />
+    <ProjectReference Include="..\Plato.Categories.Roles\Plato.Categories.Roles.csproj" />
+    <ProjectReference Include="..\Plato.Users\Plato.Users.csproj" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <FrameworkReference Include="Microsoft.AspNetCore.App" />
+  </ItemGroup>
+
+</Project>

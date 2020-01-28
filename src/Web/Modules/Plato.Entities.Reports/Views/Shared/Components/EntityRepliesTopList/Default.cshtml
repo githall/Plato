@@ -1,0 +1,50 @@
+﻿@model ChartViewModel<IEnumerable<AggregatedModel<int, Entity>>>
+
+<card class="card card-body-flush">
+    <card-title>
+        <h6 class="card-title">
+            @if (string.IsNullOrEmpty(Model.Options.Title))
+            {
+                @T["Most Participation"]
+            }
+            else
+            {
+                @T[Model.Options.Title]
+            }
+        </h6>
+    </card-title>
+    <card-body>
+
+        @if (Model.Data != null)
+        {
+
+            <div class="list-group list-group-flush list-group-hover">
+                <div class="row no-gutters">
+                    @foreach (var result in Model.Data)
+                    {
+                        <div class="col-lg-6 col-md-12 col-sm-12 list-group-item p-0">
+                            <a asp-route-area="@result.Model.ModuleId" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@result.Model.Id" asp-route-opts.alias="@result.Model.Alias" class="list-group-item list-group-item-action">
+                                <div class="btn btn-sm label float-right" data-toggle="tooltip" title="@T["Replies"]">
+                                    @result.Aggregate.Count.ToPrettyInt()
+                                </div>
+                                @if (result.Model.CreatedBy != null)
+                                {
+                                    <avatar data-toggle="tooltip" title="@result.Model.CreatedBy.DisplayName" class="avatar avatar-sm mr-2" url="@result.Model.CreatedBy.Avatar.Url" />
+                                }
+                                @result.Model.Title
+                            </a>
+                        </div>
+                    }
+                </div>
+            </div>
+        }
+        else
+        {
+            <ul class="list-group list-group-flush list-group-hover">
+                <li class="list-group-item">
+                    <h6>@T["No results found"]</h6>
+                </li>
+            </ul>
+        }
+    </card-body>
+</card>

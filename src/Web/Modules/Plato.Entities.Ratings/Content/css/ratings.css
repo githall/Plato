@@ -1,0 +1,20 @@
+﻿
+.vote-toggle {
+    text-align: center;
+}
+
+.list-left .vote-toggle { width: 36px; }
+
+.vote-toggle .btn-vote-up,
+.vote-toggle .btn-vote-down {
+    display: block;
+    border-color: transparent !important;
+}
+
+.vote-toggle .btn-vote-up i,
+.vote-toggle .btn-vote-down i {
+    display: block;
+    line-height: normal;
+}
+
+.vote-toggle h6 { margin: 6px 0; }

@@ -1,0 +1,48 @@
+﻿@using PlatoCore.Abstractions.Settings
+@using PlatoCore.Security.Abstractions
+@model EditUserViewModel
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
+    var isBot = Model.UserType == UserType.Bot;
+    var isNew = Model.IsNewUser;
+    var isCurrent = Model.Id == base.CurrentUser?.Id;
+    var isAdmin = false;
+    if (Model.RoleNames != null)
+    {
+        foreach (var roleName in Model.RoleNames)
+        {
+            if (roleName.Equals(DefaultRoles.Administrator, StringComparison.OrdinalIgnoreCase))
+            {
+                isAdmin = true;
+                break;
+            }
+        }
+    }
+}
+
+@if (isAdmin && isDemo)
+{
+    <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+        <a href="#" class="btn btn-danger disabled">
+            @T["Delete"]
+        </a>
+    </span>
+}
+else
+{
+    if (!isNew && !isBot && !isCurrent)
+     {
+         <authorize asp-permission="@Plato.Users.Permissions.DeleteUsers.Name">
+             <authorize-success>
+                 <button type="submit" asp-route-controller="Admin" asp-route-action="Delete" asp-route-id="@Model.Id" data-provide="confirm" class="btn btn-danger" >
+                     @T["Delete User"]
+                 </button>
+             </authorize-success>
+         </authorize>
+     }
+}
+
+
+
+

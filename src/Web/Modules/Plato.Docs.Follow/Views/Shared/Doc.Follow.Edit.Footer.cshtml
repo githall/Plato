@@ -1,0 +1,29 @@
+﻿@model EditFooterViewModel
+@{
+    var offTooltip = "If enabled when you save this doc notifications will be sent to all users following this doc with permission to view this doc";
+    var onTooltip = "When you save this doc all users following this doc with permission to view this doc will be notified the doc has been updated";
+    var offText = "Send Notifications?";
+    var onText = "Notifications Enabled";
+}
+
+@if (!Model.IsNewEntity)
+{
+    <authorize asp-permission="@Model.Permission.Name">
+        <authorize-success>
+            <div class="float-left">
+                <label title="@T[offTooltip]" data-subscribe-text="@T[offText]" data-unsubscribe-text="@T[onText]" data-subscribe-tooltip="@T[offTooltip]" data-unsubscribe-tooltip="@T[onTooltip]" data-toggle="tooltip" for="@Model.NotifyHtmlName" data-on-css="btn btn-lg text-danger" data-off-css="btn btn-lg text-muted" class="btn btn-lg text-muted" role="button">
+                    <input type="checkbox" class="hidden" data-provide="follow-checkbox" name="@Model.NotifyHtmlName" id="@Model.NotifyHtmlName" />
+                    <i class="fal fa-bell"></i> 
+                    <span>@T[offText]</span>
+                </label>
+            </div>
+        </authorize-success>
+    </authorize>
+}
+
+
+
+
+
+
+

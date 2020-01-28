@@ -1,0 +1,74 @@
+﻿<Project Sdk="Microsoft.NET.Sdk.Web">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+    <TieredCompilation>true</TieredCompilation>
+    <TreatWarningsAsErrors>true</TreatWarningsAsErrors>
+    <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
+    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <PreserveCompilationReferences>true</PreserveCompilationReferences>
+  </PropertyGroup>
+
+  <ItemGroup> 
+
+    <Compile Remove="Modules\**" />     
+    <Content Remove="Modules\**" />    
+    <EmbeddedResource Remove="Modules\**" />    
+    <None Remove="Modules\**" />
+
+    <None Update="App_Data\**\*">
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+
+    <None Update="Sites\**\*">
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    <None Update="Themes\**\*">
+        <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>    
+    <None Update="wwwroot\**\*">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+
+  </ItemGroup>
+
+  <!-- 
+      Ensure 
+      \Modules\**\Bin\**
+      \Modules\**\Content\**
+      \Modules\**\Locales\**      
+      \Themes\** 
+      \Sites\** 
+      Are all published for all publishing profiles
+  -->
+
+  <ItemGroup>
+    
+    <_moduleFiles Include="$(MSBuildProjectDirectory)/Modules/**/Bin/**;$(MSBuildProjectDirectory)/Modules/**/Content/**;$(MSBuildProjectDirectory)/Modules/**/Locales/**" />
+    <_themeFiles Include="$(MSBuildProjectDirectory)/Themes/**/*" />
+    <_siteFiles Include="$(MSBuildProjectDirectory)/Sites/**/*" />
+    <Content Remove="bundleconfig.json" />
+
+    <DotNetPublishFiles Include="@(_moduleFiles)">
+      <DestinationRelativePath>Modules/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+    </DotNetPublishFiles>
+     
+    <DotNetPublishFiles Include="@(_themeFiles)">
+      <DestinationRelativePath>Themes/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+    </DotNetPublishFiles>
+    
+    <DotNetPublishFiles Include="@(_siteFiles)">
+      <DestinationRelativePath>Sites/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
+    </DotNetPublishFiles>
+
+  </ItemGroup>
+
+  <ItemGroup>
+    <None Include="bundleconfig.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\Core\PlatoCore.csproj" />
+  </ItemGroup>
+
+</Project>

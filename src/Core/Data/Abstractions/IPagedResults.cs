@@ -1,0 +1,20 @@
+﻿using System.Data;
+using System.Collections.Generic;
+
+namespace PlatoCore.Data.Abstractions
+{
+    public interface IPagedResults<T> where T : class
+    {
+        int Total { get; set; }
+
+        IList<T> Data { get; set; }
+
+        void PopulateTotal(IDataReader reader);
+
+        T First();
+
+        T FirstOrDefault();
+
+    }
+
+}
