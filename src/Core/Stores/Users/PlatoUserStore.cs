@@ -13,6 +13,7 @@ using PlatoCore.Text.Abstractions;
 
 namespace PlatoCore.Stores.Users
 {
+
     public class PlatoUserStore : IPlatoUserStore<User>
     {
 

@@ -7,6 +7,7 @@
     <WarningsNotAsErrors>612,618</WarningsNotAsErrors>
     <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
     <PreserveCompilationReferences>true</PreserveCompilationReferences>
+    <SatelliteResourceLanguages>en</SatelliteResourceLanguages>
   </PropertyGroup>
 
   <ItemGroup> 
@@ -26,28 +27,36 @@
     <None Update="Themes\**\*">
         <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>    
+    
     <None Update="wwwroot\**\*">
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </None>
+    
+    <None Update="appsettings.json">
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </None>
+    
+    <Content Update="bundleconfig.json" CopyToPublishDirectory="Never" />
 
   </ItemGroup>
 
   <!-- 
       Ensure 
-      \Modules\**\Bin\**
+      \Modules\**\Bin\Release\**
       \Modules\**\Content\**
       \Modules\**\Locales\**      
+      \Modules\**\module.* 
       \Themes\** 
       \Sites\** 
+      \appsettings.json
       Are all published for all publishing profiles
   -->
 
   <ItemGroup>
     
-    <_moduleFiles Include="$(MSBuildProjectDirectory)/Modules/**/Bin/**;$(MSBuildProjectDirectory)/Modules/**/Content/**;$(MSBuildProjectDirectory)/Modules/**/Locales/**" />
+    <_moduleFiles Include="$(MSBuildProjectDirectory)/Modules/**/Bin/Release/**;$(MSBuildProjectDirectory)/Modules/**/Content/**;$(MSBuildProjectDirectory)/Modules/**/Locales/**;$(MSBuildProjectDirectory)/Modules/**/module.*;" />
     <_themeFiles Include="$(MSBuildProjectDirectory)/Themes/**/*" />
     <_siteFiles Include="$(MSBuildProjectDirectory)/Sites/**/*" />
-    <Content Remove="bundleconfig.json" />
 
     <DotNetPublishFiles Include="@(_moduleFiles)">
       <DestinationRelativePath>Modules/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
@@ -60,11 +69,11 @@
     <DotNetPublishFiles Include="@(_siteFiles)">
       <DestinationRelativePath>Sites/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
     </DotNetPublishFiles>
-
-  </ItemGroup>
-
-  <ItemGroup>
-    <None Include="bundleconfig.json" />
+    
+    <ResolvedFileToPublish Include="appsettings.json">
+      <RelativePath>appsettings.json</RelativePath>
+    </ResolvedFileToPublish>
+    
   </ItemGroup>
 
   <ItemGroup>

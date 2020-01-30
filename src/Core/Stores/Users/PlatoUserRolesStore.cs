@@ -16,8 +16,6 @@ namespace PlatoCore.Stores.Users
 {
     public class PlatoUserRolesStore : IPlatoUserRoleStore<UserRole>
     {
-        
-        private readonly IPlatoRoleStore _platoRoleStore;
         private readonly IUserRolesRepository<UserRole> _userRolesRepository;
         private readonly ILogger<PlatoUserRolesStore> _logger;
         private readonly ICacheManager _cacheManager;
@@ -30,10 +28,9 @@ namespace PlatoCore.Stores.Users
             ICacheManager cacheManager, 
             IDbQueryConfiguration dbQuery)
         {
-            _platoRoleStore = platoRoleStore;
             _userRolesRepository = userRolesRepository;
-            _logger = logger;
             _cacheManager = cacheManager;
+            _logger = logger;
             _dbQuery = dbQuery;
         }
 
