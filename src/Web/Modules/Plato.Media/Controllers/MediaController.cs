@@ -56,7 +56,7 @@ namespace Plato.Media.Controllers
                 r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + media.Name + "\"");
                 r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)media.ContentLength));
                 r.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
-                r.Body.Write(media.ContentBlob, 0, (int)media.ContentLength);
+                await r.Body.WriteAsync(media.ContentBlob, 0, (int)media.ContentLength);
             }
             else
             {
@@ -67,7 +67,7 @@ namespace Plato.Media.Controllers
                     r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"empty.png\"");
                     r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((int)fileBytes.Length));
                     r.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
-                    r.Body.Write(fileBytes, 0, fileBytes.Length);
+                    await r.Body.WriteAsync(fileBytes, 0, fileBytes.Length);
                 }
             }
 

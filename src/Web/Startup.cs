@@ -4,7 +4,12 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using PlatoCore.Features;
+using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Web.Extensions;
+using PlatoCore.Models.Shell;
+using PlatoCore.Stores.Abstractions.Shell;
+using PlatoCore.Stores.Shell;
 
 namespace Plato
 {
@@ -28,7 +33,7 @@ namespace Plato
         // Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddSingleton(Configuration);            
+            services.AddSingleton(Configuration);   
             services.AddPlato();
         }
 

@@ -292,14 +292,14 @@ $(function (win, doc, $) {
                 return action;
             },
             getStarType: function($caller) {
-                var followType = "";
+                var starType = "";
                 if ($caller.attr("data-star-type")) {
-                    followType = $caller.attr("data-star-type");
+                    starType = $caller.attr("data-star-type");
                 }
-                if (followType === "") {
-                    throw new Error("A star type  is required in order to star an item.");
+                if (starType === "") {
+                    throw new Error("A star type is required in order to star an item.");
                 }
-                return followType;
+                return starType;
             },
             getThingId: function($caller) {
                 var thingId = 0;

@@ -1,6 +1,6 @@
 ﻿namespace PlatoCore.Hosting.Abstractions
 {
-    public interface IPlatoHostEnvironment 
+    public interface IPlatoHostEnvironment
     {
 
         string MapPath(string virtualPath);

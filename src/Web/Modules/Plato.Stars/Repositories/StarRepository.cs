@@ -52,10 +52,10 @@ namespace Plato.Stars.Repositories
 
         public async Task<Star> SelectByIdAsync(int id)
         {
-            Star star = null;
+            Star output = null;
             using (var context = _dbContext)
             {
-                star = await context.ExecuteReaderAsync<Star>(
+                output = await context.ExecuteReaderAsync<Star>(
                     CommandType.StoredProcedure,
                     "SelectStarById",
                     async reader =>
@@ -63,19 +63,19 @@ namespace Plato.Stars.Repositories
                         if ((reader != null) && (reader.HasRows))
                         {
                             await reader.ReadAsync();
-                            star = new Star();
-                            star.PopulateModel(reader);
+                            output = new Star();
+                            output.PopulateModel(reader);
                         }
 
-                        return star;
-                    }, new[]
+                        return output;
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
 
             }
 
-            return star;
+            return output;
         }
 
         public async Task<IPagedResults<Star>> SelectAsync(IDbDataParameter[] dbParams)
@@ -129,7 +129,7 @@ namespace Plato.Stars.Repositories
             {
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
-                    "DeleteStarById", new[]
+                    "DeleteStarById", new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -153,9 +153,9 @@ namespace Plato.Stars.Repositories
                             var output = new List<Star>();
                             while (await reader.ReadAsync())
                             {
-                                var entity = new Star();
-                                entity.PopulateModel(reader);
-                                output.Add(entity);
+                                var star = new Star();
+                                star.PopulateModel(reader);
+                                output.Add(star);
                             }
 
                             return output;
@@ -163,7 +163,7 @@ namespace Plato.Stars.Repositories
 
                         return null;
 
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Name", DbType.String, 255, name),
                         new DbParam("ThingId", DbType.Int32, thingId),
@@ -176,10 +176,10 @@ namespace Plato.Stars.Repositories
 
         public async Task<Star> SelectByNameThingIdAndCreatedUserId(string name, int thingId, int createdUserId)
         {
-            Star star = null;
+            Star output = null;
             using (var context = _dbContext)
             {
-                star = await context.ExecuteReaderAsync(
+                output = await context.ExecuteReaderAsync(
                     CommandType.StoredProcedure,
                     "SelectStarByNameThingIdAndCreatedUserId",
                     async reader =>
@@ -187,13 +187,13 @@ namespace Plato.Stars.Repositories
                         if ((reader != null) && (reader.HasRows))
                         {
                             await reader.ReadAsync();
-                            star = new Star();
-                            star.PopulateModel(reader);
+                            output = new Star();
+                            output.PopulateModel(reader);
                         }
 
-                        return star;
+                        return output;
                     },
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Name", DbType.String, 255, name),
                         new DbParam("ThingId", DbType.Int32, thingId),
@@ -202,7 +202,7 @@ namespace Plato.Stars.Repositories
 
             }
 
-            return star;
+            return output;
         }
 
         #endregion
@@ -224,7 +224,7 @@ namespace Plato.Stars.Repositories
                 output = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "InsertUpdateStar",
-                    new []
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
                         new DbParam("Name", DbType.String, 255, name),

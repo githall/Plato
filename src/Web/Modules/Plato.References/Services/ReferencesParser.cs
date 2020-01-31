@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Infrastructure;
+using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
@@ -15,21 +18,29 @@ namespace Plato.References.Services
     public class ReferencesParser : IReferencesParser
     {
 
+        private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IEntityStore<Entity> _entityStore;
         private readonly IHashTokenizer _hashTokenizer;
         private readonly ILinkTokenizer _linkTokenizer;
         private readonly IContextFacade _contextFacade;
-        
+        private readonly IUrlHelperFactory _urlHelperFactory;
+
+        private IUrlHelper _urlHelper;
+
         public ReferencesParser(
+            IActionContextAccessor actionContextAccessor,
             IEntityStore<Entity> entityStore,
             IHashTokenizer hashTokenizer,
             IContextFacade contextFacade,
-            ILinkTokenizer linkTokenizer)
+            ILinkTokenizer linkTokenizer,
+            IUrlHelperFactory urlHelperFactory)
         {
+            _actionContextAccessor = actionContextAccessor;
             _contextFacade = contextFacade;
             _linkTokenizer = linkTokenizer;
             _entityStore = entityStore;
             _hashTokenizer = hashTokenizer;
+            _urlHelperFactory = urlHelperFactory;        
         }
 
         public async Task<string> ParseAsync(string input)
@@ -327,6 +338,17 @@ namespace Plato.References.Services
                     output.Add(token.Value);
             }
             return output?.ToArray();
+        }
+
+        string GetRouteUrl(RouteValueDictionary routeValues)
+        {
+
+            if (_urlHelper == null)
+            {
+                _urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
+            }
+
+            return _urlHelper.RouteUrl(new UrlRouteContext { Values = routeValues });
         }
 
     }

@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Diagnostics;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -11,28 +9,23 @@ using Microsoft.Extensions.Logging;
 namespace PlatoCore.Hosting.Web.Routing
 {
 
-    public interface IPlatoRouteHandler : IRouter
-    {
-
-    }
-
-    public class PlatoRouteHandler : IPlatoRouteHandler
+    public class PlatoRouter : IPlatoRouter
     {
         private readonly IActionInvokerFactory _actionInvokerFactory;
-        private readonly IActionSelector _actionSelector;
-        private readonly ILogger _logger;
         private readonly DiagnosticListener _diagnosticListener;
+        private readonly IActionSelector _actionSelector;      
+        private readonly ILogger _logger;
 
-        public PlatoRouteHandler(
+        public PlatoRouter(
             IActionInvokerFactory actionInvokerFactory,
-            IActionSelector actionSelector,
             DiagnosticListener diagnosticListener,
+            IActionSelector actionSelector,       
             ILoggerFactory loggerFactory)
         {
-            _actionInvokerFactory = actionInvokerFactory;
-            _actionSelector = actionSelector;
+            _logger = loggerFactory.CreateLogger<PlatoRouter>();
+            _actionInvokerFactory = actionInvokerFactory;        
             _diagnosticListener = diagnosticListener;
-            _logger = loggerFactory.CreateLogger<PlatoRouteHandler>();
+            _actionSelector = actionSelector;
         }
 
         public VirtualPathData GetVirtualPath(VirtualPathContext context)
@@ -83,5 +76,7 @@ namespace PlatoCore.Hosting.Web.Routing
 
             return Task.CompletedTask;
         }
+
     }
+
 }

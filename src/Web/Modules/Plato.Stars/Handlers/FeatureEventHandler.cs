@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Data.Schemas.Abstractions;
 using PlatoCore.Features.Abstractions;
@@ -12,7 +12,7 @@ namespace Plato.Stars.Handlers
 
         public string Version { get; } = "1.0.0";
 
-        // Follows table
+        // Stars table
         private readonly SchemaTable _stars = new SchemaTable()
         {
             Name = "Stars",
@@ -182,8 +182,8 @@ namespace Plato.Stars.Handlers
             builder.ProcedureBuilder
                 .CreateDefaultProcedures(_stars)
 
-                // Overwrite our SelectFollowById created via CreateDefaultProcedures
-                // above to also return basic user data with follow
+                // Overwrite our SelectStarById created via CreateDefaultProcedures
+                // above to also return basic user data with the star
                 .CreateProcedure(
                     new SchemaProcedure(
                             $"SelectStarById",

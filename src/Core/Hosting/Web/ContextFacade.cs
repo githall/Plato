@@ -24,9 +24,7 @@ namespace PlatoCore.Hosting.Web
         private readonly IPlatoUserStore<User> _platoUserStore;
         private readonly ISiteSettingsStore _siteSettingsStore;
         private readonly IUrlHelperFactory _urlHelperFactory;
-        
-        private IUrlHelper _urlHelper;
-        
+
         public ContextFacade(
             IActionContextAccessor actionContextAccessor,
             IHttpContextAccessor httpContextAccessor,
@@ -97,13 +95,8 @@ namespace PlatoCore.Hosting.Web
 
         public string GetRouteUrl(RouteValueDictionary routeValues)
         {
-
-            if (_urlHelper == null)
-            {
-                _urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
-            }
-
-            return _urlHelper.RouteUrl(new UrlRouteContext {Values = routeValues});
+            var urlHelper = _urlHelperFactory.GetUrlHelper(_actionContextAccessor.ActionContext);
+            return urlHelper.RouteUrl(new UrlRouteContext {Values = routeValues});
         }
 
         public async Task<string> GetCurrentCultureAsync()

@@ -1,7 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using PlatoCore.Abstractions;
 using System.Collections.Concurrent;
 using System.Data;
 
@@ -32,7 +29,7 @@ namespace PlatoCore.Abstractions.Extensions
                 }
             }
 
-            // GetOrdinal() is expensive so we catch the results
+            // GetOrdinal() is expensive so we cache the results
             ordinal = dr.GetOrdinal(columnName);
 
             // Cache our ordinals by IDbModel type in a staic concurrent dictionary            

@@ -1,17 +1,11 @@
 ﻿using System;
 using Microsoft.AspNetCore.Builder;
-// TODO: 3.1
-//using Microsoft.AspNetCore.Builder.Internal;
 using Microsoft.AspNetCore.Http;
-// TODO: 3.1
-//using Microsoft.AspNetCore.Mvc.Internal;
 using Microsoft.AspNetCore.Routing;
-using Microsoft.AspNetCore.Mvc.Core;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Routing;
 using PlatoCore.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
@@ -21,16 +15,16 @@ namespace PlatoCore.Hosting.Web.Routing
     public class PlatoRouterMiddleware
     {
 
-        private readonly RequestDelegate _next;
         private readonly Dictionary<string, RequestDelegate> _pipelines = new Dictionary<string, RequestDelegate>();
+        private readonly RequestDelegate _next;        
         private readonly ILogger _logger;
 
         public PlatoRouterMiddleware(
-            RequestDelegate next,
-            ILogger<PlatoRouterMiddleware> logger)
-        {
-            _next = next;
+            ILogger<PlatoRouterMiddleware> logger,
+            RequestDelegate next)
+        {           
             _logger = logger;
+            _next = next;
         }
 
         public async Task Invoke(HttpContext context)
@@ -83,9 +77,7 @@ namespace PlatoCore.Hosting.Web.Routing
         }
 
         // Build the middleware pipeline for the current tenant
-        public RequestDelegate BuildTenantPipeline(
-            ShellSettings shellSettings, 
-            HttpContext httpContext)
+        public RequestDelegate BuildTenantPipeline(ShellSettings shellSettings, HttpContext httpContext)
         {
 
             var serviceProvider = httpContext.RequestServices;
@@ -93,21 +85,21 @@ namespace PlatoCore.Hosting.Web.Routing
             var inlineConstraintResolver = serviceProvider.GetService<IInlineConstraintResolver>();
             var appBuilder = new ApplicationBuilder(serviceProvider);
 
-            var routePrefix = "";
+            var routePrefix = string.Empty;
             if (!string.IsNullOrWhiteSpace(shellSettings.RequestedUrlPrefix))
             {
                 routePrefix = shellSettings.RequestedUrlPrefix + "/";
             }
 
+            // Create a default routebuilder using our PlatoRouter implementation 
             var routeBuilder = new RouteBuilder(appBuilder, new RouteHandler(_next))
             {
-                // TODO: 3.1 - Changed MvcRouteHandler to our own IPlatoRouteHandler implementation
-                DefaultHandler = serviceProvider.GetRequiredService<IPlatoRouteHandler>()
+                DefaultHandler = serviceProvider.GetRequiredService<IPlatoRouter>()
             };
 
             // Build prefixed route builder
             var prefixedRouteBuilder = new PrefixedRouteBuilder(
-                routePrefix, 
+                routePrefix,
                 routeBuilder,
                 inlineConstraintResolver);
 
@@ -128,20 +120,33 @@ namespace PlatoCore.Hosting.Web.Routing
                 inlineConstraintResolver)
             );
 
-            // Add attribute routing
-            // TODO: 3.1
-            //routeBuilder.Routes.Insert(0, AttributeRouteInfo.CreateAttributeMegaRoute(serviceProvider));
-
             // Build router
             var router = prefixedRouteBuilder.Build();
 
             // Use router
             appBuilder.UseRouter(router);
 
+            // Configure captured http context
+            ConfigureCapturedHttpContext(httpContext, serviceProvider);
+
+            // Configure captured router
+            ConfigureCapturedRouter(httpContext, serviceProvider, router);
+
+            // Build & return new pipeline
+            var pipeline = appBuilder.Build();
+            return pipeline;
+
+        }
+
+        private static void ConfigureCapturedHttpContext(HttpContext httpContext,  IServiceProvider serviceProvider)
+        {
             // Create a captured HttpContext for use outside of application context
             var capturedHttpContext = serviceProvider.GetService<ICapturedHttpContext>();
             capturedHttpContext.Configure(state => state.Contextualize(httpContext));
+        }
 
+        private static void ConfigureCapturedRouter(HttpContext httpContext, IServiceProvider serviceProvider, IRouter router)
+        {
             // Create a captured router for use outside of application context
             var capturedRouter = serviceProvider.GetService<ICapturedRouter>();
             capturedRouter.Configure(options =>
@@ -149,13 +154,8 @@ namespace PlatoCore.Hosting.Web.Routing
                 options.Router = router;
                 options.BaseUrl = $"{httpContext.Request.Scheme}://{httpContext.Request.Host}{httpContext.Request.PathBase}";
             });
-
-            // Build & return new pipeline
-            var pipeline = appBuilder.Build();
-            return pipeline;
-
         }
-        
+
     }
 
 }

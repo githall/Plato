@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Text;
 
 namespace PlatoCore.Abstractions.Extensions
 {
     public static class OjectArrayExtensions
     {
-
 
         public static string CombineObjectHashCodesAndGetString(this object[] args)
         {
@@ -42,7 +40,6 @@ namespace PlatoCore.Abstractions.Extensions
 
         }
 
-
-
     }
+
 }

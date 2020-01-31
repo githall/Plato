@@ -45,6 +45,11 @@ using PlatoCore.Hosting.Web.Routing;
 using PlatoCore.Layout.LocationExpander;
 using PlatoCore.Layout.ViewFeatures;
 using PlatoCore.Modules;
+using PlatoCore.Models.Shell;
+using PlatoCore.Stores.Abstractions.Shell;
+using PlatoCore.Features.Abstractions;
+using PlatoCore.Features;
+using PlatoCore.Stores.Shell;
 
 namespace PlatoCore.Hosting.Web.Extensions
 {
@@ -55,7 +60,7 @@ namespace PlatoCore.Hosting.Web.Extensions
         public static IServiceCollection AddPlato(this IServiceCollection services)
         {
             services.ConfigureShell("Sites");            
-            services.AddHttpContextAccessor();
+            services.AddHttpContextAccessor();     
             services.AddPlatoDataProtection();
             services.AddPlatoHost();
             return services;
@@ -118,6 +123,12 @@ namespace PlatoCore.Hosting.Web.Extensions
 
         public static IServiceCollection AddHPlatoTennetHost(this IServiceCollection services, Action<IServiceCollection> configure)
         {
+
+            // Dummy implementations to pass .NET Core dependency injection checks
+            // These are replaced for each tenant via the ShellContainerFactory
+            services.AddScoped<IShellSettings, ShellSettings>();
+            services.AddScoped<IShellDescriptorStore, ShellDescriptorStore>();
+            services.AddScoped<IShellDescriptorManager, ShellDescriptorManager>();
 
             // Add host
             services.AddPlatoDefaultHost();
@@ -183,9 +194,6 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Add modular application parts
             services.AddPlatoModularAppParts(builder.PartManager);
 
-            // TODO: 3.1 (Added but to be refactored)
-            services.AddScoped<IPlatoRouteHandler, PlatoRouteHandler>();
-
             // View adapters
             services.AddPlatoViewAdapters();
 
@@ -240,17 +248,27 @@ namespace PlatoCore.Hosting.Web.Extensions
 
         public static IServiceCollection AddPlatoRouting(this IServiceCollection services)
         {
+
+            // Captured routers are used for background tasks as background tasks
+            // don't have access to the current HttpContext object
             services.AddScoped<ICapturedRouter, CapturedRouter>();
             services.AddScoped<ICapturedRouterUrlHelper, CapturedRouterUrlHelper>();
+
+            // Add home route manager
             services.AddScoped<IHomeRouteManager, HomeRouteManager>();
+
+            // Add default route handler (required by the Plato routing middleware)
+            services.AddScoped<IPlatoRouter, PlatoRouter>();
+
             return services;
+
         }
 
         public static IServiceCollection AddPlatoContextAccessor(this IServiceCollection services)
         {
             services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
             services.AddSingleton<ICapturedHttpContext, CapturedHttpContext>();
-            services.AddTransient<IContextFacade, ContextFacade>();
+            services.AddScoped<IContextFacade, ContextFacade>();
             return services;
         }
         

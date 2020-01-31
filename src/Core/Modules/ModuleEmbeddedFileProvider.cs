@@ -3,8 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.AspNetCore.Hosting;
-// TODO: 3.1
-//using Microsoft.AspNetCore.Mvc.Razor.Internal;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Embedded;
@@ -34,20 +32,14 @@ namespace PlatoCore.Modules
         public ModuleEmbeddedFileProvider(IServiceProvider services)
         {
 
-            // TODO: 3.1
-            // Changed from IHostingEnvironment
-            // To IHostEnvironment
             var env = services.GetRequiredService<IHostEnvironment>();
             _moduleOptions = services.GetRequiredService<IOptions<ModuleOptions>>();
 
             _moduleManager = services.GetRequiredService<IModuleManager>();
 
-            // TODO: 3.1
-            // Changed from IRazorViewEngineFileProviderAccessor
-            // To PhysicalFileProvider
             var hostingEnvironment = services.GetRequiredService<IWebHostEnvironment>();
             _fileProviderAccessor = hostingEnvironment.ContentRootFileProvider;
-            
+
             _modulesFolder = _moduleOptions.Value.VirtualPathToModulesFolder;
             _modulesRoot = _moduleOptions.Value.VirtualPathToModulesFolder + "/";
             _root = env.ContentRootPath;
@@ -68,10 +60,10 @@ namespace PlatoCore.Modules
                     .GetResult()
                     .ToList();
             }
-         
+
             var folder = NormalizePath(subpath);
             var entries = new List<IFileInfo>();
-            
+
             // Under the root.
             if (folder == "")
             {
@@ -97,10 +89,7 @@ namespace PlatoCore.Modules
                 var name = index == -1 ? path : path.Substring(0, index);
 
                 var ph = _root + _modulesFolder + "\\" + name;
-                var paths = new List<string>();
-                // TODO: 3.1
-                // Changed from _fileProviderAccessor.FileProvider.GetDirectoryContents(path)
-                // To _fileProviderAccessor.GetDirectoryContents(path)
+                var paths = new List<string>();            
                 foreach (var file  in _fileProviderAccessor.GetDirectoryContents(path))
                 {
                     paths.Add(path + name + file.Name);
@@ -113,9 +102,11 @@ namespace PlatoCore.Modules
                 // And add them to the directory contents.
                 entries.AddRange(files.Select(p => GetFileInfo(p)));
                 entries.AddRange(folders.Select(n => new EmbeddedDirectoryInfo(n)));
+
             }
 
             return new EmbeddedDirectoryContents(entries);
+
         }
 
         public IFileInfo GetFileInfo(string subpath)
@@ -178,6 +169,7 @@ namespace PlatoCore.Modules
         {
             if (!_fileInfos.TryGetValue(subpath, out var fileInfo))
             {
+
                 //if (!assetPaths.Contains(_root + subpath, StringComparer.Ordinal))
                 //{
                 //    return new NotFoundFileInfo(subpath);
