@@ -183,6 +183,7 @@ namespace PlatoCore.Hosting.Web.Extensions
                 .AddCors()
                 .AddCacheTagHelper()
                 .AddRazorViewEngine()
+                .AddNewtonsoftJson()
                 .AddRazorPages()
                 .AddRazorRuntimeCompilation();
 
@@ -201,7 +202,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             services.AddPlatoModularMvc();
 
             // Custom view model validation
-            services.AddPlatoModelValidation();
+            services.AddPlatoModelValidation();                       
 
             return services;
 
