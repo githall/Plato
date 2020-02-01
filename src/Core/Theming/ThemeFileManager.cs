@@ -10,7 +10,7 @@ namespace PlatoCore.Theming
 
     public class ThemeFileManager : IThemeFileManager
     {
-    
+
         private IThemeLoader _themeLoader;
         private readonly IPlatoFileSystem _fileSystem;
 
@@ -43,10 +43,10 @@ namespace PlatoCore.Theming
             {
                 throw new Exception($"A theme folder named \"{themeId}\" could not be found!");
             }
-            
+
             // Build output
             var output = new List<IThemeFile>();
-            
+
             // Get theme directory
             var themeDirectory = _fileSystem.GetDirectoryInfo(theme.FullPath);
 
@@ -57,7 +57,7 @@ namespace PlatoCore.Theming
                 FullName = themeDirectory.FullName,
                 IsDirectory = true
             };
-            
+
             // Add child directories to our root
             var directories = BuildDirectoriesRecursively(theme.FullPath, rootDirectory);
             if (directories != null)
@@ -78,7 +78,7 @@ namespace PlatoCore.Theming
                     Parent = rootDirectory
                 });
             }
-            
+
             // We need an explicit type to pass by reference
             var list = ((IList<IThemeFile>) output.ToList());
 
@@ -88,7 +88,7 @@ namespace PlatoCore.Theming
 
             // Return composed theme files
             return list;
-            
+
         }
 
         public IEnumerable<IThemeFile> GetFiles(string themeId, string relativePath)
@@ -153,7 +153,7 @@ namespace PlatoCore.Theming
             }
 
             return await _fileSystem.ReadFileAsync(themeFile.FullName);
-            
+
         }
 
         public async Task SaveFileAsync(IThemeFile themeFile, string contents)
@@ -173,7 +173,7 @@ namespace PlatoCore.Theming
         }
 
         // ---------------
-        
+
         void EnsureThemeLoader()
         {
             if (_themeLoader == null)
@@ -184,7 +184,7 @@ namespace PlatoCore.Theming
 
         IEnumerable<IThemeFile> BuildDirectoriesRecursively(string path, IThemeFile parent = null)
         {
-            
+
             // Recurse directories
             var themeDirectory = _fileSystem.GetDirectoryInfo(path);
             foreach (var directory in themeDirectory.GetDirectories())
@@ -208,19 +208,19 @@ namespace PlatoCore.Theming
                         Parent = themeFile
                     });
                 }
-                
+
                 // Add current file as a child of the parent
                 parent?.Children.Add(themeFile);
-                
+
                 // Recurse until we've processed all directories 
                 BuildDirectoriesRecursively(directory.FullName, themeFile);
-              
+
             }
 
             return parent?.Children ?? null;
 
         }
-        
+
         IEnumerable<IThemeFile> BuildParentsRecursively(IThemeFile themeFile, IList<IThemeFile> output = null)
         {
 

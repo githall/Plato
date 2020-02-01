@@ -4,6 +4,7 @@ using System.Runtime.CompilerServices;
 
 namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class TypeExtensions
     {
 
@@ -17,4 +18,5 @@ namespace PlatoCore.Abstractions.Extensions
             return t != null && t.GetCustomAttributes(typeof(CompilerGeneratedAttribute), true).Any();
         }
     }
+
 }

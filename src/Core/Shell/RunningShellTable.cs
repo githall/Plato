@@ -6,8 +6,10 @@ using PlatoCore.Shell.Abstractions;
 
 namespace PlatoCore.Shell
 {
+
     public class RunningShellTable : IRunningShellTable
     {
+
         private readonly Dictionary<string, IShellSettings> _shellsByHostAndPrefix =
             new Dictionary<string, IShellSettings>(StringComparer.OrdinalIgnoreCase);
 

@@ -1,9 +1,9 @@
-﻿using Microsoft.Extensions.FileProviders;
-using Microsoft.Extensions.Logging;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using Microsoft.Extensions.Logging;
+using Microsoft.Extensions.FileProviders;
 using PlatoCore.FileSystem.Abstractions;
 
 namespace PlatoCore.FileSystem
@@ -117,4 +117,5 @@ namespace PlatoCore.FileSystem
         }
 
     }
+
 }

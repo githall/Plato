@@ -7,7 +7,7 @@ namespace PlatoCore.Shell
     {
 
         IEnumerable<ShellSettings> LoadSettings();
-             
+
         void SaveSettings(IShellSettings settings);
 
     }

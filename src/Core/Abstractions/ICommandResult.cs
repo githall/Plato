@@ -14,9 +14,9 @@ namespace PlatoCore.Abstractions
 
     public interface ICommandResult<out TResponse> : ICommandResultBase where TResponse : class
     {
-        
+
         TResponse Response { get; }
-        
+
     }
 
 }

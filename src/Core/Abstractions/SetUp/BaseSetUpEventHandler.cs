@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 
 namespace PlatoCore.Abstractions.SetUp
 {
+
     public abstract class BaseSetUpEventHandler : ISetUpEventHandler
     {
 
@@ -12,4 +13,5 @@ namespace PlatoCore.Abstractions.SetUp
         public abstract Task SetUp(SetUpContext context, Action<string, string> reportError);
 
     }
+
 }

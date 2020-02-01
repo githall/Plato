@@ -33,5 +33,7 @@ namespace PlatoCore.Text
                 .Replace("&#xA;", "\n")
                 .HtmlTextulize();
         }
+
     }
+
 }

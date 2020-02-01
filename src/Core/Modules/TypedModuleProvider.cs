@@ -23,7 +23,7 @@ namespace PlatoCore.Modules
         {
             _moduleManager = moduleManager;
         }
-        
+
         public async Task<IModuleEntry> GetModuleForDependency(Type dependency)
         {
             
@@ -88,7 +88,6 @@ namespace PlatoCore.Modules
 
             return null;
 
-
         }
 
         async Task BuildTypedProviderAsync()
@@ -123,5 +122,7 @@ namespace PlatoCore.Modules
             await BuildTypedProviderAsync();
             return _modules.Select(m => m.Key.GetTypeInfo());
         }
+
     }
+
 }

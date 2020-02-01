@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 
 namespace PlatoCore.Abstractions.SetUp
 {
+
     public interface ISetUpEventHandler
     {
 
@@ -14,4 +15,5 @@ namespace PlatoCore.Abstractions.SetUp
         );
 
     }
+
 }

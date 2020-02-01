@@ -9,7 +9,7 @@ namespace PlatoCore.Navigation
 {
     public class NavigationBuilder : INavigationBuilder
     {
-        
+
         List<MenuItem> Contained { get; set; }
 
         public ActionContext ActionContext { get; set; }
@@ -18,7 +18,7 @@ namespace PlatoCore.Navigation
         {
             Contained = new List<MenuItem>();
         }
-        
+
         public INavigationBuilder Add(
             LocalizedString caption,
             string position,
@@ -27,7 +27,7 @@ namespace PlatoCore.Navigation
         {
             return Add(caption, position, 0, itemBuilder, classes);
         }
-        
+
         public INavigationBuilder Add(
             LocalizedString caption,
             string authority,
@@ -61,7 +61,7 @@ namespace PlatoCore.Navigation
         {
             return Add(caption, null,order, itemBuilder, classes);
         }
-        
+
         public INavigationBuilder Add(
             LocalizedString caption, 
             Action<INavigationItemBuilder> itemBuilder,

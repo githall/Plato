@@ -12,12 +12,12 @@ namespace PlatoCore.Data.Providers
     
     public class SqlProvider : IDataProvider
     {
-        
+
         public int CommandTimeout { get; set; } = 120;
-        
+
         private readonly ILogger<SqlProvider> _logger;
         private readonly string _connectionString;
-    
+
         public SqlProvider(
             ILogger<SqlProvider> logger,
             IOptions<DbContextOptions> dbContextOptions)
@@ -249,11 +249,11 @@ namespace PlatoCore.Data.Providers
             return p;
 
         }
-        
+
         // mainly used to hook in and override behaviour
 
         public virtual void OnExecutedCommand(IDbCommand cmd) { }
-                
+
         public virtual void HandleException(Exception ex)
         {
             if (ex == null) return;

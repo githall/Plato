@@ -11,7 +11,7 @@ namespace Plato.Discuss.Tags.Follow.ViewProviders
 {
     public class TagViewProvider : BaseViewProvider<Tag>
     {
-    
+
         private readonly IFollowStore<Follows.Models.Follow> _followStore;
         private readonly IContextFacade _contextFacade;
         private readonly ITagStore<TagBase> _tagStore;
@@ -50,7 +50,7 @@ namespace Plato.Discuss.Tags.Follow.ViewProviders
                     isFollowing = true;
                 }
             }
-            
+
             return Views(
                 View<FollowViewModel>("Follow.Display.Tools", model =>
                 {

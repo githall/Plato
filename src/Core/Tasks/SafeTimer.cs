@@ -9,7 +9,7 @@ namespace PlatoCore.Tasks
 
     public class SafeTimer : SafeTimerBase, ISafeTimer
     {
-       
+
         Timer _timer;
         private int _inTimerCallback;
 

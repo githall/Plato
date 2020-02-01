@@ -7,7 +7,7 @@ using PlatoCore.Text.PluralizerRules;
 
 namespace PlatoCore.Text
 {
-    
+
     public class Pluralize : IPluralize
     {
 

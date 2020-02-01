@@ -4,6 +4,7 @@ using System.Data;
 
 namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class DbModelExtensions
     {
 
@@ -43,9 +44,9 @@ namespace PlatoCore.Abstractions.Extensions
             });
 
             return ordinal;
-            
+
         }
-        
+
     }
 
 }

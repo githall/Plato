@@ -18,5 +18,7 @@ namespace PlatoCore.Layout.Views
         public object Value { get; set; }
         
         public ViewDescriptor ViewDescriptor { get; set; }
+
     }
+
 }

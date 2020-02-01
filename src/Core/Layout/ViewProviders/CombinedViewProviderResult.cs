@@ -7,7 +7,7 @@ namespace PlatoCore.Layout.ViewProviders
     public class CombinedViewProviderResult : IViewProviderResult
     {
         private readonly IEnumerable<IViewProviderResult> _results;
-   
+
         public CombinedViewProviderResult(params IViewProviderResult[] results)
         {
             _results = results;

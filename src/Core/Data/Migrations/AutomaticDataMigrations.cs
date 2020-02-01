@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions.Extensions;
@@ -17,9 +16,6 @@ namespace PlatoCore.Data.Migrations
 
         private readonly IOptions<PlatoOptions> _platoOptions;
         private readonly IDataMigrationBuilder _migrationBuilder;
-    
-
-        #region "Constructor"
 
         public AutomaticDataMigrations(
             IDataMigrationBuilder migrationBuilder,
@@ -28,14 +24,10 @@ namespace PlatoCore.Data.Migrations
             _migrationBuilder = migrationBuilder;
             _platoOptions = platoOptions;
         }
-
-        #endregion
-
-        #region "Private Methods"
-
+      
         public async Task<DataMigrationResult> InitialMigrationAsync()
         {
-            
+
             // Start and end versions
             var from = InitialVersion.ToVersion();
             var to = _platoOptions.Value.Version.ToVersion();
@@ -51,7 +43,7 @@ namespace PlatoCore.Data.Migrations
             {
                 throw new ArgumentOutOfRangeException(nameof(to));
             }
-            
+
             // All versions between from and to
             var versions = from.GetVersionsBetween(to);
 
@@ -67,14 +59,10 @@ namespace PlatoCore.Data.Migrations
             // Get all schemas 
             var migrations = _migrationBuilder
                 .BuildMigrations(versionsToSearch.ToArray());
-
             return await migrations.ApplyMigrationsAsync();
-            
 
         }
-        
-        #endregion
-        
+
     }
 
 }

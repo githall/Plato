@@ -9,7 +9,7 @@ namespace PlatoCore.Notifications
 {
     public class NotificationTypeManager : INotificationTypeManager
     {
-        
+
         private IEnumerable<DefaultNotificationTypes> _notificationTypes;
         private IEnumerable<DefaultNotificationTypes> _defaultNotificationTypes;
 
@@ -23,7 +23,7 @@ namespace PlatoCore.Notifications
             _providers = providers;
             _logger = logger;
         }
-        
+
         public IEnumerable<INotificationType> GetNotificationTypes(IEnumerable<string> roleNames)
         {
 
@@ -31,7 +31,6 @@ namespace PlatoCore.Notifications
             {
                 throw new ArgumentNullException(nameof(roleNames));
             }
-
 
             if (_notificationTypes == null)
             {
@@ -66,7 +65,7 @@ namespace PlatoCore.Notifications
                 .ToList();
 
         }
-        
+
         public IEnumerable<INotificationType> GetDefaultNotificationTypes(IEnumerable<string> roleNames)
         {
 
@@ -107,7 +106,7 @@ namespace PlatoCore.Notifications
                 .Distinct()
                 .ToList();
         }
-        
+
         public IDictionary<string, IEnumerable<INotificationType>> GetCategorizedNotificationTypes(IEnumerable<string> roleNames)
         {
 
@@ -115,7 +114,7 @@ namespace PlatoCore.Notifications
             {
                 throw new ArgumentNullException(nameof(roleNames));
             }
-            
+
             var output = new Dictionary<string, IEnumerable<INotificationType>>();
             var notificationTypes = GetNotificationTypes(roleNames);
             foreach (var notificationType in notificationTypes)
@@ -133,7 +132,7 @@ namespace PlatoCore.Notifications
                     output.Add(title, new[] {notificationType});
                 }
             }
-            
+
             return output;
 
         }

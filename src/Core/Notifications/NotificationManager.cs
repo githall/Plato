@@ -11,10 +11,10 @@ namespace PlatoCore.Notifications
 
     public class NotificationManager<TModel> : INotificationManager<TModel> where TModel : class
     {
-        
+
         private readonly IEnumerable<INotificationProvider<TModel>> _notificationProviders;
         private readonly ILogger<NotificationManager<TModel>> _logger;
- 
+
         public NotificationManager(
             IEnumerable<INotificationProvider<TModel>> notificationProviders, 
             ILogger<NotificationManager<TModel>> logger)
@@ -22,10 +22,10 @@ namespace PlatoCore.Notifications
             _notificationProviders = notificationProviders;
             _logger = logger;
         }
-        
+
         public async Task<IEnumerable<ICommandResult<TModel>>> SendAsync(INotification notification, TModel model) 
         {
-            
+
             // Create context for notification providers
             var context = new NotificationContext<TModel>()
             {
@@ -50,7 +50,7 @@ namespace PlatoCore.Notifications
                     _logger.LogError(e, $"An error occurred whilst invoking the SendAsync method within a notification provider for notification type '{notification.Type.Name}'.");
                 }
             }
-            
+
             // Log results
             foreach (var result in results)
             {
@@ -74,7 +74,7 @@ namespace PlatoCore.Notifications
                 }
 
             }
-            
+
             return results;
 
         }

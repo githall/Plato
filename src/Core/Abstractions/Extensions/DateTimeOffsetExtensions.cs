@@ -2,9 +2,10 @@
 
 namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class DateTimeOffsetExtensions
     {
-        
+
         public static DateTimeOffset ToDateIfNull(this DateTimeOffset? d)
         {
             if (d == null)

@@ -4,7 +4,7 @@ using PlatoCore.Security.Abstractions.Encryption;
 namespace PlatoCore.Security.Configuration
 {
 
-    class PlatoKeyOptionsConfiguration : IConfigureOptions<PlatoKeyOptions>
+    public class PlatoKeyOptionsConfiguration : IConfigureOptions<PlatoKeyOptions>
     {
 
         private readonly IEncrypterKeyStore _keyStore;
@@ -16,14 +16,11 @@ namespace PlatoCore.Security.Configuration
 
         public void Configure(PlatoKeyOptions options)
         {
-
             var keyInfo = _keyStore.GetOrCreateKeysAsync()
                 .GetAwaiter()
                 .GetResult();
-
             options.Key = keyInfo.Key;
             options.Vector = keyInfo.Vector;
-
         }
 
     }

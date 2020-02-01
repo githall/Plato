@@ -36,6 +36,12 @@ namespace Plato.Tags.Controllers
         public async Task<IActionResult> Index([FromBody] TagApiParams parameters)
         {
 
+            // We always need parameters
+            if (parameters == null)
+            {
+                throw new ArgumentNullException(nameof(parameters));
+            }
+
             // Get tags
             var tags = await GetTags(parameters);
 

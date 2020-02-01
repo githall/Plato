@@ -6,13 +6,13 @@ using PlatoCore.Tasks.Abstractions;
 
 namespace PlatoCore.Tasks
 {
-    
+
     public class DeferredTaskManager : IDeferredTaskManager
     {
- 
+
         private readonly ILogger<DeferredTaskManager> _logger;
         private readonly IDeferredTaskState _deferredTaskState;
- 
+
         public DeferredTaskManager(
             IDeferredTaskState deferredTaskState,
             ILogger<DeferredTaskManager> logger)
@@ -20,7 +20,7 @@ namespace PlatoCore.Tasks
             _deferredTaskState = deferredTaskState;
             _logger = logger;
         }
-   
+
         public bool HasTasks => _deferredTaskState.Tasks.Count > 0;
 
         public void AddTask(Func<DeferredTaskContext, Task> task)
@@ -45,7 +45,6 @@ namespace PlatoCore.Tasks
 
         }
 
-
         public async Task ExecuteTaskAsync(DeferredTaskContext context)
         {
             foreach (var task in _deferredTaskState.Tasks)
@@ -65,5 +64,5 @@ namespace PlatoCore.Tasks
         }
 
     }
-    
+
 }

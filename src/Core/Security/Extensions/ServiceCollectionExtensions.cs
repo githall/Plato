@@ -12,6 +12,7 @@ using PlatoCore.Security.Encryption;
 
 namespace PlatoCore.Security.Extensions
 {
+
     public static class ServiceCollectionExtensions
     {
 

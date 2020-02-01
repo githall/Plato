@@ -41,13 +41,12 @@ namespace PlatoCore.Text
         string GenerateKeyInternal()
         {
 
-
             var sb = new StringBuilder(_options.MaxLength);
             for (var i = 0; i <= _options.Iterations; i++)
             {
                 sb.Append(RandomAlphaNumeric(_rnd.Next(_options.MinLengthPerIteration, _options.MaxLengthPerIteration)));
             }
-            
+
             var output = sb.ToString();
 
             // Restrict to a specific length
@@ -68,14 +67,14 @@ namespace PlatoCore.Text
                     _options.UniqueIdentifier +
                     output.Substring(index);
             }
-    
+
             return output;
 
         }
-        
+
         string RandomAlphaNumeric(int length)
         {
-            
+
             var sb = new System.Text.StringBuilder(length);
             for (var i = 1; i <= length; i++)
             {

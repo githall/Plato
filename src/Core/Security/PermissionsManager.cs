@@ -13,7 +13,7 @@ namespace PlatoCore.Security
     {
 
         private IEnumerable<TPermission> _permissions;
-        
+
         private readonly IEnumerable<IPermissionsProvider<TPermission>> _providers;
         private readonly ILogger<PermissionsManager<TPermission>> _logger;
         private readonly ITypedModuleProvider _typedModuleProvider;
@@ -90,5 +90,5 @@ namespace PlatoCore.Security
         }
 
     }
-    
+
 }

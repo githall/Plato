@@ -147,7 +147,7 @@ namespace PlatoCore.Hosting.Web.Routing
 
         private static void ConfigureCapturedRouter(HttpContext httpContext, IServiceProvider serviceProvider, IRouter router)
         {
-            // Create a captured router for use outside of application context
+            // Configure captured router for use outside of application context
             var capturedRouter = serviceProvider.GetService<ICapturedRouter>();
             capturedRouter.Configure(options =>
             {

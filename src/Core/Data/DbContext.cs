@@ -8,6 +8,7 @@ using PlatoCore.Data.Abstractions;
 
 namespace PlatoCore.Data
 {
+
     public class DbContext : IDbContext
     {
 
@@ -17,22 +18,22 @@ namespace PlatoCore.Data
         private readonly IDataProvider _provider;
 
         public DbContext(
-            IOptions<DbContextOptions> dbContextOptions,
-            IDataProvider provider,
-            ILogger<DbContext> logger)
+            IOptions<DbContextOptions> dbContextOptions,           
+            ILogger<DbContext> logger,
+             IDataProvider provider)
         {
-            _provider = provider;
-            _logger = logger;
             Configuration = dbContextOptions.Value;
+            _provider = provider;
+            _logger = logger;         
         }
-   
+
         public void Configure(Action<DbContextOptions> options)
         {
             var cfg = new DbContextOptions();
             options(cfg);
             Configuration = cfg;
         }
-  
+
         public async Task<T> ExecuteReaderAsync<T>(CommandType commandType, string commandText, Func<DbDataReader, Task<T>> populate, IDbDataParameter[] dbParams = null) where T : class
         {
             if (_provider == null)
@@ -64,14 +65,14 @@ namespace PlatoCore.Data
         {
             
         }
-        
+
         private string GetProcedureName(string procedureName)
         {
             return !string.IsNullOrEmpty(Configuration.TablePrefix)
                 ? Configuration.TablePrefix + procedureName
                 : procedureName;
         }
-        
+
     }
 
 }

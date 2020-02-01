@@ -8,15 +8,15 @@ using PlatoCore.Theming.Abstractions.Models;
 
 namespace PlatoCore.Theming
 {
-    
+
     public class ThemeCreator : IThemeCreator
     {
-        
+
         private readonly ISiteThemeLoader _siteThemeLoader;
         private readonly IPlatoFileSystem _platoFileSystem;
         private readonly IThemeUpdater _themeUpdater;
         public readonly IThemeLoader _themeLoader;
-     
+
         public ThemeCreator(
             ISiteThemeLoader siteThemeLoader,
             IPlatoFileSystem platoFileSystem,            

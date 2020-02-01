@@ -10,6 +10,7 @@ using PlatoCore.Theming.Abstractions.Models;
 
 namespace PlatoCore.Theming
 {
+
     public class ThemeLoader : IThemeLoader
     {
 

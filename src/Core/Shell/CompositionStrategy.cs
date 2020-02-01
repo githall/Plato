@@ -15,7 +15,7 @@ namespace PlatoCore.Shell
         private readonly ITypedModuleProvider _typedModuleProvider;
         private readonly IModuleManager _moduleManager;
         private readonly ILogger _logger;
-  
+
         public CompositionStrategy(
             IModuleManager moduleManager,
             ILogger<CompositionStrategy> logger,

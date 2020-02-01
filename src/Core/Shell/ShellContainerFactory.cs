@@ -16,7 +16,7 @@ namespace PlatoCore.Shell
 
     public class ShellContainerFactory : IShellContainerFactory
     {
-                
+
         private readonly IServiceCollection _applicationServices;
         private readonly IServiceProvider _serviceProvider;
 

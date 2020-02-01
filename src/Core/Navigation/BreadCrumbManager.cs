@@ -116,7 +116,7 @@ namespace PlatoCore.Navigation
             return url;
 
         }
-      
+
     }
 
 }

@@ -8,4 +8,5 @@ namespace PlatoCore.Shell
         IServiceProvider CreateContainer(IShellSettings settings, ShellBlueprint blueprint);
         
     }
+
 }

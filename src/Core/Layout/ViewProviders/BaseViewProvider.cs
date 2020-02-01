@@ -10,7 +10,7 @@ namespace PlatoCore.Layout.ViewProviders
 
     public abstract class BaseViewProvider<TModel> : IViewProvider<TModel> where TModel : class
     {
-  
+
         public abstract Task<IViewProviderResult> BuildDisplayAsync(TModel viewModel, IViewProviderContext context);
 
         public abstract Task<IViewProviderResult> BuildIndexAsync(TModel viewModel, IViewProviderContext context);
@@ -18,7 +18,7 @@ namespace PlatoCore.Layout.ViewProviders
         public abstract Task<IViewProviderResult> BuildEditAsync(TModel viewModel, IViewProviderContext context);
 
         public abstract Task<IViewProviderResult> BuildUpdateAsync(TModel viewModel, IViewProviderContext context);
-        
+
         public virtual Task<bool> ValidateModelAsync(TModel model, IUpdateModel updater)
         {
             // We don't always need to implement ValidateModelAsync for certain views
@@ -53,19 +53,19 @@ namespace PlatoCore.Layout.ViewProviders
             return new PositionedView(viewName, model);
 
         }
-        
+
         public IPositionedView View(string viewName, dynamic arguments)
         {
             // Used to invoke view components
             return new PositionedView(viewName, arguments);
         }
-        
+
         public IPositionedView View(IEmbeddedView embeddedView)
         {
             // Return a view we can optionally position
             return new PositionedView(embeddedView);
         }
-        
+
     }
 
 }

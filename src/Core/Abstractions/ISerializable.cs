@@ -12,7 +12,7 @@ namespace PlatoCore.Abstractions
         T Deserialize<T>(string data);
 
         Task<T> DeserializeAsync<T>(string data);
-        
+
     }
     
 }

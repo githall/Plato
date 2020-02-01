@@ -5,6 +5,7 @@ using PlatoCore.Data.Abstractions;
 
 namespace PlatoCore.Data
 {
+
     public class DbContextOptionsConfigure : IConfigureOptions<DbContextOptions>
     {
         private readonly IServiceScopeFactory _serviceScopeFactory;
@@ -21,18 +22,17 @@ namespace PlatoCore.Data
 
         public void Configure(DbContextOptions options)
         {
+            // default configuration
             using (var scope = _serviceScopeFactory.CreateScope())
             {
-
-                var configuration = scope.ServiceProvider.GetRequiredService<IConfigurationRoot>();
-
-                // default configuration
+                var configuration = scope.ServiceProvider.GetRequiredService<IConfigurationRoot>();               
                 options.ConnectionString = configuration.GetConnectionString("DefaultConnection");
                 options.DatabaseProvider = "SqlClient";
                 options.TablePrefix = "";
 
             }
-
         }
+
     }
+
 }

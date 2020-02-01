@@ -109,6 +109,7 @@ namespace PlatoCore.Yaml
             _context.Pop();
             _currentPath = string.Join(ConfigurationPath.KeyDelimiter, _context.Reverse());
         }
+
     }
 
 }

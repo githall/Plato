@@ -1,5 +1,6 @@
 ﻿namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class CharExtensions
     {
 
@@ -29,4 +30,5 @@
         }
 
     }
+
 }

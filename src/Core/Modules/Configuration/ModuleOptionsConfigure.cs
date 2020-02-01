@@ -15,13 +15,12 @@ namespace PlatoCore.Modules.Configuration
         {
             _serviceScopeFactory = serviceScopeFactory;
         }
-        
+
         public void Configure(ModuleOptions options)
         {
             using (var scope = _serviceScopeFactory.CreateScope())
             {
                 var configuration = scope.ServiceProvider.GetRequiredService<IConfigurationRoot>();
-                
                 var section = configuration.GetSection("Plato");
                 if (section != null)
                 {
@@ -33,10 +32,11 @@ namespace PlatoCore.Modules.Configuration
                     }
 
                 }
-                
+
             }
 
         }
-        
+
     }
+
 }

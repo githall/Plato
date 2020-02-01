@@ -17,10 +17,11 @@ namespace PlatoCore.Data.Extensions
             // DbContextOptions is overriden for each tennet within ShellContainerFactory
             services.AddScoped<IDbContextOptions, DbContextOptions>();
 
+            // Provider
             services.AddScoped<IDataProvider, SqlProvider>();
-            services.AddScoped<IDbContext, DbContext>();
 
-            //services.AddSingleton<IConfigureOptions<DbContextOptions>, DbContextOptionsConfigure>();
+            // Data access
+            services.AddScoped<IDbContext, DbContext>();            
             services.AddTransient<IDbHelper, DbHelper>();
 
             // Add schemas

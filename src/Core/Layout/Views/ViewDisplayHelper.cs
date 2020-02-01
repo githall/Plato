@@ -41,15 +41,12 @@ namespace PlatoCore.Layout.Views
                 return HtmlString.Empty;
             }
 
-            // Build view descriptor
-            //var viewDescriptor = _viewFactory.Create(view);
-
             // Get registered view adapter providers for the view
             if (_viewAdapterManager == null)
             {
                 _viewAdapterManager = ViewContext.HttpContext.RequestServices.GetService<IViewAdapterManager>();
             }
-            
+
             var viewAdapterResults = await _viewAdapterManager.GetViewAdaptersAsync(view.ViewName);
 
             // Invoke the view with supplied context

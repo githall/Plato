@@ -50,7 +50,7 @@ namespace Plato.Discuss.Tags.Follow.Notifications
             {
                 return null;
             }
-            
+
             // Get the entity for the reply
             var entity = await _entityStore.GetByIdAsync(context.Model.EntityId);
 

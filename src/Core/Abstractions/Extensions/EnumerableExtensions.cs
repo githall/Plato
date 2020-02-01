@@ -5,6 +5,7 @@ using Newtonsoft.Json;
 
 namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class EnumerableExtensions
     {
 
@@ -33,6 +34,7 @@ namespace PlatoCore.Abstractions.Extensions
             return inputList;
 
         }
+
     }
-    
+
 }

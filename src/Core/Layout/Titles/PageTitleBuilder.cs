@@ -114,6 +114,7 @@ namespace PlatoCore.Layout.Titles
                 return 1;
             return 0;
         }
+
     }
 
 }

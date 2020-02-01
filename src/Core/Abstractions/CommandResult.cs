@@ -14,7 +14,6 @@ namespace PlatoCore.Abstractions
 
         public IEnumerable<CommandError> Errors => (IEnumerable<CommandError>)this._errors;
 
-
         public CommandResultBase Success()
         {
             return new CommandResultBase()
@@ -22,7 +21,7 @@ namespace PlatoCore.Abstractions
                 Succeeded = true
             };
         }
-        
+
         public CommandResultBase Failed(string message)
         {
             var result = new CommandResultBase()
@@ -46,14 +45,11 @@ namespace PlatoCore.Abstractions
             return result;
         }
 
-
-
     }
-
 
     public class CommandResult<TResponse> : ICommandResult<TResponse> where TResponse : class
     {
-        
+
         private readonly List<CommandError> _errors = new List<CommandError>();
 
         public bool Succeeded { get; protected set; }
@@ -64,9 +60,8 @@ namespace PlatoCore.Abstractions
 
         public CommandResult()
         {
-
         }
-        
+
         public CommandResult(ICommandResultBase result)
         {
             this.Succeeded = result.Succeeded;
@@ -109,7 +104,7 @@ namespace PlatoCore.Abstractions
 
             return result;
         }
-        
+
         public virtual ICommandResult<TResponse> Failed(params CommandError[] errors)
         {
             var result = new CommandResult<TResponse>()

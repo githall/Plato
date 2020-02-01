@@ -12,7 +12,7 @@ namespace PlatoCore.Abstractions.Extensions
 
     public static class StringExtensions
     {
-     
+
         public static readonly char[] InValidSegmentChars = "/?#[]@\"^{}|`<>\t\r\n\f ".ToCharArray();
 
         public static readonly string[] CommonWords = new string[]
@@ -131,7 +131,7 @@ namespace PlatoCore.Abstractions.Extensions
             "my",
             "may"
         };
-          
+
         // ---------
 
         public static bool IsValidUrlSegment(this string segment)
@@ -155,12 +155,12 @@ namespace PlatoCore.Abstractions.Extensions
 
             return false;
         }
-        
+
         public static string ToEmptyIfNull(this string input)
         {
             return input ?? string.Empty;
         }
-        
+
         public static string TrimToSize(this string input, int length)
         {
 
@@ -173,12 +173,12 @@ namespace PlatoCore.Abstractions.Extensions
             {
                 return string.Empty;
             }
-                
+
             return input.Length >= length 
                 ? input.Substring(0, length) 
                 : input;
         }
-        
+
         public static string TrimToAround(this string input, int length)
         {
 
@@ -191,7 +191,7 @@ namespace PlatoCore.Abstractions.Extensions
             {
                 return string.Empty;
             }
-                
+
             // we don't have spaces to split
             if (input.IndexOf(' ') == -1)
             {
@@ -242,7 +242,7 @@ namespace PlatoCore.Abstractions.Extensions
             return sb.ToString();
 
         }
-        
+
         public static int[] ToIntArray(this string input, char delimiter = ',')
         {
 
@@ -262,17 +262,17 @@ namespace PlatoCore.Abstractions.Extensions
             return output;
 
         }
-        
+
         public static string TryTrimEnd(this string input, char trim)
         {
             return input.EndsWith(trim.ToString()) ? input.TrimEnd(trim) : input;
         }
-        
+
         public static Stream StringToStream(this string input)
         {
             return new MemoryStream(Encoding.UTF8.GetBytes(input));
         }
-        
+
         public static T Deserialize<T>(this string json)
         {
             return JsonConvert.DeserializeObject<T>(json);
@@ -298,7 +298,7 @@ namespace PlatoCore.Abstractions.Extensions
         {
             return Regex.Replace(input.NormalizeNewLines(), "\n", "<br/>");
         }
-        
+
         public static string StripNewLines(this string input)
         {
             return input.Replace(System.Environment.NewLine, ""); ;
@@ -364,12 +364,12 @@ namespace PlatoCore.Abstractions.Extensions
             {
                 index--;
             }
-               
+
             if (value[index] == '=')
             {
                 index--;
             }
-               
+
             for (var i = 0; i <= index; i++)
             {
                 if (((char)value[i]).IsValidBase64Char())
@@ -377,13 +377,13 @@ namespace PlatoCore.Abstractions.Extensions
                     return false;
                 }
             }
-            
+
             return true;
         }
-        
+
         public static string HighlightTerms(this string input, string words)
         {
-      
+
             // ensure we have keywords to highlight
             if (String.IsNullOrEmpty(words))
             {
@@ -445,7 +445,7 @@ namespace PlatoCore.Abstractions.Extensions
             }
             return true;
         }
-        
+
         public static T ToEnum<T>(this string value, T defaultValue) where T : struct
         {
             if (string.IsNullOrEmpty(value))
@@ -489,12 +489,12 @@ namespace PlatoCore.Abstractions.Extensions
             {
                 return input;
             }
-            
+
             if (input.Length <= 2)
             {
                 return input;
             }
-                
+
             var inputLower = input.ToLower();
 
             var i = 0;
@@ -526,7 +526,7 @@ namespace PlatoCore.Abstractions.Extensions
             }
 
             return input;
-            
+
         }
 
         public static Version ToVersion(this string input)
@@ -583,7 +583,7 @@ namespace PlatoCore.Abstractions.Extensions
                     inWord = true;
                 }
             }
-            
+
             if (wasInWord)
             {
                 count++;

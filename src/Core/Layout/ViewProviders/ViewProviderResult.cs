@@ -3,7 +3,7 @@ using PlatoCore.Layout.Views;
 
 namespace PlatoCore.Layout.ViewProviders
 {
- 
+
     public class ViewProviderResult : IViewProviderResult
     {
 
@@ -18,7 +18,7 @@ namespace PlatoCore.Layout.ViewProviders
         {
             Views = views ?? ((IEnumerable<IView>) new List<IView>());
         }
-        
+
     }
 
 }

@@ -11,6 +11,7 @@ using PlatoCore.Yaml;
 
 namespace PlatoCore.Shell
 {
+
     public class ShellSettingsManager : IShellSettingsManager
     {
 
@@ -25,7 +26,7 @@ namespace PlatoCore.Shell
         #endregion
 
         #region "Constrcutor"
-        
+
         public ShellSettingsManager(
             IAppDataFolder appDataFolder,        
             IOptions<ShellOptions> optionsAccessor,
@@ -72,6 +73,7 @@ namespace PlatoCore.Shell
             }
 
             return shellSettings;
+
         }
 
         void IShellSettingsManager.SaveSettings(IShellSettings shellSettings)
@@ -119,6 +121,7 @@ namespace PlatoCore.Shell
             {
                 _logger.LogInformation("Saved ShellSettings for tenant '{0}'", shellSettings.Name);
             }
+
         }
 
         #endregion

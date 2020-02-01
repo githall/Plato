@@ -19,11 +19,11 @@ namespace PlatoCore.Layout.Razor
     public abstract class RazorPage<TModel> :
         Microsoft.AspNetCore.Mvc.Razor.RazorPage<TModel>
     {
-
-        private IViewLocalizer _t;
-        private User _currentUser;
+    
         private IViewDisplayHelper _viewDisplayHelper;
         private IPageTitleBuilder _pageTitleBuilder;
+        private IViewLocalizer _t;
+        private User _currentUser;
 
         public User CurrentUser
         {

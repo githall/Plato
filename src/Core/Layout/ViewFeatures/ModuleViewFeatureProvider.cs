@@ -14,7 +14,7 @@ namespace PlatoCore.Layout.ViewFeatures
 
     public class ModuleViewFeatureProvider : IApplicationFeatureProvider<ViewsFeature>
     {
-           
+
         private ApplicationPartManager _applicationPartManager;
         private IEnumerable<IApplicationFeatureProvider<ViewsFeature>> _featureProviders;
 
@@ -49,7 +49,7 @@ namespace PlatoCore.Layout.ViewFeatures
                     }
                 }
             }
-            
+
             // Module compiled views are not served while in dev.
             if (!_hostingEnvironment.IsDevelopment())
             {

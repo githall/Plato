@@ -103,7 +103,7 @@ namespace PlatoCore.Text
             ["}"] = 125,
             ["~"] = 126
         };
-        
+
         public static readonly IDictionary<string, int> Iso88591Characters = new Dictionary<string, int>()
         {
             ["À"] = 192,

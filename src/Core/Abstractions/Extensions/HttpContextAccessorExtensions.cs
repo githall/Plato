@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 
 namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class HttpContextAccessorExtensions
     {
 
@@ -23,4 +24,5 @@ namespace PlatoCore.Abstractions.Extensions
         }
 
     }
+
 }

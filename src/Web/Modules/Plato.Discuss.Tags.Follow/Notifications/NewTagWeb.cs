@@ -49,7 +49,7 @@ namespace Plato.Discuss.Tags.Follow.Notifications
 
             // Create result
             var result = new CommandResult<Topic>();
-            
+
             // Build user notification
             var baseUri = await _capturedRouterUrlHelper.GetBaseUrlAsync();
 

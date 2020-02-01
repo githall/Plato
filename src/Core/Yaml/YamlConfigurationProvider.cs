@@ -1,11 +1,13 @@
 ﻿using System;
-using Microsoft.Extensions.Configuration;
 using System.IO;
+using Microsoft.Extensions.Configuration;
 
 namespace PlatoCore.Yaml
 {
+
     public class YamlConfigurationProvider : FileConfigurationProvider
     {
+
         public const char _separator = ':';
         public const string _emptyValue = "null";
         public const char _themesSeparator = ';';
@@ -40,8 +42,7 @@ namespace PlatoCore.Yaml
             {
                 Directory.CreateDirectory(fileInfo.Directory.FullName);
             }
-            
-                 
+
             var newConfigFileStream = new FileStream(Source.Path, FileMode.CreateNew);
 
             try
@@ -51,6 +52,7 @@ namespace PlatoCore.Yaml
             }
             catch
             {
+
                 newConfigFileStream.Dispose();
 
                 // The operation should be atomic because we don't want a corrupted config file
@@ -69,20 +71,21 @@ namespace PlatoCore.Yaml
             }
 
             return;
-        }
 
+        }
 
         internal void GenerateNewConfig(Stream outputStream)
         {
-            var outputWriter = new StreamWriter(outputStream);
 
+            var outputWriter = new StreamWriter(outputStream);
             foreach (var entry in Data)
             {
                 outputWriter.WriteLine("{0}: {1}", entry.Key, (entry.Value ?? _emptyValue));
             }
-
             outputWriter.Flush();
+
         }
+
     }
 
 }

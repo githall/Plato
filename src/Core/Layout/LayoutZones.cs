@@ -26,5 +26,7 @@ namespace PlatoCore.Layout
             AsidesZoneName,
             AlertsZoneName
         };
+
     }
+
 }

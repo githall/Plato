@@ -2,6 +2,7 @@
 
 namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class IntExtensions
     {
 
@@ -14,7 +15,7 @@ namespace PlatoCore.Abstractions.Extensions
 
             return ToPrettyInt((int) input, precise);
         }
-        
+
         public static string ToPrettyInt(this int input, bool precise = false)
         {
 
@@ -60,7 +61,7 @@ namespace PlatoCore.Abstractions.Extensions
 
         public static int ToSafeCeilingDivision(this int input, int divideBy)
         {
-            
+
             if (input <= 0)
             {
                 return default(int);
@@ -70,9 +71,9 @@ namespace PlatoCore.Abstractions.Extensions
             {
                 return input;
             }
-            
+
             return (int)System.Math.Ceiling(decimal.Divide(input, divideBy));
-            
+
         }
 
         public static double ToSafeDivision(this int input, int total)
@@ -102,7 +103,6 @@ namespace PlatoCore.Abstractions.Extensions
 
         }
 
-
         public static string ToPositionInt(this int input)
         {
 
@@ -130,7 +130,7 @@ namespace PlatoCore.Abstractions.Extensions
             return output;
 
         }
-        
+
     }
 
 }

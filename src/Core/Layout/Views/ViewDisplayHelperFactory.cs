@@ -15,7 +15,7 @@ namespace PlatoCore.Layout.Views
         readonly IViewInvoker _viewInvoker;
         readonly IViewFactory _viewFactory;
         readonly IServiceProvider _serviceProvider;
-        
+
         public ViewDisplayHelperFactory(
             IViewInvoker viewInvoker,
             IViewFactory viewFactory,
@@ -34,5 +34,7 @@ namespace PlatoCore.Layout.Views
                 viewContext,
                 _serviceProvider);
         }
+
     }
+
 }

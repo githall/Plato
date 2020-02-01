@@ -42,6 +42,7 @@ namespace PlatoCore.Security.Attributes
             }
 
             return ValidationResult.Success;
+
         }
 
         ICommandResultBase ValidateUserName(string username, UserNameOptions options)

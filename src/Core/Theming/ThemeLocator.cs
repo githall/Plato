@@ -19,9 +19,9 @@ namespace PlatoCore.Theming
         private const string AuthorSection = "author";
         private const string WebsiteSection = "website";
         private const string TagsSection = "tags";
-       
+
         private readonly IPlatoFileSystem _fileSystem;
-        
+
         public ThemeLocator(IPlatoFileSystem fileSystem)
         {
             _fileSystem = fileSystem;
@@ -148,7 +148,7 @@ namespace PlatoCore.Theming
         {
 
             var manifest = ParseManifest(manifestText);
-         
+
             var themeDescriptor = new ThemeDescriptor
             {
                 Id = themeId,
@@ -160,7 +160,7 @@ namespace PlatoCore.Theming
                 WebSite = GetValue(manifest, WebsiteSection),
                 FullPath = _fileSystem.Combine(rootPath, themeId)
             };
-            
+
             return themeDescriptor;
 
         }
@@ -217,8 +217,9 @@ namespace PlatoCore.Theming
             }
 
             return manifest;
+
         }
-        
+
         #endregion
 
     }

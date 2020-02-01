@@ -45,7 +45,7 @@ namespace PlatoCore.Modules
             _root = env.ContentRootPath;
 
         }
-          
+
         public IDirectoryContents GetDirectoryContents(string subpath)
         {
             if (subpath == null)

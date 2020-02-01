@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PlatoCore.Layout.Views
 {
+
     public interface IViewInvoker
     {
         ViewContext ViewContext { get; set; }
@@ -13,4 +14,5 @@ namespace PlatoCore.Layout.Views
         Task<IHtmlContent> InvokeAsync(IView view);
 
     }
+
 }

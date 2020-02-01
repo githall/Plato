@@ -41,4 +41,5 @@ namespace PlatoCore.Abstractions.Settings
         string ApiKey { get; set; }
 
     }
+
 }

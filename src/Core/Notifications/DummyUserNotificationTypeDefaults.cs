@@ -12,6 +12,7 @@ namespace PlatoCore.Notifications
         {
             return new List<UserNotificationType>();
         }
+
     }
 
 }

@@ -8,17 +8,17 @@ using PlatoCore.Security.Abstractions;
 
 namespace PlatoCore.Security
 {
-    
+
     public class DummyClaimsPrincipalFactory<TUser> : IDummyClaimsPrincipalFactory<TUser> where TUser : class, IUser
     {
-        
+
         private IdentityOptions Options { get; }
 
         public DummyClaimsPrincipalFactory(IOptions<IdentityOptions> optionsAccessor)
         {
             Options = optionsAccessor.Value;
         }
-        
+
         public Task<ClaimsPrincipal> CreateAsync(TUser user)
         {
             // Our list of claims
@@ -41,7 +41,7 @@ namespace PlatoCore.Security
                     claims.Add(new Claim(ClaimTypes.Role, roleName));
                 }
             }
-          
+
             // Build identity
             var identity = new ClaimsIdentity(claims, IdentityConstants.ApplicationScheme);
 
@@ -49,5 +49,7 @@ namespace PlatoCore.Security
             return Task.FromResult(new ClaimsPrincipal(identity));
 
         }
+
     }
+
 }

@@ -5,7 +5,7 @@ using PlatoCore.Tasks.Abstractions;
 
 namespace PlatoCore.Tasks
 {
-    
+
     public class BackgroundTaskManager : IBackgroundTaskManager
     {
 
@@ -13,7 +13,7 @@ namespace PlatoCore.Tasks
        /// Globally enable or disable background tasks. Should remain enabled or true unless debugging.
        /// </summary>    
         public bool Enabled { get; set; }= true;
-                
+
         private readonly IEnumerable<IBackgroundTaskProvider> _providers;
         private readonly ILogger<BackgroundTaskManager> _logger;
         private readonly ISafeTimerFactory _safeTimerFactory;

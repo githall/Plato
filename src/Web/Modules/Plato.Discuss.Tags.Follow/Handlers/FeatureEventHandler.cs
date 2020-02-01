@@ -4,10 +4,10 @@ using PlatoCore.Security.Abstractions;
 
 namespace Plato.Discuss.Tags.Follow.Handlers
 {
-    
+
     public class FeatureEventHandler : BaseFeatureEventHandler
     {
-        
+
         private readonly IDefaultRolesManager _defaultRolesManager;
 
         public FeatureEventHandler(IDefaultRolesManager defaultRolesManager)

@@ -63,7 +63,7 @@ namespace PlatoCore.Navigation
             _item.Order = order;
             return this;
         }
-        
+
         public INavigationItemBuilder Url(string url)
         {
             _item.Url = url;
@@ -125,7 +125,7 @@ namespace PlatoCore.Navigation
             _item.DividerCss = css;
             return this;
         }
-        
+
         public INavigationItemBuilder View(string viewName, object model = null)
         {
             _item.View = new MenuItemView()
@@ -135,7 +135,7 @@ namespace PlatoCore.Navigation
             };
             return this;
         }
-        
+
         public INavigationItemBuilder Resource(object resource)
         {
             _item.Resource = resource;
@@ -193,4 +193,5 @@ namespace PlatoCore.Navigation
         }
 
     }
+
 }

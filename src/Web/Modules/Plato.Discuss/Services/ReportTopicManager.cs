@@ -14,7 +14,7 @@ using Plato.Entities.Models;
 
 namespace Plato.Discuss.Services
 {
-    
+
     public class ReportTopicManager : IReportEntityManager<Topic> 
     {
 
@@ -37,7 +37,7 @@ namespace Plato.Discuss.Services
 
         public Task ReportAsync(ReportSubmission<Topic> submission)
         {
-            
+
             // Defer notifications for execution after request completes
             _deferredTaskManager.AddTask(async ctx =>
             {
@@ -94,7 +94,7 @@ namespace Plato.Discuss.Services
             return Task.CompletedTask;
             
         }
-      
+
     }
 
 }

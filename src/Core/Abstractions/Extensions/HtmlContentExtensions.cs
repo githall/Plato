@@ -16,7 +16,7 @@ namespace PlatoCore.Abstractions.Extensions
                 return new HtmlString(writer.ToString());
             }
         }
-        
+
         public static string Stringify(this IHtmlContent content)
         {
             using (var writer = new StringWriter())
@@ -27,4 +27,5 @@ namespace PlatoCore.Abstractions.Extensions
         }
 
     }
+
 }

@@ -11,9 +11,9 @@ namespace PlatoCore.FileSystem
 
     public class PhysicalSitesFolder : ISitesFolder
     {
-        
+
         private const int ByMaxFileNameLength = 32;
-        
+
         private readonly IPlatoFileSystem _fileSystem;
         private readonly ILogger<PhysicalSitesFolder> _logger;
         private readonly IHostEnvironment _hostEnvironment;
@@ -201,5 +201,5 @@ namespace PlatoCore.FileSystem
         }
 
     }
-    
+
 }

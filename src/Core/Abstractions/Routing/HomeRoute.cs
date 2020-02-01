@@ -5,7 +5,7 @@ namespace PlatoCore.Abstractions.Routing
 
     public class HomeRoute : RouteValueDictionary
     {
-        
+
         public HomeRoute()
         {
             this["area"] = "Plato.Core";
@@ -29,6 +29,7 @@ namespace PlatoCore.Abstractions.Routing
         }
 
         public string Id => $"{this["area"]}/{this["controller"]}/{this["action"]}";
+
     }
 
 }

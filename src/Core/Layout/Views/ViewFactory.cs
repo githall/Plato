@@ -78,7 +78,7 @@ namespace PlatoCore.Layout.Views
             return htmlContent;
 
         }
-        
+
     }
 
 }

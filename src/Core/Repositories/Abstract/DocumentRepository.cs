@@ -83,7 +83,7 @@ namespace PlatoCore.Repositories.Abstract
             return success > 0 ? true : false;
 
         }
-        
+
         #endregion
 
         #region "Private Methods"
@@ -200,9 +200,9 @@ namespace PlatoCore.Repositories.Abstract
                 }
             return entry;
         }
-        
+
         #endregion
-        
+
     }
 
 }

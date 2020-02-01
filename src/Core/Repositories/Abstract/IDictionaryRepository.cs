@@ -9,7 +9,7 @@ namespace PlatoCore.Repositories.Abstract
         Task<IEnumerable<DictionaryEntry>> SelectEntries();
 
         Task<DictionaryEntry> SelectEntryByKey(string key);
-        
+
         Task<bool> DeleteByKeyAsync(string key);
 
     }

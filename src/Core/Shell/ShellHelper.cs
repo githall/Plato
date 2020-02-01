@@ -2,6 +2,7 @@
 
 namespace PlatoCore.Shell
 {
+
     public static class ShellHelper
     {
 
@@ -14,4 +15,5 @@ namespace PlatoCore.Shell
         };
 
     }
+
 }

@@ -8,7 +8,7 @@ using PlatoCore.Text.Abstractions;
 
 namespace PlatoCore.Data.Schemas
 {
-    
+
     public class SchemaBuilder : ISchemaBuilder
     {
 
@@ -59,7 +59,7 @@ namespace PlatoCore.Data.Schemas
             FullTextBuilder = new FullTextBuilder(dbContext, pluralize);
             IndexBuilder = new IndexBuilder(dbContext, pluralize);
         }
-        
+
         public ISchemaBuilderBase Configure(Action<SchemaBuilderOptions> configure)
         {
             TableBuilder.Configure(configure);
@@ -68,7 +68,7 @@ namespace PlatoCore.Data.Schemas
             IndexBuilder.Configure(configure);
             return this;
         }
-        
+
         public void Dispose()
         {
             TableBuilder.Dispose();
@@ -78,5 +78,5 @@ namespace PlatoCore.Data.Schemas
         }
 
     }
-    
+
 }

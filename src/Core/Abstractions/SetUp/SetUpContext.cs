@@ -4,6 +4,7 @@ using System.Text;
 
 namespace PlatoCore.Abstractions.SetUp
 {
+
     public class SetUpContext
     {
 
@@ -17,13 +18,12 @@ namespace PlatoCore.Abstractions.SetUp
 
         public string AdminEmail { get; set; }
 
-
         public string AdminUsername { get; set; }
 
         public string AdminPassword { get; set; }
-        
+
         public IDictionary<string, string> Errors { get; set; }
 
-
     }
+
 }

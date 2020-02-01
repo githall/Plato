@@ -2,6 +2,7 @@
 
 namespace PlatoCore.Abstractions
 {
+
     public interface ICommandManager<TModel> where TModel : class
     {
 

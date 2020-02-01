@@ -1,10 +1,11 @@
-﻿using Microsoft.Extensions.Logging;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Logging;
 
 namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class InvokeExtensions
     {
         /// <summary>
@@ -64,7 +65,6 @@ namespace PlatoCore.Abstractions.Extensions
 
             return results;
         }
-
 
         /// <summary>
         /// Safely invoke methods by catching non fatal exceptions and logging them
@@ -139,9 +139,12 @@ namespace PlatoCore.Abstractions.Extensions
                 throw ex;
             }
         }
+
         private static bool IsLogged(Exception ex)
         {
             return !ex.IsFatal();
         }
+
     }
+
 }

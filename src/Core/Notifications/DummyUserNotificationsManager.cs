@@ -23,5 +23,7 @@ namespace PlatoCore.Notifications
         {
             return Task.FromResult((ICommandResult<UserNotification>)new CommandResult<UserNotification>());
         }
+
     }
+
 }

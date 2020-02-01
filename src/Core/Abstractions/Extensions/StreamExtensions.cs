@@ -37,7 +37,7 @@ namespace PlatoCore.Abstractions.Extensions
                     i,
                     Convert.ToInt32(stream.Length) - i);
             }
-                
+
             return buffer;
 
         }

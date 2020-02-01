@@ -8,7 +8,7 @@ namespace PlatoCore.Abstractions
 
     public static class ActivateInstanceOf<T> where T : class
     {
-   
+
         public static readonly Func<T> Instance = Creator();
 
         static Func<T> Creator()
@@ -18,12 +18,12 @@ namespace PlatoCore.Abstractions
             {
                 return Expression.Lambda<Func<T>>(Expression.Constant(string.Empty)).Compile();
             }
-            
+
             if (t.HasDefaultConstructor())
             {
                 return Expression.Lambda<Func<T>>(Expression.New(t)).Compile();
             }
-                
+
             return () => (T)FormatterServices.GetUninitializedObject(t);
 
         }

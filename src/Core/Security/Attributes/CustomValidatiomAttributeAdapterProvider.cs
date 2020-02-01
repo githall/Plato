@@ -23,10 +23,11 @@ namespace PlatoCore.Security.Attributes
             {
                 return new PasswordValidatorAttributeAdapter(attribute as PasswordValidator, stringLocalizer);
             }
-            
+
             return baseProvider.GetAttributeAdapter(attribute, stringLocalizer);
 
         }
+
     }
 
 }

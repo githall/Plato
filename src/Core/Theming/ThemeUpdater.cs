@@ -10,6 +10,7 @@ namespace PlatoCore.Theming
 
     public class ThemeUpdater : IThemeUpdater
     {
+
         private const string ByThemeFileNameFormat = "Theme.{0}";
 
         private readonly IPlatoFileSystem _platoFileSystem;
@@ -69,7 +70,7 @@ namespace PlatoCore.Theming
             return result.Success(descriptor);
 
         }
-        
+
     }
 
 }

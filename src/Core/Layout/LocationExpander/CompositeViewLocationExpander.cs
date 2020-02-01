@@ -40,6 +40,7 @@ namespace PlatoCore.Layout.LocationExpander
                 .RequestServices
                 .GetServices<IViewLocationExpanderProvider>();
         }
+
     }
 
 }

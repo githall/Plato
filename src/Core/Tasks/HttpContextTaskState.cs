@@ -1,18 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Tasks.Abstractions;
 
 namespace PlatoCore.Tasks
 {
     public class HttpContextTaskState : IDeferredTaskState
     {
-       
+
         private readonly HttpContext _httpContext;
-        
+
         public HttpContextTaskState(IHttpContextAccessor httpContextAccessor)
         {
             _httpContext = httpContextAccessor.HttpContext;

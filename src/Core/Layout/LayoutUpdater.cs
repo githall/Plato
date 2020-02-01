@@ -38,7 +38,7 @@ namespace PlatoCore.Layout
         {
             _logger = logger;
         }
-        
+
         public Task<ILayoutUpdater> GetLayoutAsync(Controller controller)
         {
 
@@ -67,7 +67,7 @@ namespace PlatoCore.Layout
             {
                 _model = await configure.Invoke(_model);
             }
-         
+
             // Attempt to update controllers model to reflect configuration
             try
             {
@@ -77,11 +77,11 @@ namespace PlatoCore.Layout
             {
                 _logger.LogError(e, e.Message);
             }
-            
+
             return this;
-            
+
         }
-        
+
         public Task<List<IPositionedView>> GetZoneAsync(string zoneName)
         {
 
@@ -131,7 +131,7 @@ namespace PlatoCore.Layout
             return Task.FromResult(orderedViews.ToList());
 
         }
-        
+
     }
 
 }

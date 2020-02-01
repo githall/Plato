@@ -8,7 +8,7 @@ using PlatoCore.Data.Schemas.Abstractions;
 
 namespace PlatoCore.Data.Schemas
 {
-    
+
     public class SchemaManager : ISchemaManager
     {
 
@@ -61,7 +61,7 @@ namespace PlatoCore.Data.Schemas
             }
 
             return errors;
-            
+
         }
 
     }

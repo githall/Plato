@@ -33,19 +33,19 @@ namespace PlatoCore.Tasks
             {
                 _timers = new List<ISafeTimer>();
             }
-          
+
             if (_logger.IsEnabled(LogLevel.Information))
             {
                 _logger.LogCritical($"Starting new timer. Interval: {options.IntervalInSeconds}, RunOnce: {options.RunOnce}, RunOnStart: {options.RunOnStart}");
             }
-            
+
             var safeTimer = new SafeTimer(_serviceProvider);
             safeTimer.Elapsed += (sender, args) => action(sender, args);
             safeTimer.Options = options;
             safeTimer.Start();
-            
+
             _timers.Add(safeTimer);
-      
+
         }
 
         public void Stop()
@@ -64,5 +64,7 @@ namespace PlatoCore.Tasks
             _timers.Clear();
 
         }
+
     }
+
 }

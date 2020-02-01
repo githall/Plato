@@ -11,7 +11,7 @@
 
         public static string ToFriendlyFileSize(this long input)
         {
-            
+
             if (input < 1024)
             {
                 return $"{input:N0} " + Bytes;
@@ -28,11 +28,12 @@
             return $"{input / (1048576 * 1000)}" + Gb;
 
         }
-        
+
         private static long BytesToMegabytes(this long input)
         {
             return (input / 1024) / 1024;
         }
 
     }
+
 }

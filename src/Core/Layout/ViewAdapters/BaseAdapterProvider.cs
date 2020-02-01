@@ -28,5 +28,5 @@ namespace PlatoCore.Layout.ViewAdapters
         }
 
     }
-    
+
 }

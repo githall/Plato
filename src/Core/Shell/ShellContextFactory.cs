@@ -6,9 +6,10 @@ using PlatoCore.Stores.Abstractions.Shell;
 
 namespace PlatoCore.Shell
 {
+
     public class ShellContextFactory : IShellContextFactory
     {
-        
+
         private readonly ICompositionStrategy _compositionStrategy;
         private readonly IShellContainerFactory _shellContainerFactory;
         private readonly ILogger _logger;
@@ -41,7 +42,7 @@ namespace PlatoCore.Shell
 
             // Build minimal shell descriptor
             var describedContext = CreateDescribedContext(settings, MinimumShellDescriptor());
-            
+
             // Do we have a shell descriptor within the database
             IShellDescriptor currentDescriptor = null;
             using (var scope = describedContext.CreateServiceScope())
@@ -66,10 +67,10 @@ namespace PlatoCore.Shell
         public ShellContext CreateDescribedContext(IShellSettings settings, IShellDescriptor descriptor)
         {
 
-            if (_logger.IsEnabled(LogLevel.Debug))            
+            if (_logger.IsEnabled(LogLevel.Debug))
                 _logger.LogDebug("Creating described context for tenant {0}", settings.Name);
-            
-            var blueprint =  _compositionStrategy.ComposeAsync(settings, descriptor).Result;
+
+            var blueprint = _compositionStrategy.ComposeAsync(settings, descriptor).Result;
             var serviceProvider = _shellContainerFactory.CreateContainer(settings, blueprint);
                                     
             return new ShellContext

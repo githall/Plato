@@ -4,6 +4,7 @@ using System.Security;
 
 namespace PlatoCore.Abstractions.Extensions
 {
+
     public static class ExceptionExtensions
     {
 
@@ -15,4 +16,5 @@ namespace PlatoCore.Abstractions.Extensions
                 ex is SEHException;
         }
     }
+
 }

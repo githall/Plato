@@ -72,7 +72,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             return services.AddHPlatoTennetHost(internalServices =>
             {
 
-                // Mvc
+                // infrastructure
                 // --------
 
                 internalServices.AddLogging(loggingBuilder =>
@@ -251,14 +251,15 @@ namespace PlatoCore.Hosting.Web.Extensions
 
             // The captured router is used to resolve URLs for background or deferred tasks 
             // Background and deferred tasks don't have access to the current HttpContext
-            // Our captured router must be a singleton so the initial configuration persists
+            // Our captured router must be a singleton so the initial configuration performed
+            // by the PlatoRouterMiddleware is persisted throughout the application lifecycle
             services.AddSingleton<ICapturedRouter, CapturedRouter>();
             services.AddScoped<ICapturedRouterUrlHelper, CapturedRouterUrlHelper>();
 
             // Add home route manager
             services.AddScoped<IHomeRouteManager, HomeRouteManager>();
 
-            // Add default route handler (required by the Plato routing middleware)
+            // Add default route handler (required by PlatoRouterMiddleware)
             services.AddScoped<IPlatoRouter, PlatoRouter>();
 
             return services;
