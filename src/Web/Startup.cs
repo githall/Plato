@@ -1,15 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using PlatoCore.Features;
-using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Web.Extensions;
-using PlatoCore.Models.Shell;
-using PlatoCore.Stores.Abstractions.Shell;
-using PlatoCore.Stores.Shell;
 
 namespace Plato
 {
@@ -21,10 +15,8 @@ namespace Plato
                 .SetBasePath(env.ContentRootPath)
                 .AddJsonFile("appsettings.json", optional: true, reloadOnChange: true)
                 .AddJsonFile($"appsettings.{env.EnvironmentName}.json", optional: true)
-                .AddEnvironmentVariables();
-            
+                .AddEnvironmentVariables();            
             Configuration = builder.Build();
-
         }
 
         public IConfigurationRoot Configuration { get; }

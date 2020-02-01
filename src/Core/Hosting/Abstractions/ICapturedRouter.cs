@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace PlatoCore.Hosting.Abstractions
 {
-    
+
     public interface ICapturedRouter
     {
 

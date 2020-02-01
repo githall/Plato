@@ -65,7 +65,7 @@ namespace PlatoCore.Hosting.Web
             return await _platoUserStore.GetByUserNameAsync(identity.Name);
          
         }
-        
+
         public async Task<ISiteSettings> GetSiteSettingsAsync()
         {
             return await _siteSettingsStore.GetAsync();

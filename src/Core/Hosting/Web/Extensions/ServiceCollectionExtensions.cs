@@ -249,9 +249,10 @@ namespace PlatoCore.Hosting.Web.Extensions
         public static IServiceCollection AddPlatoRouting(this IServiceCollection services)
         {
 
-            // Captured routers are used for background tasks as background tasks
-            // don't have access to the current HttpContext object
-            services.AddScoped<ICapturedRouter, CapturedRouter>();
+            // The captured router is used to resolve URLs for background or deferred tasks 
+            // Background and deferred tasks don't have access to the current HttpContext
+            // Our captured router must be a singleton so the initial configuration persists
+            services.AddSingleton<ICapturedRouter, CapturedRouter>();
             services.AddScoped<ICapturedRouterUrlHelper, CapturedRouterUrlHelper>();
 
             // Add home route manager
