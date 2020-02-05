@@ -71,7 +71,7 @@ namespace Plato.Users
 
             // Build a claim principal from the given user
             services.TryAddScoped<IDummyClaimsPrincipalFactory<User>, DummyClaimsPrincipalFactory<User>>();
-            
+
             // Stores
             services.TryAddScoped<IUserStore<User>, UserStore>();
             services.TryAddScoped<IUserSecurityStampStore<User>, UserStore>();
@@ -103,18 +103,19 @@ namespace Plato.Users
                 options.SignIn.RequireConfirmedEmail = true;
                 options.User.RequireUniqueEmail = true;                
             });
-            
+
             // Navigation providers
             services.AddScoped<INavigationProvider, AdminMenu>();
             services.AddScoped<INavigationProvider, AdminUserMenu>();
             services.AddScoped<INavigationProvider, SiteMenu>();
+            services.AddScoped<INavigationProvider, UserMenu>();
             services.AddScoped<INavigationProvider, EditProfileMenu>();
             services.AddScoped<INavigationProvider, ProfileMenu>();
 
             // Admin view providers
             services.AddScoped<IViewProviderManager<User>, ViewProviderManager<User>>();
             services.AddScoped<IViewProvider<User>, AdminViewProvider>();
-          
+
             // Profile view providers
             services.AddScoped<IViewProviderManager<ProfilePage>, ViewProviderManager<ProfilePage>>();
             services.AddScoped<IViewProvider<ProfilePage>, UserViewProvider>();
@@ -126,11 +127,11 @@ namespace Plato.Users
             // Edit account view provider
             services.AddScoped<IViewProviderManager<EditAccountViewModel>, ViewProviderManager<EditAccountViewModel>>();
             services.AddScoped<IViewProvider<EditAccountViewModel>, EditAccountViewProvider>();
-            
+
             // Edit user settings view provider
             services.AddScoped<IViewProviderManager<EditSettingsViewModel>, ViewProviderManager<EditSettingsViewModel>>();
             services.AddScoped<IViewProvider<EditSettingsViewModel>, EditSettingsViewProvider>();
-           
+
             // Edit user signature view provider
             services.AddScoped<IViewProviderManager<EditSignatureViewModel>, ViewProviderManager<EditSignatureViewModel>>();
             services.AddScoped<IViewProvider<EditSignatureViewModel>, EditSignatureViewProvider>();
