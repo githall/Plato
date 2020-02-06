@@ -1,0 +1,19 @@
+Name: Plato Discuss New
+Description: Adds a new indicator for unread content within Plato Discuss.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Discuss
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.demo/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Discuss",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Entities.Metrics",
+		Version: "1.0.0"
+	}
+]

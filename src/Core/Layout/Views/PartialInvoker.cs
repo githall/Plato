@@ -39,13 +39,13 @@ namespace PlatoCore.Layout.Views
 
         public async Task<IHtmlContent> InvokeAsync(string viewName, object model, ViewDataDictionary viewData)
         {
-            
+
             // We always need a view name to invoke
             if (string.IsNullOrEmpty(viewName))
             {
                 throw new ArgumentNullException(nameof(viewName));
             }
-            
+
             var builder = new HtmlContentBuilder();
             var result = FindView(viewName);
             if (!result.Success)

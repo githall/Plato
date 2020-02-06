@@ -365,6 +365,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Discuss.StopForumSpam
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Questions.Slack", "Web\Modules\Plato.Questions.Slack\Plato.Questions.Slack.csproj", "{CF2CD8FC-FA7B-44E8-9E29-B51F9D81DF1D}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Discuss.New", "Web\Modules\Plato.Discuss.New\Plato.Discuss.New.csproj", "{DCB326DE-6040-4242-9B00-CD90878651DB}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1083,6 +1085,10 @@ Global
 		{CF2CD8FC-FA7B-44E8-9E29-B51F9D81DF1D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{CF2CD8FC-FA7B-44E8-9E29-B51F9D81DF1D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{CF2CD8FC-FA7B-44E8-9E29-B51F9D81DF1D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{DCB326DE-6040-4242-9B00-CD90878651DB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{DCB326DE-6040-4242-9B00-CD90878651DB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{DCB326DE-6040-4242-9B00-CD90878651DB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{DCB326DE-6040-4242-9B00-CD90878651DB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1266,6 +1272,7 @@ Global
 		{FEAE4942-8ADA-476A-86FE-2F1AFC2B568A} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 		{B38B4910-18C8-46C3-BF70-2AC4AF3AD6EF} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 		{CF2CD8FC-FA7B-44E8-9E29-B51F9D81DF1D} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
+		{DCB326DE-6040-4242-9B00-CD90878651DB} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D0A5670-4936-4ADF-AF0F-46D7F9842EC1}

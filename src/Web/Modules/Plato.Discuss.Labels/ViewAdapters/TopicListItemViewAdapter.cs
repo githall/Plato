@@ -152,49 +152,8 @@ namespace Plato.Discuss.Labels.ViewAdapters
 
         async Task<IDictionary<int, IList<Label>>> BuildLookUpTable(IEnumerable<Label> labels)
         {
-            
-            // Get topic index view model from context
-            var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
-            if (viewModel == null)
-            {
-                return null;
-            }
 
-            // Get all entities for our current view
-            var entities = await _entityService
-                .ConfigureQuery(async q =>
-                {
-
-                    // Hide private?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewPrivateTopics))
-                    {
-                        q.HidePrivate.True();
-                    }
-
-                    // Hide hidden?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewHiddenTopics))
-                    {
-                        q.HideHidden.True();
-                    }
-
-                    // Hide spam?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewSpamTopics))
-                    {
-                        q.HideSpam.True();
-                    }
-
-                    // Hide deleted?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewDeletedTopics))
-                    {
-                        q.HideDeleted.True();
-                    }
-
-                })
-                .GetResultsAsync(viewModel?.Options, viewModel?.Pager);
+            var entities = await GetDisplayedEntitiesAsync();
 
             // Get all entity label relationships for displayed entities
             IPagedResults<EntityLabel> entityLabels = null;
@@ -233,7 +192,55 @@ namespace Plato.Discuss.Labels.ViewAdapters
             return output;
 
         }
-        
+
+        private async Task<IPagedResults<Topic>> GetDisplayedEntitiesAsync()
+        {
+
+            // Get topic index view model from context
+            var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
+            if (viewModel == null)
+            {
+                return null;
+            }
+
+            // Get all entities for our current view
+            return await _entityService
+                .ConfigureQuery(async q =>
+                {
+
+                    // Hide private?
+                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+                        Permissions.ViewPrivateTopics))
+                    {
+                        q.HidePrivate.True();
+                    }
+
+                    // Hide hidden?
+                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+                        Permissions.ViewHiddenTopics))
+                    {
+                        q.HideHidden.True();
+                    }
+
+                    // Hide spam?
+                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+                        Permissions.ViewSpamTopics))
+                    {
+                        q.HideSpam.True();
+                    }
+
+                    // Hide deleted?
+                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+                        Permissions.ViewDeletedTopics))
+                    {
+                        q.HideDeleted.True();
+                    }
+
+                })
+                .GetResultsAsync(viewModel?.Options, viewModel?.Pager);
+
+        }
+
     }
     
 }
