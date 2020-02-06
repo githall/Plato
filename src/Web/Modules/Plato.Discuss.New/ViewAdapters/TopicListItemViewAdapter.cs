@@ -16,6 +16,8 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Layout.Models;
+using PlatoCore.Models.Metrics;
+using PlatoCore.Abstractions.Extensions;
 
 namespace Plato.Discuss.New.ViewAdapters
 {
@@ -23,6 +25,7 @@ namespace Plato.Discuss.New.ViewAdapters
     public class TopicListItemViewAdapter : BaseAdapterProvider
     {
 
+        private readonly IDbHelper _dbHelper;
         private readonly IEntityMetricsStore<EntityMetric> _entityMetricsStore;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IAuthorizationService _authorizationService;        
@@ -36,7 +39,8 @@ namespace Plato.Discuss.New.ViewAdapters
             IAuthorizationService authorizationService,
             IHttpContextAccessor httpContextAccessor,
             IEntityService<Topic> entityService,
-            IFeatureFacade featureFacade)
+            IFeatureFacade featureFacade,
+            IDbHelper dbHelper)
         {
             _actionContextAccessor = actionContextAccessor;
             _authorizationService = authorizationService;
@@ -44,10 +48,11 @@ namespace Plato.Discuss.New.ViewAdapters
             _entityMetricsStore = entityMetricsStore;
             _featureFacade = featureFacade;
             _entityService = entityService;
+            _dbHelper = dbHelper;
             ViewName = "TopicListItem";
         }
 
-        IEnumerable<EntityMetric> _metrics;
+        IDictionary<int, DateTimeOffset?> _lastVisits;
 
         public override async Task<IViewAdapterResult> ConfigureAsync(string viewName)
         {
@@ -57,83 +62,92 @@ namespace Plato.Discuss.New.ViewAdapters
                 return default(IViewAdapterResult);
             }
 
-            //if (_metrics == null)
-            //{
+            if (_lastVisits == null)
+            {
+                // Get displayed entities
+                var entities = await GetDisplayedEntitiesAsync();
+                if (entities?.Data != null)
+                {
+                    _lastVisits = await SelectLatestViewDateForEntitiesAsync(entities.Data.Select(e => e.Id).ToArray());
+                }
+            }
 
-            //    // Get displayed entities
-            //    var entities = await GetDisplayedEntitiesAsync();
+            if (_lastVisits == null)
+            {
+                // No metrics available to adapt the view
+                return default(IViewAdapterResult);
+            }
 
-            //    // Get all metrics for displayed entities
-            //    var metrics = await _entityMetricsStore.QueryAsync()
-            //        .Select<EntityMetricQueryParams>(q =>
-            //        {
-            //            q.EntityId.IsIn(entities.Data.Select(e => e.Id).ToArray());
-            //        })
-            //        .OrderBy("CreatedDate", OrderBy.Desc)
-            //        .ToList();
-
-            //    if (metrics != null)
-            //    {
-            //        _metrics = metrics.Data;
-            //    }
-            //}
-
-            //if (_metrics == null)
-            //{
-            //    // No categories available to adapt the view 
-            //    //return default(IViewAdapterResult);
-            //}
-
-            // Plato.Discuss does not have a dependency on Plato.Discuss.Categories
-            // Instead we update the model for the topic item view component
-            // here via our view adapter to include the channel information
-            // This way the channel data is only ever populated if the channels feature is enabled
+            // Adapt model
             return await Adapt(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Topic>>(model =>
-                  {
+                {
 
-                      if (model.Entity == null)
-                      {
-                          // Return an anonymous type, we are adapting a view component
-                          return new
-                          {
-                              model
-                          };
-                      }
+                    if (model.Entity == null)
+                    {
+                        // Return an anonymous type, we are adapting a view component
+                        return new
+                        {
+                            model
+                        };
+                    }
 
-                      if (model.TagAlterations == null)
-                      {
-                          model.TagAlterations = new TagAlterations();
-                      }
+                    DateTimeOffset? lastVisit = null;
+                    if (_lastVisits.ContainsKey(model.Entity.Id))
+                    {
+                        lastVisit = _lastVisits[model.Entity.Id];
+                    }
 
-                      model.TagAlterations.Add(new TagAlteration("avatar", (context, output) =>
-                      {
-                          if (model.Labels != null)
-                          {
-                              output.PostContent.SetHtmlContent("<span class=\"badge badge-primary\">NEW</span>");
-                          }                          
-                      }));
+                    // Ensure tag alterations
+                    if (model.TagAlterations == null)
+                    {
+                        model.TagAlterations = new TagAlterations();
+                    }
 
-                      //// Get our category
-                      ///
-                      //var category = _metrics.FirstOrDefault(c => c.Id == model.Entity.CategoryId);
-                      //if (category != null)
-                      //{
-                      //    model.Parts.Add(new HtmlPart()
-                      //    {
-                      //        Id = "title:before"
-                      //    });
-                      //}
+                    // Build tag alterations
+                    var alterations = new[]
+                    {
+                        new TagAlteration("title", (context, output) =>
+                        {
+                            if (lastVisit != null)
+                            {
 
-                      // Return an anonymous type, we are adapting a view component
-                      return new
-                      {
-                          model
-                      };
+                                if (model.Entity.LastReplyDate.HasValue)
+                                {
+                                    if (model.Entity.LastReplyDate > lastVisit)
+                                    {
+                                        output.PostContent.SetHtmlContent(
+                                            "<span class=\"badge badge-primary\">NEW</span>");
+                                    }
+                                }
+                                else
+                                {
+                                    if (model.Entity.CreatedDate > lastVisit)
+                                    {
+                                        output.PostContent.SetHtmlContent(
+                                            "<span class=\"badge badge-primary\">NEW</span>");
+                                    }
+                                }
 
-                  });
+                            }
+                            else
+                            {
+                                output.PostContent.SetHtmlContent("<span class=\"badge badge-primary\">NEW</span>");
+                            }
+                        })
+                    };
 
+                    // Apply tag alterations
+                    model.TagAlterations.Add(alterations);
+
+                    // Return an anonymous type, we are adapting a view component
+                    return new
+                    {
+                        model
+                    };
+
+                });
             });
 
         }
@@ -183,6 +197,54 @@ namespace Plato.Discuss.New.ViewAdapters
 
                 })
                 .GetResultsAsync(viewModel?.Options, viewModel?.Pager);
+
+        }
+
+        public async Task<IDictionary<int, DateTimeOffset?>> SelectLatestViewDateForEntitiesAsync(int[] ids)
+        {
+
+            const string sql = @"                
+                SELECT 
+                    em.EntityId AS EntityId, 
+                    MAX(em.CreatedDate) AS CreatedDate
+                FROM 
+                     {prefix}_EntityMetrics em
+                WHERE
+                    em.EntityId IN ({ids})
+                GROUP BY (em.EntityId)
+            ";
+
+            // Sql replacements
+            var replacements = new Dictionary<string, string>()
+            {
+                ["{ids}"] = ids.ToDelimitedString()
+            };
+
+            // Execute and return results
+            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async dr =>
+            {
+                var output = new Dictionary<int, DateTimeOffset?>();
+                while (await dr.ReadAsync())
+                {
+
+                    var key = 0;
+                    DateTimeOffset? value = null;
+
+                    if (dr.ColumnIsNotNull("EntityId"))
+                        key = Convert.ToInt32((dr["EntityId"]));
+
+                    if (dr.ColumnIsNotNull("CreatedDate"))
+                        value = (DateTimeOffset) (dr["CreatedDate"]);
+
+                    if (!output.ContainsKey(key))
+                    {
+                        output[key] = value;
+                    }
+
+                }
+
+                return output;
+            });
 
         }
 

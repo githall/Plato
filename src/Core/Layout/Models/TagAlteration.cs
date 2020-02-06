@@ -10,7 +10,7 @@ namespace PlatoCore.Layout.Models
 
         public string Id { get; set; }
 
-        Func<TagHelperContext, TagHelperOutput, Task> _alteration;
+        readonly Func<TagHelperContext, TagHelperOutput, Task> _alteration;
 
         public TagAlteration(string id, Func<TagHelperContext, TagHelperOutput, Task> alteration)
         {

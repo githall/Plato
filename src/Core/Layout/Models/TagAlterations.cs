@@ -8,21 +8,10 @@ namespace PlatoCore.Layout.Models
 
         private IList<TagAlteration> _alterations;
 
-        public int Count
-        {
-            get
-            {
-                if (_alterations != null)
-                {
-                    return _alterations.Count;
-                }
-                return 0;
-            }
-        }
+        public int Count => _alterations?.Count ?? 0;
 
         public void Add(IEnumerable<TagAlteration> alterations)
-        {
-            EnsureList();
+        {           
             foreach (var alteration in alterations)
             {
                 Add(alteration);
@@ -66,11 +55,7 @@ namespace PlatoCore.Layout.Models
         public IEnumerable<TagAlteration> FirstOrDefault(string id)
         {
             var first = First(id);
-            if (first != null)
-            {
-                return first;
-            }
-            return default(List<TagAlteration>);
+            return first ?? default(List<TagAlteration>);
         }
 
         // -----------
