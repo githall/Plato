@@ -22,6 +22,8 @@ namespace Plato.Discuss.Tags.ViewAdapters
         private readonly IEntityService<Topic> _entityService;
         private readonly IActionContextAccessor _actionContextAccessor;
 
+        private IDictionary<int, IList<EntityTag>> _lookUpTable;
+
         public TopicListItemViewAdapter(
             IEntityService<Topic> entityService, 
             IEntityTagStore<EntityTag> entityTagStore,
@@ -33,8 +35,6 @@ namespace Plato.Discuss.Tags.ViewAdapters
             ViewName = "TopicListItem";
         }
 
-        IDictionary<int, IList<EntityTag>> _lookUpTable;
-
         public override async Task<IViewAdapterResult> ConfigureAsync(string viewName)
         {
 
@@ -42,37 +42,23 @@ namespace Plato.Discuss.Tags.ViewAdapters
             {
                 return default(IViewAdapterResult);
             }
-
-            if (_lookUpTable == null)
-            {
-                // Build a dictionary we can use below within our AdaptModel
-                // method to add the correct tags for each displayed entity
-                _lookUpTable = await BuildLookUpTable();
-            }
-
-            if (_lookUpTable == null)
-            {
-                return default(IViewAdapterResult);
-            }
-
+            
             // Plato.Discuss does not have a dependency on Plato.Discuss.Tags
             // Instead we update the model for the entity list item view component
             // here via our view adapter to include the tag data for the entity
             // This way the tag data is only ever populated if the tags feature is enabled
             return await Adapt(ViewName, v =>
             {
-                v.AdaptModel<EntityListItemViewModel<Topic>>(model  =>
+                v.AdaptModel<EntityListItemViewModel<Topic>>(async model  =>
                 {
-                    if (model.Entity == null)
+
+                    if (_lookUpTable == null)
                     {
-                        // Return an anonymous type as we are adapting a view component
-                        return new
-                        {
-                            model
-                        };
+                        // Build a dictionary we can use below within our AdaptModel
+                        // method to add the correct tags for each displayed entity
+                        _lookUpTable = await BuildLookUpTable();
                     }
 
-                    // No need to modify if we don't have a lookup table
                     if (_lookUpTable == null)
                     {
                         // Return an anonymous type as we are adapting a view component
@@ -82,7 +68,16 @@ namespace Plato.Discuss.Tags.ViewAdapters
                         };
                     }
 
-                    // No need to modify the model if no labels have been found
+                    if (model.Entity == null)
+                    {
+                        // Return an anonymous type as we are adapting a view component
+                        return new
+                        {
+                            model
+                        };
+                    }
+
+                    // No need to modify the model if no tags have been found
                     if (!_lookUpTable.ContainsKey(model.Entity.Id))
                     {
                         // Return an anonymous type as we are adapting a view component

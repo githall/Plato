@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 
 namespace PlatoCore.Layout.ViewAdapters
@@ -14,7 +15,7 @@ namespace PlatoCore.Layout.ViewAdapters
 
         IViewAdapterBuilder AdaptView(string[] viewNames);
 
-        IViewAdapterBuilder AdaptModel<TModel>(Func<TModel, object> alteration) where TModel : class;
+        IViewAdapterBuilder AdaptModel<TModel>(Func<TModel, Task<object>> alteration) where TModel : class;
 
     }
 

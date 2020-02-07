@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using PlatoCore.Abstractions;
 using PlatoCore.Layout.EmbeddedViews;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.Views;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.ViewProviders
 {

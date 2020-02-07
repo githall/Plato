@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using PlatoCore.Layout.ViewProviders;
-using PlatoCore.Layout.Views;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout
 {

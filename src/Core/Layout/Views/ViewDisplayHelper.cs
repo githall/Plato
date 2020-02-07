@@ -4,20 +4,16 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
 {
-    public interface IViewDisplayHelper
-    {
-        Task<IHtmlContent> DisplayAsync(IView view);
-    }
 
     public class ViewDisplayHelper : IViewDisplayHelper
     {
         
         private readonly IViewFactory _viewFactory;
         private readonly IServiceProvider _serviceProvider;
-
         private IViewAdapterManager _viewAdapterManager;
 
         public ViewContext ViewContext { get; set; }
@@ -57,7 +53,7 @@ namespace PlatoCore.Layout.Views
                     Name = view.ViewName,
                     View = view
                 },
-                ViewAdaptorResults = viewAdapterResults,
+                ViewAdapterResults = viewAdapterResults,
                 ViewContext = ViewContext,
                 ServiceProvider = _serviceProvider
             });

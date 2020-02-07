@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using PlatoCore.Layout.Views;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout
 {

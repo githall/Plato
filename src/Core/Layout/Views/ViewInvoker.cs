@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
 {
@@ -14,7 +15,7 @@ namespace PlatoCore.Layout.Views
     {
 
         public ViewContext ViewContext { get; set; }
-                
+        
         private readonly IViewComponentHelper _viewComponentHelper;
         private readonly IPartialInvoker _partialInvoker;
         private readonly ILogger<ViewInvoker> _logger;        

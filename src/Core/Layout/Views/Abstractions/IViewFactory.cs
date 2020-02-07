@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 
-namespace PlatoCore.Layout.Views
+namespace PlatoCore.Layout.Views.Abstractions
 {
     public interface IViewFactory
     {

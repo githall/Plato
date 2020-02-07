@@ -3,21 +3,19 @@ using System.Linq;
 using System.Threading.Tasks;
 using Plato.Discuss.Models;
 using Plato.Entities.ViewModels;
-using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ViewAdapters;
 using System.Collections.Generic;
-using Plato.Entities.Metrics.Stores;
-using Plato.Entities.Metrics.Models;
-using PlatoCore.Models;
 using PlatoCore.Data.Abstractions;
 using Plato.Entities.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc.Localization;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Layout.Models;
-using PlatoCore.Models.Metrics;
 using PlatoCore.Abstractions.Extensions;
+using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.Views;
 
 namespace Plato.Discuss.New.ViewAdapters
 {
@@ -26,30 +24,37 @@ namespace Plato.Discuss.New.ViewAdapters
     {
 
         private readonly IDbHelper _dbHelper;
-        private readonly IEntityMetricsStore<EntityMetric> _entityMetricsStore;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IAuthorizationService _authorizationService;        
         private readonly IHttpContextAccessor _httpContextAccessor;    
         private readonly IEntityService<Topic> _entityService;
-        private readonly IFeatureFacade _featureFacade;
+        private readonly IContextFacade _contextFacade;
+        private readonly IViewTableManager _viewTableManager;
+
+        public IHtmlLocalizer T { get; }
 
         public TopicListItemViewAdapter(
-            IEntityMetricsStore<EntityMetric> entityMetricsStore,
+            IHtmlLocalizer<TopicListItemViewAdapter> localizer,
             IActionContextAccessor actionContextAccessor,
             IAuthorizationService authorizationService,
             IHttpContextAccessor httpContextAccessor,
             IEntityService<Topic> entityService,
-            IFeatureFacade featureFacade,
+            IViewTableManager viewTableManager,
+            IContextFacade contextFacade,
             IDbHelper dbHelper)
         {
+
             _actionContextAccessor = actionContextAccessor;
             _authorizationService = authorizationService;
             _httpContextAccessor = httpContextAccessor;
-            _entityMetricsStore = entityMetricsStore;
-            _featureFacade = featureFacade;
+            _viewTableManager = viewTableManager;
             _entityService = entityService;
+            _contextFacade = contextFacade;
             _dbHelper = dbHelper;
+
+            T = localizer;
             ViewName = "TopicListItem";
+
         }
 
         IDictionary<int, DateTimeOffset?> _lastVisits;
@@ -57,32 +62,48 @@ namespace Plato.Discuss.New.ViewAdapters
         public override async Task<IViewAdapterResult> ConfigureAsync(string viewName)
         {
 
+            // Ensure adapter is for current view
             if (!viewName.Equals(ViewName, StringComparison.OrdinalIgnoreCase))
             {
                 return default(IViewAdapterResult);
             }
 
-            if (_lastVisits == null)
-            {
-                // Get displayed entities
-                var entities = await GetDisplayedEntitiesAsync();
-                if (entities?.Data != null)
-                {
-                    _lastVisits = await SelectLatestViewDateForEntitiesAsync(entities.Data.Select(e => e.Id).ToArray());
-                }
-            }
+            // Get authenticated user
+            var user = await _contextFacade.GetAuthenticatedUserAsync();
 
-            if (_lastVisits == null)
+            // We need to be authenticated
+            if (user == null)
             {
-                // No metrics available to adapt the view
                 return default(IViewAdapterResult);
             }
 
-            // Adapt model
+            // Adapt the view
             return await Adapt(ViewName, v =>
             {
-                v.AdaptModel<EntityListItemViewModel<Topic>>(model =>
+                v.AdaptModel<EntityListItemViewModel<Topic>>(async model =>
                 {
+
+                    // Build last visits from metrics
+                    if (_lastVisits == null)
+                    {
+                        // Get displayed entities
+                        var entities = await GetDisplayedEntitiesAsync();
+                        if (entities?.Data != null)
+                        {
+                            _lastVisits = await SelectLatestViewDateForEntitiesAsync(user.Id, entities.Data.Select(e => e.Id).ToArray());
+                        }
+                    }
+
+                    // No metrics available to adapt the view
+                    if (_lastVisits == null)
+                    {
+                        // Return an anonymous type, we are adapting a view component
+                        return new
+                        {
+                            model
+                        };
+                    }
+
 
                     if (model.Entity == null)
                     {
@@ -113,27 +134,46 @@ namespace Plato.Discuss.New.ViewAdapters
                             if (lastVisit != null)
                             {
 
+                                var suppressAlterations = false;
+
+                                // Last reply
                                 if (model.Entity.LastReplyDate.HasValue)
                                 {
                                     if (model.Entity.LastReplyDate > lastVisit)
                                     {
-                                        output.PostContent.SetHtmlContent(
-                                            "<span class=\"badge badge-primary\">NEW</span>");
+                                        output.PostElement.SetHtmlContent(
+                                            $"<span class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
+                                        suppressAlterations = true;
                                     }
                                 }
-                                else
+                                
+                                // Modified
+                                if (model.Entity.ModifiedDate.HasValue && !suppressAlterations)
+                                {
+                                    if (model.Entity.ModifiedDate > lastVisit)
+                                    {
+                                        output.PostElement.SetHtmlContent(
+                                            $"<span class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
+                                        suppressAlterations = true;
+                                    }
+                                }
+
+                                // Created
+                                if (model.Entity.CreatedDate.HasValue && !suppressAlterations)
                                 {
                                     if (model.Entity.CreatedDate > lastVisit)
                                     {
-                                        output.PostContent.SetHtmlContent(
-                                            "<span class=\"badge badge-primary\">NEW</span>");
+                                        output.PostElement.SetHtmlContent(
+                                            $"<span class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
+                                        suppressAlterations = true;
                                     }
                                 }
 
                             }
                             else
                             {
-                                output.PostContent.SetHtmlContent("<span class=\"badge badge-primary\">NEW</span>");
+                                output.PostElement.SetHtmlContent(
+                                    $"<span class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
                             }
                         })
                     };
@@ -156,11 +196,7 @@ namespace Plato.Discuss.New.ViewAdapters
         {
 
             // Get topic index view model from context
-            var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
-            if (viewModel == null)
-            {
-                return null;
-            }
+            var viewModel = _viewTableManager.FirstModelOfType<EntityIndexViewModel<Topic>>();
 
             // Get all entities for our current view
             return await _entityService
@@ -200,7 +236,7 @@ namespace Plato.Discuss.New.ViewAdapters
 
         }
 
-        public async Task<IDictionary<int, DateTimeOffset?>> SelectLatestViewDateForEntitiesAsync(int[] ids)
+        public async Task<IDictionary<int, DateTimeOffset?>> SelectLatestViewDateForEntitiesAsync(int userId, int[] entityIds)
         {
 
             const string sql = @"                
@@ -210,14 +246,16 @@ namespace Plato.Discuss.New.ViewAdapters
                 FROM 
                      {prefix}_EntityMetrics em
                 WHERE
-                    em.EntityId IN ({ids})
+                    em.CreatedUserId = {userId} AND
+                    em.EntityId IN ({entityIds})
                 GROUP BY (em.EntityId)
             ";
 
             // Sql replacements
             var replacements = new Dictionary<string, string>()
             {
-                ["{ids}"] = ids.ToDelimitedString()
+                ["{userId}"] = userId.ToString(),
+                ["{entityIds}"] = entityIds.ToDelimitedString()
             };
 
             // Execute and return results

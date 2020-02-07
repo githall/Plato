@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using PlatoCore.Abstractions.Extensions;
 
@@ -52,16 +53,50 @@ namespace PlatoCore.Layout.ViewAdapters
             return this;
         }
 
-        public IViewAdapterBuilder AdaptModel<TModel>(Func<TModel, object> alteration) where TModel : class
+        //public IViewAdapterBuilder AdaptModel<TModel>(Func<TModel, object> alteration) where TModel : class
+        //{
+        //    if (alteration == null)
+        //    {
+        //        throw new NullReferenceException(nameof(alteration));
+        //    }
+            
+        //    // wrapper to convert delegates generic argument type
+        //    // to concrete type (object) for storage within adapter result
+        //    var typedDelegate = new Func<object, object>((object input) =>
+        //    {
+
+        //        // use first argument from anonymous type as model
+        //        // todo: implement support for multiple arguments within anonymous types
+        //        if (IsViewModelAnonymousType(input))
+        //        {
+        //            var args = new List<object>();
+        //            var properties = TypeDescriptor.GetProperties(input);
+        //            foreach (PropertyDescriptor property in properties)
+        //            {
+        //                args.Add(property.GetValue(input));
+        //            }
+        //            return alteration((TModel)args[0]);
+        //        }
+
+        //        return alteration((TModel) input);
+
+        //    });
+
+        //    _viewAdapterResult.ModelAlterations.Add(typedDelegate);
+        //    return this;
+        //}
+
+        public IViewAdapterBuilder AdaptModel<TModel>(Func<TModel, Task<object>> alteration) where TModel : class
         {
+
             if (alteration == null)
             {
                 throw new NullReferenceException(nameof(alteration));
             }
-            
+
             // wrapper to convert delegates generic argument type
             // to concrete type (object) for storage within adapter result
-            var typedDelegate = new Func<object, object>((object input) =>
+            var typedDelegate = new Func<object, Task<object>>(async (object input) =>
             {
 
                 // use first argument from anonymous type as model
@@ -74,17 +109,17 @@ namespace PlatoCore.Layout.ViewAdapters
                     {
                         args.Add(property.GetValue(input));
                     }
-                    return alteration((TModel)args[0]);
+                    return await alteration((TModel)args[0]);
                 }
 
-                return alteration((TModel) input);
+                return await alteration((TModel)input);
 
             });
 
             _viewAdapterResult.ModelAlterations.Add(typedDelegate);
             return this;
         }
-        
+
         bool IsViewModelAnonymousType(object model)
         {
 

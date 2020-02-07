@@ -38,19 +38,17 @@ namespace Plato.Discuss.Categories.Moderators.ViewAdapters
             }
 
             // Plato.Discuss.Categories.Moderators does not have a dependency on Plato.Discuss.Channels
-            // Instead we update the moderator view here via our view adaptor
+            // Instead we update the moderator view here via our view adapter
             // This way the channel name is only ever populated if the channels feature is enabled
             return Adapt(ViewName,  v =>
             {
-                v.AdaptModel<Moderator>(model =>
+                v.AdaptModel<Moderator>(async model =>
                 {
 
                     IEnumerable<CategoryAdmin> parents = null;
                     if (model.CategoryId > 0)
                     {
-                        parents = _channelStore.GetParentsByIdAsync(model.CategoryId)
-                            .GetAwaiter()
-                            .GetResult();
+                        parents = await _channelStore.GetParentsByIdAsync(model.CategoryId);
                     }
 
                     var sb = new StringBuilder();
@@ -71,7 +69,7 @@ namespace Plato.Discuss.Categories.Moderators.ViewAdapters
                     }
                     else
                     {
-                        model.CategoryName = T["All Channels"].Value.ToString();
+                        model.CategoryName = T["All Categories"].Value.ToString();
                     }
                     
                     // Return an anonymous type, we are adapting a view component

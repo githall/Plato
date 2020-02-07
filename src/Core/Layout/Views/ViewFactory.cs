@@ -1,5 +1,7 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
 {
@@ -7,11 +9,14 @@ namespace PlatoCore.Layout.Views
     public class ViewFactory : IViewFactory
     {
 
-        //private readonly IViewTableManager _viewTableManager;
         private readonly IViewInvoker _viewInvoker;
+        private readonly IViewTableManager _viewTableManager;
 
-        public ViewFactory(IViewInvoker viewInvoker)
-        {           
+        public ViewFactory(
+            IViewTableManager viewTableManager,
+            IViewInvoker viewInvoker)
+        {
+            _viewTableManager = viewTableManager;
             _viewInvoker = viewInvoker;
         }
 
@@ -22,9 +27,9 @@ namespace PlatoCore.Layout.Views
             _viewInvoker.Contextualize(displayContext);
 
             // Apply view & model alterations
-            if (displayContext.ViewAdaptorResults != null)
+            if (displayContext.ViewAdapterResults != null)
             {
-                foreach (var viewAdapterResult in displayContext.ViewAdaptorResults)
+                foreach (var viewAdapterResult in displayContext.ViewAdapterResults)
                 {
 
                     var updatedView = displayContext.ViewDescriptor.View;
@@ -45,7 +50,7 @@ namespace PlatoCore.Layout.Views
                     {
                         foreach (var alteration in modelAlterations)
                         {
-                            updatedView.Model = alteration(updatedView.Model);
+                            updatedView.Model = await alteration(updatedView.Model);
                         }
                     }
 
@@ -55,13 +60,16 @@ namespace PlatoCore.Layout.Views
 
             }
 
-            // Invoke generic view
-            var htmlContent = await _viewInvoker.InvokeAsync(displayContext.ViewDescriptor.View);
+            // Add descriptor
+            var descriptor = _viewTableManager.Add(displayContext.ViewDescriptor);
+
+            // Invoke view
+            var htmlContent = await _viewInvoker.InvokeAsync(descriptor.View);
 
             // Apply adapter output alterations
-            if (displayContext.ViewAdaptorResults != null)
+            if (displayContext.ViewAdapterResults != null)
             {
-                foreach (var viewAdapterResult in displayContext.ViewAdaptorResults)
+                foreach (var viewAdapterResult in displayContext.ViewAdapterResults)
                 {
                     var alterations = viewAdapterResult.OutputAlterations;
                     if (alterations.Count > 0)

@@ -51,45 +51,55 @@ namespace Plato.Questions.Labels.ViewAdapters
                 return default(IViewAdapterResult);
             }
 
-
-            if (_lookUpTable == null)
-            {
-
-                // Get feature
-                var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Questions");
-                if (feature == null)
-                {
-                    // Feature not found
-                    return default(IViewAdapterResult);
-                }
-
-                // Get all labels for feature
-                var labels = await _labelStore.GetByFeatureIdAsync(feature.Id);
-                if (labels == null)
-                {
-                    // No labels available to adapt the view 
-                    return default(IViewAdapterResult);
-                }
-
-                // Build a dictionary we can use below within our AdaptModel
-                // method to add the correct labels for each displayed entity
-                _lookUpTable = await BuildLookUpTable(labels.ToList());
-                
-            }
-
-            if (_lookUpTable == null)
-            {
-                return default(IViewAdapterResult);
-            }
-
             // Plato.Questions does not have a dependency on Plato.Questions.Labels
             // Instead we update the model for the entity list item view component
             // here via our view adapter to include the label data for the entity
             // This way the label data is only ever populated if the labels feature is enabled
             return await Adapt(ViewName, v =>
             {
-                v.AdaptModel<EntityListItemViewModel<Question>>(model  =>
+                v.AdaptModel<EntityListItemViewModel<Question>>(async model  =>
                 {
+
+                    if (_lookUpTable == null)
+                    {
+
+                        // Get feature
+                        var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Questions");
+                        if (feature == null)
+                        {
+                            // Return an anonymous type, we are adapting a view component
+                            return new
+                            {
+                                model
+                            };
+                        }
+
+                        // Get all labels for feature
+                        var labels = await _labelStore.GetByFeatureIdAsync(feature.Id);
+                        if (labels == null)
+                        {
+                            // Return an anonymous type, we are adapting a view component
+                            return new
+                            {
+                                model
+                            };
+                        }
+
+                        // Build a dictionary we can use below within our AdaptModel
+                        // method to add the correct labels for each displayed entity
+                        _lookUpTable = await BuildLookUpTable(labels.ToList());
+
+                    }
+
+                    if (_lookUpTable == null)
+                    {
+                        // Return an anonymous type, we are adapting a view component
+                        return new
+                        {
+                            model
+                        };
+                    }
+
                     if (model.Entity == null)
                     {
                         // Return an anonymous type as we are adapting a view component

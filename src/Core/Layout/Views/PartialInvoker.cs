@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
 using Microsoft.Extensions.Caching.Memory;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
 {

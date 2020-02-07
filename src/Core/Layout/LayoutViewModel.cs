@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using PlatoCore.Layout.ViewProviders;
-using PlatoCore.Layout.Views;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout
 {

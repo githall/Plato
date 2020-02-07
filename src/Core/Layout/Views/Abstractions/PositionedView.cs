@@ -2,7 +2,7 @@
 using System.Linq;
 using PlatoCore.Layout.EmbeddedViews;
 
-namespace PlatoCore.Layout.Views
+namespace PlatoCore.Layout.Views.Abstractions
 {
 
     public interface IPositionedView : IView
@@ -45,15 +45,15 @@ namespace PlatoCore.Layout.Views
             if (String.IsNullOrEmpty(zone))
             {
                 throw new Exception(
-                    $"No znon has been specified for the view {ViewName}.");
+                    $"No zone has been specified for the view {ViewName}.");
             }
 
             // Is the zone supported?
-            var supprtedZones = LayoutZones.SupportedZones;
-            if (!supprtedZones.Contains(zone.ToLower()))
+            var supportedZones = LayoutZones.SupportedZones;
+            if (!supportedZones.Contains(zone.ToLower()))
             {
                 throw new Exception(
-                    $"The zone name '{zone}' is not supported. Supported zones include {String.Join(", ", supprtedZones)}. Please update the zone name within your view provider and try again.");
+                    $"The zone name '{zone}' is not supported. Supported zones include {String.Join(", ", supportedZones)}. Please update the zone name within your view provider and try again.");
             }
 
             _zone = zone;

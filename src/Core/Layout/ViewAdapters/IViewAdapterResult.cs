@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 
 namespace PlatoCore.Layout.ViewAdapters
@@ -13,7 +14,7 @@ namespace PlatoCore.Layout.ViewAdapters
 
         IList<string> ViewAlterations { get; set; }
 
-        IList<Func<object, object>> ModelAlterations { get; set; }
+        IList<Func<object, Task<object>>> ModelAlterations { get; set; }
 
     }
 

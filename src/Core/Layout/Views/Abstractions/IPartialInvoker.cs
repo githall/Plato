@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace PlatoCore.Layout.Views
+namespace PlatoCore.Layout.Views.Abstractions
 {
     public interface IPartialInvoker
     {

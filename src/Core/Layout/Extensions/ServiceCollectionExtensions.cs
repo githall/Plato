@@ -19,6 +19,7 @@ using PlatoCore.Layout.Theming;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewAdapters;
 using PlatoCore.Layout.Views;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Extensions
 {
@@ -41,7 +42,9 @@ namespace PlatoCore.Layout.Extensions
             services.AddSingleton<ILayoutUpdater, LayoutUpdater>();
 
             // Views need to be scoped so new instances are created for each request
-            services.AddScoped<IViewFactory, ViewFactory>(); 
+            services.AddScoped<IViewFactory, ViewFactory>();
+            services.AddScoped<IViewTableManager, ViewTableManager>();
+
             services.AddScoped<IPartialInvoker, PartialInvoker>();
             services.AddScoped<IViewInvoker, ViewInvoker>();
             services.AddScoped<IViewHelperFactory, ViewDisplayHelperFactory>();
@@ -66,11 +69,8 @@ namespace PlatoCore.Layout.Extensions
             // Alerter
             services.AddScoped<IAlerter, Alerter>();
 
-
-
             services.AddTagHelpers<AssetsTagHelper>();
             services.AddTagHelpers<CardTagHelper>();
-
 
             return services;
 

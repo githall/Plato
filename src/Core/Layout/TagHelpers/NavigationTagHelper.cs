@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Layout.Views;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace PlatoCore.Layout.TagHelpers

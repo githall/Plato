@@ -68,21 +68,6 @@ namespace Plato.Discuss.Labels.ViewAdapters
                 return default(IViewAdapterResult);
             }
 
-            if (_lookUp == null)
-            {
-                // Get all labels for feature
-                var labels = await _labelStore.GetByFeatureIdAsync(feature.Id);
-                if (labels == null)
-                {
-                    // No labels available to adapt the view 
-                    return default(IViewAdapterResult);
-                }
-
-                // Build a dictionary we can use below within our AdaptModel
-                // method to add the correct labels for each displayed entity
-                _lookUp = await NewMethod(labels);
-
-            }
 
             // Plato.Discuss does not have a dependency on Plato.Discuss.Labels
             // Instead we update the model for the entity list item view component
@@ -90,8 +75,27 @@ namespace Plato.Discuss.Labels.ViewAdapters
             // This way the label data is only ever populated if the labels feature is enabled
             return await Adapt(viewName, v =>
             {
-                v.AdaptModel<EntityListItemViewModel<Topic>>(model =>
+                v.AdaptModel<EntityListItemViewModel<Topic>>(async model =>
                 {
+
+                    if (_lookUp == null)
+                    {
+                        // Get all labels for feature
+                        var labels = await _labelStore.GetByFeatureIdAsync(feature.Id);
+                        if (labels == null)
+                        {
+                            // Return an anonymous type, we are adapting a view component
+                            return new
+                            {
+                                model
+                            };
+                        }
+
+                        // Build a dictionary we can use below within our AdaptModel
+                        // method to add the correct labels for each displayed entity
+                        _lookUp = await NewMethod(labels);
+
+                    }
 
                     if (model.Entity == null)
                     {

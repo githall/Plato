@@ -8,7 +8,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PlatoCore.Layout.ViewHelpers;
-using PlatoCore.Layout.Views;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Models.Shell;
 
 namespace PlatoCore.Layout.Alerts

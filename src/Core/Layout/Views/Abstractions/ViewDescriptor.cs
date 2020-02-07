@@ -1,4 +1,4 @@
-﻿namespace PlatoCore.Layout.Views
+﻿namespace PlatoCore.Layout.Views.Abstractions
 {
     public class ViewDescriptor
     {
@@ -7,7 +7,6 @@
 
         public IView View { get; set; }
       
-        public bool IsAnonymousType { get; set; }
     }
 
 }

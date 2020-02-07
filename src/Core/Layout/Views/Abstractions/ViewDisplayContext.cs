@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PlatoCore.Layout.ViewAdapters;
 
-namespace PlatoCore.Layout.Views
+namespace PlatoCore.Layout.Views.Abstractions
 {
     public class ViewDisplayContext
     {
@@ -13,7 +13,7 @@ namespace PlatoCore.Layout.Views
 
         public ViewContext ViewContext { get; set; }
 
-        public IEnumerable<IViewAdapterResult> ViewAdaptorResults { get; set; }
+        public IEnumerable<IViewAdapterResult> ViewAdapterResults { get; set; }
 
         public object Value { get; set; }
         

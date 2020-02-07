@@ -1,4 +1,4 @@
-﻿namespace PlatoCore.Layout.Views
+﻿namespace PlatoCore.Layout.Views.Abstractions
 {
     public class ViewPosition
     {

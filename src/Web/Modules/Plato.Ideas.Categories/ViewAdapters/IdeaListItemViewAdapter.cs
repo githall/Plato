@@ -37,26 +37,6 @@ namespace Plato.Ideas.Categories.ViewAdapters
                 return default(IViewAdapterResult);
             }
             
-            if (_channels == null)
-            {
-                // Get feature
-                var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Ideas.Categories");
-                if (feature == null)
-                {
-                    // Feature not found
-                    return default(IViewAdapterResult);
-                }
-
-                // Get all categories for feature
-                _channels = await _channelStore.GetByFeatureIdAsync(feature.Id);
-
-            }
-            
-            if (_channels == null)
-            {
-                // No categories available to adapt the view 
-                return default(IViewAdapterResult);
-            }
             
             // Plato.Ideas does not have a dependency on Plato.Ideas.Categories
             // Instead we update the model for the topic item view component
@@ -64,8 +44,35 @@ namespace Plato.Ideas.Categories.ViewAdapters
             // This way the channel data is only ever populated if the channels feature is enabled
             return await Adapt(ViewName, v =>
             {
-                v.AdaptModel<EntityListItemViewModel<Idea>>(model =>
+                v.AdaptModel<EntityListItemViewModel<Idea>>(async model =>
                 {
+
+                    if (_channels == null)
+                    {
+                        // Get feature
+                        var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Ideas.Categories");
+                        if (feature == null)
+                        {
+                            // Return an anonymous type, we are adapting a view component
+                            return new
+                            {
+                                model
+                            };
+                        }
+
+                        // Get all categories for feature
+                        _channels = await _channelStore.GetByFeatureIdAsync(feature.Id);
+
+                    }
+
+                    if (_channels == null)
+                    {
+                        // Return an anonymous type, we are adapting a view component
+                        return new
+                        {
+                            model
+                        };
+                    }
 
                     if (model.Entity == null)
                     {

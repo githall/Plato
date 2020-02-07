@@ -1,14 +1,10 @@
 ﻿using System;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
 {
-
-    public interface IViewHelperFactory
-    {
-        IViewDisplayHelper CreateHelper(ViewContext context);
-    }
-
+  
     public class ViewDisplayHelperFactory : IViewHelperFactory
     {
 
