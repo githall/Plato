@@ -12,7 +12,7 @@ using PlatoCore.Layout.Views.Abstractions;
 namespace Plato.Discuss.ViewComponents
 {
   
-    public class GetTopicListViewComponent : BaseViewComponent
+    public class GetTopicListViewComponent : ViewComponentBase
     {
         
       

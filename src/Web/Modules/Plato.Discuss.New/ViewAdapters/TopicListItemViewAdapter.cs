@@ -35,8 +35,6 @@ namespace Plato.Discuss.New.ViewAdapters
         private readonly IHttpContextAccessor _httpContextAccessor;    
         private readonly IEntityService<Topic> _entityService;
         private readonly IContextFacade _contextFacade;
-        private readonly IViewTable _viewTableManager;
-        private readonly IViewResultTable _viewResultTable;
 
         private readonly IUpdateModelAccessor _updateModelAccessor;
 
@@ -50,11 +48,9 @@ namespace Plato.Discuss.New.ViewAdapters
             IActionContextAccessor actionContextAccessor,
             IAuthorizationService authorizationService,
             IHttpContextAccessor httpContextAccessor,
-            IEntityService<Topic> entityService,
-            IViewTable viewTableManager,
+            IEntityService<Topic> entityService,           
             IContextFacade contextFacade,
-            IModelMetadataProvider modelMetadataProvider,
-            IViewResultTable viewResultTable,
+            IModelMetadataProvider modelMetadataProvider,      
             ILayoutModelAccessor layoutModelAccesssor,
             IUpdateModelAccessor updateModelAccessor,
             IDbHelper dbHelper)
@@ -62,13 +58,11 @@ namespace Plato.Discuss.New.ViewAdapters
 
             _actionContextAccessor = actionContextAccessor;
             _authorizationService = authorizationService;
-            _httpContextAccessor = httpContextAccessor;
-            _viewTableManager = viewTableManager;
+            _httpContextAccessor = httpContextAccessor;      
             _entityService = entityService;
             _contextFacade = contextFacade;
             _dbHelper = dbHelper;
-            _modelMetadataProvider = modelMetadataProvider;
-            _viewResultTable = viewResultTable;
+            _modelMetadataProvider = modelMetadataProvider;   
 
             _layoutModelAccesssor = layoutModelAccesssor;
             _updateModelAccessor = updateModelAccessor;
@@ -213,32 +207,9 @@ namespace Plato.Discuss.New.ViewAdapters
 
         }
 
-        private async Task<IPagedResults<Topic>> GetDisplayedEntitiesAsync()
+        private Task<IPagedResults<Topic>> GetDisplayedEntitiesAsync()
         {
-
- 
-            var viewComponentResults = _viewResultTable.FirstViewComponentWithType<EntityIndexViewModel<Topic>>();
-
-
-            var layoutModel = _layoutModelAccesssor.LayoutViewModel;
-
-            var updateModel = _updateModelAccessor.ModelUpdater;
-
-            var metaData = _modelMetadataProvider.GetMetadataForType(typeof(EntityIndexViewModel<Topic>));
-            var modelExplorer = new ModelExplorer(_modelMetadataProvider, metaData, null);
-
             
-
-            var viewDataDictionary = new ViewDataDictionary<EntityIndexViewModel<Topic>>(_modelMetadataProvider, new ModelStateDictionary());
-            //viewDataDictionary.Model = new FooModel();
-
-            // Get topic index view model from context
-            var viewModel2 = _viewTableManager.FirstModelOfType<EntityIndexViewModel<Topic>>();
-            if (viewModel2 == null)
-            {
-                return null;
-            }
-
             // Get topic index view model from context
             var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
             if (viewModel == null)
@@ -246,42 +217,48 @@ namespace Plato.Discuss.New.ViewAdapters
                 return null;
             }
 
+            if (viewModel.Results == null)
+            {
+                return null;
+            }
 
-            // Get all entities for our current view
-            return await _entityService
-                .ConfigureQuery(async q =>
-                {
+            return Task.FromResult(viewModel.Results);
 
-                    // Hide private?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewPrivateTopics))
-                    {
-                        q.HidePrivate.True();
-                    }
+            //// Get all entities for our current view
+            //return await _entityService
+            //    .ConfigureQuery(async q =>
+            //    {
 
-                    // Hide hidden?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewHiddenTopics))
-                    {
-                        q.HideHidden.True();
-                    }
+            //        // Hide private?
+            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+            //            Permissions.ViewPrivateTopics))
+            //        {
+            //            q.HidePrivate.True();
+            //        }
 
-                    // Hide spam?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewSpamTopics))
-                    {
-                        q.HideSpam.True();
-                    }
+            //        // Hide hidden?
+            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+            //            Permissions.ViewHiddenTopics))
+            //        {
+            //            q.HideHidden.True();
+            //        }
 
-                    // Hide deleted?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewDeletedTopics))
-                    {
-                        q.HideDeleted.True();
-                    }
+            //        // Hide spam?
+            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+            //            Permissions.ViewSpamTopics))
+            //        {
+            //            q.HideSpam.True();
+            //        }
 
-                })
-                .GetResultsAsync(viewModel?.Options, viewModel?.Pager);
+            //        // Hide deleted?
+            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+            //            Permissions.ViewDeletedTopics))
+            //        {
+            //            q.HideDeleted.True();
+            //        }
+
+            //    })
+            //    .GetResultsAsync(viewModel?.Options, viewModel?.Pager);
 
         }
 

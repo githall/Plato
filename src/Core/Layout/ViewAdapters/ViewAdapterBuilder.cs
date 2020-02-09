@@ -113,11 +113,15 @@ namespace PlatoCore.Layout.ViewAdapters
                     foreach (var arg in args)
                     {
                         if (arg is TModel)
-                        {
+                        {                            
                             return await alteration((TModel)arg);
                         }
                     }
             
+                    // IF we reach this point we have not found an anonymous type 
+                    // parameter matching the model we are attempting to adapt
+
+
                 }
 
                 if (input is TModel)

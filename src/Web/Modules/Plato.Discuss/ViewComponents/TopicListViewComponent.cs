@@ -7,6 +7,7 @@ using Plato.Discuss.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
@@ -14,7 +15,7 @@ using PlatoCore.Security.Abstractions;
 namespace Plato.Discuss.ViewComponents
 {
 
-    public class TopicListViewComponent : BaseViewComponent
+    public class TopicListViewComponent : ViewComponentBase
     {
 
         private readonly ICollection<Filter> _defaultFilters = new List<Filter>()
@@ -137,16 +138,14 @@ namespace Plato.Discuss.ViewComponents
         };
    
         private readonly IAuthorizationService _authorizationService;
-        private readonly IHttpContextAccessor _httpContextAccessor;
         private readonly IEntityService<Topic> _entityService;
-     
+
         public TopicListViewComponent(
+            
             IAuthorizationService authorizationService,
-            IHttpContextAccessor httpContextAccessor,
             IEntityService<Topic> entityService)
         {
-            _authorizationService = authorizationService;
-            _httpContextAccessor = httpContextAccessor;
+            _authorizationService = authorizationService;      
             _entityService = entityService;
         }
 
@@ -164,13 +163,8 @@ namespace Plato.Discuss.ViewComponents
             {
                 pager = new PagerOptions();
             }
-
-            var viewModel = await GetViewModel(options, pager);
-
-            //// Add view model to context
-            //_httpContextAccessor.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] = viewModel;
-
-            return View(viewModel);
+      
+            return View(await GetViewModel(options, pager));
 
         }
         

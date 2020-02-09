@@ -6,7 +6,7 @@ using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Discuss.ViewComponents
 {
-    public class TopicListItemViewComponent : BaseViewComponent
+    public class TopicListItemViewComponent : ViewComponentBase
     {
 
         public TopicListItemViewComponent()

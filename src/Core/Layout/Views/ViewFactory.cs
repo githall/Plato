@@ -10,13 +10,13 @@ namespace PlatoCore.Layout.Views
     {
 
         private readonly IViewInvoker _viewInvoker;
-        private readonly IViewTable _viewTableManager;
+        private readonly IViewDescriptorCollection _viewDescriptorCollection;
 
         public ViewFactory(
-            IViewTable viewTableManager,
+            IViewDescriptorCollection viewDescriptorCollection,
             IViewInvoker viewInvoker)
         {
-            _viewTableManager = viewTableManager;
+            _viewDescriptorCollection = viewDescriptorCollection;
             _viewInvoker = viewInvoker;
         }
 
@@ -65,7 +65,7 @@ namespace PlatoCore.Layout.Views
             }
 
             // Add descriptor
-            var descriptor = _viewTableManager.Add(displayContext.ViewDescriptor);
+            var descriptor = _viewDescriptorCollection.Add(displayContext.ViewDescriptor);
 
             // Invoke view
             var htmlContent = await _viewInvoker.InvokeAsync(descriptor.View);
