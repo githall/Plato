@@ -10,10 +10,10 @@ namespace PlatoCore.Layout.Views
     {
 
         private readonly IViewInvoker _viewInvoker;
-        private readonly IViewTableManager _viewTableManager;
+        private readonly IViewTable _viewTableManager;
 
         public ViewFactory(
-            IViewTableManager viewTableManager,
+            IViewTable viewTableManager,
             IViewInvoker viewInvoker)
         {
             _viewTableManager = viewTableManager;
@@ -65,7 +65,7 @@ namespace PlatoCore.Layout.Views
 
             // Invoke view
             var htmlContent = await _viewInvoker.InvokeAsync(descriptor.View);
-
+         
             // Apply adapter output alterations
             if (displayContext.ViewAdapterResults != null)
             {

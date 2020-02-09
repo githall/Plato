@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Plato.Discuss.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Discuss.ViewComponents
 {
-    public class TopicListItemViewComponent : ViewComponent
+    public class TopicListItemViewComponent : BaseViewComponent
     {
-  
+
         public TopicListItemViewComponent()
         {
         }
@@ -18,7 +19,6 @@ namespace Plato.Discuss.ViewComponents
         }
 
     }
-
 
 }
 

@@ -1,26 +1,31 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Discuss.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Discuss.ViewComponents
 {
-    public class GetTopicListViewComponent : ViewComponent
+  
+    public class GetTopicListViewComponent : BaseViewComponent
     {
         
-        private readonly IEntityService<Topic> _entityService;
+      
         private readonly IAuthorizationService _authorizationService;
+       
+        private readonly IEntityService<Topic> _entityService;
 
         public GetTopicListViewComponent(
             IEntityService<Topic> entityService,
             IAuthorizationService authorizationService)
         {
             _entityService = entityService;
-            _authorizationService = authorizationService;
+            _authorizationService = authorizationService;       
         }
 
         public async Task<IViewComponentResult> InvokeAsync(EntityIndexOptions options, PagerOptions pager)
@@ -37,9 +42,11 @@ namespace Plato.Discuss.ViewComponents
             {
                 pager = new PagerOptions();
             }
-        
+
+            var viewModel = await GetViewModel(options, pager);
+
             // Review view
-            return View(await GetViewModel(options, pager));
+            return View(viewModel);
 
         }
         

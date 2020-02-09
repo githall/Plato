@@ -43,9 +43,10 @@ namespace PlatoCore.Layout.Extensions
 
             // Views need to be scoped so new instances are created for each request
             services.AddScoped<IViewFactory, ViewFactory>();
-            services.AddScoped<IViewTableManager, ViewTableManager>();
+            services.AddScoped<IViewTable, ViewTable>();
+            services.AddScoped<IViewResultTable, ViewResultTable>();
 
-            services.AddScoped<IPartialInvoker, PartialInvoker>();
+            services.AddScoped<IPartialViewInvoker, PartialViewInvoker>();
             services.AddScoped<IViewInvoker, ViewInvoker>();
             services.AddScoped<IViewHelperFactory, ViewDisplayHelperFactory>();
 
@@ -59,12 +60,14 @@ namespace PlatoCore.Layout.Extensions
             services.Configure<MvcOptions>(options =>
             {
                 options.Filters.Add(typeof(ModelBinderAccessorFilter));
+                options.Filters.Add(typeof(LayoutModelAccessorFilter));
                 options.Filters.Add(typeof(AlertFilter));
-                options.Filters.Add(typeof(ModularFilter));
+                options.Filters.Add(typeof(ModularFilter));                
             });
 
             // Model binding model accessor
             services.AddScoped<IUpdateModelAccessor, LocalModelBinderAccessor>();
+            services.AddScoped<ILayoutModelAccessor, LocalLayoutModelAccessor>();
 
             // Alerter
             services.AddScoped<IAlerter, Alerter>();

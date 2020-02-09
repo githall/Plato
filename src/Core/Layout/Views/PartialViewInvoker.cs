@@ -7,28 +7,19 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Mvc.ViewFeatures.Buffers;
-using Microsoft.Extensions.Caching.Memory;
 using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
 {
 
-    public class PartialInvoker : IPartialInvoker
+    public class PartialViewInvoker : IPartialViewInvoker
     {
 
-        private readonly IViewBufferScope _viewBufferScope;
-        private readonly ICompositeViewEngine _viewEngine;        
-        private readonly IMemoryCache _memoryCache;
+        private readonly ICompositeViewEngine _viewEngine;
 
-        public PartialInvoker(
-            IViewBufferScope viewBufferScope,
-            ICompositeViewEngine viewEngine,
-            IMemoryCache memoryCache) 
-        {
-            _memoryCache = memoryCache ?? throw new ArgumentNullException(nameof(memoryCache));
-            _viewEngine = viewEngine ?? throw new ArgumentNullException(nameof(viewEngine));
-            _viewBufferScope = viewBufferScope ?? throw new ArgumentNullException(nameof(viewBufferScope));                        
+        public PartialViewInvoker(ICompositeViewEngine viewEngine) 
+        {            
+            _viewEngine = viewEngine ?? throw new ArgumentNullException(nameof(viewEngine));            
         }
         
         public ViewContext ViewContext { get; set; }
@@ -100,7 +91,7 @@ namespace PlatoCore.Layout.Views
 
             using (view as IDisposable)
             {
-                await view.RenderAsync(partialViewContext);
+                await view.RenderAsync(partialViewContext);             
             }
 
         }

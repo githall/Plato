@@ -6,23 +6,23 @@ using PlatoCore.Layout.Views.Abstractions;
 namespace PlatoCore.Layout.Views
 {
 
-    public interface IViewTableManager
+    public interface IViewTable
     {
 
         ViewDescriptor Add(ViewDescriptor view);
 
-        IDictionary<Type, IList<ViewDescriptor>> Views { get; }
+        IReadOnlyDictionary<Type, IList<ViewDescriptor>> Views { get; }
 
     }
 
-    public class ViewTableManager : IViewTableManager
+    public class ViewTable : IViewTable
     {
 
         private readonly ConcurrentDictionary<Type, IList<ViewDescriptor>> _views;
 
-        public IDictionary<Type, IList<ViewDescriptor>> Views => _views;
+        public IReadOnlyDictionary<Type, IList<ViewDescriptor>> Views => _views;
 
-        public ViewTableManager()
+        public ViewTable()
         {
             _views = new ConcurrentDictionary<Type, IList<ViewDescriptor>>();
         }
@@ -56,7 +56,7 @@ namespace PlatoCore.Layout.Views
 
     public static class ViewTableManagerExtensions
     {
-        public static T FirstModelOfType<T>(this IViewTableManager viewTableManager) where T : class
+        public static T FirstModelOfType<T>(this IViewTable viewTableManager) where T : class
         {
 
             if (viewTableManager.Views.ContainsKey(typeof(T)))

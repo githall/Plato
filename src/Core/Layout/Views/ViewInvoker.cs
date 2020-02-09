@@ -17,12 +17,12 @@ namespace PlatoCore.Layout.Views
         public ViewContext ViewContext { get; set; }
         
         private readonly IViewComponentHelper _viewComponentHelper;
-        private readonly IPartialInvoker _partialInvoker;
+        private readonly IPartialViewInvoker _partialInvoker;
         private readonly ILogger<ViewInvoker> _logger;        
 
         public ViewInvoker(            
             IViewComponentHelper viewComponentHelper,
-            IPartialInvoker partialInvoker,
+            IPartialViewInvoker partialInvoker,
             ILogger<ViewInvoker> logger)
         {            
             _viewComponentHelper = viewComponentHelper;

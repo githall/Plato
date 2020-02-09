@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
 namespace PlatoCore.Layout.Views.Abstractions
 {
-    public interface IPartialInvoker
+    public interface IPartialViewInvoker
     {
 
         ViewContext ViewContext { get; set; }

@@ -27,11 +27,12 @@ using PlatoCore.Layout;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Net.Abstractions;
 using PlatoCore.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Discuss.Controllers
 {
 
-    public class HomeController : Controller, IUpdateModel
+    public class HomeController : BaseController, IUpdateModel
     {
 
         #region "Constructor"
