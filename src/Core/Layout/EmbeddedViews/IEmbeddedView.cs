@@ -9,7 +9,7 @@ namespace PlatoCore.Layout.EmbeddedViews
 
         IEmbeddedView Contextualize(ViewContext context);
 
-        Task<IHtmlContent> Build();
+        Task<IHtmlContent> InvokeAsync();
 
     }
 

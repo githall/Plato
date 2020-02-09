@@ -22,7 +22,7 @@ namespace PlatoCore.Layout.EmbeddedViews
             }
         } 
 
-        public abstract Task<IHtmlContent> Build();
+        public abstract Task<IHtmlContent> InvokeAsync();
         
         public IEmbeddedView Contextualize(ViewContext context)
         {
@@ -31,4 +31,5 @@ namespace PlatoCore.Layout.EmbeddedViews
         }
 
     }
+
 }

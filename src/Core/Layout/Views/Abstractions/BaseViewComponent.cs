@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace PlatoCore.Layout.Views.Abstractions
@@ -9,6 +10,10 @@ namespace PlatoCore.Layout.Views.Abstractions
         public override ViewResult View(object model)
         {
             var result = base.View(model);
+
+            var viewData = base.ViewData;
+            var tempData = base.TempData;
+    
             var viewResultTable = HttpContext.RequestServices.GetService<IViewResultTable>();
             viewResultTable.Add(result);
             return result;

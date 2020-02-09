@@ -109,10 +109,23 @@ namespace PlatoCore.Layout.ViewAdapters
                     {
                         args.Add(property.GetValue(input));
                     }
-                    return await alteration((TModel)args[0]);
+                    
+                    foreach (var arg in args)
+                    {
+                        if (arg is TModel)
+                        {
+                            return await alteration((TModel)arg);
+                        }
+                    }
+            
                 }
 
-                return await alteration((TModel)input);
+                if (input is TModel)
+                {
+                    return await alteration((TModel)input);
+                }
+
+                return null;
 
             });
 

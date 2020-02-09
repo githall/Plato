@@ -22,7 +22,8 @@ namespace Plato.Demo
         {
 
             // Register view adapters
-            services.AddScoped<IViewAdapterProvider, TopicListItemViewAdapter>();
+            services.AddScoped<IViewAdapterProvider, TopicListViewAdapter>();
+            services.AddScoped<IViewAdapterProvider, TopicListItemViewAdapter>();    
 
         }
 

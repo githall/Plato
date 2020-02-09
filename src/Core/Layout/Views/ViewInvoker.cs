@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
@@ -6,6 +7,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
+using PlatoCore.Layout.EmbeddedViews;
 using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
@@ -62,29 +64,32 @@ namespace PlatoCore.Layout.Views
             // It's the embedded views responsibility to perform model binding
             // Embedded views can leverage the current context within the Build method
             if (view.EmbeddedView != null)
-            {                
-                return await view.EmbeddedView
-                    .Contextualize(ViewContext)
-                    .Build();
+            {
+                return await InvokeEmbeddedViewAsync(view.EmbeddedView);
             }
 
             // View components use an anonymous type for the parameters argument
             // this anonymous type is emitted as an actual type by the compiler but
             // marked with the CompilerGeneratedAttribute. If we find this attribute
             // on the model we'll treat this view as a ViewComponent and invoke accordingly
-            if (IsViewModelAnonymousType(view.Model))
+            if (IsComponent(view.Model))
             {
                 return await InvokeViewComponentAsync(view.ViewName, view.Model);
             }
 
             // else we have a partial view
-            return await InvokePartialAsync(view.ViewName, view.Model);
+            return await InvokePartialViewAsync(view.ViewName, view.Model);
 
         }
 
-        // privates
+        // ------------------
 
-        async Task<IHtmlContent> InvokePartialAsync(string viewName, object model)
+        async Task<IHtmlContent> InvokeEmbeddedViewAsync(IEmbeddedView view)
+        {
+            return await view.Contextualize(ViewContext).InvokeAsync();
+        }
+
+        async Task<IHtmlContent> InvokePartialViewAsync(string viewName, object model)
         {
             _partialInvoker.Contextualize(ViewContext);
             return await _partialInvoker.InvokeAsync(viewName, model, ViewContext.ViewData);
@@ -123,8 +128,10 @@ namespace PlatoCore.Layout.Views
                         
         }
 
-        bool IsViewModelAnonymousType(object model)
+        bool IsComponent(object model)
         {
+
+            var test = ViewComponentConventions.IsComponent(model.GetType().GetTypeInfo());
 
             // We need a model to inspect
             if (model == null)

@@ -15,7 +15,7 @@ namespace PlatoCore.Layout.ViewHelpers
             _alert = alert;
         }
 
-        public override Task<IHtmlContent> Build()
+        public override Task<IHtmlContent> InvokeAsync()
         {
             if (_alert == null)
             {

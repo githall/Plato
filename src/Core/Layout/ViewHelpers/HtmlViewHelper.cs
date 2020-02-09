@@ -15,7 +15,7 @@ namespace PlatoCore.Layout.ViewHelpers
             _html = html;
         }
         
-        public override Task<IHtmlContent> Build()
+        public override Task<IHtmlContent> InvokeAsync()
         {
             return Task.FromResult((IHtmlContent)new HtmlString(_html));
         }
