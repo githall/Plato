@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -9,13 +8,12 @@ using PlatoCore.Data.Abstractions;
 
 namespace Plato.Entities.Metrics.Repositories
 {
-    
+
     public class EntityMetricsRepository : IEntityMetricsRepository<EntityMetric>
     {
 
         private readonly IDbContext _dbContext;
         private readonly ILogger<EntityMetricsRepository> _logger;
-
 
         public EntityMetricsRepository(
             IDbContext dbContext,
@@ -70,7 +68,7 @@ namespace Plato.Entities.Metrics.Repositories
                         }
 
                         return output;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -124,6 +122,7 @@ namespace Plato.Entities.Metrics.Repositories
 
         public async Task<bool> DeleteAsync(int id)
         {
+
             if (_logger.IsEnabled(LogLevel.Information))
             {
                 _logger.LogInformation($"Deleting metric with id: {id}");
@@ -135,7 +134,7 @@ namespace Plato.Entities.Metrics.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteEntityMetricById",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -164,7 +163,7 @@ namespace Plato.Entities.Metrics.Repositories
                 emailId = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "InsertUpdateEntityMetric",
-                    new []
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
                         new DbParam("EntityId", DbType.Int32, entityId),

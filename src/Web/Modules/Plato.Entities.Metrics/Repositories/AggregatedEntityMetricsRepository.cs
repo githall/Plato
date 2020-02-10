@@ -7,7 +7,7 @@ using PlatoCore.Models.Metrics;
 
 namespace Plato.Entities.Metrics.Repositories
 {
-    
+
     public class AggregatedEntityMetricsRepository : IAggregatedEntityMetricsRepository
     {
 
@@ -185,9 +185,8 @@ namespace Plato.Entities.Metrics.Repositories
                 return output;
             });
 
-
         }
-        
+
     }
 
 }

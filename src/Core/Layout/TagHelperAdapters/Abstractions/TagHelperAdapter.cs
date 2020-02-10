@@ -2,7 +2,8 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 
-namespace PlatoCore.Layout.TagHelperAdapters.Abstractions{
+namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
+{
 
     public interface ITagHelperAdapter
     {
