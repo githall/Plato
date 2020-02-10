@@ -14,10 +14,8 @@ namespace Plato.Discuss.ViewComponents
   
     public class GetTopicListViewComponent : ViewComponentBase
     {
-        
-      
+
         private readonly IAuthorizationService _authorizationService;
-       
         private readonly IEntityService<Topic> _entityService;
 
         public GetTopicListViewComponent(
@@ -43,10 +41,8 @@ namespace Plato.Discuss.ViewComponents
                 pager = new PagerOptions();
             }
 
-            var viewModel = await GetViewModel(options, pager);
-
             // Review view
-            return View(viewModel);
+            return View(await GetViewModel(options, pager));
 
         }
         

@@ -197,7 +197,7 @@ namespace Plato.Discuss.Labels.ViewAdapters
 
         }
 
-        private async Task<IPagedResults<Topic>> GetDisplayedEntitiesAsync()
+        private Task<IPagedResults<Topic>> GetDisplayedEntitiesAsync()
         {
 
             // Get topic index view model from context
@@ -207,41 +207,48 @@ namespace Plato.Discuss.Labels.ViewAdapters
                 return null;
             }
 
-            // Get all entities for our current view
-            return await _entityService
-                .ConfigureQuery(async q =>
-                {
+            if (viewModel.Results == null)
+            {
+                return null;
+            }
 
-                    // Hide private?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewPrivateTopics))
-                    {
-                        q.HidePrivate.True();
-                    }
+            return Task.FromResult(viewModel.Results);
 
-                    // Hide hidden?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewHiddenTopics))
-                    {
-                        q.HideHidden.True();
-                    }
+            //// Get all entities for our current view
+            //return await _entityService
+            //    .ConfigureQuery(async q =>
+            //    {
 
-                    // Hide spam?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewSpamTopics))
-                    {
-                        q.HideSpam.True();
-                    }
+            //        // Hide private?
+            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+            //            Permissions.ViewPrivateTopics))
+            //        {
+            //            q.HidePrivate.True();
+            //        }
 
-                    // Hide deleted?
-                    if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-                        Permissions.ViewDeletedTopics))
-                    {
-                        q.HideDeleted.True();
-                    }
+            //        // Hide hidden?
+            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+            //            Permissions.ViewHiddenTopics))
+            //        {
+            //            q.HideHidden.True();
+            //        }
 
-                })
-                .GetResultsAsync(viewModel?.Options, viewModel?.Pager);
+            //        // Hide spam?
+            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+            //            Permissions.ViewSpamTopics))
+            //        {
+            //            q.HideSpam.True();
+            //        }
+
+            //        // Hide deleted?
+            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
+            //            Permissions.ViewDeletedTopics))
+            //        {
+            //            q.HideDeleted.True();
+            //        }
+
+            //    })
+            //    .GetResultsAsync(viewModel?.Options, viewModel?.Pager);
 
         }
 

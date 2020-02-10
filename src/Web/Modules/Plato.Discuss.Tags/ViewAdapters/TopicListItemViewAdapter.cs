@@ -11,6 +11,7 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Layout.ViewAdapters;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Discuss.Tags.ViewAdapters
 {
@@ -112,18 +113,22 @@ namespace Plato.Discuss.Tags.ViewAdapters
         
         async Task<IDictionary<int, IList<EntityTag>>> BuildLookUpTable()
         {
-            
-            // Get index view model from context
-            var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
+
+
+           // Get index view model from context
+           var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
             if (viewModel == null)
             {
                 return null;
             }
 
+            if (viewModel.Results == null)
+            {
+                return null;
+            }
+
             // Get all entities for our current view
-            var entities = await _entityService.GetResultsAsync(
-                viewModel?.Options, 
-                viewModel?.Pager);
+            var entities = viewModel.Results;
 
             // Get all entity tag relationships for displayed entities
             IPagedResults<EntityTag> entityTags = null;

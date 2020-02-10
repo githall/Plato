@@ -6,22 +6,12 @@ using Plato.Entities.ViewModels;
 using PlatoCore.Layout.ViewAdapters;
 using System.Collections.Generic;
 using PlatoCore.Data.Abstractions;
-using Plato.Entities.Services;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc.Localization;
-using PlatoCore.Security.Abstractions;
 using PlatoCore.Layout.Models;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.Views;
-using Microsoft.AspNetCore.Mvc.ModelBinding;
-using Microsoft.AspNetCore.Mvc.ViewFeatures;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
-using PlatoCore.Layout;
-using PlatoCore.Layout.ModelBinding;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Discuss.New.ViewAdapters
 {
@@ -29,43 +19,25 @@ namespace Plato.Discuss.New.ViewAdapters
     public class TopicListItemViewAdapter : BaseAdapterProvider
     {
 
-        private readonly IDbHelper _dbHelper;
         private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly IAuthorizationService _authorizationService;        
-        private readonly IHttpContextAccessor _httpContextAccessor;    
-        private readonly IEntityService<Topic> _entityService;
         private readonly IContextFacade _contextFacade;
-
-        private readonly IUpdateModelAccessor _updateModelAccessor;
-
-        private readonly IModelMetadataProvider _modelMetadataProvider;
-        private readonly ILayoutModelAccessor _layoutModelAccesssor;
+        private readonly IDbHelper _dbHelper;
+        private readonly IModelCollection _modelCollection;
 
         public IHtmlLocalizer T { get; }
 
         public TopicListItemViewAdapter(
             IHtmlLocalizer<TopicListItemViewAdapter> localizer,
             IActionContextAccessor actionContextAccessor,
-            IAuthorizationService authorizationService,
-            IHttpContextAccessor httpContextAccessor,
-            IEntityService<Topic> entityService,           
-            IContextFacade contextFacade,
-            IModelMetadataProvider modelMetadataProvider,      
-            ILayoutModelAccessor layoutModelAccesssor,
-            IUpdateModelAccessor updateModelAccessor,
+            IModelCollection modelCollection,
+            IContextFacade contextFacade,     
             IDbHelper dbHelper)
         {
 
-            _actionContextAccessor = actionContextAccessor;
-            _authorizationService = authorizationService;
-            _httpContextAccessor = httpContextAccessor;      
-            _entityService = entityService;
+            _modelCollection = modelCollection;
+            _actionContextAccessor = actionContextAccessor;        
             _contextFacade = contextFacade;
-            _dbHelper = dbHelper;
-            _modelMetadataProvider = modelMetadataProvider;   
-
-            _layoutModelAccesssor = layoutModelAccesssor;
-            _updateModelAccessor = updateModelAccessor;
+            _dbHelper = dbHelper;    
 
             T = localizer;
             ViewName = "TopicListItem";
@@ -209,7 +181,13 @@ namespace Plato.Discuss.New.ViewAdapters
 
         private Task<IPagedResults<Topic>> GetDisplayedEntitiesAsync()
         {
-            
+
+            var model = _modelCollection.FirstOf<EntityIndexViewModel<Topic>>();
+            if (model == null)
+            {
+                return null;
+            }
+
             // Get topic index view model from context
             var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
             if (viewModel == null)

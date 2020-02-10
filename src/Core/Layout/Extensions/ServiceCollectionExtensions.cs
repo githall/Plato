@@ -18,6 +18,7 @@ using PlatoCore.Layout.TagHelpers;
 using PlatoCore.Layout.Theming;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewComponentFilters;
 using PlatoCore.Layout.Views;
 using PlatoCore.Layout.Views.Abstractions;
 
@@ -57,15 +58,20 @@ namespace PlatoCore.Layout.Extensions
             // Action filters
             services.Configure<MvcOptions>(options =>
             {
-                options.Filters.Add(typeof(ModelBinderAccessorFilter));
-                options.Filters.Add(typeof(LayoutModelAccessorFilter));
+                options.Filters.Add(typeof(ModelBinderAccessorFilter));          
+                options.Filters.Add(typeof(ControllerModelFilter));
                 options.Filters.Add(typeof(AlertFilter));
                 options.Filters.Add(typeof(ModularFilter));                
             });
 
+            // View component filters
+            services.AddScoped<IViewComponentFilter, ViewComponentModelFilter>();
+
             // Model binding model accessor
             services.AddScoped<IUpdateModelAccessor, LocalModelBinderAccessor>();
-            services.AddScoped<ILayoutModelAccessor, LocalLayoutModelAccessor>();
+   
+            // Model collection available throughout the entire request
+            services.AddScoped<IModelCollection, ModelCollection>();
 
             // Alerter
             services.AddScoped<IAlerter, Alerter>();

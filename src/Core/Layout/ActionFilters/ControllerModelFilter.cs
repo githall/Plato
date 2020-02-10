@@ -1,34 +1,38 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using PlatoCore.Layout.Views.Abstractions;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace PlatoCore.Layout.ActionFilters
 {
-
-    public class LayoutModelAccessorFilter : IActionFilter
+    public class ControllerModelFilter : IActionFilter
     {
         public void OnActionExecuted(ActionExecutedContext context)
         {
+
             // The controller action didn't return a view result so no need to continue execution
             var result = context.Result as ViewResult;
-
-            // Check early to ensure we are working with a LayoutViewModel
-            var model = result?.Model as LayoutViewModel;
-            if (model == null)
+            if (result == null)
             {
                 return;
             }
 
-            // Update accessor
-            var layoutModelAccessor = context.HttpContext.RequestServices.GetRequiredService<ILayoutModelAccessor>();
-            layoutModelAccessor.LayoutViewModel = model;
+            if (result.Model == null)
+            {
+                return;
+            }
+
+            var controller = context.Controller as Controller;
+            if (controller != null)
+            {
+                var modelCollection = controller.HttpContext.RequestServices.GetService<IModelCollection>();
+                modelCollection.AddOrUpdate(result.Model);               
+            }
 
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
-        {
-       
-         
+        {      
         }
 
     }

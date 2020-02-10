@@ -6,8 +6,6 @@ using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters;
 using Plato.Discuss.New.ViewAdapters;
-using Plato.Discuss.New.ViewComponentFilters;
-using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Demo
 {
@@ -26,9 +24,7 @@ namespace Plato.Demo
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, TopicListItemViewAdapter>();
 
-            // View component filters
-            services.AddScoped<IViewComponentFilter, TestViewComponentFilter>();
-
+       
         }
 
         public override void Configure(
