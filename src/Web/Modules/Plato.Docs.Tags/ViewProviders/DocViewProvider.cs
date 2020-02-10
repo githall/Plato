@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Docs.Models;
 using Plato.Docs.Tags.Models;
 using Plato.Entities.Stores;
@@ -20,7 +20,7 @@ using Plato.Tags.ViewModels;
 namespace Plato.Docs.Tags.ViewProviders
 {
 
-    public class DocViewProvider : BaseViewProvider<Doc>
+    public class DocViewProvider : ViewProviderBase<Doc>
     {
 
         private const string ModuleId = "Plato.Docs";

@@ -10,6 +10,7 @@ using Plato.Docs.Models;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
 using Plato.Docs.Categories.Roles.Handlers;

@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Questions.Models;
 using Plato.Questions.Tags.Models;
 using Plato.Entities.Stores;
@@ -20,7 +20,7 @@ using Plato.Tags.ViewModels;
 
 namespace Plato.Questions.Tags.ViewProviders
 {
-    public class QuestionViewProvider : BaseViewProvider<Question>
+    public class QuestionViewProvider : ViewProviderBase<Question>
     {
 
         private const string ModuleId = "Plato.Questions";

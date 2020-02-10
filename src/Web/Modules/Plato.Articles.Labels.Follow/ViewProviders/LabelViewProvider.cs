@@ -3,13 +3,13 @@ using Plato.Articles.Labels.Models;
 using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Labels.Stores;
 
 namespace Plato.Articles.Labels.Follow.ViewProviders
 {
 
-    public class LabelViewProvider : BaseViewProvider<Label>
+    public class LabelViewProvider : ViewProviderBase<Label>
     {
 
         private readonly IFollowStore<Follows.Models.Follow> _followStore;

@@ -17,13 +17,13 @@ using Plato.Docs.Services;
 using Plato.Entities.Stores;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Docs.Categories.ViewProviders
 {
-    public class DocViewProvider : BaseViewProvider<Doc>
+    public class DocViewProvider : ViewProviderBase<Doc>
     {
 
         private const string CategoryHtmlName = "category";

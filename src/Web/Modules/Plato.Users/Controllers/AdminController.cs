@@ -11,7 +11,7 @@ using Microsoft.Extensions.Localization;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using Plato.Users.ViewModels;
 using PlatoCore.Layout.ModelBinding;

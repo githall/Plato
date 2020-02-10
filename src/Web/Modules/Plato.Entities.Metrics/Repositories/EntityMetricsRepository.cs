@@ -16,6 +16,7 @@ namespace Plato.Entities.Metrics.Repositories
         private readonly IDbContext _dbContext;
         private readonly ILogger<EntityMetricsRepository> _logger;
 
+
         public EntityMetricsRepository(
             IDbContext dbContext,
             ILogger<EntityMetricsRepository> logger)

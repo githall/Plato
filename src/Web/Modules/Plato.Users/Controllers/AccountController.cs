@@ -14,7 +14,7 @@ using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;

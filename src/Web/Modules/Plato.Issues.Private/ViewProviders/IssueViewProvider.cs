@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Navigation.Abstractions;
@@ -12,7 +12,7 @@ using Plato.Issues.Private.ViewModels;
 
 namespace Plato.Issues.Private.ViewProviders
 {
-    public class IssueViewProvider : BaseViewProvider<Issue>
+    public class IssueViewProvider : ViewProviderBase<Issue>
     {
 
         public static string HtmlName = "visibility";

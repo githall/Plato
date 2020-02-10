@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 
 namespace PlatoCore.Layout.ViewAdapters
 {
@@ -11,7 +12,7 @@ namespace PlatoCore.Layout.ViewAdapters
 
         private readonly IEnumerable<IViewAdapterProvider> _viewAdapterProviders;
         private readonly ILogger<ViewAdapterManager> _logger;
-   
+
         public ViewAdapterManager(
             IEnumerable<IViewAdapterProvider> viewAdapterProviders, 
             ILogger<ViewAdapterManager> logger)
@@ -22,7 +23,7 @@ namespace PlatoCore.Layout.ViewAdapters
 
         public async Task<IEnumerable<IViewAdapterResult>> GetViewAdaptersAsync(string viewName)
         {
-            
+
             List<IViewAdapterResult> matchingAdapterResults = null;
             foreach (var provider in _viewAdapterProviders)
             {

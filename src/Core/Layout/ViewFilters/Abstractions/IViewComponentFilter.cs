@@ -1,7 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 
-namespace PlatoCore.Layout.Views.Abstractions
+namespace PlatoCore.Layout.ViewFilters.Abstractions
 {
 
     public class ViewComponentExecutingContext

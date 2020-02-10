@@ -15,6 +15,7 @@ using PlatoCore.Abstractions.Routing;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Localization.Abstractions.Models;
 

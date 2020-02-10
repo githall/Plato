@@ -8,6 +8,7 @@ using Plato.Features.Updates.Services;
 using Plato.Features.Updates.ViewModels;
 using Plato.Features.Updates.ViewProviders;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;

@@ -11,11 +11,11 @@ using Plato.Docs.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Docs.Categories.ViewProviders
 {
-    public class CategoryViewProvider : BaseViewProvider<Category>
+    public class CategoryViewProvider : ViewProviderBase<Category>
     {
 
         private readonly IContextFacade _contextFacade;

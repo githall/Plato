@@ -7,6 +7,7 @@ using PlatoCore.Hosting.Abstractions;
 using Plato.Reports.FeatureViews.Navigation;
 using Plato.Reports.FeatureViews.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Reports.FeatureViews.Models;
 

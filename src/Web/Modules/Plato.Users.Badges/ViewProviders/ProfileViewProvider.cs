@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PlatoCore.Badges.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Badges;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Badges;
@@ -11,7 +11,7 @@ using Plato.Users.Badges.ViewModels;
 namespace Plato.Users.Badges.ViewProviders
 {
 
-    public class ProfileViewProvider : BaseViewProvider<ProfilePage>
+    public class ProfileViewProvider : ViewProviderBase<ProfilePage>
     {
         
         private readonly IPlatoUserStore<User> _platoUserStore;

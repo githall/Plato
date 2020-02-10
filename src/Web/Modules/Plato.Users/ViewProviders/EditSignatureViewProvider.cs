@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Users;
 using Plato.Users.Services;
@@ -11,7 +11,7 @@ using Plato.Users.ViewModels;
 namespace Plato.Users.ViewProviders
 {
 
-    public class EditSignatureViewProvider : BaseViewProvider<EditSignatureViewModel>
+    public class EditSignatureViewProvider : ViewProviderBase<EditSignatureViewModel>
     {
         
         private readonly IPlatoUserStore<User> _platoUserStore;

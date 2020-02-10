@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using PlatoCore.Layout.ModelBinding;
 
-namespace PlatoCore.Layout.ViewProviders
+namespace PlatoCore.Layout.ViewProviders.Abstractions
 {
 
     public interface IViewProvider<in TModel> where TModel : class

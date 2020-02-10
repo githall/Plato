@@ -10,12 +10,12 @@ namespace PlatoCore.Repositories.Metrics
     
     public class AggregatedUserRepository : IAggregatedUserRepository
     {
-      
-        private readonly IDbHelper _dbHelper;
+
+        public IDbHelper DbHelper { get; }
 
         public AggregatedUserRepository(IDbHelper dbHelper)
         {
-            _dbHelper = dbHelper;
+            DbHelper = dbHelper;
         }
 
         public async Task<AggregatedResult<DateTimeOffset>> SelectGroupedByDateAsync(
@@ -48,7 +48,7 @@ namespace PlatoCore.Repositories.Metrics
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<DateTimeOffset>();
                 while (await reader.ReadAsync())
@@ -134,7 +134,7 @@ namespace PlatoCore.Repositories.Metrics
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<string>();
                 while (await reader.ReadAsync())

@@ -5,13 +5,13 @@ using Plato.Site.Demo.Models;
 using Plato.Site.Demo.Stores;
 using Plato.Site.Demo.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Security.Abstractions.Encryption;
 
 namespace Plato.Site.Demo.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<DemoSettings>
+    public class AdminViewProvider : ViewProviderBase<DemoSettings>
     {
 
         private readonly IDemoSettingsStore<DemoSettings> _demoSettingsStore;        

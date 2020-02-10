@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
 using PlatoCore.Notifications;

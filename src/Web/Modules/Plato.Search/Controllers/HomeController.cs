@@ -10,7 +10,7 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Search.Models;
 using Plato.Search.Stores;

@@ -11,7 +11,7 @@ using Plato.Entities.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Search.Models;
@@ -20,7 +20,7 @@ using Plato.Search.Stores;
 
 namespace Plato.Discuss.SimilarTopics.ViewProviders
 {
-    public class TopicViewProvider : BaseViewProvider<Topic>
+    public class TopicViewProvider : ViewProviderBase<Topic>
     {
 
         private readonly ISearchSettingsStore<SearchSettings> _searchSettingsStore;

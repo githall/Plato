@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Labels.Stores;

@@ -8,12 +8,12 @@ using Plato.Follows.Services;
 using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Ideas.Follow.ViewProviders
 {
-    public class IdeaViewProvider : BaseViewProvider<Idea>
+    public class IdeaViewProvider : ViewProviderBase<Idea>
     {
 
         private const string FollowHtmlName = "follow";

@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using PlatoCore.Abstractions.Extensions;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 
 namespace PlatoCore.Layout.ViewAdapters
 {
@@ -52,39 +53,6 @@ namespace PlatoCore.Layout.ViewAdapters
             }
             return this;
         }
-
-        //public IViewAdapterBuilder AdaptModel<TModel>(Func<TModel, object> alteration) where TModel : class
-        //{
-        //    if (alteration == null)
-        //    {
-        //        throw new NullReferenceException(nameof(alteration));
-        //    }
-            
-        //    // wrapper to convert delegates generic argument type
-        //    // to concrete type (object) for storage within adapter result
-        //    var typedDelegate = new Func<object, object>((object input) =>
-        //    {
-
-        //        // use first argument from anonymous type as model
-        //        // todo: implement support for multiple arguments within anonymous types
-        //        if (IsViewModelAnonymousType(input))
-        //        {
-        //            var args = new List<object>();
-        //            var properties = TypeDescriptor.GetProperties(input);
-        //            foreach (PropertyDescriptor property in properties)
-        //            {
-        //                args.Add(property.GetValue(input));
-        //            }
-        //            return alteration((TModel)args[0]);
-        //        }
-
-        //        return alteration((TModel) input);
-
-        //    });
-
-        //    _viewAdapterResult.ModelAlterations.Add(typedDelegate);
-        //    return this;
-        //}
 
         public IViewAdapterBuilder AdaptModel<TModel>(Func<TModel, Task<object>> alteration) where TModel : class
         {
@@ -136,6 +104,8 @@ namespace PlatoCore.Layout.ViewAdapters
             _viewAdapterResult.ModelAlterations.Add(typedDelegate);
             return this;
         }
+
+        // ----------------
 
         bool IsViewModelAnonymousType(object model)
         {

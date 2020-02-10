@@ -3,7 +3,7 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.StopForumSpam.Models;
 using Plato.StopForumSpam.Services;
 using Plato.StopForumSpam.Stores;
@@ -11,7 +11,7 @@ using Plato.StopForumSpam.ViewModels;
 
 namespace Plato.StopForumSpam.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<SpamSettings>
+    public class AdminViewProvider : ViewProviderBase<SpamSettings>
     {
 
         private readonly ISpamSettingsStore<SpamSettings> _recaptchaSettingsStore;

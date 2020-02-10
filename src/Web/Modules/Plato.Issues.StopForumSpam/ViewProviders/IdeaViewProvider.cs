@@ -1,13 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Plato.Issues.Models;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.StopForumSpam.Services;
 
 namespace Plato.Issues.StopForumSpam.ViewProviders
 {
 
-    public class IdeaViewProvider : BaseViewProvider<Issue>
+    public class IdeaViewProvider : ViewProviderBase<Issue>
     {
         private readonly ISpamOperatorManager<Issue> _spamOperatorManager;
  

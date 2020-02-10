@@ -13,11 +13,11 @@ using Plato.Issues.Categories.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Issues.Categories.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<CategoryAdmin>
+    public class AdminViewProvider : ViewProviderBase<CategoryAdmin>
     {
         
         private readonly IContextFacade _contextFacade;

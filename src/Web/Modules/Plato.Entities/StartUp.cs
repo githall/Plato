@@ -20,6 +20,7 @@ using Plato.Entities.ViewProviders;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Data.Migrations.Abstractions;
 using PlatoCore.Layout.ActionFilters;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Users;

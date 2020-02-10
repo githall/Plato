@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using Plato.Site.Demo.Models;
 using Plato.Site.Demo.ViewModels;
@@ -10,7 +10,7 @@ using Plato.Users.ViewModels;
 
 namespace Plato.Site.Demo.ViewProviders
 {
-    public class LoginViewProvider : BaseViewProvider<LoginPage>
+    public class LoginViewProvider : ViewProviderBase<LoginPage>
     {
         
         public IHtmlLocalizer T { get; }

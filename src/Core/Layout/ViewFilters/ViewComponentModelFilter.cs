@@ -1,6 +1,6 @@
-﻿using PlatoCore.Layout.Views.Abstractions;
+﻿using PlatoCore.Layout.ViewFilters.Abstractions;
 
-namespace PlatoCore.Layout.ViewComponentFilters
+namespace PlatoCore.Layout.ViewFilters
 {
 
     /// <summary>

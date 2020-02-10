@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Stores.Abstractions.Settings;
 using PlatoCore.Text.Abstractions;
@@ -10,7 +10,7 @@ using Plato.WebApi.ViewModels;
 
 namespace Plato.WebApi.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<WebApiSettings>
+    public class AdminViewProvider : ViewProviderBase<WebApiSettings>
     {
 
         private readonly ISiteSettingsStore _siteSettingsStore;

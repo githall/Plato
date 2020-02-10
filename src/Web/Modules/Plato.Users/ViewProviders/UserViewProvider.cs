@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Hosting;
 using PlatoCore.FileSystem.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Files;
@@ -12,7 +12,7 @@ using Plato.Users.ViewModels;
 
 namespace Plato.Users.ViewProviders
 {
-    public class UserViewProvider : BaseViewProvider<ProfilePage>
+    public class UserViewProvider : ViewProviderBase<ProfilePage>
     {
   
         private readonly UserManager<User> _userManager;

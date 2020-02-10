@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Plato.Features.Updates.ViewModels;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Features.Updates.ViewProviders
 {
     
-    public class AdminViewProvider : BaseViewProvider<FeatureUpdatesViewModel>
+    public class AdminViewProvider : ViewProviderBase<FeatureUpdatesViewModel>
     {
 
         public override Task<IViewProviderResult> BuildDisplayAsync(FeatureUpdatesViewModel model, IViewProviderContext updater)

@@ -3,12 +3,12 @@ using Plato.Docs.Models;
 using Plato.Stars.Stores;
 using Plato.Stars.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Docs.Star.ViewProviders
 {
 
-    public class DocViewProvider : BaseViewProvider<Doc>
+    public class DocViewProvider : ViewProviderBase<Doc>
     {
 
         private const string StarHtmlName = "star";

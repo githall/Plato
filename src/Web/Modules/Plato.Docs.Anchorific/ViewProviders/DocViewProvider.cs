@@ -1,12 +1,12 @@
 ﻿using System.Threading.Tasks;
 using Plato.Docs.Models;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Docs.Anchorific.ViewModels;
 
 namespace Plato.Docs.Anchorific.ViewProviders
 {
 
-    public class DocViewProvider : BaseViewProvider<Doc>
+    public class DocViewProvider : ViewProviderBase<Doc>
     {
 
         public DocViewProvider()

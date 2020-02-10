@@ -11,12 +11,11 @@ namespace Plato.Entities.Repositories
     public class AggregatedEntityRepository : IAggregatedEntityRepository
     {
 
-        private readonly IDbHelper _dbHelper;
-
+        public IDbHelper DbHelper { get; }
 
         public AggregatedEntityRepository(IDbHelper dbHelper)
         {
-            _dbHelper = dbHelper;
+            DbHelper = dbHelper;
         }
         
         // ----------------
@@ -49,7 +48,7 @@ namespace Plato.Entities.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<DateTimeOffset>();
                 while (await reader.ReadAsync())
@@ -93,7 +92,7 @@ namespace Plato.Entities.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<DateTimeOffset>();
                 while (await reader.ReadAsync())

@@ -8,10 +8,10 @@ using Plato.Docs.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Labels.Models;
 using Plato.Labels.Stores;
-using Label = Plato.Docs.Labels.Models.Label;
+using Plato.Docs.Labels.Models;
 
 namespace Plato.Docs.Labels.ViewAdapters
 {

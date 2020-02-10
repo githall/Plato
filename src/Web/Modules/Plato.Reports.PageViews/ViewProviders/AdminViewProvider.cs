@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Metrics.Models;
 using Plato.Reports.Models;
 using Plato.Reports.ViewModels;
@@ -8,7 +8,7 @@ using Plato.Reports.PageViews.Models;
 
 namespace Plato.Reports.PageViews.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<PageViewIndex>
+    public class AdminViewProvider : ViewProviderBase<PageViewIndex>
     {
 
         public override Task<IViewProviderResult> BuildIndexAsync(PageViewIndex viewReportModel, IViewProviderContext context)

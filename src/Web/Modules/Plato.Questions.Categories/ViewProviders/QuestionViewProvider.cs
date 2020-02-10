@@ -15,14 +15,14 @@ using Plato.Questions.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Questions.Categories.ViewModels;
 
 namespace Plato.Questions.Categories.ViewProviders
 {
-    public class QuestionViewProvider : BaseViewProvider<Question>
+    public class QuestionViewProvider : ViewProviderBase<Question>
     {
 
         private const string CategoryHtmlName = "category";

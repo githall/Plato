@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Labels.Services;
 using Plato.Labels.Stores;
 using Plato.Labels.ViewModels;
@@ -10,7 +10,7 @@ using Plato.Discuss.Labels.ViewModels;
 
 namespace Plato.Discuss.Labels.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<LabelAdmin>
+    public class AdminViewProvider : ViewProviderBase<LabelAdmin>
     {
  
         private readonly ILabelStore<Label> _labelStore;

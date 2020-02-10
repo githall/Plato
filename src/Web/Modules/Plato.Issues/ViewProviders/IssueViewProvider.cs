@@ -5,14 +5,14 @@ using Plato.Issues.Models;
 using Plato.Issues.Services;
 using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.ViewModels;
 using Plato.Entities.Models;
 using Plato.Entities.Services;
 
 namespace Plato.Issues.ViewProviders
 {
-    public class IssueViewProvider : BaseViewProvider<Issue>
+    public class IssueViewProvider : ViewProviderBase<Issue>
     {
 
         private const string EditorHtmlName = "message";

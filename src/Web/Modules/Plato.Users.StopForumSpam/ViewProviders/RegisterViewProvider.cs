@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Net.Abstractions;
 using PlatoCore.Stores.Abstractions.Users;
@@ -8,7 +8,7 @@ using Plato.StopForumSpam.Services;
 
 namespace Plato.Users.StopForumSpam.ViewProviders
 {
-    public class RegisterViewProvider : BaseViewProvider<UserRegistration>
+    public class RegisterViewProvider : ViewProviderBase<UserRegistration>
     {
 
         private readonly IPlatoUserStore<User> _platoUserStore;

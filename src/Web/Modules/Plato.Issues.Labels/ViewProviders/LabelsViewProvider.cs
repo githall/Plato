@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Data.Abstractions;
 using Plato.Labels.Stores;
 using Plato.Labels.ViewModels;
@@ -13,7 +13,7 @@ using Plato.Issues.Models;
 namespace Plato.Issues.Labels.ViewProviders
 {
 
-    public class LabelViewProvider : BaseViewProvider<Label>
+    public class LabelViewProvider : ViewProviderBase<Label>
     {
 
         private readonly ILabelStore<Label> _labelStore;

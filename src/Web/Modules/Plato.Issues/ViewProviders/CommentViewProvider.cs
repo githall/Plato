@@ -6,12 +6,12 @@ using Plato.Issues.Services;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Issues.ViewProviders
 {
 
-    public class CommentViewProvider : BaseViewProvider<Comment>
+    public class CommentViewProvider : ViewProviderBase<Comment>
     {
 
         private const string EditorHtmlName = "message";

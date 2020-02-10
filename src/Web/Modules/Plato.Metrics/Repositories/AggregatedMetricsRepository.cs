@@ -12,11 +12,11 @@ namespace Plato.Metrics.Repositories
     public class AggregatedMetricsRepository : IAggregatedMetricsRepository
     {
 
-        private readonly IDbHelper _dbHelper;
+        public IDbHelper DbHelper { get; }
 
         public AggregatedMetricsRepository(IDbHelper dbHelper)
         {
-            _dbHelper = dbHelper;
+            DbHelper = dbHelper;
         }
 
         public async Task<AggregatedResult<DateTimeOffset>> SelectGroupedByDateAsync(string groupBy, DateTimeOffset start, DateTimeOffset end)
@@ -45,7 +45,7 @@ namespace Plato.Metrics.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<DateTimeOffset>();
                 while (await reader.ReadAsync())
@@ -88,7 +88,7 @@ namespace Plato.Metrics.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<string>();
                 while (await reader.ReadAsync())
@@ -137,7 +137,7 @@ namespace Plato.Metrics.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<string>();
                 while (await reader.ReadAsync())
@@ -150,7 +150,6 @@ namespace Plato.Metrics.Repositories
             });
 
         }
-
 
         // ----------------
         // Grouped by role
@@ -199,7 +198,7 @@ namespace Plato.Metrics.Repositories
                 SELECT [Aggregate] AS Aggregate, [Count] AS Count FROM @temp
 
             ";
-            
+
             // Sql replacements
             var replacements = new Dictionary<string, string>()
             {
@@ -209,7 +208,7 @@ namespace Plato.Metrics.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<string>();
                 while (await reader.ReadAsync())

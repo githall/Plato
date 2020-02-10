@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace PlatoCore.Layout.ViewAdapters
+namespace PlatoCore.Layout.ViewAdapters.Abstractions
 {
 
     public interface IViewAdapterManager

@@ -3,13 +3,13 @@ using Plato.Discuss.Tags.Models;
 using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;
 
 namespace Plato.Discuss.Tags.Follow.ViewProviders
 {
-    public class TagViewProvider : BaseViewProvider<Tag>
+    public class TagViewProvider : ViewProviderBase<Tag>
     {
 
         private readonly IFollowStore<Follows.Models.Follow> _followStore;

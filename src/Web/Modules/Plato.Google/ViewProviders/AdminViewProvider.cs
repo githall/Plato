@@ -5,7 +5,7 @@ using Plato.Google.Models;
 using Plato.Google.Stores;
 using Plato.Google.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions.Settings;
@@ -13,7 +13,7 @@ using PlatoCore.Security.Abstractions.Encryption;
 
 namespace Plato.Google.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<PlatoGoogleSettings>
+    public class AdminViewProvider : ViewProviderBase<PlatoGoogleSettings>
     {
 
         private readonly IGoogleSettingsStore<PlatoGoogleSettings> _googleSettingsStore;        

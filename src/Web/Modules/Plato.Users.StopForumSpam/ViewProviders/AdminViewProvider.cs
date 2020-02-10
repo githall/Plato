@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using Plato.StopForumSpam.Services;
 using Plato.Users.StopForumSpam.ViewModels;
 
 namespace Plato.Users.StopForumSpam.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<User>
+    public class AdminViewProvider : ViewProviderBase<User>
     {
 
     

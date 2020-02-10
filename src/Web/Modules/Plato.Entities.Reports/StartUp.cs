@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Admin.Models;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Entities.Reports.ViewProviders;
 

@@ -5,7 +5,7 @@ using Microsoft.Extensions.Localization;
 using Plato.Questions.Models;
 using PlatoCore.Layout;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Layout.Alerts;
 

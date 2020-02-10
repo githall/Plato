@@ -10,6 +10,7 @@ using PlatoCore.Features.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Articles.Share.Handlers;
 using Plato.Articles.Share.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 

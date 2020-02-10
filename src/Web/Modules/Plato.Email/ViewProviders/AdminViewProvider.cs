@@ -7,13 +7,13 @@ using Plato.Email.ViewModels;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Emails.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Security.Abstractions.Encryption;
 
 namespace Plato.Email.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<EmailSettings>
+    public class AdminViewProvider : ViewProviderBase<EmailSettings>
     {
 
         private readonly IEmailSettingsStore<EmailSettings> _emailSettingsStore;        

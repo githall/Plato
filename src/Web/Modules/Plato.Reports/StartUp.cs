@@ -6,6 +6,7 @@ using Plato.Admin.Models;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Reports.Assets;

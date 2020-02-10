@@ -12,6 +12,7 @@ using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Models.Roles;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Users;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Reputations;

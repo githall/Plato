@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Plato.Theming.Models;
 using Plato.Theming.ViewModels;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Theming.Abstractions;
 
 namespace Plato.Theming.ViewProviders
 {
     
-    public class AdminViewProvider : BaseViewProvider<ThemeAdmin>
+    public class AdminViewProvider : ViewProviderBase<ThemeAdmin>
     {
 
         private readonly ISiteThemeLoader _siteThemeLoader;

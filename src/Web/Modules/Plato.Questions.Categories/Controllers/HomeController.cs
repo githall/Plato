@@ -14,7 +14,7 @@ using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Questions.Categories.Controllers

@@ -3,14 +3,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Plato.Articles.Models;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.ViewModels;
 using Plato.Entities.Models;
 using Plato.Entities.Services;
 
 namespace Plato.Articles.ViewProviders
 {
-    public class ArticleViewProvider : BaseViewProvider<Article>
+    public class ArticleViewProvider : ViewProviderBase<Article>
     {
 
         private const string EditorHtmlName = "message";

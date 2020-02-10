@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views

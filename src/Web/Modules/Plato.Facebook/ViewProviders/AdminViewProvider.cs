@@ -5,7 +5,7 @@ using Plato.Facebook.Models;
 using Plato.Facebook.Stores;
 using Plato.Facebook.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Abstractions.Settings;
 using Microsoft.Extensions.Options;
@@ -13,7 +13,7 @@ using PlatoCore.Security.Abstractions.Encryption;
 
 namespace Plato.Facebook.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<PlatoFacebookSettings>
+    public class AdminViewProvider : ViewProviderBase<PlatoFacebookSettings>
     {
 
         private readonly IFacebookSettingsStore<PlatoFacebookSettings> _facebookSettingsStore;        

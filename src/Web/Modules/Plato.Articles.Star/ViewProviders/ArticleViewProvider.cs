@@ -3,11 +3,11 @@ using Plato.Articles.Models;
 using Plato.Stars.Stores;
 using Plato.Stars.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Articles.Star.ViewProviders
 {
-    public class ArticleViewProvider : BaseViewProvider<Article>
+    public class ArticleViewProvider : ViewProviderBase<Article>
     {
         
         private readonly IStarStore<Stars.Models.Star> _starStore;

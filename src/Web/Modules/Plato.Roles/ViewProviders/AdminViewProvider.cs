@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Roles;
 using PlatoCore.Models.Users;
 using PlatoCore.Navigation.Abstractions;
@@ -17,7 +17,7 @@ using Plato.Roles.ViewModels;
 
 namespace Plato.Roles.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<Role>
+    public class AdminViewProvider : ViewProviderBase<Role>
     {
 
         private readonly IDummyClaimsPrincipalFactory<User> _claimsPrincipalFactory;

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 
-namespace PlatoCore.Layout.ViewAdapters
+namespace PlatoCore.Layout.ViewAdapters.Abstractions
 {
-    
-    public class ViewAdapterResult : IViewAdapterResult 
+
+    public class ViewAdapterResult : IViewAdapterResult
     {
 
         private IList<Func<IHtmlContent, IHtmlContent>> _outputAlterations;

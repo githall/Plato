@@ -3,11 +3,11 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using Plato.Articles.Models;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Articles.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<AdminIndex>
+    public class AdminViewProvider : ViewProviderBase<AdminIndex>
     {
 
         public override Task<IViewProviderResult> BuildIndexAsync(AdminIndex viewModel, IViewProviderContext context)

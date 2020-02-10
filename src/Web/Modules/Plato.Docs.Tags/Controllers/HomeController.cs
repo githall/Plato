@@ -7,7 +7,7 @@ using Plato.Docs.Tags.Models;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tags.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;

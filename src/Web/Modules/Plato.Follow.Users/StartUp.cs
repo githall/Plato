@@ -7,6 +7,7 @@ using Plato.Follow.Users.Subscribers;
 using Plato.Follow.Users.ViewProviders;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Users;

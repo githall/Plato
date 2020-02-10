@@ -7,7 +7,7 @@ using Plato.Ideas.Categories.Models;
 using Plato.Ideas.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 
 namespace Plato.Ideas.Categories.ViewAdapters
 {

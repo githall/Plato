@@ -5,7 +5,7 @@ using Plato.Articles.Categories.Models;
 using Plato.Articles.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using System;
 using System.Collections.Generic;
 

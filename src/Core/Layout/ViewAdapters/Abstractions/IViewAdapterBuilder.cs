@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 
-namespace PlatoCore.Layout.ViewAdapters
+namespace PlatoCore.Layout.ViewAdapters.Abstractions
 {
     public interface IViewAdapterBuilder
     {

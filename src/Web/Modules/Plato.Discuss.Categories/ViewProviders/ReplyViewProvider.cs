@@ -8,12 +8,12 @@ using Plato.Categories.Stores;
 using Plato.Discuss.Categories.Models;
 using Plato.Discuss.Models;
 using Plato.Entities.Stores;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Discuss.Categories.ViewProviders
 {
-    public class ReplyViewProvider : BaseViewProvider<Reply>
+    public class ReplyViewProvider : ViewProviderBase<Reply>
     {
 
         private readonly IEntityStore<Topic> _entityStore;

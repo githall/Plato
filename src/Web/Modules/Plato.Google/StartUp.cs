@@ -11,6 +11,7 @@ using Plato.Google.Stores;
 using Plato.Google.ViewProviders;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;

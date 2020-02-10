@@ -6,12 +6,12 @@ using Plato.Questions.Services;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Questions.ViewProviders
 {
 
-    public class AnswerViewProvider : BaseViewProvider<Answer>
+    public class AnswerViewProvider : ViewProviderBase<Answer>
     {
 
         private const string EditorHtmlName = "message";

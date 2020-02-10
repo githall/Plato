@@ -11,7 +11,7 @@ using Plato.Discuss.Categories.Moderators.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Models.Users;
 using PlatoCore.Navigation.Abstractions;
@@ -23,7 +23,7 @@ using Plato.WebApi.Models;
 
 namespace Plato.Discuss.Categories.Moderators.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<Moderator>
+    public class AdminViewProvider : ViewProviderBase<Moderator>
     {
 
         private readonly IContextFacade _contextFacade;

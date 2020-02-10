@@ -15,7 +15,7 @@ using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 

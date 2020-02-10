@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Plato.Discuss.Models;
 using Plato.Entities.ViewModels;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using System.Collections.Generic;
 using PlatoCore.Data.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;

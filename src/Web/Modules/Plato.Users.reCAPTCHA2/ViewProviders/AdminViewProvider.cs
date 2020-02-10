@@ -2,14 +2,14 @@
 using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Users.reCAPTCHA2.Models;
 using Plato.Users.reCAPTCHA2.Stores;
 using Plato.Users.reCAPTCHA2.ViewModels;
 
 namespace Plato.Users.reCAPTCHA2.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<ReCaptchaSettings>
+    public class AdminViewProvider : ViewProviderBase<ReCaptchaSettings>
     {
 
         private readonly IReCaptchaSettingsStore<ReCaptchaSettings> _recaptchaSettingsStore;

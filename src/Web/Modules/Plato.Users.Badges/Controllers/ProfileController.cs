@@ -7,7 +7,7 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Badges;
 using PlatoCore.Models.Users;
 using PlatoCore.Navigation.Abstractions;

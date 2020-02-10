@@ -4,7 +4,7 @@ using Plato.Articles.Models;
 using Plato.Articles.Tags.Models;
 using Plato.Articles.Tags.ViewModels;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using Plato.Tags.Models;
@@ -13,7 +13,7 @@ using Plato.Tags.ViewModels;
 
 namespace Plato.Articles.Tags.ViewProviders
 {
-    public class TagViewProvider : BaseViewProvider<Tag>
+    public class TagViewProvider : ViewProviderBase<Tag>
     {
         
         private readonly IFeatureFacade _featureFacade;

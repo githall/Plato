@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using Plato.Authentication.Google.ViewModels;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 
 
 namespace Plato.Authentication.Google.ViewProviders
 {
-    public class LoginViewProvider : BaseViewProvider<LoginPage>
+    public class LoginViewProvider : ViewProviderBase<LoginPage>
     {
         
         public IHtmlLocalizer T { get; }

@@ -13,6 +13,7 @@ using Plato.Site.Configuration;
 using Microsoft.Extensions.Options;
 using Plato.Site.Models;
 using Plato.Site.Stores;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Site.ViewProviders;
 

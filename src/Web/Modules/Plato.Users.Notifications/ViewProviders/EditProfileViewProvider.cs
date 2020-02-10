@@ -4,7 +4,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Identity;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Models.Users;
 using PlatoCore.Notifications.Abstractions;
@@ -16,7 +16,7 @@ using Plato.Users.Notifications.ViewModels;
 namespace Plato.Users.Notifications.ViewProviders
 {
 
-    public class EditProfileViewProvider : BaseViewProvider<EditNotificationsViewModel>
+    public class EditProfileViewProvider : ViewProviderBase<EditNotificationsViewModel>
     {
 
         private readonly IUserNotificationTypeDefaults _userNotificationTypeDefaults;

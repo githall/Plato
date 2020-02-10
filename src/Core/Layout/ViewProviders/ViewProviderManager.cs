@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Layout.ModelBinding;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace PlatoCore.Layout.ViewProviders
 {

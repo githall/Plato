@@ -4,12 +4,12 @@ using Plato.Site.Models;
 using Plato.Site.Stores;
 using Plato.Site.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 
 namespace Plato.Site.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<PlatoSiteSettings>
+    public class AdminViewProvider : ViewProviderBase<PlatoSiteSettings>
     {
 
         private readonly IPlatoSiteSettingsStore<PlatoSiteSettings> _demoSettingsStore;        

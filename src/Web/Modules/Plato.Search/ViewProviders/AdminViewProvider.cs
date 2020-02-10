@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using Plato.Search.Models;
 using Plato.Search.Repositories;
@@ -11,7 +11,7 @@ using Plato.Search.ViewModels;
 
 namespace Plato.Search.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<SearchSettings>
+    public class AdminViewProvider : ViewProviderBase<SearchSettings>
     {
 
         private readonly ISearchSettingsStore<SearchSettings> _searchSettingsStore;

@@ -2,12 +2,12 @@
 using Plato.Core.Models;
 using Plato.Entities.Models;
 using Plato.Entities.ViewModels;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Entities.ViewProviders
 {
-    public class HomeViewProvider : BaseViewProvider<HomeIndex>
+    public class HomeViewProvider : ViewProviderBase<HomeIndex>
     {
 
         public override Task<IViewProviderResult> BuildIndexAsync(HomeIndex viewModel, IViewProviderContext context)

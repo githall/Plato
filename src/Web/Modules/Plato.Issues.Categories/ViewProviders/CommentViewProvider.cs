@@ -6,13 +6,13 @@ using Plato.Categories.Stores;
 using Plato.Issues.Categories.Models;
 using Plato.Issues.Models;
 using Plato.Entities.Stores;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Issues.Categories.ViewProviders
 {
 
-    public class CommentViewProvider : BaseViewProvider<Comment>
+    public class CommentViewProvider : ViewProviderBase<Comment>
     {
         
         private readonly ICategoryStore<Category> _categoryStore;

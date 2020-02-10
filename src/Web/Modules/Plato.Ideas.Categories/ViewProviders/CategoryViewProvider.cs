@@ -7,12 +7,12 @@ using Plato.Ideas.Categories.Models;
 using Plato.Ideas.Categories.ViewModels;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Ideas.Models;
 
 namespace Plato.Ideas.Categories.ViewProviders
 {
-    public class CategoryViewProvider : BaseViewProvider<Category>
+    public class CategoryViewProvider : ViewProviderBase<Category>
     {
         
         private readonly ICategoryStore<Category> _categoryStore;

@@ -8,6 +8,7 @@ using Plato.Ideas.Private.Navigation;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Ideas.Private.ViewProviders;
 using PlatoCore.Features.Abstractions;

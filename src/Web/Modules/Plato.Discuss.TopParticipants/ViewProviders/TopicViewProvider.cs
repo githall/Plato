@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Plato.Discuss.Models;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Discuss.TopParticipants.ViewProviders
 {
-    public class TopicViewProvider : BaseViewProvider<Topic>
+    public class TopicViewProvider : ViewProviderBase<Topic>
     {             
         
         public override Task<IViewProviderResult> BuildIndexAsync(Topic entity, IViewProviderContext context)

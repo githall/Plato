@@ -6,7 +6,7 @@ using Plato.Docs.Categories.Models;
 using Plato.Docs.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using System.Collections.Generic;
 
 namespace Plato.Docs.Categories.ViewAdapters

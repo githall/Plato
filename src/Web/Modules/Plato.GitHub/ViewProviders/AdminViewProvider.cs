@@ -5,7 +5,7 @@ using Plato.GitHub.Models;
 using Plato.GitHub.Stores;
 using Plato.GitHub.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions.Settings;
@@ -13,7 +13,7 @@ using PlatoCore.Security.Abstractions.Encryption;
 
 namespace Plato.GitHub.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<PlatoGitHubSettings>
+    public class AdminViewProvider : ViewProviderBase<PlatoGitHubSettings>
     {
 
         private readonly IGitHubSettingsStore<PlatoGitHubSettings> _gitHubSettingsStore;        

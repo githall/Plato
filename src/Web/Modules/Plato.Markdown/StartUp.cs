@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Assets.Abstractions;
 using Plato.Markdown.Assets;

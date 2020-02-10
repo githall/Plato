@@ -6,7 +6,7 @@ using Microsoft.Extensions.Localization;
 using Plato.Issues.Labels.Models;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Labels.Stores;

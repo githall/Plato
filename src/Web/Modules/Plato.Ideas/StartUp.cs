@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Plato.Entities;
 using PlatoCore.Models.Shell;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Badges.Abstractions;
@@ -106,10 +106,6 @@ namespace Plato.Ideas
             services.AddScoped<IViewProviderManager<IdeaComment>, ViewProviderManager<IdeaComment>>();
             services.AddScoped<IViewProvider<IdeaComment>, IdeaCommentViewProvider>();
 
-            //// Add profile views
-            //services.AddScoped<IViewProviderManager<Profile>, ViewProviderManager<Profile>>();
-            //services.AddScoped<IViewProvider<Profile>, ProfileViewProvider>();
-            
             // Add user views
             services.AddScoped<IViewProviderManager<UserIndex>, ViewProviderManager<UserIndex>>();
             services.AddScoped<IViewProvider<UserIndex>, UserViewProvider>();

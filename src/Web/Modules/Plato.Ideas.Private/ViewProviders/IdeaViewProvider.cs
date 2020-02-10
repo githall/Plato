@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
 using Plato.Ideas.Models;
@@ -13,7 +13,7 @@ using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Ideas.Private.ViewProviders
 {
-    public class IdeaViewProvider : BaseViewProvider<Idea>
+    public class IdeaViewProvider : ViewProviderBase<Idea>
     {
 
         public static string HtmlName = "visibility";

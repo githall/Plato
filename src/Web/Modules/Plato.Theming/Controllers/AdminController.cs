@@ -12,7 +12,7 @@ using PlatoCore.Layout;
 using Plato.Theming.Models;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;

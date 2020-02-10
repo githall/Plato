@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Metrics.Models;
 using Plato.Reports.Models;
 using Plato.Reports.ViewModels;
@@ -9,7 +9,7 @@ using Plato.Reports.Services;
 
 namespace Plato.Reports.TopUsers.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<FeatureViewIndex>
+    public class AdminViewProvider : ViewProviderBase<FeatureViewIndex>
     {
 
         private readonly IDateRangeStorage _dateRangeStorage;

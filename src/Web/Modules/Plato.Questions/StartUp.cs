@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Plato.Entities;
 using PlatoCore.Models.Shell;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Badges.Abstractions;
@@ -37,7 +37,6 @@ using PlatoCore.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Reputations.Abstractions;
 using PlatoCore.Stores;
-using PlatoCore.Stores.Abstractions;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
 

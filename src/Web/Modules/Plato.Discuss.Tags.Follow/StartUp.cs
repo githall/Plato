@@ -11,6 +11,7 @@ using Plato.Discuss.Tags.Follow.ViewProviders;
 using Plato.Discuss.Tags.Models;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Notifications;

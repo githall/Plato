@@ -8,6 +8,7 @@ using Plato.Admin.Navigation;
 using Plato.Admin.ViewProviders;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ActionFilters;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 

@@ -11,7 +11,7 @@ using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.Services;
@@ -21,7 +21,7 @@ using Plato.Tags.ViewModels;
 namespace Plato.Articles.Tags.ViewProviders
 {
 
-    public class CommentViewProvider : BaseViewProvider<Comment>
+    public class CommentViewProvider : ViewProviderBase<Comment>
     {
 
         private const string ModuleId = "Plato.Articles";

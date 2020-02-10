@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Localization;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
@@ -13,7 +13,7 @@ using Plato.Roles.ViewModels;
 
 namespace Plato.Roles.ViewProviders
 {
-    public class UserViewProvider : BaseViewProvider<User>
+    public class UserViewProvider : ViewProviderBase<User>
     {
 
         private const string HtmlName = "UserRoles";

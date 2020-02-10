@@ -5,13 +5,13 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using Plato.Users.ViewModels;
 
 namespace Plato.Users.ViewProviders
 {
-    public class LoginViewProvider : BaseViewProvider<LoginPage>
+    public class LoginViewProvider : ViewProviderBase<LoginPage>
     {
         
         public IHtmlLocalizer T { get; }

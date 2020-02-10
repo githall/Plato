@@ -11,6 +11,7 @@ using Plato.GitHub.Stores;
 using Plato.GitHub.ViewProviders;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;

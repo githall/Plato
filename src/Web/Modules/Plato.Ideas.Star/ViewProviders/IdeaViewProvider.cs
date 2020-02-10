@@ -3,12 +3,12 @@ using Plato.Ideas.Models;
 using Plato.Stars.Stores;
 using Plato.Stars.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Ideas.Star.ViewProviders
 {
 
-    public class IdeaViewProvider : BaseViewProvider<Idea>
+    public class IdeaViewProvider : ViewProviderBase<Idea>
     {
         
         private readonly IStarStore<Stars.Models.Star> _starStore;

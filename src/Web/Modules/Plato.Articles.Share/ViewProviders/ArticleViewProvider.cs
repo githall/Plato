@@ -3,11 +3,11 @@ using Microsoft.AspNetCore.Routing;
 using Plato.Articles.Models;
 using Plato.Articles.Share.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Articles.Share.ViewProviders
 {
-    public class ArticleViewProvider : BaseViewProvider<Article>
+    public class ArticleViewProvider : ViewProviderBase<Article>
     {
 
         private readonly IContextFacade _contextFacade;

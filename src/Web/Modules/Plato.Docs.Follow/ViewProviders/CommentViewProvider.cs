@@ -6,13 +6,13 @@ using Plato.Entities.Stores;
 using Plato.Follows.Services;
 using Plato.Follows.Stores;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Docs.Follow.ViewProviders
 {
 
-    public class CommentViewProvider : BaseViewProvider<DocComment>
+    public class CommentViewProvider : ViewProviderBase<DocComment>
     {
 
         private readonly IFollowStore<Plato.Follows.Models.Follow> _followStore;

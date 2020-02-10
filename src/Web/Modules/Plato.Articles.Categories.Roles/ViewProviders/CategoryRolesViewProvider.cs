@@ -5,14 +5,14 @@ using Plato.Articles.Categories.Models;
 using Plato.Categories.Models;
 using Plato.Categories.Services;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
 using Plato.Roles.ViewModels;
 
 namespace Plato.Articles.Categories.Roles.ViewProviders
 {
 
-    public class CategoryRolesViewProvider : BaseViewProvider<CategoryAdmin>
+    public class CategoryRolesViewProvider : ViewProviderBase<CategoryAdmin>
     {
 
         private const string HtmlName = "CategoryRoles";

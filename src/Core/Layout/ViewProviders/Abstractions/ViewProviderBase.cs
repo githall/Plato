@@ -5,10 +5,10 @@ using PlatoCore.Layout.EmbeddedViews;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Views.Abstractions;
 
-namespace PlatoCore.Layout.ViewProviders
+namespace PlatoCore.Layout.ViewProviders.Abstractions
 {
 
-    public abstract class BaseViewProvider<TModel> : IViewProvider<TModel> where TModel : class
+    public abstract class ViewProviderBase<TModel> : IViewProvider<TModel> where TModel : class
     {
 
         public abstract Task<IViewProviderResult> BuildDisplayAsync(TModel viewModel, IViewProviderContext context);

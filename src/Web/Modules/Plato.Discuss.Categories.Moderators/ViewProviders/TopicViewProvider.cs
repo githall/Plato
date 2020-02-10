@@ -4,7 +4,7 @@ using Plato.Discuss.Models;
 using Plato.Discuss.Categories.Moderators.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Users;
 using PlatoCore.Stores.Users;
@@ -13,7 +13,7 @@ using Plato.Moderation.Stores;
 
 namespace Plato.Discuss.Categories.Moderators.ViewProviders
 {
-    public class TopicViewProvider : BaseViewProvider<Topic>
+    public class TopicViewProvider : ViewProviderBase<Topic>
     {
 
         private readonly IContextFacade _contextFacade;

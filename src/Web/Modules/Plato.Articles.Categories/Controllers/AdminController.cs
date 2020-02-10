@@ -9,7 +9,7 @@ using Microsoft.Extensions.Localization;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Features;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Categories.Services;

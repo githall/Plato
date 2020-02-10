@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout

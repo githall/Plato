@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using PlatoCore.Layout.Views.Abstractions;
 
-namespace PlatoCore.Layout.ViewProviders
+namespace PlatoCore.Layout.ViewProviders.Abstractions
 {
 
     public class CombinedViewProviderResult : IViewProviderResult

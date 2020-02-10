@@ -18,7 +18,9 @@ using PlatoCore.Layout.TagHelpers;
 using PlatoCore.Layout.Theming;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewAdapters;
-using PlatoCore.Layout.ViewComponentFilters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
+using PlatoCore.Layout.ViewFilters;
+using PlatoCore.Layout.ViewFilters.Abstractions;
 using PlatoCore.Layout.Views;
 using PlatoCore.Layout.Views.Abstractions;
 

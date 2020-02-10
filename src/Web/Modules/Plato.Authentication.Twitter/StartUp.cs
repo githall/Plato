@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Twitter;
 using Plato.Authentication.Twitter.Configuration;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
 using Plato.Authentication.Twitter.ViewProviders;

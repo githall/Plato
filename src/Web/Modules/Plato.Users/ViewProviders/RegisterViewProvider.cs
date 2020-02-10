@@ -8,7 +8,7 @@ using PlatoCore.Abstractions;
 using PlatoCore.Emails.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Localization.Abstractions.Models;
 using PlatoCore.Localization.Extensions;
@@ -18,7 +18,7 @@ using Plato.Users.ViewModels;
 
 namespace Plato.Users.ViewProviders
 {
-    public class RegisterViewProvider : BaseViewProvider<UserRegistration>
+    public class RegisterViewProvider : ViewProviderBase<UserRegistration>
     {
 
         private readonly IPlatoUserManager<User> _platoUserManager;

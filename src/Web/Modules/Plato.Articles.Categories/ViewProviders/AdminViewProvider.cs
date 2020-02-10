@@ -12,11 +12,11 @@ using Plato.Articles.Categories.ViewModels;
 using Plato.Categories.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Articles.Categories.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<CategoryAdmin>
+    public class AdminViewProvider : ViewProviderBase<CategoryAdmin>
     {
      
         private readonly ICategoryStore<Category> _categoryStore;

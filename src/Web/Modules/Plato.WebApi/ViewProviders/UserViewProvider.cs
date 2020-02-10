@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Users;
 
@@ -7,7 +7,7 @@ using Plato.WebApi.ViewModels;
 
 namespace Plato.WebApi.ViewProviders
 {
-    public class UserViewProvider : BaseViewProvider<User>
+    public class UserViewProvider : ViewProviderBase<User>
     {
         
         private readonly IPlatoUserStore<User> _platoUserStore;

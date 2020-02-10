@@ -8,6 +8,7 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Questions.Private.Navigation;
 using Plato.Questions.Models;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Security.Abstractions;
 using Plato.Questions.Private.Handlers;

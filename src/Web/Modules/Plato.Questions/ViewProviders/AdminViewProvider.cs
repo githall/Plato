@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Plato.Questions.Models;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Questions.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<AdminIndex>
+    public class AdminViewProvider : ViewProviderBase<AdminIndex>
     {
 
         public override Task<IViewProviderResult> BuildIndexAsync(AdminIndex viewModel, IViewProviderContext context)

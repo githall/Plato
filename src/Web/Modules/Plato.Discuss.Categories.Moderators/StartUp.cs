@@ -2,10 +2,10 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Plato.Discuss.Categories.Models;
 using Plato.Discuss.Models;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Discuss.Categories.Moderators.Navigation;
 using Plato.Discuss.Categories.Moderators.ViewProviders;
@@ -14,7 +14,7 @@ using PlatoCore.Security.Abstractions;
 using Plato.Moderation.Models;
 using Plato.Discuss.Categories.Moderators.Handlers;
 using Plato.Discuss.Categories.Moderators.ViewAdapters;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Discuss.Categories.Moderators

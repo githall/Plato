@@ -3,14 +3,14 @@ using System.Threading.Tasks;
 using Plato.Entities.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Users;
 
 namespace Plato.Entities.ViewProviders
 {
 
-    public class UserViewProvider : BaseViewProvider<EntityUserIndex>
+    public class UserViewProvider : ViewProviderBase<EntityUserIndex>
     {
 
         private readonly IFeatureEntityCountService _featureEntityCountService;        

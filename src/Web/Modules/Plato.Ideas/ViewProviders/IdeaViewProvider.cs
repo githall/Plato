@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Plato.Ideas.Models;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.ViewModels;
 using Plato.Entities.Models;
 using Plato.Entities.Services;
@@ -11,7 +11,7 @@ using Plato.Entities.Services;
 namespace Plato.Ideas.ViewProviders
 {
 
-    public class IdeaViewProvider : BaseViewProvider<Idea>
+    public class IdeaViewProvider : ViewProviderBase<Idea>
     {
 
         private const string EditorHtmlName = "message";

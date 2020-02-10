@@ -8,6 +8,7 @@ using Plato.Articles.Categories.Follow.Subscribers;
 using Plato.Articles.Categories.Follow.ViewProviders;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Notifications;

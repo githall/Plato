@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
 using Plato.Authentication.Google.Configuration;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
 using Plato.Authentication.Google.ViewProviders;

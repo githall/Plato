@@ -11,14 +11,14 @@ using Plato.Discuss.Categories.Models;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using Plato.Moderation.Models;
 using Plato.Moderation.Stores;
 
 namespace Plato.Discuss.Categories.Moderators.ViewProviders
 {
-    public class ModeratorViewProvider : BaseViewProvider<Moderator>
+    public class ModeratorViewProvider : ViewProviderBase<Moderator>
     {
 
         private const string ChannelHtmlName = "channel";

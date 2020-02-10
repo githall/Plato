@@ -5,11 +5,11 @@ using Plato.Discuss.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Discuss.ViewProviders
 {
-    public class TopicViewProvider : BaseViewProvider<Topic>
+    public class TopicViewProvider : ViewProviderBase<Topic>
     {
 
         public const string EditorHtmlName = "message";

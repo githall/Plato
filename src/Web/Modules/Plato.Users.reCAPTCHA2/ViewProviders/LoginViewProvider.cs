@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using Plato.Users.reCAPTCHA2.Models;
 using Plato.Users.reCAPTCHA2.Services;
@@ -12,7 +12,7 @@ using Plato.Users.reCAPTCHA2.ViewModels;
 
 namespace Plato.Users.reCAPTCHA2.ViewProviders
 {
-    public class LoginViewProvider : BaseViewProvider<LoginPage>
+    public class LoginViewProvider : ViewProviderBase<LoginPage>
     {
 
         private readonly IReCaptchaService _recaptchaService;

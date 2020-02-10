@@ -4,7 +4,8 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Categories.Models;
@@ -99,5 +100,7 @@ namespace Plato.Discuss.Categories
             );
 
         }
+
     }
+
 }

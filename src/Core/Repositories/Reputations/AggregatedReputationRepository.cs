@@ -11,11 +11,11 @@ namespace PlatoCore.Repositories.Reputations
     public class AggregatedUserReputationRepository : IAggregatedUserReputationRepository
     {
 
-        private readonly IDbHelper _dbHelper;
+        public IDbHelper DbHelper { get; }
 
         public AggregatedUserReputationRepository(IDbHelper dbHelper)
         {
-            _dbHelper = dbHelper;
+            DbHelper = dbHelper;
         }
         
         public async Task<AggregatedResult<DateTimeOffset>> SelectGroupedByDateAsync(
@@ -47,7 +47,7 @@ namespace PlatoCore.Repositories.Reputations
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<DateTimeOffset>();
                 while (await reader.ReadAsync())
@@ -91,7 +91,7 @@ namespace PlatoCore.Repositories.Reputations
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<int>();
                 while (await reader.ReadAsync())
@@ -138,7 +138,7 @@ namespace PlatoCore.Repositories.Reputations
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<int>();
                 while (await reader.ReadAsync())
@@ -180,7 +180,7 @@ namespace PlatoCore.Repositories.Reputations
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<string>();
                 while (await reader.ReadAsync())
@@ -232,7 +232,7 @@ namespace PlatoCore.Repositories.Reputations
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<DateTimeOffset>();
                 while (await reader.ReadAsync())

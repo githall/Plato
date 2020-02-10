@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Plato.Docs.Drafts.ViewModels;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Docs.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
@@ -12,7 +12,7 @@ using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Docs.Drafts.ViewProviders
 {
-    public class DocViewProvider : BaseViewProvider<Doc>
+    public class DocViewProvider : ViewProviderBase<Doc>
     {
 
         public static string HtmlName = "published";

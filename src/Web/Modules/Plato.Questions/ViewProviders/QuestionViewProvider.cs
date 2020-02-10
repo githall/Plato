@@ -5,14 +5,14 @@ using Plato.Questions.Models;
 using Plato.Questions.Services;
 using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.ViewModels;
 using Plato.Entities.Models;
 using Plato.Entities.Services;
 
 namespace Plato.Questions.ViewProviders
 {
-    public class QuestionViewProvider : BaseViewProvider<Question>
+    public class QuestionViewProvider : ViewProviderBase<Question>
     {
 
         private const string EditorHtmlName = "message";

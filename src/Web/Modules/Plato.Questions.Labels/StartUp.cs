@@ -4,8 +4,9 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Labels.Repositories;
 using Plato.Labels.Services;
@@ -80,7 +81,8 @@ namespace Plato.Questions.Labels
                 defaults: new { controller = "Home", action = "Display" }
             );
 
-
         }
+
     }
+
 }

@@ -2,13 +2,13 @@
 using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Users;
 
 namespace Plato.Follow.Users.ViewProviders
 {
-    public class ProfileViewProvider : BaseViewProvider<ProfilePage>
+    public class ProfileViewProvider : ViewProviderBase<ProfilePage>
     {
 
         private readonly IPlatoUserStore<User> _platoUserStore;

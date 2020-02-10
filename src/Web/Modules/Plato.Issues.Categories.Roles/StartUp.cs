@@ -10,6 +10,7 @@ using Plato.Issues.Categories.Roles.ViewProviders;
 using Plato.Issues.Models;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
 using Plato.Issues.Categories.Roles.Handlers;

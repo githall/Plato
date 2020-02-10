@@ -8,11 +8,11 @@ using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Docs.ViewProviders
 {
-    public class DocViewProvider : BaseViewProvider<Doc>
+    public class DocViewProvider : ViewProviderBase<Doc>
     {
 
         public const string EditorHtmlName = "message";

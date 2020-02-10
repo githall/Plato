@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PlatoCore.Badges.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Badges;
 using Plato.Users.Badges.Services;
 using Plato.Users.Badges.ViewModels;
@@ -8,7 +8,7 @@ using Plato.Users.Badges.ViewModels;
 namespace Plato.Users.Badges.ViewProviders
 {
 
-    public class BadgeViewProvider : BaseViewProvider<Badge>
+    public class BadgeViewProvider : ViewProviderBase<Badge>
     {
         
         private readonly IBadgeEntriesStore _badgeEntriesStore;

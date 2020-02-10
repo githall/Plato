@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Articles.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;
 

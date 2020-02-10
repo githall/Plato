@@ -8,12 +8,12 @@ using Plato.Categories.Stores;
 using Plato.Questions.Categories.Models;
 using Plato.Questions.Models;
 using Plato.Entities.Stores;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Questions.Categories.ViewProviders
 {
-    public class AnswerViewProvider : BaseViewProvider<Answer>
+    public class AnswerViewProvider : ViewProviderBase<Answer>
     {
 
         private readonly IEntityStore<Question> _entityStore;

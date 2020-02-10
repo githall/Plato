@@ -7,7 +7,7 @@ using Plato.Issues.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Labels.Models;
 using Plato.Labels.Stores;
 using Plato.Issues.Labels.Models;

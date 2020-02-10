@@ -4,12 +4,12 @@ using Plato.Ideas.Categories.Models;
 using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Ideas.Categories.Follow.ViewProviders
 {
 
-    public class CategoryViewProvider : BaseViewProvider<Category>
+    public class CategoryViewProvider : ViewProviderBase<Category>
     {
 
         private readonly IFollowStore<Follows.Models.Follow> _followStore;

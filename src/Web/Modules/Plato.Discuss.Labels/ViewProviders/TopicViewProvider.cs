@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Plato.Entities.Stores;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Data.Abstractions;
@@ -21,7 +21,7 @@ using Label = Plato.Discuss.Labels.Models.Label;
 
 namespace Plato.Discuss.Labels.ViewProviders
 {
-    public class TopicViewProvider : BaseViewProvider<Topic>
+    public class TopicViewProvider : ViewProviderBase<Topic>
     {
 
         private const string LabelHtmlName = "label";

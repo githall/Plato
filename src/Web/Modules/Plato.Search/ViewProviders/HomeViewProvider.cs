@@ -1,10 +1,10 @@
 ﻿using System.Threading.Tasks;
 using Plato.Core.Models;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Search.ViewProviders
 {
-    public class HomeViewProvider : BaseViewProvider<HomeIndex>
+    public class HomeViewProvider : ViewProviderBase<HomeIndex>
     {
 
         public override Task<IViewProviderResult> BuildIndexAsync(HomeIndex viewModel, IViewProviderContext context)

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Security.Abstractions.Encryption;
 using Plato.Slack.Models;
@@ -11,7 +11,7 @@ using Plato.Slack.ViewModels;
 
 namespace Plato.Slack.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<PlatoSlackSettings>
+    public class AdminViewProvider : ViewProviderBase<PlatoSlackSettings>
     {
 
         private readonly ISlackSettingsStore<PlatoSlackSettings> _TwitterSettingsStore;        

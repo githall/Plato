@@ -5,6 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Badges.Abstractions;
@@ -28,7 +29,6 @@ using Plato.Entities.Stores;
 using Plato.Entities.Subscribers;
 using Plato.Docs.NotificationTypes;
 using Plato.Docs.Notifications;
-using Plato.Entities;
 using Plato.Entities.Models;
 using Plato.Entities.Search;
 using PlatoCore.Abstractions.Routing;
@@ -37,7 +37,6 @@ using PlatoCore.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Reputations.Abstractions;
 using PlatoCore.Stores;
-using PlatoCore.Stores.Abstractions;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
 
@@ -107,10 +106,6 @@ namespace Plato.Docs
             services.AddScoped<IViewProviderManager<DocComment>, ViewProviderManager<DocComment>>();
             services.AddScoped<IViewProvider<DocComment>, DocCommentViewProvider>();
 
-            // Add profile views
-            //services.AddScoped<IViewProviderManager<Profile>, ViewProviderManager<Profile>>();
-            //services.AddScoped<IViewProvider<Profile>, ProfileViewProvider>();
-            
             // Add user views
             services.AddScoped<IViewProviderManager<UserIndex>, ViewProviderManager<UserIndex>>();
             services.AddScoped<IViewProvider<UserIndex>, UserViewProvider>();

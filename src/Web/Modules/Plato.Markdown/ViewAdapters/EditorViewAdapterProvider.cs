@@ -1,12 +1,12 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 
 namespace Plato.Markdown.ViewAdapters
 {
     public class EditorViewAdapterProvider : ViewAdapterProviderBase
     {
-            
+
         public EditorViewAdapterProvider()
         {
             ViewName = "Editor";
@@ -19,7 +19,7 @@ namespace Plato.Markdown.ViewAdapters
             {
                 return Task.FromResult(default(IViewAdapterResult));
             }
-            
+
             return AdaptAsync(ViewName, v =>
             {
                 v.AdaptView("Markdown");

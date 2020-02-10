@@ -2,13 +2,13 @@
 using System.Threading.Tasks;
 using Plato.Entities.Models;
 using Plato.Entities.ViewModels;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Search.Models;
 using Plato.Search.ViewModels;
 
 namespace Plato.Search.ViewProviders
 {
-    public class SearchViewProvider : BaseViewProvider<SearchResult>
+    public class SearchViewProvider : ViewProviderBase<SearchResult>
     {
      
         public override Task<IViewProviderResult> BuildIndexAsync(SearchResult searchResult, IViewProviderContext context)

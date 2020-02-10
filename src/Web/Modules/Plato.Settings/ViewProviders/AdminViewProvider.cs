@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 using PlatoCore.Abstractions.Routing;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Stores.Abstractions.Settings;
@@ -18,7 +18,7 @@ using Plato.Settings.ViewModels;
 
 namespace Plato.Settings.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<SettingsIndex>
+    public class AdminViewProvider : ViewProviderBase<SettingsIndex>
     {
 
         private readonly ISiteSettingsStore _siteSettingsStore;

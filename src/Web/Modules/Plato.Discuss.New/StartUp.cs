@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Discuss.New.ViewAdapters;
 
 namespace Plato.Demo
@@ -24,7 +24,6 @@ namespace Plato.Demo
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, TopicListItemViewAdapter>();
 
-       
         }
 
         public override void Configure(

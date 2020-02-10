@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Http;
 using Plato.Docs.Categories.Models;
 using Plato.Categories.Models;
 using Plato.Categories.Services;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Roles.ViewModels;
 
 namespace Plato.Docs.Categories.Roles.ViewProviders
 {
 
-    public class CategoryRolesViewProvider : BaseViewProvider<CategoryAdmin>
+    public class CategoryRolesViewProvider : ViewProviderBase<CategoryAdmin>
     {
 
         private const string HtmlName = "CategoryRoles";

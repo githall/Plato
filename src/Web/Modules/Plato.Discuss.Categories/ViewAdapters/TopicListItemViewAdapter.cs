@@ -8,13 +8,14 @@ using Plato.Discuss.Categories.Models;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ViewAdapters;
 using System.Collections.Generic;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 
 namespace Plato.Discuss.Categories.ViewAdapters
 {
 
     public class TopicListItemViewAdapter : ViewAdapterProviderBase
     {
-             
+
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IFeatureFacade _featureFacade;
 
@@ -36,7 +37,7 @@ namespace Plato.Discuss.Categories.ViewAdapters
             {
                 return default(IViewAdapterResult);
             }
-     
+
             // Plato.Discuss does not have a dependency on Plato.Discuss.Categories
             // Instead we update the model for the topic item view component
             // here via our view adapter to include the channel information

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tags.Services;
 using Plato.Tags.ViewModels;
 using Plato.Docs.Tags.Models;
@@ -8,7 +8,7 @@ using Plato.Docs.Tags.ViewModels;
 
 namespace Plato.Docs.Tags.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<TagAdmin>
+    public class AdminViewProvider : ViewProviderBase<TagAdmin>
     {
 
         private readonly ITagManager<Tag> _tagManager;

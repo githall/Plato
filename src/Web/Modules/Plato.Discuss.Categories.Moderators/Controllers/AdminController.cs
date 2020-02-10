@@ -9,7 +9,7 @@ using Plato.Discuss.Categories.Moderators.ViewModels;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Stores.Abstractions.Users;

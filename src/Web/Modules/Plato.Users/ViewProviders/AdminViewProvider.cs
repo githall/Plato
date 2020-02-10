@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Localization;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.FileSystem.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Models.Shell;
 using PlatoCore.Models.Users;
@@ -17,7 +17,7 @@ using Plato.Users.ViewModels;
 
 namespace Plato.Users.ViewProviders
 {
-    public class AdminViewProvider : BaseViewProvider<User>
+    public class AdminViewProvider : ViewProviderBase<User>
     {
 
         private static string _pathToImages;

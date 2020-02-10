@@ -5,13 +5,11 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Discuss.Models;
-using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;
-using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Discuss.Tags.ViewAdapters
 {
@@ -19,18 +17,15 @@ namespace Plato.Discuss.Tags.ViewAdapters
     public class TopicListItemViewAdapter : ViewAdapterProviderBase
     {
       
-        private readonly IEntityTagStore<EntityTag> _entityTagStore;
-        private readonly IEntityService<Topic> _entityService;
+        private readonly IEntityTagStore<EntityTag> _entityTagStore;       
         private readonly IActionContextAccessor _actionContextAccessor;
 
         private IDictionary<int, IList<EntityTag>> _lookUpTable;
 
-        public TopicListItemViewAdapter(
-            IEntityService<Topic> entityService, 
+        public TopicListItemViewAdapter(          
             IEntityTagStore<EntityTag> entityTagStore,
             IActionContextAccessor actionContextAccessor)
-        {
-            _entityService = entityService;
+        {           
             _entityTagStore = entityTagStore;
             _actionContextAccessor = actionContextAccessor;
             ViewName = "TopicListItem";
@@ -55,8 +50,6 @@ namespace Plato.Discuss.Tags.ViewAdapters
 
                     if (_lookUpTable == null)
                     {
-                        // Build a dictionary we can use below within our AdaptModel
-                        // method to add the correct tags for each displayed entity
                         _lookUpTable = await BuildLookUpTable();
                     }
 
@@ -167,7 +160,7 @@ namespace Plato.Discuss.Tags.ViewAdapters
             return output;
 
         }
-        
+
     }
-    
+
 }

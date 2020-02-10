@@ -4,6 +4,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
 using AspNet.Security.OAuth.GitHub;
 using Plato.Authentication.GitHub.Configuration;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
 using Plato.Authentication.GitHub.ViewProviders;

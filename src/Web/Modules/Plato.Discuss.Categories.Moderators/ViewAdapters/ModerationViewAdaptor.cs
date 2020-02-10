@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Plato.Categories.Stores;
 using Plato.Discuss.Categories.Models;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Moderation.Models;
 
 namespace Plato.Discuss.Categories.Moderators.ViewAdapters

@@ -13,6 +13,7 @@ using Plato.Slack.Models;
 using Plato.Slack.Navigation;
 using Plato.Slack.Configuration;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Security.Abstractions;
 using Plato.Slack.Services;

@@ -6,7 +6,7 @@ using Microsoft.Extensions.Hosting;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.FileSystem.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Files;
@@ -16,7 +16,7 @@ using Plato.Users.ViewModels;
 namespace Plato.Users.ViewProviders
 {
 
-    public class EditProfileViewProvider : BaseViewProvider<EditProfileViewModel>
+    public class EditProfileViewProvider : ViewProviderBase<EditProfileViewModel>
     {
 
         private static string _pathToImages;

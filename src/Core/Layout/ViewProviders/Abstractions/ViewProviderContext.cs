@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc;
 using PlatoCore.Layout.ModelBinding;
 
-namespace PlatoCore.Layout.ViewProviders
+namespace PlatoCore.Layout.ViewProviders.Abstractions
 {
 
     public interface IViewProviderContext

@@ -14,6 +14,7 @@ using Plato.Email.Tasks;
 using Plato.Email.ViewProviders;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Emails.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Navigation.Abstractions;

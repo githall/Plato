@@ -7,7 +7,7 @@ using Plato.Questions.Categories.Models;
 using Plato.Questions.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Layout.ViewAdapters;
+using PlatoCore.Layout.ViewAdapters.Abstractions;
 
 namespace Plato.Questions.Categories.ViewAdapters
 {

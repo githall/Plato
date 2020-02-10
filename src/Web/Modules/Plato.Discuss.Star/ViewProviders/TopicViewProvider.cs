@@ -7,11 +7,11 @@ using Plato.Stars.Services;
 using Plato.Stars.Stores;
 using Plato.Stars.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Discuss.Star.ViewProviders
 {
-    public class TopicViewProvider : BaseViewProvider<Topic>
+    public class TopicViewProvider : ViewProviderBase<Topic>
     {
         
         private readonly IStarStore<Stars.Models.Star> _starStore;

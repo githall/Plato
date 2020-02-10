@@ -10,7 +10,7 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Models.Users;
 using PlatoCore.Navigation.Abstractions;

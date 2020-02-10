@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Data.Abstractions;
 using Plato.Labels.Stores;
 using Plato.Labels.ViewModels;
@@ -11,7 +11,7 @@ using Plato.Discuss.Models;
 namespace Plato.Discuss.Labels.ViewProviders
 {
 
-    public class LabelViewProvider : BaseViewProvider<Label>
+    public class LabelViewProvider : ViewProviderBase<Label>
     {
 
         private readonly ILabelStore<Label> _labelStore; 

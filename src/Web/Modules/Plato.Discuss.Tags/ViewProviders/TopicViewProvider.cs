@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Discuss.Models;
 using Plato.Discuss.Tags.Models;
 using Plato.Entities.Stores;
@@ -20,7 +20,7 @@ using Plato.Tags.ViewModels;
 
 namespace Plato.Discuss.Tags.ViewProviders
 {
-    public class TopicViewProvider : BaseViewProvider<Topic>
+    public class TopicViewProvider : ViewProviderBase<Topic>
     {
 
         private const string ModuleId = "Plato.Discuss";

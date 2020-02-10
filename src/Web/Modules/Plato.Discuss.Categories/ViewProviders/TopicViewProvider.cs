@@ -17,13 +17,13 @@ using Plato.Discuss.Services;
 using Plato.Entities.Stores;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Discuss.Categories.ViewProviders
 {
-    public class TopicViewProvider : BaseViewProvider<Topic>
+    public class TopicViewProvider : ViewProviderBase<Topic>
     {
 
         private const string CategoryHtmlName = "category";

@@ -11,11 +11,11 @@ namespace Plato.Entities.Metrics.Repositories
     public class AggregatedEntityMetricsRepository : IAggregatedEntityMetricsRepository
     {
 
-        private readonly IDbHelper _dbHelper;
+        public IDbHelper DbHelper { get; }
 
         public AggregatedEntityMetricsRepository(IDbHelper dbHelper)
         {
-            _dbHelper = dbHelper;
+            DbHelper = dbHelper;
         }
 
         public async Task<AggregatedResult<DateTimeOffset>> SelectGroupedByDateAsync(string groupBy, DateTimeOffset start, DateTimeOffset end)
@@ -44,7 +44,7 @@ namespace Plato.Entities.Metrics.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<DateTimeOffset>();
                 while (await reader.ReadAsync())
@@ -87,7 +87,7 @@ namespace Plato.Entities.Metrics.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<DateTimeOffset>();
                 while (await reader.ReadAsync())
@@ -128,7 +128,7 @@ namespace Plato.Entities.Metrics.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<int>();
                 while (await reader.ReadAsync())
@@ -173,7 +173,7 @@ namespace Plato.Entities.Metrics.Repositories
             };
 
             // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
+            return await DbHelper.ExecuteReaderAsync(sql, replacements, async reader =>
             {
                 var output = new AggregatedResult<int>();
                 while (await reader.ReadAsync())

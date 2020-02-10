@@ -6,12 +6,12 @@ using Plato.Categories.Stores;
 using Plato.Ideas.Categories.Models;
 using Plato.Ideas.Models;
 using Plato.Entities.Stores;
-using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Ideas.Categories.ViewProviders
 {
-    public class IdeaCommentViewProvider : BaseViewProvider<IdeaComment>
+    public class IdeaCommentViewProvider : ViewProviderBase<IdeaComment>
     {
 
         private readonly IEntityStore<Idea> _entityStore;
