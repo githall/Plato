@@ -3,14 +3,15 @@ using System.Threading.Tasks;
 
 namespace PlatoCore.Layout.ViewAdapters
 {
-    public abstract class BaseAdapterProvider : IViewAdapterProvider
+
+    public abstract class ViewAdapterProviderBase : IViewAdapterProvider
     {
-        
+
         public string ViewName { get; set; }
 
         public abstract Task<IViewAdapterResult> ConfigureAsync(string viewName);
 
-        public Task<IViewAdapterResult> Adapt(string viewName,
+        public Task<IViewAdapterResult> AdaptAsync(string viewName,
             Action<IViewAdapterBuilder> configure)
         {
 

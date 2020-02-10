@@ -5,37 +5,33 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Articles.Models;
-using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ViewAdapters;
 using Plato.Labels.Models;
 using Plato.Labels.Stores;
-using Label = Plato.Articles.Labels.Models.Label;
+using Plato.Articles.Labels.Models;
 
 namespace Plato.Articles.Labels.ViewAdapters
 {
 
-    public class ArticleListItemViewAdapter : BaseAdapterProvider
+    public class ArticleListItemViewAdapter : ViewAdapterProviderBase
     {
-           
+
         private readonly IEntityLabelStore<EntityLabel> _entityLabelStore;
-        private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly IEntityService<Article> _entityService;
+        private readonly IActionContextAccessor _actionContextAccessor;    
         private readonly ILabelStore<Label> _labelStore;
         private readonly IFeatureFacade _featureFacade;
 
         public ArticleListItemViewAdapter(
             IEntityLabelStore<EntityLabel> entityLabelStore,
-            IActionContextAccessor actionContextAccessor,
-            IEntityService<Article> entityService,
+            IActionContextAccessor actionContextAccessor,        
             ILabelStore<Label> labelStore,
             IFeatureFacade featureFacade)
         {
             _actionContextAccessor = actionContextAccessor;
-            _entityLabelStore = entityLabelStore;
-            _entityService = entityService;
+            _entityLabelStore = entityLabelStore;        
             _featureFacade = featureFacade;
             _labelStore = labelStore;
             ViewName = "ArticleListItem";
@@ -45,7 +41,7 @@ namespace Plato.Articles.Labels.ViewAdapters
 
         public override async Task<IViewAdapterResult> ConfigureAsync(string viewName)
         {
-            
+
             if (!viewName.Equals(ViewName, StringComparison.OrdinalIgnoreCase))
             {
                 return default(IViewAdapterResult);
@@ -55,7 +51,7 @@ namespace Plato.Articles.Labels.ViewAdapters
             // Instead we update the model for the entity list item view component
             // here via our view adapter to include the label data for the entity
             // This way the label data is only ever populated if the labels feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Article>>(async model  =>
                 {
@@ -85,13 +81,12 @@ namespace Plato.Articles.Labels.ViewAdapters
                             };
                         }
 
-                        // Build a dictionary we can use below within our AdaptModel
-                        // method to add the correct labels for each displayed entity
                         _lookUpTable = await BuildLookUpTable(labels.ToList());
 
                     }
 
-                    if (model.Entity == null)
+                    // No need to modify if we don't have a lookup table
+                    if (_lookUpTable == null)
                     {
                         // Return an anonymous type as we are adapting a view component
                         return new
@@ -100,8 +95,7 @@ namespace Plato.Articles.Labels.ViewAdapters
                         };
                     }
 
-                    // No need to modify if we don't have a lookup table
-                    if (_lookUpTable == null)
+                    if (model.Entity == null)
                     {
                         // Return an anonymous type as we are adapting a view component
                         return new
@@ -142,10 +136,10 @@ namespace Plato.Articles.Labels.ViewAdapters
             });
 
         }
-        
+
         async Task<IDictionary<int, IList<Label>>> BuildLookUpTable(IEnumerable<Label> labels)
         {
-            
+
             // Get topic index view model from context
             var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Article>)] as EntityIndexViewModel<Article>;
             if (viewModel == null)
@@ -153,10 +147,14 @@ namespace Plato.Articles.Labels.ViewAdapters
                 return null;
             }
 
+            // We need results
+            if (viewModel.Results == null)
+            {
+                return null;
+            }
+
             // Get all entities for our current view
-            var entities = await _entityService.GetResultsAsync(
-                viewModel?.Options, 
-                viewModel?.Pager);
+            var entities = viewModel.Results;
 
             // Get all entity label relationships for displayed entities
             IPagedResults<EntityLabel> entityLabels = null;
@@ -195,7 +193,7 @@ namespace Plato.Articles.Labels.ViewAdapters
             return output;
 
         }
-        
+
     }
-    
+
 }

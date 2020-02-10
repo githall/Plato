@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Plato.Ideas.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Ideas.ViewComponents
 {
-    public class IdeaCommentListItemViewComponent : ViewComponent
+    public class IdeaCommentListItemViewComponent : ViewComponentBase
     {
         
         public Task<IViewComponentResult> InvokeAsync(

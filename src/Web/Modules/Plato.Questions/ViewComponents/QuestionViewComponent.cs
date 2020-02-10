@@ -4,21 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Questions.Models;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Questions.ViewComponents
 {
 
-    public class QuestionViewComponent : ViewComponent
+    public class QuestionViewComponent : ViewComponentBase
     {
 
         private readonly IEntityStore<Question> _entityStore;
-        private readonly IEntityReplyStore<Answer> _entityReplyStore;
 
-        public QuestionViewComponent(
-            IEntityReplyStore<Answer> entityReplyStore,
-            IEntityStore<Question> entityStore)
-        {
-            _entityReplyStore = entityReplyStore;
+        public QuestionViewComponent(IEntityStore<Question> entityStore)
+        {          
             _entityStore = entityStore;
         }
 
@@ -36,8 +33,7 @@ namespace Plato.Questions.ViewComponents
 
         }
 
-        async Task<EntityViewModel<Question, Answer>> GetViewModel(
-            EntityOptions options)
+        async Task<EntityViewModel<Question, Answer>> GetViewModel(EntityOptions options)
         {
 
             if (options.Id <= 0)
@@ -45,18 +41,18 @@ namespace Plato.Questions.ViewComponents
                 throw new ArgumentOutOfRangeException(nameof(options.Id));
             }
 
-            var topic = await _entityStore.GetByIdAsync(options.Id);
-            if (topic == null)
+            var entity = await _entityStore.GetByIdAsync(options.Id);
+            if (entity == null)
             {
-                throw new ArgumentNullException();
+                throw new ArgumentNullException(nameof(entity));
             }
             
             // Return view model
             return new EntityViewModel<Question, Answer>
             {
                 Options = options,
-                Entity = topic
-        };
+                Entity = entity
+            };
 
         }
 

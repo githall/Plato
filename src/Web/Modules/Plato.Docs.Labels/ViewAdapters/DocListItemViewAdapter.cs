@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Docs.Models;
-using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
@@ -17,25 +16,22 @@ using Label = Plato.Docs.Labels.Models.Label;
 namespace Plato.Docs.Labels.ViewAdapters
 {
 
-    public class DocListItemViewAdapter : BaseAdapterProvider
+    public class DocListItemViewAdapter : ViewAdapterProviderBase
     {
 
         private readonly IEntityLabelStore<EntityLabel> _entityLabelStore;
-        private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly IEntityService<Doc> _entityService;
+        private readonly IActionContextAccessor _actionContextAccessor;    
         private readonly ILabelStore<Label> _labelStore;
         private readonly IFeatureFacade _featureFacade;
 
         public DocListItemViewAdapter(
             IEntityLabelStore<EntityLabel> entityLabelStore,
-            IActionContextAccessor actionContextAccessor,
-            IEntityService<Doc> entityService,
+            IActionContextAccessor actionContextAccessor,  
             ILabelStore<Label> labelStore,
             IFeatureFacade featureFacade)
         {
             _actionContextAccessor = actionContextAccessor;
-            _entityLabelStore = entityLabelStore;
-            _entityService = entityService;
+            _entityLabelStore = entityLabelStore;          
             _featureFacade = featureFacade;
             _labelStore = labelStore;
             ViewName = "DocListItem";
@@ -55,7 +51,7 @@ namespace Plato.Docs.Labels.ViewAdapters
             // Instead we update the model for the entity list item view component
             // here via our view adapter to include the label data for the entity
             // This way the label data is only ever populated if the labels feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Doc>>(async model  =>
                 {
@@ -84,8 +80,6 @@ namespace Plato.Docs.Labels.ViewAdapters
                             };
                         }
 
-                        // Build a dictionary we can use below within our AdaptModel
-                        // method to add the correct labels for each displayed entity
                         _lookUp = await BuildLookUpTable(labels.ToList());
 
                     }
@@ -153,7 +147,7 @@ namespace Plato.Docs.Labels.ViewAdapters
         
         async Task<IDictionary<int, IList<Label>>> BuildLookUpTable(IEnumerable<Label> labels)
         {
-            
+
             // Get topic index view model from context
             var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Doc>)] as EntityIndexViewModel<Doc>;
             if (viewModel == null)
@@ -161,10 +155,14 @@ namespace Plato.Docs.Labels.ViewAdapters
                 return null;
             }
 
+            // We need results
+            if (viewModel.Results == null)
+            {
+                return null;
+            }
+
             // Get all entities for our current view
-            var entities = await _entityService.GetResultsAsync(
-                viewModel?.Options, 
-                viewModel?.Pager);
+            var entities = viewModel.Results;
 
             // Get all entity label relationships for displayed entities
             IPagedResults<EntityLabel> entityLabels = null;
@@ -203,7 +201,7 @@ namespace Plato.Docs.Labels.ViewAdapters
             return output;
 
         }
-        
+
     }
-    
+
 }

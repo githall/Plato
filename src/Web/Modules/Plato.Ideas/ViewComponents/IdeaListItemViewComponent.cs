@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Plato.Ideas.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Ideas.ViewComponents
 {
-    public class IdeaListItemViewComponent : ViewComponent
+    public class IdeaListItemViewComponent : ViewComponentBase
     {
         
         public IdeaListItemViewComponent()

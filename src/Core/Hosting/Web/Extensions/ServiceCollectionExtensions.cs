@@ -272,7 +272,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             services.AddScoped<IContextFacade, ContextFacade>();
             return services;
         }
-        
+
     }
 
 }

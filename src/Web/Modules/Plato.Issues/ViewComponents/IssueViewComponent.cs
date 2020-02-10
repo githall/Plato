@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Issues.Models;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Issues.ViewComponents
 {
 
-    public class IssueViewComponent : ViewComponent
+    public class IssueViewComponent : ViewComponentBase
     {
 
         private readonly IEntityStore<Issue> _entityStore;

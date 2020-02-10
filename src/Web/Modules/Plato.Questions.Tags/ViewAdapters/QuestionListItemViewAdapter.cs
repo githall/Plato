@@ -4,7 +4,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Questions.Models;
-using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Layout.ViewAdapters;
@@ -15,19 +14,16 @@ using System;
 namespace Plato.Questions.Tags.ViewAdapters
 {
 
-    public class QuestionListItemViewAdapter : BaseAdapterProvider
+    public class QuestionListItemViewAdapter : ViewAdapterProviderBase
     {
      
         private readonly IEntityTagStore<EntityTag> _entityTagStore;
-        private readonly IEntityService<Question> _entityService;
         private readonly IActionContextAccessor _actionContextAccessor;
 
-        public QuestionListItemViewAdapter(
-            IEntityService<Question> entityService, 
+        public QuestionListItemViewAdapter(     
             IEntityTagStore<EntityTag> entityTagStore,
             IActionContextAccessor actionContextAccessor)
-        {
-            _entityService = entityService;
+        {          
             _entityTagStore = entityTagStore;
             _actionContextAccessor = actionContextAccessor;
             ViewName = "QuestionListItem";
@@ -43,19 +39,17 @@ namespace Plato.Questions.Tags.ViewAdapters
                 return default(IViewAdapterResult);
             }
 
-            // Plato.Discuss does not have a dependency on Plato.Discuss.Tags
+            // Plato.Questions does not have a dependency on Plato.Questions.Tags
             // Instead we update the model for the entity list item view component
             // here via our view adapter to include the tag data for the entity
             // This way the tag data is only ever populated if the tags feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Question>>(async model  =>
                 {
 
                     if (_lookUpTable == null)
                     {
-                        // Build a dictionary we can use below within our AdaptModel
-                        // method to add the correct tags for each displayed entity
                         _lookUpTable = await BuildLookUpTable();
                     }
 
@@ -130,10 +124,14 @@ namespace Plato.Questions.Tags.ViewAdapters
                 return null;
             }
 
+            // We need results
+            if (viewModel.Results == null)
+            {
+                return null;
+            }
+
             // Get all entities for our current view
-            var entities = await _entityService.GetResultsAsync(
-                viewModel?.Options, 
-                viewModel?.Pager);
+            var entities = viewModel.Results;
 
             // Get all entity tag relationships for displayed entities
             IPagedResults<EntityTag> entityTags = null;
@@ -172,7 +170,7 @@ namespace Plato.Questions.Tags.ViewAdapters
             return output;
 
         }
-        
+
     }
-    
+
 }

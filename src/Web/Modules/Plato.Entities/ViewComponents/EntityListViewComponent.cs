@@ -6,12 +6,13 @@ using Plato.Entities.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Entities.ViewComponents
 {
-    public class EntityListViewComponent : ViewComponent
+    public class EntityListViewComponent : ViewComponentBase
     {
 
 

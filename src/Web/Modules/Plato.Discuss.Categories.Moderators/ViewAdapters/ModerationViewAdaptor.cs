@@ -12,7 +12,7 @@ using Plato.Moderation.Models;
 namespace Plato.Discuss.Categories.Moderators.ViewAdapters
 {
 
-    public class ModerationViewAdapterProvider : BaseAdapterProvider
+    public class ModerationViewAdapterProvider : ViewAdapterProviderBase
     {
 
 
@@ -40,7 +40,7 @@ namespace Plato.Discuss.Categories.Moderators.ViewAdapters
             // Plato.Discuss.Categories.Moderators does not have a dependency on Plato.Discuss.Channels
             // Instead we update the moderator view here via our view adapter
             // This way the channel name is only ever populated if the channels feature is enabled
-            return Adapt(ViewName,  v =>
+            return AdaptAsync(ViewName,  v =>
             {
                 v.AdaptModel<Moderator>(async model =>
                 {

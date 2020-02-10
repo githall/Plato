@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Ideas.Models;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Ideas.ViewComponents
 {
 
-    public class IdeaViewComponent : ViewComponent
+    public class IdeaViewComponent : ViewComponentBase
     {
 
         private readonly IEntityStore<Idea> _entityStore;

@@ -6,10 +6,11 @@ using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Issues.ViewComponents
 {
-    public class GetIssueListViewComponent : ViewComponent
+    public class GetIssueListViewComponent : ViewComponentBase
     {
 
         private readonly IEntityService<Issue> _articleService;

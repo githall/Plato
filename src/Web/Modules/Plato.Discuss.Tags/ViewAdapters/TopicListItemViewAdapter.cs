@@ -16,7 +16,7 @@ using PlatoCore.Layout.Views.Abstractions;
 namespace Plato.Discuss.Tags.ViewAdapters
 {
 
-    public class TopicListItemViewAdapter : BaseAdapterProvider
+    public class TopicListItemViewAdapter : ViewAdapterProviderBase
     {
       
         private readonly IEntityTagStore<EntityTag> _entityTagStore;
@@ -48,7 +48,7 @@ namespace Plato.Discuss.Tags.ViewAdapters
             // Instead we update the model for the entity list item view component
             // here via our view adapter to include the tag data for the entity
             // This way the tag data is only ever populated if the tags feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Topic>>(async model  =>
                 {

@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Plato.Issues.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Issues.ViewComponents
 {
-    public class IssueListItemViewComponent : ViewComponent
+    public class IssueListItemViewComponent : ViewComponentBase
     {
         
         public IssueListItemViewComponent()

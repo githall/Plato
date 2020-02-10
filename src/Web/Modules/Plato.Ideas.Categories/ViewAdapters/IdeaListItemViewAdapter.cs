@@ -12,7 +12,7 @@ using PlatoCore.Layout.ViewAdapters;
 namespace Plato.Ideas.Categories.ViewAdapters
 {
 
-    public class IdeaListItemViewAdapter : BaseAdapterProvider
+    public class IdeaListItemViewAdapter : ViewAdapterProviderBase
     {
             
         private readonly ICategoryStore<Category> _channelStore;
@@ -42,7 +42,7 @@ namespace Plato.Ideas.Categories.ViewAdapters
             // Instead we update the model for the topic item view component
             // here via our view adapter to include the channel information
             // This way the channel data is only ever populated if the channels feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Idea>>(async model =>
                 {

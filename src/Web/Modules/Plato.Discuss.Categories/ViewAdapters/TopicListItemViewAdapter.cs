@@ -2,9 +2,9 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Plato.Categories.Stores;
-using Plato.Discuss.Categories.Models;
 using Plato.Discuss.Models;
 using Plato.Entities.ViewModels;
+using Plato.Discuss.Categories.Models;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ViewAdapters;
 using System.Collections.Generic;
@@ -12,17 +12,17 @@ using System.Collections.Generic;
 namespace Plato.Discuss.Categories.ViewAdapters
 {
 
-    public class TopicListItemViewAdapter : BaseAdapterProvider
+    public class TopicListItemViewAdapter : ViewAdapterProviderBase
     {
              
-        private readonly ICategoryStore<Category> _channelStore;
+        private readonly ICategoryStore<Category> _categoryStore;
         private readonly IFeatureFacade _featureFacade;
 
         public TopicListItemViewAdapter(
-            ICategoryStore<Category> channelStore,
+            ICategoryStore<Category> categoryStore,
             IFeatureFacade featureFacade)
         {
-            _channelStore = channelStore;
+            _categoryStore = categoryStore;
             _featureFacade = featureFacade;
             ViewName = "TopicListItem";
         }
@@ -41,7 +41,7 @@ namespace Plato.Discuss.Categories.ViewAdapters
             // Instead we update the model for the topic item view component
             // here via our view adapter to include the channel information
             // This way the channel data is only ever populated if the channels feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Topic>>(async model =>
                 {
@@ -60,7 +60,7 @@ namespace Plato.Discuss.Categories.ViewAdapters
                         }
 
                         // Get all categories for feature
-                        _categories = await _channelStore.GetByFeatureIdAsync(feature.Id);
+                        _categories = await _categoryStore.GetByFeatureIdAsync(feature.Id);
                     }
 
                     if (_categories == null)
@@ -110,6 +110,5 @@ namespace Plato.Discuss.Categories.ViewAdapters
         }
 
     }
-
 
 }

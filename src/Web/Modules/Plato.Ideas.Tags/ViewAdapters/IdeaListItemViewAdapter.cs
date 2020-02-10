@@ -15,20 +15,16 @@ using System;
 namespace Plato.Ideas.Tags.ViewAdapters
 {
 
-    public class IdeaListItemViewAdapter : BaseAdapterProvider
+    public class IdeaListItemViewAdapter : ViewAdapterProviderBase
     {
 
-  
         private readonly IEntityTagStore<EntityTag> _entityTagStore;
-        private readonly IEntityService<Idea> _entityService;
         private readonly IActionContextAccessor _actionContextAccessor;
 
-        public IdeaListItemViewAdapter(
-            IEntityService<Idea> entityService, 
+        public IdeaListItemViewAdapter(  
             IEntityTagStore<EntityTag> entityTagStore,
             IActionContextAccessor actionContextAccessor)
         {
-            _entityService = entityService;
             _entityTagStore = entityTagStore;
             _actionContextAccessor = actionContextAccessor;
             ViewName = "IdeaListItem";
@@ -44,19 +40,17 @@ namespace Plato.Ideas.Tags.ViewAdapters
                 return default(IViewAdapterResult);
             }
 
-            // Plato.Discuss does not have a dependency on Plato.Discuss.Tags
+            // Plato.Ideas does not have a dependency on Plato.Ideas.Tags
             // Instead we update the model for the entity list item view component
             // here via our view adapter to include the tag data for the entity
             // This way the tag data is only ever populated if the tags feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Idea>>(async model  =>
                 {
 
                     if (_lookUpTable == null)
                     {
-                        // Build a dictionary we can use below within our AdaptModel
-                        // method to add the correct tags for each displayed entity
                         _lookUpTable = await BuildLookUpTable();
                     }
 
@@ -121,10 +115,10 @@ namespace Plato.Ideas.Tags.ViewAdapters
             });
 
         }
-        
+
         async Task<IDictionary<int, IList<EntityTag>>> BuildLookUpTable()
         {
-            
+
             // Get topic index view model from context
             var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Idea>)] as EntityIndexViewModel<Idea>;
             if (viewModel == null)
@@ -132,10 +126,14 @@ namespace Plato.Ideas.Tags.ViewAdapters
                 return null;
             }
 
+            // We need results
+            if (viewModel.Results == null)
+            {
+                return null;
+            }
+
             // Get all entities for our current view
-            var entities = await _entityService.GetResultsAsync(
-                viewModel?.Options, 
-                viewModel?.Pager);
+            var entities = viewModel.Results;
 
             // Get all entity tag relationships for displayed entities
             IPagedResults<EntityTag> entityTags = null;
@@ -174,7 +172,7 @@ namespace Plato.Ideas.Tags.ViewAdapters
             return output;
 
         }
-        
+
     }
-    
+
 }

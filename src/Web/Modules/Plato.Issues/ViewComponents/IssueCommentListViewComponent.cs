@@ -8,11 +8,12 @@ using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Issues.ViewComponents
 {
 
-    public class IssueCommentListViewComponent : ViewComponent
+    public class IssueCommentListViewComponent : ViewComponentBase
     {
 
         private readonly IEntityStore<Issue> _entityStore;

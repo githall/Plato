@@ -4,11 +4,12 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Entities.ViewComponents
 {
 
-    public class EntityParticipantsViewComponent : ViewComponent
+    public class EntityParticipantsViewComponent : ViewComponentBase
     {
 
         private readonly IEntityUsersStore _entityUsersStore;

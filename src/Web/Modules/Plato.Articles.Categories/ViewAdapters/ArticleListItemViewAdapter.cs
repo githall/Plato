@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace Plato.Articles.Categories.ViewAdapters
 {
 
-    public class ArticleListItemViewAdapter : BaseAdapterProvider
+    public class ArticleListItemViewAdapter : ViewAdapterProviderBase
     {
 
    
@@ -42,7 +42,7 @@ namespace Plato.Articles.Categories.ViewAdapters
             // Instead we update the model for the article item view component
             // here via our view adapter to include the category information
             // This way the category data is only ever populated if the categories feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Article>>(async model =>
                 {

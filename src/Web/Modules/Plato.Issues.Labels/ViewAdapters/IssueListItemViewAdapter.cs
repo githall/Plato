@@ -4,39 +4,34 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Issues.Models;
-using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ViewAdapters;
 using Plato.Labels.Models;
 using Plato.Labels.Stores;
-using Label = Plato.Issues.Labels.Models.Label;
+using Plato.Issues.Labels.Models;
 using System;
 
 namespace Plato.Issues.Labels.ViewAdapters
 {
 
-    public class IssueListItemViewAdapter : BaseAdapterProvider
-    {
-           
+    public class IssueListItemViewAdapter : ViewAdapterProviderBase
+    {           
 
         private readonly IEntityLabelStore<EntityLabel> _entityLabelStore;
-        private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly IEntityService<Issue> _entityService;
+        private readonly IActionContextAccessor _actionContextAccessor;   
         private readonly ILabelStore<Label> _labelStore;
         private readonly IFeatureFacade _featureFacade;
 
         public IssueListItemViewAdapter(
             IEntityLabelStore<EntityLabel> entityLabelStore,
             IActionContextAccessor actionContextAccessor,
-            IEntityService<Issue> entityService,
             ILabelStore<Label> labelStore,
             IFeatureFacade featureFacade)
         {
             _actionContextAccessor = actionContextAccessor;
-            _entityLabelStore = entityLabelStore;
-            _entityService = entityService;
+            _entityLabelStore = entityLabelStore;   
             _featureFacade = featureFacade;
             _labelStore = labelStore;
             ViewName = "IssueListItem";
@@ -51,12 +46,12 @@ namespace Plato.Issues.Labels.ViewAdapters
             {
                 return default(IViewAdapterResult);
             }
-        
+
             // Plato.Issues does not have a dependency on Plato.Issues.Labels
             // Instead we update the model for the entity list item view component
             // here via our view adapter to include the label data for the entity
             // This way the label data is only ever populated if the labels feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Issue>>(async model  =>
                 {
@@ -85,8 +80,6 @@ namespace Plato.Issues.Labels.ViewAdapters
                             };
                         }
 
-                        // Build a dictionary we can use below within our AdaptModel
-                        // method to add the correct labels for each displayed entity
                         _lookUpTable = await BuildLookUpTable(labels.ToList());
 
                     }
@@ -151,10 +144,10 @@ namespace Plato.Issues.Labels.ViewAdapters
             });
 
         }
-        
+
         async Task<IDictionary<int, IList<Label>>> BuildLookUpTable(IEnumerable<Label> labels)
         {
-            
+
             // Get topic index view model from context
             var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Issue>)] as EntityIndexViewModel<Issue>;
             if (viewModel == null)
@@ -162,10 +155,14 @@ namespace Plato.Issues.Labels.ViewAdapters
                 return null;
             }
 
+            // We need results
+            if (viewModel.Results == null)
+            {
+                return null;
+            }
+
             // Get all entities for our current view
-            var entities = await _entityService.GetResultsAsync(
-                viewModel?.Options, 
-                viewModel?.Pager);
+            var entities = viewModel.Results;
 
             // Get all entity label relationships for displayed entities
             IPagedResults<EntityLabel> entityLabels = null;
@@ -204,7 +201,7 @@ namespace Plato.Issues.Labels.ViewAdapters
             return output;
 
         }
-        
+
     }
-    
+
 }

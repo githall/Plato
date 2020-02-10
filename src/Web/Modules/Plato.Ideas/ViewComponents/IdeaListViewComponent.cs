@@ -8,11 +8,12 @@ using PlatoCore.Navigation.Abstractions;
 using Plato.Entities.ViewModels;
 using Plato.Entities.Services;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Ideas.ViewComponents
 {
 
-    public class IdeaListViewComponent : ViewComponent
+    public class IdeaListViewComponent : ViewComponentBase
     {
 
         private readonly ICollection<Filter> _defaultFilters = new List<Filter>()

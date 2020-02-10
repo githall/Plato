@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Plato.Questions.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Questions.ViewComponents
 {
-    public class QuestionListItemViewComponent : ViewComponent
+    public class QuestionListItemViewComponent : ViewComponentBase
     {
         
         public QuestionListItemViewComponent()

@@ -6,11 +6,12 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Entities.Stores;
 using Plato.Entities.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Entities.ViewComponents
 {
 
-    public class EntityDropDownViewComponent : ViewComponent
+    public class EntityDropDownViewComponent : ViewComponentBase
     {
         private readonly IEntityStore<Entity> _entityStore;
         

@@ -6,10 +6,11 @@ using Plato.Entities.Extensions;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Entities.ViewComponents
 {
-    public class EntityTreeViewComponent : ViewComponent
+    public class EntityTreeViewComponent : ViewComponentBase
     {
 
         private readonly IEntityStore<Entity> _entityStore;

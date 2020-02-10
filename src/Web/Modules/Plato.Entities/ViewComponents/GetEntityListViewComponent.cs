@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Entities.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
-using PlatoCore.Navigation;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Entities.ViewComponents
 {
-    public class GetEntityListViewComponent : ViewComponent
+    public class GetEntityListViewComponent : ViewComponentBase
     {
 
         private readonly IAuthorizationService _authorizationService;

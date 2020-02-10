@@ -12,7 +12,7 @@ using PlatoCore.Layout.ViewAdapters;
 namespace Plato.Issues.Categories.ViewAdapters
 {
 
-    public class IssueListItemViewAdapter : BaseAdapterProvider
+    public class IssueListItemViewAdapter : ViewAdapterProviderBase
     {
            
         private readonly ICategoryStore<Category> _categoryStore;
@@ -41,7 +41,7 @@ namespace Plato.Issues.Categories.ViewAdapters
             // Instead we update the model for the topic item view component
             // here via our view adapter to include the category information
             // This way the category data is only ever populated if the categories feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Issue>>(async model =>
                 {

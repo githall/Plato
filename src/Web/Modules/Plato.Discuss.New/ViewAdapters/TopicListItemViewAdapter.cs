@@ -15,7 +15,7 @@ using PlatoCore.Hosting.Abstractions;
 namespace Plato.Discuss.New.ViewAdapters
 {
 
-    public class TopicListItemViewAdapter : BaseAdapterProvider
+    public class TopicListItemViewAdapter : ViewAdapterProviderBase
     {
 
         private readonly IActionContextAccessor _actionContextAccessor;
@@ -61,7 +61,7 @@ namespace Plato.Discuss.New.ViewAdapters
             }
 
             // Adapt the view
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Topic>>(async model =>
                 {
@@ -204,8 +204,7 @@ namespace Plato.Discuss.New.ViewAdapters
                 FROM 
                      {prefix}_EntityMetrics em
                 WHERE
-                    em.CreatedUserId = {userId} AND
-                    em.EntityId IN ({entityIds})
+                    em.CreatedUserId = {userId} AND em.EntityId IN ({entityIds})
                 GROUP BY (em.EntityId)
             ";
 

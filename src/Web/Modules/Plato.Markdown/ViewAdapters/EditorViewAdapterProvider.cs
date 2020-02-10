@@ -4,7 +4,7 @@ using PlatoCore.Layout.ViewAdapters;
 
 namespace Plato.Markdown.ViewAdapters
 {
-    public class EditorViewAdapterProvider : BaseAdapterProvider
+    public class EditorViewAdapterProvider : ViewAdapterProviderBase
     {
             
         public EditorViewAdapterProvider()
@@ -20,7 +20,7 @@ namespace Plato.Markdown.ViewAdapters
                 return Task.FromResult(default(IViewAdapterResult));
             }
             
-            return Adapt(ViewName, v =>
+            return AdaptAsync(ViewName, v =>
             {
                 v.AdaptView("Markdown");
             });

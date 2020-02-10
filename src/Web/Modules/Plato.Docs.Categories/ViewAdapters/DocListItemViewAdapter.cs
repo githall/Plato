@@ -12,7 +12,7 @@ using System.Collections.Generic;
 namespace Plato.Docs.Categories.ViewAdapters
 {
 
-    public class DocListItemViewAdapter : BaseAdapterProvider
+    public class DocListItemViewAdapter : ViewAdapterProviderBase
     {
            
         private readonly ICategoryStore<Category> _channelStore;
@@ -41,7 +41,7 @@ namespace Plato.Docs.Categories.ViewAdapters
             // Instead we update the model for the topic item view component
             // here via our view adapter to include the channel information
             // This way the channel data is only ever populated if the channels feature is enabled
-            return await Adapt(ViewName, v =>
+            return await AdaptAsync(ViewName, v =>
             {
                 v.AdaptModel<EntityListItemViewModel<Doc>>(async model =>
                 {

@@ -8,11 +8,12 @@ using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Ideas.ViewComponents
 {
 
-    public class GetIdeaCommentListViewComponent : ViewComponent
+    public class GetIdeaCommentListViewComponent : ViewComponentBase
     {
         
         private readonly IEntityReplyService<IdeaComment> _replyService;

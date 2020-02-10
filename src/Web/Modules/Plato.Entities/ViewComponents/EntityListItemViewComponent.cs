@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Plato.Entities.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Entities.ViewComponents
 {
-    public class EntityListItemViewComponent : ViewComponent
+    public class EntityListItemViewComponent : ViewComponentBase
     {
 
         public EntityListItemViewComponent()
