@@ -5,12 +5,13 @@ using Plato.Discuss.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using System.Collections.Generic;
-using PlatoCore.Data.Abstractions;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Localization;
 using PlatoCore.Layout.Models;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Hosting.Abstractions;
+using Plato.Entities.Metrics.Repositories;
+using Plato.Entities.Metrics.Extensions;
 
 namespace Plato.Discuss.New.ViewAdapters
 {
@@ -18,22 +19,22 @@ namespace Plato.Discuss.New.ViewAdapters
     public class TopicListItemViewAdapter : ViewAdapterProviderBase
     {
 
+        private readonly IAggregatedEntityMetricsRepository _agggregatedEntityMetricsRepository;
         private readonly IActionContextAccessor _actionContextAccessor;
-        private readonly IContextFacade _contextFacade;
-        private readonly IDbHelper _dbHelper;
+        private readonly IContextFacade _contextFacade;      
 
         public IHtmlLocalizer T { get; }
 
         public TopicListItemViewAdapter(
             IHtmlLocalizer<TopicListItemViewAdapter> localizer,
+            IAggregatedEntityMetricsRepository agggregatedEntityMetricsRepository,
             IActionContextAccessor actionContextAccessor,         
-            IContextFacade contextFacade,     
-            IDbHelper dbHelper)
+            IContextFacade contextFacade)
         {
-          
+
+            _agggregatedEntityMetricsRepository = agggregatedEntityMetricsRepository;
             _actionContextAccessor = actionContextAccessor;        
-            _contextFacade = contextFacade;
-            _dbHelper = dbHelper;    
+            _contextFacade = contextFacade; 
 
             T = localizer;
             ViewName = "TopicListItem";
@@ -51,15 +52,6 @@ namespace Plato.Discuss.New.ViewAdapters
                 return default(IViewAdapterResult);
             }
 
-            // Get authenticated user
-            var user = await _contextFacade.GetAuthenticatedUserAsync();
-
-            // We need to be authenticated
-            if (user == null)
-            {
-                return default(IViewAdapterResult);
-            }
-
             // Adapt the view
             return await AdaptAsync(ViewName, v =>
             {
@@ -69,11 +61,43 @@ namespace Plato.Discuss.New.ViewAdapters
                     // Build last visits from metrics
                     if (_lastVisits == null)
                     {
-                        // Get displayed entities
-                        var entities = await GetDisplayedEntitiesAsync();
-                        if (entities?.Data != null)
+
+                        // Get authenticated user
+                        var user = await _contextFacade.GetAuthenticatedUserAsync();
+
+                        // We need to be authenticated
+                        if (user == null)
                         {
-                            _lastVisits = await SelectLatestViewDateForEntitiesAsync(user.Id, entities.Data.Select(e => e.Id).ToArray());
+                            // Return an anonymous type, we are adapting a view component
+                            return new
+                            {
+                                model
+                            };
+                        }
+
+                        // Get index view model from context
+                        var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
+                        if (viewModel == null)
+                        {
+                            // Return an anonymous type, we are adapting a view component
+                            return new
+                            {
+                                model
+                            };
+                        }
+
+                        if (viewModel.Results == null)
+                        {
+                            // Return an anonymous type, we are adapting a view component
+                            return new
+                            {
+                                model
+                            };
+                        }
+
+                        if (viewModel.Results.Data != null)
+                        {
+                            _lastVisits = await _agggregatedEntityMetricsRepository.SelectMaxViewDateForEntitiesAsync(user.Id, viewModel.Results.Data.Select(e => e.Id).ToArray());
                         }
                     }
 
@@ -86,7 +110,6 @@ namespace Plato.Discuss.New.ViewAdapters
                             model
                         };
                     }
-
 
                     if (model.Entity == null)
                     {
@@ -161,7 +184,7 @@ namespace Plato.Discuss.New.ViewAdapters
                         })
                     };
 
-                    // Apply tag alterations
+                    // Add tag alterations
                     model.TagAlterations.Add(alterations);
 
                     // Return an anonymous type, we are adapting a view component
@@ -171,74 +194,6 @@ namespace Plato.Discuss.New.ViewAdapters
                     };
 
                 });
-            });
-
-        }
-
-        private Task<IPagedResults<Topic>> GetDisplayedEntitiesAsync()
-        {
-     
-            // Get topic index view model from context
-            var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
-            if (viewModel == null)
-            {
-                return null;
-            }
-
-            if (viewModel.Results == null)
-            {
-                return null;
-            }
-
-            return Task.FromResult(viewModel.Results);
-
-        }
-
-        public async Task<IDictionary<int, DateTimeOffset?>> SelectLatestViewDateForEntitiesAsync(int userId, int[] entityIds)
-        {
-
-            const string sql = @"                
-                SELECT 
-                    em.EntityId AS EntityId, 
-                    MAX(em.CreatedDate) AS CreatedDate
-                FROM 
-                     {prefix}_EntityMetrics em
-                WHERE
-                    em.CreatedUserId = {userId} AND em.EntityId IN ({entityIds})
-                GROUP BY (em.EntityId)
-            ";
-
-            // Sql replacements
-            var replacements = new Dictionary<string, string>()
-            {
-                ["{userId}"] = userId.ToString(),
-                ["{entityIds}"] = entityIds.ToDelimitedString()
-            };
-
-            // Execute and return results
-            return await _dbHelper.ExecuteReaderAsync(sql, replacements, async dr =>
-            {
-                var output = new Dictionary<int, DateTimeOffset?>();
-                while (await dr.ReadAsync())
-                {
-
-                    var key = 0;
-                    DateTimeOffset? value = null;
-
-                    if (dr.ColumnIsNotNull("EntityId"))
-                        key = Convert.ToInt32((dr["EntityId"]));
-
-                    if (dr.ColumnIsNotNull("CreatedDate"))
-                        value = (DateTimeOffset) (dr["CreatedDate"]);
-
-                    if (!output.ContainsKey(key))
-                    {
-                        output[key] = value;
-                    }
-
-                }
-
-                return output;
             });
 
         }
