@@ -48,11 +48,7 @@ namespace PlatoCore.Layout.Views
             // Invoke the view with supplied context
             return await _viewFactory.InvokeAsync(new ViewDisplayContext()
             {
-                ViewDescriptor = new ViewDescriptor()
-                {
-                    Name = view.ViewName,
-                    View = view
-                },
+                ViewDescriptor = new ViewDescriptor(view),
                 ViewAdapterResults = viewAdapterResults,
                 ViewContext = ViewContext,
                 ServiceProvider = _serviceProvider

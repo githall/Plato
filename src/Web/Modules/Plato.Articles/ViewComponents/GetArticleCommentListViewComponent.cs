@@ -6,15 +6,16 @@ using Plato.Articles.Models;
 using Plato.Entities.Services;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Articles.ViewComponents
 {
 
-    public class GetArticleCommentListViewComponent : ViewComponent
+    public class GetArticleCommentListViewComponent : ViewComponentBase
     {
-        
+
         private readonly IEntityReplyService<Comment> _replyService;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityStore<Article> _entityStore;

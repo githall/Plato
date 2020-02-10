@@ -2,10 +2,11 @@
 using Microsoft.AspNetCore.Mvc;
 using Plato.Docs.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
-    public class DocListItemViewComponent : ViewComponent
+    public class DocListItemViewComponent : ViewComponentBase
     {
   
         public DocListItemViewComponent()

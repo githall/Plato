@@ -3,11 +3,12 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Docs.Models;
 using Plato.Entities.Models;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
     
-    public class DocTreeMenuViewComponent : ViewComponent
+    public class DocTreeMenuViewComponent : ViewComponentBase
     {
         
         public DocTreeMenuViewComponent()

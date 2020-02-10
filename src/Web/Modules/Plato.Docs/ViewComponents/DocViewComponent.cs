@@ -8,14 +8,15 @@ using Plato.Entities.Services;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
 
-    public class DocViewComponent : ViewComponent
+    public class DocViewComponent : ViewComponentBase
     {
-             
+
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityService<Doc> _entityService;
         private readonly IEntityStore<Doc> _entityStore;
@@ -42,8 +43,7 @@ namespace Plato.Docs.ViewComponents
 
         }
 
-        async Task<EntityViewModel<Doc, DocComment>> GetViewModel(
-            EntityOptions options)
+        async Task<EntityViewModel<Doc, DocComment>> GetViewModel(EntityOptions options)
         {
 
             if (options == null)

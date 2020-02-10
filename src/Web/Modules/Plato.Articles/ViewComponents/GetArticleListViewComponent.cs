@@ -4,14 +4,15 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Articles.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Articles.ViewComponents
 {
-    public class GetArticleListViewComponent : ViewComponent
+    public class GetArticleListViewComponent : ViewComponentBase
     {
-        
+
         private readonly IEntityService<Article> _articleService;
         private readonly IAuthorizationService _authorizationService;
 
@@ -42,7 +43,7 @@ namespace Plato.Articles.ViewComponents
             return View(await GetViewModel(options, pager));
 
         }
-        
+
         async Task<EntityIndexViewModel<Article>> GetViewModel(
             EntityIndexOptions options,
             PagerOptions pager)
@@ -91,6 +92,6 @@ namespace Plato.Articles.ViewComponents
         }
 
     }
-    
+
 }
 

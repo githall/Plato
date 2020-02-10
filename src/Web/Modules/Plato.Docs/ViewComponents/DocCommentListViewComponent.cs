@@ -6,13 +6,14 @@ using Plato.Docs.Models;
 using Plato.Entities.Services;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
 
-    public class DocCommentListViewComponent : ViewComponent
+    public class DocCommentListViewComponent : ViewComponentBase
     {
                         
         private readonly IAuthorizationService _authorizationService;

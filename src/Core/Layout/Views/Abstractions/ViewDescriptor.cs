@@ -6,7 +6,13 @@
         public string Name { get; set; }
 
         public IView View { get; set; }
-      
+
+        public ViewDescriptor(IView view)
+        {
+            Name = view.ViewName;
+            View = view;
+        }
+
     }
 
 }

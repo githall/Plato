@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using PlatoCore.Layout.Models;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Discuss.New.ViewAdapters
 {
@@ -22,19 +21,16 @@ namespace Plato.Discuss.New.ViewAdapters
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IContextFacade _contextFacade;
         private readonly IDbHelper _dbHelper;
-        private readonly IModelCollection _modelCollection;
 
         public IHtmlLocalizer T { get; }
 
         public TopicListItemViewAdapter(
             IHtmlLocalizer<TopicListItemViewAdapter> localizer,
-            IActionContextAccessor actionContextAccessor,
-            IModelCollection modelCollection,
+            IActionContextAccessor actionContextAccessor,         
             IContextFacade contextFacade,     
             IDbHelper dbHelper)
         {
-
-            _modelCollection = modelCollection;
+          
             _actionContextAccessor = actionContextAccessor;        
             _contextFacade = contextFacade;
             _dbHelper = dbHelper;    
@@ -181,13 +177,7 @@ namespace Plato.Discuss.New.ViewAdapters
 
         private Task<IPagedResults<Topic>> GetDisplayedEntitiesAsync()
         {
-
-            var model = _modelCollection.FirstOf<EntityIndexViewModel<Topic>>();
-            if (model == null)
-            {
-                return null;
-            }
-
+     
             // Get topic index view model from context
             var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
             if (viewModel == null)
@@ -201,42 +191,6 @@ namespace Plato.Discuss.New.ViewAdapters
             }
 
             return Task.FromResult(viewModel.Results);
-
-            //// Get all entities for our current view
-            //return await _entityService
-            //    .ConfigureQuery(async q =>
-            //    {
-
-            //        // Hide private?
-            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-            //            Permissions.ViewPrivateTopics))
-            //        {
-            //            q.HidePrivate.True();
-            //        }
-
-            //        // Hide hidden?
-            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-            //            Permissions.ViewHiddenTopics))
-            //        {
-            //            q.HideHidden.True();
-            //        }
-
-            //        // Hide spam?
-            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-            //            Permissions.ViewSpamTopics))
-            //        {
-            //            q.HideSpam.True();
-            //        }
-
-            //        // Hide deleted?
-            //        if (!await _authorizationService.AuthorizeAsync(_httpContextAccessor.HttpContext.User,
-            //            Permissions.ViewDeletedTopics))
-            //        {
-            //            q.HideDeleted.True();
-            //        }
-
-            //    })
-            //    .GetResultsAsync(viewModel?.Options, viewModel?.Pager);
 
         }
 

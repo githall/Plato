@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using PlatoCore.Layout.Views.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace PlatoCore.Layout.ActionFilters
 {
@@ -24,9 +22,8 @@ namespace PlatoCore.Layout.ActionFilters
 
             var controller = context.Controller as Controller;
             if (controller != null)
-            {
-                var modelCollection = controller.HttpContext.RequestServices.GetService<IModelCollection>();
-                modelCollection.AddOrUpdate(result.Model);               
+            {          
+                controller.HttpContext.Items[result.Model.GetType()] = result.Model;
             }
 
         }

@@ -13,11 +13,12 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
 
-    public class DocDropDownViewComponent : ViewComponent
+    public class DocDropDownViewComponent : ViewComponentBase
     {
 
         private readonly IAuthorizationService _authorizationService;

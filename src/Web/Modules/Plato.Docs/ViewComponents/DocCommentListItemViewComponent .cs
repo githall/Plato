@@ -2,12 +2,13 @@
 using Microsoft.AspNetCore.Mvc;
 using Plato.Docs.Models;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
-    public class DocCommentListItemViewComponent : ViewComponent
+    public class DocCommentListItemViewComponent : ViewComponentBase
     {
-        
+
         public Task<IViewComponentResult> InvokeAsync(
             EntityReplyListItemViewModel<Doc, DocComment> model)
         {
@@ -15,7 +16,6 @@ namespace Plato.Docs.ViewComponents
         }
 
     }
-
 
 }
 

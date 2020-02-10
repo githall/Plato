@@ -50,7 +50,7 @@ namespace PlatoCore.Layout.Views
                     {
                         foreach (var alteration in modelAlterations)
                         {
-                            var model = await alteration?.Invoke(updatedView.Model);
+                            var model = await alteration(updatedView.Model);
                             if (model != null)
                             {
                                 updatedView.Model = model;

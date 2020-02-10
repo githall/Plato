@@ -76,9 +76,9 @@ namespace PlatoCore.Layout.ViewFeatures
                             var assembly = Assembly.LoadFile(precompiledAssemblyPath);
 
                             var applicationPart = new ApplicationPart[]
-                           {
-                                    new CompiledRazorAssemblyPart(assembly)
-                           };
+                            {
+                                new CompiledRazorAssemblyPart(assembly)
+                            };
 
                             foreach (var provider in mvcFeatureProviders)
                             {

@@ -4,21 +4,18 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Articles.Models;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Articles.ViewComponents
 {
 
-    public class ArticleViewComponent : ViewComponent
+    public class ArticleViewComponent : ViewComponentBase
     {
 
         private readonly IEntityStore<Article> _entityStore;
-        private readonly IEntityReplyStore<Comment> _entityReplyStore;
 
-        public ArticleViewComponent(
-            IEntityReplyStore<Comment> entityReplyStore,
-            IEntityStore<Article> entityStore)
+        public ArticleViewComponent(IEntityStore<Article> entityStore)
         {
-            _entityReplyStore = entityReplyStore;
             _entityStore = entityStore;
         }
 

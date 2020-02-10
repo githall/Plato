@@ -6,27 +6,28 @@ using Plato.Docs.Models;
 using Plato.Entities.Services;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
 
-    public class GetDocCommentListViewComponent : ViewComponent
+    public class GetDocCommentListViewComponent : ViewComponentBase
     {
         
         private readonly IEntityReplyService<DocComment> _replyService;
-        private readonly IEntityStore<Doc> _entityStore;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IEntityStore<Doc> _entityStore;
 
         public GetDocCommentListViewComponent(
-            IEntityReplyService<DocComment> replyService,
-            IEntityStore<Doc> entityStore, 
-            IAuthorizationService authorizationService)
+            IEntityReplyService<DocComment> replyService, 
+            IAuthorizationService authorizationService,
+            IEntityStore<Doc> entityStore)
         {
-            _replyService = replyService;
-            _entityStore = entityStore;
             _authorizationService = authorizationService;
+            _replyService = replyService;
+            _entityStore = entityStore;   
         }
 
         public async Task<IViewComponentResult> InvokeAsync(EntityOptions options, PagerOptions pager)

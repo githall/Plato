@@ -4,12 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Docs.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
-    public class GetDocListViewComponent : ViewComponent
+    public class GetDocListViewComponent : ViewComponentBase
     {
         
         private readonly IEntityService<Doc> _entityService;

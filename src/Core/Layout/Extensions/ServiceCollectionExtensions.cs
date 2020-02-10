@@ -69,9 +69,6 @@ namespace PlatoCore.Layout.Extensions
 
             // Model binding model accessor
             services.AddScoped<IUpdateModelAccessor, LocalModelBinderAccessor>();
-   
-            // Model collection available throughout the entire request
-            services.AddScoped<IModelCollection, ModelCollection>();
 
             // Alerter
             services.AddScoped<IAlerter, Alerter>();

@@ -1,11 +1,11 @@
 ﻿using PlatoCore.Layout.Views.Abstractions;
-using Microsoft.Extensions.DependencyInjection;
 
 namespace PlatoCore.Layout.ViewComponentFilters
 {
 
     /// <summary>
-    /// This filter adds view component models to our globally accessible model collection.
+    /// This filter stores models returned via view components within the current HttpContext.Items dictionary 
+    /// This ensures the model is available throughout the entire request, for example within child view components. 
     /// </summary>
     public class ViewComponentModelFilter : IViewComponentFilter
     {
@@ -26,9 +26,6 @@ namespace PlatoCore.Layout.ViewComponentFilters
             {
                 return;
             }
-
-            var modelCollection = context.ViewContext.HttpContext.RequestServices.GetService<IModelCollection>();
-            modelCollection.AddOrUpdate(context.ViewData.Model);
 
             context.ViewContext.HttpContext.Items[context.ViewData.Model.GetType()] = context.ViewData.Model;
 

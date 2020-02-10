@@ -163,7 +163,7 @@ namespace Plato.Discuss.ViewComponents
             {
                 pager = new PagerOptions();
             }
-      
+
             return View(await GetViewModel(options, pager));
 
         }
@@ -172,7 +172,7 @@ namespace Plato.Discuss.ViewComponents
             EntityIndexOptions options,
             PagerOptions pager)
         {
-            
+
             // Get results
             var results = await _entityService
                 .ConfigureQuery(async q =>
@@ -211,9 +211,9 @@ namespace Plato.Discuss.ViewComponents
 
             // Set total on pager
             pager.SetTotal(results?.Total ?? 0);
-            
+
             // Return view model
-            return new EntityIndexViewModel<Topic>
+            return new EntityIndexViewModel<Topic>()
             {
                 SortColumns = _defaultSortColumns,
                 SortOrder = _defaultSortOrder,

@@ -226,10 +226,8 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Configure razor options
             services.Configure<RazorViewEngineOptions>(options =>
             {
-
                 // Add composite view location expander
                 options.ViewLocationExpanders.Add(new CompositeViewLocationExpander());
-
             });
 
             // Configure runtime compilation file providers
