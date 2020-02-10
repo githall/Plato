@@ -7,7 +7,7 @@ using PlatoCore.Layout.ViewAdapters.Abstractions;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Localization;
-using PlatoCore.Layout.Models;
+using PlatoCore.Layout.TagHelperAdapters.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Metrics.Repositories;
@@ -127,15 +127,15 @@ namespace Plato.Discuss.New.ViewAdapters
                     }
 
                     // Ensure tag alterations
-                    if (model.TagAlterations == null)
+                    if (model.TagHelperAdapters == null)
                     {
-                        model.TagAlterations = new TagAlterations();
+                        model.TagHelperAdapters = new TagHelperAdapterCollection();
                     }
 
                     // Build tag alterations
                     var alterations = new[]
                     {
-                        new TagAlteration("title", (context, output) =>
+                        new TagHelperAdapter("title", (context, output) =>
                         {
                             if (lastVisit != null)
                             {
@@ -185,7 +185,7 @@ namespace Plato.Discuss.New.ViewAdapters
                     };
 
                     // Add tag alterations
-                    model.TagAlterations.Add(alterations);
+                    model.TagHelperAdapters.Add(alterations);
 
                     // Return an anonymous type, we are adapting a view component
                     return new

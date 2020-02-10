@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
-using PlatoCore.Layout.Models;
+using PlatoCore.Layout.TagHelperAdapters.Abstractions;
 using PlatoCore.Models;
 
 namespace Plato.Entities.ViewModels
 {
 
-    public class EntityListItemViewModel<TModel> where TModel : class
+    public class EntityListItemViewModel<TModel> : TagHelperAdapterAwareViewModel where TModel : class
     {
 
         public TModel Entity { get; set; }
@@ -17,8 +17,6 @@ namespace Plato.Entities.ViewModels
         public IEnumerable<ITagBase> Tags { get; set; }
 
         public EntityIndexOptions Options { get; set; }
-
-        public TagAlterations TagAlterations { get; set; }
 
     }
 

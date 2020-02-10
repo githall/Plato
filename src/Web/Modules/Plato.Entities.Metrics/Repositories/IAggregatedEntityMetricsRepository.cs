@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Data.Abstractions;
 using PlatoCore.Models.Metrics;
 using PlatoCore.Repositories.Metrics;
 
 namespace Plato.Entities.Metrics.Repositories
 {
+
     public interface IAggregatedEntityMetricsRepository : IAggregatedRepository
     {
 

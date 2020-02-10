@@ -3,11 +3,13 @@ using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using Plato.Entities.Models;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Layout.TagHelperAdapters.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Entities.ViewModels
 {
-    public class EntityViewModel<TEntity, TReply> 
+
+    public class EntityViewModel<TEntity, TReply> : TagHelperAdapterAwareViewModel
         where TEntity : class, IEntity
         where TReply : class, IEntityReply
     {

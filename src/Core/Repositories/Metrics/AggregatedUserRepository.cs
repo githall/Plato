@@ -7,7 +7,7 @@ using PlatoCore.Models.Metrics;
 
 namespace PlatoCore.Repositories.Metrics
 {
-    
+
     public class AggregatedUserRepository : IAggregatedUserRepository
     {
 
@@ -146,9 +146,7 @@ namespace PlatoCore.Repositories.Metrics
                 return output;
             });
 
-
         }
-
 
     }
 
