@@ -1,16 +1,16 @@
 ﻿@model EntityListItemViewModel<Topic>
 @{
-    var details = Model.Entity.GetOrCreate<TopicDetails>();
+    var details = Model.Entity.GetOrCreate<TopicDetails>();    
 }
-
-<div asp-id="list-left" asp-adapters="Model.TagHelperAdapters" class="list-left">
-    <a asp-id="avatar" asp-adapters="Model.TagHelperAdapters" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.CreatedUserId" asp-route-opts.alias="@Model.Entity.CreatedBy.Alias">
+                                                                   
+<div asp-id="list-left" class="list-left">
+    <a asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.CreatedUserId" asp-route-opts.alias="@Model.Entity.CreatedBy.Alias">
         <avatar data-toggle="tooltip" title="@Model.Entity.CreatedBy.DisplayName" class="avatar" url="@Model.Entity.CreatedBy.Avatar.Url"/>
     </a>
 </div>
-<div asp-id="list-body" asp-adapters="Model.TagHelperAdapters" class="list-body">
+<div asp-id="list-body" class="list-body">
 
-    <ol asp-id="icons" asp-adapters="Model.TagHelperAdapters" class="list-inline text-muted float-right text-right">
+    <ol asp-id="icons" class="list-inline text-muted float-right text-right">
         @if (Model.Tags != null)
         {
             var sb = new System.Text.StringBuilder();
@@ -51,7 +51,7 @@
         }
     </ol>
 
-    <a asp-id="title" asp-adapters="Model.TagHelperAdapters" asp-route-area="Plato.Discuss" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold" title="@Model.Entity.Title">@Model.Entity.Title.TrimToAround(75)</a>
+    <a asp-id="title" asp-route-area="Plato.Discuss" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold" title="@Model.Entity.Title">@Model.Entity.Title.TrimToAround(75)</a>
    
     @if (Model.Entity.IsPinned)
     {
@@ -77,10 +77,10 @@
             }
         </span>
     }
-    <div asp-id="abstract" asp-adapters="Model.TagHelperAdapters" class="text-muted">
+    <div asp-id="abstract" class="text-muted">
         @Model.Entity.Abstract
     </div>
-    <div asp-id="details" asp-adapters="Model.TagHelperAdapters">
+    <div asp-id="details">
 
         @if (details?.LatestUsers != null)
         {

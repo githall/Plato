@@ -14,6 +14,7 @@ using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.Localizers;
 using PlatoCore.Layout.ModelBinding;
+using PlatoCore.Layout.TagHelperAdapters.Abstractions;
 using PlatoCore.Layout.TagHelpers;
 using PlatoCore.Layout.Theming;
 using PlatoCore.Layout.Titles;
@@ -68,6 +69,7 @@ namespace PlatoCore.Layout.Extensions
 
             // View component filters
             services.AddScoped<IViewComponentFilter, ViewComponentModelFilter>();
+            services.AddScoped<IViewComponentFilter, TagHelperAdapterModelFilter>();
 
             // Model binding model accessor
             services.AddScoped<IUpdateModelAccessor, LocalModelBinderAccessor>();

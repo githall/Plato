@@ -19,6 +19,8 @@ namespace Plato.Discuss.New.ViewAdapters
     public class TopicListItemViewAdapter : ViewAdapterProviderBase
     {
 
+        private readonly ITagHelperAdapterCollection _tagHelperAdapterCollection;
+
         private readonly IAggregatedEntityMetricsRepository _agggregatedEntityMetricsRepository;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IContextFacade _contextFacade;      
@@ -27,12 +29,13 @@ namespace Plato.Discuss.New.ViewAdapters
 
         public TopicListItemViewAdapter(
             IHtmlLocalizer<TopicListItemViewAdapter> localizer,
-            IAggregatedEntityMetricsRepository agggregatedEntityMetricsRepository,
+
+            IAggregatedEntityMetricsRepository agggregatedEntityMetricsRepository,    
             IActionContextAccessor actionContextAccessor,         
             IContextFacade contextFacade)
         {
 
-            _agggregatedEntityMetricsRepository = agggregatedEntityMetricsRepository;
+            _agggregatedEntityMetricsRepository = agggregatedEntityMetricsRepository;      
             _actionContextAccessor = actionContextAccessor;        
             _contextFacade = contextFacade; 
 

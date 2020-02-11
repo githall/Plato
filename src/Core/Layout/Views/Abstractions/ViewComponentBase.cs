@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Layout.ViewFilters.Abstractions;
 
@@ -12,12 +13,17 @@ namespace PlatoCore.Layout.Views.Abstractions
 
             var filters = HttpContext.RequestServices.GetServices<IViewComponentFilter>();
 
+            var viewData = new ViewDataDictionary(ViewData)
+            {
+                Model = model
+            };
+
             foreach (var filter in filters)
             {
                 filter.OnViewComponentExecuting(new ViewComponentExecutingContext()
                 {
                     ViewName = null,
-                    ViewData = ViewData,
+                    ViewData = viewData,
                     ViewContext = ViewContext
                 });
             }
