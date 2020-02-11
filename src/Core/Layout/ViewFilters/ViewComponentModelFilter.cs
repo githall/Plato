@@ -4,7 +4,7 @@ namespace PlatoCore.Layout.ViewFilters
 {
 
     /// <summary>
-    /// This filter stores models returned via view components within the current HttpContext.Items dictionary 
+    /// This view component filter stores models returned via view components within the current HttpContext.Items dictionary 
     /// This ensures the model is available throughout the request, for example within child view components. 
     /// </summary>
     public class ViewComponentModelFilter : IViewComponentFilter

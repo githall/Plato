@@ -78,6 +78,6 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
             return first ?? default(List<ITagHelperAdapter>);
         }
 
-
     }
+
 }

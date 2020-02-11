@@ -132,9 +132,10 @@ namespace Plato.Discuss.New.ViewAdapters
                         model.TagHelperAdapters = new TagHelperAdapterCollection();
                     }
 
-                    // Build tag alterations
-                    var alterations = new[]
+                    // Build tag adapters
+                    var adapters = new[]
                     {
+                        // Add a "New" label after the title tag 
                         new TagHelperAdapter("title", (context, output) =>
                         {
                             if (lastVisit != null)
@@ -184,8 +185,8 @@ namespace Plato.Discuss.New.ViewAdapters
                         })
                     };
 
-                    // Add tag alterations
-                    model.TagHelperAdapters.Add(alterations);
+                    // Add tag adapters
+                    model.TagHelperAdapters.Add(adapters);
 
                     // Return an anonymous type, we are adapting a view component
                     return new
