@@ -15,7 +15,7 @@
 
 <div class="list-row">
     <div asp-id="list-left" class="list-left reply-left">
-        <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="avatar-link" data-provide="popper" data-popper-url="@Model.Reply.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+        <a asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="avatar-link" data-provide="popper" data-popper-url="@Model.Reply.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
             <avatar class="avatar" url="@Model.Reply.CreatedBy.Avatar.Url" />
         </a>
         <navigation name="topic-reply-details"
@@ -23,7 +23,7 @@
                     class="list-inline p-0" />
     </div>
     <div asp-id="list-body" class="list-body reply-body">
-        <card class="card card-body-flush">
+        <card asp-id="card" class="card card-body-flush">
             <card-title>
                 <div data-infinite-scroll-offset="@Model.Reply.Offset">
                     <div asp-id="title" class="card-title float-left">

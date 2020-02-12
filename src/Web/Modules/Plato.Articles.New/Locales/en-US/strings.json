@@ -1,0 +1,16 @@
+{
+  "Strings": [
+    {
+      "Key": "Unread",
+      "Value": "Unread"
+    },
+    {
+      "Key": "New",
+      "Value": "New"
+    },
+    {
+      "Key": "Updated",
+      "Value": "Updated"
+    }
+  ]
+}

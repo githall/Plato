@@ -1,0 +1,19 @@
+Name: Plato Articles New
+Description: Adds a "New" or "Updated" indicator for unread or updated articles within Plato Articles.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Articles
+PlatoVersion: 1.0.0
+Version: 1.0.0
+Icon: /plato.articles.new/content/images/icon.png
+Dependencies:
+[
+	{
+		Id: "Plato.Articles",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Entities.Metrics",
+		Version: "1.0.0"
+	}
+]

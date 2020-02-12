@@ -5,7 +5,7 @@
 
 @if (Model.Category != null)
 {
-    <div class="list-left">
+    <div asp-id="list-left" class="list-left">
         <a asp-route-area="Plato.Articles.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="@Model.Category.Id" asp-route-opts.alias="@Model.Category.Alias" data-toggle="tooltip" title="@Model.Category.Name">
             @if (!String.IsNullOrWhiteSpace(Model.Category.IconCss))
             {
@@ -23,11 +23,9 @@
     </div>
 }
 
-
-<div class="list-body">
-    
-    <div>
-        <ol class="list-inline float-right text-muted">
+<div asp-id="list-body" class="list-body">    
+    <div asp-id="header">
+        <ol asp-id="icons" class="list-inline float-right text-muted">
             @if (Model.Tags != null)
             {
                 var sb = new System.Text.StringBuilder();
@@ -68,7 +66,8 @@
             }
         </ol>
         
-        <a asp-route-area="Plato.Articles" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold">@Model.Entity.Title</a>
+        <a asp-id="title" asp-route-area="Plato.Articles" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold">@Model.Entity.Title</a>
+
         @if (Model.Entity.IsPinned)
         {
             <span title="@T["This article is pinned and is probably important"]" data-toggle="tooltip" class="d-inline-block mx-1">
@@ -93,11 +92,10 @@
             </span>
         }
     </div>
-    <div class="text-muted">
+    <div asp-id="abstract" class="text-muted">
         @Model.Entity.Abstract
     </div>
-    <div>
-        
+    <div asp-id="details">        
         <ul class="list-inline float-right">
             @if (Model.Entity.LastReplyDate != null)
             {
@@ -117,8 +115,7 @@
                     }
                 </li>
             }
-        </ul>
-     
+        </ul>     
         <ul class="list-inline">
             @if (Model.Category != null)
             {
@@ -172,6 +169,5 @@
                 </li>
             }
         </ul>
-
     </div>
 </div>

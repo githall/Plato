@@ -4,8 +4,8 @@
 
 <card class="card card-body-flush">
     <card-title>
-        <h6 class="card-title float-left">@T["Articles"]</h6>
-        <ul class="nav navbar p-0 float-right">
+        <h6 asp-id="title" class="card-title float-left">@T["Articles"]</h6>
+        <ul asp-id="nav" class="nav navbar p-0 float-right">
             <li class="nav-item dropdown">
                 <a class="nav-link text-muted dropdown-toggle" href="#" id="filterDropDown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
                     @T["Filter"]
@@ -94,7 +94,8 @@
         {
             var offset = Model.Pager.Offset;
             var rowOffset = Model.Pager.RowOffset;
-            <ul data-provide="infiniteScroll"
+            <ul asp-id="infinite-scroll" 
+                data-provide="infiniteScroll"
                 data-infinite-scroll-url="@Model.Pager.Url"
                 data-infinite-scroll-offset="@offset"
                 data-infinite-scroll-row-offset="@rowOffset"

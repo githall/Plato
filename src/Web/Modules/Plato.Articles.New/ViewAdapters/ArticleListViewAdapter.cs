@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Plato.Discuss.Models;
+using Plato.Articles.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Microsoft.AspNetCore.Mvc.Localization;
 using PlatoCore.Layout.TagHelperAdapters.Abstractions;
 
-namespace Plato.Discuss.New.ViewAdapters
+namespace Plato.Articles.New.ViewAdapters
 {
 
-    public class TopicReplyListItemViewAdapter : ViewAdapterProviderBase
+    public class ArticleListViewAdapter : ViewAdapterProviderBase
     {   
 
         public IHtmlLocalizer T { get; }
 
-        public TopicReplyListItemViewAdapter(IHtmlLocalizer<TopicListItemViewAdapter> localizer)
+        public ArticleListViewAdapter(IHtmlLocalizer<ArticleListItemViewAdapter> localizer)
         {
 
             T = localizer;
-            ViewName = "TopicReplyListItem";
+            ViewName = "ArticleList";
 
         }
 
@@ -34,7 +34,7 @@ namespace Plato.Discuss.New.ViewAdapters
             // Adapt the view
             return await AdaptAsync(ViewName, v =>
             {
-                v.AdaptModel<EntityReplyListItemViewModel<Topic, Reply>>(model =>
+                v.AdaptModel<EntityIndexViewModel<Article>>(model =>
                 {
 
                     // Build tag adapters
@@ -42,8 +42,9 @@ namespace Plato.Discuss.New.ViewAdapters
                     {
                         new TagHelperAdapter("title", (context, output) =>
                         {
-                            output.PostElement.SetHtmlContent(
-                                        $"<span class=\"badge badge-primary ml-2\">{T["Topic Reply List Item View Adapter"].Value}</span>");
+                               output.PostElement.SetHtmlContent(
+                                            $"<span class=\"badge badge-primary ml-2\">{T["Entity List View Adapter"].Value}</span>");
+
                         })
                     };
 

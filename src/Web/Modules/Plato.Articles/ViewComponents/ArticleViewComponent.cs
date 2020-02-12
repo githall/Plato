@@ -19,41 +19,45 @@ namespace Plato.Articles.ViewComponents
             _entityStore = entityStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityOptions options)
+        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Article, Comment> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityOptions();
+                model = new EntityViewModel<Article, Comment>();
             }
 
-            var model = await GetViewModel(options);
-
-            return View(model);
+            if (model.Options == null)
+            {
+                model.Options = new EntityOptions();
+            }
+         
+            return View(await GetViewModel(model));
 
         }
 
-        async Task<EntityViewModel<Article, Comment>> GetViewModel(
-            EntityOptions options)
+        async Task<EntityViewModel<Article, Comment>> GetViewModel(EntityViewModel<Article, Comment> model)
         {
 
-            if (options.Id <= 0)
+            if (model.Entity == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(options.Id));
-            }
 
-            var entity = await _entityStore.GetByIdAsync(options.Id);
-            if (entity == null)
-            {
-                throw new ArgumentNullException();
-            }
-            
-            // Return view model
-            return new EntityViewModel<Article, Comment>
-            {
-                Options = options,
-                Entity = entity
-        };
+                if (model.Options.Id <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(model.Options.Id));
+                }
+
+                var entity = await _entityStore.GetByIdAsync(model.Options.Id);
+                if (entity == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                model.Entity = entity;
+
+            }          
+
+            return model;
 
         }
 
