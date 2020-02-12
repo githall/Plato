@@ -3,7 +3,7 @@ Description: Adds a "New" or "Updated" indicator for unread or updated topics wi
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Discuss
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.discuss.new/content/images/icon.png
 Dependencies:

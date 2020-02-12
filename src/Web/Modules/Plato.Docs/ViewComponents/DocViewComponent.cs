@@ -30,51 +30,53 @@ namespace Plato.Docs.ViewComponents
             _authorizationService = authorizationService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityOptions options)
+        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Doc, DocComment> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityOptions();
+                model = new EntityViewModel<Doc, DocComment>();
             }
 
-            return View(await GetViewModel(options));
+            if (model.Options == null)
+            {
+                model.Options = new EntityOptions();
+            }
+
+            return View(await GetViewModel(model));
 
         }
 
-        async Task<EntityViewModel<Doc, DocComment>> GetViewModel(EntityOptions options)
+        async Task<EntityViewModel<Doc, DocComment>> GetViewModel(EntityViewModel<Doc, DocComment> model)
         {
 
-            if (options == null)
+            if (model.Entity == null)
             {
-                throw new ArgumentNullException(nameof(options));
+
+                if (model.Options.Id <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(model.Options.Id));
+                }
+
+                // Get entity
+                var entity = await _entityStore.GetByIdAsync(model.Options.Id);
+
+                if (entity == null)
+                {
+                    throw new ArgumentNullException();
+                }
+
+                // Populate previous and next entity
+                await PopulatePreviousAndNextAsync(entity);
+
+                // Populate child entities
+                await PopulateChildEntitiesAsync(entity);
+
+                model.Entity = entity;
+
             }
 
-            if (options.Id <= 0)
-            {
-                throw new ArgumentOutOfRangeException(nameof(options.Id));
-            }
-
-            // Get entity
-            var entity = await _entityStore.GetByIdAsync(options.Id);
-
-            if (entity == null)
-            {
-                throw new ArgumentNullException();
-            }
-
-            // Populate previous and next entity
-            await PopulatePreviousAndNextAsync(entity);
-
-            // Populate child entities
-            await PopulateChildEntitiesAsync(entity);
-
-            // Return view model
-            return new EntityViewModel<Doc, DocComment>
-            {
-                Options = options,
-                Entity = entity
-            };
+            return model;
 
         }
 

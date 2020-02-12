@@ -7,7 +7,7 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Articles.New.ViewAdapters;
 
-namespace Plato.Demo
+namespace Plato.Articles.New
 {
     public class Startup : StartupBase
     {

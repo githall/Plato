@@ -1,10 +1,6 @@
-﻿@using Microsoft.AspNetCore.Routing
-@using Plato.Entities.Models
-@model EntityIndexViewModel<Doc>
-
+﻿@model EntityIndexViewModel<Doc>
 
 @await DisplayAsync(new View("DocList", new
 {
-    options = @Model.Options,
-    pager = @Model.Pager
+    Model
 }))

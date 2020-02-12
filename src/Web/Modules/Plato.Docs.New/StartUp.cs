@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
-using Plato.Discuss.New.ViewAdapters;
+using Plato.Docs.New.ViewAdapters;
 
-namespace Plato.Discuss.New
+namespace Plato.Docs.New
 {
     public class Startup : StartupBase
     {
@@ -22,13 +22,13 @@ namespace Plato.Discuss.New
         {
 
             // Register view adapters        
-            services.AddScoped<IViewAdapterProvider, TopicListItemViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, TopicListViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, TopicViewAdapter>();
+            services.AddScoped<IViewAdapterProvider, DocListItemViewAdapter>();
+            services.AddScoped<IViewAdapterProvider, DocListViewAdapter>();
+            services.AddScoped<IViewAdapterProvider, DocViewAdapter>();
 
             // Replies
-            services.AddScoped<IViewAdapterProvider, TopicReplyListViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, TopicReplyListItemViewAdapter>();
+            services.AddScoped<IViewAdapterProvider, DocCommentListViewAdapter>();
+            services.AddScoped<IViewAdapterProvider, DocCommentListItemViewAdapter>();
 
         }
 

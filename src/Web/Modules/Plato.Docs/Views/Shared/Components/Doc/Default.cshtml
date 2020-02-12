@@ -19,7 +19,7 @@
             <card-title>
                 <ul class="list-inline float-left p-0 m-0">
                     <li class="list-inline-item">
-                        <span class="d-inline-block text-muted">
+                        <span asp-id="title" class="d-inline-block text-muted">
                             @if (readingTime >= 1)
                             {
                                 @readText.Replace("{0}", $"{readingTime} {minuteText}")
@@ -71,13 +71,12 @@
                             child-ul-inner-css-class="min-w-200 max-h-250 overflow-auto" />
             </card-title>
             <card-body class="card-body-flush">
-                <div class="markdown-body entity-body doc-body p-3" data-provide="markdownBody">
+                <div asp-id="body" class="markdown-body entity-body doc-body p-3" data-provide="markdownBody">
                     @Html.Raw(@Model.Entity.Html)
                 </div>                
                 @if (Model.Entity.ChildEntities != null)
                 {
-
-                    <div cass="row p-3">
+                    <div asp-id="see-also" cass="row p-3">
                         <div class="col-12">
                             <h5>@T["See also"]</h5>
                             <ul>
@@ -101,12 +100,10 @@
                         </div>
                     </div>
                 }
-
                 @if (Model.Entity.PreviousDoc != null || Model.Entity.NextDoc != null)
                 {
                     var css = Model.Entity.PreviousDoc != null && Model.Entity.NextDoc != null ? "col-6" : "col-12";
-                    <div class="row p-3">
-                
+                    <div asp-id="previous-and-next" class="row p-3">                
                         @if (Model.Entity.PreviousDoc != null)
                         {
                             <div class="@css">
@@ -141,7 +138,6 @@
                             model="Model.Entity"
                             enable-list="false" />
             </card-body>
-
         </card>
     </div>
 </div>

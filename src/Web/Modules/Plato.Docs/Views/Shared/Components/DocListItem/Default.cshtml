@@ -3,9 +3,9 @@
     var details = Model.Entity.GetOrCreate<DocDetails>();
 }
 
-<div>
+<div asp-id="header">
     <div class="float-right text-right">
-        <ol class="list-inline text-muted">
+        <ol asp-id="icons" class="list-inline text-muted">
             @if (Model.Entity.TotalReplies > 0)
             {
                 <li class="list-inline-item">
@@ -24,7 +24,7 @@
             }
         </ol>
     </div>
-    <a asp-route-area="Plato.Docs" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold">@Model.Entity.Title</a>
+    <a asp-id="title" asp-route-area="Plato.Docs" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold">@Model.Entity.Title</a>
     @if (Model.Entity.IsPinned)
     {
         <span title="@T["This doc is pinned and is probably important"]" data-toggle="tooltip" class="d-inline-block mx-1">
@@ -49,10 +49,10 @@
         </span>
     }
 </div>
-<div class="text-muted">
+<div asp-id="abstract" class="text-muted">
     @Model.Entity.Abstract
 </div>
-<div>
+<div asp-id="details">
 
     <ul class="list-inline float-right">
         @if (Model.Entity.LastReplyDate != null)

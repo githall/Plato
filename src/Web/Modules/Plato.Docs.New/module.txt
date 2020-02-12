@@ -1,0 +1,19 @@
+Name: Plato Docs New
+Description: Adds a "New" or "Updated" indicator for unread or updated docs within Plato Docs.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Docs
+PlatoVersion: 1.1.1
+Version: 1.0.0
+Icon: /plato.docs.new/content/images/icon.png
+Dependencies:
+[
+	{
+		Id: "Plato.Docs",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Entities.Metrics",
+		Version: "1.0.0"
+	}
+]

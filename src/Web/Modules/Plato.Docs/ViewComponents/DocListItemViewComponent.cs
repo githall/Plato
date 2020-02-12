@@ -8,10 +8,6 @@ namespace Plato.Docs.ViewComponents
 {
     public class DocListItemViewComponent : ViewComponentBase
     {
-  
-        public DocListItemViewComponent()
-        {
-        }
 
         public Task<IViewComponentResult> InvokeAsync(EntityListItemViewModel<Doc> model)
         {
@@ -19,7 +15,6 @@ namespace Plato.Docs.ViewComponents
         }
 
     }
-
 
 }
 

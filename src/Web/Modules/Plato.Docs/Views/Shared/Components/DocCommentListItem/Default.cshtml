@@ -13,20 +13,20 @@
     });
 }
 
-<div class="list-row">
-    <div class="list-left reply-left">
-        <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="avatar-link" data-provide="popper" data-popper-url="@Model.Reply.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+<div asp-id="list-row" class="list-row">
+    <div asp-id="list-left" class="list-left reply-left">
+        <a  asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="avatar-link" data-provide="popper" data-popper-url="@Model.Reply.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
             <avatar class="avatar" url="@Model.Reply.CreatedBy.Avatar.Url" />
         </a>
         <navigation name="doc-comment-details"
                     model="Model.Reply"
                     class="list-inline p-0" />
     </div>
-    <div class="list-body reply-body">
+    <div asp-id="list-body" class="list-body reply-body">
         <card class="card card-body-flush">
             <card-title>
                 <div data-infinite-scroll-offset="@Model.Reply.Offset">
-                    <div class="card-title float-left">
+                    <div  asp-id="title" class="card-title float-left">
                         <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="@Model.Reply.CreatedBy.Css.StaffCss" data-provide="popper" data-popper-url="@Model.Reply.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">@Model.Reply.CreatedBy.DisplayName</a>
                         @T["posted "]
                         <span data-toggle="tooltip" title="@Model.Reply.CreatedDate">
@@ -60,11 +60,11 @@
             </card-title>
             <card-body>
                 <div class="@css" data-infinite-scroll-highlight="@Model.Reply.Offset">
-                    <div class="markdown-body p-3" data-provide="markdownBody">
+                    <div asp-id="body" class="markdown-body p-3" data-provide="markdownBody">
                         @Html.Raw(@Model.Reply.Html)
                         @if (!String.IsNullOrEmpty(Model.Reply.CreatedBy.SignatureHtml))
                         {
-                            <div>
+                            <div asp-id="signature">
                                 @Html.Raw(@Model.Reply.CreatedBy.SignatureHtml)
                             </div>
                         }

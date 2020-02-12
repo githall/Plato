@@ -1,6 +1,4 @@
-﻿using Plato.Articles.Models;
-using PlatoCore.Data.Abstractions;
-using Plato.Entities.ViewModels;
+﻿using Plato.Entities.ViewModels;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Articles.Tags.ViewModels

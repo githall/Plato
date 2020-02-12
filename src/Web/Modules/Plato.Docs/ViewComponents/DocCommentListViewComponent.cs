@@ -15,7 +15,7 @@ namespace Plato.Docs.ViewComponents
 
     public class DocCommentListViewComponent : ViewComponentBase
     {
-                        
+
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityReplyService<DocComment> _replyService;
         private readonly IEntityStore<Doc> _entityStore;
@@ -30,31 +30,32 @@ namespace Plato.Docs.ViewComponents
             _entityStore = entityStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(
-            EntityOptions options,
-            PagerOptions pager)
+        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Doc, DocComment> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityOptions();
+                model = new EntityViewModel<Doc, DocComment>();
             }
 
-            if (pager == null)
+            if (model.Options == null)
             {
-                pager = new PagerOptions();
+                model.Options = new EntityOptions();
             }
-            
-            return View(await GetViewModel(options, pager));
+
+            if (model.Pager == null)
+            {
+                model.Pager = new PagerOptions();
+            }
+
+            return View(await GetViewModel(model));
 
         }
 
-        async Task<EntityViewModel<Doc, DocComment>> GetViewModel(
-            EntityOptions options,
-            PagerOptions pager)
+        async Task<EntityViewModel<Doc, DocComment>> GetViewModel(EntityViewModel<Doc, DocComment> model)
         {
 
-            var entity = await _entityStore.GetByIdAsync(options.Id);
+            var entity = await _entityStore.GetByIdAsync(model.Options.Id);
             if (entity == null)
             {
                 throw new ArgumentNullException();
@@ -86,19 +87,15 @@ namespace Plato.Docs.ViewComponents
                     }
 
                 })
-                .GetResultsAsync(options, pager);
-            
-            // Set total on pager
-            pager.SetTotal(results?.Total ?? 0);
+                .GetResultsAsync(model.Options, model.Pager);
 
-            // Return view model
-            return new EntityViewModel<Doc, DocComment>
-            {
-                Options = options,
-                Pager = pager,
-                Entity = entity,
-                Replies = results
-        };
+            // Set total on pager
+            model.Pager.SetTotal(results?.Total ?? 0);
+
+            model.Entity = entity;
+            model.Replies = results;
+
+            return model;
 
         }
 
