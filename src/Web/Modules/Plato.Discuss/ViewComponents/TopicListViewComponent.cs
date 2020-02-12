@@ -7,7 +7,6 @@ using Plato.Discuss.Models;
 using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
@@ -140,8 +139,7 @@ namespace Plato.Discuss.ViewComponents
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityService<Topic> _entityService;
 
-        public TopicListViewComponent(
-            
+        public TopicListViewComponent(            
             IAuthorizationService authorizationService,
             IEntityService<Topic> entityService)
         {
@@ -149,28 +147,29 @@ namespace Plato.Discuss.ViewComponents
             _entityService = entityService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(
-            EntityIndexOptions options,
-            PagerOptions pager)
+        public async Task<IViewComponentResult> InvokeAsync(EntityIndexViewModel<Topic> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityIndexOptions();
+                model = new EntityIndexViewModel<Topic>();
             }
 
-            if (pager == null)
+            if (model.Options == null)
             {
-                pager = new PagerOptions();
+                model.Options = new EntityIndexOptions();
             }
 
-            return View(await GetViewModel(options, pager));
+            if (model.Pager == null)
+            {
+                model.Pager = new PagerOptions();
+            }
+
+            return View(await GetViewModel(model));
 
         }
-        
-        async Task<EntityIndexViewModel<Topic>> GetViewModel(
-            EntityIndexOptions options,
-            PagerOptions pager)
+
+        async Task<EntityIndexViewModel<Topic>> GetViewModel(EntityIndexViewModel<Topic> model)
         {
 
             // Get results
@@ -207,21 +206,17 @@ namespace Plato.Discuss.ViewComponents
                     }
                     
                 })
-                .GetResultsAsync(options, pager);
+                .GetResultsAsync(model.Options, model.Pager);
 
             // Set total on pager
-            pager.SetTotal(results?.Total ?? 0);
+            model.Pager.SetTotal(results?.Total ?? 0);
 
-            // Return view model
-            return new EntityIndexViewModel<Topic>()
-            {
-                SortColumns = _defaultSortColumns,
-                SortOrder = _defaultSortOrder,
-                Filters = _defaultFilters,
-                Results = results,
-                Options = options,
-                Pager = pager
-            }; 
+            model.SortColumns = _defaultSortColumns;
+            model.SortOrder = _defaultSortOrder;
+            model.Filters = _defaultFilters;
+            model.Results = results;
+
+            return model;
 
         }
 

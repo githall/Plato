@@ -4,10 +4,7 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
 {
 
     public interface ITagHelperAdapterCollection
-    {
-        void Add(IEnumerable<ITagHelperAdapter> adapters);
-
-        void Add(ITagHelperAdapter adapter);
+    {     
 
         IList<ITagHelperAdapter> Adapters { get; }
 
@@ -25,23 +22,23 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
             _adapters = new List<ITagHelperAdapter>();
         }
 
-        public void Add(IEnumerable<ITagHelperAdapter> adapters)
-        {           
-            foreach (var adapter in adapters)
-            {
-                Add(adapter);
-            }            
-        }
-
-        public void Add(ITagHelperAdapter adapter)
-        {          
-            _adapters.Add(adapter);
-        }
-
     }
 
     public static class TagHelperAdapterCollectionExtensions
     {
+        
+        public static void Add(this ITagHelperAdapterCollection tagHelperAdapterCollection, IEnumerable<ITagHelperAdapter> adapters)
+        {           
+            foreach (var adapter in adapters)
+            {
+                tagHelperAdapterCollection.Adapters.Add(adapter);
+            }            
+        }
+
+        public static void Add(this ITagHelperAdapterCollection tagHelperAdapterCollection, ITagHelperAdapter adapter)
+        {
+            tagHelperAdapterCollection.Adapters.Add(adapter);
+        }
 
         public static IEnumerable<ITagHelperAdapter> First(this ITagHelperAdapterCollection tagHelperAdapterCollection, string id)
         {
@@ -57,15 +54,15 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
             }
 
             IList<ITagHelperAdapter> output = null;
-            foreach (var alteration in tagHelperAdapterCollection.Adapters)
+            foreach (var adapter in tagHelperAdapterCollection.Adapters)
             {
-                if (alteration.Id.Equals(id, System.StringComparison.OrdinalIgnoreCase))
+                if (adapter.Id.Equals(id, System.StringComparison.OrdinalIgnoreCase))
                 {
                     if (output == null)
                     {
                         output = new List<ITagHelperAdapter>();
                     }
-                    output.Add(alteration);
+                    output.Add(adapter);
                 }
             }
             return output;

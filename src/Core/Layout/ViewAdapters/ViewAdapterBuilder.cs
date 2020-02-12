@@ -11,6 +11,7 @@ namespace PlatoCore.Layout.ViewAdapters
 
     public class ViewAdapterBuilder : IViewAdapterBuilder
     {
+
         public string ViewName { get; }
 
         private readonly IViewAdapterResult _viewAdapterResult;
@@ -67,17 +68,18 @@ namespace PlatoCore.Layout.ViewAdapters
             var typedDelegate = new Func<object, Task<object>>(async (object input) =>
             {
 
-                // use first argument from anonymous type as model
-                // todo: implement support for multiple arguments within anonymous types
+                // For view components that use anonymous types use the first 
+                // anonymous type parameter that matching the model we are attempting to adapt
                 if (IsViewModelAnonymousType(input))
                 {
+
                     var args = new List<object>();
                     var properties = TypeDescriptor.GetProperties(input);
                     foreach (PropertyDescriptor property in properties)
                     {
                         args.Add(property.GetValue(input));
                     }
-                    
+
                     foreach (var arg in args)
                     {
                         if (arg is TModel)
@@ -85,10 +87,9 @@ namespace PlatoCore.Layout.ViewAdapters
                             return await alteration((TModel)arg);
                         }
                     }
-            
+
                     // IF we reach this point we have not found an anonymous type 
                     // parameter matching the model we are attempting to adapt
-
 
                 }
 

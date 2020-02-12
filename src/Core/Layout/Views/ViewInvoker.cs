@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Reflection;
 using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
@@ -130,8 +129,6 @@ namespace PlatoCore.Layout.Views
 
         bool IsComponent(object model)
         {
-
-            var test = ViewComponentConventions.IsComponent(model.GetType().GetTypeInfo());
 
             // We need a model to inspect
             if (model == null)

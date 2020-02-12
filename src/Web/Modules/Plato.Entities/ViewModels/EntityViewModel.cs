@@ -9,7 +9,8 @@ using PlatoCore.Navigation.Abstractions;
 namespace Plato.Entities.ViewModels
 {
 
-    public class EntityViewModel<TEntity, TReply> : TagHelperAdapterAwareViewModel
+    public class EntityViewModel<TEntity, TReply> 
+        : TagHelperAdapterAwareViewModel
         where TEntity : class, IEntity
         where TReply : class, IEntityReply
     {

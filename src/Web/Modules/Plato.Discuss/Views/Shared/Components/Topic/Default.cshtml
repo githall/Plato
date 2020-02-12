@@ -7,7 +7,7 @@
     <div class="list-body reply-body">
         <card class="card card-body-flush">
             <card-title>
-                <h6 class="card-title d-inline-block">@T["Topic"]</h6>
+                <h6 asp-id="title" class="card-title d-inline-block">@T["Topic"]</h6>
                 @if (Model.Entity.IsPrivate)
                 {
                     if (Model.Entity.CreatedUserId == base.CurrentUser?.Id)
@@ -38,11 +38,11 @@
                             child-ul-inner-css-class="min-w-200 max-h-250 overflow-auto" />
             </card-title>
             <card-body>
-                <div class="markdown-body entity-body topic-body p-3" data-provide="markdownBody">
+                <div asp-id="body" class="markdown-body entity-body topic-body p-3" data-provide="markdownBody">
                     @Html.Raw(@Model.Entity.Html)
                     @if (!String.IsNullOrEmpty(Model.Entity.CreatedBy.SignatureHtml))
                     {
-                        <div>
+                        <div asp-id="signature">
                             @Html.Raw(@Model.Entity.CreatedBy.SignatureHtml)
                         </div>
                     }
@@ -51,7 +51,6 @@
                             model="Model.Entity"
                             enable-list="false" />
             </card-body>
-
         </card>
     </div>
 </div>

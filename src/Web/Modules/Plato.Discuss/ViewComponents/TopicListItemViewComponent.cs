@@ -9,10 +9,6 @@ namespace Plato.Discuss.ViewComponents
     public class TopicListItemViewComponent : ViewComponentBase
     {
 
-        public TopicListItemViewComponent()
-        {
-        }
-
         public Task<IViewComponentResult> InvokeAsync(EntityListItemViewModel<Topic> model)
         {
             return Task.FromResult((IViewComponentResult)View(model));

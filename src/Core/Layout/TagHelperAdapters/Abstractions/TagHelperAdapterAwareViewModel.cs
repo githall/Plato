@@ -9,7 +9,23 @@
     public class TagHelperAdapterAwareViewModel : ITagHelperAdapterAwareViewModel
     {
 
-        public ITagHelperAdapterCollection TagHelperAdapters { get; set; }
+        private ITagHelperAdapterCollection _tagHelperAdapters;
+
+        public ITagHelperAdapterCollection TagHelperAdapters {
+            get
+            {
+                if (_tagHelperAdapters == null)
+                {
+                    _tagHelperAdapters = new TagHelperAdapterCollection();
+                }
+                return _tagHelperAdapters;
+            }
+            set
+            {
+                _tagHelperAdapters = value;
+            }
+
+        }
 
     }
 

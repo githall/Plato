@@ -13,48 +13,44 @@ namespace Plato.Discuss.ViewComponents
     {
 
         private readonly IEntityStore<Topic> _entityStore;
-        private readonly IEntityReplyStore<Reply> _entityReplyStore;
 
-        public TopicViewComponent(
-            IEntityReplyStore<Reply> entityReplyStore,
-            IEntityStore<Topic> entityStore)
-        {
-            _entityReplyStore = entityReplyStore;
+        public TopicViewComponent(IEntityStore<Topic> entityStore)
+        {     
             _entityStore = entityStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityOptions options)
+        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Topic, Reply> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityOptions();
+                model = new EntityViewModel<Topic, Reply>();
             }
 
-            return View(await GetViewModel(options));
+            return View(await GetViewModel(model));
 
         }
-        async Task<EntityViewModel<Topic, Reply>> GetViewModel(
-            EntityOptions options)
+
+        async Task<EntityViewModel<Topic, Reply>> GetViewModel(EntityViewModel<Topic, Reply> model)
         {
 
-            if (options.Id <= 0)
+            if (model.Entity == null)
             {
-                throw new ArgumentOutOfRangeException(nameof(options.Id));
-            }
+                if (model.Options.Id <= 0)
+                {
+                    throw new ArgumentOutOfRangeException(nameof(model.Options.Id));
+                }
 
-            var topic = await _entityStore.GetByIdAsync(options.Id);
-            if (topic == null)
-            {
-                throw new ArgumentNullException();
-            }
+                var entity = await _entityStore.GetByIdAsync(model.Options.Id);
+                if (entity == null)
+                {
+                    throw new ArgumentNullException();
+                }
 
-            // Return view model
-            return new EntityViewModel<Topic, Reply>
-            {
-                Options = options,
-                Entity = topic
-            };
+                model.Entity = entity;
+            }    
+
+            return model;
 
         }
 

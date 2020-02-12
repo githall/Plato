@@ -2,12 +2,13 @@
 using System.Runtime.Serialization;
 using Newtonsoft.Json;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Layout.TagHelperAdapters.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Entities.ViewModels
 {
 
-    public class EntityIndexViewModel<TModel> where TModel : class
+    public class EntityIndexViewModel<TModel> : TagHelperAdapterAwareViewModel where TModel : class
     {
 
         public IPagedResults<TModel> Results { get; set; }

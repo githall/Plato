@@ -1,11 +1,10 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
 using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
 {
-    
+
     public class ViewFactory : IViewFactory
     {
 
@@ -69,8 +68,8 @@ namespace PlatoCore.Layout.Views
 
             // Invoke view
             var htmlContent = await _viewInvoker.InvokeAsync(descriptor.View);
-         
-            // Apply adapter output alterations
+
+            // Apply output alterations
             if (displayContext.ViewAdapterResults != null)
             {
                 foreach (var viewAdapterResult in displayContext.ViewAdapterResults)

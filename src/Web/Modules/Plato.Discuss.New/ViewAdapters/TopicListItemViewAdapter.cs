@@ -29,7 +29,6 @@ namespace Plato.Discuss.New.ViewAdapters
 
         public TopicListItemViewAdapter(
             IHtmlLocalizer<TopicListItemViewAdapter> localizer,
-
             IAggregatedEntityMetricsRepository agggregatedEntityMetricsRepository,    
             IActionContextAccessor actionContextAccessor,         
             IContextFacade contextFacade)
@@ -127,12 +126,6 @@ namespace Plato.Discuss.New.ViewAdapters
                     if (_lastVisits.ContainsKey(model.Entity.Id))
                     {
                         lastVisit = _lastVisits[model.Entity.Id];
-                    }
-
-                    // Ensure tag alterations
-                    if (model.TagHelperAdapters == null)
-                    {
-                        model.TagHelperAdapters = new TagHelperAdapterCollection();
                     }
 
                     // Build tag adapters
