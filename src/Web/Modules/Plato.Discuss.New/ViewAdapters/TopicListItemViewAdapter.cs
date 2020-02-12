@@ -12,14 +12,13 @@ using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Metrics.Repositories;
 using Plato.Entities.Metrics.Extensions;
+using Plato.Entities.Extensions;
 
 namespace Plato.Discuss.New.ViewAdapters
 {
 
     public class TopicListItemViewAdapter : ViewAdapterProviderBase
     {
-
-        private readonly ITagHelperAdapterCollection _tagHelperAdapterCollection;
 
         private readonly IAggregatedEntityMetricsRepository _agggregatedEntityMetricsRepository;
         private readonly IActionContextAccessor _actionContextAccessor;
@@ -135,43 +134,22 @@ namespace Plato.Discuss.New.ViewAdapters
                         new TagHelperAdapter("title", (context, output) =>
                         {
                             if (lastVisit != null)
-                            {
-
-                                var suppressAlterations = false;
-
-                                // Last reply
-                                if (model.Entity.LastReplyDate.HasValue)
+                            {                     
+                                // New
+                                if (model.Entity.CreatedAfter(lastVisit) || model.Entity.LastReplyAfter(lastVisit))
                                 {
-                                    if (model.Entity.LastReplyDate > lastVisit)
-                                    {
-                                        output.PostElement.SetHtmlContent(
-                                            $"<span class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
-                                        suppressAlterations = true;
-                                    }
+                                    output.PostElement.SetHtmlContent(
+                                        $"<span class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
                                 }
-                                
-                                // Modified
-                                if (model.Entity.ModifiedDate.HasValue && !suppressAlterations)
+                                else
                                 {
-                                    if (model.Entity.ModifiedDate > lastVisit)
+                                    // Modified
+                                    if (model.Entity.ModifiedAfter(lastVisit))
                                     {
                                         output.PostElement.SetHtmlContent(
                                             $"<span class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
-                                        suppressAlterations = true;
                                     }
                                 }
-
-                                // Created
-                                if (model.Entity.CreatedDate.HasValue && !suppressAlterations)
-                                {
-                                    if (model.Entity.CreatedDate > lastVisit)
-                                    {
-                                        output.PostElement.SetHtmlContent(
-                                            $"<span class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
-                                        suppressAlterations = true;
-                                    }
-                                }
-
                             }
                             else
                             {

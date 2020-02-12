@@ -45,6 +45,56 @@ namespace Plato.Entities.Extensions
             return RecurseChildrenInternal<TEntity>(input.ToList(), id);
         }
 
+        public static bool CreatedAfter(this IEntity entity, DateTimeOffset? date)
+        {
+            if (entity.CreatedDate.HasValue)
+            {
+                if (entity.CreatedDate > date)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool LastReplyAfter(this IEntity entity, DateTimeOffset? date)
+        {
+            if (entity.LastReplyDate.HasValue)
+            {
+                if (entity.LastReplyDate > date)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool EditedAfter(this IEntity entity, DateTimeOffset? date)
+        {
+            if (entity.EditedDate.HasValue)
+            {
+                if (entity.EditedDate > date)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        public static bool ModifiedAfter(this IEntity entity, DateTimeOffset? date)
+        {
+            if (entity.ModifiedDate.HasValue)
+            {
+                if (entity.ModifiedDate > date)
+                {
+                    return true;
+                }
+            }
+            return false;
+        }
+
+        // ----------------
+
         private static IList<TEntity> BuildHierarchyRecursively<TEntity>(
            ILookup<int, IEntity> input,
            IList<TEntity> output = null,
@@ -143,6 +193,7 @@ namespace Plato.Entities.Extensions
             return output;
 
         }
+
 
     }
 
