@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Plato.Discuss.Models;
 using Plato.Entities.ViewModels;
@@ -8,7 +7,6 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Localization;
 using PlatoCore.Layout.TagHelperAdapters.Abstractions;
-using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Metrics.Repositories;
 using Plato.Entities.Metrics.Extensions;
@@ -23,7 +21,6 @@ namespace Plato.Discuss.New.ViewAdapters
         private readonly IAggregatedEntityMetricsRepository _agggregatedEntityMetricsRepository;
         private readonly IActionContextAccessor _actionContextAccessor;
         private readonly IContextFacade _contextFacade;
-
 
         public IHtmlLocalizer T { get; }
 
@@ -122,12 +119,16 @@ namespace Plato.Discuss.New.ViewAdapters
                         new TagHelperAdapter("title", (context, output) =>
                         {
                             if (lastVisit != null)
-                            {                     
+                            {
+
+                                // Optionally remove bold title for read entities
+                                // output.Attributes.RemoveAll("class");
+
                                 // New
-                                if (model.Entity.CreatedAfter(lastVisit) || model.Entity.LastReplyAfter(lastVisit))
+                                if (model.Entity.LastReplyAfter(lastVisit))
                                 {
                                     output.PostElement.SetHtmlContent(
-                                        $"<span class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
+                                        $"<span data-toggle=\"tooltip\" title=\"{T["This topic has new replies"].Value}\" class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
                                 }
                                 else
                                 {
@@ -135,15 +136,10 @@ namespace Plato.Discuss.New.ViewAdapters
                                     if (model.Entity.ModifiedAfter(lastVisit))
                                     {
                                         output.PostElement.SetHtmlContent(
-                                            $"<span class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
+                                            $"<span data-toggle=\"tooltip\" title=\"{T["This topic has been updated since it was last read"].Value}\" class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
                                     }
                                 }
-                            }
-                            else
-                            {
-                                output.PostElement.SetHtmlContent(
-                                    $"<span class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
-                            }
+                            }                         
                         })
                     };
 

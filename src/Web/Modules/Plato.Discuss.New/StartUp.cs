@@ -26,6 +26,10 @@ namespace Plato.Demo
             services.AddScoped<IViewAdapterProvider, TopicListViewAdapter>();
             services.AddScoped<IViewAdapterProvider, TopicViewAdapter>();
 
+            // Replies
+            services.AddScoped<IViewAdapterProvider, TopicReplyListViewAdapter>();
+            services.AddScoped<IViewAdapterProvider, TopicReplyListItemViewAdapter>();
+
         }
 
         public override void Configure(

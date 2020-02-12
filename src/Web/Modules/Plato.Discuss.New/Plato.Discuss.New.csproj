@@ -5,6 +5,24 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Locales\en-US\emails.json" />
+    <None Remove="Locales\en-US\strings.json" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Locales\en-US\emails.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Locales\en-US\strings.json">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Core\PlatoCore.csproj" />
     <ProjectReference Include="..\Plato.Discuss\Plato.Discuss.csproj" />
     <ProjectReference Include="..\Plato.Entities.Metrics\Plato.Entities.Metrics.csproj" />

@@ -15,10 +15,11 @@
         ? $"{Model.Pager.Total.ToPrettyInt()} {replyText.Value}"
         : $"{Model.Pager.Total.ToPrettyInt()} {repliesText.Value}";
 
-    <h6>@title</h6>
+    <h6 asp-id="title">@title</h6>
     <hr />
 
-    <div data-provide="infiniteScroll"
+    <div asp-id="infinite-scroll"
+         data-provide="infiniteScroll"
          data-infinite-scroll-url="@Model.Pager.Url"
          data-infinite-scroll-offset="@offset"
          data-infinite-scroll-row-offset="@rowOffset"
