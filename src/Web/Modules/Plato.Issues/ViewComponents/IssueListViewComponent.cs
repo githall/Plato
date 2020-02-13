@@ -134,40 +134,45 @@ namespace Plato.Issues.ViewComponents
                 Value = OrderBy.Asc
             },
         };
-
-        private readonly IEntityService<Issue> _articleService;
+        
         private readonly IAuthorizationService _authorizationService;
+        private readonly IEntityService<Issue> _entityService;
 
-        public IssueListViewComponent(
-            IEntityService<Issue> articleService,
-            IAuthorizationService authorizationService)
-        {
-            _articleService = articleService;
+        public IssueListViewComponent(            
+            IAuthorizationService authorizationService,
+            IEntityService<Issue> articleService)
+        {            
             _authorizationService = authorizationService;
+            _entityService = articleService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityIndexOptions options, PagerOptions pager)
+        public async Task<IViewComponentResult> InvokeAsync(EntityIndexViewModel<Issue> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityIndexOptions();
+                model = new EntityIndexViewModel<Issue>();
             }
 
-            if (pager == null)
+            if (model.Options == null)
             {
-                pager = new PagerOptions();
+                model.Options = new EntityIndexOptions();
             }
 
-            return View(await GetViewModel(options, pager));
+            if (model.Pager == null)
+            {
+                model.Pager = new PagerOptions();
+            }
+
+            return View(await GetViewModel(model));
 
         }
 
-        async Task<EntityIndexViewModel<Issue>> GetViewModel(EntityIndexOptions options, PagerOptions pager)
+        async Task<EntityIndexViewModel<Issue>> GetViewModel(EntityIndexViewModel<Issue> model)
         {
 
             // Get results
-            var results = await _articleService
+            var results = await _entityService
                 .ConfigureQuery(async q =>
                 {
 
@@ -200,21 +205,17 @@ namespace Plato.Issues.ViewComponents
                     }
 
                 })
-                .GetResultsAsync(options, pager);
+                .GetResultsAsync(model.Options, model.Pager);
 
             // Set total on pager
-            pager.SetTotal(results?.Total ?? 0);
+            model.Pager.SetTotal(results?.Total ?? 0);
 
-            // Return view model
-            return new EntityIndexViewModel<Issue>
-            {
-                SortColumns = _defaultSortColumns,
-                SortOrder = _defaultSortOrder,
-                Filters = _defaultFilters,
-                Results = results,
-                Options = options,
-                Pager = pager
-            };
+            model.SortColumns = _defaultSortColumns;
+            model.SortOrder = _defaultSortOrder;
+            model.Filters = _defaultFilters;
+            model.Results = results;
+
+            return model;
 
         }
 

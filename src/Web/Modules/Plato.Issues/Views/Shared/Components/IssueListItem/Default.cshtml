@@ -4,7 +4,6 @@
     var voteText = Model.Entity.TotalRatings == 1 ? T["vote"] : T["votes"];
     var repliesText = Model.Entity.TotalReplies == 1 ? T["reply"] : T["replies"];
     string voteCss = "votes", replyCss = "comments";
-
     if (Model.Entity.TotalReplies > 0)
     {
         replyCss = "counter-outline-primary";
@@ -19,7 +18,7 @@
     }
 }
 
-<div class="list-left list-left-28">
+<div asp-id="list-left" class="list-left list-left-28">
     @if (Model.Entity.IsClosed)
     {
         <span title="@T["This issue has been closed"]" data-toggle="tooltip" class="d-inline-block text-success my-2">
@@ -33,7 +32,7 @@
         </span>
     }
 </div>
-<div class="list-body">
+<div asp-id="list-body" class="list-body">
     <div class="list-left list-left-2x counter-group">
         <div class="counter @voteCss">
             <h6>@Model.Entity.TotalRatings.ToPrettyInt()</h6> @voteText.Value
@@ -44,8 +43,8 @@
     </div>
     <div class="list-body">        
         <div class="row no-gutters">         
-            <div class="col-12">                
-                <a asp-route-area="Plato.Issues" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold" title="@Model.Entity.Title">@Model.Entity.Title.TrimToAround(75)</a>
+            <div asp-id="header" class="col-12">                
+                <a asp-id="title" asp-route-area="Plato.Issues" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold" title="@Model.Entity.Title">@Model.Entity.Title.TrimToAround(75)</a>
                 @if (Model.Entity.IsPinned)
                 {
                     <span title="@T["This issue is pinned and is probably important"]" data-toggle="tooltip" class="d-inline-block mx-1">
@@ -72,7 +71,7 @@
             </div>
         </div>
         <div class="row no-gutters">
-            <div class="col-12">
+            <div asp-id="details" class="col-12">
                 @if (details?.LatestUsers != null)
                 {
                     <div class="avatar-group float-right ml-2">

@@ -13,51 +13,46 @@ namespace Plato.Issues.ViewComponents
     {
 
         private readonly IEntityStore<Issue> _entityStore;
-        private readonly IEntityReplyStore<Comment> _entityReplyStore;
 
-        public IssueViewComponent(
-            IEntityReplyStore<Comment> entityReplyStore,
-            IEntityStore<Issue> entityStore)
-        {
-            _entityReplyStore = entityReplyStore;
+        public IssueViewComponent(IEntityStore<Issue> entityStore)
+        {           
             _entityStore = entityStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityOptions options)
+        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Issue, Comment> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityOptions();
+                model = new EntityViewModel<Issue, Comment>();
             }
 
-            var model = await GetViewModel(options);
+            if (model.Options == null)
+            {
+                model.Options = new EntityOptions();
+            }
 
-            return View(model);
+            return View(await GetViewModel(model));
 
         }
 
-        async Task<EntityViewModel<Issue, Comment>> GetViewModel(
-            EntityOptions options)
+        async Task<EntityViewModel<Issue, Comment>> GetViewModel(EntityViewModel<Issue, Comment> model)
         {
 
-            if (options.Id <= 0)
+            if (model.Options.Id <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(options.Id));
+                throw new ArgumentOutOfRangeException(nameof(model.Options.Id));
             }
 
-            var entity = await _entityStore.GetByIdAsync(options.Id);
+            var entity = await _entityStore.GetByIdAsync(model.Options.Id);
             if (entity == null)
             {
                 throw new ArgumentNullException();
             }
 
-            // Return view model
-            return new EntityViewModel<Issue, Comment>
-            {
-                Options = options,
-                Entity = entity
-            };
+            model.Entity = entity;
+
+            return model;
 
         }
 

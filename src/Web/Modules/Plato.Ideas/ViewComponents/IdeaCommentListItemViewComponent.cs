@@ -9,8 +9,7 @@ namespace Plato.Ideas.ViewComponents
     public class IdeaCommentListItemViewComponent : ViewComponentBase
     {
         
-        public Task<IViewComponentResult> InvokeAsync(
-            EntityReplyListItemViewModel<Idea, IdeaComment> model)
+        public Task<IViewComponentResult> InvokeAsync(EntityReplyListItemViewModel<Idea, IdeaComment> model)
         {
             return Task.FromResult((IViewComponentResult)View(model));
         }

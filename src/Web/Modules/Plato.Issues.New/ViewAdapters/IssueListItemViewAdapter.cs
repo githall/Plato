@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Plato.Ideas.Models;
+using Plato.Issues.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using System.Collections.Generic;
@@ -14,10 +14,10 @@ using Plato.Entities.Metrics.Repositories;
 using Plato.Entities.Metrics.Extensions;
 using Plato.Entities.Extensions;
 
-namespace Plato.Ideas.New.ViewAdapters
+namespace Plato.Issues.New.ViewAdapters
 {
 
-    public class IdeaListItemViewAdapter : ViewAdapterProviderBase
+    public class IssueListItemViewAdapter : ViewAdapterProviderBase
     {
 
         private readonly IAggregatedEntityMetricsRepository _agggregatedEntityMetricsRepository;
@@ -26,8 +26,8 @@ namespace Plato.Ideas.New.ViewAdapters
 
         public IHtmlLocalizer T { get; }
 
-        public IdeaListItemViewAdapter(
-            IHtmlLocalizer<IdeaListItemViewAdapter> localizer,
+        public IssueListItemViewAdapter(
+            IHtmlLocalizer<IssueListItemViewAdapter> localizer,
             IAggregatedEntityMetricsRepository agggregatedEntityMetricsRepository,    
             IActionContextAccessor actionContextAccessor,         
             IContextFacade contextFacade)
@@ -38,7 +38,7 @@ namespace Plato.Ideas.New.ViewAdapters
             _contextFacade = contextFacade; 
 
             T = localizer;
-            ViewName = "IdeaListItem";
+            ViewName = "IssueListItem";
 
         }
 
@@ -56,7 +56,7 @@ namespace Plato.Ideas.New.ViewAdapters
             // Adapt the view
             return await AdaptAsync(ViewName, v =>
             {
-                v.AdaptModel<EntityListItemViewModel<Idea>>(async model =>
+                v.AdaptModel<EntityListItemViewModel<Issue>>(async model =>
                 {
 
                     // Build last visits from metrics
@@ -77,7 +77,7 @@ namespace Plato.Ideas.New.ViewAdapters
                         }
 
                         // Get index view model from context
-                        var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Idea>)] as EntityIndexViewModel<Idea>;
+                        var viewModel = _actionContextAccessor.ActionContext.HttpContext.Items[typeof(EntityIndexViewModel<Issue>)] as EntityIndexViewModel<Issue>;
                         if (viewModel == null)
                         {
                             // Return an anonymous type, we are adapting a view component
@@ -143,7 +143,7 @@ namespace Plato.Ideas.New.ViewAdapters
                                 if (model.Entity.LastReplyAfter(lastVisit))
                                 {
                                     output.PostElement.SetHtmlContent(
-                                        $"<span data-toggle=\"tooltip\" title=\"{T["This idea has new replies"].Value}\" class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
+                                        $"<span data-toggle=\"tooltip\" title=\"{T["This issue has new replies"].Value}\" class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
                                 }
                                 else
                                 {
@@ -151,7 +151,7 @@ namespace Plato.Ideas.New.ViewAdapters
                                     if (model.Entity.ModifiedAfter(lastVisit))
                                     {
                                         output.PostElement.SetHtmlContent(
-                                            $"<span data-toggle=\"tooltip\" title=\"{T["This idea has been updated since it was last read"].Value}\" class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
+                                            $"<span data-toggle=\"tooltip\" title=\"{T["This issue has been updated since it was last read"].Value}\" class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
                                     }
                                 }
                             }
@@ -159,7 +159,7 @@ namespace Plato.Ideas.New.ViewAdapters
                             {
                                 // Unread
                                 output.PreElement.SetHtmlContent(
-                                    $"<span data-toggle=\"tooltip\" title=\"{T["You've not read this idea yet"].Value}\" class=\"text-primary mr-2 smaller\"><i class=\"fa fa-circle\"></i></span>");
+                                    $"<span data-toggle=\"tooltip\" title=\"{T["You've not read this issue yet"].Value}\" class=\"text-primary mr-2 smaller\"><i class=\"fa fa-circle\"></i></span>");
                             }
                         })
                     };

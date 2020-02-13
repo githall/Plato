@@ -151,7 +151,6 @@ namespace Plato.Ideas.New.ViewAdapters
                 });
             });
 
-
         }
 
     }

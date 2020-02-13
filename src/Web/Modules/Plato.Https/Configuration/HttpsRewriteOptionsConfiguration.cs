@@ -6,7 +6,7 @@ using Plato.Https.Stores;
 
 namespace Plato.Https.Configuration
 {
-    class HttpsRewriteOptionsConfiguration : IConfigureOptions<RewriteOptions>
+    public class HttpsRewriteOptionsConfiguration : IConfigureOptions<RewriteOptions>
     {
 
         private readonly IHttpsSettingsStore<HttpsSettings> _httpsSettingsStore;
