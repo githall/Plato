@@ -7,8 +7,11 @@
 
 @await DisplayAsync(new View("DocList", new
 {
-    options = Model.EntityIndexOptions,
-    pager = Model.Pager
+    model = new EntityIndexViewModel<Doc>()
+    {
+        Options = Model.EntityIndexOptions,
+        Pager = Model.Pager
+    }  
 }))
 
 

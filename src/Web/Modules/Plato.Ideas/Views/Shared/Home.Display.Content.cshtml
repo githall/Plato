@@ -2,13 +2,12 @@
 
 @await DisplayAsync(new View("Idea", new
 {
-    options = @Model.Options
+    Model
 }))
 
 @await DisplayAsync(new View("IdeaCommentList", new
 {
-    options = @Model.Options,
-    pager = @Model.Pager
+    Model
 }))
 
 

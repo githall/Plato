@@ -25,8 +25,6 @@ namespace Plato.Articles.New
             services.AddScoped<IViewAdapterProvider, ArticleListItemViewAdapter>();
             services.AddScoped<IViewAdapterProvider, ArticleListViewAdapter>();
             services.AddScoped<IViewAdapterProvider, ArticleViewAdapter>();
-
-            // Replies
             services.AddScoped<IViewAdapterProvider, ArticleCommentListViewAdapter>();
             services.AddScoped<IViewAdapterProvider, ArticleCommentListItemViewAdapter>();
 

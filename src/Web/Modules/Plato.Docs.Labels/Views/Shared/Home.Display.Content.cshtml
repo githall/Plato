@@ -2,6 +2,9 @@
 
 @await DisplayAsync(new View("DocList", new
 {
-    options = @Model.Options,
-    pager = @Model.Pager
+    model = new EntityIndexViewModel<Doc>()
+    {
+        Options = Model.Options,
+        Pager = Model.Pager
+    }  
 }))

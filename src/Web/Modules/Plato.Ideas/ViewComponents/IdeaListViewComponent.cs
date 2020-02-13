@@ -146,26 +146,31 @@ namespace Plato.Ideas.ViewComponents
             _authorizationService = authorizationService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityIndexOptions options, PagerOptions pager)
+        public async Task<IViewComponentResult> InvokeAsync(EntityIndexViewModel<Idea> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityIndexOptions();
+                model = new EntityIndexViewModel<Idea>();
             }
 
-            if (pager == null)
+            if (model.Options == null)
             {
-                pager = new PagerOptions();
+                model.Options = new EntityIndexOptions();
             }
-            
-            return View(await GetViewModel(options, pager));
+
+            if (model.Pager == null)
+            {
+                model.Pager = new PagerOptions();
+            }
+
+            return View(await GetViewModel(model));
 
         }
-        
-        async Task<EntityIndexViewModel<Idea>> GetViewModel(EntityIndexOptions options, PagerOptions pager)
+
+        async Task<EntityIndexViewModel<Idea>> GetViewModel(EntityIndexViewModel<Idea> model)
         {
-          
+
             // Get results
             var results = await _articleService
                 .ConfigureQuery(async q =>
@@ -200,21 +205,17 @@ namespace Plato.Ideas.ViewComponents
                     }
                     
                 })
-                .GetResultsAsync(options, pager);
+                .GetResultsAsync(model.Options, model.Pager);
 
             // Set total on pager
-            pager.SetTotal(results?.Total ?? 0);
-            
-            // Return view model
-            return new EntityIndexViewModel<Idea>
-            {
-                SortColumns = _defaultSortColumns,
-                SortOrder = _defaultSortOrder,
-                Filters = _defaultFilters,
-                Results = results,
-                Options = options,
-                Pager = pager
-            }; 
+            model.Pager.SetTotal(results?.Total ?? 0);
+
+            model.SortColumns = _defaultSortColumns;
+            model.SortOrder = _defaultSortOrder;
+            model.Filters = _defaultFilters;
+            model.Results = results;
+
+            return model;
 
         }
 

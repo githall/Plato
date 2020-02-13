@@ -3,8 +3,7 @@
     var details = Model.Entity.GetOrCreate<IdeaDetails>();
     var voteText = Model.Entity.TotalRatings == 1 ? T["vote"] : T["votes"];
     var repliesText = Model.Entity.TotalReplies == 1 ? T["reply"] : T["replies"];
-    string voteCss = "votes", ratingCss = "rating";
-    
+    string voteCss = "votes", ratingCss = "rating";    
     if (Model.Entity.TotalRatings > 0)
     {
         voteCss = "counter-outline-info";
@@ -21,10 +20,9 @@
     {
         ratingCss = "counter-danger";
     }
-
 }
 
-<div class="list-left list-left-2x counter-group">
+<div asp-id="list-left" class="list-left list-left-2x counter-group">
     <div class="counter @voteCss">
         <h6>@Model.Entity.TotalRatings.ToPrettyInt()</h6> @voteText.Value
     </div>
@@ -32,11 +30,11 @@
         <h6>@Model.Entity.SummedRating.ToPrettyInt()</h6> @T["rating"]
     </div>
 </div>
-<div class="list-body">    
+<div asp-id="list-body" class="list-body">    
     <div class="row no-gutters">
-        <div class="col-12">
+        <div asp-id="header" class="col-12">
 
-            <ol class="list-inline text-muted float-right text-right">
+            <ol asp-id="icons" class="list-inline text-muted float-right text-right">
                 @if (Model.Tags != null)
                 {
                     var sb = new System.Text.StringBuilder();
@@ -77,7 +75,7 @@
                 }
             </ol>
 
-            <a asp-route-area="Plato.Ideas" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold" title="@Model.Entity.Title">@Model.Entity.Title.TrimToAround(75)</a>
+            <a asp-id="title" asp-route-area="Plato.Ideas" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" class="font-weight-bold" title="@Model.Entity.Title">@Model.Entity.Title.TrimToAround(75)</a>
             @if (Model.Entity.IsPinned)
             {
                 <span title="@T["This idea is pinned and is probably important"]" data-toggle="tooltip" class="d-inline-block mx-1">
@@ -104,7 +102,7 @@
         </div>
     </div>
     <div class="row no-gutters">
-        <div class="col-12">
+        <div asp-id="details" class="col-12">
 
             @if (details?.LatestUsers != null)
             {
@@ -125,7 +123,6 @@
                     <a asp-route-area="Plato.Ideas" asp-route-controller="Home" asp-route-action="Reply" asp-route-opts.id="@Model.Entity.Id" asp-route-opts.alias="@Model.Entity.Alias" asp-route-opts.replyId="@Model.Entity.LastReplyId" class="@Model.Entity.LastReplyBy?.Css.StaffCss"><date utc="@Model.Entity.LastReplyDate"></date></a>
                 </div>
             }
-
 
             @if (Model.Entity.CreatedUserId > 0)
             {

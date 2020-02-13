@@ -33,31 +33,32 @@ namespace Plato.Ideas.ViewComponents
             _authorizationService = authorizationService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(
-            EntityOptions options,
-            PagerOptions pager)
+        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Idea, IdeaComment> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityOptions();
+                model = new EntityViewModel<Idea, IdeaComment>();
             }
 
-            if (pager == null)
+            if (model.Options == null)
             {
-                pager = new PagerOptions();
+                model.Options = new EntityOptions();
+            }
+
+            if (model.Pager == null)
+            {
+                model.Pager = new PagerOptions();
             }
             
-            return View(await GetViewModel(options, pager));
+            return View(await GetViewModel(model));
 
         }
 
-        async Task<EntityViewModel<Idea, IdeaComment>> GetViewModel(
-            EntityOptions options,
-            PagerOptions pager)
-        {
+        async Task<EntityViewModel<Idea, IdeaComment>> GetViewModel(EntityViewModel<Idea, IdeaComment> model)
+        { 
 
-            var entity = await _entityStore.GetByIdAsync(options.Id);
+            var entity = await _entityStore.GetByIdAsync(model.Options.Id);
             if (entity == null)
             {
                 throw new ArgumentNullException();
@@ -89,19 +90,15 @@ namespace Plato.Ideas.ViewComponents
                     }
 
                 })
-                .GetResultsAsync(options, pager);
+                .GetResultsAsync(model.Options, model.Pager);
             
             // Set total on pager
-            pager.SetTotal(results?.Total ?? 0);
+            model.Pager.SetTotal(results?.Total ?? 0);
 
-            // Return view model
-            return new EntityViewModel<Idea, IdeaComment>
-            {
-                Options = options,
-                Pager = pager,
-                Entity = entity,
-                Replies = results
-        };
+            model.Entity = entity;
+            model.Replies = results;
+
+            return model;
 
         }
 

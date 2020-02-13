@@ -13,51 +13,46 @@ namespace Plato.Ideas.ViewComponents
     {
 
         private readonly IEntityStore<Idea> _entityStore;
-        private readonly IEntityReplyStore<IdeaComment> _entityReplyStore;
 
-        public IdeaViewComponent(
-            IEntityReplyStore<IdeaComment> entityReplyStore,
-            IEntityStore<Idea> entityStore)
+        public IdeaViewComponent(IEntityStore<Idea> entityStore)
         {
-            _entityReplyStore = entityReplyStore;
             _entityStore = entityStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityOptions options)
+        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Idea, IdeaComment> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityOptions();
+                model = new EntityViewModel<Idea, IdeaComment>();
             }
 
-            var model = await GetViewModel(options);
+            if (model.Options == null)
+            {
+                model.Options = new EntityOptions();
+            }
 
-            return View(model);
+            return View(await GetViewModel(model));
 
         }
 
-        async Task<EntityViewModel<Idea, IdeaComment>> GetViewModel(
-            EntityOptions options)
+        async Task<EntityViewModel<Idea, IdeaComment>> GetViewModel(EntityViewModel<Idea, IdeaComment> model)
         {
 
-            if (options.Id <= 0)
+            if (model.Options.Id <= 0)
             {
-                throw new ArgumentOutOfRangeException(nameof(options.Id));
+                throw new ArgumentOutOfRangeException(nameof(model.Options.Id));
             }
 
-            var topic = await _entityStore.GetByIdAsync(options.Id);
-            if (topic == null)
+            var entity = await _entityStore.GetByIdAsync(model.Options.Id);
+            if (entity == null)
             {
                 throw new ArgumentNullException();
             }
-            
-            // Return view model
-            return new EntityViewModel<Idea, IdeaComment>
-            {
-                Options = options,
-                Entity = topic
-        };
+
+            model.Entity = entity;
+
+            return model;
 
         }
 
