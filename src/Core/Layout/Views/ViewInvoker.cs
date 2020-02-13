@@ -1,13 +1,9 @@
 ﻿using System;
-using System.Runtime.CompilerServices;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Layout.EmbeddedViews;
 using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
@@ -18,25 +14,25 @@ namespace PlatoCore.Layout.Views
 
         public ViewContext ViewContext { get; set; }
         
-        private readonly IViewComponentHelper _viewComponentHelper;
-        private readonly IPartialViewInvoker _partialViewInvoker;
+        private readonly IPlatoViewComponentInvoker _platoViewComponentInvoker;
+        private readonly IPlatoPartialViewInvoker _platoPartialViewInvoker;
         private readonly ILogger<ViewInvoker> _logger;        
 
-        public ViewInvoker(            
-            IViewComponentHelper viewComponentHelper,
-            IPartialViewInvoker partialViewInvoker,
+        public ViewInvoker(
+            IPlatoViewComponentInvoker platoViewComponentInvoker,
+            IPlatoPartialViewInvoker platoPartialViewInvoker,
             ILogger<ViewInvoker> logger)
-        {            
-            _viewComponentHelper = viewComponentHelper;
-            _partialViewInvoker = partialViewInvoker;            
+        {
+            _platoViewComponentInvoker = platoViewComponentInvoker;
+            _platoPartialViewInvoker = platoPartialViewInvoker;            
             _logger = logger;
         }
 
         // Implementation
 
-        public void Contextualize(ViewDisplayContext context)
+        public void Contextualize(ViewContext viewContext)
         {
-            ViewContext = context.ViewContext;
+            ViewContext = viewContext;
         }
 
         public async Task<IHtmlContent> InvokeAsync(IView view)
@@ -47,25 +43,16 @@ namespace PlatoCore.Layout.Views
                 throw new ArgumentNullException(nameof(view));
             }
 
-            if (string.IsNullOrEmpty(view.ViewName))
-            {
-                throw new ArgumentNullException(nameof(view.ViewName));
-            }
-
-            // ** Hot code path ** - please modify carefully
-
             if (ViewContext == null)
             {
                 throw new Exception(
-                    "ViewContext must be set via the Contextualize method before calling the InvokeAsync method");
-            }
+                    "The ViewContext must be set via the Contextualize method before calling the InvokeAsync method");
+            }        
 
-            // Embedded views simply return the output generated within the view
-            // It's the embedded views responsibility to perform model binding
-            // Embedded views can leverage the current context within the InvokeAsync method
-            if (view.EmbeddedView != null)
+            // Compiled views are invoked directly
+            if (view as CompiledView != null)
             {
-                return await InvokeEmbeddedViewAsync(view.EmbeddedView);
+                return await InvokeCompiledViewAsync((ICompiledView)view);
             }
 
             // View components use an anonymous type for the parameters argument
@@ -74,58 +61,31 @@ namespace PlatoCore.Layout.Views
             // on the model we'll treat this view as a ViewComponent and invoke accordingly
             if (IsComponent(view.Model))
             {
-                return await InvokeViewComponentAsync(view.ViewName, view.Model);
+                return await InvokeViewComponentAsync(view);
             }
 
-            // else we have a partial view
-            return await InvokePartialViewAsync(view.ViewName, view.Model);
+            // Else we have a partial view
+            return await InvokePartialViewAsync(view);
 
         }
 
         // ------------------
 
-        async Task<IHtmlContent> InvokeEmbeddedViewAsync(IEmbeddedView view)
+        async Task<IHtmlContent> InvokeCompiledViewAsync(ICompiledView view)
         {
-            return await view.Contextualize(ViewContext).InvokeAsync();
+            return await view.InvokeAsync(ViewContext);
         }
 
-        async Task<IHtmlContent> InvokePartialViewAsync(string viewName, object model)
+        async Task<IHtmlContent> InvokePartialViewAsync(IView view)
         {
-            _partialViewInvoker.Contextualize(ViewContext);
-            return await _partialViewInvoker.InvokeAsync(viewName, model, ViewContext.ViewData);
+            _platoPartialViewInvoker.Contextualize(ViewContext);
+            return await _platoPartialViewInvoker.InvokeAsync(view);
         }
 
-        async Task<IHtmlContent> InvokeViewComponentAsync(string viewName, object arguments)
+        async Task<IHtmlContent> InvokeViewComponentAsync(IView view)
         {
-            if (!(_viewComponentHelper is DefaultViewComponentHelper helper))
-            {
-                throw new ArgumentNullException(
-                    $"{_viewComponentHelper.GetType()} cannot be converted to DefaultViewComponentHelper");
-            }
-
-            // Contextualize view component
-            helper.Contextualize(ViewContext);
-
-            // Log the invocation
-            if (_logger.IsEnabled(LogLevel.Information))
-            {
-                _logger.LogInformation($"Attempting to invoke view component \"{viewName}\".");
-            }
-
-            try
-            {
-                return await _viewComponentHelper.InvokeAsync(viewName, arguments);
-            }
-            catch (Exception e)
-            {
-                if (_logger.IsEnabled(LogLevel.Error))
-                {
-                    _logger.LogError(e,
-                        $"An exception occurred whilst invoking the view component with name \"{viewName}\". {e.Message}");
-                }
-                throw;
-            }
-                        
+            _platoViewComponentInvoker.Contextualize(ViewContext);
+            return await _platoViewComponentInvoker.InvokeAsync(view);
         }
 
         bool IsComponent(object model)

@@ -7,8 +7,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
-using PlatoCore.Layout.ViewHelpers;
-using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Models.Shell;
 
 namespace PlatoCore.Layout.Alerts
@@ -154,9 +152,7 @@ namespace PlatoCore.Layout.Alerts
                     {
                         foreach (var alert in _alerts)
                         {
-                            zone.Add(new PositionedView(
-                                new AlertViewHelper(alert))
-                            );
+                            zone.Add(new AlertCompiledView(alert));
                         }
                     });
                     return layout;

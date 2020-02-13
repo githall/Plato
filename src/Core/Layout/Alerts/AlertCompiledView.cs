@@ -1,21 +1,21 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
-using PlatoCore.Layout.Alerts;
-using PlatoCore.Layout.EmbeddedViews;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using PlatoCore.Layout.Views.Abstractions;
 
-namespace PlatoCore.Layout.ViewHelpers
+namespace PlatoCore.Layout.Alerts
 {
-    public class AlertViewHelper : EmbeddedView
+    public class AlertCompiledView : CompiledView
     {
 
         private readonly AlertInfo _alert;
 
-        public AlertViewHelper(AlertInfo alert)
+        public AlertCompiledView(AlertInfo alert)
         {
             _alert = alert;
         }
 
-        public override Task<IHtmlContent> InvokeAsync()
+        public override Task<IHtmlContent> InvokeAsync(ViewContext context)
         {
             if (_alert == null)
             {

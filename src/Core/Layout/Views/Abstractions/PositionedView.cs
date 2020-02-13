@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Linq;
-using PlatoCore.Layout.EmbeddedViews;
 
 namespace PlatoCore.Layout.Views.Abstractions
 {
@@ -21,9 +20,8 @@ namespace PlatoCore.Layout.Views.Abstractions
 
         private string _zone;
         private int _order;
-        
-        public PositionedView(IEmbeddedView embeddedView) :
-            base(embeddedView)
+
+        public PositionedView()
         {
             _zone = LayoutZones.ContentZoneName;
             _order = 1;

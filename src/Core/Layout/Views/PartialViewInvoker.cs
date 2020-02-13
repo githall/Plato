@@ -7,18 +7,23 @@ using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewEngines;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
+using Microsoft.Extensions.Logging;
 using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.Views
 {
 
-    public class PartialViewInvoker : IPartialViewInvoker
+    public class PartialViewInvoker : IPlatoPartialViewInvoker
     {
-
+   
+        private readonly ILogger<PartialViewInvoker> _logger;
         private readonly ICompositeViewEngine _viewEngine;
 
-        public PartialViewInvoker(ICompositeViewEngine viewEngine) 
-        {            
+        public PartialViewInvoker(
+            ILogger<PartialViewInvoker> logger,
+            ICompositeViewEngine viewEngine) 
+        {
+            _logger = logger ?? throw new ArgumentNullException(nameof(logger));
             _viewEngine = viewEngine ?? throw new ArgumentNullException(nameof(viewEngine));            
         }
 
@@ -29,26 +34,26 @@ namespace PlatoCore.Layout.Views
             ViewContext = viewContext;
         }
 
-        public async Task<IHtmlContent> InvokeAsync(string viewName, object model, ViewDataDictionary viewData)
+        public async Task<IHtmlContent> InvokeAsync(Abstractions.IView view)
         {
 
             // We always need a view name to invoke
-            if (string.IsNullOrEmpty(viewName))
+            if (string.IsNullOrEmpty(view.ViewName))
             {
-                throw new ArgumentNullException(nameof(viewName));
+                throw new ArgumentNullException(nameof(view.ViewName));
             }
           
-            var result = FindView(viewName);
+            var result = FindView(view.ViewName);
             if (!result.Success)
             {
-                throw new Exception($"A view with the name \"{viewName}\" could not be found!");
+                throw new Exception($"A view with the name \"{view.ViewName}\" could not be found!");
             }
 
             var builder = new HtmlContentBuilder();
             using (var writer = new StringWriter())
             {
                 // Render view
-                await RenderPartialViewAsync(writer, model, viewData, result.View);
+                await RenderPartialViewAsync(writer, view.Model, ViewContext.ViewData, result.View);
                 // Write results
                 builder.WriteTo(writer, HtmlEncoder.Default);
                 // Return builder

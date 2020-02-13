@@ -9,7 +9,7 @@ namespace PlatoCore.Layout.Views.Abstractions
     {
         ViewContext ViewContext { get; set; }
 
-        void Contextualize(ViewDisplayContext viewContext);
+        void Contextualize(ViewContext viewContext);
 
         Task<IHtmlContent> InvokeAsync(IView view);
 

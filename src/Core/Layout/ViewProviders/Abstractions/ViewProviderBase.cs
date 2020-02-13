@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using PlatoCore.Abstractions;
-using PlatoCore.Layout.EmbeddedViews;
+using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Views.Abstractions;
 
@@ -52,18 +52,6 @@ namespace PlatoCore.Layout.ViewProviders.Abstractions
             // Return a view we can optionally position
             return new PositionedView(viewName, model);
 
-        }
-
-        public IPositionedView View(string viewName, dynamic arguments)
-        {
-            // Used to invoke view components
-            return new PositionedView(viewName, arguments);
-        }
-
-        public IPositionedView View(IEmbeddedView embeddedView)
-        {
-            // Return a view we can optionally position
-            return new PositionedView(embeddedView);
         }
 
     }

@@ -45,12 +45,15 @@ namespace PlatoCore.Layout.Extensions
             // Layout updater
             services.AddSingleton<ILayoutUpdater, LayoutUpdater>();
 
-            // Views need to be scoped so new instances are created for each request         
+            // Views helpers       
             services.AddScoped<IViewDescriptorCollection, ViewDescriptorCollection>();
-            services.AddScoped<IViewHelperFactory, ViewDisplayHelperFactory>();
-            services.AddScoped<IPartialViewInvoker, PartialViewInvoker>();
-            services.AddScoped<IViewInvoker, ViewInvoker>();
+            services.AddScoped<IViewHelperFactory, ViewDisplayHelperFactory>();     
             services.AddScoped<IViewFactory, ViewFactory>();
+
+            // View invokers
+            services.AddScoped<IPlatoPartialViewInvoker, PartialViewInvoker>();
+            services.AddScoped<IPlatoViewComponentInvoker, ViewComponentInvoker>();
+            services.AddScoped<IViewInvoker, ViewInvoker>();
 
             // Add page title builder
             services.AddScoped<IPageTitleBuilder, PageTitleBuilder>();
