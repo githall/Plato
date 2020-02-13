@@ -11,7 +11,8 @@ namespace PlatoCore.Layout.ViewAdapters.Abstractions
 
         public abstract Task<IViewAdapterResult> ConfigureAsync(string viewName);
 
-        public Task<IViewAdapterResult> AdaptAsync(string viewName,
+
+        public IViewAdapterResult Adapt(string viewName,
             Action<IViewAdapterBuilder> configure)
         {
 
@@ -24,8 +25,14 @@ namespace PlatoCore.Layout.ViewAdapters.Abstractions
             result.Builder = builder;
 
             // Return results
-            return Task.FromResult(result);
+            return result;
 
+        }
+
+        public Task<IViewAdapterResult> AdaptAsync(string viewName,
+            Action<IViewAdapterBuilder> configure)
+        {     
+            return Task.FromResult(Adapt(viewName, configure));
         }
 
     }

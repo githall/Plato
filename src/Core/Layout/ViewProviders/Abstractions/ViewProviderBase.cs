@@ -45,7 +45,7 @@ namespace PlatoCore.Layout.ViewProviders.Abstractions
 
             // Create proxy model 
             var proxy = ActivateInstanceOf<TViewModel>.Instance();
-        
+
             // Configure model
             var model = configure((TViewModel) proxy);
 

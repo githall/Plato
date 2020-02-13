@@ -63,39 +63,37 @@ namespace PlatoCore.Layout.ViewAdapters
                 throw new NullReferenceException(nameof(alteration));
             }
 
-            // wrapper to convert delegates generic argument type
-            // to concrete type (object) for storage within adapter result
-            var typedDelegate = new Func<object, Task<object>>(async (object input) =>
+            // Convert TModel to object for storage within adapter result
+            var typedDelegate = new Func<object, Task<object>>(async (object model) =>
             {
 
-                // For view components that use anonymous types use the first 
-                // anonymous type parameter that matching the model we are attempting to adapt
-                if (IsViewModelAnonymousType(input))
+                // For view component model adapters, the convention is to use the first anonymous
+                // type argument matching our TModel. This is not perfect but at last allows 
+                // adapters that adapt view components to use a strong typing
+                // To modify anonymous type arguments without the generic typing
+                // use the regular non generic AdaptModel method below instead
+                // TODO: Possibly implement a convention-based approach for greater extensibility. 
+                // For example ViewComponentModelAdapterConvention : IModelAdapterConvention
+                if (IsComponent(model))
                 {
 
-                    var args = new List<object>();
-                    var properties = TypeDescriptor.GetProperties(input);
-                    foreach (PropertyDescriptor property in properties)
+                    foreach (var argument in PrepareAnonymousTypeArguments(model))
                     {
-                        args.Add(property.GetValue(input));
-                    }
-
-                    foreach (var arg in args)
-                    {
-                        if (arg is TModel)
-                        {                            
-                            return await alteration((TModel)arg);
+                        if (argument is TModel)
+                        {
+                            return await alteration((TModel)argument);
                         }
                     }
 
                     // IF we reach this point we have not found an anonymous type 
-                    // parameter matching the model we are attempting to adapt
+                    // argument matching the model we are attempting to adapt
 
                 }
 
-                if (input is TModel)
+                // Patial views
+                if (model is TModel)
                 {
-                    return await alteration((TModel)input);
+                    return await alteration((TModel)model);
                 }
 
                 return null;
@@ -106,9 +104,23 @@ namespace PlatoCore.Layout.ViewAdapters
             return this;
         }
 
+      
+        public IViewAdapterBuilder AdaptModel(Func<object, Task<object>> alteration)
+        {
+
+            if (alteration == null)
+            {
+                throw new NullReferenceException(nameof(alteration));
+            }
+
+            _viewAdapterResult.ModelAlterations.Add(alteration);
+            return this;
+
+        }
+
         // ----------------
 
-        bool IsViewModelAnonymousType(object model)
+        bool IsComponent(object model)
         {
 
             // We need a model to inspect
@@ -120,6 +132,18 @@ namespace PlatoCore.Layout.ViewAdapters
             return model.GetType().IsAnonymousType();
 
         }
+
+        private IEnumerable<object> PrepareAnonymousTypeArguments(object model)
+        {
+            var arguments = new List<object>();
+            var properties = TypeDescriptor.GetProperties(model);
+            foreach (PropertyDescriptor property in properties)
+            {
+                arguments.Add(property.GetValue(model));
+            }
+            return arguments;
+        }
+
 
     }
 

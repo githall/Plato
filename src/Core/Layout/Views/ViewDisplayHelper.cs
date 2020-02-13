@@ -11,24 +11,24 @@ namespace PlatoCore.Layout.Views
 
     public class ViewDisplayHelper : IViewDisplayHelper
     {
-        
+
         private readonly IViewFactory _viewFactory;
         private readonly IServiceProvider _serviceProvider;
         private IViewAdapterManager _viewAdapterManager;
 
         public ViewContext ViewContext { get; set; }
-        
+
         public ViewDisplayHelper(
             IViewInvoker viewInvoker,
             IViewFactory viewFactory,
             ViewContext viewContext,
             IServiceProvider serviceProvider)
         {
-            _viewFactory = viewFactory;
-            ViewContext = viewContext;
             _serviceProvider = serviceProvider;
+            _viewFactory = viewFactory;
+            ViewContext = viewContext;     
         }
-        
+
         public async Task<IHtmlContent> DisplayAsync(IView view)
         {
 

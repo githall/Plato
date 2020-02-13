@@ -21,7 +21,7 @@ namespace PlatoCore.Layout.Views
         {            
             _viewEngine = viewEngine ?? throw new ArgumentNullException(nameof(viewEngine));            
         }
-        
+
         public ViewContext ViewContext { get; set; }
 
         public void Contextualize(ViewContext viewContext)
@@ -37,14 +37,14 @@ namespace PlatoCore.Layout.Views
             {
                 throw new ArgumentNullException(nameof(viewName));
             }
-
-            var builder = new HtmlContentBuilder();
+          
             var result = FindView(viewName);
             if (!result.Success)
             {
                 throw new Exception($"A view with the name \"{viewName}\" could not be found!");
             }
 
+            var builder = new HtmlContentBuilder();
             using (var writer = new StringWriter())
             {
                 // Render view
@@ -58,7 +58,7 @@ namespace PlatoCore.Layout.Views
         }
 
         // -----------
-        
+
         ViewEngineResult FindView(string partialName)
         {
 
@@ -83,15 +83,17 @@ namespace PlatoCore.Layout.Views
             object model,
             ViewDataDictionary viewData,
             Microsoft.AspNetCore.Mvc.ViewEngines.IView view)
-        {
-            // Determine which ViewData we should use to construct a new ViewData
-            var baseViewData = viewData ?? ViewContext.ViewData;
-            var newViewData = new ViewDataDictionary<object>(baseViewData, model);
-            var partialViewContext = new ViewContext(ViewContext, view, newViewData, writer);
+        {     
+
+            var viewContext = new ViewContext(
+                ViewContext, 
+                view, 
+                new ViewDataDictionary<object>(viewData ?? ViewContext.ViewData, model), 
+                writer);
 
             using (view as IDisposable)
             {
-                await view.RenderAsync(partialViewContext);             
+                await view.RenderAsync(viewContext);             
             }
 
         }

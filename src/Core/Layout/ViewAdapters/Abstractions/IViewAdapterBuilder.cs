@@ -17,6 +17,8 @@ namespace PlatoCore.Layout.ViewAdapters.Abstractions
 
         IViewAdapterBuilder AdaptModel<TModel>(Func<TModel, Task<object>> alteration) where TModel : class;
 
+        IViewAdapterBuilder AdaptModel(Func<object, Task<object>> alteration);
+
     }
 
 }

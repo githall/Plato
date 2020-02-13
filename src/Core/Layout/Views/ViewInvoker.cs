@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
+using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout.EmbeddedViews;
 using PlatoCore.Layout.Views.Abstractions;
 
@@ -18,16 +19,16 @@ namespace PlatoCore.Layout.Views
         public ViewContext ViewContext { get; set; }
         
         private readonly IViewComponentHelper _viewComponentHelper;
-        private readonly IPartialViewInvoker _partialInvoker;
+        private readonly IPartialViewInvoker _partialViewInvoker;
         private readonly ILogger<ViewInvoker> _logger;        
 
         public ViewInvoker(            
             IViewComponentHelper viewComponentHelper,
-            IPartialViewInvoker partialInvoker,
+            IPartialViewInvoker partialViewInvoker,
             ILogger<ViewInvoker> logger)
         {            
             _viewComponentHelper = viewComponentHelper;
-            _partialInvoker = partialInvoker;            
+            _partialViewInvoker = partialViewInvoker;            
             _logger = logger;
         }
 
@@ -61,7 +62,7 @@ namespace PlatoCore.Layout.Views
 
             // Embedded views simply return the output generated within the view
             // It's the embedded views responsibility to perform model binding
-            // Embedded views can leverage the current context within the Build method
+            // Embedded views can leverage the current context within the InvokeAsync method
             if (view.EmbeddedView != null)
             {
                 return await InvokeEmbeddedViewAsync(view.EmbeddedView);
@@ -90,8 +91,8 @@ namespace PlatoCore.Layout.Views
 
         async Task<IHtmlContent> InvokePartialViewAsync(string viewName, object model)
         {
-            _partialInvoker.Contextualize(ViewContext);
-            return await _partialInvoker.InvokeAsync(viewName, model, ViewContext.ViewData);
+            _partialViewInvoker.Contextualize(ViewContext);
+            return await _partialViewInvoker.InvokeAsync(viewName, model, ViewContext.ViewData);
         }
 
         async Task<IHtmlContent> InvokeViewComponentAsync(string viewName, object arguments)
@@ -105,7 +106,7 @@ namespace PlatoCore.Layout.Views
             // Contextualize view component
             helper.Contextualize(ViewContext);
 
-            // Log the invocation, we can't use try / catch around our view component helper :(
+            // Log the invocation
             if (_logger.IsEnabled(LogLevel.Information))
             {
                 _logger.LogInformation($"Attempting to invoke view component \"{viewName}\".");
@@ -136,10 +137,7 @@ namespace PlatoCore.Layout.Views
                 return false;
             }
 
-            object[] attrs = model
-                .GetType()
-                .GetCustomAttributes(typeof(CompilerGeneratedAttribute), true);
-            return attrs != null && attrs.Length > 0;
+            return model.GetType().IsAnonymousType();
 
         }
 
