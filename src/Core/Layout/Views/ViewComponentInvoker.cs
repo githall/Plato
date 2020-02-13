@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Html;
+﻿using System;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Layout.Views.Abstractions;
-using System;
-using System.Threading.Tasks;
 
 namespace PlatoCore.Layout.Views
 {
@@ -25,13 +25,20 @@ namespace PlatoCore.Layout.Views
             _logger = logger;
         }
 
-        public void Contextualize(ViewContext viewContext)
+        public IViewInvoker Contextualize(ViewContext viewContext)
         {
             ViewContext = viewContext;
+            return this;
         }
 
         public async Task<IHtmlContent> InvokeAsync(Abstractions.IView view)
         {
+
+            // We always need a view name to invoke
+            if (string.IsNullOrEmpty(view.ViewName))
+            {
+                throw new ArgumentNullException(nameof(view.ViewName));
+            }
 
             if (!(_viewComponentHelper is DefaultViewComponentHelper helper))
             {

@@ -3,7 +3,6 @@ using System.Threading.Tasks;
 using PlatoCore.Abstractions;
 using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.Views.Abstractions;
 
 namespace PlatoCore.Layout.ViewProviders.Abstractions
 {
@@ -23,7 +22,7 @@ namespace PlatoCore.Layout.ViewProviders.Abstractions
         {
             // We don't always need to implement ValidateModelAsync for certain views
             // For example views that don't perform any updates. We'll leave this method
-            // virtual to allow us to override if needed within view provider implementations
+            // virtual to allow us to override as and when needed within view provider implementations
             return Task.FromResult(true);
         }
 

@@ -7,7 +7,7 @@ namespace PlatoCore.Layout.Views
 
     public class ViewFactory : IViewFactory
     {
-   
+
         private readonly IViewDescriptorCollection _viewDescriptors;
         private readonly IViewInvoker _viewInvoker;
 
@@ -20,26 +20,21 @@ namespace PlatoCore.Layout.Views
         }
 
         public async Task<IHtmlContent> InvokeAsync(ViewDisplayContext displayContext)
-        {
-
-            // Contextualize view invoker
-            _viewInvoker.Contextualize(displayContext.ViewContext);
+        {      
 
             // Apply view & model alterations
             if (displayContext.ViewAdapterResults != null)
             {
                 foreach (var viewAdapterResult in displayContext.ViewAdapterResults)
                 {
-
-                    var updatedView = displayContext.ViewDescriptor.View;
-
+          
                     // Apply view alterations
                     var viewAlterations = viewAdapterResult.ViewAlterations;
                     if (viewAlterations.Count > 0)
                     {
                         foreach (var alteration in viewAlterations)
                         {
-                            updatedView.ViewName = alteration;
+                            displayContext.ViewDescriptor.View.ViewName = alteration;
                         }
                     }
 
@@ -49,15 +44,13 @@ namespace PlatoCore.Layout.Views
                     {
                         foreach (var alteration in modelAlterations)
                         {
-                            var model = await alteration(updatedView.Model);
+                            var model = await alteration(displayContext.ViewDescriptor.View.Model);
                             if (model != null)
                             {
-                                updatedView.Model = model;
+                                displayContext.ViewDescriptor.View.Model = model;
                             }                         
                         }
                     }
-
-                    displayContext.ViewDescriptor.View = updatedView;
 
                 }
 
@@ -66,8 +59,10 @@ namespace PlatoCore.Layout.Views
             // Add descriptor
             var descriptor = _viewDescriptors.Add(displayContext.ViewDescriptor);
 
-            // Invoke view
-            var htmlContent = await _viewInvoker.InvokeAsync(descriptor.View);
+            // Invoke view             
+            var htmlContent = await _viewInvoker
+                .Contextualize(displayContext.ViewContext)
+                .InvokeAsync(descriptor.View);
 
             // Apply output alterations
             if (displayContext.ViewAdapterResults != null)

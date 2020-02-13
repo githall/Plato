@@ -69,10 +69,10 @@ namespace PlatoCore.Layout.ViewAdapters
 
                 // For view component model adapters, the convention is to use the first anonymous
                 // type argument matching our TModel. This is not perfect but at last allows 
-                // adapters that adapt view components to use a strong typing
-                // To modify anonymous type arguments without the generic typing
+                // adapters that adapt view components to use a strongly typed model
+                // To modify anonymous type arguments without the strong typing
                 // use the regular non generic AdaptModel method below instead
-                // TODO: Possibly implement a convention-based approach for greater extensibility. 
+                // TODO: Possibly implement a convention-based approach for model adapters
                 // For example ViewComponentModelAdapterConvention : IModelAdapterConvention
                 if (IsComponent(model))
                 {

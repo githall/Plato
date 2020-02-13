@@ -29,9 +29,10 @@ namespace PlatoCore.Layout.Views
 
         public ViewContext ViewContext { get; set; }
 
-        public void Contextualize(ViewContext viewContext)
+        public IViewInvoker Contextualize(ViewContext viewContext)
         {
             ViewContext = viewContext;
+            return this;
         }
 
         public async Task<IHtmlContent> InvokeAsync(Abstractions.IView view)
@@ -47,6 +48,12 @@ namespace PlatoCore.Layout.Views
             if (!result.Success)
             {
                 throw new Exception($"A view with the name \"{view.ViewName}\" could not be found!");
+            }
+
+            // Log the invocation
+            if (_logger.IsEnabled(LogLevel.Information))
+            {
+                _logger.LogInformation($"Attempting to invoke partial view \"{view.ViewName}\".");
             }
 
             var builder = new HtmlContentBuilder();
