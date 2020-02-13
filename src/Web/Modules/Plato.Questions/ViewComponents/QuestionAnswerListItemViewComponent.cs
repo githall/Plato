@@ -8,15 +8,13 @@ namespace Plato.Questions.ViewComponents
 {
     public class QuestionAnswerListItemViewComponent : ViewComponentBase
     {
-        
-        public Task<IViewComponentResult> InvokeAsync(
-            EntityReplyListItemViewModel<Question, Answer> model)
+
+        public Task<IViewComponentResult> InvokeAsync(EntityReplyListItemViewModel<Question, Answer> model)
         {
             return Task.FromResult((IViewComponentResult)View(model));
         }
 
     }
-
 
 }
 

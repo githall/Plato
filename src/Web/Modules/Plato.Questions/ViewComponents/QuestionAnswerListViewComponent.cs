@@ -16,48 +16,46 @@ namespace Plato.Questions.ViewComponents
     public class QuestionAnswerListViewComponent : ViewComponentBase
     {
 
-        private readonly IEntityStore<Question> _entityStore;
-        private readonly IEntityReplyStore<Answer> _entityReplyStore;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityReplyService<Answer> _replyService;
+        private readonly IEntityStore<Question> _entityStore;
 
         public QuestionAnswerListViewComponent(
-            IEntityReplyStore<Answer> entityReplyStore,
-            IEntityStore<Question> entityStore,
+            IAuthorizationService authorizationService,
             IEntityReplyService<Answer> replyService,
-            IAuthorizationService authorizationService)
+            IEntityStore<Question> entityStore)
         {
-            _entityReplyStore = entityReplyStore;
-            _entityStore = entityStore;
+            _authorizationService = authorizationService;            
             _replyService = replyService;
-            _authorizationService = authorizationService;
+            _entityStore = entityStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(
-            EntityOptions options,
-            PagerOptions pager)
+        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Question, Answer> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityOptions();
+                model = new EntityViewModel<Question, Answer>();
             }
 
-            if (pager == null)
+            if (model.Options == null)
             {
-                pager = new PagerOptions();
+                model.Options = new EntityOptions();
             }
-            
-            return View(await GetViewModel(options, pager));
+
+            if (model.Pager == null)
+            {
+                model.Pager = new PagerOptions();
+            }
+
+            return View(await GetViewModel(model));
 
         }
 
-        async Task<EntityViewModel<Question, Answer>> GetViewModel(
-            EntityOptions options,
-            PagerOptions pager)
+        async Task<EntityViewModel<Question, Answer>> GetViewModel(EntityViewModel<Question, Answer> model)
         {
 
-            var entity = await _entityStore.GetByIdAsync(options.Id);
+            var entity = await _entityStore.GetByIdAsync(model.Options.Id);
             if (entity == null)
             {
                 throw new ArgumentNullException();
@@ -89,19 +87,15 @@ namespace Plato.Questions.ViewComponents
                     }
 
                 })
-                .GetResultsAsync(options, pager);
-            
-            // Set total on pager
-            pager.SetTotal(results?.Total ?? 0);
+                .GetResultsAsync(model.Options, model.Pager);
 
-            // Return view model
-            return new EntityViewModel<Question, Answer>
-            {
-                Options = options,
-                Pager = pager,
-                Entity = entity,
-                Replies = results
-        };
+            // Set total on pager
+            model.Pager.SetTotal(results?.Total ?? 0);
+
+            model.Entity = entity;
+            model.Replies = results;
+
+            return model;
 
         }
 

@@ -1,0 +1,19 @@
+Name: Plato Questions New
+Description: Adds a "New" or "Updated" indicator for unread or updated questions within Plato Questions.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Questions
+PlatoVersion: 1.1.1
+Version: 1.0.0
+Icon: /plato.questions.new/content/images/icon.png
+Dependencies:
+[
+	{
+		Id: "Plato.Questions",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Entities.Metrics",
+		Version: "1.0.0"
+	}
+]

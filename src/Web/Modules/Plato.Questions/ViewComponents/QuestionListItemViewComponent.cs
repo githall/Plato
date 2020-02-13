@@ -6,21 +6,16 @@ using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Questions.ViewComponents
 {
+
     public class QuestionListItemViewComponent : ViewComponentBase
     {
-        
-        public QuestionListItemViewComponent()
-        {
-        }
 
-        public Task<IViewComponentResult> InvokeAsync(
-            EntityListItemViewModel<Question> model)
+        public Task<IViewComponentResult> InvokeAsync(EntityListItemViewModel<Question> model)
         {
             return Task.FromResult((IViewComponentResult)View(model));
         }
 
     }
-
 
 }
 

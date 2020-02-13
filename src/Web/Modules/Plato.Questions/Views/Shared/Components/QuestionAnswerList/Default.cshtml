@@ -15,12 +15,11 @@
         ? $"{Model.Pager.Total.ToPrettyInt()} {answerText.Value}"
         : $"{Model.Pager.Total.ToPrettyInt()} {answersText.Value}";
   
-    <h6>
-        @title, @Model.Entity.TotalAnswers @T["accepted"]
-    </h6>
+    <h6 asp-id="title">@title, @Model.Entity.TotalAnswers @T["accepted"]</h6>
     <hr/>
 
-    <div data-provide="infiniteScroll"
+    <div  asp-id="infinite-scroll"
+         data-provide="infiniteScroll"
          data-infinite-scroll-url="@Model.Pager.Url"
          data-infinite-scroll-offset="@offset"
          data-infinite-scroll-row-offset="@rowOffset"
@@ -49,7 +48,7 @@
 
     @if (!Model.Entity.IsHidden() && !Model.Entity.IsLocked)
      {
-         <div class="my-4">
+         <div asp-id="participate" class="my-4">
              <card>
                  <card-body>
                      <div class="text-muted">
@@ -85,7 +84,7 @@ else
 {
     @if (!Model.Entity.IsHidden() && !Model.Entity.IsLocked)
      {
-         <div class="my-4">
+         <div  asp-id="participate" class="my-4">
              <card>
                  <card-body>
                      <div class="text-muted">
@@ -121,7 +120,7 @@ else
 
 @if (Model.Pager.Enabled)
 {
-    <div class="mt-4">
+    <div asp-id="pager" class="mt-4">
         <pager model="@Model.Pager"></pager>
     </div>
 }

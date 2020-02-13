@@ -1,13 +1,13 @@
 ﻿@model EntityViewModel<Question, Answer>
 
-<div class="list-row">
+<div asp-id="list-row" class="list-row">
     <navigation name="question-details"
                 model="Model.Entity"
                 class="list-left list-inline p-0" />
-    <div class="list-body reply-body">
+    <div asp-id="list-body" class="list-body reply-body">
         <card>
             <card-title>
-                <h6 class="card-title d-inline-block">@T["Question"]</h6>           
+                <h6 asp-id="title" class="card-title d-inline-block">@T["Question"]</h6>           
                 @if (Model.Entity.IsPrivate)
                 {
                     if (Model.Entity.CreatedUserId == base.CurrentUser?.Id)
@@ -19,7 +19,6 @@
                         <span class="badge badge-warning" data-toggle="tooltip" title="@T["This question is private and only visible as you have permission to view private questions"]">@T["Private"]</span>
                     }
                 }
-
                 @if (Model.Entity.IsHidden)
                 {
                     <span data-toggle="tooltip" title="@T["This question is hidden and only visible as you have permission to view hidden questions"]" class="badge badge-primary">@T["Hidden"]</span>
@@ -39,11 +38,11 @@
                             child-ul-inner-css-class="min-w-200 max-h-250 overflow-auto" />
             </card-title>
             <card-body class="card-body-flush">
-                <div class="markdown-body entity-body question-body p-3" data-provide="markdownBody">
+                <div asp-id="body" class="markdown-body entity-body question-body p-3" data-provide="markdownBody">
                     @Html.Raw(@Model.Entity.Html)
                     @if (!String.IsNullOrEmpty(Model.Entity.CreatedBy.SignatureHtml))
                     {
-                        <div>
+                        <div asp-id="signature">
                             @Html.Raw(@Model.Entity.CreatedBy.SignatureHtml)
                         </div>
                     }
