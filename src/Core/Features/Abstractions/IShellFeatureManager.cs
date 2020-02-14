@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using PlatoCore.Models.Features;
 
 namespace PlatoCore.Features.Abstractions
 {
@@ -14,7 +11,7 @@ namespace PlatoCore.Features.Abstractions
         Task<IEnumerable<IFeatureEventContext>> EnableFeaturesAsync(string[] featureIds);
 
         Task<IEnumerable<IFeatureEventContext>> DisableFeatureAsync(string featureId);
-            
+
         Task<IEnumerable<IFeatureEventContext>> DisableFeaturesAsync(string[] featureIds);
 
     }

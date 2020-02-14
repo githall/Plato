@@ -4,9 +4,9 @@ using PlatoCore.Abstractions;
 
 namespace PlatoCore.Models
 {
-    
+
     /// <summary>
-    /// Represents some abstract meta data that can be stored on certain types.
+    /// Represents some abstract meta data that can be stored on types that implement this interface.
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
     public interface IMetaData<TModel> where TModel : class
@@ -22,5 +22,5 @@ namespace PlatoCore.Models
         T GetOrCreate<T>() where T : class;
 
     }
-    
+
 }

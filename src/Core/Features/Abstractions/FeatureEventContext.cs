@@ -1,14 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
-using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Features;
 
-namespace PlatoCore.Features
+namespace PlatoCore.Features.Abstractions
 {
-    
-    public class FeatureEventContext  : IFeatureEventContext
+
+    public class FeatureEventContext : IFeatureEventContext
     {
         public IServiceProvider ServiceProvider { get; set; }
 
@@ -20,7 +18,6 @@ namespace PlatoCore.Features
 
         public FeatureEventContext()
         {
-
         }
 
         public FeatureEventContext(IShellFeature feature)

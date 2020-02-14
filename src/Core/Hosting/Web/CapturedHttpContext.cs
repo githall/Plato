@@ -3,7 +3,7 @@ using PlatoCore.Hosting.Abstractions;
 
 namespace PlatoCore.Hosting.Web
 {
-    
+
     public class CapturedHttpContext : ICapturedHttpContext
     {
         private readonly CapturedHttpContextState _state;
@@ -22,5 +22,5 @@ namespace PlatoCore.Hosting.Web
         }
 
     }
-    
+
 }

@@ -19,7 +19,7 @@ namespace PlatoCore.Features.Abstractions
         Task UpdatingAsync(IFeatureEventContext context);
 
         Task UpdatedAsync(IFeatureEventContext context);
-        
+
     }
 
 }

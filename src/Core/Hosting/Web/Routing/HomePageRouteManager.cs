@@ -5,7 +5,7 @@ using PlatoCore.Abstractions.Routing;
 
 namespace PlatoCore.Hosting.Web.Routing
 {
- 
+
     public class HomeRouteManager : IHomeRouteManager
     {
 

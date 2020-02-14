@@ -7,7 +7,7 @@ namespace PlatoCore.Features.Extensions
 
     public static class ServiceCollectionExtensions
     {
-   
+
         public static IServiceCollection AddPlatoShellFeatures(
             this IServiceCollection services)
         {

@@ -7,7 +7,6 @@ namespace PlatoCore.Hosting
         public PlatoWebHostEnvironment(IHostEnvironment hostingEnvironment) 
             : base(hostingEnvironment)
         {
-
         }
 
     }

@@ -5,7 +5,6 @@ using System.Collections.Concurrent;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Shell;
 using PlatoCore.Shell.Abstractions;
 using PlatoCore.Tasks.Abstractions;
 
@@ -40,13 +39,13 @@ namespace PlatoCore.Hosting
             _broker = broker;
         }
 
-        #region "Implementation"
+        // Implementation
 
         public void Initialize()
         {
             BuildCurrent();
         }
-  
+
         public ShellContext GetOrCreateShellContext(IShellSettings settings)
         {
             if (_shellContexts == null)
@@ -83,7 +82,7 @@ namespace PlatoCore.Hosting
             _logger.LogDebug("Creating shell context for tenant {0}", settings.Name);
             return _shellContextFactory.CreateShellContext(settings);
         }
-        
+
         public void RecycleShellContext(IShellSettings settings)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
@@ -123,9 +122,7 @@ namespace PlatoCore.Hosting
 
         }
 
-        #endregion
-
-        #region "Private Methods"
+        // Private methods
 
         IDictionary<string, ShellContext> BuildCurrent()
         {
@@ -144,7 +141,7 @@ namespace PlatoCore.Hosting
 
             return _shellContexts;
         }
-        
+
         void CreateAndActivateShells()
         {
 
@@ -177,7 +174,7 @@ namespace PlatoCore.Hosting
                 _logger.LogInformation("Done creating shells");
             }
         }
-        
+
         void ActivateShell(ShellContext context)
         {
             if (_logger.IsEnabled(LogLevel.Debug))
@@ -189,14 +186,14 @@ namespace PlatoCore.Hosting
             }
 
         }
-        
+
         ShellContext CreateSetupContext()
         {
             if (_logger.IsEnabled(LogLevel.Debug))
                 _logger.LogDebug("Creating shell context for root setup.");
             return _shellContextFactory.CreateSetupContext(ShellHelper.BuildDefaultUninitializedShell);
         }
-        
+
         bool CanCreateShell(IShellSettings shellSettings)
         {
             return
@@ -205,8 +202,7 @@ namespace PlatoCore.Hosting
                 shellSettings.State == TenantState.Initializing ||
                 shellSettings.State == TenantState.Disabled;
         }
-        
-        #endregion
-        
+
     }
+
 }

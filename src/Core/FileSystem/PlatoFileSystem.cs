@@ -337,7 +337,7 @@ namespace PlatoCore.FileSystem
         {
             return GetFileInfo(path).PhysicalPath;
         }
-        
+
     }
 
 }

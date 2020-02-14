@@ -27,9 +27,9 @@ namespace PlatoCore.Features
 
         private readonly IShellDescriptorStore _shellDescriptorStore;
         private readonly IShellContextFactory _shellContextFactory;
-        private readonly IModuleManager _moduleManager;               
+        private readonly IModuleManager _moduleManager;
 
-        public ShellDescriptorManager(            
+        public ShellDescriptorManager(
             IShellDescriptorStore shellDescriptorStore,
             IShellContextFactory shellContextFactory, 
             IModuleManager moduleManager)
@@ -62,7 +62,7 @@ namespace PlatoCore.Features
             return features;
 
         }
-        
+
         public async Task<IEnumerable<IShellFeature>> GetFeaturesAsync()
         {
 

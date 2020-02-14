@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.Logging;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Hosting;
 
 namespace PlatoCore.FileSystem
@@ -13,6 +12,8 @@ namespace PlatoCore.FileSystem
                 hostingEnvironment.ContentRootPath,
                 hostingEnvironment.ContentRootFileProvider,
                 logger)
-        { }
+        { 
+        }
     }
+
 }

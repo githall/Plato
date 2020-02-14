@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using Newtonsoft.Json;
-using PlatoCore.Abstractions;
+﻿using PlatoCore.Abstractions;
 
 namespace PlatoCore.Models
 {
@@ -11,10 +7,6 @@ namespace PlatoCore.Models
 
         public int Id { get; set; }
 
-        //public string Serialize()
-        //{
-        //    return JsonConvert.SerializeObject(this);
-        //}
-
     }
+
 }
