@@ -20,14 +20,14 @@ namespace PlatoCore.Layout.Views
         }
 
         public async Task<IHtmlContent> InvokeAsync(ViewDisplayContext displayContext)
-        {      
+        {
 
             // Apply view & model alterations
             if (displayContext.ViewAdapterResults != null)
             {
                 foreach (var viewAdapterResult in displayContext.ViewAdapterResults)
                 {
-          
+
                     // Apply view alterations
                     var viewAlterations = viewAdapterResult.ViewAlterations;
                     if (viewAlterations.Count > 0)
@@ -77,7 +77,6 @@ namespace PlatoCore.Layout.Views
                             htmlContent = alteration(htmlContent);
                         }
                     }
-
                 }
             }
 

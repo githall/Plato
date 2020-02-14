@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Linq;
+using PlatoCore.Abstractions.Extensions;
 
 namespace PlatoCore.Layout.Views.Abstractions
 {
@@ -40,18 +40,17 @@ namespace PlatoCore.Layout.Views.Abstractions
         {
 
             // We already expect a zone
-            if (String.IsNullOrEmpty(zone))
+            if (string.IsNullOrEmpty(zone))
             {
                 throw new Exception(
                     $"No zone has been specified for the view {ViewName}.");
             }
 
-            // Is the zone supported?
-            var supportedZones = LayoutZones.SupportedZones;
-            if (!supportedZones.Contains(zone.ToLower()))
+            // Is the zone supported?            
+            if (!LayoutZones.SupportedZones.Contains(zone, StringComparison.OrdinalIgnoreCase))
             {
                 throw new Exception(
-                    $"The zone name '{zone}' is not supported. Supported zones include {String.Join(", ", supportedZones)}. Please update the zone name within your view provider and try again.");
+                    $"The zone name '{zone}' is not supported. Supported zones include {String.Join(", ", LayoutZones.SupportedZones)}. Please update the zone name within your view provider and try again.");
             }
 
             _zone = zone;

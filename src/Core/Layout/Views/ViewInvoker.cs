@@ -40,8 +40,10 @@ namespace PlatoCore.Layout.Views
             // Compiled view
             if (view is ICompiledView)
             {
-                return await InvokeCompiledViewAsync((ICompiledView)view);
-            }
+                return await ((ICompiledView)view)
+                    .Contextualize(ViewContext)
+                    .InvokeAsync();
+                }
 
             // View comoponent
             if (IsComponent(view.Model))
@@ -73,11 +75,6 @@ namespace PlatoCore.Layout.Views
                 throw new Exception("The ViewContext must be set via the Contextualize method before calling the InvokeAsync method");
             }
 
-        }
-
-        async Task<IHtmlContent> InvokeCompiledViewAsync(ICompiledView view)
-        {
-            return await view.InvokeAsync(ViewContext);
         }
 
         bool IsComponent(object model)

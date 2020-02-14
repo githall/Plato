@@ -7,7 +7,11 @@ namespace PlatoCore.Layout.Views.Abstractions
     public interface ICompiledView
     {
 
-        Task<IHtmlContent> InvokeAsync(ViewContext context);
+        ViewContext ViewContext { get; set; }
+
+        ICompiledView Contextualize(ViewContext viewContext);
+
+        Task<IHtmlContent> InvokeAsync();
 
     }
 

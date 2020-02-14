@@ -15,7 +15,7 @@ namespace PlatoCore.Layout.Alerts
             _alert = alert;
         }
 
-        public override Task<IHtmlContent> InvokeAsync(ViewContext context)
+        public override Task<IHtmlContent> InvokeAsync()
         {
             if (_alert == null)
             {

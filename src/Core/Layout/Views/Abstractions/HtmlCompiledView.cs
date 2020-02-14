@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
-using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PlatoCore.Layout.Views.Abstractions
 {
@@ -15,7 +14,7 @@ namespace PlatoCore.Layout.Views.Abstractions
             _html = html;
         }
         
-        public override Task<IHtmlContent> InvokeAsync(ViewContext context)
+        public override Task<IHtmlContent> InvokeAsync()
         {
             return Task.FromResult((IHtmlContent)new HtmlString(_html));
         }

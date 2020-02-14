@@ -14,7 +14,6 @@ using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.Localizers;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.TagHelperAdapters.Abstractions;
 using PlatoCore.Layout.TagHelpers;
 using PlatoCore.Layout.Theming;
 using PlatoCore.Layout.Titles;
@@ -111,7 +110,6 @@ namespace PlatoCore.Layout.Extensions
 
     }
 
-
     // ---------
 
     public interface ITagHelpersProvider
@@ -141,6 +139,5 @@ namespace PlatoCore.Layout.Extensions
     {
         public IEnumerable<Type> GetTypes() => new Type[] { typeof(T) };
     }
-
 
 }

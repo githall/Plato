@@ -43,6 +43,29 @@ namespace PlatoCore.Abstractions.Extensions
 
         }
 
+        public static bool Contains(
+           this string[] inputs,
+           string value,
+           System.StringComparison comparer)
+        {
+        
+            if (inputs == null)
+            {
+                return false;
+            }
+
+            foreach (string input in inputs)
+            {
+                if (input.Equals(value, comparer))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+
     }
 
 }
