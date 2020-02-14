@@ -5,7 +5,6 @@ using System.IO;
 using Microsoft.Extensions.Options;
 using System.Reflection;
 using System.Threading.Tasks;
-using System.Runtime.Loader;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using PlatoCore.FileSystem.Abstractions;

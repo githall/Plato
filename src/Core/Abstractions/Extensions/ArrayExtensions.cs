@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System;
+using System.Text;
 
 namespace PlatoCore.Abstractions.Extensions
 {
@@ -43,12 +44,17 @@ namespace PlatoCore.Abstractions.Extensions
 
         }
 
-        public static bool Contains(
-           this string[] inputs,
-           string value,
-           System.StringComparison comparer)
+        public static bool Contains(this string[] inputs, string value)
         {
-        
+            return inputs.Contains(value, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static bool Contains(
+            this string[] inputs,
+           string value,
+           StringComparison comparer)
+        {
+
             if (inputs == null)
             {
                 return false;
@@ -57,6 +63,28 @@ namespace PlatoCore.Abstractions.Extensions
             foreach (string input in inputs)
             {
                 if (input.Equals(value, comparer))
+                {
+                    return true;
+                }
+            }
+
+            return false;
+
+        }
+
+        public static bool Contains(
+            this int[] inputs,
+           int value)
+        {
+
+            if (inputs == null)
+            {
+                return false;
+            }
+
+            foreach (int input in inputs)
+            {
+                if (input == value)
                 {
                     return true;
                 }

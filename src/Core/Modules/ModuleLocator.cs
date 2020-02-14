@@ -9,7 +9,7 @@ using PlatoCore.Models.Modules;
 using PlatoCore.Modules.Abstractions;
 using PlatoCore.Modules.Models;
 
-namespace PlatoCore.Modules.Locator
+namespace PlatoCore.Modules
 {
     public class ModuleLocator : IModuleLocator
     {

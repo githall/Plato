@@ -12,7 +12,7 @@ using PlatoCore.FileSystem.Abstractions;
 using PlatoCore.Models.Modules;
 using PlatoCore.Modules.Abstractions;
 
-namespace PlatoCore.Modules.Loader
+namespace PlatoCore.Modules
 {
 
     public class ModuleLoader : IModuleLoader

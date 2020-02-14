@@ -11,7 +11,7 @@ using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.Hosting;
 using PlatoCore.Hosting.Web.Middleware;
 using PlatoCore.Hosting.Web.Routing;
-using PlatoCore.Modules;
+using PlatoCore.Modules.FileProviders;
 
 namespace PlatoCore.Hosting.Web.Extensions
 {

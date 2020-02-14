@@ -1,7 +1,6 @@
 ﻿using System;
 using System.IO;
 using System.Linq;
-using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.FileProviders;
 using Microsoft.Extensions.FileProviders.Internal;
@@ -12,7 +11,7 @@ using Microsoft.Extensions.Primitives;
 using PlatoCore.Modules.Abstractions;
 using PlatoCore.Modules.Models;
 
-namespace PlatoCore.Modules
+namespace PlatoCore.Modules.FileProviders
 {
 
     public class ModuleViewFileProvider : IFileProvider

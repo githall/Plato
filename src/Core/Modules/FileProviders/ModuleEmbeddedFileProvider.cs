@@ -14,7 +14,7 @@ using PlatoCore.Modules.Abstractions;
 using PlatoCore.Modules.FileProviders;
 using PlatoCore.Modules.Models;
 
-namespace PlatoCore.Modules
+namespace PlatoCore.Modules.FileProviders
 {
     public class ModuleEmbeddedFileProvider : IFileProvider
     {

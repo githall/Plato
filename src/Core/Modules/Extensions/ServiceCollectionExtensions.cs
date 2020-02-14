@@ -2,8 +2,6 @@
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Modules.Abstractions;
 using PlatoCore.Modules.Configuration;
-using PlatoCore.Modules.Loader;
-using PlatoCore.Modules.Locator;
 using PlatoCore.Modules.Models;
 
 namespace PlatoCore.Modules.Extensions

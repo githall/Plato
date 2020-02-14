@@ -10,7 +10,7 @@ namespace PlatoCore.Layout.Views.Abstractions
         ViewPosition Position { get; }
 
         IPositionedView Zone(string zone);
-        
+
         IPositionedView Order(int order);
 
     }
@@ -33,7 +33,7 @@ namespace PlatoCore.Layout.Views.Abstractions
             _zone = LayoutZones.ContentZoneName;
             _order = 1;
         }
-        
+
         public ViewPosition Position => new ViewPosition(_zone, _order);
         
         public IPositionedView Zone(string zone)
