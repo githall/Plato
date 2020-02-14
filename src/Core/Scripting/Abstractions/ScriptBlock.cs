@@ -117,9 +117,9 @@ namespace PlatoCore.Scripting.Abstractions
             EnsureUnique = ensureUnique;
             DisableScriptTag = disableScriptTag;
         }
-        
+
     }
-    
+
     public enum ScriptSection
     {
         Header,

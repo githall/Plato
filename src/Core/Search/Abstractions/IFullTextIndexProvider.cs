@@ -7,5 +7,5 @@ namespace PlatoCore.Search.Abstractions
     {
         IEnumerable<FullTextIndex> GetIndexes();
     }
-    
+
 }

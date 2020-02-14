@@ -10,7 +10,7 @@ namespace PlatoCore.Scripting.Abstractions
         readonly IList<ScriptBlock> _blocks = new List<ScriptBlock>();
 
         public IEnumerable<ScriptBlock> Blocks => _blocks;
-        
+
         public void Add(ScriptBlock block)
         {
 
@@ -71,7 +71,7 @@ namespace PlatoCore.Scripting.Abstractions
             }
 
         }
-       
+
     }
-    
+
 }

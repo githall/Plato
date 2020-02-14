@@ -6,7 +6,7 @@ using PlatoCore.Search.Abstractions;
 
 namespace PlatoCore.Search
 {
-    
+
     public class FullTextIndexManager : IFullTextIndexManager
     {
 
@@ -22,7 +22,7 @@ namespace PlatoCore.Search
             _providers = providers;
             _logger = logger;
         }
-        
+
         public IEnumerable<FullTextIndex> GetIndexes()
         {
 

@@ -10,5 +10,5 @@ namespace PlatoCore.Search.Abstractions
         IDictionary<string, IEnumerable<FullTextIndex>> GetIndexesByTable();
 
     }
-    
+
 }

@@ -12,7 +12,7 @@ namespace PlatoCore.Reputations
 
     public class ReputationsManager<TReputation> : IReputationsManager<TReputation> where TReputation : class, IReputation
     {
-        
+
         private readonly IEnumerable<IReputationsProvider<TReputation>> _providers;
         private readonly ILogger<ReputationsManager<TReputation>> _logger;
         private readonly ITypedModuleProvider _typedModuleProvider;

@@ -7,5 +7,5 @@
         void RegisterScriptBlock(ScriptBlock block, ScriptSection section);
 
     }
-    
+
 }

@@ -15,20 +15,14 @@ namespace PlatoCore.Shell
     public class ShellSettingsManager : IShellSettingsManager
     {
 
-        #region "Private Variables"
+        private const string SettingsFileNameFormat = "Settings.{0}";
 
         private readonly IOptions<ShellOptions> _optionsAccessor;
         private readonly IAppDataFolder _appDataFolder;        
         private readonly ILogger _logger;
 
-        private const string SettingsFileNameFormat = "Settings.{0}";
-
-        #endregion
-
-        #region "Constrcutor"
-
         public ShellSettingsManager(
-            IAppDataFolder appDataFolder,        
+            IAppDataFolder appDataFolder,
             IOptions<ShellOptions> optionsAccessor,
             ILogger<ShellSettingsManager> logger)
         {
@@ -37,11 +31,9 @@ namespace PlatoCore.Shell
             _logger = logger;
         }
 
-        #endregion
+        // Implementation
 
-        #region "Implementation"
-
-        IEnumerable<ShellSettings> IShellSettingsManager.LoadSettings()
+        public IEnumerable<ShellSettings> LoadSettings()
         {
 
             var shellSettings = new List<ShellSettings>();
@@ -76,7 +68,7 @@ namespace PlatoCore.Shell
 
         }
 
-        void IShellSettingsManager.SaveSettings(IShellSettings shellSettings)
+        public void SaveSettings(IShellSettings shellSettings)
         {
 
             if (shellSettings == null)
@@ -123,8 +115,6 @@ namespace PlatoCore.Shell
             }
 
         }
-
-        #endregion
 
     }
 

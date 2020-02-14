@@ -4,8 +4,10 @@ using PlatoCore.Scripting.Abstractions;
 
 namespace PlatoCore.Scripting
 {
+
     public class ScriptManager : IScriptManager
     {
+
         private const string ScriptKey = "js_";
 
         private readonly IHttpContextAccessor _httpContextAccessor;
@@ -15,10 +17,10 @@ namespace PlatoCore.Scripting
             ILogger<ScriptManager> logger,
             IHttpContextAccessor httpContextAccessor)
         {
-            _logger = logger;
             _httpContextAccessor = httpContextAccessor;
+            _logger = logger;
         }
-        
+
         /// <summary>
         /// Gets all script blocks registered on the context for a given section.
         /// </summary>
@@ -74,7 +76,7 @@ namespace PlatoCore.Scripting
             }
 
         }
-        
+
     }
 
 }

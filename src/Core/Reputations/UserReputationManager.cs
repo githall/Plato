@@ -9,7 +9,7 @@ using PlatoCore.Stores.Abstractions.Reputations;
 
 namespace PlatoCore.Reputations
 {
-    
+
     public class UserReputationManager : IUserReputationManager<UserReputation>
     {
 
@@ -78,7 +78,7 @@ namespace PlatoCore.Reputations
             return result.Failed(new CommandError("An unknown error occurred whilst attempting to create the user reputation entry."));
 
         }
-        
+
         public async Task<ICommandResult<UserReputation>> UpdateAsync(UserReputation model)
         {
             // Validate
@@ -128,7 +128,6 @@ namespace PlatoCore.Reputations
             return result.Failed(new CommandError("An unknown error occurred whilst attempting to create the user reputation entry."));
 
         }
-
 
         public async Task<ICommandResult<UserReputation>> DeleteAsync(UserReputation model)
         {

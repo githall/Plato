@@ -7,6 +7,7 @@ using PlatoCore.Reputations.Abstractions;
 
 namespace PlatoCore.Reputations
 {
+
     public class UserReputationAwarder : IUserReputationAwarder
     {
 
@@ -42,7 +43,7 @@ namespace PlatoCore.Reputations
 
             var userReputation = new UserReputation()
             {
-                FeatureId = await GetReputationFeatureId(reputation),
+                FeatureId = await GetReputationFeatureIdAsync(reputation),
                 Name = reputation.Name,
                 Description = description,
                 Points = reputation.Points,
@@ -77,7 +78,7 @@ namespace PlatoCore.Reputations
 
             var userReputation = new UserReputation()
             {
-                FeatureId = await GetReputationFeatureId(reputation),
+                FeatureId = await GetReputationFeatureIdAsync(reputation),
                 Name = reputation.Name,
                 Description = description,
                 Points = -reputation.Points,
@@ -91,11 +92,12 @@ namespace PlatoCore.Reputations
             }
 
             return null;
-            
+
         }
 
+        // ------------
 
-        async Task<int> GetReputationFeatureId(IReputation reputation)
+        async Task<int> GetReputationFeatureIdAsync(IReputation reputation)
         {
 
             var reputations = await _reputationManager.GetReputationsAsync();

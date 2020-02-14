@@ -84,7 +84,7 @@ namespace PlatoCore.Stores
             builder.Replace("{prefix}_", query.Options.TablePrefix);
             
         }
-        
+
     }
 
 }
