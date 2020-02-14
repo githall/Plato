@@ -5,7 +5,6 @@ namespace PlatoCore.Shell.Abstractions
     public interface IShellContextFactory
     {
 
-
         ShellContext CreateMinimalShellContext(IShellSettings settings);
 
         ShellContext CreateShellContext(IShellSettings settings);

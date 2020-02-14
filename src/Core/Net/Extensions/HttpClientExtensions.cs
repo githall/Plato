@@ -9,7 +9,7 @@ namespace PlatoCore.Net.Extensions
     {
 
         public static async Task<T> GetJsonAsync<T>(
-            this HttpClient httpClient,
+            this IHttpClient httpClient,
             string requestUri)
         {
             var response = await httpClient.GetAsync(requestUri);
@@ -17,7 +17,7 @@ namespace PlatoCore.Net.Extensions
         }
 
         public static async Task<T> PostJsonAsync<T>(
-            this HttpClient httpClient,            
+            this IHttpClient httpClient,            
             string requestUri, 
             object content)
         {

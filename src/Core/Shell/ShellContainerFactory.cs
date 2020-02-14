@@ -10,6 +10,7 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Features;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
+using PlatoCore.Shell.Abstractions;
 
 namespace PlatoCore.Shell
 {

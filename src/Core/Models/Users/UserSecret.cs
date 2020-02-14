@@ -1,30 +1,22 @@
 ﻿using System;
 using System.Data;
-using System.Collections.Generic;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions;
-using PlatoCore.Models.Annotations;
 
 namespace PlatoCore.Models.Users
 {
 
-    [TableName("Plato_UserSecret")]
     public class UserSecret : IDbModel<UserSecret>
     {
 
         #region "Public Properties"
 
-        [PrimaryKey]
-        [ColumnName("Id", typeof(int))]
         public int Id { get; set; }
 
-        [ColumnName("UserId", typeof(int))]
         public int UserId { get; set; }
 
-        [ColumnName("Password", typeof(string), 255)]
         public string Secret { get; set; }
 
-        [ColumnName("Salts", typeof(List<int>))]
         public int[] Salts { get; set; }
 
         public string SecurityStamp { get; set; }
@@ -73,7 +65,6 @@ namespace PlatoCore.Models.Users
         }
 
         #endregion
-
 
     }
 

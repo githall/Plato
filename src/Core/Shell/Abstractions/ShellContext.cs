@@ -4,6 +4,7 @@ using PlatoCore.Models.Shell;
 
 namespace PlatoCore.Shell.Abstractions
 {
+
     public class ShellContext : IDisposable
     {
 
@@ -22,7 +23,7 @@ namespace PlatoCore.Shell.Abstractions
             return ServiceProvider.GetRequiredService<IServiceScopeFactory>().CreateScope();
         }
 
-        #region IDisposable Support
+        // IDisposable
 
         public void Dispose()
         {
@@ -54,7 +55,6 @@ namespace PlatoCore.Shell.Abstractions
             Dispose(false);
         }
 
-        #endregion
-
     }
+
 }

@@ -1,6 +1,6 @@
 ﻿using PlatoCore.Models.Shell;
 
-namespace PlatoCore.Shell
+namespace PlatoCore.Shell.Abstractions
 {
 
     public static class ShellHelper

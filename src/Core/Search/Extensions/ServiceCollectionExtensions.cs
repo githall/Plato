@@ -18,6 +18,6 @@ namespace PlatoCore.Search.Extensions
 
         }
 
-
     }
+
 }
