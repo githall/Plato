@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using PlatoCore.Net.Abstractions;
 using Plato.Slack.Models;
+using System.Net.Http;
 
 namespace Plato.Slack.Services
 {

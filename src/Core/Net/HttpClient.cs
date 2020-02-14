@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Net;
+using System.Net.Http;
 using System.Text;
 using System.Threading.Tasks;
 using System.Web;
@@ -25,6 +26,22 @@ namespace PlatoCore.Net
         }
 
         #region "Implementation"
+        public async Task<HttpClientResponse> GetAsync(string url)
+        {
+
+            Uri uri = null;
+            try
+            {
+                uri = new Uri(url);
+            }
+            catch
+            {
+                throw new Exception("The url is not supported.");
+            }
+
+            return await GetAsync(uri);
+
+        }
 
         public async Task<HttpClientResponse> GetAsync(Uri url)
         {
@@ -36,14 +53,14 @@ namespace PlatoCore.Net
             return await RequestAsync(HttpMethod.Get, url, parameters);
         }
 
-        public async Task<HttpClientResponse> PostAsync(Uri url)
-        {
-            return await PostAsync(url, null);
-        }
-
         public async Task<HttpClientResponse> PostAsync(Uri url, IDictionary<string, string> parameters)
         {
             return await RequestAsync(HttpMethod.Post, url, parameters);
+        }
+
+        public async Task<HttpClientResponse> PostAsync(Uri url, string json)
+        {
+            return await RequestAsync(HttpMethod.Post, url, null, json, "application/json");
         }
 
         public async Task<HttpClientResponse> RequestAsync(
@@ -51,30 +68,50 @@ namespace PlatoCore.Net
             Uri url,
             IDictionary<string, string> parameters)
         {
-            return await RequestAsync(method, url, parameters, "application/x-www-form-urlencoded");
+            return await RequestAsync(method, url, parameters, null, "application/x-www-form-urlencoded");
+        }
+
+        public async Task<HttpClientResponse> RequestAsync(
+           HttpMethod method,
+           Uri url,
+           string json)
+        {
+            return await RequestAsync(method, url, null, json, "application/json");
         }
 
         public async Task<HttpClientResponse> RequestAsync(
             HttpMethod method, 
             Uri url, 
+            IDictionary<string, string> parameters, 
+            string contentType)
+        {
+            return await RequestAsync(method, url, parameters, null, contentType);
+        }
+
+        public async Task<HttpClientResponse> RequestAsync(
+            HttpMethod method, 
+            Uri url,            
             IDictionary<string, string> parameters,
+            string data,
             string contentType)
         {
 
             var result = new HttpClientResponse();
 
-            var encoding = new UTF8Encoding();
-            var data = string.Empty;
+            var keyValues = string.Empty;
+            var encoding = new UTF8Encoding();         
             if (parameters != null)
             {
-                data = contentType.Equals("application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase) ?
+                keyValues = contentType.Equals("application/x-www-form-urlencoded", StringComparison.OrdinalIgnoreCase) ?
                     BuildParameterString(parameters) :
                     BuildParameterJsonString(parameters);
             }
 
             if (method == HttpMethod.Get)
             {
-                url = new Uri(url.ToString() + "?" + data);
+                url = !string.IsNullOrEmpty(keyValues) 
+                    ? new Uri(url.ToString() + "?" + keyValues) 
+                    : new Uri(url.ToString());
             }
 
             var request = (HttpWebRequest)WebRequest.Create(url);
@@ -84,16 +121,12 @@ namespace PlatoCore.Net
 
             if (method == HttpMethod.Post)
             {
-
                 request.ContentType = contentType;
-                
-                var byteData = encoding.GetBytes(data);
+                var byteData = encoding.GetBytes(data ?? keyValues);
                 request.ContentLength = byteData.Length;
                 var stream = await request.GetRequestStreamAsync();
                 stream.Write(byteData, 0, byteData.Length);
                 stream.Close();
-              
-        
             }
 
             WebResponse response = null;

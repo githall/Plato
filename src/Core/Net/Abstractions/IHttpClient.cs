@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Net.Http;
 using System.Threading.Tasks;
 
 namespace PlatoCore.Net.Abstractions
@@ -10,17 +11,23 @@ namespace PlatoCore.Net.Abstractions
 
         int Timeout { get; set; }
 
+        Task<HttpClientResponse> GetAsync(string url);
+
         Task<HttpClientResponse> GetAsync(Uri url);
 
         Task<HttpClientResponse> GetAsync(Uri url, IDictionary<string, string> parameters);
 
-        Task<HttpClientResponse> PostAsync(Uri url);
-
         Task<HttpClientResponse> PostAsync(Uri url, IDictionary<string, string> parameters);
+
+        Task<HttpClientResponse> PostAsync(Uri url, string data);
 
         Task<HttpClientResponse> RequestAsync(HttpMethod method, Uri url, IDictionary<string, string> parameters);
 
+        Task<HttpClientResponse> RequestAsync(HttpMethod method, Uri url, string data);
+
         Task<HttpClientResponse> RequestAsync(HttpMethod method, Uri url, IDictionary<string, string> parameters, string contentType);
+
+        Task<HttpClientResponse> RequestAsync(HttpMethod method, Uri url, IDictionary<string, string> parameters, string data, string contentType);
 
     }
 
@@ -34,12 +41,4 @@ namespace PlatoCore.Net.Abstractions
 
     }
 
-    public enum HttpMethod
-    {
-        Get,
-        Post,
-        Put,
-        Delete
-    }
-    
 }
