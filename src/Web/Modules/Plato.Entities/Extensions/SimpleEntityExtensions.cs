@@ -5,6 +5,7 @@ using Plato.Entities.Models;
 
 namespace Plato.Entities.Extensions
 {
+
     public static class SimpleEntityExtensions
     {
 
@@ -62,6 +63,7 @@ namespace Plato.Entities.Extensions
 
                 // recurse
                 BuildHierarchyRecursively<T>(input, output, item, item.Id, depth--);
+
             }
 
             return output;
@@ -124,6 +126,6 @@ namespace Plato.Entities.Extensions
 
         }
 
-
     }
+
 }

@@ -12,7 +12,7 @@ using PlatoCore.Stores.Abstractions.QueryAdapters;
 namespace Plato.Entities.Stores
 {
 
-    #region "EntityQuery"
+    #region "SimpleEntityQuery"
 
     public class SimpleEntityQuery<TModel> : DefaultQuery<TModel> where TModel : class
     {
@@ -24,9 +24,9 @@ namespace Plato.Entities.Stores
         public SimpleEntityQueryParams Params { get; set; }
 
         private readonly IQueryableStore<TModel> _store;
-        
+
         public SimpleEntityQueryBuilder<TModel> Builder { get; private set; }
-        
+
         public SimpleEntityQuery(IQueryableStore<TModel> store)
         {
             _store = store;
@@ -39,7 +39,7 @@ namespace Plato.Entities.Stores
             Params = (SimpleEntityQueryParams)Convert.ChangeType(defaultParams, typeof(SimpleEntityQueryParams));
             return this;
         }
-        
+
         public override async Task<IPagedResults<TModel>> ToList()
         {
 
@@ -62,7 +62,7 @@ namespace Plato.Entities.Stores
 
     #endregion
 
-    #region "EntityQueryParams"
+    #region "SimpleEntityQueryParams"
 
     public class SimpleEntityQueryParams
     {
@@ -317,7 +317,7 @@ namespace Plato.Entities.Stores
 
     #endregion
 
-    #region "EntityQueryBuilder"
+    #region "SimpleEntityQueryBuilder"
 
     public class SimpleEntityQueryBuilder<TModel> : IQueryBuilder where TModel : class
     {
@@ -373,7 +373,7 @@ namespace Plato.Entities.Stores
         private readonly string _categoryRolesTableName;
 
         private readonly SimpleEntityQuery<TModel> _query;
-  
+
         public SimpleEntityQueryBuilder(SimpleEntityQuery<TModel> query)
         {
             _query = query;

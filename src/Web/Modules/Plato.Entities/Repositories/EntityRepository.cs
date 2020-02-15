@@ -14,9 +14,9 @@ namespace Plato.Entities.Repositories
 
     public class EntityRepository<TModel> : IEntityRepository<TModel> where TModel : class, IEntity
     {
-     
+
         #region "Constructor"
-        
+
         private readonly IDbContext _dbContext;
         private readonly ILogger<EntityRepository<TModel>> _logger;
         private readonly IEntityDataRepository<IEntityData> _entityDataRepository;
@@ -32,7 +32,7 @@ namespace Plato.Entities.Repositories
         }
 
         #endregion
-        
+
         #region "Implementation"
 
         public async Task<TModel> InsertUpdateAsync(TModel entity)
@@ -117,7 +117,7 @@ namespace Plato.Entities.Repositories
             return entity;
 
         }
-        
+
         public async Task<IPagedResults<TModel>> SelectAsync(IDbDataParameter[] dbParams)
         {
             IPagedResults<TModel> results = null;
@@ -159,7 +159,7 @@ namespace Plato.Entities.Repositories
 
             return results;
         }
-        
+
         public async Task<bool> DeleteAsync(int id)
         {
 
@@ -376,9 +376,9 @@ namespace Plato.Entities.Repositories
             return entityId;
 
         }
-        
+
         #endregion
-                
+
     }
 
 }

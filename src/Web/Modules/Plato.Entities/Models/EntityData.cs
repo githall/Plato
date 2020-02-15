@@ -44,7 +44,7 @@ namespace Plato.Entities.Models
 
         #region "Implementation"
 
-        public void PopulateModel(IDataReader dr)
+        public virtual void PopulateModel(IDataReader dr)
         {
 
             if (dr.ColumnIsNotNull("Id"))
@@ -74,7 +74,7 @@ namespace Plato.Entities.Models
         }
 
         #endregion
-        
+
     }
 
 }

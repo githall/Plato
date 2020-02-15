@@ -9,6 +9,7 @@ using PlatoCore.Models.Users;
 
 namespace Plato.Entities.Models
 {
+
     public class Entity : SimpleEntity, IEntity
     {
 
@@ -134,6 +135,8 @@ namespace Plato.Entities.Models
 
             return new EntityUris();
         }
+
+        // IDbModel
 
         public override void PopulateModel(IDataReader dr)
         {

@@ -1,7 +1,5 @@
 ﻿using PlatoCore.Stores.Abstractions;
-using System;
 using System.Collections.Generic;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Plato.Entities.Stores

@@ -1,6 +1,6 @@
 ﻿namespace PlatoCore.Models.Users
 {
-    
+
     public class SimpleUser : ISimpleUser
     {
 
@@ -52,10 +52,8 @@
             IsVerified = user.IsVerified;
             IsBanned = user.IsBanned;
             IsSpam = user.IsSpam;
-
         }
 
     }
-
 
 }

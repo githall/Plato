@@ -14,5 +14,5 @@ namespace PlatoCore.Abstractions
         Task<T> DeserializeAsync<T>(string data);
 
     }
-    
+
 }
