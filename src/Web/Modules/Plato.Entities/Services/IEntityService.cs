@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
@@ -9,19 +8,24 @@ using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Entities.Services
 {
-    public interface IEntityService<TModel> where TModel : class, IEntity
+
+    public interface ISimpleEntityService<TModel> where TModel : class, ISimpleEntity
     {
+
+        ISimpleEntityService<TModel> ConfigureDb(Action<IQueryOptions> configure);
+
+        ISimpleEntityService<TModel> ConfigureQuery(Action<EntityQueryParams> configure);
 
         Task<IPagedResults<TModel>> GetResultsAsync();
 
         Task<IPagedResults<TModel>> GetResultsAsync(EntityIndexOptions options);
 
         Task<IPagedResults<TModel>> GetResultsAsync(EntityIndexOptions options, PagerOptions pager);
-        
-        IEntityService<TModel> ConfigureDb(Action<IQueryOptions> configure);
-        
-        IEntityService<TModel> ConfigureQuery(Action<EntityQueryParams> configure);
 
     }
-    
+
+    public interface IEntityService<TModel> : ISimpleEntityService<TModel> where TModel : class, IEntity
+    {
+    }
+
 }

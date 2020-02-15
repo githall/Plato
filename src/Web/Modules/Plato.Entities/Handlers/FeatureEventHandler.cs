@@ -1,9 +1,9 @@
-﻿using System.Data;
-using System.Collections.Generic;
-using System.Threading.Tasks;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
 using PlatoCore.Data.Schemas.Abstractions;
 using PlatoCore.Features.Abstractions;
+using System.Collections.Generic;
+using System.Data;
+using System.Threading.Tasks;
 
 namespace Plato.Entities.Handlers
 {
@@ -545,6 +545,9 @@ namespace Plato.Entities.Handlers
                 // Entities schema
                 Entities(builder);
 
+                // Simple entities schema
+                SimpleEntities(builder);
+
                 // Entity data schema
                 EntityData(builder);
                 
@@ -595,6 +598,7 @@ namespace Plato.Entities.Handlers
                 builder.ProcedureBuilder
                     .DropDefaultProcedures(_entities)
                     .DropProcedure(new SchemaProcedure("SelectEntitiesByFeatureId"))
+                    .DropProcedure(new SchemaProcedure("SelectSimpleEntitiesByFeatureId"))
                     .DropProcedure(new SchemaProcedure("SelectEntitiesPaged"))
                     .DropProcedure(new SchemaProcedure("SelectEntityUsersPaged"));
                 
@@ -665,7 +669,7 @@ namespace Plato.Entities.Handlers
                 });
 
         }
-
+     
         void Entities(ISchemaBuilder builder)
         {
 
@@ -866,6 +870,71 @@ namespace Plato.Entities.Handlers
                 }
             });
 
+
+        }
+
+        void SimpleEntities(ISchemaBuilder builder)
+        {
+
+            // Simple entities = minimal data
+            builder.ProcedureBuilder.CreateProcedure(
+                    new SchemaProcedure(
+                            $"SelectSimpleEntityById",
+                            @"SELECT 
+                                e.Id,
+                                e.ParentId,
+                                e.FeatureId,
+                                e.CategoryId,
+                                e.Title,
+                                e.Alias,
+                                e.IsHidden,
+                                e.IsPrivate,
+                                e.IsSpam,
+                                e.IsPinned,
+                                e.IsDeleted,
+                                e.IsLocked,
+                                e.IsClosed,
+                                f.ModuleId,
+                                0 AS Rank, 
+                                0 AS MaxRank
+                            FROM {prefix}_Entities e WITH (nolock)                                     
+                                INNER JOIN {prefix}_ShellFeatures f ON e.FeatureId = f.Id
+                            WHERE (
+                                e.Id = @Id
+                            );
+                            SELECT * FROM {prefix}_EntityData WITH (nolock) 
+                            WHERE (
+                                EntityId = @Id
+                            );")
+                        .ForTable(_entities)
+                        .WithParameter(_entities.PrimaryKeyColumn))
+
+                // SelectEntitiesByFeatureId
+                .CreateProcedure(new SchemaProcedure("SelectSimpleEntitiesByFeatureId",
+                        @"SELECT 
+                                e.Id,
+                                e.ParentId,
+                                e.FeatureId,
+                                e.CategoryId,
+                                e.Title,
+                                e.Alias,
+                                e.IsHidden,
+                                e.IsPrivate,
+                                e.IsSpam,
+                                e.IsPinned,
+                                e.IsDeleted,
+                                e.IsLocked,
+                                e.IsClosed,
+                                f.ModuleId,
+                                0 AS Rank, 
+                                0 AS MaxRank
+                            FROM {prefix}_Entities e WITH (nolock)                                     
+                                INNER JOIN {prefix}_ShellFeatures f ON e.FeatureId = f.Id
+                            WHERE (
+                                e.FeatureId = @FeatureId
+                            )")
+                    .ForTable(_entities)
+                    .WithParameter(new SchemaColumn() { Name = "FeatureId", DbType = DbType.Int32 }));
 
         }
 

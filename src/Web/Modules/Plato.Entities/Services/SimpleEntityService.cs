@@ -10,18 +10,18 @@ using PlatoCore.Navigation.Abstractions;
 namespace Plato.Entities.Services
 {
 
-    public class EntityService<TModel> : IEntityService<TModel> where TModel : class, IEntity
+    public class SimpleEntityService<TModel> : ISimpleEntityService<TModel> where TModel : class, ISimpleEntity
     {
 
         private Action<QueryOptions> _configureDb = null;
         private Action<EntityQueryParams> _configureParams = null;
         
         private readonly IContextFacade _contextFacade;
-        private readonly IEntityStore<TModel> _entityStore;
+        private readonly ISimpleEntityStore<TModel> _entityStore;
   
-        public EntityService(
+        public SimpleEntityService(
             IContextFacade contextFacade,
-            IEntityStore<TModel> entityStore)
+            ISimpleEntityStore<TModel> entityStore)
         {
             _contextFacade = contextFacade;
             _entityStore = entityStore;

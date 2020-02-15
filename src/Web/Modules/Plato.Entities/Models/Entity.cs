@@ -9,26 +9,10 @@ using PlatoCore.Models.Users;
 
 namespace Plato.Entities.Models
 {
-    public class Entity :
-        IComparable<IEntity>,
-        IEntity
+    public class Entity : SimpleEntity, IEntity
     {
         private readonly ConcurrentDictionary<Type, ISerializable> _metaData;
-        
-        public int Id { get; set; }
 
-        public int ParentId { get; set; }
-
-        public int FeatureId { get; set; }
-
-        public string ModuleId { get; set; }
-
-        public int CategoryId { get; set; }
-        
-        public string Title { get; set; }
-
-        public string Alias { get; set; }
-        
         public string Message { get; set; }
 
         public string Html { get; set; }
@@ -37,21 +21,6 @@ namespace Plato.Entities.Models
 
         public string Urls { get; set; }
         
-        public bool IsHidden { get; set; }
-
-        public bool IsPrivate { get; set; }
-
-        public bool IsSpam { get; set; }
-
-        public bool IsPinned { get; set; }
-
-        public bool IsDeleted { get; set; }
-
-        public bool IsLocked { get; set; }
-
-        public bool IsClosed { get; set; }
-
-
         public int TotalViews { get; set; }
 
         public int TotalReplies { get; set; }
@@ -107,12 +76,6 @@ namespace Plato.Entities.Models
         public SimpleUser ModifiedBy { get; private set; } = new SimpleUser();
 
         public SimpleUser LastReplyBy { get; private set; } = new SimpleUser();
-        
-        public int Rank { get; set; }
-
-        public int MaxRank { get; set; }
-
-        public int Relevance { get; set; }
 
         // IMetaData
 
@@ -120,16 +83,6 @@ namespace Plato.Entities.Models
 
         public IDictionary<Type, ISerializable> MetaData => _metaData;
 
-        // INestable
-
-        public IEnumerable<IEntity> Children { get; set; } = new List<IEntity>();
-
-        public IEntity Parent { get; set; }
-
-        public int Depth { get; set; }
-
-        public int SortOrder { get; set; }
-        
         public Entity()
         {
             _metaData = new ConcurrentDictionary<Type, ISerializable>();
@@ -182,29 +135,10 @@ namespace Plato.Entities.Models
             return new EntityUris();
         }
 
-        public virtual void PopulateModel(IDataReader dr)
+        public override void PopulateModel(IDataReader dr)
         {
 
-            if (dr.ColumnIsNotNull("Id"))
-                Id = Convert.ToInt32(dr["Id"]);
-
-            if (dr.ColumnIsNotNull("ParentId"))
-                ParentId = Convert.ToInt32(dr["ParentId"]);
-
-            if (dr.ColumnIsNotNull("FeatureId"))
-                FeatureId = Convert.ToInt32(dr["FeatureId"]);
-
-            if (dr.ColumnIsNotNull("ModuleId"))
-                ModuleId = Convert.ToString(dr["ModuleId"]);
-
-            if (dr.ColumnIsNotNull("CategoryId"))
-                CategoryId = Convert.ToInt32(dr["CategoryId"]);
-            
-            if (dr.ColumnIsNotNull("Title"))
-                Title = Convert.ToString(dr["Title"]);
-
-            if (dr.ColumnIsNotNull("Alias"))
-                Alias = Convert.ToString(dr["Alias"]);
+            base.PopulateModel(dr);
 
             if (dr.ColumnIsNotNull("Message"))
                 Message = Convert.ToString(dr["Message"]);
@@ -218,27 +152,6 @@ namespace Plato.Entities.Models
             if (dr.ColumnIsNotNull("Urls")) 
                 Urls = Convert.ToString(dr["Urls"]);
             
-            if (dr.ColumnIsNotNull("IsHidden"))
-                IsHidden = Convert.ToBoolean(dr["IsHidden"]);
-
-            if (dr.ColumnIsNotNull("IsPrivate"))
-                IsPrivate = Convert.ToBoolean(dr["IsPrivate"]);
-
-            if (dr.ColumnIsNotNull("IsSpam"))
-                IsSpam = Convert.ToBoolean(dr["IsSpam"]);
-
-            if (dr.ColumnIsNotNull("IsPinned"))
-                IsPinned = Convert.ToBoolean(dr["IsPinned"]);
-
-            if (dr.ColumnIsNotNull("IsDeleted"))
-                IsDeleted = Convert.ToBoolean(dr["IsDeleted"]);
-
-            if (dr.ColumnIsNotNull("IsLocked"))
-                IsLocked = Convert.ToBoolean(dr["IsLocked"]);
-
-            if (dr.ColumnIsNotNull("IsClosed"))
-                IsClosed = Convert.ToBoolean(dr["IsClosed"]);
-
             if (dr.ColumnIsNotNull("TotalViews"))
                 TotalViews = Convert.ToInt32(dr["TotalViews"]);
 
@@ -281,8 +194,6 @@ namespace Plato.Entities.Models
             if (dr.ColumnIsNotNull("TotalWords"))
                 TotalWords = Convert.ToInt32(dr["TotalWords"]);
             
-            if (dr.ColumnIsNotNull("SortOrder"))
-                SortOrder = Convert.ToInt32(dr["SortOrder"]);
 
             if (dr.ColumnIsNotNull("IpV4Address"))
                 IpV4Address = Convert.ToString(dr["IpV4Address"]);
@@ -390,28 +301,8 @@ namespace Plato.Entities.Models
             if (dr.ColumnIsNotNull("LastReplyDate"))
                 LastReplyDate = (DateTimeOffset)dr["LastReplyDate"];
 
-            if (dr.ColumnIsNotNull("Rank"))
-                Rank = Convert.ToInt32(dr["Rank"]);
-
-            if (dr.ColumnIsNotNull("MaxRank"))
-                MaxRank = Convert.ToInt32(dr["MaxRank"]);
-
-            Relevance = Rank.ToPercentageOf(MaxRank);
         }
 
-        public int CompareTo(IEntity other)
-        {
-            if (other == null)
-                return 1;
-            var sortOrderCompare = other.SortOrder;
-            if (this.SortOrder == sortOrderCompare)
-                return 0;
-            if (this.SortOrder < sortOrderCompare)
-                return -1;
-            if (this.SortOrder > sortOrderCompare)
-                return 1;
-            return 0;
-        }
     }
     
 }

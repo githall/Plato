@@ -4,10 +4,12 @@ using System.Threading.Tasks;
 
 namespace Plato.Entities.Repositories
 {
-
-    public interface IEntityRepository<T> : IRepository<T> where T : class
+    public interface ISimpleEntityRepository<T> : IQueryableRepository<T> where T : class
     {
+
+        Task<T> SelectByIdAsync(int id);
+
         Task<IEnumerable<T>> SelectByFeatureIdAsync(int featureId);
-    } 
+    }
 
 }

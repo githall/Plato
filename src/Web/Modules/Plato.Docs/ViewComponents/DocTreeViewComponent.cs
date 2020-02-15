@@ -27,8 +27,7 @@ namespace Plato.Docs.ViewComponents
 
         private bool? _displayMenu;
 
-        public DocTreeViewComponent(
-        
+        public DocTreeViewComponent(        
             IAuthorizationService authorizationService,
             IEntityService<Doc> entityService,
             IFeatureFacade featureFacade)
@@ -45,7 +44,7 @@ namespace Plato.Docs.ViewComponents
             {
                 options = new EntityTreeOptions();;
             }
-            
+
             // Get entities
             var entities = await GetEntities(options.IndexOptions);
 
@@ -92,7 +91,7 @@ namespace Plato.Docs.ViewComponents
                 options.FeatureId = feature.Id;
 
             }
-            
+
             // Get results
             return await _entityService
                 .ConfigureQuery(async q =>
@@ -137,7 +136,7 @@ namespace Plato.Docs.ViewComponents
 
         private async Task DisplayMenu()
         {
-                       
+
             // Permissions needed for the menu
             var permissions = new List<IPermission>
             {
@@ -158,7 +157,7 @@ namespace Plato.Docs.ViewComponents
             }
 
             _displayMenu = false;
-                
+
         }
 
     }

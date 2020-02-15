@@ -119,7 +119,7 @@ namespace Plato.Entities.Extensions
 
                 if (parent != null)
                 {
-                    var children = new List<IEntity>() { item };
+                    var children = new List<ISimpleEntity>() { item };
                     if (parent.Children != null)
                     {
                         children.AddRange(parent.Children);
