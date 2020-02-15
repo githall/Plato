@@ -1,61 +1,95 @@
-﻿@model TraceViewModel
+﻿@using PlatoCore.Abstractions.Extensions
+@model TraceViewModel
+@{ 
+    var timeSpans = new List<TimeSpan>();
+}
 
 <h4>@T["Tracing"]</h4>
-<p class="text-muted">
-    @T["You can see below all database queries required to construct this page."]
-</p>
+<p class="text-muted">@T["You can see below all database queries required to construct this page."]</p>
 <hr />
 
-<table class="table">
-    @if (Model.Traces != null)
-    {
-        <thead>
-            <tr>
-                <th scope="col">#</th>
-                <th scope="col">Type</th>
-                <th scope="col">Command</th>
-                <th scope="col">Start</th>
-                <th scope="col">End</th>
-                <th scope="col">Total (ms)</th>
-                <th scope="col">Params</th>
-            </tr>
-        </thead>
-        <tbody>
-            @foreach (var trace in Model.Traces)
+<card class="card card-body-flush">
+    <card-title>
+        <h6 class="card-title">@T["Tracing"]</h6>
+    </card-title>
+    <card-body>
+        <table class="table">
+            @if (Model.Traces != null)
             {
-            <tr>
-                <th scope="row">@trace.Id.ToString()</th>
-                <td>@trace.Command.CommandType.ToString()</td>
-                <td>@trace.Command.CommandText</td>
-                <td>@trace.StartTime.ToString()</td>
-                <td>@trace.EndTime.ToString()</td>
-                <td>@string.Format("{0}ms", trace.ElapsedTime.Milliseconds)</td>
-                <td>
-                    @if  (trace.Command.Parameters != null)
+                <thead>
+                    <tr>
+                        <th scope="col">#</th>
+                        <th scope="col">@T["Type"]</th>
+                        <th scope="col">@T["Command"]</th>
+                        <th scope="col">@T["Elapsed"]</th>
+                        <th scope="col">@T["Params"]</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var trace in Model.Traces)
                     {
-                        foreach (var parameter in trace.Command.Parameters)
-                        {
-                            @Html.Raw(string.Format("<strong>{0}</strong> = {1}<hr/>", parameter.ParameterName, parameter.Value.ToString()));                        
-                        }
-                    } else
-                    {
-                        @T["No parameters"]
+                        <tr>
+                            <th scope="row">@trace.Id.ToString()</th>
+                            <td>@trace.Command.CommandType.ToString()</td>
+                            <td>@trace.Command.CommandText</td>
+                            <td>
+                                @if (trace.ElapsedTime.Milliseconds > 500)
+                                {
+                                    <span class="label p-1 bg-danger text-white">
+                                        @string.Format("{0}ms", trace.ElapsedTime.Milliseconds)
+                                    </span>
+                                }
+                                else if (trace.ElapsedTime.Milliseconds > 250)
+                                {
+                                    <span class="label p-1 bg-warning text-white">
+                                        @string.Format("{0}ms", trace.ElapsedTime.Milliseconds)
+                                    </span>
+                                }
+                                else
+                                {
+                                    <span class="label p-1">
+                                        @string.Format("{0}ms", trace.ElapsedTime.Milliseconds)
+                                    </span>
+                                }
+                                @{
+                                    timeSpans.Add(trace.ElapsedTime);
+                                }
+                            </td>
+                            <td>
+                                @if (trace.Command.Parameters != null)
+                                {
+                                    foreach (var parameter in trace.Command.Parameters)
+                                    {
+                                        @Html.Raw(string.Format("<strong>{0}</strong> = {1}<hr/>", parameter.ParameterName, parameter.Value.ToString()));
+                                    }
+                                }
+                                else
+                                {
+                                    @T["No parameters"]
+                                }
+                            </td>
+                        </tr>
                     }
-                </td>
-            </tr>
+                    <tr>
+                        <td scope="col" colspan="5">
+                            <span class="text-muted">Total queries:</span>
+                            <strong>@Model.Traces.Count().ToString()</strong>,
+                            <span class="text-muted">Total time:</span>
+                            <strong>@timeSpans.Milliseconds().ToString(@"s\s\ fff\m\s")</strong>
+                        </td>
+                    </tr>
+                </tbody>
             }
-        </tbody>
-    }
-    else
-    {
-        <tbody>
-            <tr>
-                <td>
-                    @T["No queries executed"]
-                </td>
-            </tr>
-        </tbody>
-    }
-</table>
-
-<hr />
+            else
+            {
+                <tbody>
+                    <tr>
+                        <td>
+                            @T["No queries executed"]
+                        </td>
+                    </tr>
+                </tbody>
+            }
+        </table>
+    </card-body>
+</card>
