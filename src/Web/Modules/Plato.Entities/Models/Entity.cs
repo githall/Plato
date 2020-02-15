@@ -11,6 +11,7 @@ namespace Plato.Entities.Models
 {
     public class Entity : SimpleEntity, IEntity
     {
+
         private readonly ConcurrentDictionary<Type, ISerializable> _metaData;
 
         public string Message { get; set; }
@@ -83,13 +84,6 @@ namespace Plato.Entities.Models
 
         public IDictionary<Type, ISerializable> MetaData => _metaData;
 
-        public Entity()
-        {
-            _metaData = new ConcurrentDictionary<Type, ISerializable>();
-        }
-
-        // IMetaData
-
         public void AddOrUpdate<T>(T obj) where T : class
         {
             if (_metaData.ContainsKey(typeof(T)))
@@ -125,6 +119,12 @@ namespace Plato.Entities.Models
 
         }
 
+        public Entity()
+        {
+            _metaData = new ConcurrentDictionary<Type, ISerializable>();
+        }
+
+        // TODO: Move to extension method
         public async Task<EntityUris> GetEntityUrlsAsync()
         {
             if (!string.IsNullOrEmpty(Urls))

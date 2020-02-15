@@ -52,6 +52,8 @@ namespace Plato.Entities.Models
     public class SimpleEntity : ISimpleEntity
     {
 
+        // ISimpleEntity
+
         public int Id { get; set; }
 
         public int ParentId { get; set; }
@@ -90,12 +92,13 @@ namespace Plato.Entities.Models
 
         public IEnumerable<ISimpleEntity> Children { get; set; } = new List<ISimpleEntity>();
 
-        public IEntity Parent { get; set; }
+        public ISimpleEntity Parent { get; set; }
 
         public int Depth { get; set; }
 
         public int SortOrder { get; set; }
-        ISimpleEntity INestable<ISimpleEntity>.Parent { get => throw new NotImplementedException(); set => throw new NotImplementedException(); }
+
+        // IDbModel
 
         public virtual void PopulateModel(IDataReader dr)
         {
@@ -152,10 +155,14 @@ namespace Plato.Entities.Models
                 MaxRank = Convert.ToInt32(dr["MaxRank"]);
 
             Relevance = Rank.ToPercentageOf(MaxRank);
+
         }
+
+        // IComparable
 
         public int CompareTo(ISimpleEntity other)
         {
+
             if (other == null)
                 return 1;
             var sortOrderCompare = other.SortOrder;
@@ -166,6 +173,7 @@ namespace Plato.Entities.Models
             if (this.SortOrder > sortOrderCompare)
                 return 1;
             return 0;
+
         }
 
     }

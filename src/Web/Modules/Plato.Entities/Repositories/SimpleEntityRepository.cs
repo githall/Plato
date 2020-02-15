@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Data;
 using System.Data.Common;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Plato.Entities.Models;
 using PlatoCore.Abstractions;
-using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 
 namespace Plato.Entities.Repositories
@@ -39,7 +37,6 @@ namespace Plato.Entities.Repositories
                     new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
-
                     });
             }
 
@@ -88,7 +85,7 @@ namespace Plato.Entities.Repositories
 
             return results;
         }
-        
+
         public async Task<IEnumerable<TModel>> SelectByFeatureIdAsync(int featureId)
         {
             IList<TModel> output = null;
@@ -112,7 +109,7 @@ namespace Plato.Entities.Repositories
 
                         return output;
 
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("FeatureId", DbType.Int32, featureId)
                     });
@@ -132,14 +129,12 @@ namespace Plato.Entities.Repositories
             if ((reader != null) && (reader.HasRows))
             {
                 model = ActivateInstanceOf<TModel>.Instance();
-               
-                // Entity
                 await reader.ReadAsync();
                 model.PopulateModel(reader);
-
             }
 
             return model;
+
         }
 
     }

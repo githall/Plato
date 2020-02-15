@@ -10,6 +10,7 @@ namespace Plato.Entities.Repositories
         Task<T> SelectByIdAsync(int id);
 
         Task<IEnumerable<T>> SelectByFeatureIdAsync(int featureId);
+
     }
 
 }
