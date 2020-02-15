@@ -14,7 +14,7 @@ namespace PlatoCore.Data.Tracing.Abstractions
 
         long EndTime { get; set; }
 
-        long ExecutionTime { get; }
+        TimeSpan ElapsedTime { get; set; }
 
     }
 
@@ -29,7 +29,7 @@ namespace PlatoCore.Data.Tracing.Abstractions
 
         public long EndTime { get; set; }
 
-        public long ExecutionTime => EndTime - StartTime / 10000000;
+        public TimeSpan ElapsedTime { get; set; }
 
         public DbTrace()
         {

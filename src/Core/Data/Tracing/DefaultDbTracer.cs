@@ -51,6 +51,7 @@ namespace PlatoCore.Data.Tracing
             }
 
             _currentTrace.EndTime = DateTime.Now.Ticks;
+            _currentTrace.ElapsedTime = TimeSpan.FromTicks(_currentTrace.StartTime);
             _dbTraceState.AddOrUpdate(_currentTrace);
 
         }

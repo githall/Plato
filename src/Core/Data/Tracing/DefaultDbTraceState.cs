@@ -8,7 +8,7 @@ namespace PlatoCore.Data.Tracing
     public class DefaultDbTraceState : IDbTraceState
     {
 
-        private int _traceId;
+        private int _traceId = 1;
 
         private ConcurrentDictionary<int, IDbTrace> _traces;
 
@@ -32,12 +32,14 @@ namespace PlatoCore.Data.Tracing
                 _traces = new ConcurrentDictionary<int, IDbTrace>();
             }
 
-            // Use existing trace id or generate a new one
-            _traceId = trace.Id == 0
-                ? _traceId++
-                : trace.Id;
+            // Initialize new traces with a new id
+            if (trace.Id == 0)
+            {
+                trace.Id = _traceId;
+                _traceId++;
+            }
 
-            return _traces.AddOrUpdate(_traceId, trace, (k, v) =>
+            return _traces.AddOrUpdate(trace.Id, trace, (k, v) =>
             {
                 return trace;
             });

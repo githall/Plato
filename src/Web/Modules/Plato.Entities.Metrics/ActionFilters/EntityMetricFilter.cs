@@ -30,14 +30,12 @@ namespace Plato.Entities.Metrics.ActionFilters
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            return;
         }
 
         public void OnActionExecuted(ActionExecutedContext context)
-        {
-            return;
+        {       
         }
-        
+
         public Task OnActionExecutingAsync(ResultExecutingContext context)
         {
             return Task.CompletedTask;
