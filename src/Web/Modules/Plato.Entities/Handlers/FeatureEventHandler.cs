@@ -11,8 +11,8 @@ namespace Plato.Entities.Handlers
     public class FeatureEventHandler : BaseFeatureEventHandler
     {
     
-        public string Version { get; } = "1.0.0";
-        
+        public string Version { get; } = "1.0.5";
+
         // Entities table
         private readonly SchemaTable _entities = new SchemaTable()
         {
@@ -594,14 +594,18 @@ namespace Plato.Entities.Handlers
                 
                 // drop entities
                 builder.TableBuilder.DropTable(_entities);
-                
+
                 builder.ProcedureBuilder
                     .DropDefaultProcedures(_entities)
                     .DropProcedure(new SchemaProcedure("SelectEntitiesByFeatureId"))
-                    .DropProcedure(new SchemaProcedure("SelectSimpleEntitiesByFeatureId"))
                     .DropProcedure(new SchemaProcedure("SelectEntitiesPaged"))
                     .DropProcedure(new SchemaProcedure("SelectEntityUsersPaged"));
-                
+
+                // drop simple entities
+                builder.ProcedureBuilder
+                    .DropProcedure(new SchemaProcedure("SelectSimpleEntityById"))
+                    .DropProcedure(new SchemaProcedure("SelectSimpleEntitiesByFeatureId"));
+
                 // drop entity data
                 builder.TableBuilder.DropTable(_entityData);
 
@@ -609,7 +613,7 @@ namespace Plato.Entities.Handlers
                     .DropDefaultProcedures(_entityData)
                     .DropProcedure(new SchemaProcedure("SelectEntityDatumByEntityId"))
                     .DropProcedure(new SchemaProcedure("SelectEntityDatumPaged"));
-                
+
                 // drop entity replies
                 builder.TableBuilder.DropTable(_entityReplies);
 
@@ -642,9 +646,9 @@ namespace Plato.Entities.Handlers
                     context.Logger.LogCritical(error, $"An error occurred within the UninstallingAsync method within {this.GetType().FullName}");
                     context.Errors.Add(error, $"UninstallingAsync within {this.GetType().FullName}");
                 }
-                
+
             }
-            
+
         }
 
         public override Task UninstalledAsync(IFeatureEventContext context)
@@ -881,30 +885,27 @@ namespace Plato.Entities.Handlers
                     new SchemaProcedure(
                             $"SelectSimpleEntityById",
                             @"SELECT 
-                                e.Id,
-                                e.ParentId,
-                                e.FeatureId,
-                                e.CategoryId,
-                                e.Title,
-                                e.Alias,
-                                e.IsHidden,
-                                e.IsPrivate,
-                                e.IsSpam,
-                                e.IsPinned,
-                                e.IsDeleted,
-                                e.IsLocked,
-                                e.IsClosed,
-                                f.ModuleId,
-                                0 AS Rank, 
-                                0 AS MaxRank
+                                    e.Id,
+                                    e.ParentId,
+                                    e.FeatureId,
+                                    e.CategoryId,
+                                    e.Title,
+                                    e.Alias,
+                                    e.IsHidden,
+                                    e.IsPrivate,
+                                    e.IsSpam,
+                                    e.IsPinned,
+                                    e.IsDeleted,
+                                    e.IsLocked,
+                                    e.IsClosed,
+                                    e.SortOrder,
+                                    f.ModuleId,
+                                    0 AS Rank, 
+                                    0 AS MaxRank
                             FROM {prefix}_Entities e WITH (nolock)                                     
-                                INNER JOIN {prefix}_ShellFeatures f ON e.FeatureId = f.Id
+                                    INNER JOIN {prefix}_ShellFeatures f ON e.FeatureId = f.Id
                             WHERE (
-                                e.Id = @Id
-                            );
-                            SELECT * FROM {prefix}_EntityData WITH (nolock) 
-                            WHERE (
-                                EntityId = @Id
+                                    e.Id = @Id
                             );")
                         .ForTable(_entities)
                         .WithParameter(_entities.PrimaryKeyColumn))
@@ -912,26 +913,27 @@ namespace Plato.Entities.Handlers
                 // SelectEntitiesByFeatureId
                 .CreateProcedure(new SchemaProcedure("SelectSimpleEntitiesByFeatureId",
                         @"SELECT 
-                                e.Id,
-                                e.ParentId,
-                                e.FeatureId,
-                                e.CategoryId,
-                                e.Title,
-                                e.Alias,
-                                e.IsHidden,
-                                e.IsPrivate,
-                                e.IsSpam,
-                                e.IsPinned,
-                                e.IsDeleted,
-                                e.IsLocked,
-                                e.IsClosed,
-                                f.ModuleId,
-                                0 AS Rank, 
-                                0 AS MaxRank
+                                    e.Id,
+                                    e.ParentId,
+                                    e.FeatureId,
+                                    e.CategoryId,
+                                    e.Title,
+                                    e.Alias,
+                                    e.IsHidden,
+                                    e.IsPrivate,
+                                    e.IsSpam,
+                                    e.IsPinned,
+                                    e.IsDeleted,
+                                    e.IsLocked,
+                                    e.IsClosed,
+                                    e.SortOrder,
+                                    f.ModuleId,
+                                    0 AS Rank, 
+                                    0 AS MaxRank
                             FROM {prefix}_Entities e WITH (nolock)                                     
-                                INNER JOIN {prefix}_ShellFeatures f ON e.FeatureId = f.Id
+                                    INNER JOIN {prefix}_ShellFeatures f ON e.FeatureId = f.Id
                             WHERE (
-                                e.FeatureId = @FeatureId
+                                    e.FeatureId = @FeatureId
                             )")
                     .ForTable(_entities)
                     .WithParameter(new SchemaColumn() { Name = "FeatureId", DbType = DbType.Int32 }));

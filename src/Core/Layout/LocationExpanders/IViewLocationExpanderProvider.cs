@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc.Razor;
 
-namespace PlatoCore.Layout.LocationExpander
+namespace PlatoCore.Layout.LocationExpanders
 {
     public interface IViewLocationExpanderProvider : IViewLocationExpander
     {

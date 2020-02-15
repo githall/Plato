@@ -31,13 +31,13 @@ namespace Plato.Entities.Services
 
         }
         
-        public ISimpleEntityService<TModel> ConfigureDb(Action<IQueryOptions> configure)
+        public IEntityService<TModel> ConfigureDb(Action<IQueryOptions> configure)
         {
             _configureDb = configure;
             return this;
         }
         
-        public ISimpleEntityService<TModel> ConfigureQuery(Action<EntityQueryParams> configure)
+        public IEntityService<TModel> ConfigureQuery(Action<EntityQueryParams> configure)
         {
             _configureParams = configure;
             return this;

@@ -13,9 +13,9 @@ namespace Plato.Entities.ViewComponents
     public class EntityTreeViewComponent : ViewComponentBase
     {
 
-        private readonly IEntityStore<Entity> _entityStore;
+        private readonly ISimpleEntityStore<SimpleEntity> _entityStore;
         
-        public EntityTreeViewComponent(IEntityStore<Entity> entityStore)
+        public EntityTreeViewComponent(ISimpleEntityStore<SimpleEntity> entityStore)
         {
             _entityStore = entityStore;
         }
@@ -44,11 +44,11 @@ namespace Plato.Entities.ViewComponents
 
         }
 
-        IList<Selection<IEntity>> BuildSelectionsAsync(EntityTreeOptions options)
+        IList<Selection<ISimpleEntity>> BuildSelectionsAsync(EntityTreeOptions options)
         {
             
             // Build a model for our tree
-            return options.Entities?.Select(e => new Selection<IEntity>
+            return options.Entities?.Select(e => new Selection<ISimpleEntity>
                 {
                     IsSelected = options.SelectedEntity.Equals(e.Id),
                     Value = e

@@ -3,6 +3,7 @@ using PlatoCore.Data.Migrations.Extensions;
 using PlatoCore.Data.Schemas.Extensions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Data.Providers;
+using PlatoCore.Data.Tracing.Extensions;
 
 namespace PlatoCore.Data.Extensions
 {
@@ -29,6 +30,9 @@ namespace PlatoCore.Data.Extensions
 
             // Add migrations 
             services.AddDataMigrations();
+
+            // Add tracing 
+            services.AddDataTracing();
 
             return services;
 

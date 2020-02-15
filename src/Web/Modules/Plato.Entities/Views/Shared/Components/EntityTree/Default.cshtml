@@ -6,13 +6,13 @@
         return await BuildRecursivelyAsync(model.SelectedEntities, model.HtmlName);
     }
 
-    bool IsParentOfSelected(int id, IEnumerable<IEntity> selectedParents)
+    bool IsParentOfSelected(int id, IEnumerable<ISimpleEntity> selectedParents)
     {
         return selectedParents?.FirstOrDefault(p => p.Id == id) != null ? true : false;
     }
 
     async Task<string> BuildRecursivelyAsync(
-        IList<Selection<IEntity>> entities,
+        IList<Selection<ISimpleEntity>> entities,
         string htmlName,
         System.Text.StringBuilder sb = null,
         int id = 0)

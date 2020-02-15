@@ -56,6 +56,7 @@ namespace Plato.Entities
 
             // Repositories
             services.AddScoped<IEntityRepository<Entity>, EntityRepository<Entity>>();
+            services.AddScoped<ISimpleEntityRepository<SimpleEntity>, SimpleEntityRepository<SimpleEntity>>();
             services.AddScoped<IEntityDataRepository<IEntityData>, EntityDataRepository>();
             services.AddScoped<IEntityReplyRepository<EntityReply>, EntityReplyRepository<EntityReply>>();
             services.AddScoped<IEntityReplyDataRepository<IEntityReplyData>, EntityReplyDataRepository>();
@@ -66,6 +67,7 @@ namespace Plato.Entities
 
             // Stores
             services.AddScoped<IEntityStore<Entity>, EntityStore<Entity>>();
+            services.AddScoped<ISimpleEntityStore<SimpleEntity>, SimpleEntityStore<SimpleEntity>>();
             services.AddScoped<IEntityDataStore<IEntityData>, EntityDataStore>();
             services.AddScoped<IEntityDataItemStore<EntityData>, EntityDataItemStore<EntityData>>();
             services.AddScoped<IEntityReplyDataStore<IEntityReplyData>, EntityReplyDataStore>();
@@ -73,13 +75,14 @@ namespace Plato.Entities
             services.AddScoped<IEntityUsersStore, EntityUsersStore>();
             services.AddScoped<IFeatureEntityCountStore, FeatureEntityCountStore>();
 
+            // Services
+            services.AddScoped<IEntityService<Entity>, EntityService<Entity>>();
+            services.AddScoped<ISimpleEntityService<SimpleEntity>, SimpleEntityService<SimpleEntity>>();
+            services.AddScoped<IFeatureEntityCountService, FeatureEntityCountService>();
+
             // Managers
             services.AddScoped<IEntityManager<Entity>, EntityManager<Entity>>();
             services.AddScoped<IEntityReplyManager<EntityReply>, EntityReplyManager<EntityReply>>();
-
-            // Services
-            services.AddScoped<IEntityService<Entity>, EntityService<Entity>>();
-            services.AddScoped<IFeatureEntityCountService, FeatureEntityCountService>();
 
             // Entity subscribers
             services.AddScoped<IBrokerSubscriber, ParseEntityAliasSubscriber>();
@@ -91,15 +94,16 @@ namespace Plato.Entities
             services.AddScoped<IFullTextIndexProvider, FullTextIndexes>();
             
             // Federated search
-
             services.AddScoped<IFederatedQueryManager<Entity>, FederatedQueryManager<Entity>>();
             services.AddScoped<IFederatedQueryProvider<Entity>, EntityQueries<Entity>>();
-
+            services.AddScoped<IFederatedQueryManager<SimpleEntity>, FederatedQueryManager<SimpleEntity>>();
+            services.AddScoped<IFederatedQueryProvider<SimpleEntity>, SimpleEntityQueries<SimpleEntity>>();
             services.AddScoped<IFederatedQueryManager<FeatureEntityCount>, FederatedQueryManager<FeatureEntityCount>>();
             services.AddScoped<IFederatedQueryProvider<FeatureEntityCount>, FeatureEntityCountQueries<FeatureEntityCount>>();
 
             // Query adapters
             services.AddScoped<IQueryAdapterManager<Entity>, QueryAdapterManager<Entity>>();
+            services.AddScoped<IQueryAdapterManager<SimpleEntity>, QueryAdapterManager<SimpleEntity>>();
             services.AddScoped<IQueryAdapterManager<EntityQueryParams>, QueryAdapterManager<EntityQueryParams>>();
             services.AddScoped<IQueryAdapterManager<FeatureEntityCount>, QueryAdapterManager<FeatureEntityCount>>();
 
@@ -117,10 +121,10 @@ namespace Plato.Entities
 
             // Action filter
             services.AddScoped<IModularActionFilter, HomeMenuContextualizeFilter>();
-       
+
             // Migrations
             services.AddSingleton<IMigrationProvider, Migrations>();
-            
+
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 

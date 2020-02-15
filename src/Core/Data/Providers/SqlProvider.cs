@@ -6,23 +6,27 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Data.Tracing.Abstractions;
 
 namespace PlatoCore.Data.Providers
 {
-    
+
     public class SqlProvider : IDataProvider
     {
 
         public int CommandTimeout { get; set; } = 120;
 
+        private readonly IDbTracer<SqlProvider> _dbTracer;
         private readonly ILogger<SqlProvider> _logger;
         private readonly string _connectionString;
 
         public SqlProvider(
+            IOptions<DbContextOptions> dbContextOptions,
             ILogger<SqlProvider> logger,
-            IOptions<DbContextOptions> dbContextOptions)
+            IDbTracer<SqlProvider> dbTracer)
         {
             _logger = logger;
+            _dbTracer = dbTracer;
             _connectionString = dbContextOptions.Value.ConnectionString;
         }
 
@@ -34,8 +38,9 @@ namespace PlatoCore.Data.Providers
                 _logger.LogInformation("SQL to execute: " + commandText);
             }
 
-            T output = null;
+            StartTrace(commandText, commandType, dbParams);
 
+            T output = null;
             using (var conn = new SqlConnection(_connectionString))
             {
                 try
@@ -61,6 +66,8 @@ namespace PlatoCore.Data.Providers
                 }
             }
 
+            StopTrace();
+
             return output;
         }
 
@@ -71,6 +78,8 @@ namespace PlatoCore.Data.Providers
             {
                 _logger.LogInformation("SQL to execute: " + commandText);
             }
+
+            StartTrace(commandText, commandType, dbParams);
             
             object output = null;
             using (var conn = new SqlConnection(_connectionString))
@@ -122,16 +131,21 @@ namespace PlatoCore.Data.Providers
                 return (T)Convert.ChangeType(output, typeof(T));
             }
 
+            StopTrace();
+
             return default(T);
             
         }
 
         public async Task<T> ExecuteNonQueryAsync<T>(CommandType commandType, string commandText, IDbDataParameter[] dbParams = null)
         {
+
             if (_logger.IsEnabled(LogLevel.Information))
             {
                 _logger.LogInformation("SQL to execute: " + commandText);
             }
+
+            StartTrace(commandText, commandType, dbParams);
 
             object output = null;
             using (var conn = new SqlConnection(_connectionString))
@@ -185,11 +199,29 @@ namespace PlatoCore.Data.Providers
                 output = (T)Convert.ChangeType(output, typeof(T));
             }
 
+            StopTrace();
+
             return default(T);
 
         }
         
         // ---------------
+
+        void StartTrace(string commandText, CommandType commandType, IDbDataParameter[] dbParams)
+        {
+            if (_dbTracer.Enabled)
+            {
+                _dbTracer.Start(commandText, commandType, dbParams);
+            }
+        }
+
+        void StopTrace()
+        {
+            if (_dbTracer.Enabled)
+            {
+                _dbTracer.Stop();
+            }
+        }
 
         SqlCommand CreateCommand(
             SqlConnection connection,

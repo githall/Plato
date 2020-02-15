@@ -22,6 +22,12 @@ namespace Plato.Entities
                     ModuleId = ModuleId,
                     Version = "1.0.4",
                     Statements = v_1_0_4()
+                },
+                new PreparedMigration()
+                {
+                    ModuleId = ModuleId,
+                    Version = "1.0.5",
+                    Statements = v_1_0_5()
                 }
             };
 
@@ -343,8 +349,6 @@ namespace Plato.Entities
                     }
                 });
 
-
-
                 ////// Drop daily columns
                 ////builder.TableBuilder.DropTableColumns(columnsToDrop);
 
@@ -412,7 +416,90 @@ namespace Plato.Entities
 
         }
 
-        
+        private ICollection<string> v_1_0_5()
+        {
+
+            // Plato.Entities 1.0.5 adds 2 new stored procedures
+            // These provide a lighter weight way to select entities
+
+            var output = new List<string>();
+
+            using (var builder = _schemaBuilder)
+            {
+
+                builder
+                    .Configure(options =>
+                    {
+                        options.ModuleName = ModuleId;
+                        options.Version = "1.0.5";
+                        options.DropProceduresBeforeCreate = true;
+                    });
+
+                    // Simple entities = minimal data
+                    builder.ProcedureBuilder.CreateProcedure(
+                        new SchemaProcedure(
+                                $"SelectSimpleEntityById",
+                                    @"SELECT 
+                                    e.Id,
+                                    e.ParentId,
+                                    e.FeatureId,
+                                    e.CategoryId,
+                                    e.Title,
+                                    e.Alias,
+                                    e.IsHidden,
+                                    e.IsPrivate,
+                                    e.IsSpam,
+                                    e.IsPinned,
+                                    e.IsDeleted,
+                                    e.IsLocked,
+                                    e.IsClosed,
+                                    e.SortOrder,
+                                    f.ModuleId,
+                                    0 AS Rank, 
+                                    0 AS MaxRank
+                            FROM {prefix}_Entities e WITH (nolock)                                     
+                                    INNER JOIN {prefix}_ShellFeatures f ON e.FeatureId = f.Id
+                            WHERE (
+                                    e.Id = @Id
+                            );")
+                            .WithParameter(new SchemaColumn() { Name = "Id", DbType = DbType.Int32 }))
+
+                    // SelectEntitiesByFeatureId
+                    .CreateProcedure(new SchemaProcedure("SelectSimpleEntitiesByFeatureId",
+                            @"SELECT 
+                                    e.Id,
+                                    e.ParentId,
+                                    e.FeatureId,
+                                    e.CategoryId,
+                                    e.Title,
+                                    e.Alias,
+                                    e.IsHidden,
+                                    e.IsPrivate,
+                                    e.IsSpam,
+                                    e.IsPinned,
+                                    e.IsDeleted,
+                                    e.IsLocked,
+                                    e.IsClosed,
+                                    e.SortOrder,
+                                    f.ModuleId,
+                                    0 AS Rank, 
+                                    0 AS MaxRank
+                            FROM {prefix}_Entities e WITH (nolock)                                     
+                                    INNER JOIN {prefix}_ShellFeatures f ON e.FeatureId = f.Id
+                            WHERE (
+                                    e.FeatureId = @FeatureId
+                            )")
+                        .WithParameter(new SchemaColumn() { Name = "FeatureId", DbType = DbType.Int32 }));
+
+                // Add builder results to output
+                output.AddRange(builder.Statements);
+
+            }
+
+            return output;
+
+        }
+
     }
 
 }

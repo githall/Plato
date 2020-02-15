@@ -4,17 +4,6 @@ using PlatoCore.Abstractions.Extensions;
 namespace PlatoCore.Layout.Views.Abstractions
 {
 
-    public interface IPositionedView : IView
-    {
-
-        ViewPosition Position { get; }
-
-        IPositionedView Zone(string zone);
-
-        IPositionedView Order(int order);
-
-    }
-
     public class PositionedView : View, IPositionedView
     {
 
@@ -27,15 +16,14 @@ namespace PlatoCore.Layout.Views.Abstractions
             _order = 1;
         }
 
-        public PositionedView(string viewName, object model) : 
-            base(viewName, model)
+        public PositionedView(string viewName, object model) : base(viewName, model)
         {
             _zone = LayoutZones.ContentZoneName;
             _order = 1;
         }
 
         public ViewPosition Position => new ViewPosition(_zone, _order);
-        
+
         public IPositionedView Zone(string zone)
         {
 

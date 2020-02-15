@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Razor;
 
-namespace PlatoCore.Layout.LocationExpander
+namespace PlatoCore.Layout.LocationExpanders
 {
     public class AreaViewLocationExpander : IViewLocationExpanderProvider
     {

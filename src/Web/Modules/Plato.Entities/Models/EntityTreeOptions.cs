@@ -8,7 +8,7 @@ namespace Plato.Entities.Models
     public class EntityTreeOptions
     {
 
-        public IEnumerable<IEntity> Entities { get; set; }
+        public IEnumerable<ISimpleEntity> Entities { get; set; }
 
         public int SelectedEntity { get; set; }
 

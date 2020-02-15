@@ -7,9 +7,9 @@ namespace Plato.Entities.ViewModels
     public class EntityTreeViewModel
     {
         
-        public IList<Selection<IEntity>> SelectedEntities { get; set; }
+        public IList<Selection<ISimpleEntity>> SelectedEntities { get; set; }
 
-        public IEnumerable<IEntity> SelectedParents { get; set; }
+        public IEnumerable<ISimpleEntity> SelectedParents { get; set; }
 
         public string HtmlName { get; set; }
 
@@ -23,7 +23,7 @@ namespace Plato.Entities.ViewModels
 
     }
 
-    public class Selection<TModel> where TModel : class, IEntity
+    public class Selection<TModel> where TModel : class, ISimpleEntity
     {
 
         public bool IsSelected { get; set; }

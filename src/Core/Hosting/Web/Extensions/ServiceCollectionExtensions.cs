@@ -42,7 +42,7 @@ using PlatoCore.FileSystem.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Hosting.Web.Configuration;
 using PlatoCore.Hosting.Web.Routing;
-using PlatoCore.Layout.LocationExpander;
+using PlatoCore.Layout.LocationExpanders;
 using PlatoCore.Layout.ViewFeatures;
 using PlatoCore.Modules.FileProviders;
 using PlatoCore.Models.Shell;

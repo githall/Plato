@@ -14,7 +14,7 @@ namespace Plato.Entities.Services
     {
 
         private Action<QueryOptions> _configureDb = null;
-        private Action<EntityQueryParams> _configureParams = null;
+        private Action<SimpleEntityQueryParams> _configureParams = null;
         
         private readonly IContextFacade _contextFacade;
         private readonly ISimpleEntityStore<TModel> _entityStore;
@@ -37,7 +37,7 @@ namespace Plato.Entities.Services
             return this;
         }
         
-        public ISimpleEntityService<TModel> ConfigureQuery(Action<EntityQueryParams> configure)
+        public ISimpleEntityService<TModel> ConfigureQuery(Action<SimpleEntityQueryParams> configure)
         {
             _configureParams = configure;
             return this;
@@ -86,7 +86,7 @@ namespace Plato.Entities.Services
             return await _entityStore.QueryAsync()
                 .Take(pager.Page, pager.Size)
                 .Configure(_configureDb)
-                .Select<EntityQueryParams>(q =>
+                .Select<SimpleEntityQueryParams>(q =>
                 {
                     
                     // ----------------

@@ -4,7 +4,7 @@ using System.Linq;
 using Microsoft.AspNetCore.Mvc.Razor;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace PlatoCore.Layout.LocationExpander
+namespace PlatoCore.Layout.LocationExpanders
 {
     
     public class CompositeViewLocationExpander : IViewLocationExpanderProvider

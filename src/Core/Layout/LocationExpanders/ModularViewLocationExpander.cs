@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Mvc.Razor;
 using PlatoCore.Modules.Abstractions;
 
-namespace PlatoCore.Layout.LocationExpander
+namespace PlatoCore.Layout.LocationExpanders
 {
 
     public class ModularViewLocationExpander : IViewLocationExpanderProvider
