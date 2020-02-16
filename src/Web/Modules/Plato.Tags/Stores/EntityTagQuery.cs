@@ -205,6 +205,8 @@ namespace Plato.Tags.Stores
         
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(et.Id) FROM ")
@@ -214,7 +216,11 @@ namespace Plato.Tags.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("et.*, ")
@@ -233,7 +239,7 @@ namespace Plato.Tags.Stores
             return sb.ToString();
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_entityTagsTableName)
@@ -250,10 +256,6 @@ namespace Plato.Tags.Stores
 
             return sb.ToString();
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -412,7 +414,7 @@ namespace Plato.Tags.Stores
             return sb.ToString();
         }
 
-        IDictionary<string, OrderBy> GetSafeSortColumns()
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
         {
             var output = new Dictionary<string, OrderBy>();
             foreach (var sortColumn in _query.SortColumns)
@@ -429,8 +431,7 @@ namespace Plato.Tags.Stores
             return output;
         }
 
-
-        string GetSortColumn(string columnName)
+        private string GetSortColumn(string columnName)
         {
 
             if (String.IsNullOrEmpty(columnName))

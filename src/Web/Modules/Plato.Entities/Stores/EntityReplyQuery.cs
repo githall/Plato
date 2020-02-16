@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions;
 
@@ -222,6 +222,8 @@ namespace Plato.Entities.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(r.Id) FROM ")
@@ -230,8 +232,12 @@ namespace Plato.Entities.Stores
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             return sb.ToString();
         }
-        
-        string BuildPopulateSelect()
+
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("r.*,")
@@ -262,9 +268,9 @@ namespace Plato.Entities.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
-            
+
             var sb = new StringBuilder();
             sb.Append(_entityRepliesTableName)
                 .Append(" r ");
@@ -273,18 +279,14 @@ namespace Plato.Entities.Stores
             sb.Append("LEFT OUTER JOIN ")
                 .Append(_usersTableName)
                 .Append(" c ON r.CreatedUserId = c.Id ");
-            
+
             sb.Append("LEFT OUTER JOIN ")
                 .Append(_usersTableName)
                 .Append(" m ON r.ModifiedUserId = m.Id");
-            
+
             return sb.ToString();
 
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -447,7 +449,7 @@ namespace Plato.Entities.Stores
             return sb.ToString();
         }
 
-        IDictionary<string, OrderBy> GetSafeSortColumns()
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
         {
             var output = new Dictionary<string, OrderBy>();
             foreach (var sortColumn in _query.SortColumns)
@@ -464,7 +466,7 @@ namespace Plato.Entities.Stores
             return output;
         }
 
-        string GetSortColumn(string columnName)
+        private string GetSortColumn(string columnName)
         {
 
             if (String.IsNullOrEmpty(columnName))

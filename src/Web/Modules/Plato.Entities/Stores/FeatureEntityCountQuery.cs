@@ -680,7 +680,6 @@ namespace Plato.Entities.Stores
 
         }
 
-
         string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)

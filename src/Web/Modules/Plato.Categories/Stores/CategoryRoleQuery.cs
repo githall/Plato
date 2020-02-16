@@ -102,6 +102,8 @@ namespace Plato.Categories.Stores
 
         #region "Implementation"
 
+        // TODO: To be removed and refactored to use newer style paging
+        // See other paging queries for reference
         public string BuildSqlStartId()
         {
             var whereClause = BuildWhereClause();
@@ -117,17 +119,14 @@ namespace Plato.Categories.Stores
         }
 
         public string BuildSqlPopulate()
-        {
-
+        {    
             var whereClause = BuildWhereClauseForStartId();
             var orderBy = BuildOrderBy();
-
             var sb = new StringBuilder();
             sb.Append("SELECT ")
                 .Append(BuildPopulateSelect())
                 .Append(" FROM ")
                 .Append(BuildTables());
-
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             if (!string.IsNullOrEmpty(orderBy))
@@ -137,6 +136,8 @@ namespace Plato.Categories.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(c.Id) FROM ")
@@ -146,7 +147,11 @@ namespace Plato.Categories.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("c.*");
@@ -154,7 +159,7 @@ namespace Plato.Categories.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
 
             var sb = new StringBuilder();
@@ -165,10 +170,6 @@ namespace Plato.Categories.Stores
             return sb.ToString();
 
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -217,7 +218,6 @@ namespace Plato.Categories.Stores
 
         }
 
-
         string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
@@ -248,9 +248,9 @@ namespace Plato.Categories.Stores
         }
 
         #endregion
+
     }
 
     #endregion
-
 
 }

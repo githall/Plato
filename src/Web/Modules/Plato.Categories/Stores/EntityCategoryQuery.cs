@@ -120,6 +120,8 @@ namespace Plato.Categories.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(c.Id) FROM ")
@@ -129,24 +131,24 @@ namespace Plato.Categories.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("c.*");
             return sb.ToString();
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_entityCategorysTableName)
                 .Append(" c ");
             return sb.ToString();
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {

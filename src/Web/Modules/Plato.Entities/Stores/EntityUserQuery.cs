@@ -145,10 +145,8 @@ namespace Plato.Entities.Stores
 
         public string BuildSqlPopulate()
         {
-
             var orderBy = BuildOrderBy();
             var sb = new StringBuilder();
-
             sb.Append(BuildTemporaryTable())
                 .Append("SELECT ")
                 .Append("u.Id AS UserId, ")
@@ -178,6 +176,8 @@ namespace Plato.Entities.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append(BuildTemporaryTable());

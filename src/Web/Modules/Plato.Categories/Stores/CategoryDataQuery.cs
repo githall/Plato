@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,7 +8,6 @@ using PlatoCore.Stores.Abstractions;
 
 namespace Plato.Categories.Stores
 {
-    
 
     #region "CategoryDataQuery"
 
@@ -129,6 +127,8 @@ namespace Plato.Categories.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(d.Id) FROM ")
@@ -137,7 +137,6 @@ namespace Plato.Categories.Stores
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             return sb.ToString();
         }
-
 
         #endregion
 
@@ -227,7 +226,9 @@ namespace Plato.Categories.Stores
         }
 
         #endregion
+
     }
 
     #endregion
+
 }

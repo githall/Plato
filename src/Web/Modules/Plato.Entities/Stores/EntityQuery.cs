@@ -406,11 +406,9 @@ namespace Plato.Entities.Stores
         #region "Implementation"
         
         public string BuildSqlPopulate()
-        {
-            
+        {            
             var whereClause = BuildWhere();
             var orderBy = BuildOrderBy();
-
             var sb = new StringBuilder();
             sb.Append("DECLARE @MaxRank int;")
                 .Append(Environment.NewLine)
@@ -432,6 +430,8 @@ namespace Plato.Entities.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhere();
             var sb = new StringBuilder();
             sb.Append("DECLARE @MaxRank int;")
@@ -444,8 +444,6 @@ namespace Plato.Entities.Stores
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             return sb.ToString();
         }
-        
-        private string _where = null;
 
         public string Where => _where ?? (_where = BuildWhere());
 
@@ -453,6 +451,9 @@ namespace Plato.Entities.Stores
 
         #region "Private Methods"
 
+        private string _where = null;
+
+       
         private string[] _columns = new string[]
         {
             "e.Id",

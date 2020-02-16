@@ -125,6 +125,8 @@ namespace PlatoCore.Stores.Reputations
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(ur.Id) FROM ")
@@ -133,6 +135,10 @@ namespace PlatoCore.Stores.Reputations
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             return sb.ToString();
         }
+
+        #endregion
+
+        #region "Private Methods"
 
         string BuildPopulateSelect()
         {
@@ -148,10 +154,6 @@ namespace PlatoCore.Stores.Reputations
                 .Append(" ub ");
             return sb.ToString();
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {

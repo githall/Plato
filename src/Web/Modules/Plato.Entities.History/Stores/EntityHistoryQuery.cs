@@ -51,7 +51,6 @@ namespace Plato.Entities.History.Stores
 
         }
 
-
     }
 
     #endregion
@@ -66,7 +65,6 @@ namespace Plato.Entities.History.Stores
         private WhereInt _entityId;
         private WhereInt _entityReplyId;
         private WhereString _keywords;
-
 
         public WhereInt Id
         {
@@ -92,7 +90,6 @@ namespace Plato.Entities.History.Stores
             set => _keywords = value;
         }
 
-
     }
 
     #endregion
@@ -101,6 +98,7 @@ namespace Plato.Entities.History.Stores
 
     public class EntityHistoryQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _entityHistoryTableName;
@@ -122,7 +120,6 @@ namespace Plato.Entities.History.Stores
         
         public string BuildSqlPopulate()
         {
-
             var whereClause = BuildWhereClause();
             var orderBy = BuildOrderBy();
             var sb = new StringBuilder();
@@ -142,6 +139,8 @@ namespace Plato.Entities.History.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(h.Id) FROM ")
@@ -151,7 +150,11 @@ namespace Plato.Entities.History.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("h.*,")
@@ -164,7 +167,7 @@ namespace Plato.Entities.History.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
 
             var sb = new StringBuilder();
@@ -176,17 +179,12 @@ namespace Plato.Entities.History.Stores
 
         }
 
-        #endregion
-
-        #region "Private Methods"
-
         private string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)
                 ? _query.Options.TablePrefix + tableName
                 : tableName;
         }
-
       
         private string BuildWhereClause()
         {
@@ -245,7 +243,7 @@ namespace Plato.Entities.History.Stores
             return sb.ToString();
         }
 
-        IDictionary<string, OrderBy> GetSafeSortColumns()
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
         {
             var ourput = new Dictionary<string, OrderBy>();
             foreach (var sortColumn in _query.SortColumns)
@@ -262,8 +260,7 @@ namespace Plato.Entities.History.Stores
             return ourput;
         }
 
-
-        string GetSortColumn(string columnName)
+        private string GetSortColumn(string columnName)
         {
 
             if (String.IsNullOrEmpty(columnName))
@@ -294,8 +291,8 @@ namespace Plato.Entities.History.Stores
 
         }
 
-
         #endregion
+
     }
 
     #endregion

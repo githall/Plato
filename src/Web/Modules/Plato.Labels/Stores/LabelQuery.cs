@@ -98,6 +98,7 @@ namespace Plato.Labels.Stores
 
     public class LabelQueryBuilder<TModel> : IQueryBuilder where TModel : class
     {
+
         #region "Constructor"
 
         private readonly string _labelsTableName;
@@ -115,7 +116,7 @@ namespace Plato.Labels.Stores
         #endregion
 
         #region "Implementation"
-        
+
         public string BuildSqlPopulate()
         {
 
@@ -138,6 +139,8 @@ namespace Plato.Labels.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(l.Id) FROM ")
@@ -316,7 +319,7 @@ namespace Plato.Labels.Stores
             return string.Empty;
 
         }
-        
+
         #endregion
 
     }

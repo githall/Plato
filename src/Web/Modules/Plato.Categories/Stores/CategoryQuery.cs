@@ -134,8 +134,8 @@ namespace Plato.Categories.Stores
 
         public string BuildSqlCount()
         {
-            if (!_query.TakeResults)            
-                return "SELECT 0";            
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhere();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(c.Id) FROM ")
@@ -144,6 +144,10 @@ namespace Plato.Categories.Stores
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             return sb.ToString();
         }
+
+        #endregion
+
+        #region "Private Methods"
 
         string BuildSelect()
         {
@@ -156,7 +160,7 @@ namespace Plato.Categories.Stores
             // -----------------
 
             _query.QueryAdapterManager?.BuildSelect(_query, sb);
-           
+
             return sb.ToString();
         }
 
@@ -171,7 +175,7 @@ namespace Plato.Categories.Stores
             // -----------------
 
             _query.QueryAdapterManager?.BuildTables(_query, sb);
-         
+
             return sb.ToString();
         }
 
@@ -184,8 +188,8 @@ namespace Plato.Categories.Stores
             // Apply any query adapters
             // -----------------
 
-             _query.QueryAdapterManager?.BuildWhere(_query, sb);
-          
+            _query.QueryAdapterManager?.BuildWhere(_query, sb);
+
             // -----------------
             // Id
             // -----------------
@@ -196,7 +200,7 @@ namespace Plato.Categories.Stores
                     sb.Append(_query.Params.Id.Operator);
                 sb.Append(_query.Params.Id.ToSqlString("c.Id"));
             }
-            
+
             // -----------------
             // FeatureId
             // -----------------
@@ -211,10 +215,6 @@ namespace Plato.Categories.Stores
             return sb.ToString();
 
         }
-        
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {

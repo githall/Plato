@@ -201,6 +201,8 @@ namespace Plato.Labels.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(el.Id) FROM ")
@@ -209,6 +211,10 @@ namespace Plato.Labels.Stores
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             return sb.ToString();
         }
+
+        #endregion
+
+        #region "Private Methods"
 
         string BuildPopulateSelect()
         {
@@ -232,10 +238,6 @@ namespace Plato.Labels.Stores
             return sb.ToString();
 
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
