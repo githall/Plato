@@ -23,8 +23,10 @@ using PlatoCore.Data.Migrations.Abstractions;
 
 namespace Plato.Roles
 {
+
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)

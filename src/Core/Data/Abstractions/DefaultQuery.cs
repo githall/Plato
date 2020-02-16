@@ -20,8 +20,11 @@ namespace PlatoCore.Data.Abstractions
 
         public int PageSize { get; private set; } = int.MaxValue;
 
+        public bool TakeResults { get; set; } = false;
+
         public IQuery<TModel> Take(int pageIndex, int pageSize)
         {
+            TakeResults = true; 
             this.PageIndex = pageIndex;
             this.PageSize = pageSize;
             return this;

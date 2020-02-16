@@ -71,7 +71,7 @@ namespace PlatoCore.Data.Schemas.Builders
 
             var indexName = index.GenerateName();
 
-            // Ensure the index does not already exist
+            // Ensure the index does not already exist before attempting to create
 
             sb.Append("IF NOT EXISTS (SELECT object_id FROM sys.indexes WHERE [name] = '")
                 .Append(PrependTablePrefix(indexName))

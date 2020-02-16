@@ -9,7 +9,7 @@ namespace PlatoCore.Stores.Abstractions
     /// Represents a store that supports an IQueryBuilder.
     /// </summary>
     /// <typeparam name="TModel"></typeparam>
-    public interface IQueryableStore<TModel> where TModel : class
+    public interface IQueryableStore<TModel> : ICacheableStore<TModel> where TModel : class
     {
 
         IQuery<TModel> QueryAsync();

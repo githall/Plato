@@ -134,6 +134,8 @@ namespace Plato.Categories.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.TakeResults)            
+                return "SELECT 0";            
             var whereClause = BuildWhere();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(c.Id) FROM ")
@@ -258,6 +260,5 @@ namespace Plato.Categories.Stores
     }
 
     #endregion
-
 
 }

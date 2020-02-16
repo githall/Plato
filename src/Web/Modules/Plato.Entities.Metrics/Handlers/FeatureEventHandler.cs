@@ -10,9 +10,9 @@ namespace Plato.Entities.Metrics.Handlers
 
     public class FeatureEventHandler : BaseFeatureEventHandler
     {
-    
+
         public string Version { get; } = "1.0.0";
-        
+
         // Entity Metrics table
         private readonly SchemaTable _entityMetrics = new SchemaTable()
         {

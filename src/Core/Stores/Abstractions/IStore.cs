@@ -3,14 +3,7 @@
 namespace PlatoCore.Stores.Abstractions
 {
 
-    public interface ICacheableStore<TModel> where TModel : class
-    {
-        void CancelTokens(TModel model);
-    }
-
-    public interface IStore<TModel> :
-        ICacheableStore<TModel>,
-        IQueryableStore<TModel> where TModel : class
+    public interface IStore<TModel> : IQueryableStore<TModel> where TModel : class
     {
 
         Task<TModel> CreateAsync(TModel model);
