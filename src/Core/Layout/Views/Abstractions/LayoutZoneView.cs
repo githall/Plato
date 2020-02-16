@@ -4,19 +4,19 @@ using PlatoCore.Abstractions.Extensions;
 namespace PlatoCore.Layout.Views.Abstractions
 {
 
-    public class PositionedView : View, IPositionedView
+    public class LayoutZoneView : View, ILayoutZoneView
     {
 
         private string _zone;
         private int _order;
 
-        public PositionedView()
+        public LayoutZoneView()
         {
             _zone = LayoutZones.ContentZoneName;
             _order = 1;
         }
 
-        public PositionedView(string viewName, object model) : base(viewName, model)
+        public LayoutZoneView(string viewName, object model) : base(viewName, model)
         {
             _zone = LayoutZones.ContentZoneName;
             _order = 1;
@@ -24,7 +24,7 @@ namespace PlatoCore.Layout.Views.Abstractions
 
         public ViewPosition Position => new ViewPosition(_zone, _order);
 
-        public IPositionedView Zone(string zone)
+        public ILayoutZoneView Zone(string zone)
         {
 
             // We already expect a zone
@@ -45,7 +45,7 @@ namespace PlatoCore.Layout.Views.Abstractions
             return this;
         }
 
-        public IPositionedView Order(int order)
+        public ILayoutZoneView Order(int order)
         {
             _order = order;
             return this;

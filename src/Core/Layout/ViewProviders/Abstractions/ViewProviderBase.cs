@@ -39,7 +39,7 @@ namespace PlatoCore.Layout.ViewProviders.Abstractions
             return new LayoutViewModel(new ViewProviderResult(views));
         }
 
-        public IPositionedView View<TViewModel>(string viewName, Func<TViewModel, TViewModel> configure) where TViewModel : class
+        public ILayoutZoneView View<TViewModel>(string viewName, Func<TViewModel, TViewModel> configure) where TViewModel : class
         {
 
             // Create proxy model 
@@ -49,7 +49,7 @@ namespace PlatoCore.Layout.ViewProviders.Abstractions
             var model = configure((TViewModel) proxy);
 
             // Return a view we can optionally position
-            return new PositionedView(viewName, model);
+            return new LayoutZoneView(viewName, model);
 
         }
 

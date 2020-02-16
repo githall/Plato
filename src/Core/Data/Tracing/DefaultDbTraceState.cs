@@ -12,17 +12,7 @@ namespace PlatoCore.Data.Tracing
 
         private ConcurrentDictionary<int, IDbTrace> _traces;
 
-        public ICollection<IDbTrace> Traces
-        {
-            get
-            {
-                if (_traces == null)
-                {
-                    return null;
-                }
-                return _traces.Values;
-            }
-        }
+        public ICollection<IDbTrace> Traces => _traces?.Values;
 
         public IDbTrace AddOrUpdate(IDbTrace trace)
         {
@@ -39,10 +29,7 @@ namespace PlatoCore.Data.Tracing
                 _traceId++;
             }
 
-            return _traces.AddOrUpdate(trace.Id, trace, (k, v) =>
-            {
-                return trace;
-            });
+            return _traces.AddOrUpdate(trace.Id, trace, (k, v) => trace);
 
         }
 

@@ -1,8 +1,8 @@
 Name: Plato Data Tracing
-Description: Displays details for all database queries executed on every Plato page. 
+Description: Displays timings for all database queries executed on every Plato page. 
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
-Category: Core
+Category: Performance
 PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.data.tracing/content/images/icon.png

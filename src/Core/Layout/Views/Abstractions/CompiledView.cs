@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace PlatoCore.Layout.Views.Abstractions
 {
-    public abstract class CompiledView : PositionedView, ICompiledView
+    public abstract class CompiledView : LayoutZoneView, ICompiledView
     {
 
         public ViewContext ViewContext { get; set; }

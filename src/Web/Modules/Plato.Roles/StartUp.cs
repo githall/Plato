@@ -19,6 +19,7 @@ using Plato.Roles.ViewProviders;
 using Plato.Roles.Handlers;
 using Plato.Roles.Navigation;
 using Plato.Roles.Services;
+using PlatoCore.Data.Migrations.Abstractions;
 
 namespace Plato.Roles
 {
@@ -64,6 +65,9 @@ namespace Plato.Roles
 
             // Register additional authorization handler for implied permissions
             services.AddScoped<IAuthorizationHandler, RolesPermissionsHandler>();
+
+            // Migrations
+            services.AddSingleton<IMigrationProvider, Migrations>();
 
         }
 

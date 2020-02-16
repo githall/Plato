@@ -4,16 +4,15 @@
     var timeSpans = new List<TimeSpan>();
 }
 
-<h4>@T["Tracing"]</h4>
-<p class="text-muted">@T["You can see below all database queries required to construct this page."]</p>
-<hr />
-
 <card class="card card-body-flush">
     <card-title>
-        <h6 class="card-title">@T["Tracing"]</h6>
+        <h6 class="card-title">@T["Plato.Data.Tracing"]</h6>
+        <div class="text-muted">
+            @T["Below you can see all database queries required to construct this page."]
+        </div>
     </card-title>
     <card-body>
-        <table class="table">
+        <table class="table m-0">
             @if (Model.Traces != null)
             {
                 <thead>
@@ -72,10 +71,8 @@
                     }
                     <tr>
                         <td scope="col" colspan="5">
-                            <span class="text-muted">Total queries:</span>
-                            <strong>@Model.Traces.Count().ToString()</strong>,
-                            <span class="text-muted">Total time:</span>
-                            <strong>@timeSpans.Milliseconds().ToString(@"s\s\ fff\m\s")</strong>
+                            <span class="text-muted">@T["Total queries"]</span> <strong>@Model.Traces.Count().ToString()</strong>,
+                            <span class="text-muted">@T["Total time"]</span> <strong>@timeSpans.Milliseconds().ToString(@"s\s\ fff\m\s")</strong>
                         </td>
                     </tr>
                 </tbody>
@@ -85,7 +82,7 @@
                 <tbody>
                     <tr>
                         <td>
-                            @T["No queries executed"]
+                            @T["No database queries messcarry"]
                         </td>
                     </tr>
                 </tbody>

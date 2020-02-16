@@ -2,6 +2,7 @@
 
 namespace PlatoCore.Data.Migrations.Abstractions
 {
+
     public interface IMigrationProvider
     {
 
@@ -14,4 +15,5 @@ namespace PlatoCore.Data.Migrations.Abstractions
         IMigrationProvider LoadSchemas(IList<string> versions);
 
     }
+
 }

@@ -17,11 +17,11 @@ namespace PlatoCore.Layout
         Task<ILayoutUpdater> UpdateLayoutAsync(
             Func<LayoutViewModel, Task<LayoutViewModel>> configure);
 
-        Task<List<IPositionedView>> UpdateZoneAsync(
-            IEnumerable<IPositionedView> zone,
-            Action<List<IPositionedView>> configure);
+        Task<List<ILayoutZoneView>> UpdateZoneAsync(
+            IEnumerable<ILayoutZoneView> zone,
+            Action<List<ILayoutZoneView>> configure);
         
-        Task<List<IPositionedView>> GetZoneAsync(string zoneName);
+        Task<List<ILayoutZoneView>> GetZoneAsync(string zoneName);
 
     }
 
@@ -82,7 +82,7 @@ namespace PlatoCore.Layout
 
         }
 
-        public Task<List<IPositionedView>> GetZoneAsync(string zoneName)
+        public Task<List<ILayoutZoneView>> GetZoneAsync(string zoneName)
         {
 
             // We always need a model to invoke configuration
@@ -98,24 +98,24 @@ namespace PlatoCore.Layout
                 ?.GetValue(_model, null);
 
             // Ensure we are working with a list of positioned views
-            if (propValue is IEnumerable<IPositionedView> views)
+            if (propValue is IEnumerable<ILayoutZoneView> views)
             {
                 return Task.FromResult(views.ToList());
             }
 
-            return Task.FromResult(new List<IPositionedView>());
+            return Task.FromResult(new List<ILayoutZoneView>());
 
         }
 
-        public Task<List<IPositionedView>> UpdateZoneAsync(
-            IEnumerable<IPositionedView> zone,
-            Action<List<IPositionedView>> configure)
+        public Task<List<ILayoutZoneView>> UpdateZoneAsync(
+            IEnumerable<ILayoutZoneView> zone,
+            Action<List<ILayoutZoneView>> configure)
         {
 
             // The zone may not have been initialized
             if (zone == null)
             {
-                zone = new List<IPositionedView>();
+                zone = new List<ILayoutZoneView>();
             }
 
             // Ensures we can easily perform work within configure

@@ -14,7 +14,7 @@ namespace PlatoCore.Layout.ViewProviders.Abstractions
             Views = views ?? ((IEnumerable<IView>) new List<IView>());
         }
 
-        public ViewProviderResult(params IPositionedView[] views)
+        public ViewProviderResult(params ILayoutZoneView[] views)
         {
             Views = views ?? ((IEnumerable<IView>) new List<IView>());
         }

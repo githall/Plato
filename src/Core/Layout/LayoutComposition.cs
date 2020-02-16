@@ -10,8 +10,8 @@ namespace PlatoCore.Layout
     {
 
         private readonly IEnumerable<IViewProviderResult> _results;
-        private readonly ConcurrentDictionary<string, IList<IPositionedView>> _zonedViews =
-            new ConcurrentDictionary<string, IList<IPositionedView>>();
+        private readonly ConcurrentDictionary<string, IList<ILayoutZoneView>> _zonedViews =
+            new ConcurrentDictionary<string, IList<ILayoutZoneView>>();
 
         public LayoutComposition(IEnumerable<IViewProviderResult> results)
         {
@@ -40,7 +40,7 @@ namespace PlatoCore.Layout
 
         }
 
-        IEnumerable<IPositionedView> GetPositionedViews(string zoneName)
+        IEnumerable<ILayoutZoneView> GetPositionedViews(string zoneName)
         {
 
             // Returns an ordered list of all views within a zone. 
@@ -66,9 +66,9 @@ namespace PlatoCore.Layout
                 foreach (var view in result.Views)
                 {
                     // We can only zone views that implement IPositionedView
-                    if (view is IPositionedView positionedView)
+                    if (view is ILayoutZoneView positionedView)
                     {
-                        _zonedViews.AddOrUpdate(positionedView.Position.Zone.ToLower(), new List<IPositionedView>()
+                        _zonedViews.AddOrUpdate(positionedView.Position.Zone.ToLower(), new List<ILayoutZoneView>()
                         {
                             positionedView
                         }, (k, v) =>

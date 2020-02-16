@@ -3,8 +3,8 @@ Description: Provides role based security functionality for Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Core
-PlatoVersion: 1.0.0
-Version: 1.0.0
+PlatoVersion: 1.1.1
+Version: 1.0.1
 Icon: /plato.roles/content/images/icon.png
 Dependencies: 
 [

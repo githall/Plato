@@ -1,27 +1,26 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
 using Plato.Data.Tracing.ViewModels;
 using PlatoCore.Data.Tracing.Abstractions;
-using System.Collections.Generic;
-using System.Threading.Tasks;
 
 namespace Plato.Data.Tracing.ViewComponents
 {
 
-    public class DbTraceViewComponent : ViewComponent
+    public class DbTraceListViewComponent : ViewComponent
     {
 
         private readonly IDbTraceState _dbTraceState;
 
-        public DbTraceViewComponent(IDbTraceState dbTraceState)
+        public DbTraceListViewComponent(IDbTraceState dbTraceState)
         {
             _dbTraceState = dbTraceState;
         }
 
-        public Task<IViewComponentResult> InvokeAsync(IEnumerable<IDbTrace> traces)
+        public Task<IViewComponentResult> InvokeAsync()
         {
             return Task.FromResult((IViewComponentResult) View(new TraceViewModel()
             {
-                Traces = traces
+                Traces = _dbTraceState.Traces
             }));
         }
 

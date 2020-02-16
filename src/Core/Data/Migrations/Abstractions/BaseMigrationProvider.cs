@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Collections.Generic;
 
 namespace PlatoCore.Data.Migrations.Abstractions
 {
@@ -9,7 +9,7 @@ namespace PlatoCore.Data.Migrations.Abstractions
     {
 
         public IList<PreparedMigration> AvailableMigrations { get; set; }
-        
+
         public string ModuleId => Path.GetFileNameWithoutExtension(this.GetType().Assembly.ManifestModule.Name);
 
         public IList<PreparedMigration> Schemas { get; } = new List<PreparedMigration>();
@@ -21,6 +21,7 @@ namespace PlatoCore.Data.Migrations.Abstractions
 
         public virtual IMigrationProvider LoadSchemas(IList<string> versions)
         {
+
             foreach (var migration in AvailableMigrations)
             {
                 if (versions.Contains(migration.Version))
@@ -30,7 +31,9 @@ namespace PlatoCore.Data.Migrations.Abstractions
             }
 
             return this;
+
         }
 
     }
+
 }

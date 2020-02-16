@@ -31,17 +31,17 @@ namespace Plato.Data.Tracing.ActionFilters
         public async Task OnActionExecutingAsync(ResultExecutingContext context)
         {
 
-            var state = context.HttpContext.RequestServices.GetService<IDbTraceState>();
-
-            // Add trace information to the top of our content zone
+            // Add our trace view to the bottom of the page
+            // It's important to add this to the very bottom of the view (for example in the footer)
+            // This allows all queries to execute before rendering the trace list
             if (context.Controller is Controller controller)
             {
                 var updater = await _layoutUpdater.GetLayoutAsync(controller);
                 await updater.UpdateLayoutAsync(async layout =>
                 {
-                    layout.Content = await updater.UpdateZoneAsync(layout.Content, zone =>
+                    layout.Footer = await updater.UpdateZoneAsync(layout.Footer, zone =>
                     {
-                        zone.Add(new PositionedView("DbTrace", new { state.Traces }).Order(int.MinValue));                
+                        zone.Add(new LayoutZoneView("DbTraceList", new {}).Order(int.MaxValue));
                     });
                     return layout;
                 });
@@ -55,4 +55,5 @@ namespace Plato.Data.Tracing.ActionFilters
         }
 
     }
+
 }

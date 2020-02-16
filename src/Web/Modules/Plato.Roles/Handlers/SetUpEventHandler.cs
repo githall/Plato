@@ -12,7 +12,7 @@ namespace Plato.Roles.Handlers
     public class SetUpEventHandler : BaseSetUpEventHandler
     {
 
-        public const string Version = "1.0.0";
+        public const string Version = "1.0.1";
         
         // Roles schema
         private readonly SchemaTable _roles = new SchemaTable()
@@ -133,13 +133,13 @@ namespace Plato.Roles.Handlers
 
                 // user roles 
                 UserRoles(builder);
-                
+
                 var errors = await _schemaManager.ExecuteAsync(builder.Statements);
                 foreach (var error in errors)
                 {
                     reportError(error, $"SetUp within {this.GetType().FullName} - {error}");
                 }
-                
+
             }
 
             // Install default roles & permissions on first set-up
@@ -206,6 +206,17 @@ namespace Plato.Roles.Handlers
                             Length = "255"
                         }
                     }));
+
+            // Indexes
+            builder.IndexBuilder.CreateIndex(new SchemaIndex()
+            {
+                TableName = _roles.Name,
+                Columns = new string[]
+                {
+                    "[Name]",
+                    "NormalizedName"
+                }
+            });
 
         }
 
@@ -312,6 +323,17 @@ namespace Plato.Roles.Handlers
                                 DbType = DbType.Int32
                             }
                         }));
+
+            // Indexes
+            builder.IndexBuilder.CreateIndex(new SchemaIndex()
+            {
+                TableName = _userRoles.Name,
+                Columns = new string[]
+                {
+                    "UserId",
+                    "RoleId"
+                }
+            });
 
         }
 

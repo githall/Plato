@@ -16,11 +16,11 @@ namespace PlatoCore.Data.Tracing
         private readonly IDbTraceState _dbTraceState;
 
         public DefaultDbTracer(
-            IHostEnvironment hostEnviroment,
+            IHostEnvironment hostEnvironment,
             IDbTraceState dbTraceState)
         {
             // Enabling profiling by default within development
-            if (hostEnviroment.IsDevelopment())
+            if (hostEnvironment.IsDevelopment())
             {
                 Enabled = true;
             }

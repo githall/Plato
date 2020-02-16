@@ -126,12 +126,12 @@ namespace PlatoCore.Data.Providers
                 }
             }
 
+            StopTrace();
+
             if (output != null)
             {
                 return (T)Convert.ChangeType(output, typeof(T));
             }
-
-            StopTrace();
 
             return default(T);
             
@@ -194,12 +194,12 @@ namespace PlatoCore.Data.Providers
                 }
             }
 
+            StopTrace();
+
             if (output != null)
             {
-                output = (T)Convert.ChangeType(output, typeof(T));
+                return (T)Convert.ChangeType(output, typeof(T));
             }
-
-            StopTrace();
 
             return default(T);
 

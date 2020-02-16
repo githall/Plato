@@ -11,7 +11,6 @@ using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Data.Migrations.Abstractions;
-using PlatoCore.Features;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Features;
@@ -360,7 +359,10 @@ namespace Plato.Features.Updates.Services
                             {
                                 context.Errors = new Dictionary<string, string>();
                             }
-                            context.Errors.Add(error.Code, error.Description);
+                            if (!context.Errors.ContainsKey(error.Code))
+                            {
+                                context.Errors.Add(error.Code, error.Description);
+                            }
                         }
 
                         contexts.AddOrUpdate(context.Feature.ModuleId, context, (k, v) =>

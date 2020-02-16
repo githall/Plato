@@ -15,7 +15,7 @@ namespace Plato.Users.Handlers
     public class SetUpEventHandler : BaseSetUpEventHandler
     {
 
-        private const string Version = "1.0.9";
+        private const string Version = "1.1.0";
 
         private readonly SchemaTable _userPhoto = new SchemaTable()
         {
@@ -865,6 +865,20 @@ namespace Plato.Users.Handlers
                             Length = "255"
                         }
                     }));
+
+            // Indexes
+            builder.IndexBuilder.CreateIndex(new SchemaIndex()
+            {
+                TableName = _users.Name,
+                Columns = new string[]
+                {
+                    "UserName",
+                    "NormalizedUserName",
+                    "Email",
+                    "NormalizedEmail",
+                    "UserType"
+                }
+            });
 
         }
 

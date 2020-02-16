@@ -1,6 +1,4 @@
-﻿using System;
-using System.Linq;
-using System.Data;
+﻿using System.Data;
 using System.Collections.Generic;
 using PlatoCore.Data.Migrations.Abstractions;
 using PlatoCore.Data.Schemas.Abstractions;
@@ -35,12 +33,18 @@ namespace Plato.Users
                     ModuleId = ModuleId,
                     Version = "1.0.9",
                     Statements = V_1_0_9()
+                },
+                new PreparedMigration()
+                {
+                    ModuleId = ModuleId,
+                    Version = "1.1.0",
+                    Statements = V_1_1_0()
                 }
             };
 
         }
 
-        // --------------
+        // Migrations
 
         private ICollection<string> V_1_0_1()
         {
@@ -1364,6 +1368,46 @@ namespace Plato.Users
                                 )")
                         .ForTable(users)
                         .WithParameter(users.PrimaryKeyColumn));
+
+                // Add builder results to output
+                output.AddRange(builder.Statements);
+
+            }
+
+            return output;
+
+        }
+
+        private ICollection<string> V_1_1_0()
+        {
+
+            // Plato.USers 1.1.0 adds indexes to the users table to help with performance
+
+            var output = new List<string>();
+            using (var builder = _schemaBuilder)
+            {
+
+                builder.Configure(options =>
+                {
+                    options.ModuleName = ModuleId;
+                    options.Version = "1.1.0";
+                    options.DropTablesBeforeCreate = true;
+                    options.DropProceduresBeforeCreate = true;
+                });
+
+                // Indexes
+                builder.IndexBuilder.CreateIndex(new SchemaIndex()
+                {
+                    TableName = "Users",
+                    Columns = new string[]
+                    {
+                    "UserName",
+                    "NormalizedUserName",
+                    "Email",
+                    "NormalizedEmail",
+                    "UserType"
+                    }
+                });
 
                 // Add builder results to output
                 output.AddRange(builder.Statements);
