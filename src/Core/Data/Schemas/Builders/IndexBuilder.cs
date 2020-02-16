@@ -60,14 +60,28 @@ namespace PlatoCore.Data.Schemas.Builders
         private string CreateIndexInternal(SchemaIndex index)
         {
 
-            // CREATE INDEX IX_tableName_columnName ON tableName
-            //    ( columnName(s) )
-            // WITH(FILLFACTOR = 30)
-            // GO
+            // IF NOT EXISTS (SELECT object_id FROM sys.indexes WHERE [name] = 'prefix_IX_tableName_firstColumnName')
+            // BEGIN
+            //      CREATE INDEX prefix_IX_tableName_firstColumnName ON tableName
+            //          ( columnName(s) )
+            //      WITH(FILLFACTOR = 30)
+            // END
 
             var sb = new StringBuilder();
 
             var indexName = index.GenerateName();
+
+            // Ensure the index does not already exist
+
+            sb.Append("IF NOT EXISTS (SELECT object_id FROM sys.indexes WHERE [name] = '")
+                .Append(PrependTablePrefix(indexName))
+                .Append("')")
+                .Append(NewLine);
+
+            sb.Append("BEGIN")
+                 .Append(NewLine); ;
+
+            // Create index
 
             sb.Append("CREATE INDEX ")
                 .Append(PrependTablePrefix(indexName))
@@ -85,6 +99,11 @@ namespace PlatoCore.Data.Schemas.Builders
             }
 
             sb.Append(";");
+
+            // End index exists check
+            sb
+                .Append(NewLine)
+                .Append("END");        
 
             return sb.ToString();
 
