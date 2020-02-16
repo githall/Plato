@@ -15,8 +15,7 @@
 
         int MaxResults { get; set; }
 
-        SearchTypes SearchType { get; set; }
-        
+        SearchTypes SearchType { get; set; }        
 
     }
 
