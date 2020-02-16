@@ -141,31 +141,39 @@ namespace Plato.Entities.ViewComponents
         public EntityListViewComponent(
             IEntityService<Entity> entityService,
             IAuthorizationService authorizationService)
-        {
-            _entityService = entityService;
+        {            
             _authorizationService = authorizationService;
+            _entityService = entityService;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(
-            EntityIndexOptions options,
-            PagerOptions pager)
+        public async Task<IViewComponentResult> InvokeAsync(EntityIndexViewModel<Entity> model)
         {
 
-            if (options == null)
+            if (model == null)
             {
-                options = new EntityIndexOptions();
+                model = new EntityIndexViewModel<Entity>();
             }
 
-            if (pager == null)
+            if (model.Options == null)
             {
-                pager = new PagerOptions();
+                model.Options = new EntityIndexOptions();
             }
 
-            // Get view model
-            var model = await GetIndexViewModel(options, pager);
+            if (model.Pager == null)
+            {
+                model.Pager = new PagerOptions();
+            }
+
+            // Return view model
+            return View(await GetIndexViewModel(model));
+
+        }
+        
+        async Task<EntityIndexViewModel<Entity>> GetIndexViewModel(EntityIndexViewModel<Entity> model)
+        {
 
             // If full text is enabled add rank to sort options
-            if (options.Sort == SortBy.Rank)
+            if (model.Options.Sort == SortBy.Rank)
             {
                 var sortColumns = new List<SortColumn>()
                 {
@@ -178,16 +186,6 @@ namespace Plato.Entities.ViewComponents
                 sortColumns.AddRange(model.SortColumns);
                 model.SortColumns = sortColumns;
             }
-
-            // Return view model
-            return View(model);
-
-        }
-        
-        async Task<EntityIndexViewModel<Entity>> GetIndexViewModel(
-            EntityIndexOptions options,
-            PagerOptions pager)
-        {
 
             // Build results
             var results = await _entityService
@@ -223,21 +221,18 @@ namespace Plato.Entities.ViewComponents
                     }
 
                 })
-                .GetResultsAsync(options, pager);
+                .GetResultsAsync(model.Options, model.Pager);
 
             // Set pager total
-            pager.SetTotal(results?.Total ?? 0);
-            
-            // Return view model
-            return new EntityIndexViewModel<Entity>
-            {
-                Results = results,
-                Options = options,
-                Pager = pager,
-                SortColumns = _defaultSortColumns,
-                SortOrder = _defaultSortOrder,
-                Filters = _defaultFilters
-            };
+            model.Pager.SetTotal(results?.Total ?? 0);
+
+            model.Results = results;
+            model.SortColumns = _defaultSortColumns;
+            model.SortOrder = _defaultSortOrder;
+            model.Filters = _defaultFilters;
+
+            return model;
+
         }
     
     }
