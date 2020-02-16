@@ -72,7 +72,7 @@ namespace Plato.Questions.Tags.ViewProviders
             
             // Get all tags for feature
             var tags = await _tagStore.QueryAsync()
-                .Take(1, 20)
+                .Take(20, false)
                 .Select<TagQueryParams>(q =>
                 {
                     q.FeatureId.Equals(feature.Id);

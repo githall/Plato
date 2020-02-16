@@ -141,7 +141,7 @@ namespace Plato.Articles.Reactions.Tasks
 
                     // Get all users awarded the badge
                     var users = await _userStore.QueryAsync()
-                        .Take(1, userIds.Count)
+                        .Take(userIds.Count, false)
                         .Select<UserQueryParams>(q => { q.Id.IsIn(userIds.ToArray()); })
                         .OrderBy("LastLoginDate", OrderBy.Desc)
                         .ToList();

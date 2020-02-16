@@ -52,7 +52,7 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
             if (moderators != null)
             {
                 users = await _platoUserStore.QueryAsync()
-                    .Take(1, 20)
+                    .Take(20, false)
                     .Select<UserQueryParams>(q =>
                     {
                         q.Id.IsIn(moderators.Data.Select(m => m.UserId).ToArray());

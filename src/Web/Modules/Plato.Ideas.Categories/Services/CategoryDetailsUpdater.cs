@@ -45,7 +45,7 @@ namespace Plato.Ideas.Categories.Services
 
                 // Get latest topic & total topic count for current channel
                 var entities = await _entityStore.QueryAsync()
-                    .Take(1, 1) // we only need the latest topic
+                    .Take(1) // we only need the latest topic but need a total count
                     .Select<EntityQueryParams>(q =>
                     {
 
@@ -75,7 +75,7 @@ namespace Plato.Ideas.Categories.Services
 
                 // Get latest reply & total reply count for current channel
                 var replies = await _replyStore.QueryAsync()
-                    .Take(1, 1) // we only need the latest reply
+                    .Take(1, 1, true) // we only need the latest reply but need a total count
                     .Select<EntityReplyQueryParams>(q =>
                     {
 

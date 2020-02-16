@@ -35,9 +35,9 @@ namespace Plato.Entities.ViewComponents
         async Task<EntityParticipantsViewModel> GetViewModel(int id)
         {
             
-            // Get top X participants
+            // Get top 10 participants
             var users = await _entityUsersStore.QueryAsync()
-                .Take(1, 10)
+                .Take(10, false)
                 .Select<EntityUserQueryParams>(q =>
                 {
                     q.EntityId.Equals(id);

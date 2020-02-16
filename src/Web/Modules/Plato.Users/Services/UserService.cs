@@ -39,13 +39,11 @@ namespace Plato.Users.Services
             return this;
         }
         
-        public async Task<IPagedResults<TModel>> GetResultsAsync(
-            UserIndexOptions options,
-            PagerOptions pager)
+        public async Task<IPagedResults<TModel>> GetResultsAsync(UserIndexOptions options, PagerOptions pager)
         {
             return await _platoUserStore.QueryAsync()
                 .Configure(_configureDb)
-                .Take(pager.Page, pager.Size)
+                .Take(pager.Page, pager.Size, pager.CountTotal)
                 .Select<UserQueryParams>(q =>
                 {
 

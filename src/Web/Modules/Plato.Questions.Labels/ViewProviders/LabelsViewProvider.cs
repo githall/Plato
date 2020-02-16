@@ -64,9 +64,9 @@ namespace Plato.Questions.Labels.ViewProviders
                 Pager = viewModel?.Pager
             };
             
-            // Get labels for feature
+            // Get top 10 labels for feature
             var labels = await _labelStore.QueryAsync()
-                .Take(1, 10)
+                .Take(10, false)
                 .Select<LabelQueryParams>(async q =>
                 {
                     q.FeatureId.Equals(await GetFeatureIdAsync());

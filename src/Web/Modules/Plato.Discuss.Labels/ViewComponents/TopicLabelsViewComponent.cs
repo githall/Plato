@@ -27,7 +27,7 @@ namespace Plato.Discuss.Labels.ViewComponents
 
             // Get entity labels
             var labels = await _labelStore.QueryAsync()
-                .Take(1, 10)
+                .Take(10, false)
                 .Select<LabelQueryParams>(q =>
                 {
                     q.EntityId.Equals(entity.Id);

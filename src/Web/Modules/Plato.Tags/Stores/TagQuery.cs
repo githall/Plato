@@ -144,7 +144,7 @@ namespace Plato.Tags.Stores
 
         public string BuildSqlCount()
         {
-            if (!_query.TakeResults)
+            if (!_query.CountTotal)
                 return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();

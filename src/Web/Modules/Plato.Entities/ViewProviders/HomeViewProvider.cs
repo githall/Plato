@@ -27,7 +27,8 @@ namespace Plato.Entities.ViewProviders
                     {
                         Page = 1,
                         Size = 10,
-                        Enabled = false
+                        Enabled = false,
+                        CountTotal = false
                     }
                 },
                 Popular = new EntityIndexViewModel<Entity>()
@@ -41,7 +42,8 @@ namespace Plato.Entities.ViewProviders
                     {
                         Page = 1,
                         Size = 10,
-                        Enabled = false
+                        Enabled = false,
+                        CountTotal = false
                     }
                 }
             };

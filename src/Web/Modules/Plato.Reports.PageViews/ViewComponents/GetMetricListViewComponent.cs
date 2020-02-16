@@ -44,7 +44,7 @@ namespace Plato.Reports.PageViews.ViewComponents
 
             // Get results
             var results = await _metricStore.QueryAsync()
-                .Take(pager.Page, pager.Size)
+                .Take(pager.Page, pager.Size, pager.CountTotal)
                 .Select<MetricQueryParams>(q =>
                 {
                     q.StartDate.GreaterThanOrEqual(options.Start);

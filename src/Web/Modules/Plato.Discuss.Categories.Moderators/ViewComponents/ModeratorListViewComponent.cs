@@ -50,7 +50,6 @@ namespace Plato.Discuss.Categories.Moderators.ViewComponents
 
         #endregion
 
-
     }
     
 }

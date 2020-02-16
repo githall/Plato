@@ -349,7 +349,8 @@ namespace PlatoCore.Stores.Users
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ByPlatoBot);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
-                var results = await QueryAsync().Take(1)
+                var results = await QueryAsync()
+                    .Take(1, false)
                     .Select<UserQueryParams>(q => q.UserType.Equals(UserType.Bot))
                     .ToList();
                 return results?.Data?[0];

@@ -102,7 +102,6 @@ namespace Plato.Reports.PageViews.ViewComponents
             },
         };
 
-
         private readonly IMetricsStore<Metric> _metricStore;
 
         public MetricListViewComponent(
@@ -130,7 +129,6 @@ namespace Plato.Reports.PageViews.ViewComponents
 
         }
 
-
         async Task<ReportIndexViewModel<Metric>> GetViewModel(
             ReportOptions options,
             PagerOptions pager)
@@ -138,7 +136,7 @@ namespace Plato.Reports.PageViews.ViewComponents
 
             // Get results
             var results = await _metricStore.QueryAsync()
-                .Take(pager.Page, pager.Size)
+                .Take(pager.Page, pager.Size, pager.CountTotal)
                 .Select<MetricQueryParams>(q =>
                 {
                     q.StartDate.GreaterThanOrEqual(options.Start);
@@ -164,4 +162,5 @@ namespace Plato.Reports.PageViews.ViewComponents
         }
 
     }
+
 }

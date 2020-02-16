@@ -57,7 +57,7 @@ namespace Plato.Entities.Services
             }
             
             return await _entityReplyStore.QueryAsync()
-                .Take(pager.Page, pager.Size)
+                .Take(pager.Page, pager.Size, pager.CountTotal)
                 .Configure(_configureDb)
                 .Select<EntityReplyQueryParams>(q =>
                 {

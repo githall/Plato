@@ -123,7 +123,7 @@ namespace Plato.Email.Tasks
         async Task<IEnumerable<EmailMessage>> GetEmails()
         {
             var emails = await _emailStore.QueryAsync()
-                .Take(1, _smtpSettings.BatchSize)
+                .Take(_smtpSettings.BatchSize, false)
                 .OrderBy("Id", OrderBy.Desc)
                 .ToList();
             return emails?.Data;

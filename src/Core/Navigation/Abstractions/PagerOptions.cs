@@ -28,6 +28,8 @@ namespace PlatoCore.Navigation.Abstractions
  
         public bool Enabled { get; set; } = false;
 
+        public bool CountTotal { get; set; } = true;
+
         // Private setters
 
         public int Total { get; private set; }

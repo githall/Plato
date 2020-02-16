@@ -63,9 +63,9 @@ namespace Plato.Articles.Labels.ViewProviders
         public override async Task<IViewProviderResult> BuildIndexAsync(Article viewModel, IViewProviderContext updater)
         {
             
-            // Get top labels
+            // Get top 5 labels
             var labels = await _labelStore.QueryAsync()
-                .Take(1, 5)
+                .Take(1, 5, false)
                 .Select<LabelQueryParams>(async q =>
                 {
                     q.FeatureId.Equals(await GetFeatureIdAsync());
@@ -87,7 +87,7 @@ namespace Plato.Articles.Labels.ViewProviders
             
             // Get entity labels
             var labels = await _labelStore.QueryAsync()
-                .Take(1, 10)
+                .Take(10, false)
                 .Select<LabelQueryParams>(q =>
                 {
                     q.EntityId.Equals(viewModel.Id);

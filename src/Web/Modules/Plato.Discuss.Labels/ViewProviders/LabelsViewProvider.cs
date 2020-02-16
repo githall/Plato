@@ -48,16 +48,16 @@ namespace Plato.Discuss.Labels.ViewProviders
             {
                 throw new Exception($"A view model of type {typeof(EntityIndexViewModel<Topic>).ToString()} has not been registered on the HttpContext!");
             }
-            
+
             var indexViewModel = new EntityIndexViewModel<Topic>
             {
                 Options = viewModel?.Options,
                 Pager = viewModel?.Pager
             };
-            
-            // Get labels for feature
+
+            // Get top 10 labels for feature
             var labels = await _labelStore.QueryAsync()
-                .Take(1, 10)
+                .Take(10, false)
                 .Select<LabelQueryParams>(q =>
                 {
                     if (viewModel.Options.FeatureId != null)

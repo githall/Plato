@@ -10,9 +10,11 @@ namespace PlatoCore.Data.Abstractions
 
         IQueryOptions Options { get; }
         
-        IQuery<TModel> Take(int page, int size);
+        //IQuery<TModel> Take(int page, int size);
 
-        IQuery<TModel> Take(int size);
+        IQuery<TModel> Take(int page, int size, bool countTotal = true);
+
+        IQuery<TModel> Take(int size, bool countTotal = true);
 
         IQuery<TModel> Configure(Action<QueryOptions> configure);
 

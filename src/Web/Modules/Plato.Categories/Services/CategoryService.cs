@@ -68,7 +68,7 @@ namespace Plato.Categories.Services
 
             // Return tailored results
             return await _categoryStore.QueryAsync()
-                .Take(pager.Page, pager.Size)
+                .Take(pager.Page, pager.Size, pager.CountTotal)                
                 .Configure(_configureDb)
                 .Select<CategoryQueryParams>(q =>
                 {

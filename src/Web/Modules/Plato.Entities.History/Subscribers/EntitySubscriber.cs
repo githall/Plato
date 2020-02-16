@@ -105,7 +105,7 @@ namespace Plato.Entities.History.Subscribers
 
             // Get previous history points
             var previousHistories = await _entityHistoryStore.QueryAsync()
-                .Take(1)
+                .Take(1, false)
                 .Select<EntityHistoryQueryParams>(q =>
                 {
                     q.EntityId.Equals(entity.Id);
@@ -158,7 +158,7 @@ namespace Plato.Entities.History.Subscribers
 
             // Get previous history points
             var previousHistories = await _entityHistoryStore.QueryAsync()
-                .Take(1)
+                .Take(1, false)
                 .Select<EntityHistoryQueryParams>(q =>
                 {
                     q.EntityId.Equals(entity.Id);

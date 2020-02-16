@@ -423,7 +423,7 @@ namespace Plato.Site.Demo.Services
 
             // Get the starting sort order for new entities within this feature       
             var entities = await _entityStore.QueryAsync()
-                .Take(1)
+                .Take(1, false)
                 .Select<EntityQueryParams>(q =>
                 {
                     q.FeatureId.Equals(featureId);

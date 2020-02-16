@@ -45,7 +45,7 @@ namespace Plato.Articles.Categories.Services
 
                 // Get latest entity & total entity count for current category
                 var entities = await _entityStore.QueryAsync()
-                    .Take(1, 1) // we only need the latest entity
+                    .Take(1) // we only need the latest entity but need a total count
                     .Select<EntityQueryParams>(q =>
                     {
 
@@ -75,7 +75,7 @@ namespace Plato.Articles.Categories.Services
 
                 // Get latest reply & total reply count for current category
                 var replies = await _replyStore.QueryAsync()
-                    .Take(1, 1) // we only need the latest reply
+                    .Take(1, 1, true) // we only need the latest reply but a total reply count
                     .Select<EntityReplyQueryParams>(q =>
                     {
 

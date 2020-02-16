@@ -171,7 +171,7 @@ namespace Plato.Notifications.Controllers
                 return base.UnauthorizedException();
             }
 
-            // Get unread message count
+            // Get total unread message count
             var unread = await _userNotificationStore.QueryAsync()
                 .Take(1)
                 .Select<UserNotificationsQueryParams>(q =>
@@ -258,7 +258,7 @@ namespace Plato.Notifications.Controllers
             OrderBy sortOrder)
         {
             return await _userNotificationStore.QueryAsync()
-                .Take(page, pageSize)
+                .Take(page, pageSize, true)
                 .Select<UserNotificationsQueryParams>(q => { q.UserId.Equals(userId); })
                 .OrderBy(sortBy, sortOrder)
                 .ToList();

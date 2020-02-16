@@ -26,7 +26,7 @@ namespace Plato.Tags.Services
         public async Task<IPagedResults<TModel>> GetResultsAsync(TagIndexOptions options, PagerOptions pager)
         {
             return await _tagStore.QueryAsync()
-                .Take(pager.Page, pager.Size)
+                .Take(pager.Page, pager.Size, pager.CountTotal)
                 .Select<TagQueryParams>(q =>
                 {
                    q.FeatureId.Equals(options.FeatureId);

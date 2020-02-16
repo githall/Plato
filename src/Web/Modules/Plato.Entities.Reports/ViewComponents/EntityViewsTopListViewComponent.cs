@@ -53,7 +53,6 @@ namespace Plato.Entities.Reports.ViewComponents
         async Task<IEnumerable<AggregatedModel<int, Entity>>> SelectEntitiesGroupedByViewsAsync(ReportOptions options)
         {
 
-            // Get views by grouped by entity id for specified range
             var viewsById = options.FeatureId > 0
                 ? await _aggregatedEntityMetricsRepository.SelectGroupedByIntAsync(
                     "EntityId",
@@ -65,12 +64,11 @@ namespace Plato.Entities.Reports.ViewComponents
                     options.Start,
                     options.End);
 
-            // Get all entities matching ids
             IPagedResults<Entity> entities = null;
             if (viewsById != null)
             {
                 entities = await _entityStore.QueryAsync()
-                    .Take(1, 10)
+                    .Take(10, false)
                     .Select<EntityQueryParams>(q =>
                     {
                         q.Id.IsIn(viewsById.Data.Select(d => d.Aggregate).ToArray());
@@ -79,7 +77,6 @@ namespace Plato.Entities.Reports.ViewComponents
                     .ToList();
             }
 
-            // Build aggregated list
             List<AggregatedModel<int, Entity>> metrics = null;
             if (entities?.Data != null)
             {

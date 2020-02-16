@@ -52,7 +52,7 @@ namespace Plato.Reports.TopUsers.ViewComponents
         async Task<IEnumerable<AggregatedModel<int, User>>> SelectUsersByReputationAsync(ReportOptions options)
         {
 
-            // Get views by id for specified range
+            // Get reputation for specified range
             var viewsById = options.FeatureId > 0
                 ? await _aggregatedUserReputationRepository.SelectSummedByIntAsync(
                     "CreatedUserId",
@@ -64,12 +64,12 @@ namespace Plato.Reports.TopUsers.ViewComponents
                     options.Start,
                     options.End);
 
-            // Get all entities matching ids
-            IPagedResults<User> mostViewedEntities = null;
+            // Get all users matching awarded rep
+            IPagedResults<User> users = null;
             if (viewsById != null)
             {
-                mostViewedEntities = await _platoUserStore.QueryAsync()
-                    .Take(1, 100)
+                users = await _platoUserStore.QueryAsync()
+                    .Take(100, false)
                     .Select<UserQueryParams>(q =>
                     {
                         q.Id.IsIn(viewsById.Data.Select(d => d.Aggregate).ToArray());
@@ -78,26 +78,26 @@ namespace Plato.Reports.TopUsers.ViewComponents
                     .ToList();
             }
 
-            // Build combined result
-            List<AggregatedModel<int, User>> entityMetrics = null;
-            if (mostViewedEntities?.Data != null)
+            // Build total rep awarded and user
+            List<AggregatedModel<int, User>> topUsers = null;
+            if (users?.Data != null)
             {
-                foreach (var entity in mostViewedEntities.Data)
+                foreach (var entity in users.Data)
                 {
                     // Get or add aggregate
                     var aggregate = viewsById?.Data.FirstOrDefault(m => m.Aggregate == entity.Id);
                     if (aggregate != null)
                     {
-                        if (entityMetrics == null)
+                        if (topUsers == null)
                         {
-                            entityMetrics = new List<AggregatedModel<int, User>>();
+                            topUsers = new List<AggregatedModel<int, User>>();
                         }
-                        entityMetrics.Add(new AggregatedModel<int, User>(aggregate, entity));
+                        topUsers.Add(new AggregatedModel<int, User>(aggregate, entity));
                     }
                 }
             }
 
-            return entityMetrics?.OrderByDescending(o => o.Aggregate.Count) ?? null;
+            return topUsers?.OrderByDescending(o => o.Aggregate.Count) ?? null;
 
         }
         

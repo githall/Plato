@@ -104,7 +104,7 @@ namespace Plato.Discuss.History.Controllers
 
             // Get previous history 
             var previousHistory = await _entityHistoryStore.QueryAsync()
-                .Take(1)
+                .Take(1, false)
                 .Select<EntityHistoryQueryParams>(q =>
                 {
                     q.Id.LessThan(history.Id);
@@ -116,7 +116,7 @@ namespace Plato.Discuss.History.Controllers
 
             // Get newest / most recent history entry
             var latestHistory = await _entityHistoryStore.QueryAsync()
-               .Take(1)
+               .Take(1, false)
                .Select<EntityHistoryQueryParams>(q =>
                {
                    q.EntityId.Equals(history.EntityId);
@@ -376,7 +376,7 @@ namespace Plato.Discuss.History.Controllers
 
             // Get newest / most recent history entry
             var histories = await _entityHistoryStore.QueryAsync()
-               .Take(1)
+               .Take(1, false)
                .Select<EntityHistoryQueryParams>(q =>
                {
                    q.EntityId.Equals(entity.Id);

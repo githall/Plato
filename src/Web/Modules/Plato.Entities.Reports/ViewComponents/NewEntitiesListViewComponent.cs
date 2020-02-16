@@ -33,8 +33,9 @@ namespace Plato.Entities.Reports.ViewComponents
                 chart = new ChartOptions();
             }
 
+            // Get top 10 latest entiies for feature
             var data = await _entityStore.QueryAsync()
-                .Take(1, 10)
+                .Take(10, false)
                 .Select<EntityQueryParams>(q =>
                 {
 

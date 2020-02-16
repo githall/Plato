@@ -208,7 +208,7 @@ namespace Plato.Questions.Answers.Controllers
         async Task<Question> UpdateEntityAsync(Question entity)
         {
 
-            // Get a count of all replies marked as an answer
+            // Get a total count of all replies marked as an answer
             var answers = await _entityReplyStore.QueryAsync()
                 .Take(1)
                 .Select<EntityReplyQueryParams>(q =>

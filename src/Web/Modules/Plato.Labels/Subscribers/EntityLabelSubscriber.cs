@@ -95,7 +95,7 @@ namespace Plato.Labels.Subscribers
                 return entityLabel;
             }
 
-            // Get count for entities labeled with this label
+            // Get total count for entities labeled with this label
             var entityLabels = await _entityLabelStore.QueryAsync()
                 .Take(1)
                 .Select<EntityLabelQueryParams>(q =>
@@ -148,7 +148,7 @@ namespace Plato.Labels.Subscribers
             
             // Get count for entities labeled with this label
             var entityLabels = await _entityLabelStore.QueryAsync()
-                .Take(1)
+                .Take(1, true)
                 .Select<EntityLabelQueryParams>(q =>
                 {
                     q.LabelId.Equals(label.Id);

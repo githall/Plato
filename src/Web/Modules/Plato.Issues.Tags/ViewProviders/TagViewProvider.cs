@@ -69,10 +69,10 @@ namespace Plato.Issues.Tags.ViewProviders
             {
                 return default(IViewProviderResult);
             }
-            
-            // Get all tags for feature
+
+            // Get top 20 tags for feature
             var tags = await _tagStore.QueryAsync()
-                .Take(1, 20)
+                .Take(20, false)
                 .Select<TagQueryParams>(q =>
                 {
                     q.FeatureId.Equals(feature.Id);

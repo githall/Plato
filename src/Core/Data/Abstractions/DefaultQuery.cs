@@ -20,24 +20,21 @@ namespace PlatoCore.Data.Abstractions
 
         public int PageSize { get; private set; } = int.MaxValue;
 
-        public bool TakeResults { get; set; } = false;
+        public bool CountTotal { get; private set; }
 
-        public IQuery<TModel> Take(int pageIndex, int pageSize)
-        {
-            // we only need to count a total if we are actually limiting the result set
-            // If our page size = int.MaxValue we are not limiting results
-            TakeResults = pageSize == int.MaxValue 
-                ? false 
-                : true; 
-            PageIndex = pageIndex;
-            PageSize = pageSize;
-            return this;
-        }
-
-        public IQuery<TModel> Take(int pageSize)
+        public IQuery<TModel> Take(int pageSize, bool countTotal = true)
         {
             PageIndex = 1;
             PageSize = pageSize;
+            CountTotal = countTotal;
+            return this;
+        }
+
+        public IQuery<TModel> Take(int pageIndex, int pageSize, bool countTotal = true)
+        {
+            PageIndex = pageIndex;
+            PageSize = pageSize;
+            CountTotal = countTotal;
             return this;
         }
 

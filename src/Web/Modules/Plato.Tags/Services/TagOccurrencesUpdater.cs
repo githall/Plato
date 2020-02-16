@@ -23,7 +23,7 @@ namespace Plato.Tags.Services
         public async Task UpdateAsync(TModel tag)
         {
 
-            // Get count for public entities & replies tagged with this tag
+            // Get total count for public entities & replies tagged with this tag
             var entityTags = await _entityTagStore.QueryAsync()
                 .Take(1)
                 .Select<EntityTagQueryParams>(q =>

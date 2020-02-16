@@ -167,7 +167,7 @@ namespace Plato.Ideas.Subscribers
 
             // Get last 5 unique users & total unique user count
             var users = await _entityUsersStore.QueryAsync()
-                .Take(1, 5)
+                .Take(5, true)
                 .Select<EntityUserQueryParams>(q =>
                 {
                     q.EntityId.Equals(entity.Id);
