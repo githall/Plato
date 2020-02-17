@@ -216,13 +216,14 @@ namespace Plato.Notifications.Controllers
         [HttpDelete, ResponseCache(NoStore = true)]
         public async Task<IActionResult> Delete(int id)
         {
+
             // Ensure notification exists
             var userNotification = await _userNotificationStore.GetByIdAsync(id);
             if (userNotification == null)
             {
                 return base.NotFound();
             }
-            
+
             // Ensure we are authenticated
             var user = await base.GetAuthenticatedUserAsync();
             if (user == null)

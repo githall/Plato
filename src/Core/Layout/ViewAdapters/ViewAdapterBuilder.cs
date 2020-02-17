@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.ComponentModel;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Html;
+using System.Collections.Generic;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 
@@ -90,7 +90,7 @@ namespace PlatoCore.Layout.ViewAdapters
 
                 }
 
-                // Patial views
+                // Partial views
                 if (model is TModel)
                 {
                     return await alteration((TModel)model);

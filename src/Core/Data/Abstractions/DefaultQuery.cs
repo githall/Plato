@@ -20,9 +20,15 @@ namespace PlatoCore.Data.Abstractions
 
         public int PageSize { get; private set; } = int.MaxValue;
 
+        /// <summary>
+        /// Returns true if a page size has been specified.
+        /// </summary>
         public bool IsDefaultPageSize => PageSize == int.MaxValue ? true : false;
 
-        public bool CountTotal { get; private set; }
+        /// <summary>
+        /// Indicates if a total count should be returned with the query. The default is true.
+        /// </summary>
+        public bool CountTotal { get; private set; } = true;
 
         public IQuery<TModel> Take(int pageSize, bool countTotal = true)
         {

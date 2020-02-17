@@ -10,19 +10,19 @@ namespace Plato.Entities.Subscribers
 {
     public class EntityReplySubscriber<TEntityReply> : IBrokerSubscriber where TEntityReply : class, IEntityReply
     {
-
-        private readonly IBroker _broker;
+   
+        private readonly IEntityReplyStore<TEntityReply> _entityReplyStore;        
         private readonly IEntityStore<Entity> _entityStore;
-        private readonly IEntityReplyStore<TEntityReply> _entityReplyStore;
+        private readonly IBroker _broker;
 
         public EntityReplySubscriber(
-            IBroker broker,
+            IEntityReplyStore<TEntityReply> entityReplyStore,            
             IEntityStore<Entity> entityStore,
-            IEntityReplyStore<TEntityReply> entityReplyStore)
-        {
-            _broker = broker;
+            IBroker broker)
+        {  
+            _entityReplyStore = entityReplyStore;    
             _entityStore = entityStore;
-            _entityReplyStore = entityReplyStore;
+            _broker = broker;
         }
 
         #region "Implementation"
@@ -41,7 +41,6 @@ namespace Plato.Entities.Subscribers
             {
                 Key = "EntityReplyUpdated"
             }, async message => await EntityReplyUpdated(message.What));
-
 
         }
 
@@ -122,10 +121,21 @@ namespace Plato.Entities.Subscribers
                 return reply;
             }
 
-            // Get reply details
+            // Get latest reply & total reply count            
+            var replies = await _entityReplyStore.QueryAsync()
+                .Take(1)
+                .Select<EntityReplyQueryParams>(q =>
+                {
+                    q.EntityId.Equals(entity.Id);
+                    q.HideHidden.True();
+                    q.HideSpam.True();
+                    q.HideDeleted.True();
+                })
+                .OrderBy("CreatedDate", OrderBy.Desc)
+                .ToList();
+
             TEntityReply lastReply = null;
             int totalReplies = 0, totalParticipants = 0;
-            var replies = await GetReplies(entity);
             if (replies?.Data != null)
             {
                 totalReplies = replies.Total;
@@ -163,20 +173,6 @@ namespace Plato.Entities.Subscribers
 
             return output;
 
-        }
-
-        async Task<IPagedResults<TEntityReply>> GetReplies(Entity entity)
-        {
-            return await _entityReplyStore.QueryAsync()
-                .Select<EntityReplyQueryParams>(q =>
-                {
-                    q.EntityId.Equals(entity.Id);
-                    q.HideHidden.True();
-                    q.HideSpam.True();
-                    q.HideDeleted.True();
-                })
-                .OrderBy("CreatedDate", OrderBy.Desc)
-                .ToList();
         }
 
         #endregion
