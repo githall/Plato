@@ -347,15 +347,22 @@ namespace Plato.Entities.Stores
                 e.CategoryId,
                 e.Title,
                 e.Alias,
+                e.IsHidden,
+                e.IsPrivate,
+                e.IsSpam,
+                e.IsPinned,
+                e.IsDeleted,
+                e.IsLocked,
+                e.IsClosed,
+                e.SortOrder,
+                e.CreatedUserId,
+                e.ModifiedUserId,
                 f.ModuleId,
                 r.[Rank] AS [Rank], 
                 @MaxRank AS MaxRank 
             FROM plato_Entities e 
                 INNER JOIN plato_ShellFeatures f ON e.FeatureId = f.Id 
-                INNER JOIN @results r ON r.Id = e.Id -- joined on federated search results
-                LEFT OUTER JOIN plato_Users c ON e.CreatedUserId = c.Id 
-                LEFT OUTER JOIN plato_Users m ON e.ModifiedUserId = m.Id 
-                LEFT OUTER JOIN plato_Users l ON e.LastReplyUserId = l.Id 
+                INNER JOIN @results r ON r.Id = e.Id -- joined on federated search results                
             ORDER BY 
 	            e.IsPinned DESC, 
 	            [Rank] DESC 
@@ -454,11 +461,15 @@ namespace Plato.Entities.Stores
             "e.IsPinned",
             "e.IsDeleted",
             "e.IsLocked",
-            "e.IsClosed",            
+            "e.IsClosed",
+            "e.SortOrder",
+            "e.CreatedUserId",
+            "e.ModifiedUserId",
+            "f.ModuleId",
             "@MaxRank AS MaxRank"
         };
 
-        string BuildSelect()
+        private string BuildSelect()
         {
             var sb = new StringBuilder();
             sb
@@ -476,7 +487,7 @@ namespace Plato.Entities.Stores
 
         }
         
-        string BuildTables()
+        private string BuildTables()
         {
 
             var sb = new StringBuilder();
@@ -498,27 +509,27 @@ namespace Plato.Entities.Stores
             // -----------------
 
             _query.QueryAdapterManager?.BuildTables(_query, sb);
-         
+
             return sb.ToString();
 
         }
 
-        string BuildWhere()
+        private string BuildWhere()
         {
 
             var sb = new StringBuilder();
-            
+
             // -----------------
             // Apply any where query adapters
             // -----------------
 
-             _query.QueryAdapterManager?.BuildWhere(_query, sb);
-      
-             // -----------------
-             // Ensure we have params
-             // -----------------
+            _query.QueryAdapterManager?.BuildWhere(_query, sb);
 
-             if (_query.Params == null)
+            // -----------------
+            // Ensure we have params
+            // -----------------
+
+            if (_query.Params == null)
              {
                  return string.Empty;
              }
@@ -852,14 +863,14 @@ namespace Plato.Entities.Stores
             return sb.ToString();
 
         }
-        
-        string GetTableNameWithPrefix(string tableName)
+
+        private string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)
                 ? _query.Options.TablePrefix + tableName
                 : tableName;
         }
-       
+
         private string BuildOrderBy()
         {
             if (_query.SortColumns.Count == 0) return null;
@@ -878,7 +889,7 @@ namespace Plato.Entities.Stores
             return sb.ToString();
         }
 
-        IDictionary<string, OrderBy> GetSafeSortColumns()
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
         {
             var output = new Dictionary<string, OrderBy>();
             foreach (var sortColumn in _query.SortColumns)
@@ -892,8 +903,8 @@ namespace Plato.Entities.Stores
 
             return output;
         }
-        
-        string GetSortColumn(string columnName)
+
+        private string GetSortColumn(string columnName)
         {
 
             if (String.IsNullOrEmpty(columnName))
@@ -976,8 +987,8 @@ namespace Plato.Entities.Stores
         }
 
         // -- Search
-        
-        string BuildFederatedResults()
+
+        private string BuildFederatedResults()
         {
 
             // No keywords
@@ -1023,12 +1034,12 @@ namespace Plato.Entities.Stores
 
         }
 
-        bool HasKeywords()
+        private bool HasKeywords()
         {
             return !string.IsNullOrEmpty(GetKeywords());
         }
 
-        string GetKeywords()
+        private string GetKeywords()
         {
 
             if (string.IsNullOrEmpty(_query.Params.Keywords.Value))
@@ -1039,7 +1050,7 @@ namespace Plato.Entities.Stores
             return _query.Params.Keywords.Value;
 
         }
-        
+
         #endregion
 
     }

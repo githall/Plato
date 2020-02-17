@@ -1,11 +1,9 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Categories.Services;
 using Plato.Categories.ViewModels;
 using Plato.Questions.Categories.Models;
-using PlatoCore.Features.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Discuss.Categories.ViewComponents
@@ -45,7 +43,8 @@ namespace Plato.Discuss.Categories.ViewComponents
                 }, new PagerOptions()
                 {
                     Page = 1,
-                    Size = int.MaxValue
+                    Size = int.MaxValue,
+                    CountTotal = false
                 });
             
             return new CategoryListViewModel<Category>()

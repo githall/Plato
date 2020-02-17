@@ -39,6 +39,10 @@ namespace Plato.Entities.Models
 
         bool IsClosed { get; set; }
 
+        int CreatedUserId { get; set; }
+
+        int ModifiedUserId { get; set; }
+
         string ModuleId { get; set; }
 
         int Rank { get; set; }
@@ -79,6 +83,9 @@ namespace Plato.Entities.Models
         public bool IsLocked { get; set; }
 
         public bool IsClosed { get; set; }
+
+        public int CreatedUserId { get; set; }
+        public int ModifiedUserId { get; set; }
 
         public string ModuleId { get; set; }
 
@@ -144,6 +151,12 @@ namespace Plato.Entities.Models
 
             if (dr.ColumnIsNotNull("SortOrder"))
                 SortOrder = Convert.ToInt32(dr["SortOrder"]);
+
+            if (dr.ColumnIsNotNull("CreatedUserId"))
+                CreatedUserId = Convert.ToInt32(dr["CreatedUserId"]);
+
+            if (dr.ColumnIsNotNull("ModifiedUserId"))
+                ModifiedUserId = Convert.ToInt32(dr["ModifiedUserId"]);
 
             if (dr.ColumnIsNotNull("ModuleId"))
                 ModuleId = Convert.ToString(dr["ModuleId"]);

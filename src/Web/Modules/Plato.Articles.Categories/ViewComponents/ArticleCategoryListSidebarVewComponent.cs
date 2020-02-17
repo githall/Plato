@@ -43,7 +43,8 @@ namespace Plato.Articles.Categories.ViewComponents
                 }, new PagerOptions()
                 {
                     Page = 1,
-                    Size = int.MaxValue
+                    Size = int.MaxValue,                    
+                    CountTotal = false
                 });
             
             return new CategoryListViewModel<Category>()

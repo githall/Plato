@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Data;
 using System.Threading.Tasks;
-using PlatoCore.Abstractions;
 using PlatoCore.Models.Users;
 
 namespace Plato.Entities.Models
@@ -51,16 +49,12 @@ namespace Plato.Entities.Models
 
         string IpV6Address { get; set; }
 
-        int CreatedUserId { get; set; }
-
         DateTimeOffset? CreatedDate { get; set; }
 
         int EditedUserId { get; set; }
 
         DateTimeOffset? EditedDate { get; set; }
-        
-        int ModifiedUserId { get; set; }
-
+ 
         DateTimeOffset? ModifiedDate { get; set; }
 
         int LastReplyId { get; set; }
@@ -74,8 +68,8 @@ namespace Plato.Entities.Models
         SimpleUser ModifiedBy { get; }
 
         SimpleUser LastReplyBy { get; }
-        
-        Task<EntityUris> GetEntityUrlsAsync();       
+
+        Task<EntityUris> GetEntityUrlsAsync();
 
     }
 

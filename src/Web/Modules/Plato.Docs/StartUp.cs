@@ -42,8 +42,10 @@ using PlatoCore.Stores.Abstractions.QueryAdapters;
 
 namespace Plato.Docs
 {
+
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)
@@ -70,6 +72,8 @@ namespace Plato.Docs
             // Stores
             services.AddScoped<IEntityRepository<Doc>, EntityRepository<Doc>>();
             services.AddScoped<IEntityStore<Doc>, EntityStore<Doc>>();
+            services.AddScoped<ISimpleEntityRepository<SimpleDoc>, SimpleEntityRepository<SimpleDoc>>();
+            services.AddScoped<ISimpleEntityStore<SimpleDoc>, SimpleEntityStore<SimpleDoc>>();
             services.AddScoped<IEntityManager<Doc>, EntityManager<Doc>>();
 
             services.AddScoped<IEntityReplyRepository<DocComment>, EntityReplyRepository<DocComment>>();
@@ -79,14 +83,15 @@ namespace Plato.Docs
             // Register data access
             services.AddScoped<IPostManager<Doc>, DocManager>();
             services.AddScoped<IPostManager<DocComment>, ReplyManager>();
-            
+
             // Services
             services.AddScoped<IEntityService<Doc>, EntityService<Doc>>();
+            services.AddScoped<ISimpleEntityService<SimpleDoc>, SimpleEntityService<SimpleDoc>>();
             services.AddScoped<IEntityReplyService<DocComment>, EntityReplyService<DocComment>>();
 
             // View incrementer
             services.AddScoped<IEntityViewIncrementer<Doc>, EntityViewIncrementer<Doc>>();
-            
+
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
@@ -95,7 +100,7 @@ namespace Plato.Docs
 
             // Register client resources
             services.AddScoped<IAssetProvider, AssetProvider>();
-         
+
             // Register admin view providers
             services.AddScoped<IViewProviderManager<AdminIndex>, ViewProviderManager<AdminIndex>>();
             services.AddScoped<IViewProvider<AdminIndex>, AdminViewProvider>();
@@ -144,10 +149,13 @@ namespace Plato.Docs
             // Federated query manager 
             services.AddScoped<IFederatedQueryManager<Doc>, FederatedQueryManager<Doc>>();
             services.AddScoped<IFederatedQueryProvider<Doc>, EntityQueries<Doc>>();
-        
+            services.AddScoped<IFederatedQueryManager<SimpleDoc>, FederatedQueryManager<SimpleDoc>>();
+            services.AddScoped<IFederatedQueryProvider<SimpleDoc>, EntityQueries<SimpleDoc>>();
+
             // Query adapters
             services.AddScoped<IQueryAdapterManager<Doc>, QueryAdapterManager<Doc>>();
-          
+            services.AddScoped<IQueryAdapterManager<SimpleDoc>, QueryAdapterManager<SimpleDoc>>();
+
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();
 
@@ -158,7 +166,7 @@ namespace Plato.Docs
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-            
+
             // Index
             routes.MapAreaRoute(
                 name: "Docs",
@@ -166,7 +174,7 @@ namespace Plato.Docs
                 template: "docs/{pager.offset:int?}",
                 defaults: new { controller = "Home", action = "Index" }
             );
-            
+
             // Popular
             routes.MapAreaRoute(
                 name: "DocsPopular",
@@ -224,5 +232,7 @@ namespace Plato.Docs
             );
 
         }
+
     }
+
 }

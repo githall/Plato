@@ -150,9 +150,8 @@ namespace Plato.Discuss.Categories.ViewProviders
 
             });
 
-
             return default(IViewProviderResult);
-            
+
         }
         
         public override async Task<IViewProviderResult> BuildEditAsync(Topic entity, IViewProviderContext updater)
@@ -425,7 +424,7 @@ namespace Plato.Discuss.Categories.ViewProviders
         }
 
         #endregion
-        
+
     }
 
 }

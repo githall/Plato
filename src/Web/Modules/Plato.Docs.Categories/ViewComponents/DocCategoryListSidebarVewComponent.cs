@@ -12,7 +12,7 @@ namespace Plato.Docs.Categories.ViewComponents
     {
 
         private readonly ICategoryService<Category> _categoryService;
-        
+
         public DocCategoryListSidebarViewComponent(
             ICategoryService<Category> categoryService)
         {
@@ -52,6 +52,7 @@ namespace Plato.Docs.Categories.ViewComponents
                 Options = options,
                 Categories = categories?.Data
             };
+
         }
         
     }

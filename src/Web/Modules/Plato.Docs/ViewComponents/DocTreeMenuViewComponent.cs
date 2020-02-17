@@ -7,23 +7,23 @@ using PlatoCore.Layout.Views.Abstractions;
 
 namespace Plato.Docs.ViewComponents
 {
-    
+
     public class DocTreeMenuViewComponent : ViewComponentBase
     {
-        
+
         public DocTreeMenuViewComponent()
         {
         }
 
-        public Task<IViewComponentResult> InvokeAsync(IEntity entity)
+        public Task<IViewComponentResult> InvokeAsync(ISimpleEntity entity)
         {
-            
+
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            return Task.FromResult((IViewComponentResult) View((Doc) entity));
+            return Task.FromResult((IViewComponentResult) View((SimpleDoc) entity));
 
         }
 

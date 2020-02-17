@@ -222,7 +222,6 @@ namespace Plato.Categories.Repositories
             return model;
         }
 
-
         async Task<int> InsertUpdateInternal(
             int id,
             int parentId,

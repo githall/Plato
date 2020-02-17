@@ -15,4 +15,8 @@ namespace Plato.Docs.Models
 
     }
 
+    public class SimpleDoc : SimpleEntity
+    {
+
+    }
 }

@@ -14,7 +14,7 @@ namespace Plato.Entities.ViewComponents
     {
 
         private readonly ISimpleEntityStore<SimpleEntity> _entityStore;
-        
+
         public EntityTreeViewComponent(ISimpleEntityStore<SimpleEntity> entityStore)
         {
             _entityStore = entityStore;
@@ -27,11 +27,11 @@ namespace Plato.Entities.ViewComponents
             {
                 options = new EntityTreeOptions();
             }
-            
+
             // Build selection including parents 
             var selected = BuildSelectionsAsync(options);
-            
-            return Task.FromResult((IViewComponentResult) View(new EntityTreeViewModel
+
+            return Task.FromResult((IViewComponentResult)View(new EntityTreeViewModel
             {
                 HtmlName = options.HtmlName,
                 EnableCheckBoxes = options.EnableCheckBoxes,
@@ -39,7 +39,7 @@ namespace Plato.Entities.ViewComponents
                 CssClass = options.CssClass,
                 RouteValues = options.RouteValues,
                 SelectedEntities = selected,
-                SelectedParents = options.Entities?.RecurseParents<Entity>(options.SelectedEntity)
+                SelectedParents = options.Entities?.RecurseParents<SimpleEntity>(options.SelectedEntity)
             }));
 
         }

@@ -47,35 +47,13 @@
 
                 @if (childCategories != null && childCategories.Any())
                 {
-
                     @foreach (var category in childCategories)
                      {
-                         var css = category.Id == Model.Options.CategoryId ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action";
-                         var categoryDetails = category.GetOrCreate<CategoryDetails>();
+                         var css = category.Id == Model.Options.CategoryId ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action";                         
                          <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="@category.Id" asp-route-opts.alias="@category.Alias" title="@category.Description" class="@css">
-                             @*<span data-toggle="tooltip" title="@T["Public Docs"]" class="badge badge-info float-right">
-                                 @categoryDetails.TotalEntities.ToPrettyInt()
-                             </span>
-                             @if (!String.IsNullOrWhiteSpace(category.IconCss))
-                             {
-                                 <div class="float-left mr-3">
-                                     <span class="icon-wrapper icon-wrapper-sm" style="background-color: @category.BackColor; color: @category.ForeColor">
-                                         <i class="@category.IconCss"></i>
-                                     </span>
-                                 </div>
-                             }
-                             else
-                             {
-                                 <div class="float-left mr-3">
-                                     <span class="icon-wrapper icon-wrapper-sm">
-                                         <i class="fal fa-folder"></i>
-                                     </span>
-                                 </div>
-                             }*@
                              @category.Name
                          </a>
                      }
-
                 }
                 else
                 {

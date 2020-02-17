@@ -56,7 +56,6 @@ namespace Plato.Entities.Reactions.Stores
 
         }
 
-
     }
 
     #endregion
@@ -66,7 +65,6 @@ namespace Plato.Entities.Reactions.Stores
     public class EntityReactionsQueryParams
     {
 
-
         private WhereInt _id;
         private WhereInt _featureId;
         private WhereInt _entityId;
@@ -75,7 +73,6 @@ namespace Plato.Entities.Reactions.Stores
         private WhereString _ipV6Address;
         private WhereString _userAgent;
         private WhereInt _createdUserId;
-
 
         public WhereInt Id
         {
@@ -125,8 +122,6 @@ namespace Plato.Entities.Reactions.Stores
             set => _createdUserId = value;
         }
 
-
-
     }
 
     #endregion
@@ -135,6 +130,7 @@ namespace Plato.Entities.Reactions.Stores
 
     public class EntityReactionsQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _entityReactionsTableName;
@@ -152,19 +148,16 @@ namespace Plato.Entities.Reactions.Stores
         #endregion
 
         #region "Implementation"
-        
+
         public string BuildSqlPopulate()
         {
-
             var whereClause = BuildWhereClause();
             var orderBy = BuildOrderBy();
-
             var sb = new StringBuilder();
             sb.Append("SELECT ")
                 .Append(BuildPopulateSelect())
                 .Append(" FROM ")
                 .Append(BuildTables());
-
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             sb.Append(" ORDER BY ")
@@ -177,6 +170,8 @@ namespace Plato.Entities.Reactions.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(er.Id) FROM ")
@@ -186,7 +181,11 @@ namespace Plato.Entities.Reactions.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("er.*, ")
@@ -199,7 +198,7 @@ namespace Plato.Entities.Reactions.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_entityReactionsTableName)
@@ -212,10 +211,6 @@ namespace Plato.Entities.Reactions.Stores
             return sb.ToString();
 
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -299,8 +294,7 @@ namespace Plato.Entities.Reactions.Stores
 
         }
 
-
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {
@@ -330,6 +324,7 @@ namespace Plato.Entities.Reactions.Stores
         }
 
         #endregion
+
     }
 
     #endregion

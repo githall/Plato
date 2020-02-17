@@ -454,6 +454,8 @@ namespace Plato.Entities
                                     e.IsLocked,
                                     e.IsClosed,
                                     e.SortOrder,
+                                    e.CreatedUserId,
+                                    e.ModifiedUserId,
                                     f.ModuleId,
                                     0 AS Rank, 
                                     0 AS MaxRank
@@ -481,6 +483,8 @@ namespace Plato.Entities
                                     e.IsLocked,
                                     e.IsClosed,
                                     e.SortOrder,
+                                    e.CreatedUserId,
+                                    e.ModifiedUserId,
                                     f.ModuleId,
                                     0 AS Rank, 
                                     0 AS MaxRank

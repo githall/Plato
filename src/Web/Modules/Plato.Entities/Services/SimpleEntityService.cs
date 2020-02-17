@@ -15,10 +15,10 @@ namespace Plato.Entities.Services
 
         private Action<QueryOptions> _configureDb = null;
         private Action<SimpleEntityQueryParams> _configureParams = null;
-        
+
         private readonly IContextFacade _contextFacade;
         private readonly ISimpleEntityStore<TModel> _entityStore;
-  
+
         public SimpleEntityService(
             IContextFacade contextFacade,
             ISimpleEntityStore<TModel> entityStore)
@@ -30,13 +30,13 @@ namespace Plato.Entities.Services
             _configureDb = options => options.SearchType = SearchTypes.Tsql;
 
         }
-        
+
         public ISimpleEntityService<TModel> ConfigureDb(Action<IQueryOptions> configure)
         {
             _configureDb = configure;
             return this;
         }
-        
+
         public ISimpleEntityService<TModel> ConfigureQuery(Action<SimpleEntityQueryParams> configure)
         {
             _configureParams = configure;
@@ -65,7 +65,7 @@ namespace Plato.Entities.Services
             {
                 pager = new PagerOptions();
             }
-            
+
             // Special edge case for popular entities
             if (options.Sort == SortBy.Popular)
             {
@@ -81,7 +81,7 @@ namespace Plato.Entities.Services
 
             // Get authenticated user 
             var user = await _contextFacade.GetAuthenticatedUserAsync();
-            
+
             // Return tailored results
             return await _entityStore.QueryAsync()
                 .Take(pager.Page, pager.Size, pager.CountTotal)

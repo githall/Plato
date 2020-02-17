@@ -53,18 +53,14 @@ namespace Plato.Entities.Models
         
         public string IpV4Address { get; set; }
 
-        public string IpV6Address { get; set; }
-
-        public int CreatedUserId { get; set; }
+        public string IpV6Address { get; set; }      
 
         public DateTimeOffset? CreatedDate { get; set; }
 
         public int EditedUserId { get; set; }
 
         public DateTimeOffset? EditedDate { get; set; }
-
-        public int ModifiedUserId { get; set; }
-
+   
         public DateTimeOffset? ModifiedDate { get; set; }
 
         public int LastReplyId { get; set; }
@@ -195,17 +191,13 @@ namespace Plato.Entities.Models
                 TotalImages = Convert.ToInt32(dr["TotalImages"]);
             
             if (dr.ColumnIsNotNull("TotalWords"))
-                TotalWords = Convert.ToInt32(dr["TotalWords"]);
-            
+                TotalWords = Convert.ToInt32(dr["TotalWords"]);            
 
             if (dr.ColumnIsNotNull("IpV4Address"))
                 IpV4Address = Convert.ToString(dr["IpV4Address"]);
 
             if (dr.ColumnIsNotNull("IpV6Address"))
                 IpV6Address = Convert.ToString(dr["IpV6Address"]);
-
-            if (dr.ColumnIsNotNull("CreatedUserId"))
-                CreatedUserId = Convert.ToInt32(dr["CreatedUserId"]);
 
             if (CreatedUserId > 0)
             {
@@ -240,9 +232,6 @@ namespace Plato.Entities.Models
             
             if (dr.ColumnIsNotNull("EditedDate"))
                 EditedDate = (DateTimeOffset)dr["EditedDate"];
-
-            if (dr.ColumnIsNotNull("ModifiedUserId"))
-                ModifiedUserId = Convert.ToInt32(dr["ModifiedUserId"]);
 
             if (ModifiedUserId > 0)
             {
@@ -307,5 +296,5 @@ namespace Plato.Entities.Models
         }
 
     }
-    
+
 }

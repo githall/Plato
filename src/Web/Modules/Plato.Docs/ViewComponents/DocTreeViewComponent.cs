@@ -22,18 +22,18 @@ namespace Plato.Docs.ViewComponents
     {
 
         private readonly IAuthorizationService _authorizationService;
-        private readonly IEntityService<Doc> _entityService;
+        private readonly ISimpleEntityService<SimpleDoc> _simpleEntityService;
         private readonly IFeatureFacade _featureFacade;
 
         private bool? _displayMenu;
 
-        public DocTreeViewComponent(        
-            IAuthorizationService authorizationService,
-            IEntityService<Doc> entityService,
+        public DocTreeViewComponent(
+            ISimpleEntityService<SimpleDoc> simpleEntityService,
+            IAuthorizationService authorizationService,            
             IFeatureFacade featureFacade)
         {
             _authorizationService = authorizationService;
-            _entityService = entityService;
+            _simpleEntityService = simpleEntityService;
             _featureFacade = featureFacade;
         }
 
@@ -46,10 +46,10 @@ namespace Plato.Docs.ViewComponents
             }
 
             // Get entities
-            var entities = await GetEntities(options.IndexOptions);
+            var entities = await GetSimpleEntitiesAsync(options.IndexOptions);
 
             // Add entities to view model
-            options.Entities = entities?.Data?.BuildHierarchy<Doc>()?.OrderBy(r => r.SortOrder);
+            options.Entities = entities?.Data?.BuildHierarchy<SimpleDoc>()?.OrderBy(r => r.SortOrder);
 
             // Do we have a menu to display?
             if (!string.IsNullOrEmpty(options.EditMenuViewName))
@@ -72,9 +72,9 @@ namespace Plato.Docs.ViewComponents
 
         }
 
-        private async Task<IPagedResults<Doc>> GetEntities(EntityIndexOptions options)
+        private async Task<IPagedResults<SimpleDoc>> GetSimpleEntitiesAsync(EntityIndexOptions options)
         {
-            
+
             // Set default feature
             if (options.FeatureId <= 0)
             {
@@ -93,7 +93,7 @@ namespace Plato.Docs.ViewComponents
             }
 
             // Get results
-            return await _entityService
+            return await _simpleEntityService
                 .ConfigureQuery(async q =>
                 {
 
@@ -129,7 +129,8 @@ namespace Plato.Docs.ViewComponents
                 .GetResultsAsync(options, new PagerOptions()
                 {
                     Page = 1,
-                    Size = int.MaxValue
+                    Size = int.MaxValue,
+                    CountTotal = false
                 });
 
         }

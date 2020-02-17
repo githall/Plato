@@ -150,8 +150,7 @@ namespace Plato.Categories.Stores
             {
                 QueryAdapterManager = _queryAdapterManager
             };
-            return _dbQuery.ConfigureQuery<TCategory>(query);
-            ;
+            return _dbQuery.ConfigureQuery<TCategory>(query);            
         }
 
         public virtual async Task<IPagedResults<TCategory>> SelectAsync(IDbDataParameter[] dbParams)

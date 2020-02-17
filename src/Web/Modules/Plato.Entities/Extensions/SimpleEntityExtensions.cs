@@ -88,7 +88,7 @@ namespace Plato.Entities.Extensions
                     if (item.ParentId > 0)
                     {
                         output.Add(item);
-                        RecurseParentsInternal(input, item.ParentId, output);
+                        RecurseParentsInternal<T>(input, item.ParentId, output);
                     }
                     else
                     {
@@ -118,7 +118,7 @@ namespace Plato.Entities.Extensions
                 if (item.ParentId == rootId)
                 {
                     output.Add(item);
-                    RecurseChildrenInternal(input, item.Id, output);
+                    RecurseChildrenInternal<T>(input, item.Id, output);
                 }
             }
 
