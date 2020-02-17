@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PlatoCore.Data.Schemas.Abstractions
+﻿namespace PlatoCore.Data.Schemas.Abstractions
 {
     public class SchemaFullTextIndex
     {

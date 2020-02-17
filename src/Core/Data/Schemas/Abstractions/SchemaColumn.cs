@@ -4,6 +4,7 @@ using PlatoCore.Data.Abstractions.Extensions;
 
 namespace PlatoCore.Data.Schemas.Abstractions
 {
+
     public class SchemaColumn
     {
 
@@ -67,7 +68,7 @@ namespace PlatoCore.Data.Schemas.Abstractions
             }
 
         }
-        
+
         public string DbTypeNormalized
         {
             get

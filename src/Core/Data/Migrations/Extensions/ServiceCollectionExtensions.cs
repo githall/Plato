@@ -3,6 +3,7 @@ using PlatoCore.Data.Migrations.Abstractions;
 
 namespace PlatoCore.Data.Migrations.Extensions
 {
+
     public static class ServiceCollectionExtensions
     {
 
@@ -13,10 +14,10 @@ namespace PlatoCore.Data.Migrations.Extensions
             services.AddTransient<IDataMigrationManager, DataMigrationManager>();
             services.AddTransient<IDataMigrationBuilder, DataMigrationBuilder>();
             services.AddTransient<AutomaticDataMigrations>();
-
             return services;
+
         }
 
-
     }
+
 }

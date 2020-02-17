@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace PlatoCore.Data.Schemas.Abstractions.Builders
+﻿namespace PlatoCore.Data.Schemas.Abstractions.Builders
 {
     public interface IIndexBuilder : ISchemaBuilderBase
     {
@@ -14,5 +10,5 @@ namespace PlatoCore.Data.Schemas.Abstractions.Builders
         IIndexBuilder DropIndex(SchemaIndex index);
 
     }
-    
+
 }

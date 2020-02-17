@@ -45,8 +45,9 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
             IPagedResults<User> users = null;
 
             // Get all moderators
-            var moderators = await _moderatorStore
+            var moderators = await _moderatorStore            
                 .QueryAsync()
+                .Take(int.MaxValue, false)
                 .ToList();
 
             if (moderators != null)

@@ -35,7 +35,7 @@ namespace Plato.Discuss.Categories.Moderators.ViewComponents
             {
                 filterOpts = new FilterOptions();
             }
-            
+
             if (pagerOpts == null)
             {
                 pagerOpts = new PagerOptions();

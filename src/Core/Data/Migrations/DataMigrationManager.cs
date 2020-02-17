@@ -1,11 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Data.Migrations.Abstractions;
 
 namespace PlatoCore.Data.Migrations
 {
+
     public class DataMigrationManager : IDataMigrationManager
     {
         

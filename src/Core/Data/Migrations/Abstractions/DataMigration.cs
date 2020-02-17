@@ -2,6 +2,7 @@
 
 namespace PlatoCore.Data.Migrations.Abstractions
 {
+
     public class DataMigration
     {
 
@@ -12,4 +13,5 @@ namespace PlatoCore.Data.Migrations.Abstractions
         public IEnumerable<string> Statements { get; set; }
 
     }
+
 }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace PlatoCore.Data.Migrations.Abstractions
 {
+
     public class DataMigrationResult
     {
 
@@ -29,4 +30,5 @@ namespace PlatoCore.Data.Migrations.Abstractions
         }
 
     }
+
 }

@@ -7,9 +7,10 @@ using PlatoCore.Data.Tracing.Extensions;
 
 namespace PlatoCore.Data.Extensions
 {
+
     public static class ServiceCollectionExtensions
     {
-        
+
         public static IServiceCollection AddPlatoDbContext(
             this IServiceCollection services)
         {
@@ -38,6 +39,6 @@ namespace PlatoCore.Data.Extensions
 
         }
 
-
     }
+
 }

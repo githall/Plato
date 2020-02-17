@@ -3,6 +3,7 @@ using System.Data;
 
 namespace PlatoCore.Data.Abstractions.Extensions
 {
+
     public static class DbDataParameterExtensions
     {
 
@@ -15,5 +16,7 @@ namespace PlatoCore.Data.Abstractions.Extensions
             }
             return dbTypeNormalized;
         }
+
     }
+
 }

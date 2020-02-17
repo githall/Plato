@@ -49,7 +49,7 @@ namespace Plato.Moderation.Stores
             });
 
         }
-        
+
     }
 
     #endregion
@@ -87,7 +87,7 @@ namespace Plato.Moderation.Stores
             get => _keywords ?? (_keywords = new WhereString());
             set => _keywords = value;
         }
-        
+
     }
 
     #endregion
@@ -96,6 +96,7 @@ namespace Plato.Moderation.Stores
 
     public class ModeratorQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _moderatorsTableName;
@@ -108,13 +109,12 @@ namespace Plato.Moderation.Stores
             _query = query;
             _moderatorsTableName = GetTableNameWithPrefix("Moderators");
             _usersTableName = GetTableNameWithPrefix("Users");
-
         }
 
         #endregion
 
         #region "Implementation"
-        
+
         public string BuildSqlPopulate()
         {
             var whereClause = BuildWhereClause();
@@ -136,6 +136,8 @@ namespace Plato.Moderation.Stores
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return "SELECT 0";
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(m.Id) FROM ")
@@ -145,7 +147,11 @@ namespace Plato.Moderation.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("m.*, ")
@@ -159,7 +165,7 @@ namespace Plato.Moderation.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
 
             var sb = new StringBuilder();
@@ -171,14 +177,10 @@ namespace Plato.Moderation.Stores
             sb.Append("LEFT OUTER JOIN ")
                 .Append(_usersTableName)
                 .Append(" u ON m.UserId = u.Id ");
-            
+
             return sb.ToString();
 
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {

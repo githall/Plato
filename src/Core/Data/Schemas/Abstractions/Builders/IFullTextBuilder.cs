@@ -1,5 +1,6 @@
 ﻿namespace PlatoCore.Data.Schemas.Abstractions.Builders
 {
+
     public interface IFullTextBuilder : ISchemaBuilderBase
     {
 
@@ -16,11 +17,11 @@
         IFullTextBuilder DropIndex(string tableName, string columnName);
 
         IFullTextBuilder DropIndexes(string tableName, string[] columnNames);
-        
+
         IFullTextBuilder DropIndexes(string tableName);
 
         IFullTextBuilder DisableIndex(string tableName);
 
     }
-    
+
 }

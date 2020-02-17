@@ -3,6 +3,7 @@ using System.Collections.Generic;
 
 namespace PlatoCore.Data.Migrations.Abstractions
 {
+
     public class PreparedMigration
     {
 
@@ -13,6 +14,7 @@ namespace PlatoCore.Data.Migrations.Abstractions
         public Version TypedVersion => new Version(this.Version);
 
         public ICollection<string> Statements { get; set; }
-        
+
     }
+
 }

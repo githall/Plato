@@ -1,5 +1,6 @@
 ﻿namespace PlatoCore.Data.Schemas.Abstractions.Builders
 {
+
     public interface IProcedureBuilder : ISchemaBuilderBase
     {
 

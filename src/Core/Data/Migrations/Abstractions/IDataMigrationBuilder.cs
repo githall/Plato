@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-
 namespace PlatoCore.Data.Migrations.Abstractions
 {
 
@@ -25,4 +24,5 @@ namespace PlatoCore.Data.Migrations.Abstractions
         Task<DataMigrationResult> ApplyMigrationsAsync();
 
     }
+
 }

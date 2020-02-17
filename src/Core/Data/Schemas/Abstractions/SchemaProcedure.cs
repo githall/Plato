@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace PlatoCore.Data.Schemas.Abstractions
 {
@@ -34,15 +32,15 @@ namespace PlatoCore.Data.Schemas.Abstractions
             this.Name = name;
             this.Sql = sql;
         }
-        
+
         public string Name { get; set; }
 
         public string Sql { get; set; }
 
         public StoredProcedureType ProcedureType { get; set; }
-        
+
         public SchemaTable Table { get; private set; }
-        
+
         public List<SchemaColumn> Parameters { get; private set; }
 
         public SchemaProcedure ForTable(SchemaTable table)
@@ -50,7 +48,7 @@ namespace PlatoCore.Data.Schemas.Abstractions
             this.Table = table;
             return this;
         }
-        
+
         public SchemaProcedure WithParameter(SchemaColumn parameter)
         {
             if (this.Parameters == null)
@@ -64,6 +62,7 @@ namespace PlatoCore.Data.Schemas.Abstractions
             this.Parameters = parameters;
             return this;
         }
-        
+
     }
+
 }

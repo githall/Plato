@@ -2,6 +2,7 @@
 
 namespace PlatoCore.Data.Migrations.Abstractions
 {
+
     public class DataMigrationRecord
     {
 

@@ -2,10 +2,10 @@
 
 namespace PlatoCore.Data.Schemas.Abstractions
 {
-    
+
     public interface ISchemaBuilder : ISchemaBuilderBase
     {
-       
+
         ITableBuilder TableBuilder { get; }
 
         IProcedureBuilder ProcedureBuilder { get; }
@@ -13,7 +13,7 @@ namespace PlatoCore.Data.Schemas.Abstractions
         IFullTextBuilder FullTextBuilder { get; }
 
         IIndexBuilder IndexBuilder { get;  }
-        
+
     }
-    
+
 }

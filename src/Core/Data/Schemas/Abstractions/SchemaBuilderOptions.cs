@@ -1,5 +1,6 @@
 ﻿namespace PlatoCore.Data.Schemas.Abstractions
 {
+
     public class SchemaBuilderOptions
     {
 
@@ -10,14 +11,15 @@
         public bool DropTablesBeforeCreate { get; set; }
 
         public bool DropProceduresBeforeCreate { get; set; } = true;
-        
-        public bool DropCatalogBeforeCreate { get; set; } 
 
-        public bool DropIndexesBeforeCreate { get; set; } 
-        
+        public bool DropCatalogBeforeCreate { get; set; }
+
+        public bool DropIndexesBeforeCreate { get; set; }
+
         public bool CheckColumnExistsBeforeCreate { get; set; } = true;
 
         public bool CheckColumnExistsBeforeAlter { get; set; } = true;
 
     }
+
 }
