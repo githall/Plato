@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Categories.Models;
 using Plato.Categories.Services;
@@ -13,7 +13,7 @@ namespace Plato.Docs.Categories.ViewComponents
 
     public class DocCategoryDropDownViewComponent : ViewComponent
     {
-     
+
         private readonly ICategoryService<Category> _categoryService;
 
         public DocCategoryDropDownViewComponent(ICategoryService<Category> categoryService)
@@ -42,13 +42,14 @@ namespace Plato.Docs.Categories.ViewComponents
 
         private async Task<IList<Selection<CategoryBase>>> BuildSelectionsAsync(CategoryDropDownViewModel model)
         {
-           
+
             // Get categories
             var categories = await _categoryService.GetResultsAsync(
                 model.Options, new PagerOptions()
                 {
                     Page = 1,
-                    Size = int.MaxValue
+                    Size = int.MaxValue,
+                    CountTotal = false
                 });
 
             // Indicate selections

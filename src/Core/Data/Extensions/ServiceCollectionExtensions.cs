@@ -1,9 +1,9 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Data.Migrations.Extensions;
-using PlatoCore.Data.Schemas.Extensions;
-using PlatoCore.Data.Abstractions;
 using PlatoCore.Data.Providers;
+using PlatoCore.Data.Abstractions;
+using PlatoCore.Data.Schemas.Extensions;
 using PlatoCore.Data.Tracing.Extensions;
+using PlatoCore.Data.Migrations.Extensions;
 
 namespace PlatoCore.Data.Extensions
 {

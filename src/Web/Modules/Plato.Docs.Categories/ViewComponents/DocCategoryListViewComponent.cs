@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using System.Collections.Generic;
 using Plato.Categories.Services;
 using Plato.Categories.ViewModels;
 using Plato.Docs.Categories.Models;
@@ -14,7 +14,7 @@ namespace Plato.Docs.Categories.ViewComponents
     {
 
         private readonly ICategoryService<Category> _categoryService;
-     
+
         public DocCategoryListViewComponent(ICategoryService<Category> categoryService)
         {
             _categoryService = categoryService;
@@ -27,22 +27,23 @@ namespace Plato.Docs.Categories.ViewComponents
             {
                 options = new CategoryIndexOptions();
             }
-            
+
             return View(await GetIndexModel(options));
 
         }
-        
+
         async Task<CategoryListViewModel<Category>> GetIndexModel(CategoryIndexOptions options)
         {
-      
+
             // Get categories
             var categories = await _categoryService
                 .GetResultsAsync(options, new PagerOptions()
                 {
                     Page = 1,
-                    Size = int.MaxValue
+                    Size = int.MaxValue,
+                    CountTotal = false
                 });
-            
+
             return new CategoryListViewModel<Category>()
             {
                 Options = options,
@@ -50,7 +51,7 @@ namespace Plato.Docs.Categories.ViewComponents
             };
 
         }
-        
+
     }
-    
+
 }

@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Categories.Services;
 using Plato.Categories.ViewModels;
@@ -44,7 +43,8 @@ namespace Plato.Docs.Categories.ViewComponents
                 }, new PagerOptions()
                 {
                     Page = 1,
-                    Size = int.MaxValue
+                    Size = int.MaxValue,
+                    CountTotal = false
                 });
             
             return new CategoryListViewModel<Category>()

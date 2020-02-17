@@ -1,7 +1,5 @@
 ﻿using System.Linq;
 using System.Threading.Tasks;
-using Plato.Discuss.Models;
-using Plato.Discuss.Categories.Moderators.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
@@ -10,6 +8,8 @@ using PlatoCore.Stores.Abstractions.Users;
 using PlatoCore.Stores.Users;
 using Plato.Moderation.Models;
 using Plato.Moderation.Stores;
+using Plato.Discuss.Models;
+using Plato.Discuss.Categories.Moderators.ViewModels;
 
 namespace Plato.Discuss.Categories.Moderators.ViewProviders
 {
