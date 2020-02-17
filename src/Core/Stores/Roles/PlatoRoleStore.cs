@@ -169,7 +169,7 @@ namespace PlatoCore.Stores.Roles
             var roles = await GetRolesByUserIdAsync(userId);
             return roles?.Select(r => r.Id).OrderBy(r => r).ToList();
         }
-        
+
         public void CancelTokens(Role model = null)
         {
 
@@ -184,11 +184,6 @@ namespace PlatoCore.Stores.Roles
           
         }
 
-        void ClearCache(User user)
-        {
-            _cacheManager.CancelTokens(this.GetType(), UserId, user.Id);
-        }
-        
     }
 
 }

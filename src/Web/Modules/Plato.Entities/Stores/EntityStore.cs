@@ -353,7 +353,10 @@ namespace Plato.Entities.Stores
                 _cacheManager.CancelTokens(typeof(EntityStore<Entity>));
             }
 
-            // Clear entity data
+            // Clear simple entities store
+            _cacheManager.CancelTokens(typeof(SimpleEntityStore<SimpleEntity>));
+
+            // Clear entity data store
             _cacheManager.CancelTokens(typeof(EntityDataStore));
 
         }

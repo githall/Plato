@@ -71,9 +71,7 @@ namespace Plato.Docs
 
             // Stores
             services.AddScoped<IEntityRepository<Doc>, EntityRepository<Doc>>();
-            services.AddScoped<IEntityStore<Doc>, EntityStore<Doc>>();
-            services.AddScoped<ISimpleEntityRepository<SimpleDoc>, SimpleEntityRepository<SimpleDoc>>();
-            services.AddScoped<ISimpleEntityStore<SimpleDoc>, SimpleEntityStore<SimpleDoc>>();
+            services.AddScoped<IEntityStore<Doc>, EntityStore<Doc>>();            
             services.AddScoped<IEntityManager<Doc>, EntityManager<Doc>>();
 
             services.AddScoped<IEntityReplyRepository<DocComment>, EntityReplyRepository<DocComment>>();
@@ -85,8 +83,7 @@ namespace Plato.Docs
             services.AddScoped<IPostManager<DocComment>, ReplyManager>();
 
             // Services
-            services.AddScoped<IEntityService<Doc>, EntityService<Doc>>();
-            services.AddScoped<ISimpleEntityService<SimpleDoc>, SimpleEntityService<SimpleDoc>>();
+            services.AddScoped<IEntityService<Doc>, EntityService<Doc>>();            
             services.AddScoped<IEntityReplyService<DocComment>, EntityReplyService<DocComment>>();
 
             // View incrementer
@@ -149,12 +146,12 @@ namespace Plato.Docs
             // Federated query manager 
             services.AddScoped<IFederatedQueryManager<Doc>, FederatedQueryManager<Doc>>();
             services.AddScoped<IFederatedQueryProvider<Doc>, EntityQueries<Doc>>();
-            services.AddScoped<IFederatedQueryManager<SimpleDoc>, FederatedQueryManager<SimpleDoc>>();
-            services.AddScoped<IFederatedQueryProvider<SimpleDoc>, EntityQueries<SimpleDoc>>();
+            services.AddScoped<IFederatedQueryManager<SimpleEntity>, FederatedQueryManager<SimpleEntity>>();
+            services.AddScoped<IFederatedQueryProvider<SimpleEntity>, EntityQueries<SimpleEntity>>();
 
             // Query adapters
             services.AddScoped<IQueryAdapterManager<Doc>, QueryAdapterManager<Doc>>();
-            services.AddScoped<IQueryAdapterManager<SimpleDoc>, QueryAdapterManager<SimpleDoc>>();
+            services.AddScoped<IQueryAdapterManager<SimpleEntity>, QueryAdapterManager<SimpleEntity>>();
 
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();

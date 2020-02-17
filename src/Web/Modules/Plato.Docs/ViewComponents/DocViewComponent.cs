@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Docs.Models;
+using Plato.Entities.Models;
 using Plato.Entities.Services;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
@@ -17,17 +18,17 @@ namespace Plato.Docs.ViewComponents
     {
 
         private readonly IAuthorizationService _authorizationService;
-        private readonly IEntityService<Doc> _entityService;
+        private readonly ISimpleEntityService<SimpleEntity> _simpleEntityService;
         private readonly IEntityStore<Doc> _entityStore;
 
-        public DocViewComponent(
-            IEntityStore<Doc> entityStore,
-            IEntityService<Doc> entityService,
-            IAuthorizationService authorizationService)
+        public DocViewComponent(            
+            ISimpleEntityService<SimpleEntity> simpleEntityService,
+            IAuthorizationService authorizationService,
+            IEntityStore<Doc> entityStore)
         {
-            _entityStore = entityStore;
-            _entityService = entityService;
             _authorizationService = authorizationService;
+            _simpleEntityService = simpleEntityService;
+            _entityStore = entityStore;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Doc, DocComment> model)
@@ -66,15 +67,15 @@ namespace Plato.Docs.ViewComponents
                     throw new ArgumentNullException();
                 }
 
-                // Populate previous and next entity
-                await PopulatePreviousAndNextAsync(entity);
-
-                // Populate child entities
-                await PopulateChildEntitiesAsync(entity);
-
                 model.Entity = entity;
 
             }
+
+            // Populate previous and next entity
+            await PopulatePreviousAndNextAsync(model.Entity);
+
+            // Populate child entities
+            await PopulateChildEntitiesAsync(model.Entity);
 
             return model;
 
@@ -89,7 +90,7 @@ namespace Plato.Docs.ViewComponents
             }
 
             // Get all other entities at the same level as our current entity
-            var entities = await _entityService
+            var entities = await _simpleEntityService
                 .ConfigureQuery(async q =>
                 {
 
@@ -124,7 +125,6 @@ namespace Plato.Docs.ViewComponents
                     {
                         q.HideDeleted.True();
                     }
-
 
                 })
                 .GetResultsAsync(new EntityIndexOptions()
@@ -179,7 +179,7 @@ namespace Plato.Docs.ViewComponents
             }
 
             // Get all child entities
-            var entities = await _entityService
+            var entities = await _simpleEntityService
                 .ConfigureQuery(async q =>
                 {
                     q.ParentId.Equals(entity.Id);

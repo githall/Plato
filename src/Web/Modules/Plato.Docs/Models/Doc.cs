@@ -3,20 +3,17 @@ using Plato.Entities.Models;
 
 namespace Plato.Docs.Models
 {
+
     public class Doc : Entity
     {
         public bool IsNew { get; set; }
-        
-        public Doc PreviousDoc { get; set; }
 
-        public Doc NextDoc { get; set; }
+        public ISimpleEntity PreviousDoc { get; set; }
 
-        public IEnumerable<IEntity> ChildEntities { get; set; }
+        public ISimpleEntity NextDoc { get; set; }
 
-    }
-
-    public class SimpleDoc : SimpleEntity
-    {
+        public IEnumerable<ISimpleEntity> ChildEntities { get; set; }
 
     }
+
 }

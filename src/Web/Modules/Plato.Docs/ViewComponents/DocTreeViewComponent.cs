@@ -22,13 +22,13 @@ namespace Plato.Docs.ViewComponents
     {
 
         private readonly IAuthorizationService _authorizationService;
-        private readonly ISimpleEntityService<SimpleDoc> _simpleEntityService;
+        private readonly ISimpleEntityService<SimpleEntity> _simpleEntityService;
         private readonly IFeatureFacade _featureFacade;
 
         private bool? _displayMenu;
 
         public DocTreeViewComponent(
-            ISimpleEntityService<SimpleDoc> simpleEntityService,
+            ISimpleEntityService<SimpleEntity> simpleEntityService,
             IAuthorizationService authorizationService,            
             IFeatureFacade featureFacade)
         {
@@ -49,7 +49,7 @@ namespace Plato.Docs.ViewComponents
             var entities = await GetSimpleEntitiesAsync(options.IndexOptions);
 
             // Add entities to view model
-            options.Entities = entities?.Data?.BuildHierarchy<SimpleDoc>()?.OrderBy(r => r.SortOrder);
+            options.Entities = entities?.Data?.BuildHierarchy<SimpleEntity>()?.OrderBy(r => r.SortOrder);
 
             // Do we have a menu to display?
             if (!string.IsNullOrEmpty(options.EditMenuViewName))
@@ -72,7 +72,7 @@ namespace Plato.Docs.ViewComponents
 
         }
 
-        private async Task<IPagedResults<SimpleDoc>> GetSimpleEntitiesAsync(EntityIndexOptions options)
+        private async Task<IPagedResults<SimpleEntity>> GetSimpleEntitiesAsync(EntityIndexOptions options)
         {
 
             // Set default feature

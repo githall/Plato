@@ -21,7 +21,7 @@ namespace PlatoCore.Data.Abstractions
         public int PageSize { get; private set; } = int.MaxValue;
 
         /// <summary>
-        /// Returns true if a page size has been specified.
+        /// Returns true if no page size has been specified.
         /// </summary>
         public bool IsDefaultPageSize => PageSize == int.MaxValue ? true : false;
 
