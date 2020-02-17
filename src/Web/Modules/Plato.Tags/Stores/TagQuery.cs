@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions;
 
@@ -15,9 +14,9 @@ namespace Plato.Tags.Stores
     public class TagQuery<TModel> : DefaultQuery<TModel> where TModel : class
     {
 
-        private readonly IStore<TModel> _store;
+        private readonly IQueryableStore<TModel> _store;
 
-        public TagQuery(IStore<TModel> store)
+        public TagQuery(IQueryableStore<TModel> store)
         {
             _store = store;
         }
@@ -105,6 +104,7 @@ namespace Plato.Tags.Stores
 
     public class TagQueryBuilder<TModel> : IQueryBuilder where TModel : class
     {
+
         #region "Constructor"
 
         private readonly string _tagsTableName;
@@ -134,18 +134,20 @@ namespace Plato.Tags.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(t.Id) FROM ")

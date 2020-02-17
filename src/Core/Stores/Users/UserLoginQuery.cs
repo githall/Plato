@@ -14,9 +14,9 @@ namespace PlatoCore.Stores.Users
     public class UserLoginQuery : DefaultQuery<UserLogin>
     {
 
-        private readonly IStore<UserLogin> _store;
+        private readonly IQueryableStore<UserLogin> _store;
 
-        public UserLoginQuery(IStore<UserLogin> store)
+        public UserLoginQuery(IQueryableStore<UserLogin> store)
         {
             _store = store;
         }
@@ -126,18 +126,20 @@ namespace PlatoCore.Stores.Users
             sb.Append("SELECT * FROM ").Append(_tableName);
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(Id) FROM ").Append(_tableName);

@@ -14,9 +14,9 @@ namespace Plato.Categories.Stores
     public class CategoryDataQuery : DefaultQuery<CategoryData>
     {
 
-        private readonly IStore<CategoryData> _store;
+        private readonly IQueryableStore<CategoryData> _store;
 
-        public CategoryDataQuery(IStore<CategoryData> store)
+        public CategoryDataQuery(IQueryableStore<CategoryData> store)
         {
             _store = store;
         }
@@ -38,8 +38,8 @@ namespace Plato.Categories.Stores
             var populateSql = builder.BuildSqlPopulate();
             var countSql = builder.BuildSqlCount();
             var key = Params.Key.Value ?? string.Empty;
-            
-            return await _store.SelectAsync(new[]
+
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),
@@ -49,7 +49,6 @@ namespace Plato.Categories.Stores
             });
 
         }
-
 
     }
 
@@ -90,16 +89,17 @@ namespace Plato.Categories.Stores
 
     public class CategoryDataQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
-        private readonly string _CategoryDataTableName;
+        private readonly string _categoryDataTableName;
 
         private readonly CategoryDataQuery _query;
 
         public CategoryDataQueryBuilder(CategoryDataQuery query)
         {
             _query = query;
-            _CategoryDataTableName = GetTableNameWithPrefix("CategoryData");
+            _categoryDataTableName = GetTableNameWithPrefix("CategoryData");
         }
 
         #endregion
@@ -117,18 +117,20 @@ namespace Plato.Categories.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(d.Id) FROM ")
@@ -142,16 +144,16 @@ namespace Plato.Categories.Stores
 
         #region "Private Methods"
 
-        string BuildPopulateSelect()
+        private string BuildPopulateSelect()
         {
             return "*";
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
-            sb.Append(_CategoryDataTableName).Append(" d ");
+            sb.Append(_categoryDataTableName).Append(" d ");
             return sb.ToString();
         }
 
@@ -195,8 +197,7 @@ namespace Plato.Categories.Stores
 
         }
 
-
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

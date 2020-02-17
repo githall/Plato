@@ -5,10 +5,8 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Plato.Categories.Models;
 using Plato.Categories.Repositories;
-using PlatoCore.Cache;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Modules.Abstractions;
 
 namespace Plato.Categories.Stores
 {
@@ -18,27 +16,24 @@ namespace Plato.Categories.Stores
 
         public const string ById = "ById";
         public const string ByCategoryId = "ByCategoryId";
-
-        private readonly ICacheManager _cacheManager;
+        
         private readonly ICategoryDataRepository<CategoryData> _categoryDataRepository;
         private readonly ILogger<CategoryDataStore> _logger;
         private readonly IDbQueryConfiguration _dbQuery;
-        private readonly ITypedModuleProvider _typedModuleProvider;
-        
-        public CategoryDataStore(
-            ICacheManager cacheManager,
+        private readonly ICacheManager _cacheManager;
+
+        public CategoryDataStore(        
             ICategoryDataRepository<CategoryData> categoryDataRepository, 
             ILogger<CategoryDataStore> logger,
             IDbQueryConfiguration dbQuery,
-            ITypedModuleProvider typedModuleProvider)
+            ICacheManager cacheManager)
         {
-            _cacheManager = cacheManager;
             _categoryDataRepository = categoryDataRepository;
+            _cacheManager = cacheManager;            
             _logger = logger;
             _dbQuery = dbQuery;
-            _typedModuleProvider = typedModuleProvider;
         }
-        
+
         public async Task<CategoryData> CreateAsync(CategoryData model)
         {
             var result =  await _categoryDataRepository.InsertUpdateAsync(model);
@@ -107,6 +102,7 @@ namespace Plato.Categories.Stores
             _cacheManager.CancelTokens(this.GetType());
             _cacheManager.CancelTokens(this.GetType(), ById, model.Id);
         }
+
     }
 
 }

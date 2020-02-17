@@ -8,6 +8,7 @@ using PlatoCore.Stores.Abstractions;
 
 namespace Plato.Entities.Stores
 {
+
     #region "EntityUserQuery"
 
     public class EntityUserQuery : DefaultQuery<EntityUser>
@@ -165,20 +166,21 @@ namespace Plato.Entities.Stores
                 .Append(" AS u ON u.Id = t.UserID ")
                 .Append("INNER JOIN ")
                 .Append(_repliesTableName)
-                .Append(" AS r ON r.Id = t.LastReplyId")
-                .Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC")
-                .Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+                .Append(" AS r ON r.Id = t.LastReplyId");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
-            var whereClause = BuildWhereClause();
+                return string.Empty;   
             var sb = new StringBuilder();
             sb.Append(BuildTemporaryTable());
             sb.Append("SELECT COUNT(u.Id) FROM @t t ")

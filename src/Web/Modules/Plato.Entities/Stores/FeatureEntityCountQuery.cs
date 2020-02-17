@@ -328,7 +328,6 @@ namespace Plato.Entities.Stores
 
         public string BuildSqlPopulate()
         {
-
             var whereClause = BuildWhere();
             var sb = new StringBuilder();
             sb.Append("DECLARE @MaxRank int;")
@@ -341,14 +340,14 @@ namespace Plato.Entities.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append("  GROUP BY f.ModuleId");
+            sb.Append(" GROUP BY f.ModuleId");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhere();
             var sb = new StringBuilder();
             sb.Append("DECLARE @MaxRank int;")
@@ -370,12 +369,12 @@ namespace Plato.Entities.Stores
 
         #region "Private Methods"
 
-        string BuildSelect()
+        private string BuildSelect()
         {
             return "f.ModuleId AS ModuleId, COUNT(e.Id) AS [Count]";
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             
             var sb = new StringBuilder();
@@ -402,7 +401,7 @@ namespace Plato.Entities.Stores
 
         }
 
-        string BuildWhere()
+        private string BuildWhere()
         {
 
             var sb = new StringBuilder();
@@ -680,7 +679,7 @@ namespace Plato.Entities.Stores
 
         }
 
-        string GetTableNameWithPrefix(string tableName)
+        private string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)
                 ? _query.Options.TablePrefix + tableName
@@ -689,7 +688,7 @@ namespace Plato.Entities.Stores
         
         // -- Search
 
-        string BuildFederatedResults()
+        private string BuildFederatedResults()
         {
 
             // No keywords
@@ -735,12 +734,12 @@ namespace Plato.Entities.Stores
 
         }
 
-        bool HasKeywords()
+        private bool HasKeywords()
         {
             return !string.IsNullOrEmpty(GetKeywords());
         }
 
-        string GetKeywords()
+        private string GetKeywords()
         {
 
             if (string.IsNullOrEmpty(_query.Params.Keywords.Value))

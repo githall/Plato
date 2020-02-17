@@ -14,9 +14,9 @@ namespace Plato.Entities.Stores
     public class EntityReplyDataQuery : DefaultQuery<IEntityReplyData>
     {
 
-        private readonly IStore<IEntityReplyData> _store;
+        private readonly IQueryableStore<IEntityReplyData> _store;
 
-        public EntityReplyDataQuery(IStore<IEntityReplyData> store)
+        public EntityReplyDataQuery(IQueryableStore<IEntityReplyData> store)
         {
             _store = store;
         }
@@ -116,18 +116,20 @@ namespace Plato.Entities.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(d.Id) FROM ")
@@ -141,13 +143,13 @@ namespace Plato.Entities.Stores
 
         #region "Private Methods"
 
-        string BuildPopulateSelect()
+        private string BuildPopulateSelect()
         {
             return "*";
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_entityReplyDataTableName).Append(" d ");
@@ -193,7 +195,7 @@ namespace Plato.Entities.Stores
 
         }
 
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

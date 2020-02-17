@@ -14,11 +14,11 @@ namespace Plato.Categories.Stores
     public class CategoryQuery<TModel> : DefaultQuery<TModel> where TModel : class
     {
 
-        private readonly IStore<TModel> _store;
+        private readonly IQueryableStore<TModel> _store;
 
         public IQueryAdapterManager<TModel> QueryAdapterManager { get; set; }
         
-        public CategoryQuery(IStore<TModel> store)
+        public CategoryQuery(IQueryableStore<TModel> store)
         {
             _store = store;
         }
@@ -97,6 +97,7 @@ namespace Plato.Categories.Stores
 
     public class CategoryQueryBuilder<TModel> : IQueryBuilder where TModel : class
     {
+
         #region "Constructor"
 
         private readonly string _categoriesTableName;
@@ -124,18 +125,20 @@ namespace Plato.Categories.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhere();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(c.Id) FROM ")
@@ -149,7 +152,7 @@ namespace Plato.Categories.Stores
 
         #region "Private Methods"
 
-        string BuildSelect()
+        private string BuildSelect()
         {
 
             var sb = new StringBuilder();
@@ -164,7 +167,7 @@ namespace Plato.Categories.Stores
             return sb.ToString();
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_categoriesTableName)
@@ -179,7 +182,7 @@ namespace Plato.Categories.Stores
             return sb.ToString();
         }
 
-        string BuildWhere()
+        private string BuildWhere()
         {
 
             var sb = new StringBuilder();
@@ -222,9 +225,8 @@ namespace Plato.Categories.Stores
                 ? _query.Options.TablePrefix + tableName
                 : tableName;
         }
-        
-   
-        string GetQualifiedColumnName(string columnName)
+
+        private string GetQualifiedColumnName(string columnName)
         {
 
             if (columnName == null)

@@ -14,9 +14,9 @@ namespace Plato.Labels.Stores
     public class LabelDataQuery : DefaultQuery<LabelData>
     {
 
-        private readonly IStore<LabelData> _store;
+        private readonly IQueryableStore<LabelData> _store;
 
-        public LabelDataQuery(IStore<LabelData> store)
+        public LabelDataQuery(IQueryableStore<LabelData> store)
         {
             _store = store;
         }
@@ -49,7 +49,7 @@ namespace Plato.Labels.Stores
             });
 
         }
-        
+
     }
 
     #endregion
@@ -89,6 +89,7 @@ namespace Plato.Labels.Stores
 
     public class LabelDataQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _labelDataTableName;
@@ -104,7 +105,7 @@ namespace Plato.Labels.Stores
         #endregion
 
         #region "Implementation"
-        
+
         public string BuildSqlPopulate()
         {
             var whereClause = BuildWhereClause();
@@ -116,18 +117,20 @@ namespace Plato.Labels.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(d.Id) FROM ")
@@ -141,13 +144,12 @@ namespace Plato.Labels.Stores
 
         #region "Private Methods"
 
-        string BuildPopulateSelect()
+        private string BuildPopulateSelect()
         {
             return "*";
-
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_labelDataTableName).Append(" d ");
@@ -192,8 +194,8 @@ namespace Plato.Labels.Stores
             return sb.ToString();
 
         }
-        
-        string GetQualifiedColumnName(string columnName)
+
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

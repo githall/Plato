@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions;
 using Plato.Metrics.Models;
@@ -15,9 +15,9 @@ namespace Plato.Metrics.Stores
     public class MetricQuery : DefaultQuery<Metric>
     {
 
-        private readonly IStore<Metric> _store;
+        private readonly IQueryableStore<Metric> _store;
 
-        public MetricQuery(IStore<Metric> store)
+        public MetricQuery(IQueryableStore<Metric> store)
         {
             _store = store;
         }
@@ -148,6 +148,7 @@ namespace Plato.Metrics.Stores
 
     public class MetricQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _metricTableName;
@@ -168,28 +169,29 @@ namespace Plato.Metrics.Stores
 
         public string BuildSqlPopulate()
         {
-
             var whereClause = BuildWhereClause();
             var orderBy = BuildOrderBy();
-
             var sb = new StringBuilder();
             sb.Append("SELECT ")
                 .Append(BuildPopulateSelect())
                 .Append(" FROM ")
                 .Append(BuildTables());
-
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(m.Id) FROM ")
@@ -199,7 +201,11 @@ namespace Plato.Metrics.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("m.*, ")
@@ -209,26 +215,19 @@ namespace Plato.Metrics.Stores
                 .Append("u.PhotoUrl,")
                 .Append("u.PhotoColor");
             return sb.ToString();
-
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_metricTableName)
                 .Append(" m ");
-
             // join user
             sb.Append("LEFT OUTER JOIN ")
                 .Append(_usersTableName)
                 .Append(" u ON m.CreatedUserId = u.Id ");
             return sb.ToString();
-
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -326,7 +325,7 @@ namespace Plato.Metrics.Stores
 
         }
 
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {
@@ -355,7 +354,7 @@ namespace Plato.Metrics.Stores
             return sb.ToString();
         }
 
-        IDictionary<string, OrderBy> GetSafeSortColumns()
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
         {
             var output = new Dictionary<string, OrderBy>();
             foreach (var sortColumn in _query.SortColumns)
@@ -372,7 +371,7 @@ namespace Plato.Metrics.Stores
             return output;
         }
 
-        string GetSortColumn(string columnName)
+        private string GetSortColumn(string columnName)
         {
 
             if (String.IsNullOrEmpty(columnName))

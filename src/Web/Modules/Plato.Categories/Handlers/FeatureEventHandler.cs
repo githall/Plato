@@ -457,7 +457,6 @@ namespace Plato.Categories.Handlers
                 }
             });
 
-
         }
 
         void CategoryData(ISchemaBuilder builder)
@@ -670,7 +669,7 @@ namespace Plato.Categories.Handlers
             });
 
         }
-        
+
         #endregion
 
     }

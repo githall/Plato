@@ -11,9 +11,9 @@ namespace Plato.Notifications.Repositories
 
     public class UserNotificationsRepository : IUserNotificationsRepository<UserNotification>
     {
-
-        private readonly IDbContext _dbContext;
+        
         private readonly ILogger<UserNotificationsRepository> _logger;
+        private readonly IDbContext _dbContext;
 
         public UserNotificationsRepository(
             IDbContext dbContext,
@@ -66,7 +66,7 @@ namespace Plato.Notifications.Repositories
                         }
 
                         return output;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -133,7 +133,7 @@ namespace Plato.Notifications.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteUserNotificationById",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -156,7 +156,7 @@ namespace Plato.Notifications.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "UpdateUserNotificationsReadDate",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("UserId", DbType.Int32, userId),
                         new DbParam("ReadDate", DbType.DateTimeOffset, readDate),
@@ -188,7 +188,7 @@ namespace Plato.Notifications.Repositories
                 output = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "InsertUpdateUserNotification",
-                    new []
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
                         new DbParam("UserId", DbType.Int32, userId),

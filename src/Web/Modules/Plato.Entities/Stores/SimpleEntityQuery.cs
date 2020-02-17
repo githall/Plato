@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions;
@@ -398,11 +398,9 @@ namespace Plato.Entities.Stores
         #region "Implementation"
         
         public string BuildSqlPopulate()
-        {
-            
+        {            
             var whereClause = BuildWhere();
             var orderBy = BuildOrderBy();
-
             var sb = new StringBuilder();
             sb.Append("DECLARE @MaxRank int;")
                 .Append(Environment.NewLine)
@@ -414,18 +412,19 @@ namespace Plato.Entities.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+               ? orderBy
+               : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhere();
             var sb = new StringBuilder();
             sb.Append("DECLARE @MaxRank int;")

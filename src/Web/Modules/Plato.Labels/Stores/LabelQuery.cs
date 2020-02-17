@@ -14,9 +14,9 @@ namespace Plato.Labels.Stores
     public class LabelQuery<TModel> : DefaultQuery<TModel> where TModel : class
     {
 
-        private readonly IStore<TModel> _store;
+        private readonly IQueryableStore<TModel> _store;
 
-        public LabelQuery(IStore<TModel> store)
+        public LabelQuery(IQueryableStore<TModel> store)
         {
             _store = store;
         }
@@ -129,18 +129,20 @@ namespace Plato.Labels.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(l.Id) FROM ")
@@ -150,7 +152,11 @@ namespace Plato.Labels.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("l.*");
@@ -158,7 +164,7 @@ namespace Plato.Labels.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
 
             var sb = new StringBuilder();
@@ -169,10 +175,6 @@ namespace Plato.Labels.Stores
             return sb.ToString();
 
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -225,8 +227,8 @@ namespace Plato.Labels.Stores
             return sb.ToString();
 
         }
-        
-        string GetQualifiedColumnName(string columnName)
+
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {
@@ -238,7 +240,7 @@ namespace Plato.Labels.Stores
                 : "l." + columnName;
         }
 
-        string BuildOrderBy()
+        private string BuildOrderBy()
         {
             if (_query.SortColumns.Count == 0) return null;
             var sb = new StringBuilder();
@@ -255,7 +257,7 @@ namespace Plato.Labels.Stores
             return sb.ToString();
         }
 
-        IDictionary<string, OrderBy> GetSafeSortColumns()
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
         {
             var ourput = new Dictionary<string, OrderBy>();
             foreach (var sortColumn in _query.SortColumns)
@@ -271,8 +273,8 @@ namespace Plato.Labels.Stores
 
             return ourput;
         }
-        
-        string GetSortColumn(string columnName)
+
+        private string GetSortColumn(string columnName)
         {
 
             if (String.IsNullOrEmpty(columnName))

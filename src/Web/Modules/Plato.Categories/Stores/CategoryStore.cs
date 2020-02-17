@@ -286,7 +286,8 @@ namespace Plato.Categories.Stores
             }
 
             // Get all category data matching supplied category ids
-            var results = await _categoryDataStore.QueryAsync()
+            var results = await _categoryDataStore
+                .QueryAsync()
                 .Select<CategoryDataQueryParams>(q => { q.CategoryId.IsIn(categories.Select(e => e.Id).ToArray()); })
                 .ToList();
 

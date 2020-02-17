@@ -15,9 +15,9 @@ namespace PlatoCore.Stores.Users
     public class UserQuery : DefaultQuery<User>
     {
 
-        private readonly IStore<User> _store;
+        private readonly IQueryableStore<User> _store;
 
-        public UserQuery(IStore<User> store)
+        public UserQuery(IQueryableStore<User> store)
         {
             _store = store;
         }
@@ -41,7 +41,7 @@ namespace PlatoCore.Stores.Users
             var keywords = Params.Keywords.Value ?? string.Empty;
             var roleName = Params.RoleName.Value ?? string.Empty;
 
-            return await _store.SelectAsync(new[]
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),
@@ -50,6 +50,7 @@ namespace PlatoCore.Stores.Users
                 new DbParam("Keywords", DbType.String, 255, keywords),
                 new DbParam("RoleName", DbType.String, 255, roleName),
             });
+
         }
 
     }
@@ -231,18 +232,20 @@ namespace PlatoCore.Stores.Users
             sb.Append("SELECT * FROM ").Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "LastLoginDate DESC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(Id) FROM ").Append(BuildTables());
@@ -255,20 +258,21 @@ namespace PlatoCore.Stores.Users
 
         #region "Private Methods"
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb=  new StringBuilder();
             sb.Append(_usersTableName).Append(" u");
             return sb.ToString();
         }
-        string GetTableNameWithPrefix(string tableName)
+
+        private string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)
                 ? _query.Options.TablePrefix + tableName
                 : tableName;
         }
 
-        string BuildWhereClause()
+        private string BuildWhereClause()
         {
 
             var sb = new StringBuilder();
@@ -471,7 +475,7 @@ namespace PlatoCore.Stores.Users
 
         }
 
-        string BuildOrderBy()
+        private string BuildOrderBy()
         {
             if (_query.SortColumns.Count == 0) return null;
             var sb = new StringBuilder();
@@ -489,7 +493,7 @@ namespace PlatoCore.Stores.Users
             return sb.ToString();
         }
 
-        IDictionary<string, OrderBy> GetSafeSortColumns()
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
         {
             var output = new Dictionary<string, OrderBy>();
             foreach (var sortColumn in _query.SortColumns)
@@ -502,8 +506,8 @@ namespace PlatoCore.Stores.Users
             }
             return output;
         }
-        
-        string GetSortColumn(string columnName)
+
+        private string GetSortColumn(string columnName)
         {
 
             if (String.IsNullOrEmpty(columnName))

@@ -14,9 +14,9 @@ namespace Plato.Entities.Metrics.Stores
     public class EntityMetricQuery : DefaultQuery<EntityMetric>
     {
 
-        private readonly IStore<EntityMetric> _store;
+        private readonly IQueryableStore<EntityMetric> _store;
 
-        public EntityMetricQuery(IStore<EntityMetric> store)
+        public EntityMetricQuery(IQueryableStore<EntityMetric> store)
         {
             _store = store;
         }
@@ -63,10 +63,8 @@ namespace Plato.Entities.Metrics.Stores
     public class EntityMetricQueryParams
     {
 
-
         private WhereInt _id;
         private WhereInt _entityId;
-
         private WhereString _ipV4Address;
         private WhereString _ipV6Address;
         private WhereString _userAgent;
@@ -107,7 +105,6 @@ namespace Plato.Entities.Metrics.Stores
             set => _createdUserId = value;
         }
 
-
     }
 
     #endregion
@@ -116,6 +113,7 @@ namespace Plato.Entities.Metrics.Stores
 
     public class EntityMetricQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _entityMetricsTableName;
@@ -139,28 +137,29 @@ namespace Plato.Entities.Metrics.Stores
 
         public string BuildSqlPopulate()
         {
-
             var whereClause = BuildWhereClause();
             var orderBy = BuildOrderBy();
-
             var sb = new StringBuilder();
             sb.Append("SELECT ")
                 .Append(BuildPopulateSelect())
                 .Append(" FROM ")
                 .Append(BuildTables());
-
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(em.Id) FROM ")
@@ -170,7 +169,11 @@ namespace Plato.Entities.Metrics.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("em.*, ")
@@ -187,7 +190,7 @@ namespace Plato.Entities.Metrics.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_entityMetricsTableName)
@@ -210,10 +213,6 @@ namespace Plato.Entities.Metrics.Stores
             return sb.ToString();
 
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -280,7 +279,7 @@ namespace Plato.Entities.Metrics.Stores
 
         }
 
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

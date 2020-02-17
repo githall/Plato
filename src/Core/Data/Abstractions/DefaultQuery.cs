@@ -20,6 +20,8 @@ namespace PlatoCore.Data.Abstractions
 
         public int PageSize { get; private set; } = int.MaxValue;
 
+        public bool IsDefaultPageSize => PageSize == int.MaxValue ? true : false;
+
         public bool CountTotal { get; private set; }
 
         public IQuery<TModel> Take(int pageSize, bool countTotal = true)
@@ -61,8 +63,7 @@ namespace PlatoCore.Data.Abstractions
         public IQuery<TModel> OrderBy(string columnName, OrderBy sortOrder = Abstractions.OrderBy.Asc)
         {
             // We always need a key
-            if (!string.IsNullOrEmpty(columnName)
-                && !_sortColumns.ContainsKey(columnName))
+            if (!string.IsNullOrEmpty(columnName) && !_sortColumns.ContainsKey(columnName))
             {
                 _sortColumns.Add(columnName, sortOrder);
             }

@@ -14,9 +14,9 @@ namespace PlatoCore.Stores.Badges
     public class UserBadgeQuery : DefaultQuery<UserBadge>
     {
 
-        private readonly IStore<UserBadge> _store;
+        private readonly IQueryableStore<UserBadge> _store;
 
-        public UserBadgeQuery(IStore<UserBadge> store)
+        public UserBadgeQuery(IQueryableStore<UserBadge> store)
         {
             _store = store;
         }
@@ -39,7 +39,7 @@ namespace PlatoCore.Stores.Badges
             var countSql = builder.BuildSqlCount();
             var badgeName = Params?.BadgeName?.Value ?? string.Empty;
 
-            return await _store.SelectAsync(new[]
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),
@@ -49,7 +49,7 @@ namespace PlatoCore.Stores.Badges
             });
 
         }
-        
+
     }
 
     #endregion
@@ -89,6 +89,7 @@ namespace PlatoCore.Stores.Badges
 
     public class UserBadgeQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _userBadgesTableName;
@@ -116,18 +117,20 @@ namespace PlatoCore.Stores.Badges
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(ub.Id) FROM ")
@@ -137,24 +140,24 @@ namespace PlatoCore.Stores.Badges
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("ub.*");
             return sb.ToString();
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_userBadgesTableName)
                 .Append(" ub ");
             return sb.ToString();
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -200,8 +203,8 @@ namespace PlatoCore.Stores.Badges
             return sb.ToString();
 
         }
-        
-        string GetQualifiedColumnName(string columnName)
+
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

@@ -14,9 +14,9 @@ namespace PlatoCore.Stores.Users
     public class UserDataQuery : DefaultQuery<UserData>
     {
 
-        private readonly IStore<UserData> _store;
+        private readonly IQueryableStore<UserData> _store;
 
-        public UserDataQuery(IStore<UserData> store)
+        public UserDataQuery(IQueryableStore<UserData> store)
         {
             _store = store;
         }
@@ -39,7 +39,7 @@ namespace PlatoCore.Stores.Users
             var countSql = builder.BuildSqlCount();
             var key = Params.Key.Value ?? string.Empty;
 
-            return await _store.SelectAsync(new[]
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),
@@ -47,8 +47,9 @@ namespace PlatoCore.Stores.Users
                 new DbParam("SqlCount", DbType.String, countSql),
                 new DbParam("Key", DbType.String, key)
             });
+
         }
-        
+
     }
 
     #endregion
@@ -88,6 +89,7 @@ namespace PlatoCore.Stores.Users
 
     public class UserDataQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _userDataTableName;
@@ -103,7 +105,7 @@ namespace PlatoCore.Stores.Users
         #endregion
 
         #region "Implementation"
-        
+
         public string BuildSqlPopulate()
         {
             var whereClause = BuildWhereClause();
@@ -115,18 +117,20 @@ namespace PlatoCore.Stores.Users
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(d.Id) FROM ")
@@ -140,13 +144,12 @@ namespace PlatoCore.Stores.Users
 
         #region "Private Methods"
 
-        string BuildPopulateSelect()
+        private string BuildPopulateSelect()
         {
             return "*";
-
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_userDataTableName).Append(" d ");
@@ -192,8 +195,8 @@ namespace PlatoCore.Stores.Users
             return sb.ToString();
 
         }
-        
-        string GetQualifiedColumnName(string columnName)
+
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {
@@ -227,5 +230,5 @@ namespace PlatoCore.Stores.Users
     }
 
     #endregion
-    
+
 }

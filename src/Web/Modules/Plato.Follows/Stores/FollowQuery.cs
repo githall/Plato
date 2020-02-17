@@ -14,9 +14,9 @@ namespace Plato.Follows.Stores
     public class FollowQuery : DefaultQuery<Models.Follow>
     {
 
-        private readonly IStore<Models.Follow> _store;
+        private readonly IQueryableStore<Models.Follow> _store;
 
-        public FollowQuery(IStore<Models.Follow> store)
+        public FollowQuery(IQueryableStore<Models.Follow> store)
         {
             _store = store;
         }
@@ -97,6 +97,7 @@ namespace Plato.Follows.Stores
 
     public class FollowQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _followsTableName;
@@ -118,7 +119,6 @@ namespace Plato.Follows.Stores
         
         public string BuildSqlPopulate()
         {
-
             var whereClause = BuildWhereClause();
             var orderBy = BuildOrderBy();
             var sb = new StringBuilder();
@@ -128,16 +128,20 @@ namespace Plato.Follows.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "f.Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(f.Id) FROM ")
@@ -147,7 +151,11 @@ namespace Plato.Follows.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("f.*, ")
@@ -159,7 +167,7 @@ namespace Plato.Follows.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_followsTableName)
@@ -169,17 +177,12 @@ namespace Plato.Follows.Stores
             return sb.ToString();
         }
 
-        #endregion
-
-        #region "Private Methods"
-
         private string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)
                 ? _query.Options.TablePrefix + tableName
                 : tableName;
         }
-
 
         private string BuildWhereClause()
         {
@@ -221,7 +224,7 @@ namespace Plato.Follows.Stores
 
         }
 
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

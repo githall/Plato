@@ -13,19 +13,19 @@ namespace Plato.Notifications.Stores
     
     public class UserNotificationsStore : IUserNotificationsStore<UserNotification>
     {
-        
-        private readonly IUserNotificationsRepository<UserNotification> _entityMentionsRepository;
+
+        private readonly IUserNotificationsRepository<UserNotification> _userNotificationsRepository;
         private readonly ILogger<UserNotificationsStore> _logger;
         private readonly IDbQueryConfiguration _dbQuery;
         private readonly ICacheManager _cacheManager;
 
         public UserNotificationsStore(
-            IUserNotificationsRepository<UserNotification> entityMentionsRepository,
+            IUserNotificationsRepository<UserNotification> userNotificationsRepository,
             ILogger<UserNotificationsStore> logger,
             IDbQueryConfiguration dbQuery,
             ICacheManager cacheManager)
         {
-            _entityMentionsRepository = entityMentionsRepository;
+            _userNotificationsRepository = userNotificationsRepository;
             _cacheManager = cacheManager;
             _logger = logger;
             _dbQuery = dbQuery;
@@ -48,7 +48,7 @@ namespace Plato.Notifications.Stores
                 throw new ArgumentOutOfRangeException(nameof(model.UserId));
             }
             
-            var result = await _entityMentionsRepository.InsertUpdateAsync(model);
+            var result = await _userNotificationsRepository.InsertUpdateAsync(model);
             if (result != null)
             {
                 CancelTokens(result);
@@ -74,7 +74,7 @@ namespace Plato.Notifications.Stores
                 throw new ArgumentOutOfRangeException(nameof(model.UserId));
             }
             
-            var result = await _entityMentionsRepository.InsertUpdateAsync(model);
+            var result = await _userNotificationsRepository.InsertUpdateAsync(model);
             if (result != null)
             {
                 CancelTokens(result);
@@ -85,7 +85,7 @@ namespace Plato.Notifications.Stores
         
         public async Task<bool> DeleteAsync(UserNotification model)
         {
-            var success = await _entityMentionsRepository.DeleteAsync(model.Id);
+            var success = await _userNotificationsRepository.DeleteAsync(model.Id);
             if (success)
             {
                 if (_logger.IsEnabled(LogLevel.Information))
@@ -105,7 +105,7 @@ namespace Plato.Notifications.Stores
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType(), id);
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _entityMentionsRepository.SelectByIdAsync(id));
+                async (cacheEntry) => await _userNotificationsRepository.SelectByIdAsync(id));
 
         }
 
@@ -118,23 +118,13 @@ namespace Plato.Notifications.Stores
         public async Task<IPagedResults<UserNotification>> SelectAsync(IDbDataParameter[] dbParams)
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType(), dbParams.Select(p => p.Value).ToArray());
-            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
-            {
-
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    _logger.LogInformation("Selecting entity labels for key '{0}' with the following parameters: {1}",
-                        token.ToString(), dbParams.Select(p => p.Value));
-                }
-
-                return await _entityMentionsRepository.SelectAsync(dbParams);
-
-            });
+            return await _cacheManager.GetOrCreateAsync(token, 
+                async (cacheEntry) => await _userNotificationsRepository.SelectAsync(dbParams));
         }
 
         public async Task<bool> UpdateReadDateAsync(int userId, DateTimeOffset? readDate)
         {
-            var success = await _entityMentionsRepository.UpdateReadDateAsync(userId, readDate);
+            var success = await _userNotificationsRepository.UpdateReadDateAsync(userId, readDate);
             if (success)
             {
                 if (_logger.IsEnabled(LogLevel.Information))

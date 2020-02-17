@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
@@ -9,14 +8,15 @@ using Plato.Mentions.Models;
 
 namespace Plato.Mentions.Stores
 {
+
     #region "EntityMentionsQuery"
 
     public class EntityMentionsQuery : DefaultQuery<EntityMention>
     {
 
-        private readonly IStore<EntityMention> _store;
+        private readonly IQueryableStore<EntityMention> _store;
 
-        public EntityMentionsQuery(IStore<EntityMention> store)
+        public EntityMentionsQuery(IQueryableStore<EntityMention> store)
         {
             _store = store;
         }
@@ -96,6 +96,7 @@ namespace Plato.Mentions.Stores
 
     public class EntityMentionsQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _entityMentionsTableName;
@@ -123,16 +124,20 @@ namespace Plato.Mentions.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(em.Id) FROM ")
@@ -142,7 +147,11 @@ namespace Plato.Mentions.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("em.*");
@@ -150,7 +159,7 @@ namespace Plato.Mentions.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
 
             var sb = new StringBuilder();
@@ -161,10 +170,6 @@ namespace Plato.Mentions.Stores
             return sb.ToString();
 
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -212,7 +217,7 @@ namespace Plato.Mentions.Stores
 
         }
 
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

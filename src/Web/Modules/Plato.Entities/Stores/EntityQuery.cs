@@ -23,11 +23,11 @@ namespace Plato.Entities.Stores
 
         public EntityQueryParams Params { get; set; }
 
-        private readonly IStore<TModel> _store;
+        private readonly IQueryableStore<TModel> _store;
         
         public EntityQueryBuilder<TModel> Builder { get; private set; }
         
-        public EntityQuery(IStore<TModel> store)
+        public EntityQuery(IQueryableStore<TModel> store)
         {
             _store = store;
         }
@@ -420,18 +420,20 @@ namespace Plato.Entities.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhere();
             var sb = new StringBuilder();
             sb.Append("DECLARE @MaxRank int;")

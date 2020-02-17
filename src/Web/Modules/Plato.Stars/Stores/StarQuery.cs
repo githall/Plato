@@ -14,9 +14,9 @@ namespace Plato.Stars.Stores
     public class StarQuery : DefaultQuery<Star>
     {
 
-        private readonly IStore<Star> _store;
+        private readonly IQueryableStore<Star> _store;
 
-        public StarQuery(IStore<Star> store)
+        public StarQuery(IQueryableStore<Star> store)
         {
             _store = store;
         }
@@ -118,16 +118,20 @@ namespace Plato.Stars.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "f.Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(f.Id) FROM ")
@@ -137,7 +141,11 @@ namespace Plato.Stars.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("f.*, ")
@@ -149,7 +157,7 @@ namespace Plato.Stars.Stores
 
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_starsTableName)
@@ -159,17 +167,12 @@ namespace Plato.Stars.Stores
             return sb.ToString();
         }
 
-        #endregion
-
-        #region "Private Methods"
-
         private string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)
                 ? _query.Options.TablePrefix + tableName
                 : tableName;
         }
-
 
         private string BuildWhereClause()
         {
@@ -202,7 +205,7 @@ namespace Plato.Stars.Stores
 
         }
 
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

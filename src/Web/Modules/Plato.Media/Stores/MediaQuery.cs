@@ -13,9 +13,9 @@ namespace Plato.Media.Stores
     public class MediaQuery : DefaultQuery<Models.Media>
     {
 
-        private readonly IStore<Models.Media> _store;
+        private readonly IQueryableStore<Models.Media> _store;
 
-        public MediaQuery(IStore<Models.Media> store)
+        public MediaQuery(IQueryableStore<Models.Media> store)
         {
             _store = store;
         }
@@ -81,6 +81,7 @@ namespace Plato.Media.Stores
 
     public class MediaQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _mediasTableName;
@@ -108,16 +109,20 @@ namespace Plato.Media.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(e.Id) FROM ")
@@ -127,14 +132,18 @@ namespace Plato.Media.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("e.*");
             return sb.ToString();
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_mediasTableName)
@@ -142,17 +151,13 @@ namespace Plato.Media.Stores
             return sb.ToString();
         }
 
-        #endregion
-
-        #region "Private Methods"
-
         private string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)
                 ? _query.Options.TablePrefix + tableName
                 : tableName;
         }
-        
+
         private string BuildWhereClause()
         {
             var sb = new StringBuilder();
@@ -168,8 +173,8 @@ namespace Plato.Media.Stores
             return sb.ToString();
 
         }
-        
-        string GetQualifiedColumnName(string columnName)
+
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

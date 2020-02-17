@@ -14,9 +14,9 @@ namespace Plato.Categories.Stores
     public class EntityCategoryQuery : DefaultQuery<EntityCategory>
     {
 
-        private readonly IStore<EntityCategory> _store;
+        private readonly IQueryableStore<EntityCategory> _store;
 
-        public EntityCategoryQuery(IStore<EntityCategory> store)
+        public EntityCategoryQuery(IQueryableStore<EntityCategory> store)
         {
             _store = store;
         }
@@ -82,6 +82,7 @@ namespace Plato.Categories.Stores
 
     public class EntityCategoryQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _entityCategorysTableName;
@@ -110,18 +111,20 @@ namespace Plato.Categories.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(c.Id) FROM ")
@@ -173,8 +176,8 @@ namespace Plato.Categories.Stores
             return sb.ToString();
 
         }
-        
-        string GetQualifiedColumnName(string columnName)
+
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

@@ -9,14 +9,15 @@ using PlatoCore.Stores.Abstractions;
 
 namespace PlatoCore.Stores.Users
 {
+
     #region "UserRoleQuery"
 
     public class UserRoleQuery : DefaultQuery<UserRole>
     {
 
-        private readonly IStore<UserRole> _store;
+        private readonly IQueryableStore<UserRole> _store;
 
-        public UserRoleQuery(IStore<UserRole> store)
+        public UserRoleQuery(IQueryableStore<UserRole> store)
         {
             _store = store;
         }
@@ -40,7 +41,7 @@ namespace PlatoCore.Stores.Users
             var keywords = Params.Keywords.Value ?? string.Empty;
             var roleName = Params.RoleName.Value ?? string.Empty;
 
-            return await _store.SelectAsync(new[]
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),
@@ -49,6 +50,7 @@ namespace PlatoCore.Stores.Users
                 new DbParam("Keywords", DbType.String, keywords),
                 new DbParam("RoleName", DbType.String, roleName)
             });
+
         }
 
     }
@@ -127,18 +129,20 @@ namespace PlatoCore.Stores.Users
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(ur.Id) FROM ")

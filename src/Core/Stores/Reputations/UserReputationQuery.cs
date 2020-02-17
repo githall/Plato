@@ -14,9 +14,9 @@ namespace PlatoCore.Stores.Reputations
     public class UserReputationQuery : DefaultQuery<UserReputation>
     {
 
-        private readonly IStore<UserReputation> _store;
+        private readonly IQueryableStore<UserReputation> _store;
 
-        public UserReputationQuery(IStore<UserReputation> store)
+        public UserReputationQuery(IQueryableStore<UserReputation> store)
         {
             _store = store;
         }
@@ -39,7 +39,7 @@ namespace PlatoCore.Stores.Reputations
             var countSql = builder.BuildSqlCount();
             var keywords = Params?.Keywords?.Value ?? string.Empty;
             
-            return await _store.SelectAsync(new[]
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),
@@ -47,6 +47,7 @@ namespace PlatoCore.Stores.Reputations
                 new DbParam("SqlCount", DbType.String, countSql),
                 new DbParam("Keywords", DbType.String, keywords)
             });
+
         }
 
     }
@@ -88,6 +89,7 @@ namespace PlatoCore.Stores.Reputations
 
     public class UserReputationsQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _userReputationssTableName;
@@ -115,18 +117,20 @@ namespace PlatoCore.Stores.Reputations
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(ur.Id) FROM ")
@@ -140,14 +144,14 @@ namespace PlatoCore.Stores.Reputations
 
         #region "Private Methods"
 
-        string BuildPopulateSelect()
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("ur.*");
             return sb.ToString();
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
             var sb = new StringBuilder();
             sb.Append(_userReputationssTableName)
@@ -200,7 +204,7 @@ namespace PlatoCore.Stores.Reputations
 
         }
         
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {

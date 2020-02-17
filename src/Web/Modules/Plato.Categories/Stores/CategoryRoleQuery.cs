@@ -13,9 +13,9 @@ namespace Plato.Categories.Stores
     public class CategoryRoleQuery : DefaultQuery<CategoryRole>
     {
 
-        private readonly IStore<CategoryRole> _store;
+        private readonly IQueryableStore<CategoryRole> _store;
 
-        public CategoryRoleQuery(IStore<CategoryRole> store)
+        public CategoryRoleQuery(IQueryableStore<CategoryRole> store)
         {
             _store = store;
         }
@@ -33,13 +33,12 @@ namespace Plato.Categories.Stores
         public override async Task<IPagedResults<CategoryRole>> ToList()
         {
 
-            var builder = new CategoryRoleQueryBuilder(this);
-            var startSql = builder.BuildSqlStartId();
+            var builder = new CategoryRoleQueryBuilder(this);   
             var populateSql = builder.BuildSqlPopulate();
             var countSql = builder.BuildSqlCount();
             var keywords = Params.Keywords.Value ?? string.Empty;
-            
-            return await _store.SelectAsync(new[]
+
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),
@@ -47,8 +46,8 @@ namespace Plato.Categories.Stores
                 new DbParam("SqlCount", DbType.String, countSql),
                 new DbParam("Keywords", DbType.String, keywords)
             });
-        }
 
+        }
 
     }
 
@@ -85,6 +84,7 @@ namespace Plato.Categories.Stores
 
     public class CategoryRoleQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _categoryRolesTableName;
@@ -102,22 +102,6 @@ namespace Plato.Categories.Stores
 
         #region "Implementation"
 
-        // TODO: To be removed and refactored to use newer style paging
-        // See other paging queries for reference
-        public string BuildSqlStartId()
-        {
-            var whereClause = BuildWhereClause();
-            var orderBy = BuildOrderBy();
-            var sb = new StringBuilder();
-            sb.Append("SELECT @start_id_out = c.Id FROM ")
-                .Append(BuildTables());
-            if (!string.IsNullOrEmpty(whereClause))
-                sb.Append(" WHERE (").Append(whereClause).Append(")");
-            if (!string.IsNullOrEmpty(orderBy))
-                sb.Append(" ORDER BY ").Append(orderBy);
-            return sb.ToString();
-        }
-
         public string BuildSqlPopulate()
         {    
             var whereClause = BuildWhereClauseForStartId();
@@ -129,15 +113,20 @@ namespace Plato.Categories.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            if (!string.IsNullOrEmpty(orderBy))
-                sb.Append(" ORDER BY ").Append(orderBy);
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(c.Id) FROM ")

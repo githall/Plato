@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Plato.Entities.History.Models;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions;
@@ -15,9 +15,9 @@ namespace Plato.Entities.History.Stores
     public class EntityHistoryQuery : DefaultQuery<EntityHistory>
     {
 
-        private readonly IStore<EntityHistory> _store;
+        private readonly IQueryableStore<EntityHistory> _store;
 
-        public EntityHistoryQuery(IStore<EntityHistory> store)
+        public EntityHistoryQuery(IQueryableStore<EntityHistory> store)
         {
             _store = store;
         }
@@ -129,18 +129,20 @@ namespace Plato.Entities.History.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "h.Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy)
+                ? orderBy
+                : "(SELECT NULL)");
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
             if (!_query.CountTotal)
-                return "SELECT 0";
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(h.Id) FROM ")

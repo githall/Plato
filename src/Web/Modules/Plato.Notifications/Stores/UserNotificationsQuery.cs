@@ -5,7 +5,6 @@ using System.Threading.Tasks;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Stores.Abstractions;
-using Plato.Notifications.Models;
 
 namespace Plato.Notifications.Stores
 {
@@ -15,9 +14,9 @@ namespace Plato.Notifications.Stores
     public class UserNotificationsQuery : DefaultQuery<UserNotification>
     {
 
-        private readonly IStore<UserNotification> _store;
+        private readonly IQueryableStore<UserNotification> _store;
 
-        public UserNotificationsQuery(IStore<UserNotification> store)
+        public UserNotificationsQuery(IQueryableStore<UserNotification> store)
         {
             _store = store;
         }
@@ -40,7 +39,7 @@ namespace Plato.Notifications.Stores
             var countSql = builder.BuildSqlCount();
             var keywords = Params.NotificationName.Value ?? string.Empty;
 
-            return await _store.SelectAsync(new[]
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),
@@ -97,6 +96,7 @@ namespace Plato.Notifications.Stores
 
     public class UserNotificationsQueryBuilder : IQueryBuilder
     {
+
         #region "Constructor"
 
         private readonly string _userNotificationsTableName;
@@ -126,16 +126,20 @@ namespace Plato.Notifications.Stores
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
-            sb.Append(" ORDER BY ")
-                .Append(!string.IsNullOrEmpty(orderBy)
-                    ? orderBy
-                    : "Id ASC");
-            sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
+            // Order only if we have something to order by
+            sb.Append(" ORDER BY ").Append(!string.IsNullOrEmpty(orderBy) 
+                ? orderBy 
+                : "(SELECT NULL)");         
+            // Limit results only if we have a specific page size
+            if (!_query.IsDefaultPageSize)
+                sb.Append(" OFFSET @RowIndex ROWS FETCH NEXT @PageSize ROWS ONLY;");
             return sb.ToString();
         }
 
         public string BuildSqlCount()
         {
+            if (!_query.CountTotal)
+                return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
             sb.Append("SELECT COUNT(un.Id) FROM ")
@@ -145,7 +149,11 @@ namespace Plato.Notifications.Stores
             return sb.ToString();
         }
 
-        string BuildPopulateSelect()
+        #endregion
+
+        #region "Private Methods"
+
+        private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
             sb.Append("un.*,")
@@ -160,12 +168,10 @@ namespace Plato.Notifications.Stores
                 .Append("c.PhotoUrl AS CreatedPhotoUrl,")
                 .Append("c.PhotoColor AS CreatedPhotoColor");
             return sb.ToString();
-
         }
 
-        string BuildTables()
+        private string BuildTables()
         {
-
             var sb = new StringBuilder();
             sb.Append(_userNotificationsTableName)
                 .Append(" un WITH (nolock) LEFT OUTER JOIN ")
@@ -173,14 +179,8 @@ namespace Plato.Notifications.Stores
                 .Append(" u ON un.UserId = u.Id LEFT OUTER JOIN ")
                 .Append(_usersTableName)
                 .Append(" c ON un.CreatedUserId = c.Id");
-
             return sb.ToString();
-
         }
-
-        #endregion
-
-        #region "Private Methods"
 
         private string GetTableNameWithPrefix(string tableName)
         {
@@ -232,7 +232,7 @@ namespace Plato.Notifications.Stores
 
         }
 
-        string GetQualifiedColumnName(string columnName)
+        private string GetQualifiedColumnName(string columnName)
         {
             if (columnName == null)
             {
