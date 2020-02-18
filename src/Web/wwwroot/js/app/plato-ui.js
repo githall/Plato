@@ -67,13 +67,13 @@ $(function (win, doc, $) {
                 modal: "modal fade",
                 dialog: "modal-dialog" // add modal-lg,  modal-sm for sizing
             },
-            onLoad: function ($caller) {}, // triggers when body.url is loaded
-            onShow: function ($caller) {}, // triggers when the dialog is shown
-            onHide: function ($caller) {} // triggers when the dialog is hidden
+            onLoad: function ($caller) { }, // triggers when body.url is loaded
+            onShow: function ($caller) { }, // triggers when the dialog is shown
+            onHide: function ($caller) { } // triggers when the dialog is hidden
         };
 
         var methods = {
-            init: function($caller, methodName, func) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -87,17 +87,17 @@ $(function (win, doc, $) {
                 methods.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
 
                 var $dialog = methods.getOrCreate($caller);
                 $dialog.modal();
 
             },
-            show: function($caller) {
+            show: function ($caller) {
 
                 var $dialog = methods.getOrCreate($caller);
                 $dialog.modal("show");
-                
+
                 methods.load($caller);
                 methods.populate($caller);
 
@@ -107,18 +107,18 @@ $(function (win, doc, $) {
                 }
 
             },
-            hide: function($caller) {
+            hide: function ($caller) {
 
                 var $dialog = methods.getOrCreate($caller);
                 $dialog.modal("hide");
-                
+
                 // onHide event
                 if ($caller.data(dataKey).onShow) {
                     $caller.data(dataKey).onShow($caller);
                 }
 
             },
-            load: function($caller) {
+            load: function ($caller) {
 
                 var url = $caller.data(dataKey).body.url;
                 if (url === null) {
@@ -131,7 +131,7 @@ $(function (win, doc, $) {
                 app.http({
                     method: "GET",
                     url: url
-                }).done(function(response) {
+                }).done(function (response) {
                     var $content = $caller.find(".modal-content");
                     if ($content.length > 0) {
                         $content.empty();
@@ -142,10 +142,10 @@ $(function (win, doc, $) {
                             // confirm
                             $content.find('[data-provide="confirm"]').confirm();
                             // markdown body
-                            $content.find('[data-provide="markdownBody"]').markdownBody();                            
+                            $content.find('[data-provide="markdownBody"]').markdownBody();
                         }
                     }
-                    
+
                     // onLoad event
                     if ($caller.data(dataKey).onLoad) {
                         $caller.data(dataKey).onLoad($caller, response.result);
@@ -157,7 +157,7 @@ $(function (win, doc, $) {
 
                 var $dialog = methods.getOrCreate($caller),
                     title = $caller.data(dataKey).title,
-                    html = $caller.data(dataKey).body.html,     
+                    html = $caller.data(dataKey).body.html,
                     buttons = $caller.data(dataKey).buttons,
                     $content = $caller.find(".modal-content");
 
@@ -165,17 +165,17 @@ $(function (win, doc, $) {
 
                 if (title && title !== "") {
                     var $header = $("<div>",
-                            {
-                                "class": "modal-header"
-                            }),
+                        {
+                            "class": "modal-header"
+                        }),
                         $h5 = $("<h5>", {
-                                "class": "modal-title"
-                            }).text(app.T(title));
+                            "class": "modal-title"
+                        }).text(app.T(title));
 
                     $header.append($h5);
                     $content.append($header);
                 }
-              
+
                 if (html && html !== "") {
                     var $body = $("<div>",
                         {
@@ -188,9 +188,9 @@ $(function (win, doc, $) {
                     var $footer = $("<div>",
                         {
                             "class": "modal-footer"
-                        }),                       
+                        }),
                         $button = null;
-                    for (var i = 0; i < buttons.length; i++) {                        
+                    for (var i = 0; i < buttons.length; i++) {
                         $button = $("<button>",
                             {
                                 "id": buttons[i].id,
@@ -198,20 +198,20 @@ $(function (win, doc, $) {
                             })
                             .text(app.T(buttons[i].text))
                             .data("clickFunc", buttons[i].click)
-                            ;                      
+                            ;
                         $button.on("click", function (e) {
                             var func = $(this).data("clickFunc");
                             if (func) {
                                 func($caller, $(this), e);
                             }
-                        });                                             
+                        });
                         $footer.append($button);
                     }
                     $content.append($footer);
                 }
 
             },
-            getOrCreate: function($caller) {
+            getOrCreate: function ($caller) {
 
                 var id = $caller.data(dataKey).id,
                     title = $caller.data(dataKey).title,
@@ -228,9 +228,9 @@ $(function (win, doc, $) {
                         });
 
                     var $model = $("<div>",
-                            {
-                                "class": $caller.data(dataKey).css.dialog
-                            }),                    
+                        {
+                            "class": $caller.data(dataKey).css.dialog
+                        }),
                         $content = $("<div>",
                             {
                                 "class": "modal-content"
@@ -246,7 +246,7 @@ $(function (win, doc, $) {
 
                 return $dialog;
 
-            }            
+            }
         };
 
         return {
@@ -314,7 +314,7 @@ $(function (win, doc, $) {
         var defaults = {};
 
         var methods = {
-            init: function($caller, methodName, func) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -328,36 +328,36 @@ $(function (win, doc, $) {
                 methods.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
 
                 $caller.bind("click",
-                    function(e) {
+                    function (e) {
 
                         e.preventDefault();
                         e.stopPropagation();
 
                         $().dialog({
-                                id: $(this).data("dialogId") || "dialogSpy",
-                                body: {
-                                    url: $(this).attr("href")
-                                },
-                                css: {
-                                    modal: methods.getModalCss($(this)),
-                                    dialog: methods.getDialogCss($(this))
-                                }
+                            id: $(this).data("dialogId") || "dialogSpy",
+                            body: {
+                                url: $(this).attr("href")
                             },
+                            css: {
+                                modal: methods.getModalCss($(this)),
+                                dialog: methods.getDialogCss($(this))
+                            }
+                        },
                             "show");
                     });
 
             },
-            getModalCss: function($caller) {
+            getModalCss: function ($caller) {
                 var css = $caller.data("dialogModalCss");
                 if (css) {
                     return css;
                 }
                 return "modal fade";
             },
-            getDialogCss: function($caller) {
+            getDialogCss: function ($caller) {
                 var css = $caller.data("dialogCss");
                 if (css) {
                     return css;
@@ -380,7 +380,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -411,7 +411,7 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }                 
+                    }
                 }
 
             }
@@ -464,20 +464,20 @@ $(function (win, doc, $) {
 
             },
             bind: function ($caller) {
-                
+
                 // Bind click events for anchor elements
                 var event = $caller.data(dataKey).event;
-                if (event && $caller.is("a")) {                
+                if (event && $caller.is("a")) {
                     $caller.on(event,
                         function (e) {
                             e.preventDefault();
                             methods.go($caller);
-                        });                                  
+                        });
                 }
 
             },
-            go: function($caller) {
-                
+            go: function ($caller) {
+
                 var $body = $("html,body");
                 var $target = null,
                     href = $caller.prop("tagName") === "A" && $caller.attr("href");
@@ -491,20 +491,20 @@ $(function (win, doc, $) {
                 var interval = $caller.data(dataKey).interval,
                     position = $caller.data(dataKey).position,
                     offset = $caller.data(dataKey).offset;
-                
+
                 var top = 0;
                 if ($target) {
                     top = position === "top" ? $target.offset().top : $target.offset().bottom;
                 }
-                             
+
                 // animate scroll
                 if ($caller.data(dataKey).animate) {
                     $body.stop().animate({
-                            scrollTop: top + offset
-                        },
+                        scrollTop: top + offset
+                    },
                         interval,
                         'easeInOutExpo',
-                        function() {
+                        function () {
                             if ($caller.data(dataKey).onComplete) {
                                 $caller.data(dataKey).onComplete($caller, $target);
                             }
@@ -521,7 +521,7 @@ $(function (win, doc, $) {
                         $caller.data(dataKey).onComplete($caller, $target);
                     }
                 }
-               
+
             }
         };
 
@@ -539,7 +539,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -577,7 +577,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* sticky */
     var sticky = function () {
 
@@ -587,7 +587,7 @@ $(function (win, doc, $) {
         var defaults = {
             offset: 0, // optional offset from scrollTop to trigger sticky positioning
             onUpdate: function ($caller) { },   // raised when element is made sticky / not sticky
-            onScroll: function($caller, e, $win) {}
+            onScroll: function ($caller, e, $win) { }
         };
 
         var methods = {
@@ -615,7 +615,7 @@ $(function (win, doc, $) {
                 if ($caller.data(dataKey).onUpdate) {
                     $caller.data(dataKey).onUpdate($caller);
                 }
-                
+
                 // Bind events
                 this.bind($caller);
 
@@ -667,7 +667,7 @@ $(function (win, doc, $) {
 
                     }
                 });
-                
+
             },
             unbind: function ($caller) {
                 var event = $caller.data(dataKey).event;
@@ -704,7 +704,7 @@ $(function (win, doc, $) {
                     $caller.data(key, $caller.offset().top);
                 }
             },
-            _getOriginalTop: function($caller) {
+            _getOriginalTop: function ($caller) {
                 return $caller.data(dataKey + "_top");
             },
             _getOffset: function ($caller) {
@@ -727,7 +727,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                        
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -759,7 +759,7 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }                 
+                    }
                 }
 
             }
@@ -925,10 +925,10 @@ $(function (win, doc, $) {
                     var offset = $active.offset(),
                         top = offset.top - $caller.offset().top;
                     $caller.scrollTo({
-                            targat: null,
-                            offset: top - 20,
-                            interval: 500
-                        },
+                        targat: null,
+                        offset: top - 20,
+                        interval: 500
+                    },
                         "go");
                 }
 
@@ -1006,7 +1006,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -1037,7 +1037,7 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }                 
+                    }
                 }
 
             }
@@ -1051,7 +1051,7 @@ $(function (win, doc, $) {
 
         var dataKey = "pagedList",
             dataIdKey = dataKey + "Id";
-        
+
         var defaults = {
             page: 1,
             pageSize: 10,
@@ -1059,7 +1059,7 @@ $(function (win, doc, $) {
             target: null, // optional target selector for auto complete results. if no target a dropdown-menu is used
             enablePaging: true, // indicates if paging should be enabled for results
             onLoad: function ($caller, results) {
-                
+
                 if (results) {
 
                     $caller.empty();
@@ -1086,7 +1086,7 @@ $(function (win, doc, $) {
                 if ($caller.data(dataKey).onLoaded) {
                     $caller.data(dataKey).onLoaded($caller, results);
                 }
-                
+
             }, // triggers after paged results have finished loading
             onLoaded: null, // triggers after paged results have been added to the dom
             onItemClick: null, // event raised when you click a paged result item
@@ -1144,9 +1144,9 @@ $(function (win, doc, $) {
 
                 var icon = $("<i>").addClass("fa fa-chevron-left"),
                     $a = $("<a>")
-                    .attr("href", "#")
+                        .attr("href", "#")
                         .addClass("list-group-item list-group-item-action float-left border-radius-0 border-0 prev-page col-3 text-center")
-                    .append(icon);
+                        .append(icon);
 
                 $a.click(function (e) {
                     if ($caller.data(dataKey).onPagerClick) {
@@ -1161,9 +1161,9 @@ $(function (win, doc, $) {
 
                 var icon = $("<i>").addClass("fa fa-chevron-right"),
                     $a = $("<a>")
-                    .attr("href", "#")
+                        .attr("href", "#")
                         .addClass("list-group-item list-group-item-action border-radius-0 border-0 float-left next-page col-3 text-center")
-                    .append(icon);
+                        .append(icon);
 
                 $a.click(function (e) {
                     if ($caller.data(dataKey).onPagerClick) {
@@ -1180,7 +1180,7 @@ $(function (win, doc, $) {
                     noResultsIcon = $caller.data(dataKey).noResultsIcon;
 
                 noResultsText = app.T(noResultsText);
-            
+
                 var $div = $("<div>")
                     .addClass("text-center p-4");
 
@@ -1254,7 +1254,7 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function($caller, methodName, func) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -1269,8 +1269,8 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {
-                
+            bind: function ($caller) {
+
                 // Add loader
                 var loaderTemplate = $caller.data(dataKey).loaderTemplate;
                 if (loaderTemplate) {
@@ -1279,7 +1279,7 @@ $(function (win, doc, $) {
 
                 // Begin populate
                 var config = this.getConfig($caller);
-                app.http(config).done(function(response) {
+                app.http(config).done(function (response) {
                     if (response.statusCode !== 200) {
                         return;
                     }
@@ -1289,25 +1289,23 @@ $(function (win, doc, $) {
                 });
 
             },
-            getConfig: function($caller) {
+            getConfig: function ($caller) {
 
                 var config = $.extend({}, $caller.data(dataKey).config),
                     url = $caller.data("pagedListUrl") || config.url,
                     page = this.getPageIndex($caller) || 1,
                     size = this.getPageSize($caller) || 10;
-                
+
                 if (config.method) {
 
                     // Set content type for post data
-                    if (config.method.toUpperCase() === "POST")
-                    {
+                    if (config.method.toUpperCase() === "POST") {
                         config.headers = {
                             'Content-Type': 'application/json; charset=utf-8'
                         };
                     }
 
-                    if (config.method.toUpperCase() === "GET")
-                    {
+                    if (config.method.toUpperCase() === "GET") {
                         if (url) {
                             if (url.indexOf("{page}") >= 0) {
                                 url = url.replace(/\{page}/g, page);
@@ -1318,8 +1316,7 @@ $(function (win, doc, $) {
                             config.url = url;
                         }
                     }
-                    else if (config.method.toUpperCase() === "POST")
-                    {
+                    else if (config.method.toUpperCase() === "POST") {
                         config.data["page"] = page;
                         config.data["size"] = size;
                     }
@@ -1334,7 +1331,7 @@ $(function (win, doc, $) {
                 return config;
 
             },
-            getItemIndex: function($caller) {
+            getItemIndex: function ($caller) {
                 var index = -1,
                     selector = null,
                     selection = $caller.data(dataKey).itemSelection,
@@ -1344,7 +1341,7 @@ $(function (win, doc, $) {
                     if (selection.enable === false) {
                         return index;
                     }
-                    $caller.find(selector).each(function() {
+                    $caller.find(selector).each(function () {
                         if ($(this).hasClass(selection.css)) {
                             return index;
                         }
@@ -1353,7 +1350,7 @@ $(function (win, doc, $) {
                 }
                 return index;
             },
-            setItemIndex: function($caller) {
+            setItemIndex: function ($caller) {
                 var selection = $caller.data(dataKey).itemSelection,
                     itemCss = $caller.data(dataKey).itemCss;
 
@@ -1368,11 +1365,11 @@ $(function (win, doc, $) {
                         $el = $caller.find(selector + ":eq(" + index + ")");
 
                     if (index < 0) {
-                        $caller.find(selector).each(function() {
+                        $caller.find(selector).each(function () {
                             $(this).removeClass(css);
                         });
                     } else {
-                        $caller.find(selector).each(function() {
+                        $caller.find(selector).each(function () {
                             $(this).removeClass(css);
                         });
                         if ($el.length > 0) {
@@ -1382,16 +1379,16 @@ $(function (win, doc, $) {
 
                 }
             },
-            setPageIndex: function($caller, pageIndex) {
+            setPageIndex: function ($caller, pageIndex) {
                 $caller.data(dataKey).page = pageIndex;
             },
-            getPageIndex: function($caller) {
+            getPageIndex: function ($caller) {
                 return $caller.data("pagedListPageIndex") || $caller.data(dataKey).page;
             },
-            setPageSize: function($caller, pageSize) {
+            setPageSize: function ($caller, pageSize) {
                 $caller.data(dataKey).pageSize = pageSize;
             },
-            getPageSize: function($caller) {
+            getPageSize: function ($caller) {
                 return $caller.data("pagedListPageSize") || $caller.data(dataKey).pageSize;
             }
         };
@@ -1411,7 +1408,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                           
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -1443,7 +1440,7 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }                 
+                    }
                 }
 
             }
@@ -1474,7 +1471,7 @@ $(function (win, doc, $) {
         };
 
         var methods = {
-            init: function($caller, methodName, func) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -1495,7 +1492,7 @@ $(function (win, doc, $) {
                 methods.bind($caller);
 
             },
-            bind: function($caller) {                
+            bind: function ($caller) {
 
                 $caller.bind("focus",
                     function () {
@@ -1505,7 +1502,7 @@ $(function (win, doc, $) {
                         switch (displayMode) {
 
                             case displayModes.always: // Always show regardless of user supplied input                   
-                                
+
                                 methods.show($(this),
                                     function () {
                                         // Update if not already visible
@@ -1515,7 +1512,7 @@ $(function (win, doc, $) {
                                 break;
 
                             default: // Only show if the user has supplied input
-                                
+
                                 if ($(this).val().length === 0) {
                                     methods.hide($(this));
                                 } else {
@@ -1529,63 +1526,63 @@ $(function (win, doc, $) {
                                 }
 
                         }
-                     
+
                     });
-                
+
                 $caller.bind("keydown.",
-                    function(e) {
+                    function (e) {
                         var $target = methods.getTarget($(this));
                         if ($target) {
 
                             // Hook up keyboard navigation if dropdown is visible
                             if ($target.is(":visible")) {
 
-                                var itemCss = $target.data("pagedList").itemCss,                                  
+                                var itemCss = $target.data("pagedList").itemCss,
                                     pageSize = $target.find("." + itemCss).length,
                                     itemSelection = $target.data("pagedList").itemSelection,
                                     newIndex = -1;
 
                                 if (itemSelection.enable) {
                                     switch (e.which) {
-                                    case 13: // carriage return
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        newIndex = -1; // reset selection upon carriage return
-                                        // find active and click
-                                        $target.find("." + itemCss).each(function() {
-                                            if ($(this).hasClass(itemSelection.css)) {                                                
-                                                $(this).click();
+                                        case 13: // carriage return
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            newIndex = -1; // reset selection upon carriage return
+                                            // find active and click
+                                            $target.find("." + itemCss).each(function () {
+                                                if ($(this).hasClass(itemSelection.css)) {
+                                                    $(this).click();
+                                                }
+                                            });
+                                            break;
+                                        case 38: // up
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            newIndex = itemSelection.index - 1;
+                                            if (newIndex < 0) {
+                                                newIndex = 0;
                                             }
-                                        });
-                                        break;
-                                    case 38: // up
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        newIndex = itemSelection.index - 1;
-                                        if (newIndex < 0) {
+                                            break;
+                                        case 40: // down
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            newIndex = itemSelection.index + 1;
+                                            if (newIndex > pageSize - 1) {
+                                                newIndex = pageSize - 1;
+                                            }
+                                            break;
+                                        case 37: // left
+                                            e.preventDefault();
+                                            e.stopPropagation();
                                             newIndex = 0;
-                                        }
-                                        break;
-                                    case 40: // down
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        newIndex = itemSelection.index + 1;
-                                        if (newIndex > pageSize - 1) {
-                                            newIndex = pageSize - 1;
-                                        }
-                                        break;
-                                    case 37: // left
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        newIndex = 0;
-                                        $target.find(".prev-page").click();                                     
-                                        break;
-                                    case 39: // right                                        
-                                        e.preventDefault();
-                                        e.stopPropagation();
-                                        newIndex = 0;                                        
-                                        $target.find(".next-page").click();
-                                        break;
+                                            $target.find(".prev-page").click();
+                                            break;
+                                        case 39: // right                                        
+                                            e.preventDefault();
+                                            e.stopPropagation();
+                                            newIndex = 0;
+                                            $target.find(".next-page").click();
+                                            break;
                                     }
 
                                     if (newIndex >= 0) {
@@ -1597,7 +1594,7 @@ $(function (win, doc, $) {
                                         },
                                             "setItemIndex");
                                     }
-                                  
+
 
                                 }
 
@@ -1611,7 +1608,7 @@ $(function (win, doc, $) {
 
                 // spy on our input
                 $caller.typeSpy({
-                    onKeyUp: function($el, e) {
+                    onKeyUp: function ($el, e) {
                         if (e.keyCode === 27) {
                             // escape
                             methods.hide($el);
@@ -1619,7 +1616,7 @@ $(function (win, doc, $) {
                     },
                     onChange: function ($el, e) {
                         // left or right arrow keys
-                        if (e.keyCode === 37 || e.keyCode === 39) {                         
+                        if (e.keyCode === 37 || e.keyCode === 39) {
                             return;
                         }
                         // !escape && !tab
@@ -1637,7 +1634,7 @@ $(function (win, doc, $) {
                 });
 
                 // hide menu
-                $(doc).click(function(e) {
+                $(doc).click(function (e) {
                     var target = e.target;
                     if (target) {
                         if (target.tagName.toUpperCase() === "INPUT") {
@@ -1657,7 +1654,7 @@ $(function (win, doc, $) {
                 });
 
             },
-            unbind: function($caller) {
+            unbind: function ($caller) {
                 $caller
                     .unbind("focus")
                     .unbind("keydown");
@@ -1685,7 +1682,7 @@ $(function (win, doc, $) {
                     }
                 }
             },
-            hide: function($caller, onHide) {
+            hide: function ($caller, onHide) {
                 var $target = this.getTarget($caller);
                 if ($target.length > 0) {
 
@@ -1707,14 +1704,14 @@ $(function (win, doc, $) {
                 }
             },
             hideAll: function ($caller) {
-                var $current = $caller.closest(".dropdown");                
+                var $current = $caller.closest(".dropdown");
                 $(".dropdown").each(function () {
                     if (this !== $current[0]) {
                         $(this).find(".dropdown-menu").removeClass('show');
-                    }         
+                    }
                 });
             },
-            update: function($caller) {
+            update: function ($caller) {
 
                 // no target found
                 var $target = methods.getTarget($caller);
@@ -1745,7 +1742,7 @@ $(function (win, doc, $) {
                     }
 
                 }
-               
+
                 // Init pagedList
                 $target.pagedList($.extend({},
                     $caller.data(dataKey),
@@ -1755,11 +1752,11 @@ $(function (win, doc, $) {
                     }));
 
             },
-            getTarget: function($caller) {
+            getTarget: function ($caller) {
 
                 // do we have an explicit target
                 var target = $caller.data("autocompleteTarget") ||
-                        $caller.data(dataKey).target,
+                    $caller.data(dataKey).target,
                     dynamicId = $caller.data(dataIdKey) + "_target";
 
                 if (target) {
@@ -1803,11 +1800,11 @@ $(function (win, doc, $) {
                 return null;
 
             },
-            getDisplayMode: function ($caller) {            
+            getDisplayMode: function ($caller) {
                 return $caller.data("autocompleteDisplay") || $caller.data(dataKey).displayMode;
             }
         };
-        
+
         return {
             init: function () {
 
@@ -1823,14 +1820,14 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                      
+                                break;
                             case Function:
                                 func = a;
                                 break;
                         }
                     }
                 }
-                
+
                 if (this.length > 0) {
                     // $(selector).autoComplete()
                     return this.each(function () {
@@ -1855,7 +1852,7 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }                
+                    }
                 }
 
             }
@@ -1879,7 +1876,7 @@ $(function (win, doc, $) {
         var methods = {
             timer: null,
             init: function ($caller, methodName, func) {
-                
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -1892,7 +1889,7 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
 
                 var event = $caller.data(dataKey).event;
                 if (event === null) {
@@ -1900,26 +1897,26 @@ $(function (win, doc, $) {
                 }
 
                 $caller.bind(event,
-                    function(e) {
+                    function (e) {
 
                         if (e.which) {
 
                             switch (e.which) {
-                            case 13: // carriage return
-                                e.preventDefault();
-                                methods.stopTimer();
-                                if ($caller.data(dataKey).onComplete) {
-                                    $caller.data(dataKey).onComplete($(this), e);
-                                }
-                                return;
-                            case 37: // left
-                                return;
-                            case 38: // up
-                                return;
-                            case 39: // right
-                                return;
-                            case 40: // down
-                                return;
+                                case 13: // carriage return
+                                    e.preventDefault();
+                                    methods.stopTimer();
+                                    if ($caller.data(dataKey).onComplete) {
+                                        $caller.data(dataKey).onComplete($(this), e);
+                                    }
+                                    return;
+                                case 37: // left
+                                    return;
+                                case 38: // up
+                                    return;
+                                case 39: // right
+                                    return;
+                                case 40: // down
+                                    return;
                             }
                         }
 
@@ -1939,19 +1936,19 @@ $(function (win, doc, $) {
                     });
 
             },
-            unbind: function($caller) {
+            unbind: function ($caller) {
                 $caller.unbind('keyup');
             },
-            startTimer: function($caller, e) {
+            startTimer: function ($caller, e) {
                 this.stopTimer();
-                this.timer = setTimeout(function() {
-                        if ($caller.data(dataKey).onChange) {
-                            $caller.data(dataKey).onChange($caller, e);
-                        }
-                    },
+                this.timer = setTimeout(function () {
+                    if ($caller.data(dataKey).onChange) {
+                        $caller.data(dataKey).onChange($caller, e);
+                    }
+                },
                     $caller.data(dataKey).interval);
             },
-            stopTimer: function() {
+            stopTimer: function () {
                 win.clearTimeout(this.timer);
                 this.timer = null;
             }
@@ -1971,7 +1968,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -2002,7 +1999,7 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }              
+                    }
                 }
 
             }
@@ -2038,7 +2035,7 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
 
                 var id = $caller.data(dataKey).id,
                     focusEvent = "focus",
@@ -2050,30 +2047,30 @@ $(function (win, doc, $) {
                 }
 
                 $caller.on(focusEvent,
-                    function(e) {
+                    function (e) {
                         methods.stopTimer();
                     });
 
                 $caller.on(blurEvent,
-                    function(e) {
+                    function (e) {
                         methods.startTimer($(this), e);
                     });
 
             },
-            unbind: function($caller) {
+            unbind: function ($caller) {
                 $caller.unbind('blur');
                 $caller.unbind('focus');
             },
-            startTimer: function($caller, e) {
+            startTimer: function ($caller, e) {
                 this.stopTimer();
-                this.timer = setTimeout(function() {
-                        if ($caller.data(dataKey).onBlur) {
-                            $caller.data(dataKey).onBlur($caller, e);
-                        }
-                    },
+                this.timer = setTimeout(function () {
+                    if ($caller.data(dataKey).onBlur) {
+                        $caller.data(dataKey).onBlur($caller, e);
+                    }
+                },
                     $caller.data(dataKey).interval);
             },
-            stopTimer: function() {
+            stopTimer: function () {
                 win.clearTimeout(this.timer);
                 this.timer = null;
             }
@@ -2094,7 +2091,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                    
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -2126,7 +2123,7 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }              
+                    }
                 }
 
             }
@@ -2151,8 +2148,8 @@ $(function (win, doc, $) {
 
         var methods = {
             _timer: null,
-            _scrolling: false,       
-            init: function($caller, methodName, func) {
+            _scrolling: false,
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -2173,17 +2170,17 @@ $(function (win, doc, $) {
 
             },
             bind: function ($caller) {
-                
+
                 // Bind scroll
                 var eventName = this._getEventName($caller);
                 $caller.on(eventName,
-                    function(e) {
+                    function (e) {
 
                         // Events to execute
                         var i = 0,
                             events = $caller.data(eventName);
 
-                        if (events === null) {                     
+                        if (events === null) {
                             return;
                         }
 
@@ -2208,30 +2205,30 @@ $(function (win, doc, $) {
                                 winHeight = $caller.height();
                             for (i = 0; i < events.onScroll.length; i++) {
                                 events.onScroll[i]({
-                                        scrollTop: Math.ceil(scrollTop),
-                                        scrollBottom: Math.ceil(scrollTop + winHeight),
-                                        documentHeight: docHeight,
-                                        windowHeight: winHeight
-                                    },
+                                    scrollTop: Math.ceil(scrollTop),
+                                    scrollBottom: Math.ceil(scrollTop + winHeight),
+                                    documentHeight: docHeight,
+                                    windowHeight: winHeight
+                                },
                                     e, $caller);
                             }
                         }
 
                     });
             },
-            unbind: function ($caller) {                
+            unbind: function ($caller) {
                 var eventName = this._getEventName($caller);
                 if (eventName) {
-                    $caller.off(eventName);                    
+                    $caller.off(eventName);
                 }
             },
-            start: function($caller, e) {
-                methods.stop($caller);                
-                methods._timer = win.setTimeout(function () {                    
+            start: function ($caller, e) {
+                methods.stop($caller);
+                methods._timer = win.setTimeout(function () {
                     methods._scrolling = false;
                     var eventName = methods._getEventName($caller);
                     var events = $caller.data(eventName);
-                    if (events) {                        
+                    if (events) {
                         if (events.onScrollEnd.length > 0) {
                             for (var i = 0; i < events.onScrollEnd.length; i++) {
                                 events.onScrollEnd[i](e);
@@ -2240,14 +2237,14 @@ $(function (win, doc, $) {
                     }
                 }, $caller.data(dataKey).interval);
             },
-            stop: function ($caller) {                
+            stop: function ($caller) {
                 win.clearTimeout(methods._timer);
                 methods._timer = null;
             },
-            _getEventName: function ($caller) {                
+            _getEventName: function ($caller) {
                 return "scroll." + this._getNamespace($caller);
             },
-            _getNamespace: function ($caller) {                
+            _getNamespace: function ($caller) {
                 //return "scrollSpy";
                 return $caller.data(dataKey).namespace || "scrollSpy";
             },
@@ -2258,7 +2255,7 @@ $(function (win, doc, $) {
                         onScrollStart: [],
                         onScrollEnd: [],
                         onScroll: []
-                    };                
+                    };
 
                 if ($caller.data(eventName)) {
                     events = $caller.data(eventName);
@@ -2268,7 +2265,7 @@ $(function (win, doc, $) {
                     if (!func) { return false; }
                     return arr.indexOf(func) === -1;
                 };
-                
+
                 if (validEvent(events.onScrollStart, $caller.data(dataKey).onScrollStart)) {
                     events.onScrollStart.push($caller.data(dataKey).onScrollStart);
                 }
@@ -2280,11 +2277,11 @@ $(function (win, doc, $) {
                 if (validEvent(events.onScroll, $caller.data(dataKey).onScroll)) {
                     events.onScroll.push($caller.data(dataKey).onScroll);
                 }
-                
+
                 // Store events on caller
                 $caller.data(eventName, events);
 
-            }           
+            }
         };
 
         return {
@@ -2301,7 +2298,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -2333,7 +2330,7 @@ $(function (win, doc, $) {
                         }
                         return methods.init($caller, methodName, func);
                     }
-              
+
                 }
 
             }
@@ -2474,7 +2471,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                     
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -2570,7 +2567,7 @@ $(function (win, doc, $) {
                         if (related === target) { return; }
 
                     }
-                 
+
                     // we are not on selector, start timer to trigger event
                     methods.startTimer($(this));
 
@@ -2626,13 +2623,13 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                       
+                            break;
                         case Function:
                             func = a;
                             break;
                     }
                 }
-                                
+
                 if (this.length > 0) {
                     // $(selector).leaveSpy()
                     return this.each(function () {
@@ -2666,21 +2663,21 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* InfiniteScroll */
-    var infiniteScroll = function() {
+    var infiniteScroll = function () {
 
         var dataKey = "infiniteScroll",
-            dataIdKey = dataKey + "Id",            
+            dataIdKey = dataKey + "Id",
             state = win.history.state || {};
 
-        var defaults = {            
+        var defaults = {
             scrollSpacing: 0, // optional spacing to apply when scrolling to selected offset
             offsetSuffix: "/",
             pagerKey: "pager.page",
             loaderSelector: ".infinite-scroll-loader",
             loaderTemplate: '<p class="text-center"><i class="fal fa-2x fa-spinner fa-spin py-5"></i></p>',
-            onPageLoaded: null, 
+            onPageLoaded: null,
             onScrollEnd: null,
             css: {
                 item: "infinite-scroll-item",
@@ -2700,7 +2697,7 @@ $(function (win, doc, $) {
                 ready: [], // functions to execute when dom is updated
                 scrollEnd: [] // funcitons to execute when 
             },
-            init: function($caller, methodName, func) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -2749,37 +2746,37 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function ($caller) {  
-                
+            bind: function ($caller) {
+
                 var hash = win.location.hash,
                     scrollSpacing = $caller.data(dataKey).scrollSpacing;
-                
+
                 // Scroll to any selected offset, wait until we complete
                 // scrolling before binding our scrollSpy events
                 if (methods._offset > 0) {
-                                       
+
                     var $marker = methods.getOffsetMarker($caller, methods._offset),
                         $highlight = methods.getHighlightMarker($caller, methods._offset);
                     if ($marker && $highlight) {
                         // Scroll to offset  and deactivate hihlight element
                         $().scrollTo({
-                                offset: -scrollSpacing,
-                                target: $marker,                                
-                                onComplete: function() {
-                                    // Apply css to deactivate selected offset css (set server side)
-                                    // Css can be applied directly to marker or a child of the marker
-                                    if ($highlight.hasClass(defaults.css.active)) {
-                                        $highlight
-                                            .removeClass(defaults.css.active)
-                                            .addClass(defaults.css.inactive);
-                                    } else {
-                                        $caller.find("." + defaults.css.active)
-                                            .removeClass(defaults.css.active)
-                                            .addClass(defaults.css.inactive);
-                                    }
-                                    methods.attach($caller);
+                            offset: -scrollSpacing,
+                            target: $marker,
+                            onComplete: function () {
+                                // Apply css to deactivate selected offset css (set server side)
+                                // Css can be applied directly to marker or a child of the marker
+                                if ($highlight.hasClass(defaults.css.active)) {
+                                    $highlight
+                                        .removeClass(defaults.css.active)
+                                        .addClass(defaults.css.inactive);
+                                } else {
+                                    $caller.find("." + defaults.css.active)
+                                        .removeClass(defaults.css.active)
+                                        .addClass(defaults.css.inactive);
                                 }
-                            },
+                                methods.attach($caller);
+                            }
+                        },
                             "go"); // initialize scrollTo
                     } else {
                         // If we didn't find a marker ensure we still bind scrollSpy
@@ -2787,7 +2784,7 @@ $(function (win, doc, $) {
                     }
 
                 } else {
-                    methods.attach($caller);                    
+                    methods.attach($caller);
                 }
 
             },
@@ -2800,7 +2797,7 @@ $(function (win, doc, $) {
                 if ($caller.data(dataKey).scrollSpacing) {
                     scrollSpacing = $caller.data(dataKey).scrollSpacing;
                 }
-                
+
                 // Bind scroll events
                 $().scrollSpy({
                     namespace: dataKey,
@@ -2818,7 +2815,7 @@ $(function (win, doc, $) {
                         }
 
                         // We are above the first offset marker
-                        if (scrollBottom <= firstMarkerTop) {                            
+                        if (scrollBottom <= firstMarkerTop) {
                             // Reset the state (i.e. remove offset)
                             //methods.resetState($caller);
                         } else {
@@ -2837,7 +2834,7 @@ $(function (win, doc, $) {
                     onScroll: function (spy, e, $win) {
 
                         // Ensure we are not already loading 
-                        if (methods._loading) {                     
+                        if (methods._loading) {
                             $win.scrollTop(scrollTop);
                             $().scrollSpy({ namespace: dataKey }, "stop");
                             e.preventDefault();
@@ -2883,12 +2880,12 @@ $(function (win, doc, $) {
                     namesoace: dataKey
                 }, "unbind");
             },
-            unbind: function($caller) {
-                this.detach($caller);                
+            unbind: function ($caller) {
+                this.detach($caller);
                 this._page = 1;
                 this._loading = false;
             },
-            loadPrevious: function($caller, spy) {
+            loadPrevious: function ($caller, spy) {
 
                 // Get page and check bounds
                 var pageNumber = methods.getPreviousPageNumber($caller);
@@ -2912,7 +2909,7 @@ $(function (win, doc, $) {
                 methods.load($caller,
                     pageNumber,
                     spy,
-                    function(data) {
+                    function (data) {
                         if ($loader) {
                             $loader.hide();
                         }
@@ -2931,12 +2928,12 @@ $(function (win, doc, $) {
                                 // Persist scroll position after content load
                                 $().scrollSpy({ namespace: dataKey }, "unbind");
                                 $().scrollTo({
-                                        target: null,
-                                        offset: $(doc).height() - previousPosition,                                        
-                                        onComplete: function () {                                            
-                                            $().scrollSpy({ namespace: dataKey }, "bind");
-                                        }
-                                    },
+                                    target: null,
+                                    offset: $(doc).height() - previousPosition,
+                                    onComplete: function () {
+                                        $().scrollSpy({ namespace: dataKey }, "bind");
+                                    }
+                                },
                                     "go");
 
                             }
@@ -2947,7 +2944,7 @@ $(function (win, doc, $) {
 
                     });
             },
-            loadNext: function($caller, spy) {
+            loadNext: function ($caller, spy) {
 
                 // Get page and check bounds
                 var pageNumber = methods.getNextPageNumber($caller);
@@ -2965,7 +2962,7 @@ $(function (win, doc, $) {
                 methods.load($caller,
                     pageNumber,
                     spy,
-                    function(data) {
+                    function (data) {
                         if ($loader) {
                             $loader.hide();
                         }
@@ -2989,7 +2986,7 @@ $(function (win, doc, $) {
                 if (url === "" || pageLoaded || methods._loading === true) {
                     return;
                 }
-                
+
                 // Indicate load
                 methods._loading = true;
 
@@ -3011,8 +3008,8 @@ $(function (win, doc, $) {
                         // Update loading flag
                         methods._loading = false;
                     }
-                }).done(function(data) {
-               
+                }).done(function (data) {
+
                     // Mark done loading 
                     methods._loading = false;
 
@@ -3066,18 +3063,18 @@ $(function (win, doc, $) {
                 });
 
             },
-            isElementInViewPort: function($caller, el) {
+            isElementInViewPort: function ($caller, el) {
                 var rect = el.getBoundingClientRect(),
                     scrollSpacing = $caller.data(dataKey).scrollSpacing || 0;
                 return (
                     rect.top >= scrollSpacing &&
-                        rect.left >= 0 &&
-                        rect.bottom <= (window.innerHeight || $(window).height()) &&
-                        rect.right <= (window.innerWidth || $(window).width())
+                    rect.left >= 0 &&
+                    rect.bottom <= (window.innerHeight || $(window).height()) &&
+                    rect.right <= (window.innerWidth || $(window).width())
                 );
 
             },
-            updateState: function($caller) {
+            updateState: function ($caller) {
 
                 // Iterate each offset marker and detect the first
                 // visible marker within the client viewport
@@ -3087,7 +3084,7 @@ $(function (win, doc, $) {
 
                 if ($markers) {
                     // Exit once we find the first visible offset marker
-                    $markers.each(function() {
+                    $markers.each(function () {
                         if (methods.isElementInViewPort($caller, this)) {
                             $marker = $(this);
                             return false;
@@ -3096,7 +3093,7 @@ $(function (win, doc, $) {
                 }
 
                 // Ensure we found a marker visible within the viewport
-                if ($marker) {      
+                if ($marker) {
 
                     // Ensure we can parse the marker offset
                     var offset = parseInt($marker.data("infiniteScrollOffset"));
@@ -3110,9 +3107,9 @@ $(function (win, doc, $) {
                     // but we don't actually add new history state
                     win.history.replaceState(state, doc.title, url);
 
-                } 
+                }
 
-            },            
+            },
             resetState: function ($caller) {
                 // Stop scrollspy to prevent the OnScrollEnd event from executing
                 $().scrollSpy({ namespace: dataKey }, "stop");
@@ -3120,7 +3117,7 @@ $(function (win, doc, $) {
                 if (state) {
                     win.history.replaceState(state, doc.title, methods.getStateUrl($caller));
                 }
-            },          
+            },
             getStateUrl: function ($caller, offset) {
 
                 var url = methods.getUrl($caller),
@@ -3135,7 +3132,7 @@ $(function (win, doc, $) {
                 return parts.url + offsetString + parts.qs;
 
             },
-            scrollToPage: function($caller, pageNumber) {
+            scrollToPage: function ($caller, pageNumber) {
                 var page = methods.getLoadedPage(pageNumber),
                     scrollSpacing = $caller.data(dataKey).scrollSpacing;
                 if (page) {
@@ -3144,17 +3141,17 @@ $(function (win, doc, $) {
                         $().scrollSpy({ namespace: dataKey }, "unbind");
                         // Scroll to offset marker for page
                         $().scrollTo({
-                                offset: -scrollSpacing,                                
-                                target: $marker,
-                                onComplete: function() {
-                                    $().scrollSpy({ namespace: dataKey }, "bind");
-                                }
-                            },
+                            offset: -scrollSpacing,
+                            target: $marker,
+                            onComplete: function () {
+                                $().scrollSpy({ namespace: dataKey }, "bind");
+                            }
+                        },
                             "go");
                     }
                 }
             },
-            highlightFirstMarkerOnPage: function($caller, pageNumber) {
+            highlightFirstMarkerOnPage: function ($caller, pageNumber) {
                 var page = methods.getLoadedPage(pageNumber);
                 if (page) {
                     var $marker = methods.getHighlightMarker($caller, page.offset);
@@ -3165,27 +3162,27 @@ $(function (win, doc, $) {
                         if (!$marker.hasClass(defaults.css.active)) {
                             $marker.addClass(defaults.css.active);
                         }
-                        win.setTimeout(function() {
-                                if ($marker.hasClass(defaults.css.active)) {
-                                    $marker
-                                        .removeClass(defaults.css.active)
-                                        .addClass(defaults.css.inactive);
-                                }
-                            },
+                        win.setTimeout(function () {
+                            if ($marker.hasClass(defaults.css.active)) {
+                                $marker
+                                    .removeClass(defaults.css.active)
+                                    .addClass(defaults.css.inactive);
+                            }
+                        },
                             250);
                     }
                 }
             },
-            getSortedPageNumbers: function() {
+            getSortedPageNumbers: function () {
                 var pages = [];
                 for (var i = 0; i < methods._loadedPages.length; i++) {
                     pages.push(methods._loadedPages[i].page);
                 }
-                return pages.sort(function(a, b) {
+                return pages.sort(function (a, b) {
                     return a - b;
                 });
             },
-            getLoadedPage: function(page) {
+            getLoadedPage: function (page) {
                 for (var i = 0; i < methods._loadedPages.length; i++) {
                     if (methods._loadedPages[i].page === page) {
                         return methods._loadedPages[i];
@@ -3193,18 +3190,18 @@ $(function (win, doc, $) {
                 }
                 return null;
             },
-            isPageLoaded: function($caller, pageNumber) {
+            isPageLoaded: function ($caller, pageNumber) {
                 var page = methods.getLoadedPage(pageNumber);
                 return page !== null ? true : false;
             },
-            getOffsetMarkers: function($container) {
+            getOffsetMarkers: function ($container) {
                 var $markers = $container.find("[data-infinite-scroll-offset]");
                 if ($markers.length > 0) {
                     return $markers;
                 }
                 return null;
             },
-            getOffsetMarker: function($caller, offset) {
+            getOffsetMarker: function ($caller, offset) {
                 var $marker = $caller.find('[data-infinite-scroll-offset="' + offset + '"]');
                 if ($marker.length > 0) {
                     return $($marker[0]);
@@ -3218,28 +3215,28 @@ $(function (win, doc, $) {
                 }
                 return null;
             },
-            getHighlightMarker: function($caller, offset) {
+            getHighlightMarker: function ($caller, offset) {
                 var $marker = $caller.find('[data-infinite-scroll-highlight="' + offset + '"]');
                 if ($marker.length > 0) {
                     return $marker;
                 }
                 return null;
             },
-            getFirstOffsetMarker: function($caller) {
+            getFirstOffsetMarker: function ($caller) {
                 var $markers = methods.getOffsetMarkers($caller);
                 if ($markers) {
                     return $($markers[0]);
                 }
                 return null;
             },
-            getLastOffsetMarker: function($caller) {
+            getLastOffsetMarker: function ($caller) {
                 var $markers = methods.getOffsetMarkers($caller);
                 if ($markers) {
                     return $($markers[$markers.length - 1]);
                 }
                 return null;
             },
-            getPreviousPageNumber: function($caller) {
+            getPreviousPageNumber: function ($caller) {
                 // Get a sorted array of page numbers, get first element and decrement by 1
                 var numbers = methods.getSortedPageNumbers($caller);
                 if (numbers) {
@@ -3247,7 +3244,7 @@ $(function (win, doc, $) {
                 }
                 return methods._page - 1;
             },
-            getNextPageNumber: function($caller) {
+            getNextPageNumber: function ($caller) {
                 // Get a sorted array of page numbers, get last element and increment by 1
                 var numbers = methods.getSortedPageNumbers($caller);
                 if (numbers) {
@@ -3255,11 +3252,11 @@ $(function (win, doc, $) {
                 }
                 return methods._page + 1;
             },
-            getLoader: function($caller, type) {
+            getLoader: function ($caller, type) {
                 var $loader = null,
                     $loaders = methods.getLoaders($caller);
                 if ($loaders) {
-                    $loaders.each(function() {
+                    $loaders.each(function () {
                         if ($(this).data("type") === type) {
                             $loader = $(this);
                             return false;
@@ -3273,7 +3270,7 @@ $(function (win, doc, $) {
                 }
                 return $loader;
             },
-            getLoaders: function($caller) {
+            getLoaders: function ($caller) {
                 var selector = $caller.data("infiniteScrollLoadingSelector") ||
                     $caller.data(dataKey).loaderSelector;
                 if (selector) {
@@ -3284,13 +3281,13 @@ $(function (win, doc, $) {
                 }
                 return null;
             },
-            getUrl: function($caller) {
+            getUrl: function ($caller) {
                 if ($caller.data("infiniteScrollUrl")) {
                     return $caller.data("infiniteScrollUrl");
                 }
                 return "";
             },
-            getUrlParts: function(input) {
+            getUrlParts: function (input) {
 
                 // We always need a Url
                 if (!input) {
@@ -3327,7 +3324,7 @@ $(function (win, doc, $) {
                 };
 
             },
-            getUrlSuffix: function($caller) {
+            getUrlSuffix: function ($caller) {
                 if ($caller.data("infiniteScrollUrlSuffix")) {
                     return $caller.data("infiniteScrollUrlSuffix");
                 }
@@ -3349,7 +3346,7 @@ $(function (win, doc, $) {
         };
 
         return {
-            init: function() {
+            init: function () {
 
                 var options = {};
                 var methodName = null;
@@ -3362,7 +3359,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                  
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -3371,7 +3368,7 @@ $(function (win, doc, $) {
 
                 if (this.length > 0) {
                     // $(selector).infiniteScroll()
-                    return this.each(function() {
+                    return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
                             $(this).data(dataIdKey, id);
@@ -3383,17 +3380,17 @@ $(function (win, doc, $) {
                     });
                 } else {
                     // $().infiniteScroll()
-                    var $caller = $('[data-provide="infiniteScroll"]');                    
+                    var $caller = $('[data-provide="infiniteScroll"]');
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
                             $caller.data(dataIdKey, id);
-                            $caller.data(dataKey, $.extend({}, defaults, options));                            
+                            $caller.data(dataKey, $.extend({}, defaults, options));
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
-                        }                        
+                        }
                         return methods.init($caller, methodName, func);
-                    }          
+                    }
                 }
 
             }
@@ -3401,7 +3398,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* filterList */
     var filterList = function () {
 
@@ -3429,23 +3426,23 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
                 $caller.bind('keydown',
-                    function(e) {
+                    function (e) {
                         if (e.keyCode && e.keyCode === 13) {
                             e.preventDefault();
                         }
                     });
                 $caller.bind('keyup',
-                    function(e) {
+                    function (e) {
                         methods.filter($(this));
                     });
             },
-            unbind: function($caller) {
+            unbind: function ($caller) {
                 $caller.unbind('keydown');
                 $caller.unbind('keyup');
             },
-            filter: function($caller) {
+            filter: function ($caller) {
 
                 var $target = this.getTarget($caller),
                     $items = this.getListItems($caller),
@@ -3476,7 +3473,7 @@ $(function (win, doc, $) {
                 }
 
             },
-            find: function($root, word) {
+            find: function ($root, word) {
 
                 // Search in supplied list item
                 var value = $root.data("filterListValue");
@@ -3504,7 +3501,7 @@ $(function (win, doc, $) {
                 return false;
 
             },
-            getTarget: function($caller) {
+            getTarget: function ($caller) {
                 var target = $caller.data("filterListTarget") || $caller.data(dataKey).target;
                 if (target === null) {
                     throw new Error('You must set a target for the filter list either via the data-filter-list-target data attribute on the calling element or via the target option property.');
@@ -3518,11 +3515,11 @@ $(function (win, doc, $) {
                 }
                 return target;
             },
-            getListItems: function($caller) {
+            getListItems: function ($caller) {
                 var $list = this.getTarget($caller);
                 return $list.find(".list-group-item");
             },
-            getEmpty: function($caller) {
+            getEmpty: function ($caller) {
                 var target = $caller.data("filterListEmpty") || $caller.data(dataKey).empty;
                 if (typeof target === "string") {
                     return $(target);
@@ -3546,7 +3543,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                         
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -3578,14 +3575,14 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }          
+                    }
                 }
 
             }
         };
 
     }();
-    
+
     /* tagIt */
     var tagIt = function () {
 
@@ -3594,12 +3591,13 @@ $(function (win, doc, $) {
 
         var defaults = {
             items: [], // our array of items
+            dataKey: null, // a unique key which must be specified if multiple derived tagIt ontrols appear on the same page to separate state
             ensureUnique: true, // boolean to restrict duplicate items
             maxItems: 0, // the maximum number of allowed selected items - 0 = no limit
             store: null, // optional selector for dom element which will store the JSON representing selected items
             itemTemplate:
                 '<li class="tagit-list-item">{text} <a href="#" class="tagit-list-item-delete"><i class="fal fa-times"></i></a></li>',
-            parseItemTemplate: function(html, data) {
+            parseItemTemplate: function (html, data) {
                 if (data.text) {
                     html = html.replace(/\{text}/g, data.text);
                 }
@@ -3609,16 +3607,22 @@ $(function (win, doc, $) {
                 return html;
             }, // provides a method to parse our itemTemplate with data returned from service url
             onAddItem: function ($caller, result, e) {
-                var items = $caller.data(dataKey).items;
+                var items = [];
+                var key = $caller.data(dataKey).dataKey || "";
+                if (key !== "") {
+                    items = $caller.data(key).items;
+                } else {
+                    items = $caller.data(dataKey).items;
+                }
                 items.push({
                     text: result.text,
                     value: result.value
                 });
-            } 
+            }
         };
 
         var methods = {
-            init: function($caller, methodName, func) {
+            init: function ($caller, methodName, func) {
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -3631,7 +3635,10 @@ $(function (win, doc, $) {
 
                 // Bind events
                 this.bind($caller);
-                
+
+                // Initialize default state
+                this.setItems($caller, []);
+
                 // Initialize state from store JSON
                 var $store = this.getStore($caller);
                 if ($store) {
@@ -3644,30 +3651,30 @@ $(function (win, doc, $) {
                 return null;
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
 
                 var $input = this.getInput($caller);
                 if ($input) {
-                    
+
                     $caller.bind("click",
                         function (e) {
                             $input.focus();
                         });
 
                     $input.bind("focus",
-                        function() {
+                        function () {
                             $caller.addClass("form-control-active");
                         });
 
                     $input.bind("blur",
-                        function() {
+                        function () {
                             $caller.removeClass("form-control-active");
                         });
 
                 }
-                
+
             },
-            unbind: function($caller) {
+            unbind: function ($caller) {
                 var $input = this.getInput($caller);
                 if ($input) {
                     $input.unbind("keyup");
@@ -3676,7 +3683,7 @@ $(function (win, doc, $) {
                     $input.autoComplete('unbind');
                 }
             },
-            show: function($caller) {
+            show: function ($caller) {
                 var $input = this.getInput($caller);
                 if ($input) {
                     $input.autoComplete("show");
@@ -3744,15 +3751,15 @@ $(function (win, doc, $) {
                     }
                 }
             },
-            reset: function($caller) {
+            reset: function ($caller) {
                 this.setInput($caller, "");
             },
-            clear: function($caller) {
+            clear: function ($caller) {
                 this.setStore($caller, "");
                 this.setItems($caller, []);
                 this.update($caller);
             },
-            focus: function($caller) {
+            focus: function ($caller) {
                 var $input = this.getInput($caller),
                     items = this.getItems($caller),
                     maxItems = this.getMaxItems($caller);
@@ -3766,26 +3773,26 @@ $(function (win, doc, $) {
                     }
                 }
             },
-            select: function($caller) {
+            select: function ($caller) {
                 var $input = this.getInput($caller);
                 if ($input.length > 0) {
                     $input.select();
                 }
             },
-            buildItem: function($caller, data, index) {
-                
+            buildItem: function ($caller, data, index) {
+
                 var itemTemplate = this.getItemTemplate($caller);
                 if ($caller.data(dataKey) && $caller.data(dataKey).parseItemTemplate) {
                     itemTemplate = $caller.data(dataKey).parseItemTemplate(itemTemplate, data);
                 }
-                
+
                 var $item = $(itemTemplate);
                 $item.data("tagitItem", data);
 
                 var $del = $item.find(".tagit-list-item-delete");
                 if ($del.length > 0) {
                     $del.data("tagitItemIndex", index);
-                    $del.click(function(e) {
+                    $del.click(function (e) {
                         e.preventDefault();
                         var items = methods.getItems($caller);
                         items.splice($(this).data("tagitItemIndex"), 1);
@@ -3797,10 +3804,10 @@ $(function (win, doc, $) {
                 return $item;
 
             },
-            removeItems: function($caller) {
+            removeItems: function ($caller) {
                 $caller.find(".tagit-list-item").remove();
             },
-            itemExists: function($caller, item) {
+            itemExists: function ($caller, item) {
                 var items = this.getItems($caller);
                 if (items) {
                     for (var i = 0; i < items.length; i++) {
@@ -3811,7 +3818,7 @@ $(function (win, doc, $) {
                 }
                 return false;
             },
-            isUnique: function($caller, result) {
+            isUnique: function ($caller, result) {
 
                 var ensureUnique = $caller.data(dataKey).ensureUnique;
                 if (ensureUnique === false) {
@@ -3839,18 +3846,18 @@ $(function (win, doc, $) {
                 return false;
 
             },
-            highlight: function($caller) {
+            highlight: function ($caller) {
                 var index = $caller.data(dataKey).highlightIndex,
                     $li = $caller.find("li:eq(" + index + ")");
                 if ($li.length > 0) {
                     $li.addClass("anim anim-2x anim-shake");
-                    window.setTimeout(function() {
-                            $li.removeClass("anim anim-2x anim-shake");
-                        },
+                    window.setTimeout(function () {
+                        $li.removeClass("anim anim-2x anim-shake");
+                    },
                         250);
                 }
             },
-            getInputLi: function($caller) {
+            getInputLi: function ($caller) {
                 var $li = $caller.find(".tagit-list-item-input");
                 if ($li.length > 0) {
                     return $li;
@@ -3862,7 +3869,7 @@ $(function (win, doc, $) {
                     ? parseInt($caller.data("maxItems"))
                     : $caller.data(dataKey).maxItems;
             },
-            getInput: function($caller) {
+            getInput: function ($caller) {
                 var $li = this.getInputLi($caller);
                 if ($li) {
                     var $input = $li.find("input");
@@ -3872,22 +3879,33 @@ $(function (win, doc, $) {
                 }
                 return null;
             },
-            getItemTemplate: function($caller) {
+            getItemTemplate: function ($caller) {
                 return $caller.data("tagitItemTemplate") || $caller.data(dataKey).itemTemplate;
             },
-            setInput: function($caller, value) {
+            setInput: function ($caller, value) {
                 var $input = $caller.find("input");
                 if ($input) {
                     $input.val(value);
                 }
             },
-            getItems: function($caller) {
-                return $caller.data(dataKey).items;
+            getItems: function ($caller) {
+                var key = this.getItemsKey($caller);
+                return $caller.data(key).items;
             },
             setItems: function ($caller, items) {
-                $caller.data(dataKey).items = items;
+                var key = this.getItemsKey($caller);
+                $caller.data(key).items = items;
             },
-            getStore: function($caller) {
+            getItemsKey: function ($caller) {
+                if ($caller.data("tagitDatakey")) {
+                    return $caller.data("tagitDatakey");
+                }
+                if ($caller.data(dataKey).dataKey) {
+                    return $caller.data(dataKey).dataKey;
+                }
+                return dataKey;
+            },
+            getStore: function ($caller) {
                 var selector = $caller.data("tagitStore") ||
                     $caller.data(dataKey).store;
                 if (selector) {
@@ -3898,13 +3916,13 @@ $(function (win, doc, $) {
                 }
                 return null;
             },
-            setStore: function($caller, value) {
+            setStore: function ($caller, value) {
                 var $store = this.getStore($caller);
                 if ($store) {
                     $store.val(value);
                 }
             },
-            serialize: function($caller) {
+            serialize: function ($caller) {
                 var $store = this.getStore($caller);
                 if ($store) {
                     var items = this.getItems($caller);
@@ -3919,7 +3937,7 @@ $(function (win, doc, $) {
                 }
             }
         };
-        
+
         return {
             init: function () {
 
@@ -3934,7 +3952,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                     
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -3965,14 +3983,14 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }          
+                    }
                 }
 
             }
         };
 
     }();
-    
+
     /* selectDropdown */
     var selectDropdown = function () {
 
@@ -3998,7 +4016,7 @@ $(function (win, doc, $) {
             return getOffsetFromParent($caller.find(".active"), $caller);
 
         }
-        
+
         var defaults = {
             event: "click",
             items: [], // our array of selected items
@@ -4016,9 +4034,9 @@ $(function (win, doc, $) {
                 }
                 return html;
             }, // provides a method to parse our itemTemplate with data returned from service url
-            onShow: function($caller, $dropdown) {
+            onShow: function ($caller, $dropdown) {
 
-                $caller.find('input[type="radio"], input[type="checkbox"]').each(function() {
+                $caller.find('input[type="radio"], input[type="checkbox"]').each(function () {
                     if ($(this).is(":checked")) {
                         var $parent = $(this).parent(".dropdown-item");
                         if (!$parent.hasClass("active")) {
@@ -4026,7 +4044,7 @@ $(function (win, doc, $) {
                         }
                     }
                 });
-                
+
                 // Add initial text
                 var $a = $caller.find(".dropdown-toggle");
                 if ($a.length > 0) {
@@ -4048,19 +4066,19 @@ $(function (win, doc, $) {
                             }
                         });
                 });
-                
+
                 // Scroll to active item
                 var $scrollable = $caller.find(".overflow-auto");
                 if ($scrollable.length > 0) {
                     var offset = getOffset($caller),
                         top = offset.top - $caller.height();
                     $scrollable.scrollTo({
-                            offset: top,
-                            interval: 500
-                        },
+                        offset: top,
+                        interval: 500
+                    },
                         "go");
                 }
-            
+
 
             }, // triggers when the dropdown is shown
             onChange: function ($caller, $input, e) {
@@ -4075,10 +4093,10 @@ $(function (win, doc, $) {
                 if ($input.attr("disabled") || $label.attr("disabled")) {
                     return;
                 }
-           
+
                 // Clear active
                 $caller.find(".dropdown-item").removeClass("active");
-                
+
                 // Apply active
                 var items = [];
                 $caller.find('input[type="radio"], input[type="checkbox"]').each(function () {
@@ -4102,7 +4120,7 @@ $(function (win, doc, $) {
                         if ($(this).data("navText")) {
                             items.push($(this).data("navText"));
                         }
-                    } 
+                    }
 
                     // Scroll to first active item
                     var $scrollable = $caller.find(".overflow-auto");
@@ -4110,9 +4128,9 @@ $(function (win, doc, $) {
                         var offset = getOffset($caller),
                             top = offset.top - $caller.height();
                         $scrollable.scrollTo({
-                                offset: top,
-                                interval: 500
-                            },
+                            offset: top,
+                            interval: 500
+                        },
                             "go");
                     }
 
@@ -4122,7 +4140,7 @@ $(function (win, doc, $) {
                 var s = "",
                     text = "",
                     $a = $caller.find(".dropdown-toggle");
-                
+
                 if (items.length > 0) {
                     for (var i = 0; i < items.length; i++) {
                         s += items[i];
@@ -4345,7 +4363,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                           
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -4384,7 +4402,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* confirm */
     var confirm = function () {
 
@@ -4392,7 +4410,7 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            event: "click", 
+            event: "click",
             message: "Are you sure you wish to permanently delete this item?\n\nThis operation cannot be undone.\n\nClick OK to confirm..."
         };
 
@@ -4429,7 +4447,7 @@ $(function (win, doc, $) {
                         }
 
                         // Show confirmation dialog
-                        $().dialog({                       
+                        $().dialog({
                             title: "Confirm",
                             body: {
                                 url: null,
@@ -4439,8 +4457,8 @@ $(function (win, doc, $) {
                                 {
                                     id: "cancel",
                                     text: "Cancel",
-                                    css: "btn btn-secondary",                                    
-                                    click: function () {                                     
+                                    css: "btn btn-secondary",
+                                    click: function () {
                                         $().dialog("hide");
                                         return false;
                                     }
@@ -4448,8 +4466,8 @@ $(function (win, doc, $) {
                                 {
                                     id: "ok",
                                     text: "OK",
-                                    css: "btn btn-primary",                           
-                                    click: function ($dialog, $button) {     
+                                    css: "btn btn-primary",
+                                    click: function ($dialog, $button) {
                                         // Disable button
                                         $button
                                             .addClass("disabled")
@@ -4457,8 +4475,8 @@ $(function (win, doc, $) {
                                         // Click the original button but this time 
                                         // set a flag so the click event hander returns true 
                                         // invoking navigation
-                                        $this.data(confirmedFlagKey, true);                                           
-                                        $this[0].click();                                      
+                                        $this.data(confirmedFlagKey, true);
+                                        $this[0].click();
                                     }
                                 }
                             ]
@@ -4467,7 +4485,7 @@ $(function (win, doc, $) {
 
                         // Return false to ensure navigation does not occurr
                         return false;
-                
+
                     });
             },
             unbind: function ($caller) {
@@ -4491,7 +4509,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                          
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -4688,9 +4706,9 @@ $(function (win, doc, $) {
 
                     // Ensure we scroll the container to the top
                     $container.scrollTo({
-                            offset: 0,
-                            interval: 500
-                        },
+                        offset: 0,
+                        interval: 500
+                    },
                         "go");
 
                     // onShow event
@@ -4715,7 +4733,7 @@ $(function (win, doc, $) {
                     methods.hide($caller);
                 }
             },
-            _isExpanded: function($caller) {
+            _isExpanded: function ($caller) {
                 if (methods._isHorizontal($caller)) {
                     return $caller.height() === $(win).height();
                 }
@@ -4766,7 +4784,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                          
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -4805,7 +4823,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* autoTargetBlank */
     var autoTargetBlank = function () {
 
@@ -4819,7 +4837,7 @@ $(function (win, doc, $) {
         var methods = {
             timer: null,
             init: function ($caller, methodName, func) {
-                
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -4828,11 +4846,11 @@ $(function (win, doc, $) {
                     }
                     return null;
                 }
-                
+
                 this.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
                 var selector = $caller.data(dataKey).selector;
                 $caller.find(selector).each(function () {
                     var href = $(this).attr("href");
@@ -4840,7 +4858,7 @@ $(function (win, doc, $) {
                         if (methods._isExternal(href)) {
                             $(this).attr("data-auto-target", "true");
                             $(this).attr("target", "_blank");
-                        }                      
+                        }
                     }
                 });
             },
@@ -4875,7 +4893,7 @@ $(function (win, doc, $) {
                 }
 
                 return false;
-                
+
             }
         };
 
@@ -4893,7 +4911,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                     
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -4958,10 +4976,10 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function ($caller) {
                 // Iterate images to auto link
                 var selector = $caller.data(dataKey).selector;
-                $caller.find(selector).each(function(i) {
+                $caller.find(selector).each(function (i) {
                     // Ensure we have a src attribute to link to
                     if ($(this).attr("src")) {
 
@@ -5017,7 +5035,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -5055,7 +5073,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* markdownBody */
     var markdownBody = function () {
 
@@ -5064,7 +5082,7 @@ $(function (win, doc, $) {
 
         var defaults = {
             autoTargetBlank: true,
-            autoLinkImages : true
+            autoLinkImages: true
         };
 
         var methods = {
@@ -5131,7 +5149,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                        
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -5169,7 +5187,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* userAutoComplete */
     var userAutoComplete = function () {
 
@@ -5269,7 +5287,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                         
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -5319,7 +5337,7 @@ $(function (win, doc, $) {
 
         var methods = {
             init: function ($caller, methodName, func) {
-                
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5376,7 +5394,7 @@ $(function (win, doc, $) {
                     onItemClick: function ($input, result, e) {
 
                         e.preventDefault();
-                        
+
                         // Get index if item already exists, else return -1
                         var index = methods.getIndex($caller, result);
                         if (index === -1) {
@@ -5451,7 +5469,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -5489,7 +5507,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* keyBinder */
     var keyBinder = function () {
 
@@ -5580,7 +5598,7 @@ $(function (win, doc, $) {
                                         case 39: // right
                                             return;
                                         case 40: // down
-                                            return;                                       
+                                            return;
                                         case 27: // escape
                                             return;
                                         default:
@@ -5641,7 +5659,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                          
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -5720,7 +5738,7 @@ $(function (win, doc, $) {
 
                 var $mirror = methods.getOrCreateMirror($caller);
                 if ($mirror) {
-                    
+
                     // Populate & show mirror, ensure the mirrored fields input
                     // is encoded for safe display
                     $mirror.html(html
@@ -5785,7 +5803,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                           
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -5882,7 +5900,7 @@ $(function (win, doc, $) {
                 $caller.textFieldMirror({
                     start: cursor.start,
                     ready: function ($mirror) {
-                        
+
                         // Get position from mirrored marker
                         var $marker = $mirror.find(".text-field-mirror-marker");
 
@@ -5989,7 +6007,7 @@ $(function (win, doc, $) {
                                         newIndex = -1;
 
                                     if (itemSelection.enable) {
-                          
+
                                         switch (e.which) {
                                             case 13: // carriage return
                                                 newIndex = -1; // reset selection upon carriage return
@@ -6156,7 +6174,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                           
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -6195,7 +6213,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* popper */
     var popper = function () {
 
@@ -6214,7 +6232,7 @@ $(function (win, doc, $) {
             timer: null,
             callers: [], // array of all active callers
             init: function ($caller, methodName, func) {
-                
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -6229,7 +6247,7 @@ $(function (win, doc, $) {
                 if (!$caller.data("popperOriginalPosition")) {
                     $caller.data("popperOriginalPosition", position);
                 }
-                
+
                 this.bind($caller);
 
             },
@@ -6260,8 +6278,8 @@ $(function (win, doc, $) {
                         });
                     }
 
-                }                
-                
+                }
+
             },
             unbind: function ($caller) {
                 var event = $caller.data(dataKey).event;
@@ -6276,11 +6294,11 @@ $(function (win, doc, $) {
             show: function ($caller) {
 
                 var delay = 250;
-                
+
                 if ($caller.data("popperDelay")) {
                     delay = $caller.data("popperDelay");
                 }
-                
+
                 if (delay > 0) {
                     methods.timer = win.setTimeout(function () {
                         if (methods.timer) { showTip(); }
@@ -6293,12 +6311,12 @@ $(function (win, doc, $) {
 
                     var position = methods._getPosition($caller),
                         $popper = methods._getOrCreate($caller);
-                 
+
                     if ($popper) {
-                        
+
                         // hide all poppers
                         methods.hideAll();
-                        
+
                         // add to stack
                         methods.callers.push($caller);
 
@@ -6306,13 +6324,13 @@ $(function (win, doc, $) {
                         methods._addCss($caller);
 
                         // Load content
-                        methods._load($caller, function($el) {
-                        
+                        methods._load($caller, function ($el) {
+
                             // Position
                             methods._position($caller);
-                            
+
                         });
-                        
+
                         // onShow
                         if ($caller.data(dataKey) && $caller.data(dataKey).onShow) {
                             $caller.data(dataKey).onShow($caller, $popper);
@@ -6326,7 +6344,7 @@ $(function (win, doc, $) {
 
                 var $popper = methods._getOrCreate($caller);
                 if ($popper) {
-                    
+
                     // Remove Css
                     methods._removeCss($caller);
 
@@ -6337,7 +6355,7 @@ $(function (win, doc, $) {
                     if ($caller.data(dataKey) && $caller.data(dataKey).onHide) {
                         $caller.data(dataKey).onHide();
                     }
-                    
+
                 }
 
             },
@@ -6359,12 +6377,12 @@ $(function (win, doc, $) {
 
                 var $popper = methods._getOrCreate($caller);
                 if ($popper) {
-                    
+
                     // Update entity dropdown
                     app.http({
                         method: "GET",
                         url: url
-                    }).done(function(response) {
+                    }).done(function (response) {
 
                         // Populate content
                         if ($popper.length > 0) {
@@ -6389,11 +6407,11 @@ $(function (win, doc, $) {
 
 
                     });
-                    
+
                 }
 
             },
-            _getOrCreate: function($caller) {
+            _getOrCreate: function ($caller) {
 
                 var id = $caller.data(dataKey).id,
                     selector = "#" + id,
@@ -6406,10 +6424,10 @@ $(function (win, doc, $) {
 
                 // Build popper
                 if ($(selector).length === 0) {
-                    
+
                     // Add to dom
                     $("body").append($popper);
-                    
+
                     // Bind leave events
                     $popper.leaveSpy({
                         selector: ".popper",
@@ -6418,7 +6436,7 @@ $(function (win, doc, $) {
                             methods.hideAll();
                         }
                     });
-                    
+
                     // Return new popper
                     return $popper;
 
@@ -6426,9 +6444,9 @@ $(function (win, doc, $) {
 
                 // Return existing popper
                 return $(selector);
-          
+
             },
-            _addCss: function($caller) {
+            _addCss: function ($caller) {
 
                 var $popper = methods._getOrCreate($caller),
                     css = $caller.data("popperCss") || $caller.data(dataKey).css,
@@ -6440,7 +6458,7 @@ $(function (win, doc, $) {
                         $popper.addClass(css);
                     }
                 }
-                
+
                 // Add show Css
                 if (position === "top") {
                     $popper.addClass("popper-n");
@@ -6451,7 +6469,7 @@ $(function (win, doc, $) {
                 } else if (position === "right") {
                     $popper.addClass("popper-e");
                 }
-                
+
             },
             _removeCss: function ($caller) {
 
@@ -6467,16 +6485,16 @@ $(function (win, doc, $) {
                     .removeClass("popper-e")
                     .removeClass("popper-s")
                     .removeClass("popper-w");
-                
+
                 // Custom Css
                 if (css) {
                     if ($popper.hasClass(css)) {
                         $popper.removeClass(css);
                     }
                 }
-                
+
             },
-            _position: function($caller) {
+            _position: function ($caller) {
 
                 var $popper = methods._getOrCreate($caller);
                 if ($popper) {
@@ -6485,7 +6503,7 @@ $(function (win, doc, $) {
                         "display": "block",
                         "visibility": "hidden"
                     });
-                    
+
                     // get caller coords
                     var $offset = $caller.offset(),
                         callerTop = Math.floor($offset.top),
@@ -6533,9 +6551,9 @@ $(function (win, doc, $) {
                         scrollBottom = scrollTop + winHeight,
                         aboveFold = top < scrollTop + padding,
                         belowFold = bottom > scrollBottom + padding;
-                    
+
                     if (position === "top" || position === "bottom") {
-                        
+
                         if (aboveFold && !belowFold) {
 
                             // Remove Css
@@ -6563,7 +6581,7 @@ $(function (win, doc, $) {
                             methods._position($caller);
 
                         }
-                            
+
                         if (left <= 0) {
                             $popper.css({ "left": padding });
                         } else {
@@ -6618,7 +6636,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                   
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -6698,7 +6716,7 @@ $(function (win, doc, $) {
                         });
                 }
             },
-            toggle: function($caller) {
+            toggle: function ($caller) {
                 if ($caller.attr("type") === "password") {
                     $caller.attr("type", "text");
                 } else {
@@ -6712,7 +6730,7 @@ $(function (win, doc, $) {
                     $btn.off(event);
                 }
             },
-            _getButton: function($caller) {
+            _getButton: function ($caller) {
                 var $btn = $caller.next();
                 if ($btn[0].tagName === "BUTTON" || $btn[0].tagName === "A") {
                     return $btn;
@@ -6736,7 +6754,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                         
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -6770,7 +6788,7 @@ $(function (win, doc, $) {
                                 $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                             }
                             return methods.init($caller, methodName, func);
-                        });                     
+                        });
                     }
                 }
 
@@ -6808,7 +6826,7 @@ $(function (win, doc, $) {
                     $caller.removeClass("page-loader-hidden");
                 }
             },
-            hide: function($caller) {
+            hide: function ($caller) {
                 if ($caller.hasClass("page-loader")) {
                     $caller.addClass("page-loader-hidden");
                 }
@@ -6830,7 +6848,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;                         
+                                break;
                             case Function:
                                 func = a;
                                 break;
@@ -6850,7 +6868,7 @@ $(function (win, doc, $) {
                         }
                         return methods.init($(this), methodName, func);
                     });
-                } else {                    
+                } else {
                     // $().loader()
                     var $callers = $('[data-provide="loader"]');
                     if ($callers.length > 0) {
@@ -7008,16 +7026,16 @@ $(function (win, doc, $) {
 
                 var breakPoint = parseInt($caller.data("breakPoint") || $caller.data(dataKey).breakPoint),
                     activeCss = $caller.data("activeCss") || $caller.data(dataKey).activeCss;
-                
+
                 if (breakPoint === null ||
                     typeof breakPoint === "undefined" ||
                     isNaN(breakPoint)) {
                     breakPoint = $(win).height() / 3;
                 }
-                
+
                 $().scrollSpy({
                     namespace: dataKey,
-                    onScroll: function(spy) {
+                    onScroll: function (spy) {
                         if (spy.scrollTop > breakPoint) {
                             if (!$caller.hasClass(activeCss)) {
                                 $caller.addClass(activeCss);
@@ -7095,7 +7113,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* Register Plugins */
     $.fn.extend({
         dialog: dialog.init,
@@ -7134,9 +7152,9 @@ $(function (win, doc, $) {
     // ---------------------------
     // Initialize core plug-ins
     // ----------------------------
-   
-    $.fn.platoUI = function(opts) {
-        
+
+    $.fn.platoUI = function (opts) {
+
         /* dialogSpy */
         this.find('[data-provide="dialog"]').dialogSpy();
 
@@ -7151,7 +7169,7 @@ $(function (win, doc, $) {
 
         /* select dropdown */
         this.find('[data-provide="select-dropdown"]').selectDropdown();
-        
+
         /* treeView */
         this.find('[data-provide="tree"]').treeView();
 
@@ -7163,7 +7181,7 @@ $(function (win, doc, $) {
 
         /* userAutoComplete */
         this.find('[data-provide="userAutoComplete"]').userAutoComplete();
-        
+
         /* tagIt */
         this.find('[data-provide="tagIt"]').tagIt();
 
@@ -7181,7 +7199,7 @@ $(function (win, doc, $) {
 
         /* markdownBody */
         this.find('[data-provide="markdownBody"]').markdownBody();
-     
+
         /* infiniteScroll */
         /* Initialized via $().layout so we can set the ScrollSpacing correctly */
         //this.find('[data-provide="infiniteScroll"]').infiniteScroll();
@@ -7227,7 +7245,7 @@ $(function (win, doc, $) {
 
             /* tooltips */
             app.ui.initToolTips($ele);
-            
+
             /* markdownBody */
             $ele.find('[data-provide="markdownBody"]').markdownBody();
 
@@ -7235,10 +7253,10 @@ $(function (win, doc, $) {
             $ele.find('[data-provide="dialog"]').dialogSpy();
 
             /* replySpy */
-            $ele.replySpy("bind");            
+            $ele.replySpy("bind");
 
         });
-        
+
     });
 
 }(window, document, jQuery));
@@ -7391,7 +7409,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -7421,7 +7439,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        return methods.init($caller, methodName, func);                      
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -7516,7 +7534,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -7554,7 +7572,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* layout */
     var layout = function () {
 
@@ -7599,7 +7617,7 @@ $(function (win, doc, $) {
 
                 // Layout elements
                 var $stickyHeader = $caller.find(selectors.stickyHeader),
-                    $stickySidebar = $caller.find(selectors.stickySideBar),                    
+                    $stickySidebar = $caller.find(selectors.stickySideBar),
                     $stickySidebarContent = $stickySidebar.find(selectors.stickySideBarContent),
                     $stickyAsides = $caller.find(selectors.stickyAsides),
                     $stickyAsidesContent = $caller.find(selectors.stickyAsidesContent),
@@ -7648,10 +7666,10 @@ $(function (win, doc, $) {
                     });
 
                 }
-                
+
                 // Apply sticky sidebar
                 if (stickySidebars) {
-                    
+
                     // Accommodate for the static content
                     // being smaller than the fixed content
                     if ($content.length > 0) {
@@ -7660,7 +7678,7 @@ $(function (win, doc, $) {
                             $content.css({ "minHeight": $body.height() });
                         }
                     }
-                    
+
                     // Apply sticky to sidebars
                     $stickySidebar.sticky({
                         offset: sidebarOffsetTop,
@@ -7680,7 +7698,7 @@ $(function (win, doc, $) {
                         onUpdate: function ($this) {
                             if ($this.hasClass("fixed")) {
                                 // Setup content when container becomes fixed
-                                $stickySidebarContent.css({                                   
+                                $stickySidebarContent.css({
                                     "top": sidebarOffsetTop,
                                     "width": $this.width()
                                 });
@@ -7690,7 +7708,7 @@ $(function (win, doc, $) {
                                 }
                             } else {
                                 // Reset
-                                $stickySidebarContent.css({                                
+                                $stickySidebarContent.css({
                                     "top": "auto",
                                     "width": "auto"
                                 });
@@ -7703,7 +7721,7 @@ $(function (win, doc, $) {
                         }
                     });
 
-                }                
+                }
 
                 // Apply sticky asides
                 if (stickyAsides) {
@@ -7716,7 +7734,7 @@ $(function (win, doc, $) {
                             $content.css({ "minHeight": $body.height() });
                         }
                     }
-                    
+
                     // Apply sticky asides?
                     $stickyAsides.sticky({
                         offset: sidebarOffsetTop,
@@ -7760,17 +7778,17 @@ $(function (win, doc, $) {
                         }
                     });
 
-                }  
+                }
 
                 this._detectAndScrollToAnchor($caller);
 
             },
-            unbind: function ($caller) {             
+            unbind: function ($caller) {
                 $().sticky("unbind");
             },
-            getHeaderHeight: function ($caller) {                
+            getHeaderHeight: function ($caller) {
                 var $el = $caller.find(selectors.stickyHeader);
-                return $el.length > 0 ? $el.outerHeight() : 0;                
+                return $el.length > 0 ? $el.outerHeight() : 0;
             },
             _detectAndScrollToAnchor: function ($caller) {
 
@@ -7788,13 +7806,13 @@ $(function (win, doc, $) {
                     $().scrollTo({
                         offset: -offset,
                         target: $anchor,
-                        onComplete: function () {                            
+                        onComplete: function () {
                             $().infiniteScroll({
                                 scrollSpacing: offset
                             });
                         }
                     }, "go");
-                } else {                    
+                } else {
                     $().infiniteScroll({
                         scrollSpacing: offset
                     });
@@ -7817,7 +7835,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -7880,9 +7898,9 @@ $(function (win, doc, $) {
 
             },
             bind: function ($caller) {
-                
+
                 $caller.find(".list-group-item").on("mouseenter",
-                    function() {
+                    function () {
                         var $desc = $(this).find(".badge-description"),
                             $details = $(this).find(".badge-details");
                         $desc.hide();
@@ -7918,7 +7936,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;                      
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -7956,7 +7974,7 @@ $(function (win, doc, $) {
         };
 
     }();
-    
+
     /* Register Plugins */
     $.fn.extend({
         replySpy: replySpy.init,
@@ -7969,7 +7987,7 @@ $(function (win, doc, $) {
     // Initialize app plug-ins
     // ----------------------------
 
-    $.fn.appUI = function(opts) {
+    $.fn.appUI = function (opts) {
 
         /* navigation */
         this.find(".nav-site").navSite();
@@ -7983,7 +8001,7 @@ $(function (win, doc, $) {
 
         /* replySpy */
         this.replySpy();
-        
+
         /* badgeList */
         this.find('[data-provide="badge-list"]').badgeList();
 
@@ -7991,15 +8009,15 @@ $(function (win, doc, $) {
         if (opts.validation.scrollToErrors) {
             // Raised when the form is submitted but invalid
             this.find("form").bind("invalid-form.validate",
-                function() {
+                function () {
                     // Scroll to errors if any
                     var $errors = $(this).find(".validation-summary-errors");
                     if ($errors.length > 0) {
                         $().scrollTo({
-                                target: $errors,
-                                offset: -20,
-                                interval: 250
-                            },
+                            target: $errors,
+                            offset: -20,
+                            interval: 250
+                        },
                             "go");
                     }
                 });
@@ -8023,25 +8041,25 @@ $(function (win, doc, $) {
             // Auto close alerts?
             if (opts.alerts.autoClose) {
                 win.setTimeout(function () {
-                        $alerts.each(function () {
-                            if (!$(this).hasClass("alert-hidden")) {
-                                $(this).addClass("alert-hidden");
-                            }
-                        });
-                        //$(".alert").alert('close');
-                    },
+                    $alerts.each(function () {
+                        if (!$(this).hasClass("alert-hidden")) {
+                            $(this).addClass("alert-hidden");
+                        }
+                    });
+                    //$(".alert").alert('close');
+                },
                     opts.alerts.autoCloseDelay * 1000);
             }
         }
-      
+
     };
-    
+
     // --------------
     // ready
     // --------------
 
-    app.ready(function () {     
-        $("body").appUI(win.$.Plato.defaults); 
+    app.ready(function () {
+        $("body").appUI(win.$.Plato.defaults);
     });
 
 }(window, document, jQuery));
@@ -8052,11 +8070,11 @@ $(function (win, doc, $) {
 
 $(function (win, doc, $) {
 
-    'use strict';        
+    'use strict';
 
     var app = win.$.Plato;
 
-    app.ready(function () {    
+    app.ready(function () {
 
         // Accomodate for custom "formaction" attributes added
         // when using multiple submit elements within a single form
@@ -8070,12 +8088,12 @@ $(function (win, doc, $) {
         //      Delete
         // </button>
         $('*[type="submit"]').click(function () {
-            var action = $(this).attr("formaction");          
+            var action = $(this).attr("formaction");
             if (action) {
                 var $form = $(this).closest("form");
                 if ($form.length > 0) {
                     $form[0].action = action;
-                }               
+                }
             }
         });
 
@@ -8084,7 +8102,7 @@ $(function (win, doc, $) {
     // Update jQuery validation defaults
     $.validator.setDefaults({
         focusInvalid: true,
-        submitHandler: function(form) {
+        submitHandler: function (form) {
 
             // Remove any local storage for the page upon submission
             app.storage.remove(win.location.href);
@@ -8103,9 +8121,9 @@ $(function (win, doc, $) {
             // Note don't call $(form).submit() as this 
             // internally calls the validators submitHandler again
             form.submit();
-            
+
         },
-        invalidHandler: function(event, validator) {
+        invalidHandler: function (event, validator) {
             // Cannot be updated after MVC initialization
             // https://github.com/jquery-validation/jquery-validation/issues/765
         }
@@ -8122,8 +8140,8 @@ $(function (win, doc, $) {
         if (!value) return true;
         value = $.trim(value);
         if (!value) return true;
-        
-        var $element = $(element),            
+
+        var $element = $(element),
             blackList = $element.data("valUsernameBlacklist"),
             length = $element.data("valUsernameLength");
 
@@ -8199,9 +8217,9 @@ $(function (win, doc, $) {
             digit = $element.data("valPasswordDigit"),
             nonAlphaNumeric = $element.data("valPasswordNonAlphaNumeric"),
             length = $element.data("valPasswordLength");
-        
+
         if (length) {
-            var len = parseInt(length);         
+            var len = parseInt(length);
             if (!isNaN(len)) {
                 if (value.length < len) {
                     return false;
@@ -8209,30 +8227,30 @@ $(function (win, doc, $) {
             }
         }
 
-        if (lower && !any(value, isLower)) {            
+        if (lower && !any(value, isLower)) {
             return false;
         }
 
-        if (upper && !any(value, isUpper)) {            
+        if (upper && !any(value, isUpper)) {
             return false;
         }
 
-        if (digit && !any(value, isDigit)) {            
+        if (digit && !any(value, isDigit)) {
             return false;
         }
 
         // All digits or characters (i.e. No special characters)
-        if (nonAlphaNumeric && all(value, isLetterOrDigit)) {            
+        if (nonAlphaNumeric && all(value, isLetterOrDigit)) {
             return false;
         }
 
         return true;
 
-    });    
+    });
 
     // add adapters
-    var adapters = $.validator.unobtrusive.adapters;    
+    var adapters = $.validator.unobtrusive.adapters;
     adapters.addBool("username");
     adapters.addBool("password");
-    
+
 }(window, document, jQuery));
