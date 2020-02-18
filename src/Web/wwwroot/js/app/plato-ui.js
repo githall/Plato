@@ -1457,6 +1457,11 @@ $(function (win, doc, $) {
         var dataKey = "autoComplete",
             dataIdKey = dataKey + "Id";
 
+        // Supported display modes
+        var displayModes = {
+            always: "always"
+        };
+
         var defaults = {
             page: 1, // the initial page
             pageSize: 10, // number of results to display per page
@@ -1464,7 +1469,8 @@ $(function (win, doc, $) {
             onShow: null, // triggers when the autocomplete target is displayed
             onHide: null, // triggers when the autocomplete target is hidden
             onKeyDown: null, // triggers for key down events within the autocomplete input element
-            valueField: null // the name of the querystring or post parameter representing the keywords for the request
+            valueField: null, // the name of the querystring or post parameter representing the keywords for the request
+            displayMode: null // allows us to specify unique modes to control how the autocomplete behaves
         };
 
         var methods = {
@@ -1489,27 +1495,49 @@ $(function (win, doc, $) {
                 methods.bind($caller);
 
             },
-            bind: function($caller) {
+            bind: function($caller) {                
 
                 $caller.bind("focus",
-                    function() {
-                        if ($(this).val().length === 0) {
-                            methods.hide($(this));
-                        } else {
-                            // Show
-                            methods.show($(this),
-                                function() {
-                                    // Update if not already visible
-                                    methods.update($caller);
-                                });
+                    function () {
+
+                        // Set-up based on display mode
+                        var displayMode = methods.getDisplayMode($caller);
+                        switch (displayMode) {
+
+                            case displayModes.always: // Always show regardless of user supplied input                   
+                                
+                                methods.show($(this),
+                                    function () {
+                                        // Update if not already visible
+                                        methods.update($caller);
+                                    });
+
+                                break;
+
+                            default: // Only show if the user has supplied input
+                                
+                                if ($(this).val().length === 0) {
+                                    methods.hide($(this));
+                                } else {
+                                    // Show
+                                    methods.show($(this),
+                                        function () {
+                                            // Update if not already visible
+                                            methods.update($caller);
+                                        });
+
+                                }
 
                         }
+                     
                     });
-
+                
                 $caller.bind("keydown.",
                     function(e) {
                         var $target = methods.getTarget($(this));
                         if ($target) {
+
+                            // Hook up keyboard navigation if dropdown is visible
                             if ($target.is(":visible")) {
 
                                 var itemCss = $target.data("pagedList").itemCss,                                  
@@ -1578,10 +1606,7 @@ $(function (win, doc, $) {
                             if ($caller.data(dataKey).onKeyDown) {
                                 $caller.data(dataKey).onKeyDown($caller, e, $target);
                             }
-
                         }
-
-
                     });
 
                 // spy on our input
@@ -1766,6 +1791,9 @@ $(function (win, doc, $) {
 
                 return null;
 
+            },
+            getDisplayMode: function ($caller) {            
+                return $caller.data("autocompleteDisplay") || $caller.data(dataKey).displayMode;
             }
         };
         
