@@ -1663,7 +1663,10 @@ $(function (win, doc, $) {
                     .unbind("keydown");
                 $caller.typeSpy("unbind");
             },
-            show: function($caller, onShow) {
+            show: function ($caller, onShow) {
+                // Hide all other dropdowns
+                this.hideAll($caller);
+                // Get & display our current target
                 var $target = this.getTarget($caller);
                 if ($target.length > 0) {
                     // Allows for initially hidden state
@@ -1702,6 +1705,14 @@ $(function (win, doc, $) {
                         }
                     }
                 }
+            },
+            hideAll: function ($caller) {
+                var $current = $caller.closest(".dropdown");                
+                $(".dropdown").each(function () {
+                    if (this !== $current[0]) {
+                        $(this).find(".dropdown-menu").removeClass('show');
+                    }         
+                });
             },
             update: function($caller) {
 
