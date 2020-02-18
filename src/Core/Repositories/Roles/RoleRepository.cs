@@ -250,8 +250,7 @@ namespace PlatoCore.Repositories.Roles
             return output;
         }
 
-
-        public async Task<IEnumerable<Role>> SelectRoles()
+        public async Task<IEnumerable<Role>> SelectRolesAsync()
         {
             IList<Role> output = null;
             using (var context = _dbContext)

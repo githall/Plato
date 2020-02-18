@@ -2,8 +2,8 @@
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
-using PlatoCore.Data.Abstractions;
 using PlatoCore.Models.Roles;
+using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions;
 
 namespace PlatoCore.Stores.Roles

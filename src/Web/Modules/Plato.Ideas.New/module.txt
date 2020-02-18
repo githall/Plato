@@ -1,5 +1,5 @@
 Name: Plato Ideas New
-Description: Adds a "New" or "Updated" indicator for unread or updated ideas within Plato Ideas.
+Description: Adds a "New" or "Updated" indicator for unread or updated ideas.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Ideas

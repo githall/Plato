@@ -1,28 +1,28 @@
 ﻿using System;
 using System.Linq;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Models.Roles;
-using PlatoCore.Models.Users;
 using PlatoCore.Repositories.Roles;
 using PlatoCore.Stores.Abstractions.Roles;
 
 namespace PlatoCore.Stores.Roles
 {
+
     public class PlatoRoleStore : IPlatoRoleStore
     {
 
         public const string UserId = "ByUserId";
-        
+
         private readonly IRoleRepository<Role> _roleRepository;
         private readonly ILogger<PlatoRoleStore> _logger;
         private readonly IDbQueryConfiguration _dbQuery;
         private readonly ICacheManager _cacheManager;
-      
+
         public PlatoRoleStore(
             IRoleRepository<Role> roleRepository,
             ILogger<PlatoRoleStore> logger,
@@ -30,11 +30,11 @@ namespace PlatoCore.Stores.Roles
             ICacheManager cacheManager)
         {
             _roleRepository = roleRepository;
-            _dbQuery = dbQuery;
             _cacheManager = cacheManager;
+            _dbQuery = dbQuery;
             _logger = logger;
         }
-        
+
         public async Task<Role> CreateAsync(Role role)
         {
             
@@ -109,7 +109,7 @@ namespace PlatoCore.Stores.Roles
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType());
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _roleRepository.SelectRoles());
+                async (cacheEntry) => await _roleRepository.SelectRolesAsync());
         }
 
         public async Task<Role> GetByNormalizedNameAsync(string nameNormalized)
@@ -129,9 +129,9 @@ namespace PlatoCore.Stores.Roles
         public IQuery<Role> QueryAsync()
         {
             var query = new RoleQuery(this);
-            return _dbQuery.ConfigureQuery< Role>(query); ;
+            return _dbQuery.ConfigureQuery(query); ;
         }
-        
+
         public async Task<IPagedResults<Role>> SelectAsync(IDbDataParameter[] dbParams)
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType(), dbParams.Select(p => p.Value).ToArray());
@@ -181,7 +181,7 @@ namespace PlatoCore.Stores.Roles
                 _cacheManager.CancelTokens(this.GetType(), model.Name);
                 _cacheManager.CancelTokens(this.GetType(), model.NormalizedName);
             }
-          
+
         }
 
     }

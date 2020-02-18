@@ -1,9 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
 using System.Linq;
+using System.ComponentModel;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using Plato.Entities.Extensions;
@@ -353,7 +353,7 @@ namespace Plato.Entities.Stores
                 _cacheManager.CancelTokens(typeof(EntityStore<Entity>));
             }
 
-            // Clear simple entities store
+            // Clear simple entity store
             _cacheManager.CancelTokens(typeof(SimpleEntityStore<SimpleEntity>));
 
             // Clear entity data store
