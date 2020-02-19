@@ -10,16 +10,16 @@ namespace PlatoCore.Abstractions.Extensions
         {
             if (input == null)
             {
-                return "0";
+                return default(int).ToString();
             }
 
-            return ToPrettyInt((int) input, precise);
+            return input.Value.ToPrettyInt(precise);
         }
 
         public static string ToPrettyInt(this int input, bool precise = false)
         {
 
-            var output = "";
+            var output = string.Empty;
             if (input == 0)
             {
                 output = "0";
@@ -81,7 +81,7 @@ namespace PlatoCore.Abstractions.Extensions
 
             if (input == 0) return default(int);
             if (total == 0) return input;
-            var result = $"{(decimal) input / total:#.##}";
+            var result = $"{(decimal)input / total:#.##}";
             if (!string.IsNullOrEmpty(result))
             {
                 return Convert.ToDouble(result);
@@ -128,6 +128,46 @@ namespace PlatoCore.Abstractions.Extensions
 
             output = input + output;
             return output;
+
+        }
+
+        public static string ToPrettyTimeFromSeconds(this int? input)
+        {
+            if (input == null)
+            {
+                return default(int).ToString();
+            }
+
+            return input.Value.ToPrettyTimeFromSeconds();
+        }
+
+        public static string ToPrettyTimeFromSeconds(this int seconds)
+        {
+
+            var t = TimeSpan.FromSeconds(seconds);
+
+            if (t.Days > 0)
+            {
+                return string.Format("{0:D1}d {1:D1}h",
+                    t.Days,
+                    t.Hours);
+            }
+
+            if (t.Hours > 0)
+            {
+                return string.Format("{0:D1}h {1:D1}m",
+                    t.Hours,
+                    t.Minutes);
+            }
+
+            if (t.Minutes > 0)
+            {
+                return string.Format("{0:D1}m {1:D1}s",
+                    t.Minutes,
+                    t.Seconds);
+            }
+
+            return string.Format("{0:D1}s", t.Seconds);
 
         }
 

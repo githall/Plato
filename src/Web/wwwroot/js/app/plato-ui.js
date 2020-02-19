@@ -3607,17 +3607,14 @@ $(function (win, doc, $) {
                 return html;
             }, // provides a method to parse our itemTemplate with data returned from service url
             onAddItem: function ($caller, result, e) {
-                var items = [];
-                var key = $caller.data(dataKey).dataKey || "";
-                if (key !== "") {
-                    items = $caller.data(key).items;
-                } else {
-                    items = $caller.data(dataKey).items;
+                var key = dataKey;
+                if ($caller.data(dataKey).dataKey) {
+                    key = $caller.data(dataKey).dataKey;
                 }
-                items.push({
+                $caller.data(key).items.push({
                     text: result.text,
                     value: result.value
-                });
+                });              
             }
         };
 
@@ -3889,11 +3886,11 @@ $(function (win, doc, $) {
                 }
             },
             getItems: function ($caller) {
-                var key = this.getItemsKey($caller);
+                var key = this.getItemsKey($caller);           
                 return $caller.data(key).items;
             },
-            setItems: function ($caller, items) {
-                var key = this.getItemsKey($caller);
+            setItems: function ($caller, items) {                
+                var key = this.getItemsKey($caller);   
                 $caller.data(key).items = items;
             },
             getItemsKey: function ($caller) {
@@ -3905,7 +3902,7 @@ $(function (win, doc, $) {
                 }
                 return dataKey;
             },
-            getStore: function ($caller) {
+            getStore: function($caller) {
                 var selector = $caller.data("tagitStore") ||
                     $caller.data(dataKey).store;
                 if (selector) {
@@ -3916,13 +3913,13 @@ $(function (win, doc, $) {
                 }
                 return null;
             },
-            setStore: function ($caller, value) {
+            setStore: function($caller, value) {
                 var $store = this.getStore($caller);
                 if ($store) {
                     $store.val(value);
                 }
             },
-            serialize: function ($caller) {
+            serialize: function($caller) {
                 var $store = this.getStore($caller);
                 if ($store) {
                     var items = this.getItems($caller);
@@ -3937,7 +3934,7 @@ $(function (win, doc, $) {
                 }
             }
         };
-
+        
         return {
             init: function () {
 
@@ -3952,7 +3949,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                     
                         case Function:
                             func = a;
                             break;
@@ -3983,14 +3980,14 @@ $(function (win, doc, $) {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
                         return methods.init($caller, methodName, func);
-                    }
+                    }          
                 }
 
             }
         };
 
     }();
-
+    
     /* selectDropdown */
     var selectDropdown = function () {
 
@@ -4016,7 +4013,7 @@ $(function (win, doc, $) {
             return getOffsetFromParent($caller.find(".active"), $caller);
 
         }
-
+        
         var defaults = {
             event: "click",
             items: [], // our array of selected items
@@ -4034,9 +4031,9 @@ $(function (win, doc, $) {
                 }
                 return html;
             }, // provides a method to parse our itemTemplate with data returned from service url
-            onShow: function ($caller, $dropdown) {
+            onShow: function($caller, $dropdown) {
 
-                $caller.find('input[type="radio"], input[type="checkbox"]').each(function () {
+                $caller.find('input[type="radio"], input[type="checkbox"]').each(function() {
                     if ($(this).is(":checked")) {
                         var $parent = $(this).parent(".dropdown-item");
                         if (!$parent.hasClass("active")) {
@@ -4044,7 +4041,7 @@ $(function (win, doc, $) {
                         }
                     }
                 });
-
+                
                 // Add initial text
                 var $a = $caller.find(".dropdown-toggle");
                 if ($a.length > 0) {
@@ -4066,19 +4063,19 @@ $(function (win, doc, $) {
                             }
                         });
                 });
-
+                
                 // Scroll to active item
                 var $scrollable = $caller.find(".overflow-auto");
                 if ($scrollable.length > 0) {
                     var offset = getOffset($caller),
                         top = offset.top - $caller.height();
                     $scrollable.scrollTo({
-                        offset: top,
-                        interval: 500
-                    },
+                            offset: top,
+                            interval: 500
+                        },
                         "go");
                 }
-
+            
 
             }, // triggers when the dropdown is shown
             onChange: function ($caller, $input, e) {
@@ -4093,10 +4090,10 @@ $(function (win, doc, $) {
                 if ($input.attr("disabled") || $label.attr("disabled")) {
                     return;
                 }
-
+           
                 // Clear active
                 $caller.find(".dropdown-item").removeClass("active");
-
+                
                 // Apply active
                 var items = [];
                 $caller.find('input[type="radio"], input[type="checkbox"]').each(function () {
@@ -4120,7 +4117,7 @@ $(function (win, doc, $) {
                         if ($(this).data("navText")) {
                             items.push($(this).data("navText"));
                         }
-                    }
+                    } 
 
                     // Scroll to first active item
                     var $scrollable = $caller.find(".overflow-auto");
@@ -4128,9 +4125,9 @@ $(function (win, doc, $) {
                         var offset = getOffset($caller),
                             top = offset.top - $caller.height();
                         $scrollable.scrollTo({
-                            offset: top,
-                            interval: 500
-                        },
+                                offset: top,
+                                interval: 500
+                            },
                             "go");
                     }
 
@@ -4140,7 +4137,7 @@ $(function (win, doc, $) {
                 var s = "",
                     text = "",
                     $a = $caller.find(".dropdown-toggle");
-
+                
                 if (items.length > 0) {
                     for (var i = 0; i < items.length; i++) {
                         s += items[i];
@@ -4363,7 +4360,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                           
                             case Function:
                                 func = a;
                                 break;
@@ -4402,7 +4399,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* confirm */
     var confirm = function () {
 
@@ -4410,7 +4407,7 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            event: "click",
+            event: "click", 
             message: "Are you sure you wish to permanently delete this item?\n\nThis operation cannot be undone.\n\nClick OK to confirm..."
         };
 
@@ -4447,7 +4444,7 @@ $(function (win, doc, $) {
                         }
 
                         // Show confirmation dialog
-                        $().dialog({
+                        $().dialog({                       
                             title: "Confirm",
                             body: {
                                 url: null,
@@ -4457,8 +4454,8 @@ $(function (win, doc, $) {
                                 {
                                     id: "cancel",
                                     text: "Cancel",
-                                    css: "btn btn-secondary",
-                                    click: function () {
+                                    css: "btn btn-secondary",                                    
+                                    click: function () {                                     
                                         $().dialog("hide");
                                         return false;
                                     }
@@ -4466,8 +4463,8 @@ $(function (win, doc, $) {
                                 {
                                     id: "ok",
                                     text: "OK",
-                                    css: "btn btn-primary",
-                                    click: function ($dialog, $button) {
+                                    css: "btn btn-primary",                           
+                                    click: function ($dialog, $button) {     
                                         // Disable button
                                         $button
                                             .addClass("disabled")
@@ -4475,8 +4472,8 @@ $(function (win, doc, $) {
                                         // Click the original button but this time 
                                         // set a flag so the click event hander returns true 
                                         // invoking navigation
-                                        $this.data(confirmedFlagKey, true);
-                                        $this[0].click();
+                                        $this.data(confirmedFlagKey, true);                                           
+                                        $this[0].click();                                      
                                     }
                                 }
                             ]
@@ -4485,7 +4482,7 @@ $(function (win, doc, $) {
 
                         // Return false to ensure navigation does not occurr
                         return false;
-
+                
                     });
             },
             unbind: function ($caller) {
@@ -4509,7 +4506,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                          
                             case Function:
                                 func = a;
                                 break;
@@ -4706,9 +4703,9 @@ $(function (win, doc, $) {
 
                     // Ensure we scroll the container to the top
                     $container.scrollTo({
-                        offset: 0,
-                        interval: 500
-                    },
+                            offset: 0,
+                            interval: 500
+                        },
                         "go");
 
                     // onShow event
@@ -4733,7 +4730,7 @@ $(function (win, doc, $) {
                     methods.hide($caller);
                 }
             },
-            _isExpanded: function ($caller) {
+            _isExpanded: function($caller) {
                 if (methods._isHorizontal($caller)) {
                     return $caller.height() === $(win).height();
                 }
@@ -4784,7 +4781,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                          
                             case Function:
                                 func = a;
                                 break;
@@ -4823,7 +4820,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* autoTargetBlank */
     var autoTargetBlank = function () {
 
@@ -4837,7 +4834,7 @@ $(function (win, doc, $) {
         var methods = {
             timer: null,
             init: function ($caller, methodName, func) {
-
+                
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -4846,11 +4843,11 @@ $(function (win, doc, $) {
                     }
                     return null;
                 }
-
+                
                 this.bind($caller);
 
             },
-            bind: function ($caller) {
+            bind: function($caller) {
                 var selector = $caller.data(dataKey).selector;
                 $caller.find(selector).each(function () {
                     var href = $(this).attr("href");
@@ -4858,7 +4855,7 @@ $(function (win, doc, $) {
                         if (methods._isExternal(href)) {
                             $(this).attr("data-auto-target", "true");
                             $(this).attr("target", "_blank");
-                        }
+                        }                      
                     }
                 });
             },
@@ -4893,7 +4890,7 @@ $(function (win, doc, $) {
                 }
 
                 return false;
-
+                
             }
         };
 
@@ -4911,7 +4908,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                     
                         case Function:
                             func = a;
                             break;
@@ -4976,10 +4973,10 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function ($caller) {
+            bind: function($caller) {
                 // Iterate images to auto link
                 var selector = $caller.data(dataKey).selector;
-                $caller.find(selector).each(function (i) {
+                $caller.find(selector).each(function(i) {
                     // Ensure we have a src attribute to link to
                     if ($(this).attr("src")) {
 
@@ -5035,7 +5032,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                      
                         case Function:
                             func = a;
                             break;
@@ -5073,7 +5070,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* markdownBody */
     var markdownBody = function () {
 
@@ -5082,7 +5079,7 @@ $(function (win, doc, $) {
 
         var defaults = {
             autoTargetBlank: true,
-            autoLinkImages: true
+            autoLinkImages : true
         };
 
         var methods = {
@@ -5149,7 +5146,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                        
                         case Function:
                             func = a;
                             break;
@@ -5187,7 +5184,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* userAutoComplete */
     var userAutoComplete = function () {
 
@@ -5287,7 +5284,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                         
                             case Function:
                                 func = a;
                                 break;
@@ -5337,7 +5334,7 @@ $(function (win, doc, $) {
 
         var methods = {
             init: function ($caller, methodName, func) {
-
+                
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5394,7 +5391,7 @@ $(function (win, doc, $) {
                     onItemClick: function ($input, result, e) {
 
                         e.preventDefault();
-
+                        
                         // Get index if item already exists, else return -1
                         var index = methods.getIndex($caller, result);
                         if (index === -1) {
@@ -5469,7 +5466,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                      
                         case Function:
                             func = a;
                             break;
@@ -5507,7 +5504,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* keyBinder */
     var keyBinder = function () {
 
@@ -5598,7 +5595,7 @@ $(function (win, doc, $) {
                                         case 39: // right
                                             return;
                                         case 40: // down
-                                            return;
+                                            return;                                       
                                         case 27: // escape
                                             return;
                                         default:
@@ -5659,7 +5656,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                          
                             case Function:
                                 func = a;
                                 break;
@@ -5738,7 +5735,7 @@ $(function (win, doc, $) {
 
                 var $mirror = methods.getOrCreateMirror($caller);
                 if ($mirror) {
-
+                    
                     // Populate & show mirror, ensure the mirrored fields input
                     // is encoded for safe display
                     $mirror.html(html
@@ -5803,7 +5800,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                           
                             case Function:
                                 func = a;
                                 break;
@@ -5900,7 +5897,7 @@ $(function (win, doc, $) {
                 $caller.textFieldMirror({
                     start: cursor.start,
                     ready: function ($mirror) {
-
+                        
                         // Get position from mirrored marker
                         var $marker = $mirror.find(".text-field-mirror-marker");
 
@@ -6007,7 +6004,7 @@ $(function (win, doc, $) {
                                         newIndex = -1;
 
                                     if (itemSelection.enable) {
-
+                          
                                         switch (e.which) {
                                             case 13: // carriage return
                                                 newIndex = -1; // reset selection upon carriage return
@@ -6174,7 +6171,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                           
                             case Function:
                                 func = a;
                                 break;
@@ -6213,7 +6210,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* popper */
     var popper = function () {
 
@@ -6232,7 +6229,7 @@ $(function (win, doc, $) {
             timer: null,
             callers: [], // array of all active callers
             init: function ($caller, methodName, func) {
-
+                
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -6247,7 +6244,7 @@ $(function (win, doc, $) {
                 if (!$caller.data("popperOriginalPosition")) {
                     $caller.data("popperOriginalPosition", position);
                 }
-
+                
                 this.bind($caller);
 
             },
@@ -6278,8 +6275,8 @@ $(function (win, doc, $) {
                         });
                     }
 
-                }
-
+                }                
+                
             },
             unbind: function ($caller) {
                 var event = $caller.data(dataKey).event;
@@ -6294,11 +6291,11 @@ $(function (win, doc, $) {
             show: function ($caller) {
 
                 var delay = 250;
-
+                
                 if ($caller.data("popperDelay")) {
                     delay = $caller.data("popperDelay");
                 }
-
+                
                 if (delay > 0) {
                     methods.timer = win.setTimeout(function () {
                         if (methods.timer) { showTip(); }
@@ -6311,12 +6308,12 @@ $(function (win, doc, $) {
 
                     var position = methods._getPosition($caller),
                         $popper = methods._getOrCreate($caller);
-
+                 
                     if ($popper) {
-
+                        
                         // hide all poppers
                         methods.hideAll();
-
+                        
                         // add to stack
                         methods.callers.push($caller);
 
@@ -6324,13 +6321,13 @@ $(function (win, doc, $) {
                         methods._addCss($caller);
 
                         // Load content
-                        methods._load($caller, function ($el) {
-
+                        methods._load($caller, function($el) {
+                        
                             // Position
                             methods._position($caller);
-
+                            
                         });
-
+                        
                         // onShow
                         if ($caller.data(dataKey) && $caller.data(dataKey).onShow) {
                             $caller.data(dataKey).onShow($caller, $popper);
@@ -6344,7 +6341,7 @@ $(function (win, doc, $) {
 
                 var $popper = methods._getOrCreate($caller);
                 if ($popper) {
-
+                    
                     // Remove Css
                     methods._removeCss($caller);
 
@@ -6355,7 +6352,7 @@ $(function (win, doc, $) {
                     if ($caller.data(dataKey) && $caller.data(dataKey).onHide) {
                         $caller.data(dataKey).onHide();
                     }
-
+                    
                 }
 
             },
@@ -6377,12 +6374,12 @@ $(function (win, doc, $) {
 
                 var $popper = methods._getOrCreate($caller);
                 if ($popper) {
-
+                    
                     // Update entity dropdown
                     app.http({
                         method: "GET",
                         url: url
-                    }).done(function (response) {
+                    }).done(function(response) {
 
                         // Populate content
                         if ($popper.length > 0) {
@@ -6407,11 +6404,11 @@ $(function (win, doc, $) {
 
 
                     });
-
+                    
                 }
 
             },
-            _getOrCreate: function ($caller) {
+            _getOrCreate: function($caller) {
 
                 var id = $caller.data(dataKey).id,
                     selector = "#" + id,
@@ -6424,10 +6421,10 @@ $(function (win, doc, $) {
 
                 // Build popper
                 if ($(selector).length === 0) {
-
+                    
                     // Add to dom
                     $("body").append($popper);
-
+                    
                     // Bind leave events
                     $popper.leaveSpy({
                         selector: ".popper",
@@ -6436,7 +6433,7 @@ $(function (win, doc, $) {
                             methods.hideAll();
                         }
                     });
-
+                    
                     // Return new popper
                     return $popper;
 
@@ -6444,9 +6441,9 @@ $(function (win, doc, $) {
 
                 // Return existing popper
                 return $(selector);
-
+          
             },
-            _addCss: function ($caller) {
+            _addCss: function($caller) {
 
                 var $popper = methods._getOrCreate($caller),
                     css = $caller.data("popperCss") || $caller.data(dataKey).css,
@@ -6458,7 +6455,7 @@ $(function (win, doc, $) {
                         $popper.addClass(css);
                     }
                 }
-
+                
                 // Add show Css
                 if (position === "top") {
                     $popper.addClass("popper-n");
@@ -6469,7 +6466,7 @@ $(function (win, doc, $) {
                 } else if (position === "right") {
                     $popper.addClass("popper-e");
                 }
-
+                
             },
             _removeCss: function ($caller) {
 
@@ -6485,16 +6482,16 @@ $(function (win, doc, $) {
                     .removeClass("popper-e")
                     .removeClass("popper-s")
                     .removeClass("popper-w");
-
+                
                 // Custom Css
                 if (css) {
                     if ($popper.hasClass(css)) {
                         $popper.removeClass(css);
                     }
                 }
-
+                
             },
-            _position: function ($caller) {
+            _position: function($caller) {
 
                 var $popper = methods._getOrCreate($caller);
                 if ($popper) {
@@ -6503,7 +6500,7 @@ $(function (win, doc, $) {
                         "display": "block",
                         "visibility": "hidden"
                     });
-
+                    
                     // get caller coords
                     var $offset = $caller.offset(),
                         callerTop = Math.floor($offset.top),
@@ -6551,9 +6548,9 @@ $(function (win, doc, $) {
                         scrollBottom = scrollTop + winHeight,
                         aboveFold = top < scrollTop + padding,
                         belowFold = bottom > scrollBottom + padding;
-
+                    
                     if (position === "top" || position === "bottom") {
-
+                        
                         if (aboveFold && !belowFold) {
 
                             // Remove Css
@@ -6581,7 +6578,7 @@ $(function (win, doc, $) {
                             methods._position($caller);
 
                         }
-
+                            
                         if (left <= 0) {
                             $popper.css({ "left": padding });
                         } else {
@@ -6636,7 +6633,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                   
                         case Function:
                             func = a;
                             break;
@@ -6716,7 +6713,7 @@ $(function (win, doc, $) {
                         });
                 }
             },
-            toggle: function ($caller) {
+            toggle: function($caller) {
                 if ($caller.attr("type") === "password") {
                     $caller.attr("type", "text");
                 } else {
@@ -6730,7 +6727,7 @@ $(function (win, doc, $) {
                     $btn.off(event);
                 }
             },
-            _getButton: function ($caller) {
+            _getButton: function($caller) {
                 var $btn = $caller.next();
                 if ($btn[0].tagName === "BUTTON" || $btn[0].tagName === "A") {
                     return $btn;
@@ -6754,7 +6751,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                         
                             case Function:
                                 func = a;
                                 break;
@@ -6788,7 +6785,7 @@ $(function (win, doc, $) {
                                 $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                             }
                             return methods.init($caller, methodName, func);
-                        });
+                        });                     
                     }
                 }
 
@@ -6826,7 +6823,7 @@ $(function (win, doc, $) {
                     $caller.removeClass("page-loader-hidden");
                 }
             },
-            hide: function ($caller) {
+            hide: function($caller) {
                 if ($caller.hasClass("page-loader")) {
                     $caller.addClass("page-loader-hidden");
                 }
@@ -6848,7 +6845,7 @@ $(function (win, doc, $) {
                                 break;
                             case String:
                                 methodName = a;
-                                break;
+                                break;                         
                             case Function:
                                 func = a;
                                 break;
@@ -6868,7 +6865,7 @@ $(function (win, doc, $) {
                         }
                         return methods.init($(this), methodName, func);
                     });
-                } else {
+                } else {                    
                     // $().loader()
                     var $callers = $('[data-provide="loader"]');
                     if ($callers.length > 0) {
@@ -7026,16 +7023,16 @@ $(function (win, doc, $) {
 
                 var breakPoint = parseInt($caller.data("breakPoint") || $caller.data(dataKey).breakPoint),
                     activeCss = $caller.data("activeCss") || $caller.data(dataKey).activeCss;
-
+                
                 if (breakPoint === null ||
                     typeof breakPoint === "undefined" ||
                     isNaN(breakPoint)) {
                     breakPoint = $(win).height() / 3;
                 }
-
+                
                 $().scrollSpy({
                     namespace: dataKey,
-                    onScroll: function (spy) {
+                    onScroll: function(spy) {
                         if (spy.scrollTop > breakPoint) {
                             if (!$caller.hasClass(activeCss)) {
                                 $caller.addClass(activeCss);
@@ -7113,7 +7110,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* Register Plugins */
     $.fn.extend({
         dialog: dialog.init,
@@ -7152,9 +7149,9 @@ $(function (win, doc, $) {
     // ---------------------------
     // Initialize core plug-ins
     // ----------------------------
-
-    $.fn.platoUI = function (opts) {
-
+   
+    $.fn.platoUI = function(opts) {
+        
         /* dialogSpy */
         this.find('[data-provide="dialog"]').dialogSpy();
 
@@ -7169,7 +7166,7 @@ $(function (win, doc, $) {
 
         /* select dropdown */
         this.find('[data-provide="select-dropdown"]').selectDropdown();
-
+        
         /* treeView */
         this.find('[data-provide="tree"]').treeView();
 
@@ -7181,7 +7178,7 @@ $(function (win, doc, $) {
 
         /* userAutoComplete */
         this.find('[data-provide="userAutoComplete"]').userAutoComplete();
-
+        
         /* tagIt */
         this.find('[data-provide="tagIt"]').tagIt();
 
@@ -7199,7 +7196,7 @@ $(function (win, doc, $) {
 
         /* markdownBody */
         this.find('[data-provide="markdownBody"]').markdownBody();
-
+     
         /* infiniteScroll */
         /* Initialized via $().layout so we can set the ScrollSpacing correctly */
         //this.find('[data-provide="infiniteScroll"]').infiniteScroll();
@@ -7245,7 +7242,7 @@ $(function (win, doc, $) {
 
             /* tooltips */
             app.ui.initToolTips($ele);
-
+            
             /* markdownBody */
             $ele.find('[data-provide="markdownBody"]').markdownBody();
 
@@ -7253,10 +7250,10 @@ $(function (win, doc, $) {
             $ele.find('[data-provide="dialog"]').dialogSpy();
 
             /* replySpy */
-            $ele.replySpy("bind");
+            $ele.replySpy("bind");            
 
         });
-
+        
     });
 
 }(window, document, jQuery));
@@ -7409,7 +7406,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                      
                         case Function:
                             func = a;
                             break;
@@ -7439,7 +7436,7 @@ $(function (win, doc, $) {
                         } else {
                             $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
-                        return methods.init($caller, methodName, func);
+                        return methods.init($caller, methodName, func);                      
                     }
                 }
 
@@ -7534,7 +7531,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                      
                         case Function:
                             func = a;
                             break;
@@ -7572,7 +7569,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* layout */
     var layout = function () {
 
@@ -7617,7 +7614,7 @@ $(function (win, doc, $) {
 
                 // Layout elements
                 var $stickyHeader = $caller.find(selectors.stickyHeader),
-                    $stickySidebar = $caller.find(selectors.stickySideBar),
+                    $stickySidebar = $caller.find(selectors.stickySideBar),                    
                     $stickySidebarContent = $stickySidebar.find(selectors.stickySideBarContent),
                     $stickyAsides = $caller.find(selectors.stickyAsides),
                     $stickyAsidesContent = $caller.find(selectors.stickyAsidesContent),
@@ -7666,10 +7663,10 @@ $(function (win, doc, $) {
                     });
 
                 }
-
+                
                 // Apply sticky sidebar
                 if (stickySidebars) {
-
+                    
                     // Accommodate for the static content
                     // being smaller than the fixed content
                     if ($content.length > 0) {
@@ -7678,7 +7675,7 @@ $(function (win, doc, $) {
                             $content.css({ "minHeight": $body.height() });
                         }
                     }
-
+                    
                     // Apply sticky to sidebars
                     $stickySidebar.sticky({
                         offset: sidebarOffsetTop,
@@ -7698,7 +7695,7 @@ $(function (win, doc, $) {
                         onUpdate: function ($this) {
                             if ($this.hasClass("fixed")) {
                                 // Setup content when container becomes fixed
-                                $stickySidebarContent.css({
+                                $stickySidebarContent.css({                                   
                                     "top": sidebarOffsetTop,
                                     "width": $this.width()
                                 });
@@ -7708,7 +7705,7 @@ $(function (win, doc, $) {
                                 }
                             } else {
                                 // Reset
-                                $stickySidebarContent.css({
+                                $stickySidebarContent.css({                                
                                     "top": "auto",
                                     "width": "auto"
                                 });
@@ -7721,7 +7718,7 @@ $(function (win, doc, $) {
                         }
                     });
 
-                }
+                }                
 
                 // Apply sticky asides
                 if (stickyAsides) {
@@ -7734,7 +7731,7 @@ $(function (win, doc, $) {
                             $content.css({ "minHeight": $body.height() });
                         }
                     }
-
+                    
                     // Apply sticky asides?
                     $stickyAsides.sticky({
                         offset: sidebarOffsetTop,
@@ -7778,17 +7775,17 @@ $(function (win, doc, $) {
                         }
                     });
 
-                }
+                }  
 
                 this._detectAndScrollToAnchor($caller);
 
             },
-            unbind: function ($caller) {
+            unbind: function ($caller) {             
                 $().sticky("unbind");
             },
-            getHeaderHeight: function ($caller) {
+            getHeaderHeight: function ($caller) {                
                 var $el = $caller.find(selectors.stickyHeader);
-                return $el.length > 0 ? $el.outerHeight() : 0;
+                return $el.length > 0 ? $el.outerHeight() : 0;                
             },
             _detectAndScrollToAnchor: function ($caller) {
 
@@ -7806,13 +7803,13 @@ $(function (win, doc, $) {
                     $().scrollTo({
                         offset: -offset,
                         target: $anchor,
-                        onComplete: function () {
+                        onComplete: function () {                            
                             $().infiniteScroll({
                                 scrollSpacing: offset
                             });
                         }
                     }, "go");
-                } else {
+                } else {                    
                     $().infiniteScroll({
                         scrollSpacing: offset
                     });
@@ -7835,7 +7832,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                      
                         case Function:
                             func = a;
                             break;
@@ -7898,9 +7895,9 @@ $(function (win, doc, $) {
 
             },
             bind: function ($caller) {
-
+                
                 $caller.find(".list-group-item").on("mouseenter",
-                    function () {
+                    function() {
                         var $desc = $(this).find(".badge-description"),
                             $details = $(this).find(".badge-details");
                         $desc.hide();
@@ -7936,7 +7933,7 @@ $(function (win, doc, $) {
                             break;
                         case String:
                             methodName = a;
-                            break;
+                            break;                      
                         case Function:
                             func = a;
                             break;
@@ -7974,7 +7971,7 @@ $(function (win, doc, $) {
         };
 
     }();
-
+    
     /* Register Plugins */
     $.fn.extend({
         replySpy: replySpy.init,
@@ -7987,7 +7984,7 @@ $(function (win, doc, $) {
     // Initialize app plug-ins
     // ----------------------------
 
-    $.fn.appUI = function (opts) {
+    $.fn.appUI = function(opts) {
 
         /* navigation */
         this.find(".nav-site").navSite();
@@ -8001,7 +7998,7 @@ $(function (win, doc, $) {
 
         /* replySpy */
         this.replySpy();
-
+        
         /* badgeList */
         this.find('[data-provide="badge-list"]').badgeList();
 
@@ -8009,15 +8006,15 @@ $(function (win, doc, $) {
         if (opts.validation.scrollToErrors) {
             // Raised when the form is submitted but invalid
             this.find("form").bind("invalid-form.validate",
-                function () {
+                function() {
                     // Scroll to errors if any
                     var $errors = $(this).find(".validation-summary-errors");
                     if ($errors.length > 0) {
                         $().scrollTo({
-                            target: $errors,
-                            offset: -20,
-                            interval: 250
-                        },
+                                target: $errors,
+                                offset: -20,
+                                interval: 250
+                            },
                             "go");
                     }
                 });
@@ -8041,25 +8038,25 @@ $(function (win, doc, $) {
             // Auto close alerts?
             if (opts.alerts.autoClose) {
                 win.setTimeout(function () {
-                    $alerts.each(function () {
-                        if (!$(this).hasClass("alert-hidden")) {
-                            $(this).addClass("alert-hidden");
-                        }
-                    });
-                    //$(".alert").alert('close');
-                },
+                        $alerts.each(function () {
+                            if (!$(this).hasClass("alert-hidden")) {
+                                $(this).addClass("alert-hidden");
+                            }
+                        });
+                        //$(".alert").alert('close');
+                    },
                     opts.alerts.autoCloseDelay * 1000);
             }
         }
-
+      
     };
-
+    
     // --------------
     // ready
     // --------------
 
-    app.ready(function () {
-        $("body").appUI(win.$.Plato.defaults);
+    app.ready(function () {     
+        $("body").appUI(win.$.Plato.defaults); 
     });
 
 }(window, document, jQuery));
@@ -8070,11 +8067,11 @@ $(function (win, doc, $) {
 
 $(function (win, doc, $) {
 
-    'use strict';
+    'use strict';        
 
     var app = win.$.Plato;
 
-    app.ready(function () {
+    app.ready(function () {    
 
         // Accomodate for custom "formaction" attributes added
         // when using multiple submit elements within a single form
@@ -8088,12 +8085,12 @@ $(function (win, doc, $) {
         //      Delete
         // </button>
         $('*[type="submit"]').click(function () {
-            var action = $(this).attr("formaction");
+            var action = $(this).attr("formaction");          
             if (action) {
                 var $form = $(this).closest("form");
                 if ($form.length > 0) {
                     $form[0].action = action;
-                }
+                }               
             }
         });
 
@@ -8102,7 +8099,7 @@ $(function (win, doc, $) {
     // Update jQuery validation defaults
     $.validator.setDefaults({
         focusInvalid: true,
-        submitHandler: function (form) {
+        submitHandler: function(form) {
 
             // Remove any local storage for the page upon submission
             app.storage.remove(win.location.href);
@@ -8121,9 +8118,9 @@ $(function (win, doc, $) {
             // Note don't call $(form).submit() as this 
             // internally calls the validators submitHandler again
             form.submit();
-
+            
         },
-        invalidHandler: function (event, validator) {
+        invalidHandler: function(event, validator) {
             // Cannot be updated after MVC initialization
             // https://github.com/jquery-validation/jquery-validation/issues/765
         }
@@ -8140,8 +8137,8 @@ $(function (win, doc, $) {
         if (!value) return true;
         value = $.trim(value);
         if (!value) return true;
-
-        var $element = $(element),
+        
+        var $element = $(element),            
             blackList = $element.data("valUsernameBlacklist"),
             length = $element.data("valUsernameLength");
 
@@ -8217,9 +8214,9 @@ $(function (win, doc, $) {
             digit = $element.data("valPasswordDigit"),
             nonAlphaNumeric = $element.data("valPasswordNonAlphaNumeric"),
             length = $element.data("valPasswordLength");
-
+        
         if (length) {
-            var len = parseInt(length);
+            var len = parseInt(length);         
             if (!isNaN(len)) {
                 if (value.length < len) {
                     return false;
@@ -8227,30 +8224,30 @@ $(function (win, doc, $) {
             }
         }
 
-        if (lower && !any(value, isLower)) {
+        if (lower && !any(value, isLower)) {            
             return false;
         }
 
-        if (upper && !any(value, isUpper)) {
+        if (upper && !any(value, isUpper)) {            
             return false;
         }
 
-        if (digit && !any(value, isDigit)) {
+        if (digit && !any(value, isDigit)) {            
             return false;
         }
 
         // All digits or characters (i.e. No special characters)
-        if (nonAlphaNumeric && all(value, isLetterOrDigit)) {
+        if (nonAlphaNumeric && all(value, isLetterOrDigit)) {            
             return false;
         }
 
         return true;
 
-    });
+    });    
 
     // add adapters
-    var adapters = $.validator.unobtrusive.adapters;
+    var adapters = $.validator.unobtrusive.adapters;    
     adapters.addBool("username");
     adapters.addBool("password");
-
+    
 }(window, document, jQuery));
