@@ -1382,6 +1382,7 @@ namespace Plato.Users
         {
 
             // Plato.USers 1.1.0 adds indexes to the users table to help with performance
+            // We also drop and recreate the InsertUpdateUser stored procedure using the latest table schema
 
             var output = new List<string>();
             using (var builder = _schemaBuilder)
@@ -1408,6 +1409,12 @@ namespace Plato.Users
                     "UserType"
                     }
                 });
+
+                // Drop & recreate InsertUpdateUser stored procedure
+                builder.ProcedureBuilder.CreateProcedure(
+                    new SchemaProcedure($"InsertUpdateUser",
+                            StoredProcedureType.InsertUpdate)
+                        .ForTable(UserTables.Users));
 
                 // Add builder results to output
                 output.AddRange(builder.Statements);

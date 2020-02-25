@@ -628,7 +628,7 @@ namespace PlatoCore.Repositories.Users
                         new DbParam("Url", DbType.String, 255, url.ToEmptyIfNull()),
                         new DbParam("Visits", DbType.Int32, visits),
                         new DbParam("VisitsUpdatedDate", DbType.DateTimeOffset, visitsUpdatedDate.ToDateIfNull()),
-                        new DbParam("minutesActive", DbType.Int32, minutesActive),
+                        new DbParam("MinutesActive", DbType.Int32, minutesActive),
                         new DbParam("MinutesActiveUpdatedDate", DbType.DateTimeOffset, minutesActiveUpdatedDate.ToDateIfNull()),
                         new DbParam("Reputation", DbType.Int32, reputation),
                         new DbParam("ReputationUpdatedDate", DbType.DateTimeOffset, reputationUpdatedDate.ToDateIfNull()),

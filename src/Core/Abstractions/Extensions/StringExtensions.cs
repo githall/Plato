@@ -1,17 +1,19 @@
-﻿using Newtonsoft.Json;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.IO;
 using System.Linq;
 using System.Text;
-using System.Text.RegularExpressions;
+using Newtonsoft.Json;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Text.RegularExpressions;
 
 namespace PlatoCore.Abstractions.Extensions
 {
 
     public static class StringExtensions
     {
+
+        public static string NewLine = Environment.NewLine;
 
         public static readonly char[] InValidSegmentChars = "/?#[]@\"^{}|`<>\t\r\n\f ".ToCharArray();
 
@@ -135,21 +137,21 @@ namespace PlatoCore.Abstractions.Extensions
         // ---------
 
         public static bool IsValidUrlSegment(this string segment)
-        {       
+        {
             return !segment.ContainsCharacters(InValidSegmentChars);
         }
 
         public static bool ContainsCharacters(this string subject, params char[] chars)
         {
 
-            if (string.IsNullOrEmpty(subject) || chars == null || chars.Length == 0)            
+            if (string.IsNullOrEmpty(subject) || chars == null || chars.Length == 0)
                 return false;
-            
+
             Array.Sort(chars);
 
             foreach (var current in subject)
             {
-                if (Array.BinarySearch(chars, current) >= 0)                
+                if (Array.BinarySearch(chars, current) >= 0)
                     return true;
             }
 
@@ -174,8 +176,8 @@ namespace PlatoCore.Abstractions.Extensions
                 return string.Empty;
             }
 
-            return input.Length >= length 
-                ? input.Substring(0, length) 
+            return input.Length >= length
+                ? input.Substring(0, length)
                 : input;
         }
 
@@ -221,7 +223,7 @@ namespace PlatoCore.Abstractions.Extensions
             var sb = new StringBuilder();
             for (var i = 0; i <= output.Count - 1; i++)
             {
-                sb.Append((string) output[i]);
+                sb.Append((string)output[i]);
                 if (i < output.Count - 1)
                 {
                     sb.Append(" ");
@@ -290,18 +292,18 @@ namespace PlatoCore.Abstractions.Extensions
 
         public static string NormalizeNewLines(this string input)
         {
-            // Normalize non-unix "\r\n" to standardized "\n"
-            return Regex.Replace(input, "\r\n", "\n");
+            // Ensure line breaks are normalized
+            return Regex.Replace(input, "\r\n|\n", NewLine);
         }
 
         public static string HtmlTextulize(this string input)
         {
-            return Regex.Replace(input.NormalizeNewLines(), "\n", "<br/>");
+            return Regex.Replace(input.NormalizeNewLines(), NewLine, "<br/>");
         }
 
         public static string StripNewLines(this string input)
         {
-            return input.Replace(System.Environment.NewLine, ""); ;
+            return input.NormalizeNewLines().Replace(NewLine, ""); ;
         }
 
         public static string StripHtml(this string input)
@@ -412,7 +414,7 @@ namespace PlatoCore.Abstractions.Extensions
                 var searchPattern = term.Length <= 2
                     ? "(?!<.*?)\\b(" + Regex.Escape(term) + ")\\b(?![^<>]*?>)"
                     : "(?!<.*?)(" + Regex.Escape(term) + ")(?![^<>]*?>)";
-                
+
                 input = Regex.Replace(
                     input,
                     searchPattern,

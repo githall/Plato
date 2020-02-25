@@ -48,7 +48,7 @@
                     <ul class="nav float-left">
                         <li class="nav-item dropdown">
                             <form asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="LogOff" method="post">
-                                <a class="nav-link" href="#" data-toggle="dropdown" data-display="static">
+                                <a class="nav-link" href="#" title="@T["Account"]" data-toggle="dropdown" data-display="static">
                                     <avatar class="avatar avatar-sm" url="@this.CurrentUser.Avatar.Url" />
                                 </a>
                                 <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in">
@@ -63,6 +63,7 @@
                         </li>
                     </ul>
                 }
+
             </div>
             <div class="collapse navbar-collapse flex-column" id="navbar-collapse" role="navigation">
                 <navigation name="admin"
@@ -75,7 +76,9 @@
 
         <div class="main-container">
             <div class="nav navbar navbar-expand-lg navbar-lg navbar-dark bg-dark" role="navigation">
+
                 <div class="navbar-brand">@siteOpts.SiteName</div>
+
                 @if (this.CurrentUser != null)
                 {
                     <form asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="LogOff" class="form-inline ml-auto" method="post">
@@ -86,8 +89,8 @@
                                         <i class="fal fa-home"></i>
                                     </a>
                                 </li>
-                                <li class="nav-item dropdown account">
-                                    <a href="#" class="nav-link dropdown-toggle dropdown-toggle-no-caret" data-provide="tooltip" title="@T["Account"]" data-toggle="dropdown">
+                                <li class="nav-item dropdown user-dropdown">
+                                    <a href="#" class="nav-link dropdown-toggle dropdown-toggle-no-caret" data-toggle="dropdown" data-provide="tooltip" title="@T["Account"]">
                                         <avatar class="avatar avatar-sm" url="@this.CurrentUser.Avatar.Url" />
                                     </a>
                                     <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in">
@@ -109,6 +112,7 @@
                         </div>
                     </form>
                 }
+
             </div>
             <div aria-label="breadcrumb">
                 <breadcrumb class="breadcrumb mb-0 w-100 rounded-0" />
@@ -129,6 +133,7 @@
                     </div>
                 </footer>
             </div>
+
         </div>
     </div>
 
