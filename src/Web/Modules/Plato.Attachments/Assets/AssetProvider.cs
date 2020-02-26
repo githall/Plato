@@ -6,6 +6,9 @@ namespace Plato.Attachments.Assets
     public class AssetProvider : IAssetProvider
     {
 
+        // Plato.Attachments uses the awesome file icons font library...
+        // https://github.com/dmhendricks/file-icon-vectors
+
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
 

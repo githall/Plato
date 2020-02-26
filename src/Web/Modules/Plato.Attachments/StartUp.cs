@@ -47,7 +47,7 @@ namespace Plato.Attachments
             routes.MapAreaRoute(
                 name: "AttachmentWebApi",
                 areaName: "Plato.Attachments",
-                template: "api/media/{controller}/{action}/{id?}",
+                template: "api/attachments/{controller}/{action}/{id?}",
                 defaults: new { controller = "Upload", action = "Index" }
             );
             

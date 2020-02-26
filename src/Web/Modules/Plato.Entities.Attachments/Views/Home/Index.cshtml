@@ -1,0 +1,132 @@
+﻿@model HomeIndexViewModel
+@{    
+    Layout = null;
+}
+
+<div class="modal-header">
+    <h6 class="modal-title">@T["Edit Attachments"]</h6>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">
+            <i class="fal fa-times"></i>
+        </span>
+    </button>
+</div>
+
+<div class="modal-body p-0 max-h-350">
+    <div class="max-h-300 overflow-auto">
+        <div class="list-group list-group-flush list-group-hover">
+
+            <div class="list-group-item list-group-item-action">
+                <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                    <i class="fal fa-times"></i>
+                </a>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@T["123.3kb, 24 views"]">
+                    <i class="fal fa-info-circle" />
+                </span>
+                <span class="fiv-sqo fiv-icon-zip align-middle mr-1"></span>
+                <a href="#" class="align-middle">
+                    AnExampleOfAReallyLongFileName.zip
+                </a>
+            </div>
+
+            <div class="list-group-item list-group-item-action">
+                <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                    <i class="fal fa-times"></i>
+                </a>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@T["123.3kb, 24 views"]">
+                    <i class="fal fa-info-circle" />
+                </span>
+                <span class="fiv-sqo fiv-icon-pdf align-middle mr-1"></span>
+                <a href="#" class="align-middle">
+                    Example.pdf
+                </a>
+            </div>
+
+            <div class="list-group-item list-group-item-action">
+                <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                    <i class="fal fa-times"></i>
+                </a>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@T["123.3kb, 24 views"]">
+                    <i class="fal fa-info-circle" />
+                </span>
+                <span class="fiv-sqo fiv-icon-cmd align-middle mr-1"></span>
+                <a href="#" class="align-middle">
+                    Commant.cmd
+                </a>
+            </div>
+
+            <div class="list-group-item list-group-item-action">
+                <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                    <i class="fal fa-times"></i>
+                </a>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@T["123.3kb, 24 views"]">
+                    <i class="fal fa-info-circle" />
+                </span>
+                <span class="fiv-sqo fiv-icon-doc align-middle mr-1"></span>
+                <a href="#" class="align-middle">
+                    SomeDocument.doc
+                </a>
+            </div>
+
+            <div class="list-group-item list-group-item-action">
+                <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                    <i class="fal fa-times"></i>
+                </a>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@T["123.3kb, 24 views"]">
+                    <i class="fal fa-info-circle" />
+                </span>
+                <span class="fiv-sqo fiv-icon-zip align-middle mr-1"></span>
+                <a href="#" class="align-middle">
+                    AnExampleOfAReallyLongFileName.zip
+                </a>
+            </div>
+
+            <div class="list-group-item list-group-item-action">
+                <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                    <i class="fal fa-times"></i>
+                </a>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@T["123.3kb, 24 views"]">
+                    <i class="fal fa-info-circle" />
+                </span>
+                <span class="fiv-sqo fiv-icon-pdf align-middle mr-1"></span>
+                <a href="#" class="align-middle">
+                    Example.pdf
+                </a>
+            </div>
+
+        </div>
+    </div>
+    <div class="list-group list-group-flush list-group-hover">
+
+        <div class="list-group-item list-group-item-dropzone">
+            <div class="dropzone" data-provide="attachments">
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div id="fb-root"></div>
+
+<script>
+    $(function (win, doc, $) {
+        $(doc).ready(function() {
+
+            // Plato global
+            var app = win.$.Plato;
+            if (app == null) {
+                throw Error("$.Plato has not been registered!");
+            }
+            
+            // modal show
+            $("#attachmentsDialog").on('shown.bs.modal',
+                function (e) {
+
+                    $(this).find('[data-provide="attachments"]').attachments();
+
+                });
+            
+        });
+
+    }(window, document, jQuery));
+</script>

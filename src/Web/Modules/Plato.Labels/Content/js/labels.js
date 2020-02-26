@@ -191,9 +191,6 @@ $(function (win, doc, $) {
                     }
                 }
                 return index;
-            },
-            getUrl: function($caller) {
-
             }
         };
 

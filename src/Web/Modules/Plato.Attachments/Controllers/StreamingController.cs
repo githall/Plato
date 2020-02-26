@@ -15,6 +15,7 @@ using Plato.Attachments.Stores;
 using Plato.Attachments.ViewModels;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
+using Plato.Attachments.Models;
 
 namespace Plato.Attachments.Controllers
 {
@@ -41,18 +42,18 @@ namespace Plato.Attachments.Controllers
         };
 
         private readonly ILogger<StreamingController> _logger;
-        private readonly IAttachmentStore<Models.Attachment> _mediaStore;
+        private readonly IAttachmentStore<Attachment> _attachmentStore;
 
         // Get the default form options so that we can use them
         // to set the default limits for request body data
         private readonly FormOptions _defaultFormOptions = new FormOptions();
 
-        public StreamingController(
-            ILogger<StreamingController> logger,
-            IAttachmentStore<Models.Attachment> mediaStore)
-        {
+        public StreamingController(            
+            IAttachmentStore<Attachment> attachmentStore,
+            ILogger<StreamingController> logger)
+        {       
+            _attachmentStore = attachmentStore;
             _logger = logger;
-            _mediaStore = mediaStore;
         }
 
         #region "Actions"
@@ -96,8 +97,8 @@ namespace Plato.Attachments.Controllers
             var section = await reader.ReadNextSectionAsync();
             while (section != null)
             {
-                var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition);
-            
+
+                var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition);            
                 if (hasContentDispositionHeader)
                 {
                     if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
@@ -168,25 +169,26 @@ namespace Plato.Attachments.Controllers
             }
 
             // Store media
-            var media = await _mediaStore.CreateAsync(new Models.Attachment
+            var attachment = await _attachmentStore.CreateAsync(new Attachment
             {
                 Name = name,
                 ContentType = contentType,
                 ContentLength = contentLength,
                 ContentBlob = bytes,
+                ContentGuid = "",
                 CreatedUserId = user.Id
             });
 
             // Build friendly results
-            if (media != null)
+            if (attachment != null)
             {
                 output.Add(new UploadedFile()
                 {
-                    Id = media.Id,
-                    Name = media.Name,
-                    FriendlySize = media.ContentLength.ToFriendlyFileSize(),
-                    IsImage = IsContentTypeSupported(media.ContentType, SupportedImageContentTypes),
-                    IsBinary = IsContentTypeSupported(media.ContentType, SupportedBinaryContentTypes),
+                    Id = attachment.Id,
+                    Name = attachment.Name,
+                    FriendlySize = attachment.ContentLength.ToFriendlyFileSize(),
+                    IsImage = IsContentTypeSupported(attachment.ContentType, SupportedImageContentTypes),
+                    IsBinary = IsContentTypeSupported(attachment.ContentType, SupportedBinaryContentTypes),
                 });
             }
 

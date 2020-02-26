@@ -12,11 +12,10 @@ namespace PlatoCore.Navigation.Abstractions
     {
 
         public virtual string HtmlName { get; set; }
-        
+
         public virtual string SelectedValue { get; set; }
 
         public virtual SelectDropDown DropDown { get; set; }
-
 
         public virtual async Task AdjustInitiallySelected(
             IAuthorizationService authorizationService,

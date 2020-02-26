@@ -15,10 +15,108 @@ $(function (win, doc, $) {
     // Plato Global Object
     var app = win.$.Plato;
 
-    // attachments
-    var attachments = function () {
 
-        var dataKey = "attachments",
+    /* attachmentDropdown */
+    var attachmentDropdown = function (options) {
+
+        var dataKey = "attachmentDropdown",
+            dataIdKey = dataKey + "Id";
+
+        var defaults = {
+            maxItems: 10
+        };
+
+        var methods = {
+            init: function ($caller, methodName, func) {
+
+                if (func) {
+                    return func(this);
+                }
+                if (methodName) {
+                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                        this[methodName].apply(this, [$caller]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return null;
+                }
+
+                this.bind($caller);
+
+                return null;
+
+            },
+            bind: function ($caller) {
+
+                $caller.on('shown.bs.dropdown',
+                    function () {
+                       console.log("dropdown opened")
+                    });
+
+
+
+            }
+        };
+
+        return {
+            init: function () {
+
+                var options = {};
+                var methodName = null;
+                for (var i = 0; i < arguments.length; ++i) {
+                    var a = arguments[i];
+                    if (a) {
+                        switch (a.constructor) {
+                            case Object:
+                                $.extend(options, a);
+                                break;
+                            case String:
+                                methodName = a;
+                                break;
+                            case Boolean:
+                                break;
+                            case Number:
+                                break;
+                            case Function:
+                                break;
+                        }
+                    }
+                }
+
+                if (this.length > 0) {
+                    // $(selector).labelSelectDropdown()
+                    return this.each(function () {
+                        if (!$(this).data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $(this).data(dataIdKey, id);
+                            $(this).data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
+                        }
+                        methods.init($(this), methodName);
+                    });
+                } else {
+                    // $().labelSelectDropdown()
+                    if (methodName) {
+                        if (methods[methodName]) {
+                            var $caller = $("body");
+                            $caller.data(dataKey, $.extend({}, defaults, options));
+                            methods[methodName].apply(this, [$caller]);
+                        } else {
+                            alert(methodName + " is not a valid method!");
+                        }
+                    }
+                }
+
+            }
+        };
+
+    }();
+
+    // attachmentDropzone
+    var attachmentDropzone = function () {
+
+        var dataKey = "attachmentDropzone",
             dataIdKey = dataKey + "Id";
 
         var defaults = {
@@ -33,13 +131,13 @@ $(function (win, doc, $) {
                 "jpeg"
             ],
             dropZoneOptions: {
-                url: '/api/media/streaming/upload',
+                url: '/api/attachments/streaming/upload',
                 fallbackClick: false,
                 autoProcessQueue: true,
                 autoDiscover: false,
                 disablePreview: true,
                 dictDefaultMessage:
-                    'Attach files by dragging and dropping here, <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a> or paste from the clipboard'
+                    'Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a>'
             }
         };
 
@@ -63,8 +161,6 @@ $(function (win, doc, $) {
                 var opts = $caller.data(dataKey).dropZoneOptions;
 
                 if (!opts.init) {
-
-                    console.log("configure dropzone");
 
                     // Get Plato options
                     if (app.defaults) {
@@ -91,9 +187,7 @@ $(function (win, doc, $) {
 
                         this.on('addedfile',
                             function (file) {
-
-                                console.log("addedfile");
-
+                           
                                 // Validate file extension
                                 var fileName = file.upload.filename;
                                 var allowed = false;
@@ -150,7 +244,7 @@ $(function (win, doc, $) {
 
                                             }
 
-                                            var $div = $("div", {
+                                            var $div = $("<div>", {
                                                 class: "attachment-preview"
                                             }).text(chunk);
 
@@ -216,7 +310,7 @@ $(function (win, doc, $) {
                     });
                 } else {
                     // $().attachments()
-                    var $caller = $('[data-provide="attachments"]');
+                    var $caller = $('[data-provide="attachment-dropzone"]');
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -234,15 +328,20 @@ $(function (win, doc, $) {
 
     }();
 
-    $.fn.extend({
-        attachments: attachments.init
+    $.fn.extend({        
+        attachmentDropdown: attachmentDropdown.init,
+        attachmentDropzone: attachmentDropzone.init
     });
 
     // --------
 
     app.ready(function () {
+  
+        $('[data-provide="attachment-dropdown"]')
+            .attachmentDropdown();
 
-        $('[data-provide="attachments"]').attachments();
+        $('[data-provide="attachment-dropzone"]')
+            .attachmentDropzone();
 
     });
 
