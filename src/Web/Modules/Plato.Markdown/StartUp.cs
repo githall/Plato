@@ -33,8 +33,8 @@ namespace Plato.Markdown
 
             // Register view adapters
             services.AddScoped<IViewAdapterProvider, EditorViewAdapterProvider>();
-            
-            // Register client resources
+
+            // Register client assets
             services.AddScoped<IAssetProvider, AssetProvider>();
 
             // Register message broker subscribers

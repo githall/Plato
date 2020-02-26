@@ -52,7 +52,7 @@ namespace Plato.Labels.Repositories
                         }
 
                         return data;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -84,7 +84,7 @@ namespace Plato.Labels.Repositories
                         }
 
                         return data;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("LabelId", DbType.Int32, labelId)
                     });
@@ -127,7 +127,7 @@ namespace Plato.Labels.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteLabelDatumById",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -203,7 +203,7 @@ namespace Plato.Labels.Repositories
                 return await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "InsertUpdateLabelDatum",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
                         new DbParam("LabelId", DbType.Int32, labelId),
@@ -222,7 +222,5 @@ namespace Plato.Labels.Repositories
         #endregion
 
     }
-
-
 
 }

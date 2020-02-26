@@ -1651,15 +1651,13 @@ if (typeof window.$.Plato === "undefined") {
                             this.setFullscreen(true);
                         }
 
-                        // Track changes and set a dirty flag on the body element
+                        // Store changes in local storage to easily restore
                         this.$textarea.on('keyup keypress paste',
                             function () {
-                                //if (!$("body").first().attr("data-page-is-dirty")) {
-                                //    $("body").first().attr("data-page-is-dirty", true);
-                                //}
                                 plato.storage.set(win.location.href, $(this).val());
                             });     
 
+                        // Restore stored value
                         var storedValue = plato.storage.get(win.location.href);
                         if (storedValue) {
                             if (storedValue.trim() !== "") {

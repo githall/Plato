@@ -85,20 +85,20 @@ namespace Plato.Attachments.Repositories
             return success > 0 ? true : false;
         }
 
-        public async Task<Models.Attachment> InsertUpdateAsync(Models.Attachment attachment)
+        public async Task<Models.Attachment> InsertUpdateAsync(Models.Attachment model)
         {
             var id = await InsertUpdateInternal(
-                attachment.Id,
-                attachment.Name,
-                attachment.ContentBlob,
-                attachment.ContentType,
-                attachment.ContentLength,
-                attachment.ContentGuid,
-                attachment.TotalViews,
-                attachment.CreatedUserId,
-                attachment.CreatedDate,
-                attachment.ModifiedUserId,
-                attachment.ModifiedDate);
+                model.Id,
+                model.Name,
+                model.ContentBlob,
+                model.ContentType,
+                model.ContentLength,
+                model.ContentGuid,
+                model.TotalViews,
+                model.CreatedUserId,
+                model.CreatedDate,
+                model.ModifiedUserId,
+                model.ModifiedDate);
 
             if (id > 0)
                 return await SelectByIdAsync(id);

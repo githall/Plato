@@ -1,0 +1,82 @@
+﻿@model EditEntityAttachmentsViewModel
+
+
+<card class="card card-body-flush">
+    <card-title>
+        <h6 class="card-title">@T["Attachments"]</h6>
+    </card-title>
+    <card-body>
+
+        <div class="attachments" data-provide="attachments">
+
+            <div class="list-group list-group-flush list-group-hover">
+                <a class="list-group-item list-group-item-action" asp-route-area="Plato.Discuss.Labels" asp-route-controller="Home" asp-route-action="Display">
+                    <span class="fiv-sqo fiv-icon-zip align-middle"></span>
+                    <span class="font-weight-bold">
+                        AnExampleOfAReallyLongFileName.zip
+                    </span>
+                    <span class="text-muted">
+                        123.3kb
+                    </span>
+                </a>
+                <a class="list-group-item list-group-item-action" asp-route-area="Plato.Discuss.Labels" asp-route-controller="Home" asp-route-action="Display">
+                    <span class="fiv-sqo fiv-icon-pdf align-middle"></span>
+                    <span class="font-weight-bold">
+                        Example.pdf
+                    </span>
+                    <span class="text-muted">
+                        123mb
+                    </span>
+                </a>
+                <div class="list-group-item">
+
+                    <div class="fallback">
+                        <input name="file" type="file" multiple />
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+</card-body>
+</card>
+
+@*<authorize asp-permission="@Model.Permission.Name">
+    <authorize-success>
+        <card>
+            <card-title>
+                <h6 class="card-title">@T["Follow"]</h6>
+            </card-title>
+            <card-body>
+
+                @if (!Model.IsFollowing)
+                {
+                    <label data-toggle="tooltip" title="@T[Model.FollowType.SubscribeDescription]" for="@Model.FollowHtmlName" class="btn btn-block btn-secondary" data-on-css="btn-danger" data-off-css="btn-secondary" data-subscribe-text="@T[Model.FollowType.SubscribeText]" data-unsubscribe-text="@T[Model.FollowType.UnsubscribeText]" data-subscribe-tooltip="@T[Model.FollowType.SubscribeDescription]" data-unsubscribe-tooltip="@T[Model.FollowType.UnsubscribeDescription]" role="button">
+                        <input type="checkbox" data-provide="follow-checkbox" class="hidden" name="@Model.FollowHtmlName" id="@Model.FollowHtmlName" />
+                        <i class="fal fa-bell"></i>
+                        <span>
+                            @T[Model.FollowType.SubscribeText]
+                        </span>
+                    </label>
+                }
+                else
+                {
+                    <label data-toggle="tooltip" title=" @T[Model.FollowType.UnsubscribeDescription]" for="@Model.FollowHtmlName" class="btn btn-block btn-danger" data-on-css="btn-danger" data-off-css="btn-secondary" data-subscribe-text="@T[Model.FollowType.SubscribeText]" data-unsubscribe-text="@T[Model.FollowType.UnsubscribeText]" data-subscribe-tooltip="@T[Model.FollowType.SubscribeDescription]" data-unsubscribe-tooltip="@T[Model.FollowType.UnsubscribeDescription]" role="button">
+                        <input type="checkbox" checked data-provide="follow-checkbox" class="hidden" name="@Model.FollowHtmlName" id="@Model.FollowHtmlName" />
+                        <i class="fa fa-bell"></i>
+                        <span>
+                            @T[Model.FollowType.UnsubscribeText]
+                        </span>
+                    </label>
+                }
+            </card-body>
+        </card>
+    </authorize-success>
+</authorize>*@
+
+
+
+
+
+
+

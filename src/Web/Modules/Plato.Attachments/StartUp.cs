@@ -8,6 +8,8 @@ using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
 using Plato.Attachments.Repositories;
 using Plato.Attachments.Stores;
+using Plato.Attachments.Assets;
+using PlatoCore.Assets.Abstractions;
 
 namespace Plato.Attachments
 {
@@ -25,6 +27,9 @@ namespace Plato.Attachments
 
             // Feature installation event handler
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
+
+            // Register client assets
+            services.AddScoped<IAssetProvider, AssetProvider>();
 
             // Data 
             services.AddScoped<IAttachmentRepository<Models.Attachment>, AttachmentRepository>();

@@ -1279,8 +1279,7 @@ $(function (win, doc, $) {
                 }
 
                 // Begin populate
-                var config = this.prepareRequest($caller);
-                console.log(config.url);
+                var config = this.prepareRequest($caller);           
                 app.http(config).done(function (response) {
                     if (response.statusCode !== 200) {
                         return;

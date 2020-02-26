@@ -124,8 +124,11 @@ namespace Plato.Entities.Attachments.Handlers
 
                 builder.ProcedureBuilder
                     .DropDefaultProcedures(_entityyAttachments)
-                    .DropProcedure(new SchemaProcedure("SelectEntityAttachmentsPaged", StoredProcedureType.SelectByKey));
-                
+                    .DropProcedure(new SchemaProcedure("SelectEntityAttachmentsByEntityId"))
+                    .DropProcedure(new SchemaProcedure("DeleteEntityAttachmentsByEntityId"))
+                    .DropProcedure(new SchemaProcedure("DeleteEntityAttachmentByEntityIdAndAttachmentId"))
+                    .DropProcedure(new SchemaProcedure("SelectEntityAttachmentsPaged"));
+
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
                 {
@@ -169,22 +172,66 @@ namespace Plato.Entities.Attachments.Handlers
 
         void EntityAttachments(ISchemaBuilder builder)
         {
-            
+
             builder.TableBuilder.CreateTable(_entityyAttachments);
 
-            builder.ProcedureBuilder
-                .CreateDefaultProcedures(_entityyAttachments)
+            builder.ProcedureBuilder.CreateProcedure(
+                    new SchemaProcedure(
+                            $"SelectEntityAttachmentById",
+                            @" SELECT 
+                                    ea.*, 
+                                    a.[Name] AS AttachmentName
+                                FROM {prefix}_Attachments a WITH (nolock) 
+                                    INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id                                    
+                                WHERE (
+                                   ea.Id = @Id
+                                )")
+                        .ForTable(_entityyAttachments)
+                        .WithParameter(_entityyAttachments.PrimaryKeyColumn))
+
+                .CreateProcedure(
+                    new SchemaProcedure(
+                            $"SelectEntityAttachmentsByEntityId",
+                            @" SELECT 
+                                    ea.*, 
+                                    a.[Name] AS AttachmentName
+                                FROM {prefix}_Attachments a WITH (nolock) 
+                                    INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id                                    
+                                WHERE (
+                                   ea.EntityId = @EntityId
+                                )")
+                        .ForTable(_entityyAttachments)
+                        .WithParameter(new SchemaColumn() { Name = "EntityId", DbType = DbType.Int32 }))
+
+                .CreateProcedure(new SchemaProcedure("DeleteEntityAttachmentsByEntityId", StoredProcedureType.DeleteByKey)
+                    .ForTable(_entityyAttachments)
+                    .WithParameter(new SchemaColumn() { Name = "EntityId", DbType = DbType.Int32 }))
+
+                .CreateProcedure(new SchemaProcedure("DeleteEntityAttachmentByEntityIdAndAttachmentId",
+                        StoredProcedureType.DeleteByKey)
+                    .ForTable(_entityyAttachments)
+                    .WithParameters(new List<SchemaColumn>()
+                        {
+                            new SchemaColumn() {Name = "EntityId", DbType = DbType.Int32},
+                            new SchemaColumn() {Name = "AttachmentId", DbType = DbType.Int32}
+                        }
+                    ))
+
                 .CreateProcedure(new SchemaProcedure("SelectEntityAttachmentsPaged", StoredProcedureType.SelectPaged)
-                .ForTable(_entityyAttachments)
-                .WithParameters(new List<SchemaColumn>()
-                {
-                    new SchemaColumn()
+                    .ForTable(_entityyAttachments)
+                    .WithParameters(new List<SchemaColumn>()
                     {
-                        Name = "Keywords",
-                        DbType = DbType.String,
-                        Length = "255"
-                    }
-                }));
+                        new SchemaColumn()
+                        {
+                            Name = "AttachmentId",
+                            DbType = DbType.Int32,
+                        },
+                        new SchemaColumn()
+                        {
+                            Name = "EntityId",
+                            DbType = DbType.Int32,
+                        }
+                    }));
 
             // Indexes
             builder.IndexBuilder.CreateIndex(new SchemaIndex()
@@ -196,7 +243,6 @@ namespace Plato.Entities.Attachments.Handlers
                     "AttachmentId"
                 }
             });
-
 
         }
 

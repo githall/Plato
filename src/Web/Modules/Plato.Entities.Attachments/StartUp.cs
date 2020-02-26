@@ -10,6 +10,7 @@ using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using Plato.Entities.Attachments.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Assets.Abstractions;
 
 namespace Plato.Entities.Attachments
 {
@@ -28,13 +29,12 @@ namespace Plato.Entities.Attachments
             // Feature installation event handler
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
+       
             // Federated search
-
-            services.AddScoped<IFederatedQueryManager<Entity>, FederatedQueryManager<Entity>>();
-            services.AddScoped<IFederatedQueryProvider<Entity>, EntityQueries<Entity>>();
-
-            services.AddScoped<IFederatedQueryManager<FeatureEntityCount>, FederatedQueryManager<FeatureEntityCount>>();
-            services.AddScoped<IFederatedQueryProvider<FeatureEntityCount>, FeatureEntityCountQueries<FeatureEntityCount>>();
+            //services.AddScoped<IFederatedQueryManager<Entity>, FederatedQueryManager<Entity>>();
+            //services.AddScoped<IFederatedQueryProvider<Entity>, EntityQueries<Entity>>();
+            //services.AddScoped<IFederatedQueryManager<FeatureEntityCount>, FederatedQueryManager<FeatureEntityCount>>();
+            //services.AddScoped<IFederatedQueryProvider<FeatureEntityCount>, FeatureEntityCountQueries<FeatureEntityCount>>();
 
         }
 

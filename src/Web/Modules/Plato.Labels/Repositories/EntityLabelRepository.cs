@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
@@ -69,7 +69,7 @@ namespace Plato.Labels.Repositories
                         }
 
                         return output;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -135,7 +135,7 @@ namespace Plato.Labels.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteEntityLabelById",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -168,7 +168,7 @@ namespace Plato.Labels.Repositories
                         }
 
                         return output;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("EntityId", DbType.Int32, entityId)
                     });
@@ -191,7 +191,7 @@ namespace Plato.Labels.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteEntityLabelsByEntityId",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("EntityId", DbType.Int32, entityId)
                     });
@@ -214,7 +214,7 @@ namespace Plato.Labels.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteEntityLabelByEntityIdAndLabelId",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("EntityId", DbType.Int32, entityId),
                         new DbParam("LabelId", DbType.Int32, labelId)
@@ -244,7 +244,7 @@ namespace Plato.Labels.Repositories
                 output = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "InsertUpdateEntityLabel",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
                         new DbParam("EntityId", DbType.Int32, entityId),

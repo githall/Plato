@@ -18,6 +18,7 @@ using PlatoCore.Notifications.Extensions;
 using PlatoCore.Stores.Abstractions.Users;
 using PlatoCore.Stores.Users;
 using PlatoCore.Tasks.Abstractions;
+using Plato.Entities.Attachments.ViewModels;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {
@@ -107,8 +108,13 @@ namespace Plato.Articles.Attachments.ViewProviders
         public override Task<IViewProviderResult> BuildEditAsync(Article entity, IViewProviderContext context)
         {
 
-            return Task.FromResult(default(IViewProviderResult));
-
+            return Task.FromResult((IViewProviderResult) Views(
+                View<EditEntityAttachmentsViewModel>("Attachments.Edit.Sidebar", model =>
+                {
+                   
+                    return new EditEntityAttachmentsViewModel();
+                }).Zone("sidebar").Order(1)
+            ));
 
             //if (entity == null)
             //{
@@ -130,7 +136,7 @@ namespace Plato.Articles.Attachments.ViewProviders
             //        isFollowing = true;
             //    }
             //}
-            
+
             //// For new entities check if we need to follow by default
             //if (entity.Id == 0)
             //{
