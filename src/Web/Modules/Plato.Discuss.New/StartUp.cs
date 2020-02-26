@@ -23,10 +23,10 @@ namespace Plato.Discuss.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, TopicListItemViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, TopicListViewAdapter>();
             services.AddScoped<IViewAdapterProvider, TopicViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, TopicReplyListViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, TopicReplyListItemViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, TopicListViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, TopicReplyListViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, TopicReplyListItemViewAdapter>();
 
         }
 

@@ -520,8 +520,8 @@ namespace Plato.Labels.Handlers
                 TableName = _entityLabels.Name,
                 Columns = new string[]
                 {
-                    "LabelId",
-                    "EntityId"
+                    "EntityId",
+                    "LabelId"                    
                 }
             });
             

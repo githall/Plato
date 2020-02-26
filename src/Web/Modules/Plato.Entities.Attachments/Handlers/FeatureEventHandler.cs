@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using PlatoCore.Data.Schemas.Abstractions;
 using PlatoCore.Features.Abstractions;
 
-namespace Plato.Media.Handlers
+namespace Plato.Entities.Attachments.Handlers
 {
 
     public class FeatureEventHandler : BaseFeatureEventHandler
@@ -14,9 +14,9 @@ namespace Plato.Media.Handlers
         public string Version { get; } = "1.0.0";
 
 
-        private readonly SchemaTable _media = new SchemaTable()
+        private readonly SchemaTable _entityyAttachments = new SchemaTable()
         {
-            Name = "Media",
+            Name = "EntityAttachments",
             Columns = new List<SchemaColumn>()
                 {
                     new SchemaColumn()
@@ -27,26 +27,13 @@ namespace Plato.Media.Handlers
                     },
                     new SchemaColumn()
                     {
-                        Name = "[Name]",
-                        Length = "255",
-                        DbType = DbType.String
+                        Name = "EntityId",
+                        DbType = DbType.Int32
                     },
                     new SchemaColumn()
                     {
-                        Name = "ContentBlob",
-                        Nullable = true,
-                        DbType = DbType.Binary
-                    },
-                    new SchemaColumn()
-                    {
-                        Name = "ContentType",
-                        Length = "75",
-                        DbType = DbType.String
-                    },
-                    new SchemaColumn()
-                    {
-                        Name = "ContentLength",
-                        DbType = DbType.Int64
+                        Name = "AttachmentId",
+                        DbType = DbType.Int32
                     },
                     new SchemaColumn()
                     {
@@ -96,8 +83,8 @@ namespace Plato.Media.Handlers
                 // configure
                 Configure(builder);
 
-                // Media schema
-                Media(builder);
+                // Attachments schema
+                EntityAttachments(builder);
                 
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
@@ -117,7 +104,7 @@ namespace Plato.Media.Handlers
                 }
 
             }
-            
+
         }
 
         public override Task InstalledAsync(IFeatureEventContext context)
@@ -133,11 +120,11 @@ namespace Plato.Media.Handlers
             using (var builder = _schemaBuilder)
             {
 
-                builder.TableBuilder.DropTable(_media);
+                builder.TableBuilder.DropTable(_entityyAttachments);
 
                 builder.ProcedureBuilder
-                    .DropDefaultProcedures(_media)
-                    .DropProcedure(new SchemaProcedure("SelectMediaPaged", StoredProcedureType.SelectByKey));
+                    .DropDefaultProcedures(_entityyAttachments)
+                    .DropProcedure(new SchemaProcedure("SelectEntityAttachmentsPaged", StoredProcedureType.SelectByKey));
                 
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
@@ -180,15 +167,15 @@ namespace Plato.Media.Handlers
 
         }
 
-        void Media(ISchemaBuilder builder)
+        void EntityAttachments(ISchemaBuilder builder)
         {
             
-            builder.TableBuilder.CreateTable(_media);
+            builder.TableBuilder.CreateTable(_entityyAttachments);
 
             builder.ProcedureBuilder
-                .CreateDefaultProcedures(_media)
-                .CreateProcedure(new SchemaProcedure("SelectMediaPaged", StoredProcedureType.SelectPaged)
-                .ForTable(_media)
+                .CreateDefaultProcedures(_entityyAttachments)
+                .CreateProcedure(new SchemaProcedure("SelectEntityAttachmentsPaged", StoredProcedureType.SelectPaged)
+                .ForTable(_entityyAttachments)
                 .WithParameters(new List<SchemaColumn>()
                 {
                     new SchemaColumn()
@@ -199,8 +186,20 @@ namespace Plato.Media.Handlers
                     }
                 }));
 
+            // Indexes
+            builder.IndexBuilder.CreateIndex(new SchemaIndex()
+            {
+                TableName = _entityyAttachments.Name,
+                Columns = new string[]
+                {                    
+                    "EntityId",
+                    "AttachmentId"
+                }
+            });
+
+
         }
-        
+
     }
 
 }

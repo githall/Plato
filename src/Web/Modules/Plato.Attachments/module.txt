@@ -1,0 +1,15 @@
+Name: Plato Attachments
+Description: Provides functionality to manage file attachments within Plato.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Attachments
+PlatoVersion: 1.1.1
+Version: 1.0.0
+Icon: /plato.attachments/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.WebApi",
+		Version: "1.0.0"
+	}
+]

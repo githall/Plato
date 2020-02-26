@@ -5,7 +5,7 @@ using Microsoft.Extensions.Logging;
 using PlatoCore.Data.Schemas.Abstractions;
 using PlatoCore.Features.Abstractions;
 
-namespace Plato.Media.Handlers
+namespace Plato.Attachments.Handlers
 {
 
     public class FeatureEventHandler : BaseFeatureEventHandler
@@ -14,9 +14,9 @@ namespace Plato.Media.Handlers
         public string Version { get; } = "1.0.0";
 
 
-        private readonly SchemaTable _media = new SchemaTable()
+        private readonly SchemaTable _attachments = new SchemaTable()
         {
-            Name = "Media",
+            Name = "Attachments",
             Columns = new List<SchemaColumn>()
                 {
                     new SchemaColumn()
@@ -47,6 +47,17 @@ namespace Plato.Media.Handlers
                     {
                         Name = "ContentLength",
                         DbType = DbType.Int64
+                    },
+                       new SchemaColumn()
+                    {
+                        Name = "ContentGuid",
+                        Length = "100",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "TotalViews",
+                        DbType = DbType.Int32
                     },
                     new SchemaColumn()
                     {
@@ -96,8 +107,8 @@ namespace Plato.Media.Handlers
                 // configure
                 Configure(builder);
 
-                // Media schema
-                Media(builder);
+                // Attachments schema
+                Attachments(builder);
                 
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
@@ -117,7 +128,7 @@ namespace Plato.Media.Handlers
                 }
 
             }
-            
+
         }
 
         public override Task InstalledAsync(IFeatureEventContext context)
@@ -133,11 +144,11 @@ namespace Plato.Media.Handlers
             using (var builder = _schemaBuilder)
             {
 
-                builder.TableBuilder.DropTable(_media);
+                builder.TableBuilder.DropTable(_attachments);
 
                 builder.ProcedureBuilder
-                    .DropDefaultProcedures(_media)
-                    .DropProcedure(new SchemaProcedure("SelectMediaPaged", StoredProcedureType.SelectByKey));
+                    .DropDefaultProcedures(_attachments)
+                    .DropProcedure(new SchemaProcedure("SelectAttachmentsPaged", StoredProcedureType.SelectByKey));
                 
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
@@ -180,15 +191,15 @@ namespace Plato.Media.Handlers
 
         }
 
-        void Media(ISchemaBuilder builder)
+        void Attachments(ISchemaBuilder builder)
         {
             
-            builder.TableBuilder.CreateTable(_media);
+            builder.TableBuilder.CreateTable(_attachments);
 
             builder.ProcedureBuilder
-                .CreateDefaultProcedures(_media)
-                .CreateProcedure(new SchemaProcedure("SelectMediaPaged", StoredProcedureType.SelectPaged)
-                .ForTable(_media)
+                .CreateDefaultProcedures(_attachments)
+                .CreateProcedure(new SchemaProcedure("SelectAttachmentsPaged", StoredProcedureType.SelectPaged)
+                .ForTable(_attachments)
                 .WithParameters(new List<SchemaColumn>()
                 {
                     new SchemaColumn()

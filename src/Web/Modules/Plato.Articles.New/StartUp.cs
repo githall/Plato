@@ -23,10 +23,10 @@ namespace Plato.Articles.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, ArticleListItemViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, ArticleListViewAdapter>();
             services.AddScoped<IViewAdapterProvider, ArticleViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, ArticleCommentListViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, ArticleCommentListItemViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, ArticleListViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, ArticleCommentListViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, ArticleCommentListItemViewAdapter>();
 
         }
 

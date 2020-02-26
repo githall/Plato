@@ -2,11 +2,12 @@
 using System.Data;
 using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
+using PlatoCore.Models.Users;
 
-namespace Plato.Media.Models
+namespace Plato.Attachments.Models
 {
 
-    public class Media : IDbModel
+    public class Attachment : IDbModel
     {
 
         public int Id { get; set; }
@@ -19,13 +20,21 @@ namespace Plato.Media.Models
 
         public long ContentLength { get; set; }
 
+        public string ContentGuid { get; set; }
+
+        public int TotalViews { get; set; }
+
         public DateTimeOffset? CreatedDate { get; set; }
 
         public int CreatedUserId { get; set; }
 
-        public DateTimeOffset? ModifiedDate { get; set; }
+        public ISimpleUser CreatedBy { get; set; }
 
         public int ModifiedUserId { get; set; }
+
+        public DateTimeOffset? ModifiedDate { get; set; }
+
+        public ISimpleUser ModifiedBy { get; set; }
 
         public void PopulateModel(IDataReader dr)
         {
@@ -44,6 +53,12 @@ namespace Plato.Media.Models
 
             if (dr.ColumnIsNotNull("ContentLength"))
                 this.ContentLength = Convert.ToInt64(dr["ContentLength"]);
+
+            if (dr.ColumnIsNotNull("ContentGuid"))
+                ContentGuid = Convert.ToString(dr["ContentGuid"]);
+
+            if (dr.ColumnIsNotNull("TotalViews"))
+                TotalViews = Convert.ToInt32(dr["TotalViews"]);
 
             if (dr.ColumnIsNotNull("CreatedUserId"))
                 CreatedUserId = Convert.ToInt32(dr["CreatedUserId"]);

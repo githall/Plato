@@ -1,4 +1,4 @@
-﻿namespace Plato.Media.ViewModels
+﻿namespace Plato.Attachments.ViewModels
 {
 
     public class UploadedFile

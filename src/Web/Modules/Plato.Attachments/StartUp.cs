@@ -2,15 +2,14 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Plato.Media.Handlers;
+using Plato.Attachments.Handlers;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Navigation.Abstractions;
-using Plato.Media.Repositories;
-using Plato.Media.Stores;
+using Plato.Attachments.Repositories;
+using Plato.Attachments.Stores;
 
-namespace Plato.Media
+namespace Plato.Attachments
 {
     public class Startup : StartupBase
     {
@@ -28,8 +27,8 @@ namespace Plato.Media
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // Data 
-            services.AddScoped<IMediaRepository<Models.Media>, MediaRepository>();
-            services.AddScoped<IMediaStore<Models.Media>, MediaStore>();
+            services.AddScoped<IAttachmentRepository<Models.Attachment>, AttachmentRepository>();
+            services.AddScoped<IAttachmentStore<Models.Attachment>, AttachmentStore>();
             
         }
 
@@ -41,21 +40,22 @@ namespace Plato.Media
 
             // api routes
             routes.MapAreaRoute(
-                name: "MediaWebApi",
-                areaName: "Plato.Media",
+                name: "AttachmentWebApi",
+                areaName: "Plato.Attachments",
                 template: "api/media/{controller}/{action}/{id?}",
                 defaults: new { controller = "Upload", action = "Index" }
             );
             
             // serve media routes
             routes.MapAreaRoute(
-                name: "ServeMedia",
-                areaName: "Plato.Media",
-                template: "media/{id?}",
-                defaults: new { controller = "Media", action = "Serve" }
+                name: "ServeAttachment",
+                areaName: "Plato.Attachments",
+                template: "attachment/{id?}",
+                defaults: new { controller = "Attachment", action = "Serve" }
             );
 
-
         }
+
     }
+
 }

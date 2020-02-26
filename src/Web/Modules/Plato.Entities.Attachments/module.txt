@@ -1,0 +1,19 @@
+Name: Plato Entities Attachments
+Description: Adds attachment capabilities for entities to Plato.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Attachments
+PlatoVersion: 1.1.1
+Version: 1.0.0
+Icon: /plato.entities.attachments/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Entities",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Attachments",
+		Version: "1.0.0"
+	}
+]

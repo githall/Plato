@@ -9,14 +9,14 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
 using Microsoft.Net.Http.Headers;
 using PlatoCore.Abstractions.Extensions;
-using Plato.Media.Attributes;
-using Plato.Media.Services;
-using Plato.Media.Stores;
-using Plato.Media.ViewModels;
+using Plato.Attachments.Attributes;
+using Plato.Attachments.Services;
+using Plato.Attachments.Stores;
+using Plato.Attachments.ViewModels;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
 
-namespace Plato.Media.Controllers
+namespace Plato.Attachments.Controllers
 {
 
     // https://github.com/aspnet/Docs/tree/master/aspnetcore/mvc/models/file-uploads/sample/FileUploadSample
@@ -41,7 +41,7 @@ namespace Plato.Media.Controllers
         };
 
         private readonly ILogger<StreamingController> _logger;
-        private readonly IMediaStore<Models.Media> _mediaStore;
+        private readonly IAttachmentStore<Models.Attachment> _mediaStore;
 
         // Get the default form options so that we can use them
         // to set the default limits for request body data
@@ -49,7 +49,7 @@ namespace Plato.Media.Controllers
 
         public StreamingController(
             ILogger<StreamingController> logger,
-            IMediaStore<Models.Media> mediaStore)
+            IAttachmentStore<Models.Attachment> mediaStore)
         {
             _logger = logger;
             _mediaStore = mediaStore;
@@ -168,7 +168,7 @@ namespace Plato.Media.Controllers
             }
 
             // Store media
-            var media = await _mediaStore.CreateAsync(new Models.Media
+            var media = await _mediaStore.CreateAsync(new Models.Attachment
             {
                 Name = name,
                 ContentType = contentType,

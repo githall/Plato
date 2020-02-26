@@ -5,22 +5,22 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Hosting;
 using PlatoCore.Stores.Abstractions.Files;
-using Plato.Media.Stores;
+using Plato.Attachments.Stores;
 using Microsoft.Net.Http.Headers;
 
-namespace Plato.Media.Controllers
+namespace Plato.Attachments.Controllers
 {
 
-    public class MediaController : Controller
+    public class AttachmentController : Controller
     {
 
         private static string _pathToEmptyImage;
 
-        private readonly IMediaStore<Models.Media> _mediaStore;
+        private readonly IAttachmentStore<Models.Attachment> _mediaStore;
         private readonly IFileStore _fileStore;
 
-        public MediaController(    
-            IMediaStore<Models.Media> mediaStore,
+        public AttachmentController(    
+            IAttachmentStore<Models.Attachment> mediaStore,
             IHostEnvironment hostEnvironment,
             IFileStore fileStore)
         {

@@ -5,17 +5,17 @@ using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 
-namespace Plato.Media.Repositories
+namespace Plato.Attachments.Repositories
 {
 
-    public class MediaRepository : IMediaRepository<Models.Media>
+    public class AttachmentRepository : IAttachmentRepository<Models.Attachment>
     {
 
-        private readonly ILogger<MediaRepository> _logger;
+        private readonly ILogger<AttachmentRepository> _logger;
         private readonly IDbContext _dbContext;
 
-        public MediaRepository(            
-            ILogger<MediaRepository> logger,
+        public AttachmentRepository(            
+            ILogger<AttachmentRepository> logger,
             IDbContext dbContext)
         {
             _dbContext = dbContext;
@@ -24,22 +24,22 @@ namespace Plato.Media.Repositories
         
         #region "Implementation"
 
-        public async Task<IPagedResults<Models.Media>> SelectAsync(IDbDataParameter[] dbParams)
+        public async Task<IPagedResults<Models.Attachment>> SelectAsync(IDbDataParameter[] dbParams)
         {
-            IPagedResults<Models.Media> output = null;
+            IPagedResults<Models.Attachment> output = null;
             using (var context = _dbContext)
             {
-                output = await context.ExecuteReaderAsync<IPagedResults<Models.Media>>(
+                output = await context.ExecuteReaderAsync<IPagedResults<Models.Attachment>>(
                     CommandType.StoredProcedure,
-                    "SelectMediaPaged",
+                    "SelectAttachmentsPaged",
                     async reader =>
                     {
                         if ((reader != null) && (reader.HasRows))
                         {
-                            output = new PagedResults<Models.Media>();
+                            output = new PagedResults<Models.Attachment>();
                             while (await reader.ReadAsync())
                             {
-                                var entity = new Models.Media();
+                                var entity = new Models.Attachment();
                                 entity.PopulateModel(reader);
                                 output.Data.Add(entity);
                             }
@@ -67,7 +67,7 @@ namespace Plato.Media.Repositories
         {
             if (_logger.IsEnabled(LogLevel.Information))
             {
-                _logger.LogInformation($"Deleting media with id: {id}");
+                _logger.LogInformation($"Deleting attachment with id: {id}");
             }
 
             var success = 0;
@@ -75,7 +75,7 @@ namespace Plato.Media.Repositories
             {
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
-                    "DeleteMediaById",
+                    "DeleteAttachmentById",
                     new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
@@ -85,18 +85,20 @@ namespace Plato.Media.Repositories
             return success > 0 ? true : false;
         }
 
-        public async Task<Models.Media> InsertUpdateAsync(Models.Media media)
+        public async Task<Models.Attachment> InsertUpdateAsync(Models.Attachment attachment)
         {
             var id = await InsertUpdateInternal(
-                media.Id,
-                media.Name,
-                media.ContentBlob,
-                media.ContentType,
-                media.ContentLength,
-                media.CreatedUserId,
-                media.CreatedDate,
-                media.ModifiedUserId,
-                media.ModifiedDate);
+                attachment.Id,
+                attachment.Name,
+                attachment.ContentBlob,
+                attachment.ContentType,
+                attachment.ContentLength,
+                attachment.ContentGuid,
+                attachment.TotalViews,
+                attachment.CreatedUserId,
+                attachment.CreatedDate,
+                attachment.ModifiedUserId,
+                attachment.ModifiedDate);
 
             if (id > 0)
                 return await SelectByIdAsync(id);
@@ -104,24 +106,24 @@ namespace Plato.Media.Repositories
             return null;
         }
 
-        public async Task<Models.Media> SelectByIdAsync(int id)
+        public async Task<Models.Attachment> SelectByIdAsync(int id)
         {
-            Models.Media media = null;
+            Models.Attachment attachment = null;
             using (var context = _dbContext)
             {
-                media = await context.ExecuteReaderAsync<Models.Media>(
+                attachment = await context.ExecuteReaderAsync<Models.Attachment>(
                     CommandType.StoredProcedure,
-                    "SelectMediaById",
+                    "SelectAttachmentById",
                     async reader =>
                     {
                         if ((reader != null) && reader.HasRows)
                         {
                             await reader.ReadAsync();
-                            media = new Models.Media();
-                            media.PopulateModel(reader);
+                            attachment = new Models.Attachment();
+                            attachment.PopulateModel(reader);
                         }
 
-                        return media;
+                        return attachment;
                     }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
@@ -129,8 +131,7 @@ namespace Plato.Media.Repositories
 
             }
 
-            return media;
-
+            return attachment;
         }
 
         #endregion
@@ -143,6 +144,8 @@ namespace Plato.Media.Repositories
             byte[] contentBlob,
             string contentType,
             long contentLength,
+            string contentGuid,
+            int totalViews,
             int createdUserId,
             DateTimeOffset? createdDate,
             int modifiedUserId,
@@ -154,7 +157,7 @@ namespace Plato.Media.Repositories
             {
                 output = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
-                    "InsertUpdateMedia",
+                    "InsertUpdateAttachment",
                     new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
@@ -162,6 +165,8 @@ namespace Plato.Media.Repositories
                         new DbParam("ContentBlob", DbType.Binary, contentBlob ?? new byte[0]),
                         new DbParam("ContentType", DbType.String, 75, contentType.ToEmptyIfNull()),
                         new DbParam("ContentLength", DbType.Int64, contentLength),
+                        new DbParam("ContentGuid", DbType.String, 100, contentGuid.ToEmptyIfNull()),                        
+                        new DbParam("TotalViews", DbType.Int32, totalViews),
                         new DbParam("CreatedUserId", DbType.Int32, createdUserId),
                         new DbParam("CreatedDate", DbType.DateTimeOffset, createdDate.ToDateIfNull()),
                         new DbParam("ModifiedUserId", DbType.Int32, modifiedUserId),
