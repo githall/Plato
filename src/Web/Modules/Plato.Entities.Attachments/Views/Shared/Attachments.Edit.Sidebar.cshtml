@@ -2,12 +2,23 @@
 
 <div class="card" data-provide="attachment-dropdown">
     <div class="dropdown list-group-flush">
-        <a class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" href="#" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+        <a asp-route-area="Plato.Entities.Attachments" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.entityId="0"  class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
             <i class="fal fa-cog float-right"></i>
             @T["Attachments"]
         </a>
-        <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in p-0 min-w-500" aria-labelledby="attachmentDropdown">        
-            @await DisplayAsync(new View("GetEntityAttachments", new EntityAttachmentsIndexViewModel()))   
+        <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in p-0 min-w-500" aria-labelledby="attachmentDropdown">
+
+            <div class="list-group list-group-flush list-group-hover">
+                <div class="list-group-item list-group-item-dropzone">
+                    <div class="dropzone" data-provide="attachment-dropzone">
+                    </div>
+                </div>
+            </div>
+
+            <div class="dropdown-menu-content max-h-300 overflow-auto">
+                <p class="text-center"><i class="fal fa-spinner fa-spin"></i></p>
+            </div>
+
         </div>
     </div>
     <div class="card-body">

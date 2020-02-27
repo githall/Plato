@@ -22,8 +22,8 @@ $(function (win, doc, $) {
         var dataKey = "attachmentDropdown",
             dataIdKey = dataKey + "Id";
 
-        var defaults = {
-            maxItems: 10
+        var defaults = {      
+            loaderTemplate: '<p class="text-center"><i class="fal fa-spinner fa-spin"></i></p>', // a handlebars style template for auto complete list items
         };
 
         var methods = {
@@ -50,10 +50,70 @@ $(function (win, doc, $) {
 
                 $caller.on('shown.bs.dropdown',
                     function () {
-                       console.log("dropdown opened")
+                        methods.populate($caller);
                     });
 
+            },
+            populate: function ($caller) {
+               
+                if (!$caller.data(dataKey).url) {
+                    $caller.data(dataKey).url = methods.getUrl($caller);                  
+                }
 
+                if ($caller.data(dataKey).url === null) {
+                    throw new Error("Could not determine a url to load within the dropdown!");
+                }
+
+                console.log($caller.data(dataKey).url);
+
+                app.http({
+                    method: "GET",
+                    url: $caller.data(dataKey).url
+                }).done(function (response) {
+
+                    console.log(response);
+
+                    var $content = $caller.find(".dropdown-menu-content");
+                    if ($content.length > 0) {
+                        $content.empty();
+                        if (response !== "") {
+                            $content.html(response);
+
+                            // Enable tooltips within loaded content
+                            //app.ui.initToolTips($content);
+                            // confirm
+                            //$content.find('[data-provide="confirm"]').confirm();
+
+                        }
+                    }
+
+                    // onLoad event
+                    //if ($caller.data(dataKey).onLoad) {
+                    //    $caller.data(dataKey).onLoad($caller, response.result);
+                    //}
+                });
+
+            },
+            getUrl: function ($caller) {
+
+                var url = null;
+
+                if ($caller.attr("href")) {
+                    url = $caller.attr("href");
+                }
+                
+                $caller.find("a").each(function () {
+                    if ($(this).hasClass("dropdown-toggle") ||
+                        $(this).attr("data-toggle")) {
+                        if ($(this).attr("href")) {
+                            url = $(this).attr("href");                            
+                            return;
+                        }
+                    }                       
+                });
+
+                return url;
+                
 
             }
         };

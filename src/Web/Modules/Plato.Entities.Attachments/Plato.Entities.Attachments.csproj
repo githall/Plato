@@ -8,7 +8,6 @@
   <ItemGroup>
     <None Remove="Views\Home\Index.cshtml" />
     <None Remove="Views\Shared\Attachments.Edit.Sidebar.cshtml" />
-    <None Remove="Views\Shared\GetEntityAttachments.cshtml" />
     <None Remove="Views\_ViewImports.cshtml" />
   </ItemGroup>
 
@@ -18,10 +17,6 @@
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
     <Content Include="Views\Shared\Attachments.Edit.Sidebar.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\GetEntityAttachments.cshtml">
       <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
       <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
     </Content>
