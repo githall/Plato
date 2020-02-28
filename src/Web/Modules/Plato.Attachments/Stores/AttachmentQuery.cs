@@ -20,13 +20,13 @@ namespace Plato.Attachments.Stores
             _store = store;
         }
 
-        public EntityQueryParams Params { get; set; }
+        public AttachmentQueryParams Params { get; set; }
 
         public override IQuery<Models.Attachment> Select<T>(Action<T> configure)
         {
             var defaultParams = new T();
             configure(defaultParams);
-            Params = (EntityQueryParams)Convert.ChangeType(defaultParams, typeof(EntityQueryParams));
+            Params = (AttachmentQueryParams)Convert.ChangeType(defaultParams, typeof(AttachmentQueryParams));
             return this;
         }
 
@@ -36,6 +36,7 @@ namespace Plato.Attachments.Stores
             var builder = new AttachmentQueryBuilder(this);
             var populateSql = builder.BuildSqlPopulate();
             var countSql = builder.BuildSqlCount();
+            var contentGuid = Params.ContentGuid.Value ?? string.Empty;
             var keywords = Params.Keywords.Value ?? string.Empty;
 
             return await _store.SelectAsync(new[]
@@ -44,6 +45,7 @@ namespace Plato.Attachments.Stores
                 new DbParam("PageSize", DbType.Int32, PageSize),
                 new DbParam("SqlPopulate", DbType.String, populateSql),
                 new DbParam("SqlCount", DbType.String, countSql),
+                new DbParam("ContentGuid", DbType.String, contentGuid),
                 new DbParam("Keywords", DbType.String, keywords)
             });
 
@@ -55,10 +57,11 @@ namespace Plato.Attachments.Stores
 
     #region "AttachmentQueryParams"
 
-    public class EntityQueryParams
+    public class AttachmentQueryParams
     {
         
         private WhereInt _id;
+        private WhereString _contentGuid;
         private WhereString _keywords;
         
         public WhereInt Id
@@ -67,12 +70,18 @@ namespace Plato.Attachments.Stores
             set => _id = value;
         }
 
+        public WhereString ContentGuid
+        {
+            get => _contentGuid ?? (_contentGuid = new WhereString());
+            set => _contentGuid = value;
+        }
+
         public WhereString Keywords
         {
             get => _keywords ?? (_keywords = new WhereString());
             set => _keywords = value;
         }
-        
+
     }
 
     #endregion
@@ -84,14 +93,14 @@ namespace Plato.Attachments.Stores
 
         #region "Constructor"
 
-        private readonly string _AttachmentsTableName;
+        private readonly string _attachmentsTableName;
 
         private readonly AttachmentQuery _query;
 
         public AttachmentQueryBuilder(AttachmentQuery query)
         {
             _query = query;
-            _AttachmentsTableName = GetTableNameWithPrefix("Attachment");
+            _attachmentsTableName = GetTableNameWithPrefix("Attachments");
         }
 
         #endregion
@@ -125,7 +134,7 @@ namespace Plato.Attachments.Stores
                 return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
-            sb.Append("SELECT COUNT(e.Id) FROM ")
+            sb.Append("SELECT COUNT(a.Id) FROM ")
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
@@ -139,15 +148,26 @@ namespace Plato.Attachments.Stores
         private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
-            sb.Append("e.*");
+            sb
+                .Append("a.Id, ")
+                .Append("a.[Name], ")
+                .Append("CAST(1 AS BINARY(1)) AS ContentBlob, ") // for perf not returned with paged results
+                .Append("a.ContentType, ")
+                .Append("a.ContentLength, ")
+                .Append("a.ContentGuid, ")
+                .Append("a.TotalViews, ")
+                .Append("a.CreatedUserId, ")
+                .Append("a.CreatedDate, ")
+                .Append("a.ModifiedUserId, ")
+                .Append("a.ModifiedDate ");
             return sb.ToString();
         }
 
         private string BuildTables()
         {
             var sb = new StringBuilder();
-            sb.Append(_AttachmentsTableName)
-                .Append(" e ");
+            sb.Append(_attachmentsTableName)
+                .Append(" a ");
             return sb.ToString();
         }
 
@@ -167,9 +187,18 @@ namespace Plato.Attachments.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.Id.Operator);
-                sb.Append(_query.Params.Id.ToSqlString("e.Id"));
+                sb.Append(_query.Params.Id.ToSqlString("a.Id"));
             }
-            
+
+            // ContentGuid
+            if (!String.IsNullOrEmpty(_query.Params.ContentGuid.Value))
+            {
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                    sb.Append(_query.Params.ContentGuid.Operator);
+                sb.Append(_query.Params.ContentGuid.ToSqlString("a.ContentGuid", "ContentGuid"));
+            }
+
+
             return sb.ToString();
 
         }
@@ -183,7 +212,7 @@ namespace Plato.Attachments.Stores
 
             return columnName.IndexOf('.') >= 0
                 ? columnName
-                : "e." + columnName;
+                : "a." + columnName;
         }
 
         private string BuildOrderBy()

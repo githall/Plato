@@ -1,8 +1,19 @@
-﻿@model EditEntityAttachmentsViewModel
+﻿@model EntityAttachmentOptions
+@{
+    var uploadUrl = GetRouteUrl(new RouteValueDictionary()
+    {
+        ["area"] = "Plato.Attachments",
+        ["controller"] = "streaming",
+        ["action"] = "upload",
+        ["guid"] = Model.Guid
+    });
+}
 
-<div class="card" data-provide="attachment-dropdown">
-    <div class="dropdown list-group-flush">
-        <a asp-route-area="Plato.Entities.Attachments" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.entityId="0"  class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+<input type="text" name="@Model.GuidHtmlName" asp-for="Guid" />
+
+<div class="card">
+    <div class="dropdown list-group-flush" data-provide="attachment-dropdown">
+        <a asp-route-area="Plato.Entities.Attachments" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.entityId="@Model.EntityId.ToString()" asp-route-opts.guid="@Model.Guid" class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
             <i class="fal fa-cog float-right"></i>
             @T["Attachments"]
         </a>
@@ -10,7 +21,7 @@
 
             <div class="list-group list-group-flush list-group-hover">
                 <div class="list-group-item list-group-item-dropzone">
-                    <div class="dropzone" data-provide="attachment-dropzone">
+                    <div class="dropzone" data-dropzone-url="@uploadUrl" data-provide="attachment-dropzone">
                     </div>
                 </div>
             </div>

@@ -50,7 +50,7 @@ namespace Plato.Attachments
                 template: "api/attachments/{controller}/{action}/{id?}",
                 defaults: new { controller = "Upload", action = "Index" }
             );
-            
+
             // serve media routes
             routes.MapAreaRoute(
                 name: "ServeAttachment",

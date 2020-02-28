@@ -1,23 +1,33 @@
-﻿@model EntityAttachmentsIndexViewModel
+﻿
+@model EntityAttachmentsIndexViewModel
 @{
     Layout = null;
 }
 
-<div class="list-group list-group-flush list-group-hover">
-
-    <div class="list-group-item list-group-item-action">
-        <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
-            <i class="fal fa-times"></i>
-        </a>
-        <span class="btn float-right text-muted" data-toggle="tooltip" title="@T["123.3kb, 24 views"]">
-            <i class="fal fa-info-circle"></i>
-        </span>
-        <span class="fiv-sqo fiv-icon-zip align-middle mr-1"></span>
-        <a href="#" class="align-middle">
-            AnExampleOfAReallyLongFileName.zip
-        </a>
+@if  (Model.Results?.Data != null)
+{
+    <div class="list-group list-group-flush list-group-hover">
+        @foreach (var attachment in Model.Results.Data)
+        {
+            var views = attachment.TotalViews == 1 ? T["view"] : T["views"];
+            var tooltip = $"{attachment.ContentLength.ToFriendlyFileSize()}, {attachment.TotalViews.ToPrettyInt()} {views.Value}";
+            var extension = System.IO.Path.GetExtension(attachment.Name);
+            var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
+            <div class="list-group-item list-group-item-action">
+                <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                    <i class="fal fa-times"></i>
+                </a>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@tooltip">
+                    <i class="fal fa-info-circle"></i>
+                </span>
+                @if (!string.IsNullOrEmpty(iconCss))
+                {
+                    <span class="fiv-sqo @iconCss align-middle mr-1"></span>
+                }                
+                <a href="#" class="align-middle">
+                    @attachment.Name
+                </a>                
+            </div>
+        }
     </div>
-
-   
-</div>
-
+}

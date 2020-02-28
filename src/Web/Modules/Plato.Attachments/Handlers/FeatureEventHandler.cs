@@ -202,6 +202,12 @@ namespace Plato.Attachments.Handlers
                 .ForTable(_attachments)
                 .WithParameters(new List<SchemaColumn>()
                 {
+                     new SchemaColumn()
+                    {
+                        Name = "ContentGuid",
+                        DbType = DbType.String,
+                        Length = "100"
+                    },
                     new SchemaColumn()
                     {
                         Name = "Keywords",
@@ -210,8 +216,20 @@ namespace Plato.Attachments.Handlers
                     }
                 }));
 
+            // Indexes
+            builder.IndexBuilder.CreateIndex(new SchemaIndex()
+            {
+                TableName = _attachments.Name,
+                Columns = new string[]
+                {
+                    "[Name]",
+                    "ContentGuid"
+                }
+            });
+
+
         }
-        
+
     }
 
 }

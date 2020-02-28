@@ -19,6 +19,10 @@ using PlatoCore.Stores.Abstractions.Users;
 using PlatoCore.Stores.Users;
 using PlatoCore.Tasks.Abstractions;
 using Plato.Entities.Attachments.ViewModels;
+using Plato.Attachments.Stores;
+using Plato.Attachments.Models;
+using Plato.Entities.Attachments.Stores;
+using Plato.Entities.Attachments.Models;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {
@@ -26,37 +30,28 @@ namespace Plato.Articles.Attachments.ViewProviders
     public class ArticleViewProvider : ViewProviderBase<Article>
     {
 
-        private const string FollowHtmlName = "follow";
+        private const string GuidHtmlName = "attachmentGuid";
         private const string NotifyHtmlName = "notify";
 
-        private readonly IUserNotificationTypeDefaults _userNotificationTypeDefaults;
-        private readonly IDummyClaimsPrincipalFactory<User> _claimsPrincipalFactory;
-        private readonly INotificationManager<Article> _notificationManager;    
-        private readonly IAuthorizationService _authorizationService;
-        private readonly IDeferredTaskManager _deferredTaskManager;
-        private readonly IPlatoUserStore<User> _platoUserStore;
+        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
+        private readonly IAttachmentStore<Attachment> _attachmentStore; 
+        private readonly IAuthorizationService _authorizationService; 
         private readonly IEntityStore<Article> _entityStore;
         private readonly IContextFacade _contextFacade;
         private readonly HttpRequest _request;
- 
+
         public ArticleViewProvider(
-            IUserNotificationTypeDefaults userNotificationTypeDefaults,
-            IDummyClaimsPrincipalFactory<User> claimsPrincipalFactory,          
-            INotificationManager<Article> notificationManager,
+            IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
+            IAttachmentStore<Attachment> attachmentStore,
             IAuthorizationService authorizationService,
-            IHttpContextAccessor httpContextAccessor,
-            IDeferredTaskManager deferredTaskManager,
-            IPlatoUserStore<User> platoUserStore,
+            IHttpContextAccessor httpContextAccessor,        
             IEntityStore<Article> entityStore,
             IContextFacade contextFacade)
-        {
-            _userNotificationTypeDefaults = userNotificationTypeDefaults;
+        {            
             _request = httpContextAccessor.HttpContext.Request;
-            _claimsPrincipalFactory = claimsPrincipalFactory;
+            _entityAttachmentStore = entityAttachmentStore;
             _authorizationService = authorizationService;
-            _notificationManager = notificationManager;
-            _deferredTaskManager = deferredTaskManager;
-            _platoUserStore = platoUserStore;    
+            _attachmentStore = attachmentStore;
             _contextFacade = contextFacade;       
             _entityStore = entityStore;
         }
@@ -105,78 +100,87 @@ namespace Plato.Articles.Attachments.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(Article entity, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(Article entity, IViewProviderContext context)
         {
 
-            return Task.FromResult((IViewProviderResult) Views(
-                View<EditEntityAttachmentsViewModel>("Attachments.Edit.Sidebar", model =>
+            if (entity == null)
+            {
+                return await BuildIndexAsync(new Article(), context);
+            }
+
+            var entityId = 0;
+            var contentGuid = string.Empty;
+            var user = await _contextFacade.GetAuthenticatedUserAsync();         
+
+            // For new entities we need a temporary content guid
+            if (entity.Id == 0)
+            {
+                contentGuid = System.Guid.NewGuid().ToString();
+            }
+
+            return Views(
+                View<EntityAttachmentOptions>("Attachments.Edit.Sidebar", model =>
                 {
-                   
-                    return new EditEntityAttachmentsViewModel();
+                    model.EntityId = entityId;
+                    model.Guid = contentGuid;
+                    model.GuidHtmlName = GuidHtmlName;
+                    return model;
                 }).Zone("sidebar").Order(1)
-            ));
-
-            //if (entity == null)
-            //{
-            //    return await BuildIndexAsync(new Article(), context);
-            //}
-
-
-            //var isFollowing = false;
-            //var followType = FollowTypes.Article;
-            //var user = await _contextFacade.GetAuthenticatedUserAsync();
-            //if (user != null)
-            //{
-            //    var entityFollow = await _followStore.SelectByNameThingIdAndCreatedUserId(
-            //        followType.Name,
-            //        entity.Id,
-            //        user.Id);
-            //    if (entityFollow != null)
-            //    {
-            //        isFollowing = true;
-            //    }
-            //}
-
-            //// For new entities check if we need to follow by default
-            //if (entity.Id == 0)
-            //{
-            //    if (await _authorizationService.AuthorizeAsync(context.Controller.HttpContext.User,
-            //        entity.CategoryId, Permissions.AutoFollowArticles))
-            //    {
-            //        isFollowing = true;
-            //    }
-            //}
-
-            //return Views(
-            //      View<EditFooterViewModel>("Article.Follow.Edit.Footer", model =>
-            //      {
-            //          model.IsNewEntity = entity.Id == 0 ? true : false;
-            //          model.NotifyHtmlName = NotifyHtmlName;
-            //          model.Permission = Permissions.SendArticleFollows;
-            //          return model;
-            //      }).Zone("footer"),
-            //    View<FollowViewModel>("Follow.Edit.Sidebar", model =>
-            //    {
-            //        model.FollowType = followType;
-            //        model.FollowHtmlName = FollowHtmlName;
-            //        model.ThingId = entity.Id;
-            //        model.IsFollowing = isFollowing;
-            //        model.Permission = Permissions.FollowArticles;
-            //        return model;
-            //    }).Zone("sidebar").Order(2)
-            //);
+            );
 
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(Article article, IViewProviderContext updater)
         {
 
-            //// Ensure entity exists before attempting to update
-            //var entity = await _entityStore.GetByIdAsync(article.Id);
-            //if (entity == null)
-            //{
-            //    return await BuildEditAsync(article, updater);
-            //}
+            // Get authenticated user
+            var user = await _contextFacade.GetAuthenticatedUserAsync();
+
+            // We need to be authenticated to add attachments
+            if (user == null)
+            {
+                return await BuildEditAsync(article, updater);
+            }
+
+            // Ensure entity exists before attempting to update
+            var entity = await _entityStore.GetByIdAsync(article.Id);
+            if (entity == null)
+            {
+                return await BuildEditAsync(article, updater);
+            }
+
+            // Get posted guid value
+            var postedGuid = PostedGuidValue();
+
+            // Ensure we have a guid
+            if (!string.IsNullOrEmpty(postedGuid))
+            {
+
+                // Get attachments for guid
+                var attachments = await _attachmentStore
+                   .QueryAsync()
+                   .Select<AttachmentQueryParams>(q =>
+                   {
+                       q.ContentGuid.Equals(postedGuid);
+                   })
+                    .ToList();
+
+                if (attachments?.Data != null)
+                {
+                    foreach (var attachment in attachments.Data)
+                    {
+                        // Create a relationship for each attaching matching our guid
+                        await _entityAttachmentStore.CreateAsync(new EntityAttachment()
+                        {
+                            EntityId = entity.Id,
+                            AttachmentId = attachment.Id,
+                            CreatedUserId = user.Id
+                        });
+                    }
+                }
+
+            }
+           
 
             //// We need to be authenticated to follow
             //var user = await _contextFacade.GetAuthenticatedUserAsync();
@@ -247,7 +251,7 @@ namespace Plato.Articles.Attachments.ViewProviders
         //    }
 
         //}
-        
+
         //Task<Article> SendNotificationsAsync(Article entity, IList<int> usersToExclude)
         //{
 
@@ -255,7 +259,7 @@ namespace Plato.Articles.Attachments.ViewProviders
         //    {
         //        throw new ArgumentNullException(nameof(entity));
         //    }
-            
+
         //    // Add deferred task
         //    _deferredTaskManager.AddTask(async context =>
         //    {
@@ -323,7 +327,7 @@ namespace Plato.Articles.Attachments.ViewProviders
         //            }
 
         //        }
-                
+
         //    });
 
         //    return Task.FromResult(entity);
@@ -338,7 +342,7 @@ namespace Plato.Articles.Attachments.ViewProviders
         //    {
         //        return null;
         //    }
-            
+
         //    // Get all users following the entity
         //    var users = await _platoUserStore.QueryAsync()
         //        .Select<UserQueryParams>(q =>
@@ -416,24 +420,24 @@ namespace Plato.Articles.Attachments.ViewProviders
         //    }
 
         //    return result.Count > 0 ? result.Values : null;
-            
+
         //}
 
-        //bool FollowPostedValue()
-        //{            
-        //    foreach (var key in _request.Form.Keys)
-        //    {
-        //        if (key == FollowHtmlName)
-        //        {
-        //            var values = _request.Form[key];
-        //            if (!String.IsNullOrEmpty(values))
-        //            {
-        //                return true;
-        //            }
-        //        }
-        //    }
-        //    return false;
-        //}
+        string PostedGuidValue()
+        {
+            foreach (var key in _request.Form.Keys)
+            {
+                if (key == GuidHtmlName)
+                {
+                    var values = _request.Form[key];
+                    if (!String.IsNullOrEmpty(values))
+                    {
+                        return _request.Form[key];
+                    }
+                }
+            }
+            return string.Empty;
+        }
 
         //bool NotifyPostedValue()
         //{

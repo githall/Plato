@@ -15,7 +15,6 @@ $(function (win, doc, $) {
     // Plato Global Object
     var app = win.$.Plato;
 
-
     /* attachmentDropdown */
     var attachmentDropdown = function (options) {
 
@@ -55,24 +54,16 @@ $(function (win, doc, $) {
 
             },
             populate: function ($caller) {
-               
-                if (!$caller.data(dataKey).url) {
-                    $caller.data(dataKey).url = methods.getUrl($caller);                  
+
+                var url = methods.getUrl($caller);
+                if (!url) {
+                    throw new Error("Could not determine a valid url to load within the dropdown!");
                 }
-
-                if ($caller.data(dataKey).url === null) {
-                    throw new Error("Could not determine a url to load within the dropdown!");
-                }
-
-                console.log($caller.data(dataKey).url);
-
+                
                 app.http({
                     method: "GET",
-                    url: $caller.data(dataKey).url
+                    url: url
                 }).done(function (response) {
-
-                    console.log(response);
-
                     var $content = $caller.find(".dropdown-menu-content");
                     if ($content.length > 0) {
                         $content.empty();
@@ -94,28 +85,32 @@ $(function (win, doc, $) {
                 });
 
             },
-            getUrl: function ($caller) {
+            getUrl: function ($caller) {           
 
-                var url = null;
+                if (!$caller.data(dataKey).url) {
 
-                if ($caller.attr("href")) {
-                    url = $caller.attr("href");
-                }
-                
-                $caller.find("a").each(function () {
-                    if ($(this).hasClass("dropdown-toggle") ||
-                        $(this).attr("data-toggle")) {
-                        if ($(this).attr("href")) {
-                            url = $(this).attr("href");                            
-                            return;
+                    // get url from caller
+                    if ($caller.attr("href")) {
+                        $caller.data(dataKey).url = $caller.attr("href");
+                    }
+
+                    // get url from child trigger
+                    $caller.find("a").each(function () {
+                        if ($(this).hasClass("dropdown-toggle") ||
+                            $(this).attr("data-toggle")) {
+                            if ($(this).attr("href")) {
+                                $caller.data(dataKey).url = $(this).attr("href");
+                                return;
+                            }
                         }
-                    }                       
-                });
+                    });
 
-                return url;
-                
+                }
+
+                return $caller.data(dataKey).url;                
 
             }
+
         };
 
         return {
@@ -219,6 +214,8 @@ $(function (win, doc, $) {
             bind: function ($caller) {
 
                 var opts = $caller.data(dataKey).dropZoneOptions;
+                var url = this._getUrl($caller);
+                console.log(url);
 
                 if (!opts.init) {
 
@@ -231,7 +228,7 @@ $(function (win, doc, $) {
                         }
 
                         // Configure drop zone requests from Plato options
-                        opts.url = app.defaults.url + opts.url;
+                        opts.url = app.defaults.url + url;
 
                         // Configure request headers
                         opts.headers = {
@@ -330,6 +327,10 @@ $(function (win, doc, $) {
                 // Store dropzone object in data for access within event handlers (i.e. paste)
                 $caller.data("dropzone", dropzone);
 
+            },
+            _getUrl: function ($caller) {
+                return $caller.data("dropzoneUrl") ||
+                    $caller.data(dataKey).dropZoneOptions.url;
             }
         };
 

@@ -25,6 +25,8 @@ namespace Plato.Attachments.Controllers
     public class StreamingController : BaseWebApiController
     {
 
+        public const string GuidKey = "guid";
+
         private static readonly string[] SupportedImageContentTypes = new string[]
         {
             "image/jpeg",
@@ -72,6 +74,22 @@ namespace Plato.Attachments.Controllers
             if (user == null)
             {
                 return base.UnauthorizedException();
+            }
+
+            // TODO: Add permission checks
+            // ----------------------
+
+            // Validate temporary global unique identifier
+
+            if (!Request.Query.ContainsKey(GuidKey))
+            {
+                return BadRequest($"A \"{GuidKey}\" query string parameter is required!");
+            }
+
+            var guid = Request.Query[GuidKey];
+            if (string.IsNullOrEmpty(guid))
+            {
+                return BadRequest($"The \"{GuidKey}\" query string parameter is empty!");
             }
 
             // Ensure we are dealing with a multipart request
@@ -175,7 +193,7 @@ namespace Plato.Attachments.Controllers
                 ContentType = contentType,
                 ContentLength = contentLength,
                 ContentBlob = bytes,
-                ContentGuid = "",
+                ContentGuid = guid,
                 CreatedUserId = user.Id
             });
 
