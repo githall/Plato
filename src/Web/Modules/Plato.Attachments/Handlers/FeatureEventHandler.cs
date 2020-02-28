@@ -51,7 +51,7 @@ namespace Plato.Attachments.Handlers
                        new SchemaColumn()
                     {
                         Name = "ContentGuid",
-                        Length = "100",
+                        Length = "50",
                         DbType = DbType.String
                     },
                     new SchemaColumn()
@@ -148,8 +148,9 @@ namespace Plato.Attachments.Handlers
 
                 builder.ProcedureBuilder
                     .DropDefaultProcedures(_attachments)
-                    .DropProcedure(new SchemaProcedure("SelectAttachmentsPaged", StoredProcedureType.SelectByKey));
-                
+                    .DropProcedure(new SchemaProcedure("SelectAttachmentsPaged"))
+                    .DropProcedure(new SchemaProcedure("UpdateAttachmentContentGuidById"));
+
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
                 {
@@ -206,7 +207,7 @@ namespace Plato.Attachments.Handlers
                     {
                         Name = "ContentGuid",
                         DbType = DbType.String,
-                        Length = "100"
+                        Length = "50"
                     },
                     new SchemaColumn()
                     {
@@ -215,6 +216,31 @@ namespace Plato.Attachments.Handlers
                         Length = "255"
                     }
                 }));
+
+            // UpdateAttachmentContentGuidById
+            builder.ProcedureBuilder.CreateProcedure(
+                    new SchemaProcedure(
+                            $"UpdateAttachmentContentGuidById",
+                            @"UPDATE {prefix}_Attachments SET
+                                    ContentGuid = @ContentGuid
+                                WHERE (
+                                    Id = @Id
+                                );")
+                        .ForTable(_attachments)
+                        .WithParameters(new List<SchemaColumn>()
+                        {
+                             new SchemaColumn()
+                            {
+                                Name = "Id",
+                                DbType = DbType.Int32,                                
+                            },
+                            new SchemaColumn()
+                            {
+                                Name = "ContentGuid",
+                                DbType = DbType.String,
+                                Length = "50"
+                            }
+                        }));
 
             // Indexes
             builder.IndexBuilder.CreateIndex(new SchemaIndex()

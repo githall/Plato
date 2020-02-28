@@ -29,9 +29,9 @@ namespace Plato.Entities.Attachments.Stores
             ICacheManager cacheManager)
         {
             _entityAttachmentRepository = entityAttachmentRepository;
-            _cacheManager = cacheManager;
-            _logger = logger;
+            _cacheManager = cacheManager;            
             _dbQuery = dbQuery;
+            _logger = logger;
         }
         
         #region "Implementation"

@@ -39,13 +39,17 @@ namespace Plato.Entities.Attachments.Controllers
                 opts = new EntityAttachmentOptions();
             }
             
-            // If we don't have an entity Id we need a temporary guid
-            if (opts.EntityId <= 0)
+            // We always need a guid
+            if (string.IsNullOrEmpty(opts.Guid))
             {
-                if (string.IsNullOrEmpty(opts.Guid))
-                {
-                    throw new ArgumentNullException(nameof(opts.Guid));
-                }
+                throw new ArgumentNullException(nameof(opts.Guid));
+            }            
+
+            // We don't have a guid or an entity Id
+            if (string.IsNullOrEmpty(opts.Guid) && opts.EntityId <= 0)
+            {
+                // Return empty view
+                return View(new EntityAttachmentsIndexViewModel());
             }
 
             // Get attachments
@@ -53,22 +57,24 @@ namespace Plato.Entities.Attachments.Controllers
                 .QueryAsync()
                 .Select<AttachmentQueryParams>(async q =>
                 {
+
+                    // Get attachments for entity
+                    if (opts.EntityId > 0)
+                    {
+                        var relaationships = await _entityAttachmentStore
+                            .GetByEntityIdAsync(opts.EntityId);
+                        if (relaationships != null)
+                        {
+                            q.Id.IsIn(relaationships.Select(r => r.AttachmentId).ToArray());
+                        }
+                    }
+
+                    // Also get attachments for guid
                     if (!string.IsNullOrEmpty(opts.Guid))
                     {
-                        q.ContentGuid.Equals(opts.Guid);
-                    } 
-                    else
-                    {
-                        if (opts.EntityId > 0)
-                        {
-                            var relaationships = await _entityAttachmentStore
-                                .GetByEntityIdAsync(opts.EntityId);
-                            if (relaationships != null)
-                            {
-                                q.Id.IsIn(relaationships.Select(r => r.AttachmentId).ToArray());
-                            }
-                        }                               
-                    }                    
+                        q.ContentGuid.Or().Equals(opts.Guid);
+                    }
+
                 })
                 .ToList();
 

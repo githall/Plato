@@ -71,9 +71,9 @@ $(function (win, doc, $) {
                             $content.html(response);
 
                             // Enable tooltips within loaded content
-                            //app.ui.initToolTips($content);
+                            app.ui.initToolTips($content);
                             // confirm
-                            //$content.find('[data-provide="confirm"]').confirm();
+                            $content.find('[data-provide="confirm"]').confirm();
 
                         }
                     }
@@ -193,6 +193,18 @@ $(function (win, doc, $) {
                 disablePreview: true,
                 dictDefaultMessage:
                     'Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a>'
+            },
+            onAddedFile: function (file) {
+                // triggers when a file is added
+            },
+            onDrop: function (e) {
+                // triggers when a file is dropped into the dropzone
+            },
+            onSuccess: function (response) {
+                // triggers when a file is successfully uploaded
+            },
+            onError: function (file, error, xhr) {
+                // triggers when an upload error occurrs
             }
         };
 
@@ -213,9 +225,11 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {
 
-                var opts = $caller.data(dataKey).dropZoneOptions;
-                var url = this._getUrl($caller);
-                console.log(url);
+                var opts = $caller.data(dataKey).dropZoneOptions,
+                    url = this._getUrl($caller);
+                if (url === null) {
+                    throw new Error("An upload url is required for the dropzone!");
+                }
 
                 if (!opts.init) {
 
@@ -244,7 +258,11 @@ $(function (win, doc, $) {
 
                         this.on('addedfile',
                             function (file) {
-                           
+
+                                if ($caller.data(dataKey).onAddedFile) {
+                                    $caller.data(dataKey).onAddedFile(file);
+                                }
+
                                 // Validate file extension
                                 var fileName = file.upload.filename;
                                 var allowed = false;
@@ -273,14 +291,17 @@ $(function (win, doc, $) {
 
                         this.on('drop',
                             function (e) {
-
-
+                                if ($caller.data(dataKey).onDrop) {
+                                    $caller.data(dataKey).onDrop(e);
+                                }
                             });
 
                         this.on('success',
                             function (file, response) {
-
-                                console.log(response);
+                                
+                                if ($caller.data(dataKey).onSuccess) {
+                                    $caller.data(dataKey).onSuccess(response);
+                                }
 
                                 if (response.statusCode === 200) {
 
@@ -316,7 +337,9 @@ $(function (win, doc, $) {
 
                         this.on('error',
                             function (file, error, xhr) {
-                                console.log('Error:', error);
+                                if ($caller.data(dataKey).onError) {
+                                    $caller.data(dataKey).onError(file, error, xhr);
+                                }
                             });
                     };
                 }

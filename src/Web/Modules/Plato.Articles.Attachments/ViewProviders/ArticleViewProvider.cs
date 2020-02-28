@@ -23,6 +23,7 @@ using Plato.Attachments.Stores;
 using Plato.Attachments.Models;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.Models;
+using PlatoCore.Text.Abstractions;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {
@@ -37,6 +38,7 @@ namespace Plato.Articles.Attachments.ViewProviders
         private readonly IAuthorizationService _authorizationService; 
         private readonly IEntityStore<Article> _entityStore;
         private readonly IContextFacade _contextFacade;
+        private readonly IKeyGenerator _keyGenerator;
         private readonly HttpRequest _request;
 
         public ArticleViewProvider(
@@ -45,13 +47,15 @@ namespace Plato.Articles.Attachments.ViewProviders
             IAuthorizationService authorizationService,
             IHttpContextAccessor httpContextAccessor,        
             IEntityStore<Article> entityStore,
+            IKeyGenerator keyGenerator,
             IContextFacade contextFacade)
         {            
             _request = httpContextAccessor.HttpContext.Request;
             _entityAttachmentStore = entityAttachmentStore;
             _authorizationService = authorizationService;
             _attachmentStore = attachmentStore;
-            _contextFacade = contextFacade;       
+            _contextFacade = contextFacade;
+            _keyGenerator = keyGenerator;
             _entityStore = entityStore;
         }
         
@@ -107,25 +111,24 @@ namespace Plato.Articles.Attachments.ViewProviders
                 return await BuildIndexAsync(new Article(), context);
             }
 
-            var entityId = 0;
+            var entityId = entity.Id;
             var contentGuid = string.Empty;
-            var user = await _contextFacade.GetAuthenticatedUserAsync();         
+            var user = await _contextFacade.GetAuthenticatedUserAsync();
 
-            // For new entities we need a temporary content guid
-            if (entity.Id == 0)
+            // Use posted guid if available
+            var postedGuid = PostedGuidValue();
+            if (!string.IsNullOrEmpty(postedGuid))
             {
-                var postedGuid = PostedGuidValue();
-
-                // Use posted guid if available
-                if (!string.IsNullOrEmpty(postedGuid))
+                contentGuid = postedGuid;
+            } 
+            else
+            {
+                // Create a new temporary unique guid
+                contentGuid = _keyGenerator.GenerateKey(o =>
                 {
-                    contentGuid = postedGuid;
-                } 
-                else
-                {
-                    // Create a new guid
-                    contentGuid = System.Guid.NewGuid().ToString();
-                }                
+                    o.MaxLength = 50;
+                    o.UniqueIdentifier = $"{user.Id.ToString()}-{entity.Id.ToString()}";
+                });
             }
 
             return Views(
@@ -168,29 +171,40 @@ namespace Plato.Articles.Attachments.ViewProviders
 
                 // Get attachments for guid
                 var attachments = await _attachmentStore
-                   .QueryAsync()
-                   .Select<AttachmentQueryParams>(q =>
-                   {
-                       q.ContentGuid.Equals(postedGuid);
-                   })
+                    .QueryAsync()
+                    .Select<AttachmentQueryParams>(q => q.ContentGuid.Equals(postedGuid))
                     .ToList();
 
+                // Create relationships
+                List<int> attachmentIds = null;
                 if (attachments?.Data != null)
                 {
+                    attachmentIds = new List<int>();
                     foreach (var attachment in attachments.Data)
                     {
                         // Create a relationship for any attachment matching our guid
-                        await _entityAttachmentStore.CreateAsync(new EntityAttachment()
+                        var relationship = await _entityAttachmentStore.CreateAsync(new EntityAttachment()
                         {
                             EntityId = entity.Id,
                             AttachmentId = attachment.Id,
                             CreatedUserId = user.Id
                         });
+                        if (relationship != null)
+                        {
+                            attachmentIds.Add(relationship.AttachmentId);
+                        }
                     }
                 }
 
+                // Reset guid for established relationships
+                if (attachmentIds != null)
+                {
+                    await _attachmentStore.UpdateContentGuidAsync(
+                       attachmentIds.ToArray(), string.Empty);
+                }
+
             }
-           
+
             return await BuildEditAsync(article, updater);
 
         }

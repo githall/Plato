@@ -13,9 +13,9 @@ namespace PlatoCore.Text
     public class KeyGenerator : IKeyGenerator
     {
 
-        static readonly object SyncLock = new object();
-        private readonly Random _rnd;
+        static readonly object SyncLock = new object();     
         private readonly KeyGeneratorOptions _options;
+        private readonly Random _rnd;
 
         public KeyGenerator()
         {
@@ -61,11 +61,21 @@ namespace PlatoCore.Text
             // Add our unique identifier somewhere within the response
             if (!String.IsNullOrEmpty(_options.UniqueIdentifier))
             {
-                var index = _rnd.Next(0, output.Length);
-                return
-                    output.Substring(0, index) +
-                    _options.UniqueIdentifier +
-                    output.Substring(index);
+
+                // Substitute some random characters with our output 
+                // with our unique identigier ensuring we don't change the legnth
+
+                var len = _options.UniqueIdentifier.Length;
+                var start = output.Length > len ? len : 0;
+                var end = output.Length - len > 0 ? output.Length - len : output.Length;
+                var index = _rnd.Next(start, end);
+
+                var temp = new StringBuilder(output);
+                temp
+                    .Remove(index, len)
+                    .Insert(index, _options.UniqueIdentifier);
+                output = temp.ToString();
+                
             }
 
             return output;

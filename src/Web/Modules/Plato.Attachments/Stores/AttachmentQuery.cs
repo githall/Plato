@@ -198,7 +198,6 @@ namespace Plato.Attachments.Stores
                 sb.Append(_query.Params.ContentGuid.ToSqlString("a.ContentGuid", "ContentGuid"));
             }
 
-
             return sb.ToString();
 
         }

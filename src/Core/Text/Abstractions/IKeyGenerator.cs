@@ -23,7 +23,7 @@ namespace PlatoCore.Text.Abstractions
         public int MaxLength { get; set; } = 200;
 
         public string UniqueIdentifier { get; set; }
-        
+
         public char[] SuppressCharacters { get; set; } = new[]
         {
             '0', '1', 'I', 'O', 'i', 'o', 'Q', 'q'

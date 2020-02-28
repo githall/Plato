@@ -14,7 +14,7 @@
             var extension = System.IO.Path.GetExtension(attachment.Name);
             var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
             <div class="list-group-item list-group-item-action">
-                <a href="#" class="btn float-right text-muted" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                <a href="#" class="btn float-right text-muted" data-provide="confirm" data-toggle="tooltip" title="@T["Delete Attachment"]">
                     <i class="fal fa-times"></i>
                 </a>
                 <span class="btn float-right text-muted" data-toggle="tooltip" title="@tooltip">

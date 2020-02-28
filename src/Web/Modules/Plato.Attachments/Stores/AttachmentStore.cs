@@ -76,6 +76,32 @@ namespace Plato.Attachments.Stores
 
         }
 
+        public async Task<bool> UpdateContentGuidAsync(int[] ids, string contentGuid)
+        {
+
+            var success = await _attachmentRepository.UpdateContentGuidAsync(ids, contentGuid);
+            if (success)
+            {
+                CancelTokens();
+            }
+
+            return success;
+
+        }
+
+        public async Task<bool> UpdateContentGuidAsync(int id, string contentGuid)
+        {
+
+            var success = await _attachmentRepository.UpdateContentGuidAsync(id, contentGuid);
+            if (success)
+            {
+                CancelTokens();
+            }
+
+            return success;
+
+        }
+
         public async Task<Models.Attachment> GetByIdAsync(int id)
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ById, id);

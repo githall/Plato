@@ -4,11 +4,12 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
+using Plato.Attachments.Models;
 
 namespace Plato.Attachments.Repositories
 {
 
-    public class AttachmentRepository : IAttachmentRepository<Models.Attachment>
+    public class AttachmentRepository : IAttachmentRepository<Attachment>
     {
 
         private readonly ILogger<AttachmentRepository> _logger;
@@ -24,19 +25,19 @@ namespace Plato.Attachments.Repositories
         
         #region "Implementation"
 
-        public async Task<IPagedResults<Models.Attachment>> SelectAsync(IDbDataParameter[] dbParams)
+        public async Task<IPagedResults<Attachment>> SelectAsync(IDbDataParameter[] dbParams)
         {
-            IPagedResults<Models.Attachment> output = null;
+            IPagedResults<Attachment> output = null;
             using (var context = _dbContext)
             {
-                output = await context.ExecuteReaderAsync<IPagedResults<Models.Attachment>>(
+                output = await context.ExecuteReaderAsync<IPagedResults<Attachment>>(
                     CommandType.StoredProcedure,
                     "SelectAttachmentsPaged",
                     async reader =>
                     {
                         if ((reader != null) && (reader.HasRows))
                         {
-                            output = new PagedResults<Models.Attachment>();
+                            output = new PagedResults<Attachment>();
                             while (await reader.ReadAsync())
                             {
                                 var entity = new Models.Attachment();
@@ -85,6 +86,43 @@ namespace Plato.Attachments.Repositories
             return success > 0 ? true : false;
         }
 
+        public async Task<bool> UpdateContentGuidAsync(int[] ids, string contentGuid)
+        {
+
+            var success = true;
+            foreach (var id in ids)
+            {
+                var result = await UpdateContentGuidAsync(id, contentGuid);
+                if (!result)
+                {
+                    success = false;
+                    break;
+                }
+            }
+
+            return success;
+        }
+
+        public async Task<bool> UpdateContentGuidAsync(int id, string contentGuid)
+        {
+
+            var success = 0;
+            using (var context = _dbContext)
+            {
+                success = await context.ExecuteScalarAsync<int>(
+                    CommandType.StoredProcedure,
+                    "UpdateAttachmentContentGuidById",
+                    new IDbDataParameter[]
+                    {
+                        new DbParam("Id", DbType.Int32, id),
+                        new DbParam("ContentGuid", DbType.String, 50, contentGuid.ToEmptyIfNull()),
+                    });
+            }
+
+            return success > 0 ? true : false;
+
+        }
+
         public async Task<Models.Attachment> InsertUpdateAsync(Models.Attachment model)
         {
             var id = await InsertUpdateInternal(
@@ -106,7 +144,7 @@ namespace Plato.Attachments.Repositories
             return null;
         }
 
-        public async Task<Models.Attachment> SelectByIdAsync(int id)
+        public async Task<Attachment> SelectByIdAsync(int id)
         {
             Models.Attachment attachment = null;
             using (var context = _dbContext)
@@ -165,7 +203,7 @@ namespace Plato.Attachments.Repositories
                         new DbParam("ContentBlob", DbType.Binary, contentBlob ?? new byte[0]),
                         new DbParam("ContentType", DbType.String, 75, contentType.ToEmptyIfNull()),
                         new DbParam("ContentLength", DbType.Int64, contentLength),
-                        new DbParam("ContentGuid", DbType.String, 100, contentGuid.ToEmptyIfNull()),                        
+                        new DbParam("ContentGuid", DbType.String, 50, contentGuid.ToEmptyIfNull()),                        
                         new DbParam("TotalViews", DbType.Int32, totalViews),
                         new DbParam("CreatedUserId", DbType.Int32, createdUserId),
                         new DbParam("CreatedDate", DbType.DateTimeOffset, createdDate.ToDateIfNull()),
