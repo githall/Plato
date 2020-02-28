@@ -39,7 +39,7 @@ namespace Plato.Attachments.Stores
             var contentGuid = Params.ContentGuid.Value ?? string.Empty;
             var keywords = Params.Keywords.Value ?? string.Empty;
 
-            return await _store.SelectAsync(new[]
+            return await _store.SelectAsync(new IDbDataParameter[]
             {
                 new DbParam("PageIndex", DbType.Int32, PageIndex),
                 new DbParam("PageSize", DbType.Int32, PageSize),

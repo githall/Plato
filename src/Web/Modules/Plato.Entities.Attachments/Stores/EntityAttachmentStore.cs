@@ -157,17 +157,7 @@ namespace Plato.Entities.Attachments.Stores
 
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ByEntityId, entityId);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
-            {
-
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    _logger.LogInformation("Selecting entity labels for entityId '{0}'.",
-                        entityId);
-                }
-
-                return await _entityAttachmentRepository.SelectByEntityIdAsync(entityId);
-
-            });
+            await _entityAttachmentRepository.SelectByEntityIdAsync(entityId));
         }
 
         public async Task<bool> DeleteByEntityIdAsync(int entityId)

@@ -173,9 +173,13 @@ namespace Plato.Entities.Attachments.Handlers
         void EntityAttachments(ISchemaBuilder builder)
         {
 
+            // Tables
             builder.TableBuilder.CreateTable(_entityyAttachments);
 
-            builder.ProcedureBuilder.CreateProcedure(
+            // Procedures
+            builder.ProcedureBuilder
+                .CreateDefaultProcedures(_entityyAttachments)
+                .CreateProcedure(
                     new SchemaProcedure(
                             $"SelectEntityAttachmentById",
                             @" SELECT 
