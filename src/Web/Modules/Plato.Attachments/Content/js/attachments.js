@@ -175,6 +175,7 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
+            progress: "#progress",
             allowedUploadExtensions: [
                 "txt",
                 "html",
@@ -254,7 +255,13 @@ $(function (win, doc, $) {
 
                     opts.init = function () {
 
-                        var allowedUploadExtensions = $caller.data(dataKey).allowedUploadExtensions;
+                        var $progress = null,
+                            progressSelector = $caller.data(dataKey).progress,
+                            allowedUploadExtensions = $caller.data(dataKey).allowedUploadExtensions;
+                                                
+                        if (progressSelector) {
+                            $progress = $(progressSelector);
+                        }
 
                         this.on('addedfile',
                             function (file) {
@@ -333,6 +340,15 @@ $(function (win, doc, $) {
 
                                 }
 
+                            });
+
+                        this.on('uploadprogress',
+                            function (file, progress, bytesSent) {
+                                progress = bytesSent / file.size * 100;
+                                console.log(progress);
+                                if ($progress) {
+                                    $progress.find('.progress-bar').width(progress + "%");
+                                }           
                             });
 
                         this.on('error',

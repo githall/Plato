@@ -14,7 +14,6 @@ namespace Plato.Entities.Attachments.ViewComponents
 
         private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
 
-
         public EntityAttachmentsViewComponent(
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore)
         {
@@ -32,7 +31,7 @@ namespace Plato.Entities.Attachments.ViewComponents
             return View(new EntityAttachmentsViewModel()
             {
                 Results = await _entityAttachmentStore.GetByEntityIdAsync(entity.Id)
-            });          
+            });
 
         }
 
