@@ -182,28 +182,38 @@ namespace Plato.Entities.Attachments.Handlers
                 .CreateProcedure(
                     new SchemaProcedure(
                             $"SelectEntityAttachmentById",
-                            @" SELECT 
-                                    ea.*, 
-                                    a.[Name] AS AttachmentName
+                            @"SELECT 
+                                    ea.*,          
+                                    a.[Name],
+                                    CAST(1 AS BINARY(1)) AS ContentBlob, -- for perf not returned with results
+                                    a.ContentType, 
+                                    a.ContentLength, 
+                                    a.ContentGuid, 
+                                    a.TotalViews 
                                 FROM {prefix}_Attachments a WITH (nolock) 
                                     INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id                                    
                                 WHERE (
                                    ea.Id = @Id
-                                )")
+                                );")
                         .ForTable(_entityyAttachments)
                         .WithParameter(_entityyAttachments.PrimaryKeyColumn))
 
                 .CreateProcedure(
                     new SchemaProcedure(
                             $"SelectEntityAttachmentsByEntityId",
-                            @" SELECT 
-                                    ea.*, 
-                                    a.[Name] AS AttachmentName
+                            @"SELECT 
+                                    ea.*,          
+                                    a.[Name],
+                                    CAST(1 AS BINARY(1)) AS ContentBlob, -- for perf not returned with results
+                                    a.ContentType, 
+                                    a.ContentLength, 
+                                    a.ContentGuid, 
+                                    a.TotalViews 
                                 FROM {prefix}_Attachments a WITH (nolock) 
                                     INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id                                    
                                 WHERE (
                                    ea.EntityId = @EntityId
-                                )")
+                                );")
                         .ForTable(_entityyAttachments)
                         .WithParameter(new SchemaColumn() { Name = "EntityId", DbType = DbType.Int32 }))
 

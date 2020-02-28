@@ -8,6 +8,8 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Articles.Models;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Articles.Attachments.ViewProviders;
+using Plato.Articles.Attachments.Navigation;
+using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Articles.Attachments
 {
@@ -23,6 +25,9 @@ namespace Plato.Articles.Attachments
         public override void ConfigureServices(IServiceCollection services)
         {
 
+            // Register navigation provider     
+            services.AddScoped<INavigationProvider, ArticleFooterMenu>();
+          
             // View providers
             services.AddScoped<IViewProviderManager<Article>, ViewProviderManager<Article>>();
             services.AddScoped<IViewProvider<Article>, ArticleViewProvider>();

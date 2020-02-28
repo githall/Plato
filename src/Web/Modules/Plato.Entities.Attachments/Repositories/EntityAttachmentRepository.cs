@@ -168,7 +168,7 @@ namespace Plato.Entities.Attachments.Repositories
                         }
 
                         return output;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("EntityId", DbType.Int32, entityId)
                     });

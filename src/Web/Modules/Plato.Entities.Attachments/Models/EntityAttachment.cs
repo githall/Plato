@@ -1,30 +1,22 @@
 ﻿using System;
 using System.Data;
-using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
+using Plato.Attachments.Models;
 
 namespace Plato.Entities.Attachments.Models
 {
 
-    public class EntityAttachment : IDbModel
+    public class EntityAttachment : Attachment
     {
-
-        public int Id { get; set; }
 
         public int EntityId { get; set; }
 
         public int AttachmentId { get; set; }
 
-        public int CreatedUserId { get; set; }
-
-        public DateTimeOffset? CreatedDate { get; set; }
-
-        public int ModifiedUserId { get; set; }
-
-        public DateTimeOffset? ModifiedDate { get; set; }
-
-        public void PopulateModel(IDataReader dr)
+        public override void PopulateModel(IDataReader dr)
         {
+
+            base.PopulateModel(dr);
 
             if (dr.ColumnIsNotNull("Id"))
                 Id = Convert.ToInt32(dr["Id"]);

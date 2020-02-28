@@ -1,0 +1,35 @@
+﻿@model EntityAttachmentsViewModel
+@{
+    var total = Model.Results?.Count() ?? 0; 
+    var text = total == 1
+        ? "attachment"
+        : "attachments";
+}
+@if (total > 0)
+{
+    <div class="pl-3 pb-3">     
+        <h6><i class="fal fa-paperclip fa-fw"></i> @total @text</h6>     
+        @if (Model.Results != null)
+        {   
+            foreach (var attachment in Model.Results)
+            {
+                var views = attachment.TotalViews == 1 ? T["view"] : T["views"];
+                var tooltip = $"{attachment.ContentLength.ToFriendlyFileSize()}, {attachment.TotalViews.ToPrettyInt()} {views.Value}";
+                var extension = System.IO.Path.GetExtension(attachment.Name);
+                var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
+                <div>   
+                    @if (!string.IsNullOrEmpty(iconCss))
+                    {
+                        <span class="fiv-sqo @iconCss align-middle mr-1"></span>
+                    }
+                    <a href="#" class="align-middle">
+                        @attachment.Name
+                    </a>
+                    <span class="text-muted">
+                        @tooltip
+                    </span>
+                </div>
+            }            
+        }
+    </div>
+}

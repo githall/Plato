@@ -36,7 +36,7 @@ namespace Plato.Attachments.Models
 
         public ISimpleUser ModifiedBy { get; set; }
 
-        public void PopulateModel(IDataReader dr)
+        public virtual void PopulateModel(IDataReader dr)
         {
 
             if (dr.ColumnIsNotNull("id"))

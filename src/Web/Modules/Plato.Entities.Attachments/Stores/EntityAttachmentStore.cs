@@ -134,17 +134,7 @@ namespace Plato.Entities.Attachments.Stores
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType(), dbParams.Select(p => p.Value).ToArray());
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
-            {
-
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    _logger.LogInformation("Selecting entity labels for key '{0}' with the following parameters: {1}",
-                        token.ToString(), dbParams.Select(p => p.Value));
-                }
-
-                return await _entityAttachmentRepository.SelectAsync(dbParams);
-
-            });
+                await _entityAttachmentRepository.SelectAsync(dbParams));
         }
 
         public async Task<IEnumerable<EntityAttachment>> GetByEntityIdAsync(int entityId)
@@ -157,7 +147,7 @@ namespace Plato.Entities.Attachments.Stores
 
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ByEntityId, entityId);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
-            await _entityAttachmentRepository.SelectByEntityIdAsync(entityId));
+                await _entityAttachmentRepository.SelectByEntityIdAsync(entityId));
         }
 
         public async Task<bool> DeleteByEntityIdAsync(int entityId)

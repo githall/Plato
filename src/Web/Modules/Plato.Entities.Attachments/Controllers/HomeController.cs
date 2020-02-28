@@ -9,6 +9,7 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.Models;
+using Plato.Attachments.ViewModels;
 
 namespace Plato.Entities.Attachments.Controllers
 {
@@ -49,7 +50,7 @@ namespace Plato.Entities.Attachments.Controllers
             if (string.IsNullOrEmpty(opts.Guid) && opts.EntityId <= 0)
             {
                 // Return empty view
-                return View(new EntityAttachmentsIndexViewModel());
+                return View(new AttachmentsIndexViewModel());
             }
 
             // Get attachments
@@ -79,7 +80,7 @@ namespace Plato.Entities.Attachments.Controllers
                 .ToList();
 
             // Return view
-            return View(new EntityAttachmentsIndexViewModel()
+            return View(new AttachmentsIndexViewModel()
             {
                 Results = results
             });

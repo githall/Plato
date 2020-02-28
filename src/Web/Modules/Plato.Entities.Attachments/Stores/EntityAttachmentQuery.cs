@@ -65,17 +65,6 @@ namespace Plato.Entities.Attachments.Stores
         private WhereInt _attachmentId;
         private WhereInt _entityId;
 
-        private WhereBool _showHidden;
-        private WhereBool _hideHidden;
-        private WhereBool _showPrivate;
-        private WhereBool _hidePrivate;
-        private WhereBool _showSpam;
-        private WhereBool _hideSpam;
-        private WhereBool _showClosed;
-        private WhereBool _hideClosed;
-        private WhereBool _hideDeleted;
-        private WhereBool _showDeleted;
-
         public WhereInt Id
         {
             get => _id ?? (_id = new WhereInt());
@@ -94,66 +83,6 @@ namespace Plato.Entities.Attachments.Stores
             set => _entityId = value;
         }
 
-        public WhereBool ShowHidden
-        {
-            get => _showHidden ?? (_showHidden = new WhereBool());
-            set => _showHidden = value;
-        }
-
-        public WhereBool HideHidden
-        {
-            get => _hideHidden ?? (_hideHidden = new WhereBool());
-            set => _hideHidden = value;
-        }
-
-        public WhereBool ShowPrivate
-        {
-            get => _showPrivate ?? (_showPrivate = new WhereBool());
-            set => _showPrivate = value;
-        }
-
-        public WhereBool HidePrivate
-        {
-            get => _hidePrivate ?? (_hidePrivate = new WhereBool());
-            set => _hidePrivate = value;
-        }
-
-        public WhereBool HideSpam
-        {
-            get => _hideSpam ?? (_hideSpam = new WhereBool());
-            set => _hideSpam = value;
-        }
-
-        public WhereBool ShowSpam
-        {
-            get => _showSpam ?? (_showSpam = new WhereBool());
-            set => _showSpam = value;
-        }
-
-        public WhereBool HideClosed
-        {
-            get => _hideClosed ?? (_hideClosed = new WhereBool());
-            set => _hideClosed = value;
-        }
-
-        public WhereBool ShowClosed
-        {
-            get => _showClosed ?? (_showClosed = new WhereBool());
-            set => _showClosed = value;
-        }
-        
-        public WhereBool HideDeleted
-        {
-            get => _hideDeleted ?? (_hideDeleted = new WhereBool());
-            set => _hideDeleted = value;
-        }
-
-        public WhereBool ShowDeleted
-        {
-            get => _showDeleted ?? (_showDeleted = new WhereBool());
-            set => _showDeleted = value;
-        }
-
     }
 
     #endregion
@@ -165,16 +94,16 @@ namespace Plato.Entities.Attachments.Stores
 
         #region "Constructor"
 
-        private readonly string _entitiesTableName;
-        private readonly string _EntityAttachmentsTableName;
+        private readonly string _attachmentsTableName;
+        private readonly string _entityAttachmentsTableName;
 
         private readonly EntityAttachmentQuery _query;
 
         public EntityAttachmentQueryBuilder(EntityAttachmentQuery query)
         {
             _query = query;
-            _entitiesTableName = GetTableNameWithPrefix("Entities");
-            _EntityAttachmentsTableName = GetTableNameWithPrefix("EntityAttachments");
+            _attachmentsTableName = GetTableNameWithPrefix("Attachments");
+            _entityAttachmentsTableName = GetTableNameWithPrefix("EntityAttachments");
         }
 
         #endregion
@@ -222,7 +151,14 @@ namespace Plato.Entities.Attachments.Stores
         private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
-            sb.Append("el.*");
+            sb
+                .Append("ea.*, ")            
+                .Append("a.[Name], ")
+                .Append("CAST(1 AS BINARY(1)) AS ContentBlob, ") // for perf not returned with paged results
+                .Append("a.ContentType, ")
+                .Append("a.ContentLength, ")
+                .Append("a.ContentGuid, ")
+                .Append("a.TotalViews ");
             return sb.ToString();
 
         }
@@ -230,11 +166,10 @@ namespace Plato.Entities.Attachments.Stores
         private string BuildTables()
         {
             var sb = new StringBuilder();
-            sb.Append(_EntityAttachmentsTableName)
-                .Append(" el ")
-                .Append(" INNER JOIN ")
-                .Append(_entitiesTableName)
-                .Append(" e ON el.EntityId = e.Id ");
+            sb.Append(_entityAttachmentsTableName)
+                .Append(" ea INNER JOIN ")
+                .Append(_attachmentsTableName)
+                .Append(" a ON ea.AttachmentId = a.Id ");
             return sb.ToString();
         }
 
@@ -254,7 +189,7 @@ namespace Plato.Entities.Attachments.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.Id.Operator);
-                sb.Append(_query.Params.Id.ToSqlString("el.Id"));
+                sb.Append(_query.Params.Id.ToSqlString("ea.Id"));
             }
             
             // LabelId
@@ -262,7 +197,7 @@ namespace Plato.Entities.Attachments.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.AttachmentId.Operator);
-                sb.Append(_query.Params.AttachmentId.ToSqlString("el.LabelId"));
+                sb.Append(_query.Params.AttachmentId.ToSqlString("ea.AttachmentId"));
             }
 
             // EntityId
@@ -270,109 +205,7 @@ namespace Plato.Entities.Attachments.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.EntityId.Operator);
-                sb.Append(_query.Params.EntityId.ToSqlString("el.EntityId"));
-            }
-
-
-            // -----------------
-            // IsHidden 
-            // -----------------
-
-            // hide = true, show = false
-            if (_query.Params.HideHidden.Value && !_query.Params.ShowHidden.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.HideHidden.Operator);
-                sb.Append("e.IsHidden = 0");
-            }
-
-            // show = true, hide = false
-            if (_query.Params.ShowHidden.Value && !_query.Params.HideHidden.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.ShowHidden.Operator);
-                sb.Append("e.IsHidden = 1");
-            }
-
-            // -----------------
-            // IsPrivate 
-            // -----------------
-
-            // hide = true, show = false
-            if (_query.Params.HidePrivate.Value && !_query.Params.ShowPrivate.Value)
-            {
-                // Hide all private entities except those created by the current user
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.HidePrivate.Operator);
-                sb.Append("e.IsPrivate = 0");
-            }
-
-            // show = true, hide = false
-            if (_query.Params.ShowPrivate.Value && !_query.Params.HidePrivate.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.ShowPrivate.Operator);
-                sb.Append("e.IsPrivate = 1");
-            }
-            
-            // -----------------
-            // IsSpam 
-            // -----------------
-
-            // hide = true, show = false
-            if (_query.Params.HideSpam.Value && !_query.Params.ShowSpam.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.HideSpam.Operator);
-                sb.Append("e.IsSpam = 0");
-            }
-
-            // show = true, hide = false
-            if (_query.Params.ShowSpam.Value && !_query.Params.HideSpam.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.ShowSpam.Operator);
-                sb.Append("e.IsSpam = 1");
-            }
-
-            // -----------------
-            // IsDeleted 
-            // -----------------
-
-            // hide = true, show = false
-            if (_query.Params.HideDeleted.Value && !_query.Params.ShowDeleted.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.HideDeleted.Operator);
-                sb.Append("e.IsDeleted = 0");
-            }
-
-            // show = true, hide = false
-            if (_query.Params.ShowDeleted.Value && !_query.Params.HideDeleted.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.ShowDeleted.Operator);
-                sb.Append("e.IsDeleted = 1");
-            }
-
-            // -----------------
-            // IsClosed 
-            // -----------------
-
-            // hide = true, show = false
-            if (_query.Params.HideClosed.Value && !_query.Params.ShowClosed.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.HideClosed.Operator);
-                sb.Append("e.IsClosed = 0");
-            }
-
-            // show = true, hide = false
-            if (_query.Params.ShowClosed.Value && !_query.Params.HideClosed.Value)
-            {
-                if (!string.IsNullOrEmpty(sb.ToString()))
-                    sb.Append(_query.Params.ShowClosed.Operator);
-                sb.Append("e.IsClosed = 1");
+                sb.Append(_query.Params.EntityId.ToSqlString("ea.EntityId"));
             }
 
             return sb.ToString();

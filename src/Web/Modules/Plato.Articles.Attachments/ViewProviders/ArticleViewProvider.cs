@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -8,16 +7,6 @@ using Plato.Articles.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
-using PlatoCore.Security.Abstractions;
-using Plato.Entities.Extensions;
-using Plato.Entities.Models;
-using PlatoCore.Models.Notifications;
-using PlatoCore.Models.Users;
-using PlatoCore.Notifications.Abstractions;
-using PlatoCore.Notifications.Extensions;
-using PlatoCore.Stores.Abstractions.Users;
-using PlatoCore.Stores.Users;
-using PlatoCore.Tasks.Abstractions;
 using Plato.Entities.Attachments.ViewModels;
 using Plato.Attachments.Stores;
 using Plato.Attachments.Models;
@@ -146,10 +135,8 @@ namespace Plato.Articles.Attachments.ViewProviders
         public override async Task<IViewProviderResult> BuildUpdateAsync(Article article, IViewProviderContext updater)
         {
 
-            // Get authenticated user
-            var user = await _contextFacade.GetAuthenticatedUserAsync();
-
             // We need to be authenticated to add attachments
+            var user = await _contextFacade.GetAuthenticatedUserAsync();       
             if (user == null)
             {
                 return await BuildEditAsync(article, updater);
@@ -162,48 +149,46 @@ namespace Plato.Articles.Attachments.ViewProviders
                 return await BuildEditAsync(article, updater);
             }
 
-            // Get posted guid value
-            var postedGuid = PostedGuidValue();
-
-            // Ensure we have a guid
-            if (!string.IsNullOrEmpty(postedGuid))
+            // Ensure we have a temporary guid
+            var postedGuid = PostedGuidValue();           
+            if (string.IsNullOrEmpty(postedGuid))
             {
+                return await BuildEditAsync(article, updater);
+            }
 
-                // Get attachments for guid
-                var attachments = await _attachmentStore
-                    .QueryAsync()
-                    .Select<AttachmentQueryParams>(q => q.ContentGuid.Equals(postedGuid))
-                    .ToList();
+            // Get attachments for temporary guid
+            var attachments = await _attachmentStore
+                .QueryAsync()
+                .Select<AttachmentQueryParams>(q => q.ContentGuid.Equals(postedGuid))
+                .ToList();
 
-                // Create relationships
-                List<int> attachmentIds = null;
-                if (attachments?.Data != null)
+            // Create relationships
+            List<int> attachmentIds = null;
+            if (attachments?.Data != null)
+            {
+                attachmentIds = new List<int>();
+                foreach (var attachment in attachments.Data)
                 {
-                    attachmentIds = new List<int>();
-                    foreach (var attachment in attachments.Data)
+                    // Create a relationship for any attachment matching our guid
+                    var relationship = await _entityAttachmentStore.CreateAsync(new EntityAttachment()
                     {
-                        // Create a relationship for any attachment matching our guid
-                        var relationship = await _entityAttachmentStore.CreateAsync(new EntityAttachment()
-                        {
-                            EntityId = entity.Id,
-                            AttachmentId = attachment.Id,
-                            CreatedUserId = user.Id
-                        });
-                        if (relationship != null)
-                        {
-                            attachmentIds.Add(relationship.AttachmentId);
-                        }
+                        EntityId = entity.Id,
+                        AttachmentId = attachment.Id,
+                        CreatedUserId = user.Id
+                    });
+                    if (relationship != null)
+                    {
+                        attachmentIds.Add(relationship.AttachmentId);
                     }
                 }
-
-                // Reset guid for established relationships
-                if (attachmentIds != null)
-                {
-                    await _attachmentStore.UpdateContentGuidAsync(
-                       attachmentIds.ToArray(), string.Empty);
-                }
-
             }
+
+            // Reset temporary guid for established relationships
+            if (attachmentIds != null)
+            {
+                await _attachmentStore.UpdateContentGuidAsync(
+                    attachmentIds.ToArray(), string.Empty);
+            }          
 
             return await BuildEditAsync(article, updater);
 
@@ -211,7 +196,7 @@ namespace Plato.Articles.Attachments.ViewProviders
 
         string PostedGuidValue()
         {
-            
+
             if (!_request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
             {
                 return string.Empty;
@@ -228,7 +213,9 @@ namespace Plato.Articles.Attachments.ViewProviders
                     }
                 }
             }
+
             return string.Empty;
+
         }
 
     }
