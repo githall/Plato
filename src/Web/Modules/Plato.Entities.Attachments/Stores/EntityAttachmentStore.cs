@@ -53,12 +53,12 @@ namespace Plato.Entities.Attachments.Stores
             {
                 throw new ArgumentOutOfRangeException(nameof(model.AttachmentId));
             }
-            
+
             if (model.EntityId <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(model.EntityId));
             }
-            
+
             var result = await _entityAttachmentRepository.InsertUpdateAsync(model);
             if (result != null)
             {

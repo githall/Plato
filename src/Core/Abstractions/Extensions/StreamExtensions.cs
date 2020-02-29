@@ -1,28 +1,30 @@
 ﻿using System;
 using System.IO;
 using System.Text;
+using System.Security.Cryptography;
 
 namespace PlatoCore.Abstractions.Extensions
 {
     public static class StreamExtensions
     {
 
-        public static string StreamToString(this Stream stream)
+        public static string Stringify(this Stream stream, Encoding encoding = null)
         {
             if (stream == null)
                 throw new ArgumentNullException(nameof(stream));
 
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+
             // Important: Ensure we reset the stream position
-            stream.Position = 0;
-            using (var reader = new StreamReader(stream, Encoding.UTF8))
-            {
-                return reader.ReadToEnd();
-            }
+            stream.Position = 0;            
+            using var reader = new StreamReader(stream, encoding);
+            return reader.ReadToEnd();
         }
 
-        public static byte[] StreamToByteArray(this Stream stream)
+        public static byte[] ToByteArray(this Stream stream)
         {
-            
+
             // Important: Ensure we reset the stream position
             stream.Position = 0;
 
@@ -42,6 +44,16 @@ namespace PlatoCore.Abstractions.Extensions
 
         }
 
+        public static byte[] ToMD5(this Stream stream)
+        {
+            using var md5 = MD5.Create();
+            return md5.ComputeHash(stream);
+        }
+
+        public static string ToHex(this Stream stream, bool upperCase = false)
+        {
+            return stream.ToByteArray().ToHex(upperCase);
+        }
     }
 
 }

@@ -279,7 +279,7 @@ namespace Plato.Users.ViewProviders
             byte[] bytes = null;
             if (stream != null)
             {
-                bytes = stream.StreamToByteArray();
+                bytes = stream.ToByteArray();
             }
 
             // Ensure we have a valid byte array

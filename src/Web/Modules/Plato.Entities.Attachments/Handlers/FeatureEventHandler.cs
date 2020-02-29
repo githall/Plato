@@ -186,10 +186,11 @@ namespace Plato.Entities.Attachments.Handlers
                                     ea.*,          
                                     a.[Name],
                                     CAST(1 AS BINARY(1)) AS ContentBlob, -- for perf not returned with results
-                                    a.ContentType, 
-                                    a.ContentLength, 
-                                    a.ContentGuid, 
-                                    a.TotalViews 
+                                    a.ContentType,
+                                    a.ContentLength,
+                                    a.ContentGuid,
+                                    a.ContentCheckSum,
+                                    a.TotalViews
                                 FROM {prefix}_Attachments a WITH (nolock) 
                                     INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id                                    
                                 WHERE (
@@ -205,9 +206,10 @@ namespace Plato.Entities.Attachments.Handlers
                                     ea.*,          
                                     a.[Name],
                                     CAST(1 AS BINARY(1)) AS ContentBlob, -- for perf not returned with results
-                                    a.ContentType, 
-                                    a.ContentLength, 
-                                    a.ContentGuid, 
+                                    a.ContentType,
+                                    a.ContentLength,
+                                    a.ContentGuid,
+                                    a.ContentCheckSum,
                                     a.TotalViews 
                                 FROM {prefix}_Attachments a WITH (nolock) 
                                     INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id                                    

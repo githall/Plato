@@ -37,6 +37,7 @@ namespace Plato.Attachments.Stores
             var populateSql = builder.BuildSqlPopulate();
             var countSql = builder.BuildSqlCount();
             var contentGuid = Params.ContentGuid.Value ?? string.Empty;
+            var contentCheckSum = Params.ContentCheckSum.Value ?? string.Empty;
             var keywords = Params.Keywords.Value ?? string.Empty;
 
             return await _store.SelectAsync(new IDbDataParameter[]
@@ -45,7 +46,8 @@ namespace Plato.Attachments.Stores
                 new DbParam("PageSize", DbType.Int32, PageSize),
                 new DbParam("SqlPopulate", DbType.String, populateSql),
                 new DbParam("SqlCount", DbType.String, countSql),
-                new DbParam("ContentGuid", DbType.String, contentGuid),
+                new DbParam("ContentGuid", DbType.String, 32, contentGuid),
+                new DbParam("ContentCheckSum", DbType.String, 32, contentCheckSum),
                 new DbParam("Keywords", DbType.String, keywords)
             });
 
@@ -62,6 +64,7 @@ namespace Plato.Attachments.Stores
         
         private WhereInt _id;
         private WhereString _contentGuid;
+        private WhereString _contentCheckSum;
         private WhereString _keywords;
         
         public WhereInt Id
@@ -74,6 +77,12 @@ namespace Plato.Attachments.Stores
         {
             get => _contentGuid ?? (_contentGuid = new WhereString());
             set => _contentGuid = value;
+        }
+
+        public WhereString ContentCheckSum
+        {
+            get => _contentCheckSum ?? (_contentCheckSum = new WhereString());
+            set => _contentCheckSum = value;
         }
 
         public WhereString Keywords
@@ -155,6 +164,7 @@ namespace Plato.Attachments.Stores
                 .Append("a.ContentType, ")
                 .Append("a.ContentLength, ")
                 .Append("a.ContentGuid, ")
+                .Append("a.ContentCheckSum, ")
                 .Append("a.TotalViews, ")
                 .Append("a.CreatedUserId, ")
                 .Append("a.CreatedDate, ")
@@ -197,6 +207,15 @@ namespace Plato.Attachments.Stores
                     sb.Append(_query.Params.ContentGuid.Operator);
                 sb.Append(_query.Params.ContentGuid.ToSqlString("a.ContentGuid", "ContentGuid"));
             }
+
+            // ContentCheckSum
+            if (!String.IsNullOrEmpty(_query.Params.ContentCheckSum.Value))
+            {
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                    sb.Append(_query.Params.ContentCheckSum.Operator);
+                sb.Append(_query.Params.ContentCheckSum.ToSqlString("a.ContentCheckSum", "ContentCheckSum"));
+            }
+
 
             return sb.ToString();
 

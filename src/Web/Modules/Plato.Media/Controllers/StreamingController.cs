@@ -114,7 +114,7 @@ namespace Plato.Media.Controllers
                             await section.Body.CopyToAsync(ms);
 
                             // get bytes and length
-                            bytes = ms.StreamToByteArray();
+                            bytes = ms.ToByteArray();
                             contentLength = ms.Length;
 
                         }

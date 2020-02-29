@@ -158,6 +158,7 @@ namespace Plato.Entities.Attachments.Stores
                 .Append("a.ContentType, ")
                 .Append("a.ContentLength, ")
                 .Append("a.ContentGuid, ")
+                .Append("a.ContentCheckSum, ")
                 .Append("a.TotalViews ");
             return sb.ToString();
 

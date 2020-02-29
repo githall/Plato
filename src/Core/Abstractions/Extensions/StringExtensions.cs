@@ -270,9 +270,11 @@ namespace PlatoCore.Abstractions.Extensions
             return input.EndsWith(trim.ToString()) ? input.TrimEnd(trim) : input;
         }
 
-        public static Stream StringToStream(this string input)
+        public static Stream ToStream(this string input, Encoding encoding = null)
         {
-            return new MemoryStream(Encoding.UTF8.GetBytes(input));
+            if (encoding == null)
+                encoding = Encoding.UTF8;
+            return new MemoryStream(encoding.GetBytes(input));
         }
 
         public static T Deserialize<T>(this string json)

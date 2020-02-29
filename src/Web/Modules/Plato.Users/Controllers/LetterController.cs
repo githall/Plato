@@ -90,7 +90,7 @@ namespace Plato.Users.Controllers
                     {
                         Letter = letter.ToString().ToUpper(),
                         BackColor = color
-                    }).StreamToByteArray();
+                    }).ToByteArray();
                     
                     using (var stream = new MemoryStream(fileBytes))
                     {

@@ -22,6 +22,8 @@ namespace Plato.Attachments.Models
 
         public string ContentGuid { get; set; }
 
+        public string ContentCheckSum { get; set; }
+
         public int TotalViews { get; set; }
 
         public DateTimeOffset? CreatedDate { get; set; }
@@ -56,6 +58,9 @@ namespace Plato.Attachments.Models
 
             if (dr.ColumnIsNotNull("ContentGuid"))
                 ContentGuid = Convert.ToString(dr["ContentGuid"]);
+
+            if (dr.ColumnIsNotNull("ContentCheckSum"))
+                ContentCheckSum = Convert.ToString(dr["ContentCheckSum"]);
 
             if (dr.ColumnIsNotNull("TotalViews"))
                 TotalViews = Convert.ToInt32(dr["TotalViews"]);

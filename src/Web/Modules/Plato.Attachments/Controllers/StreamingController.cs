@@ -133,7 +133,7 @@ namespace Plato.Attachments.Controllers
                             await section.Body.CopyToAsync(ms);
 
                             // get bytes and length
-                            bytes = ms.StreamToByteArray();
+                            bytes = ms.ToByteArray();
                             contentLength = ms.Length;
 
                         }
@@ -186,6 +186,9 @@ namespace Plato.Attachments.Controllers
                 return BadRequest($"Could not obtain a byte array for the uploaded file.");
             }
 
+            // Get MD5 checksum
+            var checkSum = bytes?.ToMD5().ToHex() ?? string.Empty;
+
             // Store media
             var attachment = await _attachmentStore.CreateAsync(new Attachment
             {
@@ -194,6 +197,7 @@ namespace Plato.Attachments.Controllers
                 ContentLength = contentLength,
                 ContentBlob = bytes,
                 ContentGuid = guid,
+                ContentCheckSum = checkSum,
                 CreatedUserId = user.Id
             });
 

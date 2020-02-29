@@ -48,10 +48,16 @@ namespace Plato.Attachments.Handlers
                         Name = "ContentLength",
                         DbType = DbType.Int64
                     },
-                       new SchemaColumn()
+                    new SchemaColumn()
                     {
                         Name = "ContentGuid",
-                        Length = "50",
+                        Length = "32",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "ContentCheckSum",
+                        Length = "32",
                         DbType = DbType.String
                     },
                     new SchemaColumn()
@@ -203,12 +209,18 @@ namespace Plato.Attachments.Handlers
                 .ForTable(_attachments)
                 .WithParameters(new List<SchemaColumn>()
                 {
-                     new SchemaColumn()
+                    new SchemaColumn()
                     {
                         Name = "ContentGuid",
                         DbType = DbType.String,
-                        Length = "50"
+                        Length = "32"
                     },
+                    new SchemaColumn()
+                    {
+                        Name = "ContentCheckSum",
+                        DbType = DbType.String,
+                        Length = "32"
+                    },                     
                     new SchemaColumn()
                     {
                         Name = "Keywords",
@@ -249,7 +261,8 @@ namespace Plato.Attachments.Handlers
                 Columns = new string[]
                 {
                     "[Name]",
-                    "ContentGuid"
+                    "ContentGuid",
+                    "ContentCheckSum"
                 }
             });
 

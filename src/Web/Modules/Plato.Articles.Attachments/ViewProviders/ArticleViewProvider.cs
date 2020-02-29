@@ -13,6 +13,8 @@ using Plato.Attachments.Models;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.Models;
 using PlatoCore.Text.Abstractions;
+using PlatoCore.Abstractions.Extensions;
+using System.Text;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {
@@ -112,12 +114,14 @@ namespace Plato.Articles.Attachments.ViewProviders
             } 
             else
             {
-                // Create a new temporary unique guid
-                contentGuid = _keyGenerator.GenerateKey(o =>
+                // Create a new temporary 128 bit unique ASCII string
+                var key = _keyGenerator.GenerateKey(o =>
                 {
-                    o.MaxLength = 50;
+                    o.MaxLength = 16;
                     o.UniqueIdentifier = $"{user.Id.ToString()}-{entity.Id.ToString()}";
                 });
+                // Convert to 256 bit / 32 character hexadecimal string
+                contentGuid = key.ToStream(Encoding.ASCII).ToHex();
             }
 
             return Views(
