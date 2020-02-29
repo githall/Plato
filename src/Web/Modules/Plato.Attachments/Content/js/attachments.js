@@ -227,6 +227,8 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {
 
+                //methods._showFullScreenProgress($caller);
+
                 var opts = $caller.data(dataKey).dropZoneOptions,
                     url = this._getUrl($caller);
                 if (url === null) {
@@ -265,19 +267,29 @@ $(function (win, doc, $) {
 
                         function getProgress(file) {
 
-                            var $progress = $("<div>", {
+                            var $row = $("<div>", {
                                 "id": getProgressId(file),
-                                "class": "progress mb-2"
+                                "class": "progress-row"
+                            });
+
+                            var $info = $("<div>", {                          
+                                "class": "progress-info mb-2"
                             });
 
                             var $bar = $("<div>", {
+                                "class": "progress"
+                            });
+                            
+                            $bar.append($("<div>", {
                                 "class": "progress-bar",
                                 "role": "progressbar",
                                 "style": "width: 0;"
-                            });
+                            }));
 
-                            $progress.append($bar);
-                            return $progress;
+                            $row.append($info);
+                            $row.append($bar);
+                            
+                            return $row;
 
                         }
 
@@ -330,9 +342,11 @@ $(function (win, doc, $) {
                         this.on('uploadprogress',
                             function (file, progress, bytesSent) {                                
                                 if ($progressPreview) {
-                                    progress = bytesSent / file.size * 100;
-                                    var selector = '#' + getProgressId(file);
-                                    $progressPreview.find(selector).find(".progress-bar").width(progress + "%");
+                                    progress = Math.floor(bytesSent / file.size * 100);
+                                    var rowSelector = '#' + getProgressId(file);
+                                    var $row = $progressPreview.find(rowSelector);
+                                    $row.find(".progress-info").text(progress + "%");
+                                    $row.find(".progress-bar").width(progress + "%");
                                 }
                             });
 
@@ -374,7 +388,6 @@ $(function (win, doc, $) {
 
 
                             });
-
                     
                         this.on('error',
                             function (file, error, xhr) {
@@ -417,6 +430,21 @@ $(function (win, doc, $) {
 
                 // Store dropzone object in data for access within event handlers (i.e. paste)
                 $caller.data("dropzone", dropzone);
+
+            },
+            _showFullScreenProgress: function ($caller) {
+
+                var $overlay = $(".upload-overlay");
+                if (!$overlay.hasClass("visible")) {
+                    $overlay.addClass("visible");
+                }
+            },
+            _hideFullScreenProgress: function ($caller) {
+
+                var $overlay = $(".upload-overlay");
+                if ($overlay.hasClass("visible")) {
+                    $overlay.removeClass("visible");
+                }
 
             },
             _getProgressPreview: function ($caller) {
