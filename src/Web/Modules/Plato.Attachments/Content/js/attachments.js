@@ -175,7 +175,7 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            progress: "#progress",
+            progressPreview: "#progress",
             allowedUploadExtensions: [
                 "txt",
                 "html",
@@ -192,6 +192,7 @@ $(function (win, doc, $) {
                 autoProcessQueue: true,
                 autoDiscover: false,
                 disablePreview: true,
+                uploadMultiple: false,
                 dictDefaultMessage:
                     'Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a>'
             },
@@ -255,20 +256,33 @@ $(function (win, doc, $) {
 
                     opts.init = function () {
 
-                        var $progress = null,
-                            progressSelector = $caller.data(dataKey).progress,
-                            allowedUploadExtensions = $caller.data(dataKey).allowedUploadExtensions;
-                                                
-                        if (progressSelector) {
-                            $progress = $(progressSelector);
+                        var $progressPreview = methods._getProgressPreview($caller),                           
+                            allowedUploadExtensions = $caller.data(dataKey).allowedUploadExtensions;                                        
+
+                        function getProgressId(file) {
+                            return "progress-" + file.upload.uuid;
+                        }
+
+                        function getProgress(file) {
+
+                            var $progress = $("<div>", {
+                                "id": getProgressId(file),
+                                "class": "progress mb-2"
+                            });
+
+                            var $bar = $("<div>", {
+                                "class": "progress-bar",
+                                "role": "progressbar",
+                                "style": "width: 0;"
+                            });
+
+                            $progress.append($bar);
+                            return $progress;
+
                         }
 
                         this.on('addedfile',
                             function (file) {
-
-                                if ($caller.data(dataKey).onAddedFile) {
-                                    $caller.data(dataKey).onAddedFile(file);
-                                }
 
                                 // Validate file extension
                                 var fileName = file.upload.filename;
@@ -292,6 +306,16 @@ $(function (win, doc, $) {
                                     return false;
                                 }
 
+                                // Append a progress bar for the upload
+                                if ($progressPreview) {                             
+                                    $progressPreview.append(getProgress(file));
+                                }                            
+
+                                // Raise event
+                                if ($caller.data(dataKey).onAddedFile) {
+                                    $caller.data(dataKey).onAddedFile(file);
+                                }
+
                                 return true;
 
                             });
@@ -303,59 +327,87 @@ $(function (win, doc, $) {
                                 }
                             });
 
+                        this.on('uploadprogress',
+                            function (file, progress, bytesSent) {                                
+                                if ($progressPreview) {
+                                    progress = bytesSent / file.size * 100;
+                                    var selector = '#' + getProgressId(file);
+                                    $progressPreview.find(selector).find(".progress-bar").width(progress + "%");
+                                }
+                            });
+
                         this.on('success',
                             function (file, response) {
                                 
+                                if (response.statusCode === 200) {
+                                    if (response && response.result) {
+                                        for (var i = 0; i < response.result.length; i++) {
+                                            var result = response.result[i];
+                                            if (result.id > 0) {                                                
+                                                // Bootstrap notify
+                                                app.ui.notify({
+                                                        // options
+                                                        message: result.name + app.T(" Uploaded Successfully")
+                                                    },
+                                                    {
+                                                        // settings                                                     
+                                                        type: 'success',
+                                                        allow_dismiss: true
+                                                    });
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Remove progress 
+                                if ($progressPreview) {
+                                    var selector = '#' + getProgressId(file),
+                                        $progrsss = $progressPreview.find(selector);
+                                    if ($progrsss.length > 0) {
+                                        $progrsss.remove();
+                                    }                                    
+                                }
+
                                 if ($caller.data(dataKey).onSuccess) {
                                     $caller.data(dataKey).onSuccess(response);
                                 }
 
-                                if (response.statusCode === 200) {
-
-                                    if (response && response.result) {
-                                        for (var i = 0; i < response.result.length; i++) {
-
-                                            var result = response.result[i],                                              
-                                                chunk = "";
-
-                                            if (result.id > 0) {
-
-                                                // Image or file?
-                                                if (result.isImage) {
-                                                    chunk = '![' + result.name + '](/media/' + result.id + ')';
-                                                } else {
-                                                    chunk = '[' + result.name + '](/media/' + result.id + ') - ' + result.friendlySize;
-                                                }
-
-                                            }
-
-                                            var $div = $("<div>", {
-                                                class: "attachment-preview"
-                                            }).text(chunk);
-
-                                            $caller.append($div);
-
-                                        }
-                                    }
-
-                                }
 
                             });
 
-                        this.on('uploadprogress',
-                            function (file, progress, bytesSent) {
-                                progress = bytesSent / file.size * 100;
-                                console.log(progress);
-                                if ($progress) {
-                                    $progress.find('.progress-bar').width(progress + "%");
-                                }           
-                            });
-
+                    
                         this.on('error',
                             function (file, error, xhr) {
+
+                                var s = '<h6>' + app.T("An error occurred!") + '</h6>';
+                                s += app.T("Information is provided below...") + "<br/><br/>";
+                                s += '<textarea style="min-height: 130px;" class="form-control">' + error + '</textarea>';                             
+
+                                // Bootstrap notify
+                                app.ui.notify({
+                                        // options
+                                        message: s
+                                    },
+                                    {
+                                        // settings
+                                        mouse_over: "pause",
+                                        type: 'danger',
+                                        allow_dismiss: true
+                                    });
+
+                                // Remove progress 
+                                if ($progressPreview) {
+                                    var selector = '#' + getProgressId(file),
+                                        $progrsss = $progressPreview.find(selector);
+                                    if ($progrsss.length > 0) {
+                                        $progrsss.remove();
+                                    }
+                                }
+
                                 if ($caller.data(dataKey).onError) {
                                     $caller.data(dataKey).onError(file, error, xhr);
                                 }
+
                             });
                     };
                 }
@@ -366,6 +418,16 @@ $(function (win, doc, $) {
                 // Store dropzone object in data for access within event handlers (i.e. paste)
                 $caller.data("dropzone", dropzone);
 
+            },
+            _getProgressPreview: function ($caller) {
+                var selector = $caller.data("progressPreview") || $caller.data(dataKey).progressPreview;
+                if (selector) {
+                    var $preview = $(selector);
+                    if ($preview.length > 0) {
+                        return $preview;
+                    }
+                }
+                return null;
             },
             _getUrl: function ($caller) {
                 return $caller.data("dropzoneUrl") ||

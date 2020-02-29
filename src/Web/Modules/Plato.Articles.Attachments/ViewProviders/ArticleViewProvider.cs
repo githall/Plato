@@ -114,14 +114,14 @@ namespace Plato.Articles.Attachments.ViewProviders
             } 
             else
             {
-                // Create a new temporary 128 bit unique ASCII string
+                // Create a new temporary 256 bit unique ASCII string
                 var key = _keyGenerator.GenerateKey(o =>
                 {
-                    o.MaxLength = 16;
+                    o.MaxLength = 32;
                     o.UniqueIdentifier = $"{user.Id.ToString()}-{entity.Id.ToString()}";
                 });
                 // Convert to 256 bit / 32 character hexadecimal string
-                contentGuid = key.ToStream(Encoding.ASCII).ToHex();
+                contentGuid = key.ToStream(Encoding.ASCII).ToMD5().ToHex();
             }
 
             return Views(

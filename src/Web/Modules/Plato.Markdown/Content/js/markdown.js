@@ -1786,7 +1786,6 @@ if (typeof window.$.Plato === "undefined") {
 
                                     this.on('success',
                                         function (file, response) {
-
                                             if (response.statusCode === 200) {
 
                                                 if (response && response.result) {
@@ -1818,12 +1817,28 @@ if (typeof window.$.Plato === "undefined") {
                                                 }
 
                                             }
-
                                         });
 
                                     this.on('error',
                                         function (file, error, xhr) {
-                                            console.log('Error:', error);
+
+                                            var s = '<h6>' + plato.T("An error occurred!") + '</h6>';
+                                            s += plato.T("Information is provided below...") + "<br/><br/>";
+                                            s += '<textarea style="min-height: 130px;" class="form-control">' + error + '</textarea>';
+
+                                            // Bootstrap notify
+                                            plato.ui.notify({
+                                                // options
+                                                message: s
+                                            },
+                                                {
+                                                    // settings
+                                                    mouse_over: "pause",
+                                                    type: 'danger',
+                                                    allow_dismiss: true
+                                                });
+
+
                                         });
                                 };
                             }

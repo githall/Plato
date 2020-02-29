@@ -8053,7 +8053,6 @@ $(function (win, doc, $) {
                             $(this).addClass("alert-hidden");
                         }
                     });
-                    //$(".alert").alert('close');
                 },
                     opts.alerts.autoCloseDelay * 1000);
             }
