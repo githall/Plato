@@ -1749,7 +1749,7 @@ if (typeof window.$.Plato === "undefined") {
                                 }
 
                                 options.dropZoneOptions.init = function () {
-                            
+                                
                                     var caretPos = 0,
                                         $progressPreview = editor.find(".md-dropzone-progress"),
                                         allowedUploadExtensions = options.allowedUploadExtensions;

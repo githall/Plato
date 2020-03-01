@@ -1,20 +1,20 @@
 ﻿using System;
+using System.Text;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Plato.Articles.Models;
 using Plato.Entities.Stores;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders.Abstractions;
-using Plato.Entities.Attachments.ViewModels;
 using Plato.Attachments.Stores;
 using Plato.Attachments.Models;
+using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.Models;
 using PlatoCore.Text.Abstractions;
 using PlatoCore.Abstractions.Extensions;
-using System.Text;
+using PlatoCore.Layout.ViewProviders.Abstractions;
+using Plato.Entities.Attachments.ViewModels;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {

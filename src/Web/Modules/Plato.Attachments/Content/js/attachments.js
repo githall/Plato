@@ -15,14 +15,14 @@ $(function (win, doc, $) {
     // Plato Global Object
     var app = win.$.Plato;
 
-    /* attachmentDropdown */
-    var attachmentDropdown = function (options) {
+    /* attachments */
+    var attachments = function (options) {
 
-        var dataKey = "attachmentDropdown",
+        var dataKey = "attachments",
             dataIdKey = dataKey + "Id";
 
-        var defaults = {      
-            loaderTemplate: '<p class="text-center"><i class="fal fa-spinner fa-spin"></i></p>', // a handlebars style template for auto complete list items
+        var defaults = {
+
         };
 
         var methods = {
@@ -42,104 +42,47 @@ $(function (win, doc, $) {
 
                 this.bind($caller);
 
-                return null;
-
             },
             bind: function ($caller) {
 
-                $caller.on('shown.bs.dropdown',
-                    function () {
-                        methods.populate($caller);
-                    });
-
-            },
-            populate: function ($caller) {
-
-                var url = methods.getUrl($caller);
-                if (!url) {
-                    throw new Error("Could not determine a valid url to load within the dropdown!");
-                }
-                
-                app.http({
-                    method: "GET",
-                    url: url
-                }).done(function (response) {
-                    var $content = $caller.find(".dropdown-menu-content");
-                    if ($content.length > 0) {
-                        $content.empty();
-                        if (response !== "") {
-                            $content.html(response);
-
-                            // Enable tooltips within loaded content
-                            app.ui.initToolTips($content);
-                            // confirm
-                            $content.find('[data-provide="confirm"]').confirm();
-
-                        }
-                    }
-
-                    // onLoad event
-                    //if ($caller.data(dataKey).onLoad) {
-                    //    $caller.data(dataKey).onLoad($caller, response.result);
-                    //}
-                });
-
-            },
-            getUrl: function ($caller) {           
-
-                if (!$caller.data(dataKey).url) {
-
-                    // get url from caller
-                    if ($caller.attr("href")) {
-                        $caller.data(dataKey).url = $caller.attr("href");
-                    }
-
-                    // get url from child trigger
-                    $caller.find("a").each(function () {
-                        if ($(this).hasClass("dropdown-toggle") ||
-                            $(this).attr("data-toggle")) {
-                            if ($(this).attr("href")) {
-                                $caller.data(dataKey).url = $(this).attr("href");
-                                return;
-                            }
+                // Configure attachment dropdown ensuring we reload any
+                // httpContent elements within the attachments area
+                $caller.find('[data-provide="attachment-dropzone"]')
+                    .attachmentDropzone({
+                        onSuccess: function (response) {                         
+                            $caller.find('[data-provide="http-content"]').httpContent("reload");
+                        },
+                        onError: function (file, error, xhr) {
+                            $caller.find('[data-provide="http-content"]').httpContent("reload");
                         }
                     });
-
-                }
-
-                return $caller.data(dataKey).url;                
 
             }
-
         };
 
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
-                    if (a) {
-                        switch (a.constructor) {
-                            case Object:
-                                $.extend(options, a);
-                                break;
-                            case String:
-                                methodName = a;
-                                break;
-                            case Boolean:
-                                break;
-                            case Number:
-                                break;
-                            case Function:
-                                break;
-                        }
+                    switch (a.constructor) {
+                        case Object:
+                            $.extend(options, a);
+                            break;
+                        case String:
+                            methodName = a;
+                            break;
+                        case Function:
+                            func = a;
+                            break;
                     }
                 }
 
                 if (this.length > 0) {
-                    // $(selector).labelSelectDropdown()
+                    // $(selector).attachments()
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -151,15 +94,17 @@ $(function (win, doc, $) {
                         methods.init($(this), methodName);
                     });
                 } else {
-                    // $().labelSelectDropdown()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    // $().attachments()
+                    var $caller = $('[data-provide="http-content"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -226,9 +171,7 @@ $(function (win, doc, $) {
                 
             },
             bind: function ($caller) {
-
-                //methods._showFullScreenProgress($caller);
-
+            
                 var opts = $caller.data(dataKey).dropZoneOptions,
                     url = this._getUrl($caller);
                 if (url === null) {
@@ -269,11 +212,11 @@ $(function (win, doc, $) {
 
                             var $row = $("<div>", {
                                 "id": getProgressId(file),
-                                "class": "progress-row"
+                                "class": "progress-row m-3"
                             });
 
                             var $info = $("<div>", {                          
-                                "class": "progress-info mb-2"
+                                "class": "progress-info text-center mb-2"
                             });
 
                             var $bar = $("<div>", {
@@ -431,22 +374,7 @@ $(function (win, doc, $) {
                 // Store dropzone object in data for access within event handlers (i.e. paste)
                 $caller.data("dropzone", dropzone);
 
-            },
-            _showFullScreenProgress: function ($caller) {
-
-                var $overlay = $(".upload-overlay");
-                if (!$overlay.hasClass("visible")) {
-                    $overlay.addClass("visible");
-                }
-            },
-            _hideFullScreenProgress: function ($caller) {
-
-                var $overlay = $(".upload-overlay");
-                if ($overlay.hasClass("visible")) {
-                    $overlay.removeClass("visible");
-                }
-
-            },
+            },        
             _getProgressPreview: function ($caller) {
                 var selector = $caller.data("progressPreview") || $caller.data(dataKey).progressPreview;
                 if (selector) {
@@ -465,7 +393,6 @@ $(function (win, doc, $) {
 
         return {
             init: function () {
-
                 var options = {},
                     methodName = null,
                     func = null;
@@ -483,11 +410,9 @@ $(function (win, doc, $) {
                             break;
                     }
                 }
-
-                console.log(this.length);
-
+          
                 if (this.length > 0) {
-                    // $(selector).attachments
+                    // $(selector).attachmentDropzone
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -499,7 +424,7 @@ $(function (win, doc, $) {
                         methods.init($(this), methodName);
                     });
                 } else {
-                    // $().attachments()
+                    // $().attachmentDropzone()
                     var $caller = $('[data-provide="attachment-dropzone"]');
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
@@ -518,21 +443,18 @@ $(function (win, doc, $) {
 
     }();
 
-    $.fn.extend({        
-        attachmentDropdown: attachmentDropdown.init,
+    $.fn.extend({
+        attachments: attachments.init,    
         attachmentDropzone: attachmentDropzone.init
     });
 
     // --------
 
-    app.ready(function () {
-  
-        $('[data-provide="attachment-dropdown"]')
-            .attachmentDropdown();
-
-        $('[data-provide="attachment-dropzone"]')
-            .attachmentDropzone();
-
+    app.ready(function () {       
+        
+        $('[data-provide="attachments"]')
+            .attachments();
+        
     });
 
     // infinite scroll load
