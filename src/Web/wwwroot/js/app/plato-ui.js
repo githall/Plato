@@ -28,6 +28,160 @@ $(function (win, doc, $) {
 
     // --------
 
+    /* httpContent */
+    var httpContent = function (options) {
+
+        var dataKey = "httpContent",
+            dataIdKey = dataKey + "Id";
+
+        var defaults = {
+            enableLoader: true,
+            loaderTemplate: '<p class="text-center my-3"><i class="fal fa-spinner fa-spin"></i></p>', // a handlebars style template for auto complete list items
+        };
+
+        var methods = {
+            init: function ($caller, methodName, func) {
+
+                if (func) {
+                    return func(this);
+                }
+                if (methodName) {
+                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                        this[methodName].apply(this, [$caller]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return null;
+                }
+
+                this.bind($caller);
+
+            },
+            bind: function ($caller) {
+
+                methods.load($caller);
+
+            },
+            load: function ($caller) {
+
+                var url = methods._getUrl($caller);
+                if (!$caller.data(url)) {
+
+                    // If our httpContent element has content use this content
+                    // as the loader template for subsequent requests
+                    var loaderTemplate = $caller.html();
+                    if (loaderTemplate !== "") {
+                        $caller.data(dataKey).loaderTemplate = loaderTemplate;
+                    }
+
+                    methods._request($caller, function (response) {
+                        $caller.data(url, true);
+                    });
+                }
+
+            },
+            reload: function ($caller) {
+                methods._request($caller);
+            },
+            _request: function ($caller, fn) {
+
+                var url = methods._getUrl($caller),
+                    enableLoader = methods._getEnableLoader($caller);
+
+                if (!url) {
+                    throw new Error("Could not determine a valid url to load for httpContent!");
+                }
+
+                if (enableLoader) {
+                    $caller.html($caller.data(dataKey).loaderTemplate);
+                }
+
+                app.http({
+                    method: "GET",
+                    url: url
+                }).done(function (response) {
+
+                    $caller.empty();
+                    if (response !== "") {
+                        $caller.html(response);
+                        // Enable tooltips within loaded content
+                        app.ui.initToolTips($caller);
+                        // confirm
+                        $caller.find('[data-provide="confirm"]').confirm();
+                    }
+
+                    if (fn) {
+                        fn(response);
+                    }
+
+                });
+
+            },
+            _getUrl: function ($caller) {
+
+                return $caller.data("httpUrl") || $caller.data(dataKey).url;
+
+            },
+            _getEnableLoader: function ($caller) {
+                return $caller.data("enableLoader") || $caller.data(dataKey).enableLoader;
+            }
+
+
+        };
+
+        return {
+            init: function () {
+
+                var options = {},
+                    methodName = null,
+                    func = null;
+                for (var i = 0; i < arguments.length; ++i) {
+                    var a = arguments[i];
+                    switch (a.constructor) {
+                        case Object:
+                            $.extend(options, a);
+                            break;
+                        case String:
+                            methodName = a;
+                            break;
+                        case Function:
+                            func = a;
+                            break;
+                    }
+                }
+
+                if (this.length > 0) {
+                    // $(selector).httpContent()
+                    return this.each(function () {
+                        if (!$(this).data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $(this).data(dataIdKey, id);
+                            $(this).data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
+                        }
+                        methods.init($(this), methodName);
+                    });
+                } else {
+                    // $().httpContent()
+                    var $caller = $('[data-provide="http-content"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
+                            $caller.data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
+                        }
+                        return methods.init($caller, methodName, func);
+                    }
+                }
+
+            }
+        };
+
+    }();
+
     /* dialog */
     var dialog = function () {
 
@@ -7123,6 +7277,7 @@ $(function (win, doc, $) {
 
     /* Register Plugins */
     $.fn.extend({
+        httpContent: httpContent.init,   
         dialog: dialog.init,
         dialogSpy: dialogSpy.init,
         scrollTo: scrollTo.init,
@@ -7162,10 +7317,13 @@ $(function (win, doc, $) {
 
     $.fn.platoUI = function (opts) {
 
+        /* httpContent */
+        this.find('[data-provide="http-content"]').httpContent();
+
         /* dialogSpy */
         this.find('[data-provide="dialog"]').dialogSpy();
 
-        /* scrollTo. */
+        /* scrollTo */
         this.find('[data-provide="scroll"]').scrollTo();
 
         /* sticky */
@@ -8053,7 +8211,6 @@ $(function (win, doc, $) {
                             $(this).addClass("alert-hidden");
                         }
                     });
-                    //$(".alert").alert('close');
                 },
                     opts.alerts.autoCloseDelay * 1000);
             }

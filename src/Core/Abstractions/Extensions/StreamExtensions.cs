@@ -54,6 +54,7 @@ namespace PlatoCore.Abstractions.Extensions
         {
             return stream.ToByteArray().ToHex(upperCase);
         }
+
     }
 
 }

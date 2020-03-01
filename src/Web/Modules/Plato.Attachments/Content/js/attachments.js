@@ -15,14 +15,14 @@ $(function (win, doc, $) {
     // Plato Global Object
     var app = win.$.Plato;
 
-    /* attachmentDropdown */
-    var attachmentDropdown = function (options) {
+    /* attachments */
+    var attachments = function (options) {
 
-        var dataKey = "attachmentDropdown",
+        var dataKey = "attachments",
             dataIdKey = dataKey + "Id";
 
-        var defaults = {      
-            loaderTemplate: '<p class="text-center"><i class="fal fa-spinner fa-spin"></i></p>', // a handlebars style template for auto complete list items
+        var defaults = {
+
         };
 
         var methods = {
@@ -42,104 +42,47 @@ $(function (win, doc, $) {
 
                 this.bind($caller);
 
-                return null;
-
             },
             bind: function ($caller) {
 
-                $caller.on('shown.bs.dropdown',
-                    function () {
-                        methods.populate($caller);
-                    });
-
-            },
-            populate: function ($caller) {
-
-                var url = methods.getUrl($caller);
-                if (!url) {
-                    throw new Error("Could not determine a valid url to load within the dropdown!");
-                }
-                
-                app.http({
-                    method: "GET",
-                    url: url
-                }).done(function (response) {
-                    var $content = $caller.find(".dropdown-menu-content");
-                    if ($content.length > 0) {
-                        $content.empty();
-                        if (response !== "") {
-                            $content.html(response);
-
-                            // Enable tooltips within loaded content
-                            app.ui.initToolTips($content);
-                            // confirm
-                            $content.find('[data-provide="confirm"]').confirm();
-
-                        }
-                    }
-
-                    // onLoad event
-                    //if ($caller.data(dataKey).onLoad) {
-                    //    $caller.data(dataKey).onLoad($caller, response.result);
-                    //}
-                });
-
-            },
-            getUrl: function ($caller) {           
-
-                if (!$caller.data(dataKey).url) {
-
-                    // get url from caller
-                    if ($caller.attr("href")) {
-                        $caller.data(dataKey).url = $caller.attr("href");
-                    }
-
-                    // get url from child trigger
-                    $caller.find("a").each(function () {
-                        if ($(this).hasClass("dropdown-toggle") ||
-                            $(this).attr("data-toggle")) {
-                            if ($(this).attr("href")) {
-                                $caller.data(dataKey).url = $(this).attr("href");
-                                return;
-                            }
+                // Configure attachment dropdown ensuring we reload any
+                // httpContent elements within the attachments area
+                $caller.find('[data-provide="attachment-dropzone"]')
+                    .attachmentDropzone({
+                        onSuccess: function (response) {                         
+                            $caller.find('[data-provide="http-content"]').httpContent("reload");
+                        },
+                        onError: function (file, error, xhr) {
+                            $caller.find('[data-provide="http-content"]').httpContent("reload");
                         }
                     });
-
-                }
-
-                return $caller.data(dataKey).url;                
 
             }
-
         };
 
         return {
             init: function () {
 
-                var options = {};
-                var methodName = null;
+                var options = {},
+                    methodName = null,
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
-                    if (a) {
-                        switch (a.constructor) {
-                            case Object:
-                                $.extend(options, a);
-                                break;
-                            case String:
-                                methodName = a;
-                                break;
-                            case Boolean:
-                                break;
-                            case Number:
-                                break;
-                            case Function:
-                                break;
-                        }
+                    switch (a.constructor) {
+                        case Object:
+                            $.extend(options, a);
+                            break;
+                        case String:
+                            methodName = a;
+                            break;
+                        case Function:
+                            func = a;
+                            break;
                     }
                 }
 
                 if (this.length > 0) {
-                    // $(selector).labelSelectDropdown()
+                    // $(selector).attachments()
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -151,15 +94,17 @@ $(function (win, doc, $) {
                         methods.init($(this), methodName);
                     });
                 } else {
-                    // $().labelSelectDropdown()
-                    if (methodName) {
-                        if (methods[methodName]) {
-                            var $caller = $("body");
+                    // $().attachments()
+                    var $caller = $('[data-provide="http-content"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
                             $caller.data(dataKey, $.extend({}, defaults, options));
-                            methods[methodName].apply(this, [$caller]);
                         } else {
-                            alert(methodName + " is not a valid method!");
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
                         }
+                        return methods.init($caller, methodName, func);
                     }
                 }
 
@@ -175,7 +120,7 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            progress: "#progress",
+            progressPreview: "#progress",
             allowedUploadExtensions: [
                 "txt",
                 "html",
@@ -192,6 +137,7 @@ $(function (win, doc, $) {
                 autoProcessQueue: true,
                 autoDiscover: false,
                 disablePreview: true,
+                uploadMultiple: false,
                 dictDefaultMessage:
                     'Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a>'
             },
@@ -225,7 +171,7 @@ $(function (win, doc, $) {
                 
             },
             bind: function ($caller) {
-
+            
                 var opts = $caller.data(dataKey).dropZoneOptions,
                     url = this._getUrl($caller);
                 if (url === null) {
@@ -255,20 +201,43 @@ $(function (win, doc, $) {
 
                     opts.init = function () {
 
-                        var $progress = null,
-                            progressSelector = $caller.data(dataKey).progress,
-                            allowedUploadExtensions = $caller.data(dataKey).allowedUploadExtensions;
-                                                
-                        if (progressSelector) {
-                            $progress = $(progressSelector);
+                        var $progressPreview = methods._getProgressPreview($caller),                           
+                            allowedUploadExtensions = $caller.data(dataKey).allowedUploadExtensions;                                        
+
+                        function getProgressId(file) {
+                            return "progress-" + file.upload.uuid;
+                        }
+
+                        function getProgress(file) {
+
+                            var $row = $("<div>", {
+                                "id": getProgressId(file),
+                                "class": "progress-row m-3"
+                            });
+
+                            var $info = $("<div>", {                          
+                                "class": "progress-info text-center mb-2"
+                            });
+
+                            var $bar = $("<div>", {
+                                "class": "progress"
+                            });
+                            
+                            $bar.append($("<div>", {
+                                "class": "progress-bar",
+                                "role": "progressbar",
+                                "style": "width: 0;"
+                            }));
+
+                            $row.append($info);
+                            $row.append($bar);
+                            
+                            return $row;
+
                         }
 
                         this.on('addedfile',
                             function (file) {
-
-                                if ($caller.data(dataKey).onAddedFile) {
-                                    $caller.data(dataKey).onAddedFile(file);
-                                }
 
                                 // Validate file extension
                                 var fileName = file.upload.filename;
@@ -292,6 +261,16 @@ $(function (win, doc, $) {
                                     return false;
                                 }
 
+                                // Append a progress bar for the upload
+                                if ($progressPreview) {                             
+                                    $progressPreview.append(getProgress(file));
+                                }                            
+
+                                // Raise event
+                                if ($caller.data(dataKey).onAddedFile) {
+                                    $caller.data(dataKey).onAddedFile(file);
+                                }
+
                                 return true;
 
                             });
@@ -303,59 +282,88 @@ $(function (win, doc, $) {
                                 }
                             });
 
+                        this.on('uploadprogress',
+                            function (file, progress, bytesSent) {                                
+                                if ($progressPreview) {
+                                    progress = Math.floor(bytesSent / file.size * 100);
+                                    var rowSelector = '#' + getProgressId(file);
+                                    var $row = $progressPreview.find(rowSelector);
+                                    $row.find(".progress-info").text(progress + "%");
+                                    $row.find(".progress-bar").width(progress + "%");
+                                }
+                            });
+
                         this.on('success',
                             function (file, response) {
                                 
+                                if (response.statusCode === 200) {
+                                    if (response && response.result) {
+                                        for (var i = 0; i < response.result.length; i++) {
+                                            var result = response.result[i];
+                                            if (result.id > 0) {                                                
+                                                // Bootstrap notify
+                                                app.ui.notify({
+                                                        // options
+                                                        message: result.name + app.T(" Uploaded Successfully")
+                                                    },
+                                                    {
+                                                        // settings                                                     
+                                                        type: 'success',
+                                                        allow_dismiss: true
+                                                    });
+                                            }
+                                        }
+                                    }
+                                }
+
+                                // Remove progress 
+                                if ($progressPreview) {
+                                    var selector = '#' + getProgressId(file),
+                                        $progrsss = $progressPreview.find(selector);
+                                    if ($progrsss.length > 0) {
+                                        $progrsss.remove();
+                                    }                                    
+                                }
+
                                 if ($caller.data(dataKey).onSuccess) {
                                     $caller.data(dataKey).onSuccess(response);
                                 }
 
-                                if (response.statusCode === 200) {
-
-                                    if (response && response.result) {
-                                        for (var i = 0; i < response.result.length; i++) {
-
-                                            var result = response.result[i],                                              
-                                                chunk = "";
-
-                                            if (result.id > 0) {
-
-                                                // Image or file?
-                                                if (result.isImage) {
-                                                    chunk = '![' + result.name + '](/media/' + result.id + ')';
-                                                } else {
-                                                    chunk = '[' + result.name + '](/media/' + result.id + ') - ' + result.friendlySize;
-                                                }
-
-                                            }
-
-                                            var $div = $("<div>", {
-                                                class: "attachment-preview"
-                                            }).text(chunk);
-
-                                            $caller.append($div);
-
-                                        }
-                                    }
-
-                                }
 
                             });
-
-                        this.on('uploadprogress',
-                            function (file, progress, bytesSent) {
-                                progress = bytesSent / file.size * 100;
-                                console.log(progress);
-                                if ($progress) {
-                                    $progress.find('.progress-bar').width(progress + "%");
-                                }           
-                            });
-
+                    
                         this.on('error',
                             function (file, error, xhr) {
+
+                                var s = '<h6>' + app.T("An error occurred!") + '</h6>';
+                                s += app.T("Information is provided below...") + "<br/><br/>";
+                                s += '<textarea style="min-height: 130px;" class="form-control">' + error + '</textarea>';                             
+
+                                // Bootstrap notify
+                                app.ui.notify({
+                                        // options
+                                        message: s
+                                    },
+                                    {
+                                        // settings
+                                        mouse_over: "pause",
+                                        type: 'danger',
+                                        allow_dismiss: true
+                                    });
+
+                                // Remove progress 
+                                if ($progressPreview) {
+                                    var selector = '#' + getProgressId(file),
+                                        $progrsss = $progressPreview.find(selector);
+                                    if ($progrsss.length > 0) {
+                                        $progrsss.remove();
+                                    }
+                                }
+
                                 if ($caller.data(dataKey).onError) {
                                     $caller.data(dataKey).onError(file, error, xhr);
                                 }
+
                             });
                     };
                 }
@@ -366,6 +374,16 @@ $(function (win, doc, $) {
                 // Store dropzone object in data for access within event handlers (i.e. paste)
                 $caller.data("dropzone", dropzone);
 
+            },        
+            _getProgressPreview: function ($caller) {
+                var selector = $caller.data("progressPreview") || $caller.data(dataKey).progressPreview;
+                if (selector) {
+                    var $preview = $(selector);
+                    if ($preview.length > 0) {
+                        return $preview;
+                    }
+                }
+                return null;
             },
             _getUrl: function ($caller) {
                 return $caller.data("dropzoneUrl") ||
@@ -375,7 +393,6 @@ $(function (win, doc, $) {
 
         return {
             init: function () {
-
                 var options = {},
                     methodName = null,
                     func = null;
@@ -393,11 +410,9 @@ $(function (win, doc, $) {
                             break;
                     }
                 }
-
-                console.log(this.length);
-
+          
                 if (this.length > 0) {
-                    // $(selector).attachments
+                    // $(selector).attachmentDropzone
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -409,7 +424,7 @@ $(function (win, doc, $) {
                         methods.init($(this), methodName);
                     });
                 } else {
-                    // $().attachments()
+                    // $().attachmentDropzone()
                     var $caller = $('[data-provide="attachment-dropzone"]');
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
@@ -428,21 +443,18 @@ $(function (win, doc, $) {
 
     }();
 
-    $.fn.extend({        
-        attachmentDropdown: attachmentDropdown.init,
+    $.fn.extend({
+        attachments: attachments.init,    
         attachmentDropzone: attachmentDropzone.init
     });
 
     // --------
 
-    app.ready(function () {
-  
-        $('[data-provide="attachment-dropdown"]')
-            .attachmentDropdown();
-
-        $('[data-provide="attachment-dropzone"]')
-            .attachmentDropzone();
-
+    app.ready(function () {       
+        
+        $('[data-provide="attachments"]')
+            .attachments();
+        
     });
 
     // infinite scroll load

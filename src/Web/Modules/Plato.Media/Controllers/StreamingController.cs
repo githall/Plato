@@ -63,7 +63,10 @@ namespace Plato.Media.Controllers
             return View();
         }
 
+        // 524288000 bytes = 500mb
         [HttpPost, DisableFormValueModelBinding, ValidateClientAntiForgeryToken]
+        [RequestFormLimits(MultipartBodyLengthLimit = 524288000)]
+        [RequestSizeLimit(524288000)]
         public async Task<IActionResult> Upload()
         {
 

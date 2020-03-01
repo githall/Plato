@@ -1424,6 +1424,11 @@ if (typeof window.$.Plato === "undefined") {
                                 'id': "previewTab" + editorId
                             });
 
+                        var editorDropZoneProgress = $("<div/>",
+                            {
+                                "class": "md-dropzone-progress"
+                            });
+
                         var editorDropZone = $("<div/>",
                             {
                                 "class": "md-dropzone dropzone"
@@ -1583,6 +1588,7 @@ if (typeof window.$.Plato === "undefined") {
                             editorFooter.append(footer);
                         }
 
+                        editor.append(editorDropZoneProgress);
                         editor.append(editorDropZone);
 
                         if (createFooter) editor.append(editorFooter);
@@ -1743,9 +1749,42 @@ if (typeof window.$.Plato === "undefined") {
                                 }
 
                                 options.dropZoneOptions.init = function () {
-                            
+                                
                                     var caretPos = 0,
+                                        $progressPreview = editor.find(".md-dropzone-progress"),
                                         allowedUploadExtensions = options.allowedUploadExtensions;
+
+                                    function getProgressId(file) {
+                                        return "progress-" + file.upload.uuid;
+                                    }
+
+                                    function getProgress(file) {
+
+                                        var $row = $("<div>", {
+                                            "id": getProgressId(file),
+                                            "class": "progress-row mx-3 my-2"
+                                        });
+
+                                        var $info = $("<div>", {
+                                            "class": "progress-info text-center mb-2"
+                                        });
+
+                                        var $bar = $("<div>", {
+                                            "class": "progress"
+                                        });
+
+                                        $bar.append($("<div>", {
+                                            "class": "progress-bar",
+                                            "role": "progressbar",
+                                            "style": "width: 0;"
+                                        }));
+
+                                        $row.append($info);
+                                        $row.append($bar);
+
+                                        return $row;
+
+                                    }
 
                                     this.on('addedfile',
                                         function (file) {
@@ -1775,6 +1814,11 @@ if (typeof window.$.Plato === "undefined") {
                                                 return false;
                                             }
 
+                                            // Append a progress bar for the upload
+                                            if ($progressPreview) {
+                                                $progressPreview.append(getProgress(file));
+                                            }                            
+
                                             return true;
 
                                         });
@@ -1783,6 +1827,20 @@ if (typeof window.$.Plato === "undefined") {
                                         function (e) {
                                             caretPos = textarea.prop('selectionStart');
                                         });
+
+
+                                    this.on('uploadprogress',
+                                        function (file, progress, bytesSent) {
+                                            if ($progressPreview) {
+                                                progress = Math.floor(bytesSent / file.size * 100);
+                                                var rowSelector = '#' + getProgressId(file);
+                                                var $row = $progressPreview.find(rowSelector);
+                                                $row.find(".progress-info").text(progress + "%");
+                                                $row.find(".progress-bar").width(progress + "%");
+                                            }                                          
+                                        });
+
+
 
                                     this.on('success',
                                         function (file, response) {
@@ -1807,7 +1865,7 @@ if (typeof window.$.Plato === "undefined") {
 
                                                             // Add markdown
                                                             textarea.val(text.substring(0, caretPos) +
-                                                                chunk +
+                                                                chunk + "\n\n" +
                                                                 text.substring(caretPos));
 
                                                             // Set the cursor at the end of the newly inserted markdown tag
@@ -1819,11 +1877,43 @@ if (typeof window.$.Plato === "undefined") {
 
                                             }
 
+                                            // Remove progress 
+                                            if ($progressPreview) {
+                                                var selector = '#' + getProgressId(file),
+                                                    $progrsss = $progressPreview.find(selector);
+                                                if ($progrsss.length > 0) {
+                                                    $progrsss.remove();
+                                                }
+                                            }
+
                                         });
 
                                     this.on('error',
                                         function (file, error, xhr) {
-                                            console.log('Error:', error);
+
+                                            var s = '<h6>' + plato.T("An error occurred!") + '</h6>';
+                                            s += plato.T("Information is provided below...") + "<br/><br/>";
+                                            s += '<textarea style="min-height: 130px;" class="form-control">' + error + '</textarea>';
+
+                                            // Bootstrap notify
+                                            plato.ui.notify({                                              
+                                                message: s
+                                            },
+                                            {                                            
+                                                mouse_over: "pause",
+                                                type: 'danger',
+                                                allow_dismiss: true
+                                            });
+
+                                            // Remove progress 
+                                            if ($progressPreview) {
+                                                var selector = '#' + getProgressId(file),
+                                                    $progrsss = $progressPreview.find(selector);
+                                                if ($progrsss.length > 0) {
+                                                    $progrsss.remove();
+                                                }
+                                            }
+
                                         });
                                 };
                             }

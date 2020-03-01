@@ -7,40 +7,44 @@
         ["action"] = "upload",
         ["guid"] = Model.Guid
     });
+    var previewUrl = GetRouteUrl(new RouteValueDictionary()
+    {
+        ["area"] = "Plato.Entities.Attachments",
+        ["controller"] = "Home",
+        ["action"] = "Index",
+        ["opts.guid"] = Model.Guid,
+        ["opts.entityId"] = Model.EntityId
+    });
 }
 
-<input type="text" name="@Model.GuidHtmlName" asp-for="Guid" />
+<input type="hidden" name="@Model.GuidHtmlName" asp-for="Guid" />
 
-<div id="progress" class="progress">
-    <div class="progress-bar" role="progressbar" style="width: 25%" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100"></div>
-</div>
-
-<div class="card">
-    <div class="dropdown list-group-flush" data-provide="attachment-dropdown">
-        <a asp-route-area="Plato.Entities.Attachments" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.entityId="@Model.EntityId.ToString()" asp-route-opts.guid="@Model.Guid" class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
+<div class="card card-body-flush" data-provide="attachments">
+    <div class="card-header p-0 dropdown list-group-flush">
+        <a href="#" class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
             <i class="fal fa-cog float-right"></i>
             @T["Attachments"]
         </a>
         <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in p-0 min-w-500" aria-labelledby="attachmentDropdown">
-
             <div class="list-group list-group-flush list-group-hover">
                 <div class="list-group-item list-group-item-dropzone">
-
-                    <div class="dropzone" 
-                         data-dropzone-url="@uploadUrl" 
-                         data-dropzone-progress="#progress"
+                    <div class="dropzone"
+                         data-dropzone-url="@uploadUrl"
+                         data-progress-preview="#progress"
                          data-provide="attachment-dropzone"></div>
-
                 </div>
             </div>
-
-            <div class="dropdown-menu-content max-h-300 overflow-auto">
-                <p class="text-center"><i class="fal fa-spinner fa-spin"></i></p>
+            <div class="max-h-300 overflow-auto">                
+                <div data-http-url="@previewUrl" data-provide="http-content">
+                    <p class="text-center"><i class="fal fa-spinner fa-spin"></i></p>
+                </div>
             </div>
-
         </div>
     </div>
     <div class="card-body">
-        @T["No attachments"]
+        <div id="progress"></div>
+        <div data-http-url="@previewUrl" data-provide="http-content">
+            <p class="text-center my-4"><i class="fal fa-spinner fa-spin"></i></p>
+        </div>
     </div>
 </div>
