@@ -1,0 +1,32 @@
+﻿@model AttachmentsIndexViewModel
+@{
+    Layout = null;
+}
+
+@if (Model.Results?.Data != null)
+{
+    <div class="list-group list-group-flush select-dropdown-preview">
+        <div class="list-group-item">
+            @foreach (var attachment in Model.Results.Data)
+            {
+                var extension = System.IO.Path.GetExtension(attachment.Name);
+                var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
+                var tooltip = $"{attachment.Name} - {attachment.ContentLength.ToFriendlyFileSize()}";
+                @if (!string.IsNullOrEmpty(iconCss))
+                {
+                    <a asp-route-area="Plato.Articles.Attachments" asp-route-controller="Attachment" asp-route-action="Index" asp-route-id="@attachment.Id" data-toggle="tooltip" title="@tooltip" class="d-inline-block mr-1">
+                        <i class="fiv-sqo @iconCss"></i>
+                    </a>
+                }
+            }
+        </div>
+    </div>
+}
+else
+{
+    <div class="list-group list-group-flush select-dropdown-preview">
+        <div class="list-group-item">
+            @T["No attachments added yet"]
+        </div>
+    </div>
+}

@@ -1,0 +1,41 @@
+﻿@model AttachmentsIndexViewModel
+
+@if (Model.Results?.Data != null)
+{
+    <div class="list-group list-group-flush list-group-hover select-dropdown-preview">
+        @foreach (var attachment in Model.Results.Data)
+        {
+            var views = attachment.TotalViews == 1 ? T["view"] : T["views"];
+            var tooltip = $"{attachment.ContentLength.ToFriendlyFileSize()}, {attachment.TotalViews.ToPrettyInt()} {views.Value}";
+            var extension = System.IO.Path.GetExtension(attachment.Name);
+            var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
+            var checksum = $"{attachment.ContentCheckSum}";
+            <div class="list-group-item list-group-item-action">
+                <a href="#" class="btn float-right text-muted" data-provide="confirm" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                    <i class="fal fa-times"></i>
+                </a>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@tooltip">
+                    <i class="fal fa-info-circle"></i>
+                </span>
+                <span class="btn float-right text-muted" data-toggle="tooltip" title="@checksum">
+                    <i class="fal fa-hashtag"></i>
+                </span>
+                @if (!string.IsNullOrEmpty(iconCss))
+                {
+                    <span class="fiv-sqo @iconCss align-middle mr-1"></span>
+                }
+                <a href="#" class="align-middle">
+                    @attachment.Name
+                </a>
+            </div>
+        }
+    </div>
+}
+else
+{
+    <div class="list-group list-group-flush select-dropdown-preview">
+        <div class="list-group-item">
+            @T["No attachments added yet"]
+        </div>
+    </div>
+}

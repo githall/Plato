@@ -49,6 +49,14 @@ $(function (win, doc, $) {
                 // httpContent elements within the attachments area
                 $caller.find('[data-provide="attachment-dropzone"]')
                     .attachmentDropzone({
+                        onAddedFile: function (file) {
+                            $caller.find("#preview").hide();
+                            $caller.find("#progress").show();
+                        },
+                        onComplete: function (file) {
+                            $caller.find("#progress").hide();
+                            $caller.find("#preview").show();
+                        },
                         onSuccess: function (response) {                         
                             $caller.find('[data-provide="http-content"]').httpContent("reload");
                         },
@@ -152,6 +160,9 @@ $(function (win, doc, $) {
             },
             onError: function (file, error, xhr) {
                 // triggers when an upload error occurrs
+            },
+            onComplete: function (file) {
+                // triggers when a file is successfully uploaded
             }
         };
 
@@ -331,7 +342,14 @@ $(function (win, doc, $) {
 
 
                             });
-                    
+
+                        this.on("complete", function (file) {
+
+                            if ($caller.data(dataKey).onComplete) {
+                                $caller.data(dataKey).onComplete(file);
+                            }
+                        });
+
                         this.on('error',
                             function (file, error, xhr) {
 

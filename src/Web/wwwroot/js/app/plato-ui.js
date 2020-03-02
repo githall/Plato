@@ -35,7 +35,9 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            enableLoader: true,
+            url: null, // the url to load
+            defer: false, // boolean to indicate if the URL is loaded immediately, if true the url is not loaded upon load
+            enableLoader: true, // boolean to indicate if the loader template will be added to the content area for every request
             loaderTemplate: '<p class="text-center my-3"><i class="fal fa-spinner fa-spin"></i></p>', // a handlebars style template for auto complete list items
         };
 
@@ -59,21 +61,28 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {
 
-                methods.load($caller);
+                var defer = methods._getDefer($caller);
+                if (!defer) {
+                    methods.load($caller);
+                }
 
             },
             load: function ($caller) {
 
-                var url = methods._getUrl($caller);
+                var url = methods._getUrl($caller),
+                    defer = methods._getDefer($caller);
+
                 if (!$caller.data(url)) {
 
                     // If our httpContent element has content use this content
-                    // as the loader template for subsequent requests
+                    // as the loader template for subsequent requests only if the 
+                    // request is not deferred                  
                     var loaderTemplate = $caller.html();
-                    if (loaderTemplate !== "") {
+                    if (loaderTemplate !== "" && defer === false) {
                         $caller.data(dataKey).loaderTemplate = loaderTemplate;
                     }
-
+                 
+                  
                     methods._request($caller, function (response) {
                         $caller.data(url, true);
                     });
@@ -85,7 +94,7 @@ $(function (win, doc, $) {
             },
             _request: function ($caller, fn) {
 
-                var url = methods._getUrl($caller),
+                var url = methods._getUrl($caller),                  
                     enableLoader = methods._getEnableLoader($caller);
 
                 if (!url) {
@@ -117,13 +126,14 @@ $(function (win, doc, $) {
                 });
 
             },
+            _getDefer: function ($caller) {
+                return $caller.data("httpDefer") || $caller.data(dataKey).defer;
+            },
             _getUrl: function ($caller) {
-
                 return $caller.data("httpUrl") || $caller.data(dataKey).url;
-
             },
             _getEnableLoader: function ($caller) {
-                return $caller.data("enableLoader") || $caller.data(dataKey).enableLoader;
+                return $caller.data("httpLoader") || $caller.data(dataKey).enableLoader;
             }
 
 

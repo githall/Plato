@@ -41,6 +41,15 @@ namespace Plato.Articles.Attachments
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
+
+            // Attachment
+            routes.MapAreaRoute(
+                name: "ArticlesAttachment",
+                areaName: "Plato.Articles.Attachments",
+                template: "articles/attachment/{id:int}",
+                defaults: new { controller = "Attachment", action = "Index" }
+            );
+
         }
 
     }
