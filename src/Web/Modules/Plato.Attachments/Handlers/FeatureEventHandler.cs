@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Data.Schemas.Abstractions;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Security.Abstractions;
 
 namespace Plato.Attachments.Handlers
 {
@@ -88,14 +89,17 @@ namespace Plato.Attachments.Handlers
                     }
                 }
         };
-        
+
+        private readonly IDefaultRolesManager _defaultRolesManager;
         private readonly ISchemaBuilder _schemaBuilder;
         private readonly ISchemaManager _schemaManager;
 
         public FeatureEventHandler(
+            IDefaultRolesManager defaultRolesManager,
             ISchemaBuilder schemaBuilder,
             ISchemaManager schemaManager)
         {
+            _defaultRolesManager = defaultRolesManager;
             _schemaBuilder = schemaBuilder;
             _schemaManager = schemaManager;
         }
@@ -137,9 +141,16 @@ namespace Plato.Attachments.Handlers
 
         }
 
-        public override Task InstalledAsync(IFeatureEventContext context)
-        {      
-            return Task.CompletedTask;
+        public override async Task InstalledAsync(IFeatureEventContext context)
+        {
+            // Apply default permissions to default roles for new feature
+            await _defaultRolesManager.UpdateDefaultRolesAsync(new Permissions());
+        }
+
+        public override async Task UpdatedAsync(IFeatureEventContext context)
+        {
+            // Apply any additional permissions to default roles for updated feature
+            await _defaultRolesManager.UpdateDefaultRolesAsync(new Permissions());
         }
 
         public override async Task UninstallingAsync(IFeatureEventContext context)

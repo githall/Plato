@@ -10,6 +10,12 @@ using Plato.Attachments.Repositories;
 using Plato.Attachments.Stores;
 using Plato.Attachments.Assets;
 using PlatoCore.Assets.Abstractions;
+using Plato.Attachments.Models;
+using Plato.Attachments.ViewProviders;
+using PlatoCore.Layout.ViewProviders.Abstractions;
+using PlatoCore.Layout.ViewProviders;
+using Plato.Attachments.Navigation;
+using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Attachments
 {
@@ -31,10 +37,20 @@ namespace Plato.Attachments
             // Register client assets
             services.AddScoped<IAssetProvider, AssetProvider>();
 
-            // Data 
-            services.AddScoped<IAttachmentRepository<Models.Attachment>, AttachmentRepository>();
-            services.AddScoped<IAttachmentStore<Models.Attachment>, AttachmentStore>();
-            
+            // Navigation provider
+            services.AddScoped<INavigationProvider, AdminMenu>();
+
+            // Repositories 
+            services.AddScoped<IAttachmentRepository<Attachment>, AttachmentRepository>();
+
+            // Stores
+            services.AddScoped<IAttachmentStore<Attachment>, AttachmentStore>();
+            services.AddScoped<IAttachmentSettingsStore<AttachmentSettings>, AttachmentSettingsStore>();
+
+            // View providers
+            services.AddScoped<IViewProviderManager<AttachmentSettings>, ViewProviderManager<AttachmentSettings>>();
+            services.AddScoped<IViewProvider<AttachmentSettings>, AdminViewProvider>();
+
         }
 
         public override void Configure(

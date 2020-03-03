@@ -53,9 +53,9 @@ $(function (win, doc, $) {
                             $caller.find("#preview").hide();
                             $caller.find("#progress").show();
                         },
-                        onComplete: function (file) {
+                        onComplete: function (file) {                            
                             $caller.find("#progress").hide();
-                            $caller.find("#preview").show();
+                            $caller.find("#preview").show();                            
                         },
                         onSuccess: function (response) {                         
                             $caller.find('[data-provide="http-content"]').httpContent("reload");
@@ -137,7 +137,8 @@ $(function (win, doc, $) {
                 "gif",
                 "bmp",
                 "jpg",
-                "jpeg"
+                "jpeg",
+                "pdf"
             ],
             dropZoneOptions: {
                 url: '/api/attachments/streaming/upload',
@@ -307,26 +308,6 @@ $(function (win, doc, $) {
                         this.on('success',
                             function (file, response) {
                                 
-                                if (response.statusCode === 200) {
-                                    if (response && response.result) {
-                                        for (var i = 0; i < response.result.length; i++) {
-                                            var result = response.result[i];
-                                            if (result.id > 0) {                                                
-                                                // Bootstrap notify
-                                                app.ui.notify({
-                                                        // options
-                                                        message: result.name + app.T(" Uploaded Successfully")
-                                                    },
-                                                    {
-                                                        // settings                                                     
-                                                        type: 'success',
-                                                        allow_dismiss: true
-                                                    });
-                                            }
-                                        }
-                                    }
-                                }
-
                                 // Remove progress 
                                 if ($progressPreview) {
                                     var selector = '#' + getProgressId(file),
@@ -340,11 +321,9 @@ $(function (win, doc, $) {
                                     $caller.data(dataKey).onSuccess(response);
                                 }
 
-
                             });
 
                         this.on("complete", function (file) {
-
                             if ($caller.data(dataKey).onComplete) {
                                 $caller.data(dataKey).onComplete(file);
                             }

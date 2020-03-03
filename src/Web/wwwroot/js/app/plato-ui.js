@@ -105,6 +105,8 @@ $(function (win, doc, $) {
                     $caller.html($caller.data(dataKey).loaderTemplate);
                 }
 
+                console.log("load: " + url);
+
                 app.http({
                     method: "GET",
                     url: url
