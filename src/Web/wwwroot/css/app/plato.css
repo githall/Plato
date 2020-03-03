@@ -1191,7 +1191,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 /* Forms */
 /* ------------------------- */
 
-.radio-icon { overflow: hidden; width: 62px; height: 62px; position: relative; }
+.radio-icon { transform-origin: center center; transition: all 0.2s ease-in; width: 62px; height: 62px; position: relative; }
 .radio-icon input { display:none; }
 
 .radio-icon i {
@@ -1207,12 +1207,16 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     content: '-';
     text-indent: -5000px;
     position: absolute;
-    width: 100px;
-    height: 100px;
+    width: 62px;
+    height: 62px;
     display: block;
     top: 0;
     left: 0;
-    z-index: 1;
+    z-index: 1;    
+}
+
+.radio-icon-circular input:checked + span:before {
+    border-radius: 50%;
 }
 
 /* ------------------------- */

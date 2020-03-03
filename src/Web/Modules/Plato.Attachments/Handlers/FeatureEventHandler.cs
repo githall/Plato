@@ -14,7 +14,6 @@ namespace Plato.Attachments.Handlers
 
         public string Version { get; } = "1.0.0";
 
-
         private readonly SchemaTable _attachments = new SchemaTable()
         {
             Name = "Attachments",
@@ -119,7 +118,7 @@ namespace Plato.Attachments.Handlers
 
                 // Attachments schema
                 Attachments(builder);
-                
+
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
                 {

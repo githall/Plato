@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using Plato.Attachments.Models;
+using Plato.Attachments.ViewModels;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
@@ -38,15 +39,13 @@ namespace Plato.Attachments.Controllers
             _authorizationService = authorizationService;
             _breadCrumbManager = breadCrumbManager;
             _viewProvider = viewProvider;
-       
-
             _alerter = alerter;
 
             T = htmlLocalizer;
             S = stringLocalizer;
 
         }
-        
+
         public async Task<IActionResult> Index()
         {
 
@@ -69,30 +68,29 @@ namespace Plato.Attachments.Controllers
 
             // Return view
             return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new AttachmentSettings(), this));
-            
+
         }
-        
-        //[HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
-        //public async Task<IActionResult> IndexPost(EmailSettingsViewModel viewModel)
-        //{
 
-        //    // Ensure we have permission
-        //    //if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageEmailSettings))
-        //    //{
-        //    //    return Unauthorized();
-        //    //}
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
+        public async Task<IActionResult> IndexPost(AttachmentSettingsViewModel viewModel)
+        {
 
-        //    // Execute view providers ProvideUpdateAsync method
-        //    await _viewProvider.ProvideUpdateAsync(new EmailSettings(), this);
-        
-        //    // Add alert
-        //    _alerter.Success(T["Settings Updated Successfully!"]);
-      
-        //    return RedirectToAction(nameof(Index));
-            
-        //}
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageAttachmentSettings))
+            {
+                return Unauthorized();
+            }
 
-      
+            // Execute view providers ProvideUpdateAsync method
+            await _viewProvider.ProvideUpdateAsync(new AttachmentSettings(), this);
+
+            // Add alert
+            _alerter.Success(T["Settings Updated Successfully!"]);
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
     }
-    
+
 }

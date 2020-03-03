@@ -1,9 +1,9 @@
 ﻿namespace Plato.Attachments.Models
 {
-    public class DefaultAttachmentTypes
+    public static class DefaultExtensions
     {
 
-        string[] _defaultExtensions = new string[]
+        private static readonly string[] _extensions = new string[]
         {
             "3g2",
             "3ga",
@@ -412,10 +412,29 @@
             "zsh"
         };
 
-        public string[] DefaultExtensions()
+
+        private static readonly string[] _allowedExtensions = new string[]
         {
-            return _defaultExtensions;
-        }
+            "bmp",
+            "doc",
+            "docx",            
+            "gif",
+            "htm",
+            "html",
+            "pdf",
+            "png",
+            "jpg",
+            "jpeg",
+            "rar",
+            "txt",
+            "zip",
+            "xls",
+            "xlsx"
+        };
+
+        public static string[] Extensions => _extensions;
+
+        public static string[] AllowedExtensions => _allowedExtensions;
 
     }
 

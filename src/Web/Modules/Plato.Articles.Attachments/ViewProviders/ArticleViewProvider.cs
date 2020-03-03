@@ -36,7 +36,7 @@ namespace Plato.Articles.Attachments.ViewProviders
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
             IAttachmentStore<Attachment> attachmentStore,
             IAuthorizationService authorizationService,
-            IHttpContextAccessor httpContextAccessor,        
+            IHttpContextAccessor httpContextAccessor,
             IEntityStore<Article> entityStore,
             IKeyGenerator keyGenerator,
             IContextFacade contextFacade)

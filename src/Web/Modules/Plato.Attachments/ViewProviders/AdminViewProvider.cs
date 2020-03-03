@@ -1,13 +1,15 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Http;
 using PlatoCore.Models.Shell;
 using Plato.Attachments.Models;
 using Plato.Attachments.Stores;
 using Plato.Attachments.ViewModels;
-using PlatoCore.Abstractions.Settings;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Security.Abstractions.Encryption;
+using PlatoCore.Abstractions.Settings;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Attachments.ViewProviders
@@ -20,17 +22,20 @@ namespace Plato.Attachments.ViewProviders
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
-        private readonly PlatoOptions _platoOptions;
+        private readonly HttpRequest _request;
+
+        public const string ExtensionHtmlName = "extension";
 
         public AdminViewProvider(
-            IAttachmentSettingsStore<AttachmentSettings> attachmentSettingsStore,            
-            ILogger<AdminViewProvider> logger,            
+            IAttachmentSettingsStore<AttachmentSettings> attachmentSettingsStore,
+            IHttpContextAccessor httpContextAccessor,
             IOptions<PlatoOptions> platoOptions,
+            ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,     
             IPlatoHost platoHost)
         {
+            _request = httpContextAccessor.HttpContext.Request;
             _attachmentSettingsStore = attachmentSettingsStore;
-            _platoOptions = platoOptions.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
@@ -58,7 +63,7 @@ namespace Plato.Attachments.ViewProviders
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(AttachmentSettings settings, IViewProviderContext context)
         {
-            
+
             var model = new AttachmentSettingsViewModel();
 
             // Validate model
@@ -66,46 +71,15 @@ namespace Plato.Attachments.ViewProviders
             {
                 return await BuildEditAsync(settings, context);
             }
-            
+
             // Update settings
             if (context.Updater.ModelState.IsValid)
             {
 
-                //// Encrypt the password
-                //var username = model.SmtpSettings.UserName;
-                //var password = string.Empty;
-                //if (!string.IsNullOrWhiteSpace(model.SmtpSettings.Password))
-                //{
-                //    try
-                //    {                        
-                //        password = _encrypter.Encrypt(model.SmtpSettings.Password);
-                //    }
-                //    catch (Exception e)
-                //    {
-                //        if (_logger.IsEnabled(LogLevel.Error))
-                //        {
-                //            _logger.LogError($"There was a problem encrypting the SMTP server password. {e.Message}");
-                //        }
-                //    }
-                //}
-
-                //settings = new EmailSettings()
-                //{
-                //    SmtpSettings = new SmtpSettings()
-                //    {
-                //        DefaultFrom = model.SmtpSettings.DefaultFrom,
-                //        Host = model.SmtpSettings.Host,
-                //        Port = model.SmtpSettings.Port,
-                //        UserName = username,
-                //        Password = password,
-                //        RequireCredentials = model.SmtpSettings.RequireCredentials,
-                //        EnableSsl = model.SmtpSettings.EnableSsl,
-                //        PollingInterval = model.SmtpSettings.PollInterval,
-                //        BatchSize = model.SmtpSettings.BatchSize,
-                //        SendAttempts = model.SmtpSettings.SendAttempts,
-                //        EnablePolling = model.SmtpSettings.EnablePolling
-                //    }
-                //};
+                settings = new AttachmentSettings()
+                {
+                    AllowedExtensions = GetPostedExtensions()
+                };
 
                 var result = await _attachmentSettingsStore.SaveAsync(settings);
                 if (result != null)
@@ -113,7 +87,7 @@ namespace Plato.Attachments.ViewProviders
                     // Recycle shell context to ensure changes take effect
                     _platoHost.RecycleShellContext(_shellSettings);
                 }
-              
+
             }
 
             return await BuildEditAsync(settings, context);
@@ -123,46 +97,44 @@ namespace Plato.Attachments.ViewProviders
         async Task<AttachmentSettingsViewModel> GetModel()
         {
 
-         
             var settings = await _attachmentSettingsStore.GetAsync();
+            return new AttachmentSettingsViewModel()
+            {
+                DefaultExtensions = DefaultExtensions.Extensions,
+                ExtensionHtmlName = ExtensionHtmlName,
+                AllowedExtensions = settings != null
+                    ? settings.AllowedExtensions
+                    : DefaultExtensions.AllowedExtensions
+            };
 
-            return new AttachmentSettingsViewModel();
+        }
 
+        string[] GetPostedExtensions()
+        {
 
-            //if (settings != null)
-            //{
-            //    return new EmailSettingsViewModel()
-            //    {
-            //        SmtpSettings = new SmtpSettingsViewModel()
-            //        {
-            //            DefaultFrom = _platoOptions.DemoMode
-            //                ? "email@example.com"
-            //                : settings.SmtpSettings.DefaultFrom,
-            //            Host = _platoOptions.DemoMode
-            //                ? "smtp.example.com"
-            //                : settings.SmtpSettings.Host,                        
-            //            Port = settings.SmtpSettings.Port,
-            //            UserName = _platoOptions.DemoMode
-            //                ? "email@example.com"
-            //                : settings.SmtpSettings.UserName,
-            //            Password = _platoOptions.DemoMode
-            //                ? ""
-            //                : settings.SmtpSettings.Password,
-            //            RequireCredentials = settings.SmtpSettings.RequireCredentials,
-            //            EnableSsl = settings.SmtpSettings.EnableSsl,
-            //            PollInterval = settings.SmtpSettings.PollingInterval,
-            //            BatchSize = settings.SmtpSettings.BatchSize,
-            //            SendAttempts = settings.SmtpSettings.SendAttempts,
-            //            EnablePolling = settings.SmtpSettings.EnablePolling
-            //        }
-            //    };
-            //}
+            if (!_request.Method.Equals("POST", StringComparison.OrdinalIgnoreCase))
+            {
+                return null;
+            }
 
-            //// return default settings
-            //return new EmailSettingsViewModel()
-            //{
-            //    SmtpSettings = new SmtpSettingsViewModel()
-            //};
+            var extensions = new List<string>();
+            foreach (var key in _request.Form?.Keys)
+            {
+                if (key == ExtensionHtmlName)
+                {
+                    var values = _request.Form[key];
+                    foreach (var value in values)
+                    {
+                        if (!String.IsNullOrEmpty(value))
+                        {
+                            if (!extensions.Contains(value))                            
+                                extensions.Add(value);
+                        }
+                    }
+                }
+            }
+
+            return extensions.ToArray();
 
         }
 
