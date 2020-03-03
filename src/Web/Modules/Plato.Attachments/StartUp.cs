@@ -16,6 +16,7 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Attachments.Navigation;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Security.Abstractions;
 
 namespace Plato.Attachments
 {
@@ -50,6 +51,9 @@ namespace Plato.Attachments
             // View providers
             services.AddScoped<IViewProviderManager<AttachmentSettings>, ViewProviderManager<AttachmentSettings>>();
             services.AddScoped<IViewProvider<AttachmentSettings>, AdminViewProvider>();
+
+            // Register permissions provider
+            services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
         }
 

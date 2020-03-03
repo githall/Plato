@@ -416,11 +416,14 @@
         private static readonly string[] _allowedExtensions = new string[]
         {
             "bmp",
+            "config",
             "doc",
             "docx",            
             "gif",
             "htm",
             "html",
+            "ini",            
+            "log",
             "pdf",
             "png",
             "jpg",
@@ -429,7 +432,8 @@
             "txt",
             "zip",
             "xls",
-            "xlsx"
+            "xlsx",
+            "yaml"
         };
 
         public static string[] Extensions => _extensions;

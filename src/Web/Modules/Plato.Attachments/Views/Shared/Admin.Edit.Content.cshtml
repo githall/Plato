@@ -18,18 +18,21 @@
 <card class="card card-body-flush">
     <card-title>   
         <h6 class="card-title">@T["Allowed Extensions"]</h6>
+        <div class="text-muted">
+            @T["Control the files that can be uploaded"]
+        </div>
     </card-title>
     <card-body>
-        <div id="extensionList" class="list-group list-group-flush list-group-hover infinite-scroll">
+        <div id="extensionList" class="list-group list-group-flush list-group-hover radio-icon-list">
             <div class="row no-gutters">
                 <div class="list-group-item infinite-scroll-loader col-12" data-type="previous"></div>
                 @foreach (var extension in Model.DefaultExtensions)
                 {
                     var css = Model.IconPrefix + extension;
                     var check = Model.AllowedExtensions.Contains(extension);
-                    <div class="list-group-item list-group-item-action p-0 col-lg-3 col-md-6 col-sm-12"  data-filter-list-value="@extension" style="margin-top: -1px;">
+                    <div class="float-left list-group-item list-group-item-action p-0 col-lg-3 col-md-6 col-sm-12"  data-filter-list-value="@extension" style="margin-top: -1px;">
                         <label class="d-block py-3 text-center cursor-pointer" for="@extension">
-                            <span class="radio-icon radio-icon-circular d-inline-block circle">
+                            <span class="radio-icon bg-primary-10 d-inline-block">
                                 <input checked="@check" type="checkbox" value="@extension" name="@Model.ExtensionHtmlName" id="@extension" />
                                 <span class="d-block"><i class="@css"></i></span>
                             </span>

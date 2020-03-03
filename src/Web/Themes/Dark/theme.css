@@ -106,6 +106,10 @@
     background-color: #2A9FD6;
 }
 
+.radio-icon-list.list-group-hover .list-group-item-action:hover .radio-icon input + span:before {
+    background: rgba(255,255,255,.4);
+}
+
 /* ------------------- */
 /* Reply Arrows */
 /* ------------------- */
@@ -147,7 +151,12 @@ a.label.active {
 /* Backgrounds */
 /* ------------------- */
 
-.bg-secondary {
+.bg-primary-75 { background: rgba(42, 159, 214, 0.75); }
+.bg-primary-50 { background: rgba(42, 159, 214, 0.50); }
+.bg-primary-25 { background: rgba(42, 159, 214, 0.25); }
+.bg-primary-10 { background: rgba(42, 159, 214, 0.10); }
+
+.bg-secondary { 
     background-color: #F8F8F8 !important;
 }
 
