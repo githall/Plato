@@ -7,7 +7,9 @@
         ["action"] = "upload",
         ["guid"] = Model.Guid
     });
-    var previewUrl = GetRouteUrl(new RouteValueDictionary()
+
+
+    var editUrl = GetRouteUrl(new RouteValueDictionary()
     {
         ["area"] = "Plato.Entities.Attachments",
         ["controller"] = "Home",
@@ -15,6 +17,16 @@
         ["opts.guid"] = Model.Guid,
         ["opts.entityId"] = Model.EntityId
     });
+
+    var previewUrl = GetRouteUrl(new RouteValueDictionary()
+    {
+        ["area"] = "Plato.Entities.Attachments",
+        ["controller"] = "Home",
+        ["action"] = "Preview",
+        ["opts.guid"] = Model.Guid,
+        ["opts.entityId"] = Model.EntityId
+    });
+
 }
 
 <input type="hidden" name="@Model.GuidHtmlName" asp-for="Guid" />
@@ -35,7 +47,7 @@
                 </div>
             </div>
             <div class="max-h-300 overflow-auto">                
-                <div data-http-url="@previewUrl" data-provide="http-content">
+                <div data-http-url="@editUrl" data-provide="http-content">
                     <p class="text-center"><i class="fal fa-spinner fa-spin"></i></p>
                 </div>
             </div>
@@ -43,8 +55,11 @@
     </div>
     <div class="card-body">
         <div id="progress"></div>
-        <div data-http-url="@previewUrl" data-provide="http-content">
-            <p class="text-center my-4"><i class="fal fa-spinner fa-spin"></i></p>
+        <div id="preview" data-http-url="@previewUrl" data-http-defer="true" data-provide="http-content">
+            @await DisplayAsync(new View("PreviewEntityAttachments", new
+            {
+                Model
+            }))
         </div>
     </div>
 </div>
