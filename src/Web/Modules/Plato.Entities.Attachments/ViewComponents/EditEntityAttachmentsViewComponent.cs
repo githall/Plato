@@ -43,7 +43,7 @@ namespace Plato.Entities.Attachments.ViewComponents
             }
 
             // Get data & return view
-            return View(new AttachmentsIndexViewModel()
+            return View(new AttachmentsViewModel()
             {
                 Results = await GetDataAsync(model)
             });

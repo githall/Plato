@@ -106,10 +106,6 @@
     background-color: #2A9FD6;
 }
 
-.radio-icon-list.list-group-hover .list-group-item-action:hover .radio-icon input + span:before {
-    background: rgba(255,255,255,.4);
-}
-
 /* ------------------- */
 /* Reply Arrows */
 /* ------------------- */

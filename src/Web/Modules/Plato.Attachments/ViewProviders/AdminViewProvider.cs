@@ -2,15 +2,19 @@
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Http;
 using PlatoCore.Models.Shell;
 using Plato.Attachments.Models;
 using Plato.Attachments.Stores;
 using Plato.Attachments.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Abstractions.Settings;
 using PlatoCore.Layout.ViewProviders.Abstractions;
+using Plato.Roles.ViewModels;
+using PlatoCore.Stores.Abstractions.Roles;
+using PlatoCore.Data.Abstractions;
+using PlatoCore.Models.Roles;
+using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Stores.Roles;
 
 namespace Plato.Attachments.ViewProviders
 {
@@ -19,6 +23,7 @@ namespace Plato.Attachments.ViewProviders
 
         private readonly IAttachmentSettingsStore<AttachmentSettings> _attachmentSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
+        private readonly IPlatoRoleStore _platoRoleStore;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
@@ -28,22 +33,37 @@ namespace Plato.Attachments.ViewProviders
 
         public AdminViewProvider(
             IAttachmentSettingsStore<AttachmentSettings> attachmentSettingsStore,
-            IHttpContextAccessor httpContextAccessor,
-            IOptions<PlatoOptions> platoOptions,
+            IHttpContextAccessor httpContextAccessor,     
+            IPlatoRoleStore platoRoleStore,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,     
             IPlatoHost platoHost)
         {
             _request = httpContextAccessor.HttpContext.Request;
-            _attachmentSettingsStore = attachmentSettingsStore;
+            _attachmentSettingsStore = attachmentSettingsStore;            
+            _platoRoleStore = platoRoleStore;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
         }
 
-        public override Task<IViewProviderResult> BuildIndexAsync(AttachmentSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildIndexAsync(AttachmentSettings settings, IViewProviderContext context)
         {
-            return Task.FromResult(default(IViewProviderResult));
+
+            var viewModel = context.Controller.HttpContext.Items[typeof(AttachmentsIndexViewModel)] as AttachmentsIndexViewModel;
+            if (viewModel == null)
+            {
+                throw new Exception($"A view model of type {typeof(AttachmentsIndexViewModel).ToString()} has not been registered on the HttpContext!");
+            }
+
+            viewModel.Results = await GetRoles(viewModel.Options, viewModel.Pager);
+
+            return Views(
+                View<AttachmentsIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
+                View<AttachmentsIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<AttachmentsIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
+            );
+
         }
 
         public override Task<IViewProviderResult> BuildDisplayAsync(AttachmentSettings settings, IViewProviderContext context)
@@ -53,18 +73,20 @@ namespace Plato.Attachments.ViewProviders
 
         public override async Task<IViewProviderResult> BuildEditAsync(AttachmentSettings settings, IViewProviderContext context)
         {
+
             var viewModel = await GetModel();
             return Views(
-                View<AttachmentSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
-                View<AttachmentSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools").Order(1),
-                View<AttachmentSettingsViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1)
+                View<EditAttachmentSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
+                View<EditAttachmentSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools").Order(1),
+                View<EditAttachmentSettingsViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1)
             );
+
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(AttachmentSettings settings, IViewProviderContext context)
         {
 
-            var model = new AttachmentSettingsViewModel();
+            var model = new AttachmentsIndexViewModel();
 
             // Validate model
             if (!await context.Updater.TryUpdateModelAsync(model))
@@ -94,19 +116,42 @@ namespace Plato.Attachments.ViewProviders
 
         }
 
-        async Task<AttachmentSettingsViewModel> GetModel()
-        {
+        // -----------------------
 
+        async Task<EditAttachmentSettingsViewModel> GetModel()
+        {
+            
             var settings = await _attachmentSettingsStore.GetAsync();
-            return new AttachmentSettingsViewModel()
+            return new EditAttachmentSettingsViewModel()
             {
                 DefaultExtensions = DefaultExtensions.Extensions,
-                ExtensionHtmlName = ExtensionHtmlName,
+                ExtensionHtmlName = ExtensionHtmlName,           
                 AllowedExtensions = settings != null
                     ? settings.AllowedExtensions
                     : DefaultExtensions.AllowedExtensions
             };
 
+        }
+
+        async Task<IPagedResults<Role>> GetRoles(
+            RoleIndexOptions options,
+            PagerOptions pager)
+        {
+            return await _platoRoleStore.QueryAsync()
+                .Take(pager.Page, pager.Size, pager.CountTotal)
+                .Select<RoleQueryParams>(q =>
+                {
+                    if (options.RoleId > 0)
+                    {
+                        q.Id.Equals(options.RoleId);
+                    }
+                    if (!string.IsNullOrEmpty(options.Search))
+                    {
+                        q.Keywords.Like(options.Search);
+                    }
+                })
+                .OrderBy("ModifiedDate", OrderBy.Desc)
+                .ToList();
         }
 
         string[] GetPostedExtensions()

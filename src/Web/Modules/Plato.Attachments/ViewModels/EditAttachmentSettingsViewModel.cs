@@ -1,6 +1,6 @@
 ﻿namespace Plato.Attachments.ViewModels
 {
-    public class AttachmentSettingsViewModel
+    public class EditAttachmentSettingsViewModel
     {
 
         public string IconPrefix { get; } = "fiv-sqo fiv-size-md fiv-icon-";

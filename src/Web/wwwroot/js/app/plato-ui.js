@@ -3620,18 +3620,33 @@ $(function (win, doc, $) {
             },
             filter: function ($caller) {
 
-                var $target = this.getTarget($caller),
+                var $label = null,
+                    $target = this.getTarget($caller),
                     $items = this.getListItems($caller),
                     $empty = this.getEmpty($caller),
                     word = $caller.val().trim().toLowerCase(),
                     length = $items.length,
-                    hidden = 0;
+                    hidden = 0,
+                    i = 0;
+
+                // Empty search
+                if (word === "") {
+                    // Show all items
+                    for (i = 0; i < length; i++) {
+                        $label = $($items[i]);
+                        if ($label.length > 0) {
+                            $label.removeClass("hidden");                           
+                        }
+                    }
+                    $empty.hide();
+                    return;
+                }
 
                 $target.treeView("expandAll");
 
                 // First hide all items
-                for (var i = 0; i < length; i++) {
-                    var $label = $($items[i]);
+                for (i = 0; i < length; i++) {
+                    $label = $($items[i]);
                     if ($label.length > 0) {
                         $label.removeClass("hidden");
                         if (!this.find($label, word)) {
@@ -3641,7 +3656,7 @@ $(function (win, doc, $) {
                     }
                 }
 
-                //If all items are hidden, show the empty element
+                // If all items are hidden, show the empty element
                 if (hidden === length) {
                     $empty.show();
                 } else {

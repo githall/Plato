@@ -1,5 +1,5 @@
-﻿@model AttachmentSettingsViewModel
-@{ 
+﻿@model EditAttachmentSettingsViewModel
+@{
     var platoOpts = GetOptions<PlatoOptions>();
 }
 
@@ -16,7 +16,7 @@
 </div>
 
 <card class="card card-body-flush">
-    <card-title>   
+    <card-title>
         <h6 class="card-title">@T["Allowed Extensions"]</h6>
         <div class="text-muted">
             @T["Control the files that can be uploaded"]
@@ -30,7 +30,7 @@
                 {
                     var css = Model.IconPrefix + extension;
                     var check = Model.AllowedExtensions.Contains(extension);
-                    <div class="float-left list-group-item list-group-item-action p-0 col-lg-3 col-md-6 col-sm-12"  data-filter-list-value="@extension" style="margin-top: -1px;">
+                    <div class="float-left list-group-item list-group-item-action p-0 col-lg-3 col-md-6 col-sm-12" data-filter-list-value="@extension" style="margin-top: -1px;">
                         <label class="d-block py-3 text-center cursor-pointer" for="@extension">
                             <span class="radio-icon bg-primary-10 d-inline-block">
                                 <input checked="@check" type="checkbox" value="@extension" name="@Model.ExtensionHtmlName" id="@extension" />
@@ -64,7 +64,7 @@
         }
         else
         {
-            <button class="btn btn-primary" type="submit">@T["Save"]</button>          
+            <button class="btn btn-primary" type="submit">@T["Save"]</button>
         }
     </card-footer>
 </card>
