@@ -5,7 +5,6 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using Plato.Search.Models;
-using Plato.Search.Repositories;
 using Plato.Search.Stores;
 using Plato.Search.ViewModels;
 

@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Attachments.Models;
 using Plato.Attachments.ViewModels;
@@ -10,8 +11,10 @@ using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
+using PlatoCore.Models.Roles;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Stores.Abstractions.Roles;
 
 namespace Plato.Attachments.Controllers
 {
@@ -19,9 +22,10 @@ namespace Plato.Attachments.Controllers
     public class AdminController : Controller, IUpdateModel
     {
 
-        private readonly IViewProviderManager<AttachmentSettings> _viewProvider;
-        private readonly IAuthorizationService _authorizationService;                
-        private readonly IBreadCrumbManager _breadCrumbManager;         
+        private readonly IViewProviderManager<AttachmentSetting> _viewProvider;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly IPlatoRoleStore _platoRoleStore;
         private readonly IAlerter _alerter;
            
         public IHtmlLocalizer T { get; }
@@ -31,14 +35,16 @@ namespace Plato.Attachments.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-            IViewProviderManager<AttachmentSettings> viewProvider,
+            IViewProviderManager<AttachmentSetting> viewProvider,
             IAuthorizationService authorizationService,
-            IBreadCrumbManager breadCrumbManager,                   
+            IBreadCrumbManager breadCrumbManager,
+            IPlatoRoleStore platoRoleStore,
             IAlerter alerter)
         {
 
             _authorizationService = authorizationService;
             _breadCrumbManager = breadCrumbManager;
+            _platoRoleStore = platoRoleStore;
             _viewProvider = viewProvider;
             _alerter = alerter;
 
@@ -110,7 +116,7 @@ namespace Plato.Attachments.Controllers
             this.HttpContext.Items[typeof(AttachmentsIndexViewModel)] = viewModel;
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new AttachmentSettings(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new AttachmentSetting(), this));
 
         }
 
@@ -121,6 +127,19 @@ namespace Plato.Attachments.Controllers
 
         public async Task<IActionResult> Edit(int id)
         {
+
+            if (id <= 0)
+            {
+                return NotFound();
+            }
+
+            // Get role
+            var role = await _platoRoleStore.GetByIdAsync(id);
+            
+            if (role == null)
+            {
+                return NotFound();
+            }
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageAttachmentSettings))
@@ -133,19 +152,27 @@ namespace Plato.Attachments.Controllers
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Admin", "Plato.Admin")
                     .LocalNav()
-                ).Add(S["Settings"], channels => channels
+                ).Add(S["Settings"], settings => settings
                     .Action("Index", "Admin", "Plato.Settings")
                     .LocalNav()
-                ).Add(S["Attachments"]);
+                ).Add(S["Attachments"], attachments => attachments
+                    .Action("Index", "Admin", "Plato.Attachments")
+                    .LocalNav()
+                ).Add(S[role.Name]);
             });
 
+            var model = new AttachmentSetting()
+            {
+                RoleId = role.Id
+            };
+
             // Return view
-            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new AttachmentSettings(), this));
+            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(model, this));
 
         }
 
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Edit))]
-        public async Task<IActionResult> EditPost(AttachmentsIndexViewModel viewModel)
+        public async Task<IActionResult> EditPost(EditAttachmentSettingsViewModel viewModel)
         {
 
             // Ensure we have permission
@@ -155,12 +182,15 @@ namespace Plato.Attachments.Controllers
             }
 
             // Execute view providers ProvideUpdateAsync method
-            await _viewProvider.ProvideUpdateAsync(new AttachmentSettings(), this);
+            await _viewProvider.ProvideUpdateAsync(new AttachmentSetting(), this);
 
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);
 
-            return RedirectToAction(nameof(Index));
+            return RedirectToAction(nameof(Edit), new RouteValueDictionary()
+            {
+                ["id"] = viewModel.RoleId.ToString()
+            });
 
         }
 

@@ -1,4 +1,6 @@
-﻿namespace PlatoCore.Abstractions.Extensions
+﻿using System;
+
+namespace PlatoCore.Abstractions.Extensions
 {
     public static class LongExtensions
     {
@@ -14,18 +16,19 @@
 
             if (input < 1024)
             {
-                return $"{input:N0} " + Bytes;
+                return $"{input:N0}{Bytes}";
             }
             else if (input < 1024 * 1024)
             {
-                return $"{input / 1024:N2}" + Kb;
+                return $"{input / 1024:N0}{Kb}";
             }
             else if (input < 1048576 * 1000)
             {
-                return $"{input / (1024 * 1024):N2}" + Mb;
+                return $"{input / (1024 * 1024):N0}{Mb}";
             }
 
-            return $"{input / (1048576 * 1000)}" + Gb;
+            // 1 gb = 1073741824 bytes
+            return $"{Math.Floor((decimal)input / 1073741824):N0}{Gb}";
 
         }
 

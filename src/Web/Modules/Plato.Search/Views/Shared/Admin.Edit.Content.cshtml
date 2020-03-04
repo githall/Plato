@@ -11,12 +11,10 @@
     <card-body>
 
         <div class="form-group">
-
             <span asp-validation-for="SearchType" class="text-danger"></span>
             <select class="form-control"
                     asp-for="SearchType"
                     asp-items="@Model.AvailableSearchTypes"></select>
-
         </div>
 
         @if (Model.SearchType != SearchTypes.Tsql && Model.Catalogs == null)
