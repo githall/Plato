@@ -15,10 +15,13 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Models.Roles;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Stores.Roles;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using PlatoCore.Abstractions.Extensions;
+using Plato.Attachments.Extensions;
 
 namespace Plato.Attachments.ViewProviders
 {
-    public class AdminViewProvider : ViewProviderBase<AttachmentSettings>
+    public class AdminViewProvider : ViewProviderBase<AttachmentSetting>
     {
 
         private readonly IAttachmentSettingsStore<AttachmentSettings> _attachmentSettingsStore;        
@@ -47,7 +50,7 @@ namespace Plato.Attachments.ViewProviders
             _logger = logger;
         }
 
-        public override async Task<IViewProviderResult> BuildIndexAsync(AttachmentSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildIndexAsync(AttachmentSetting settings, IViewProviderContext context)
         {
 
             var viewModel = context.Controller.HttpContext.Items[typeof(AttachmentsIndexViewModel)] as AttachmentsIndexViewModel;
@@ -66,15 +69,46 @@ namespace Plato.Attachments.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildDisplayAsync(AttachmentSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildDisplayAsync(AttachmentSetting settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<IViewProviderResult> BuildEditAsync(AttachmentSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(AttachmentSetting setting, IViewProviderContext context)
         {
 
-            var viewModel = await GetModel();
+            var role = await _platoRoleStore.GetByIdAsync(setting.RoleId);
+
+            if (role == null)
+            {
+                return default(IViewProviderResult);
+            }
+
+            // Defaults
+            long availableSpace = 0;
+            var allowedExtensions = DefaultExtensions.AllowedExtensions;
+
+            // Populate settings
+            var settings = await _attachmentSettingsStore.GetByRoleIdAsync(role.Id);
+            if (settings != null)
+            {
+                availableSpace = settings.AvailableSpace;
+                allowedExtensions = settings.AllowedExtensions;
+            }
+
+            // Build model
+            var viewModel = new EditAttachmentSettingsViewModel()
+            {                
+                RoleId = role.Id,
+                Role = role,
+                AvailableSpace = availableSpace,
+                AvailableSpaces = GetAvailableSpaces(),
+                DefaultExtensions = DefaultExtensions.Extensions,
+                ExtensionHtmlName = ExtensionHtmlName,
+                AllowedExtensions = allowedExtensions
+            };
+
+            // Build view
             return Views(
                 View<EditAttachmentSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
                 View<EditAttachmentSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools").Order(1),
@@ -83,10 +117,10 @@ namespace Plato.Attachments.ViewProviders
 
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(AttachmentSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(AttachmentSetting settings, IViewProviderContext context)
         {
 
-            var model = new AttachmentsIndexViewModel();
+            var model = new EditAttachmentSettingsViewModel();
 
             // Validate model
             if (!await context.Updater.TryUpdateModelAsync(model))
@@ -98,11 +132,14 @@ namespace Plato.Attachments.ViewProviders
             if (context.Updater.ModelState.IsValid)
             {
 
-                settings = new AttachmentSettings()
+                settings = new AttachmentSetting()
                 {
+                    RoleId = model.RoleId,
+                    AvailableSpace = model.AvailableSpace,
                     AllowedExtensions = GetPostedExtensions()
                 };
 
+    
                 var result = await _attachmentSettingsStore.SaveAsync(settings);
                 if (result != null)
                 {
@@ -117,21 +154,6 @@ namespace Plato.Attachments.ViewProviders
         }
 
         // -----------------------
-
-        async Task<EditAttachmentSettingsViewModel> GetModel()
-        {
-            
-            var settings = await _attachmentSettingsStore.GetAsync();
-            return new EditAttachmentSettingsViewModel()
-            {
-                DefaultExtensions = DefaultExtensions.Extensions,
-                ExtensionHtmlName = ExtensionHtmlName,           
-                AllowedExtensions = settings != null
-                    ? settings.AllowedExtensions
-                    : DefaultExtensions.AllowedExtensions
-            };
-
-        }
 
         async Task<IPagedResults<Role>> GetRoles(
             RoleIndexOptions options,
@@ -182,6 +204,58 @@ namespace Plato.Attachments.ViewProviders
             return extensions.ToArray();
 
         }
+
+        IEnumerable<SelectListItem> GetAvailableSpaces()
+        {
+
+            var sizesInBytes = new long[] {               
+                    51200,
+                    102400,
+                    524288,
+                    1048576,
+                    2097152,
+                    3145728,
+                    4194304,
+                    5242880,
+                    10485760,
+                    20971520,
+                    31457280,
+                    41943040,
+                    52428800,
+                    62914560,
+                    73400320,
+                    83886080,
+                    94371840,
+                    104857600,
+                    209715200,
+                    314572800,
+                    419430400,
+                    524288000,
+                    1073741824,
+                    2147483648,
+                    4294967296,
+                    8589934592,
+                    17179869184,
+                    34359738368,
+                    68719476736,
+                    137438953472,
+                    274877906944
+                };
+
+            var output = new List<SelectListItem>();
+            foreach (var size in sizesInBytes)
+            {
+                output.Add(new SelectListItem
+                {
+                    Text = size.ToFriendlyFileSize(),
+                    Value = size.ToString()
+                }); ;
+            }
+
+            return output;
+
+        }
+
 
     }
 

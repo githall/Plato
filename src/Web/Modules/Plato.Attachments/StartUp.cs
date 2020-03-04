@@ -49,8 +49,8 @@ namespace Plato.Attachments
             services.AddScoped<IAttachmentSettingsStore<AttachmentSettings>, AttachmentSettingsStore>();
 
             // View providers
-            services.AddScoped<IViewProviderManager<AttachmentSettings>, ViewProviderManager<AttachmentSettings>>();
-            services.AddScoped<IViewProvider<AttachmentSettings>, AdminViewProvider>();
+            services.AddScoped<IViewProviderManager<AttachmentSetting>, ViewProviderManager<AttachmentSetting>>();
+            services.AddScoped<IViewProvider<AttachmentSetting>, AdminViewProvider>();
 
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
@@ -63,7 +63,31 @@ namespace Plato.Attachments
             IServiceProvider serviceProvider)
         {
 
-            // api routes
+            // Index
+            routes.MapAreaRoute(
+                name: "AttachmentsIndex",
+                areaName: "Plato.Attachments",
+                template: "admin/settings/attachments",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
+            // Edit
+            routes.MapAreaRoute(
+                name: "AttachmentsEdit",
+                areaName: "Plato.Attachments",
+                template: "admin/settings/attachments/edit/{id:int}",
+                defaults: new { controller = "Admin", action = "Edit" }
+            );
+
+            // Display
+            routes.MapAreaRoute(
+                name: "ServeAttachment",
+                areaName: "Plato.Attachments",
+                template: "attachment/{id?}",
+                defaults: new { controller = "Attachment", action = "Serve" }
+            );
+
+            // API
             routes.MapAreaRoute(
                 name: "AttachmentWebApi",
                 areaName: "Plato.Attachments",
@@ -71,13 +95,6 @@ namespace Plato.Attachments
                 defaults: new { controller = "Upload", action = "Index" }
             );
 
-            // serve media routes
-            routes.MapAreaRoute(
-                name: "ServeAttachment",
-                areaName: "Plato.Attachments",
-                template: "attachment/{id?}",
-                defaults: new { controller = "Attachment", action = "Serve" }
-            );
 
         }
 
