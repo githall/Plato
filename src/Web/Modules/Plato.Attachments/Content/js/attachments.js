@@ -49,19 +49,19 @@ $(function (win, doc, $) {
                 // httpContent elements within the attachments area
                 $caller.find('[data-provide="attachment-dropzone"]')
                     .attachmentDropzone({
-                        onAddedFile: function (file) {
-                            $caller.find("#preview").hide();
-                            $caller.find("#progress").show();
+                        onDrop: function () {
+                            $caller.find(".dropdown").each(function () {                              
+                                $(this).find(".dropdown-menu").removeClass('show');                            
+                            });
                         },
-                        onComplete: function (file) {                            
-                            $caller.find("#progress").hide();
-                            $caller.find("#preview").show();                            
+                        onAddedFile: function (file) {                                
                         },
-                        onSuccess: function (response) {                         
-                            $caller.find('[data-provide="http-content"]').httpContent("reload");
+                        onComplete: function (file) {
+                            $caller.find('[data-provide="http-content"]').httpContent("reload");                                             
                         },
-                        onError: function (file, error, xhr) {
-                            $caller.find('[data-provide="http-content"]').httpContent("reload");
+                        onSuccess: function (response) {
+                        },
+                        onError: function (file, error, xhr) {                            
                         }
                     });
 
@@ -148,7 +148,7 @@ $(function (win, doc, $) {
                 disablePreview: true,
                 uploadMultiple: false,
                 dictDefaultMessage:
-                    'Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a>'
+                    '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
             },
             onAddedFile: function (file) {
                 // triggers when a file is added

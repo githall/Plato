@@ -51,8 +51,8 @@ namespace PlatoCore.Abstractions.Extensions
 
         public static bool Contains(
             this string[] inputs,
-           string value,
-           StringComparison comparer)
+            string value,
+            StringComparison comparer)
         {
 
             if (inputs == null)
@@ -74,7 +74,7 @@ namespace PlatoCore.Abstractions.Extensions
 
         public static bool Contains(
             this int[] inputs,
-           int value)
+            int value)
         {
 
             if (inputs == null)

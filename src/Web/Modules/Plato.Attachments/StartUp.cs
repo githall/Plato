@@ -17,6 +17,8 @@ using PlatoCore.Layout.ViewProviders;
 using Plato.Attachments.Navigation;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using Plato.Attachments.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Plato.Attachments
 {
@@ -54,6 +56,9 @@ namespace Plato.Attachments
 
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
+            
+            // Configuration
+            services.AddTransient<IConfigureOptions<AttachmentSettings>, AttachmentSettingsConfiguration>();
 
         }
 
