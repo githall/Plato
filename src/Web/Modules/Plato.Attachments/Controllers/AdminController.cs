@@ -11,7 +11,6 @@ using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
-using PlatoCore.Models.Roles;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
@@ -27,7 +26,7 @@ namespace Plato.Attachments.Controllers
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPlatoRoleStore _platoRoleStore;
         private readonly IAlerter _alerter;
-           
+
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
@@ -123,7 +122,6 @@ namespace Plato.Attachments.Controllers
         // ---------------
         // Edit
         // ---------------
-
 
         public async Task<IActionResult> Edit(int id)
         {

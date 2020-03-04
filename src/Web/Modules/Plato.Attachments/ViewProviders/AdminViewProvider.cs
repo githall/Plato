@@ -8,21 +8,55 @@ using Plato.Attachments.Models;
 using Plato.Attachments.Stores;
 using Plato.Attachments.ViewModels;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Roles.ViewModels;
-using PlatoCore.Stores.Abstractions.Roles;
-using PlatoCore.Data.Abstractions;
-using PlatoCore.Models.Roles;
-using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Stores.Roles;
+using PlatoCore.Models.Roles;
+using PlatoCore.Data.Abstractions;
+using Plato.Attachments.Extensions;
+using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Stores.Abstractions.Roles;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PlatoCore.Abstractions.Extensions;
-using Plato.Attachments.Extensions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Attachments.ViewProviders
 {
     public class AdminViewProvider : ViewProviderBase<AttachmentSetting>
     {
+
+        public static readonly long[] SizesInBytes = new long[] {
+            51200,
+            102400,
+            524288,
+            1048576,
+            2097152,
+            3145728,
+            4194304,
+            5242880,
+            10485760,
+            20971520,
+            31457280,
+            41943040,
+            52428800,
+            62914560,
+            73400320,
+            83886080,
+            94371840,
+            104857600,
+            209715200,
+            314572800,
+            419430400,
+            524288000,
+            1073741824,
+            2147483648,
+            4294967296,
+            8589934592,
+            17179869184,
+            34359738368,
+            68719476736,
+            137438953472,
+            274877906944
+        };
 
         private readonly IAttachmentSettingsStore<AttachmentSettings> _attachmentSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
@@ -98,7 +132,7 @@ namespace Plato.Attachments.ViewProviders
 
             // Build model
             var viewModel = new EditAttachmentSettingsViewModel()
-            {                
+            {
                 RoleId = role.Id,
                 Role = role,
                 AvailableSpace = availableSpace,
@@ -139,7 +173,6 @@ namespace Plato.Attachments.ViewProviders
                     AllowedExtensions = GetPostedExtensions()
                 };
 
-    
                 var result = await _attachmentSettingsStore.SaveAsync(settings);
                 if (result != null)
                 {
@@ -208,54 +241,19 @@ namespace Plato.Attachments.ViewProviders
         IEnumerable<SelectListItem> GetAvailableSpaces()
         {
 
-            var sizesInBytes = new long[] {               
-                    51200,
-                    102400,
-                    524288,
-                    1048576,
-                    2097152,
-                    3145728,
-                    4194304,
-                    5242880,
-                    10485760,
-                    20971520,
-                    31457280,
-                    41943040,
-                    52428800,
-                    62914560,
-                    73400320,
-                    83886080,
-                    94371840,
-                    104857600,
-                    209715200,
-                    314572800,
-                    419430400,
-                    524288000,
-                    1073741824,
-                    2147483648,
-                    4294967296,
-                    8589934592,
-                    17179869184,
-                    34359738368,
-                    68719476736,
-                    137438953472,
-                    274877906944
-                };
-
             var output = new List<SelectListItem>();
-            foreach (var size in sizesInBytes)
+            foreach (var size in SizesInBytes)
             {
                 output.Add(new SelectListItem
                 {
                     Text = size.ToFriendlyFileSize(),
                     Value = size.ToString()
-                }); ;
+                });
             }
 
             return output;
 
         }
-
 
     }
 
