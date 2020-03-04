@@ -64,12 +64,12 @@ namespace Plato.Roles.Controllers
 
         public async Task<IActionResult> Index(RoleIndexOptions opts, PagerOptions pager)
         {
-            
+
             // Ensuer we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageRoles))
-            //{
-            //    return Unauthorized();
-            //}
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageRoles))
+            {
+                return Unauthorized();
+            }
 
             _breadCrumbManager.Configure(builder =>
             {
@@ -130,11 +130,11 @@ namespace Plato.Roles.Controllers
         {
 
             // Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.AddRoles))
-            //{
-            //    return Unauthorized();
-            //}
-            
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.AddRoles))
+            {
+                return Unauthorized();
+            }
+
             _breadCrumbManager.Configure(builder =>
             {
                 builder.Add(S["Home"], home => home
@@ -197,11 +197,11 @@ namespace Plato.Roles.Controllers
         {
 
             // Ensuer we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditRoles))
-            //{
-            //    return Unauthorized();
-            //}
-            
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditRoles))
+            {
+                return Unauthorized();
+            }
+
             _breadCrumbManager.Configure(builder =>
             {
                 builder.Add(S["Home"], home => home

@@ -131,9 +131,11 @@
 
 .radio-icon input + span { color: #222; }
 .radio-icon input:checked + span { color: #fff; }
-.radio-icon input:checked + span:before {
+.radio-icon input:checked + span:before,
+.radio-icon input:checked + span:after {
     background-color: #007bff;
 }
+
 
 /* ------------------- */
 /* Reply Arrows */
@@ -167,6 +169,11 @@ a.label:hover, .label.active {
 /* ------------------- */
 /* Backgrounds */
 /* ------------------- */
+
+.bg-primary-75 { background: rgba(0, 123, 255, 0.75); }
+.bg-primary-50 { background: rgba(0, 123, 255, 0.50); }
+.bg-primary-25 { background: rgba(0, 123, 255, 0.25); }
+.bg-primary-10 { background: rgba(0, 123, 255, 0.10); }
 
 .bg-secondary {
     background-color: #F8F8F8 !important;

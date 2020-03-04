@@ -34,7 +34,7 @@ namespace Plato.Email
 
             // Navigation provider
             services.AddScoped<INavigationProvider, AdminMenu>();
-            
+
             // Repositories
             services.AddScoped<IEmailRepository<EmailMessage>, EmailRepository>();
 
@@ -48,7 +48,7 @@ namespace Plato.Email
 
             // Configuration
             services.AddTransient<IConfigureOptions<SmtpSettings>, SmtpSettingsConfiguration>();
-       
+
             // Services
             services.AddScoped<ISmtpService, SmtpService>();
 
