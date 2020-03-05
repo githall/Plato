@@ -1,29 +1,31 @@
 ﻿using System;
 using System.Collections.Generic;
+using Plato.Attachments.Models;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
-namespace Plato.Reports.ViewModels
+namespace Plato.Attachments.ViewModels
 {
-    public class ReportIndexViewModel<TModel> where TModel : class
+
+    public class AttachmentIndexViewModel
     {
 
-        public IPagedResults<TModel> Results { get; set; }
+        public IPagedResults<Attachment> Results { get; set; }
 
         public PagerOptions Pager { get; set; }
 
-        public ReportOptions Options { get; set; }
+        public AttachmentIndexOptions Options { get; set; }
 
         public ICollection<SortColumn> SortColumns { get; set; }
 
         public ICollection<SortOrder> SortOrder { get; set; }
 
         public ICollection<Filter> Filters { get; set; }
-        
+
     }
 
-    public class ReportOptions
-    { 
+    public class AttachmentIndexOptions
+    {
 
         public DateTimeOffset Start { get; set; } = DateTimeOffset.UtcNow.AddDays(-7);
 
@@ -100,5 +102,4 @@ namespace Plato.Reports.ViewModels
         Unanswered = 5,
         NoReplies = 6
     }
-
 }

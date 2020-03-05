@@ -1,46 +1,10 @@
-﻿@model AttachmentSettingsViewModel
+﻿@model AttachmentIndexViewModel
 @{
     var platoOpts = GetOptions<PlatoOptions>();
 }
 
-<card class="card card-body-flush">
-    <card-title>
-        <h6 class="card-title">@T["Roles"]</h6>
-    </card-title>
-    <card-body>
-        @if (Model.Results != null)
-        {
-            <ul class="list-group list-group-flush list-group-hover">
-                @foreach (var role in Model.Results.Data)
-                {
-                    <li class="list-group-item list-group-item-action">
-
-                        <h6 class="d-inline-block">
-                            <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@role.Id" class="font-weight-bold">
-                                @role.Name
-                            </a>
-                        </h6>
-
-                           <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@role.Id" class="btn btn-secondary float-right">
-                            <i class="fal fa-pencil"></i>
-                            @T["Edit"]
-                        </a>
-
-                    </li>
-                }
-            </ul>
-        }
-        else
-        {
-            <ul class="list-group list-group-flush list-group-hover">
-                <li class="list-group-item">
-                    <h6>@T["No roles found"]</h6>
-                </li>
-            </ul>
-        }
-    </card-body>
-</card>
-
-<div class="my-4">
-    <pager model="@Model.Pager"></pager>
-</div>
+@await DisplayAsync(new View("AttachmentList", new
+{
+    options = Model.Options,
+    pager = Model.Pager
+}))

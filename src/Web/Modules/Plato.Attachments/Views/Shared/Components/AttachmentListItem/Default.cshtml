@@ -1,0 +1,32 @@
+﻿@model AttachmentListItemViewModel
+
+@{ 
+    var viewText = Model.Attachment.TotalViews == 1 ? T["view"] : T["views"];    
+    var extension = System.IO.Path.GetExtension(Model.Attachment.Name);
+    var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
+    var views = $"{Model.Attachment.TotalViews.ToPrettyInt()} {viewText.Value}";
+}
+
+<div>
+    @if (!string.IsNullOrEmpty(iconCss))
+    {
+        <span class="fiv-sqo @iconCss align-middle mr-1"></span>
+    }
+    <a href="#" class="font-weight-bold align-middle">
+        @Model.Attachment.Name
+    </a>
+</div>
+<div class="text-muted">
+    <ul class="list-inline">
+        <li class="list-inline-item">
+            @Model.Attachment.ContentLength.ToFriendlyFileSize()
+        </li>
+        <li class="list-inline-item">
+            @views
+        </li>
+        <li class="list-inline-item">
+            @T["Added"] <date utc="Model.Attachment.CreatedDate"></date>
+        </li>
+    </ul>  
+
+</div>

@@ -23,7 +23,7 @@ namespace Plato.Features.Navigation
             }
 
             builder
-                .Add(T["Features"], int.MaxValue - 5, features => features
+                .Add(T["Features"], int.MaxValue - 10, features => features
                     .IconCss("fal fa-cube")
                     .Add(T["Manage"], 1, manage => manage
                         .Action("Index", "Admin", "Plato.Features", new RouteValueDictionary()

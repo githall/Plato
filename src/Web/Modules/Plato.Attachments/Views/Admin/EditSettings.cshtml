@@ -1,12 +1,12 @@
 ﻿@model LayoutViewModel
 @{
     AddTitleSegment(T["Admin"]);
-    AddTitleSegment(T["Settings"]);
     AddTitleSegment(T["Attachments"]);
+    AddTitleSegment(T["Settings"]);
     AddTitleSegment(T["Edit"]);
 }
 
-<form asp-route-action="Edit" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+<form asp-route-action="EditSettings" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
     <div class="layout">
         <div class="layout-header">
             <div class="layout-header-content">

@@ -21,7 +21,7 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Attachments.ViewProviders
 {
-    public class AdminViewProvider : ViewProviderBase<AttachmentSetting>
+    public class AttachmentSettingsViewProvider : ViewProviderBase<AttachmentSetting>
     {
 
         public static readonly long[] SizesInBytes = new long[] {
@@ -59,7 +59,7 @@ namespace Plato.Attachments.ViewProviders
         };
 
         private readonly IAttachmentSettingsStore<AttachmentSettings> _attachmentSettingsStore;        
-        private readonly ILogger<AdminViewProvider> _logger;
+        private readonly ILogger<AttachmentSettingsViewProvider> _logger;
         private readonly IPlatoRoleStore _platoRoleStore;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
@@ -68,11 +68,11 @@ namespace Plato.Attachments.ViewProviders
 
         public const string ExtensionHtmlName = "extension";
 
-        public AdminViewProvider(
+        public AttachmentSettingsViewProvider(
             IAttachmentSettingsStore<AttachmentSettings> attachmentSettingsStore,
             IHttpContextAccessor httpContextAccessor,     
             IPlatoRoleStore platoRoleStore,
-            ILogger<AdminViewProvider> logger,
+            ILogger<AttachmentSettingsViewProvider> logger,
             IShellSettings shellSettings,     
             IPlatoHost platoHost)
         {
@@ -96,9 +96,9 @@ namespace Plato.Attachments.ViewProviders
             viewModel.Results = await GetRoles(viewModel.Options, viewModel.Pager);
 
             return Views(
-                View<AttachmentSettingsViewModel>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<AttachmentSettingsViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
-                View<AttachmentSettingsViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
+                View<AttachmentSettingsViewModel>("Admin.Settings.Header", model => viewModel).Zone("header").Order(1),
+                View<AttachmentSettingsViewModel>("Admin.Settings.Tools", model => viewModel).Zone("tools").Order(1),
+                View<AttachmentSettingsViewModel>("Admin.Settings.Content", model => viewModel).Zone("content").Order(1)
             );
 
         }
@@ -143,9 +143,9 @@ namespace Plato.Attachments.ViewProviders
 
             // Build view
             return Views(
-                View<EditAttachmentSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
-                View<EditAttachmentSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools").Order(1),
-                View<EditAttachmentSettingsViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1)
+                View<EditAttachmentSettingsViewModel>("Admin.EditSettings.Header", model => viewModel).Zone("header").Order(1),
+                View<EditAttachmentSettingsViewModel>("Admin.EditSettings.Tools", model => viewModel).Zone("tools").Order(1),
+                View<EditAttachmentSettingsViewModel>("Admin.EditSettings.Content", model => viewModel).Zone("content").Order(1)
             );
 
         }

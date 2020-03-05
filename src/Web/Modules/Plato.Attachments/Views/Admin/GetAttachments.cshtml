@@ -1,0 +1,11 @@
+﻿@model AttachmentIndexViewModel
+@{
+    Layout = null;
+}
+
+@await DisplayAsync(new View("GetAttachmentList", new
+{
+    options = Model.Options,
+    pager = Model.Pager
+}))
+

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
@@ -238,7 +239,7 @@ namespace Plato.Attachments.Stores
             if (_query.SortColumns.Count == 0) return null;
             var sb = new StringBuilder();
             var i = 0;
-            foreach (var sortColumn in _query.SortColumns)
+            foreach (var sortColumn in GetSafeSortColumns())
             {
                 sb.Append(GetQualifiedColumnName(sortColumn.Key));
                 if (sortColumn.Value != OrderBy.Asc)
@@ -248,6 +249,52 @@ namespace Plato.Attachments.Stores
                 i += 1;
             }
             return sb.ToString();
+        }
+
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
+        {
+            var output = new Dictionary<string, OrderBy>();
+            foreach (var sortColumn in _query.SortColumns)
+            {
+                var columnName = GetSortColumn(sortColumn.Key);
+                if (String.IsNullOrEmpty(columnName))
+                {
+                    throw new Exception($"No sort column could be found for the supplied key of '{sortColumn.Key}'");
+                }
+                output.Add(columnName, sortColumn.Value);
+
+            }
+
+            return output;
+        }
+
+
+        private string GetSortColumn(string columnName)
+        {
+
+            if (String.IsNullOrEmpty(columnName))
+            {
+                return string.Empty;
+            }
+
+            switch (columnName.ToLowerInvariant())
+            {
+                case "id":
+                    return "a.Id";
+                case "featureid":
+                    return "a.FeatureId";
+                case "name":
+                    return "a.[Name]";            
+                case "createduserid":
+                    return "a.CreatedUserId";
+                case "created":
+                    return "a.CreatedDate";
+                case "createddate":
+                    return "a.CreatedDate";
+            }
+
+            return string.Empty;
+
         }
 
         #endregion
