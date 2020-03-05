@@ -55,7 +55,9 @@ namespace Plato.Attachments
 
             // View providers
             services.AddScoped<IViewProviderManager<AttachmentSetting>, ViewProviderManager<AttachmentSetting>>();
-            services.AddScoped<IViewProvider<AttachmentSetting>, AdminViewProvider>();
+            services.AddScoped<IViewProvider<AttachmentSetting>, AttachmentSettingsViewProvider>();
+            services.AddScoped<IViewProviderManager<AttachmentIndex>, ViewProviderManager<AttachmentIndex>>();
+            services.AddScoped<IViewProvider<AttachmentIndex>, AttachmentIndexViewProvider>();
 
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
@@ -73,16 +75,24 @@ namespace Plato.Attachments
             routes.MapAreaRoute(
                 name: "AttachmentsIndex",
                 areaName: "Plato.Attachments",
-                template: "admin/settings/attachments",
+                template: "admin/attachments",
                 defaults: new { controller = "Admin", action = "Index" }
             );
 
-            // Edit
+            // Settings
             routes.MapAreaRoute(
-                name: "AttachmentsEdit",
+                name: "AttachmentsSettings",
                 areaName: "Plato.Attachments",
-                template: "admin/settings/attachments/edit/{id:int}",
-                defaults: new { controller = "Admin", action = "Edit" }
+                template: "admin/attachments/settings",
+                defaults: new { controller = "Admin", action = "Settings" }
+            );
+
+            // EditSettings
+            routes.MapAreaRoute(
+                name: "AttachmentsEditSettings",
+                areaName: "Plato.Attachments",
+                template: "admin/attachments/settings/{id:int}",
+                defaults: new { controller = "Admin", action = "EditSettings" }
             );
 
             // Display

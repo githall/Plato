@@ -21,12 +21,16 @@ namespace Plato.Attachments.Navigation
             }
 
             builder
-                .Add(T["Settings"], int.MaxValue, configuration => configuration
-                    .IconCss("fal fa-paper-clip")
-                    .Add(T["Attachments"], int.MinValue + 30, installed => installed
+                .Add(T["Attachments"], int.MaxValue - 15, configuration => configuration
+                    .IconCss("fal fa-paperclip")
+                    .Add(T["Manage"], int.MinValue + 30, installed => installed
                         .Action("Index", "Admin", "Plato.Attachments")
                         .Permission(Permissions.ManageAttachmentSettings)
                         .LocalNav()
+                    ).Add(T["Settings"], int.MinValue + 30, installed => installed
+                       .Action("Settings", "Admin", "Plato.Attachments")
+                       .Permission(Permissions.ManageAttachmentSettings)
+                       .LocalNav()
                     ));
 
         }
