@@ -1,5 +1,4 @@
-﻿using Microsoft.Extensions.Logging;
-using Microsoft.Extensions.Options;
+﻿using Microsoft.Extensions.Options;
 using Plato.Attachments.Models;
 using Plato.Attachments.Stores;
 
@@ -10,19 +9,14 @@ namespace Plato.Attachments.Configuration
     {
 
         private readonly IAttachmentSettingsStore<AttachmentSettings> _attachmentSettingsStore;
-        private readonly ILogger<AttachmentSettingsConfiguration> _logger;   
 
-        public AttachmentSettingsConfiguration(
-            IAttachmentSettingsStore<AttachmentSettings> attachmentSettingsStore,            
-            ILogger<AttachmentSettingsConfiguration> logger)
+        public AttachmentSettingsConfiguration(IAttachmentSettingsStore<AttachmentSettings> attachmentSettingsStore)
         {
-            _attachmentSettingsStore = attachmentSettingsStore;     
-            _logger = logger;
+            _attachmentSettingsStore = attachmentSettingsStore;             
         }
 
         public void Configure(AttachmentSettings options)
         {
-
             var settings = _attachmentSettingsStore
                 .GetAsync()
                 .GetAwaiter()
@@ -30,11 +24,7 @@ namespace Plato.Attachments.Configuration
 
             if (settings != null)
             {
-                options = settings;
-            }
-            else
-            {
-
+                options.Settings = settings.Settings;                
             }
 
         }

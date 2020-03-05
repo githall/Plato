@@ -1,9 +1,10 @@
 ﻿namespace Plato.Attachments.Models
 {
+
     public static class DefaultExtensions
     {
 
-        private static readonly string[] _extensions = new string[]
+        public static string[] Extensions { get; } = new string[]
         {
             "3g2",
             "3ga",
@@ -412,19 +413,15 @@
             "zsh"
         };
 
-
-        private static readonly string[] _allowedExtensions = new string[]
+        public static string[] AllowedExtensions { get; } = new string[]
         {
             "bmp",
             "config",
             "doc",
-            "docx",            
+            "docx",
             "gif",
-            "htm",
-            "html",
-            "ini",            
+            "ini",
             "log",
-            "pdf",
             "png",
             "jpg",
             "jpeg",
@@ -435,10 +432,6 @@
             "xlsx",
             "yaml"
         };
-
-        public static string[] Extensions => _extensions;
-
-        public static string[] AllowedExtensions => _allowedExtensions;
 
     }
 
