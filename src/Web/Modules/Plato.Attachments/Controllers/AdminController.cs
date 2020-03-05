@@ -11,6 +11,7 @@ using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
+using PlatoCore.Models.Roles;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
@@ -105,14 +106,14 @@ namespace Plato.Attachments.Controllers
                 this.RouteData.Values.Add("pager.size", pager.Size);
 
             // Build view model
-            var viewModel = new AttachmentsIndexViewModel()
+            var viewModel = new AttachmentSettingsViewModel()
             {
                 Options = opts,
                 Pager = pager
             };
 
             // Add view model to context
-            this.HttpContext.Items[typeof(AttachmentsIndexViewModel)] = viewModel;
+            this.HttpContext.Items[typeof(AttachmentSettingsViewModel)] = viewModel;
 
             // Return view
             return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new AttachmentSetting(), this));
@@ -159,13 +160,11 @@ namespace Plato.Attachments.Controllers
                 ).Add(S[role.Name]);
             });
 
-            var model = new AttachmentSetting()
-            {
-                RoleId = role.Id
-            };
+            // Add view model to context
+            this.HttpContext.Items[typeof(Role)] = role;
 
             // Return view
-            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(model, this));
+            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new AttachmentSetting(), this));
 
         }
 
@@ -178,6 +177,17 @@ namespace Plato.Attachments.Controllers
             {
                 return Unauthorized();
             }
+
+            // Get role
+            var role = await _platoRoleStore.GetByIdAsync(viewModel.RoleId);
+
+            if (role == null)
+            {
+                return NotFound();
+            }
+
+            // Add view model to context
+            this.HttpContext.Items[typeof(Role)] = role;
 
             // Execute view providers ProvideUpdateAsync method
             await _viewProvider.ProvideUpdateAsync(new AttachmentSetting(), this);

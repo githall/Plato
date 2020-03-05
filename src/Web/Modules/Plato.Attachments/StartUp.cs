@@ -50,6 +50,9 @@ namespace Plato.Attachments
             services.AddScoped<IAttachmentStore<Attachment>, AttachmentStore>();
             services.AddScoped<IAttachmentSettingsStore<AttachmentSettings>, AttachmentSettingsStore>();
 
+            // Configuration
+            services.AddSingleton<IConfigureOptions<AttachmentSettings>, AttachmentSettingsConfiguration>();
+
             // View providers
             services.AddScoped<IViewProviderManager<AttachmentSetting>, ViewProviderManager<AttachmentSetting>>();
             services.AddScoped<IViewProvider<AttachmentSetting>, AdminViewProvider>();
@@ -57,8 +60,6 @@ namespace Plato.Attachments
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
             
-            // Configuration
-            services.AddTransient<IConfigureOptions<AttachmentSettings>, AttachmentSettingsConfiguration>();
 
         }
 

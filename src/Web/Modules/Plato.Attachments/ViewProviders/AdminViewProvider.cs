@@ -87,18 +87,18 @@ namespace Plato.Attachments.ViewProviders
         public override async Task<IViewProviderResult> BuildIndexAsync(AttachmentSetting settings, IViewProviderContext context)
         {
 
-            var viewModel = context.Controller.HttpContext.Items[typeof(AttachmentsIndexViewModel)] as AttachmentsIndexViewModel;
+            var viewModel = context.Controller.HttpContext.Items[typeof(AttachmentSettingsViewModel)] as AttachmentSettingsViewModel;
             if (viewModel == null)
             {
-                throw new Exception($"A view model of type {typeof(AttachmentsIndexViewModel).ToString()} has not been registered on the HttpContext!");
+                throw new Exception($"A view model of type {typeof(AttachmentSettingsViewModel).ToString()} has not been registered on the HttpContext!");
             }
 
             viewModel.Results = await GetRoles(viewModel.Options, viewModel.Pager);
 
             return Views(
-                View<AttachmentsIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<AttachmentsIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
-                View<AttachmentsIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
+                View<AttachmentSettingsViewModel>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
+                View<AttachmentSettingsViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<AttachmentSettingsViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             );
 
         }
@@ -111,16 +111,15 @@ namespace Plato.Attachments.ViewProviders
         public override async Task<IViewProviderResult> BuildEditAsync(AttachmentSetting setting, IViewProviderContext context)
         {
 
-            var role = await _platoRoleStore.GetByIdAsync(setting.RoleId);
-
+            var role = context.Controller.HttpContext.Items[typeof(Role)] as Role;
             if (role == null)
             {
-                return default(IViewProviderResult);
+                throw new Exception($"A view model of type {typeof(Role).ToString()} has not been registered on the HttpContext!");
             }
 
             // Defaults
-            long availableSpace = 0;
-            var allowedExtensions = DefaultExtensions.AllowedExtensions;
+            long availableSpace = DefaultAttachmentSettings.AvailableSpace;
+            var allowedExtensions = DefaultAttachmentSettings.AllowedExtensions;
 
             // Populate settings
             var settings = await _attachmentSettingsStore.GetByRoleIdAsync(role.Id);
@@ -166,9 +165,11 @@ namespace Plato.Attachments.ViewProviders
             if (context.Updater.ModelState.IsValid)
             {
 
+                var role = await _platoRoleStore.GetByIdAsync(model.RoleId);
+
                 settings = new AttachmentSetting()
                 {
-                    RoleId = model.RoleId,
+                    RoleId = role.Id,
                     AvailableSpace = model.AvailableSpace,
                     AllowedExtensions = GetPostedExtensions()
                 };

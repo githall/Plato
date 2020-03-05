@@ -5,14 +5,14 @@ using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Attachments.ViewModels
 {
-    public class AttachmentsIndexViewModel : RolesIndexViewModel
+    public class AttachmentSettingsViewModel : RolesIndexViewModel
     {
 
-        public AttachmentsIndexViewModel()
+        public AttachmentSettingsViewModel()
         {
         }
 
-        public AttachmentsIndexViewModel(
+        public AttachmentSettingsViewModel(
             IPagedResults<Role> results,
             RoleIndexOptions options,
             PagerOptions pager) : base(results, options, pager)

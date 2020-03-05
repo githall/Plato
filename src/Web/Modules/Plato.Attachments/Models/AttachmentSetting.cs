@@ -9,23 +9,6 @@ namespace Plato.Attachments.Models
 
         public IEnumerable<AttachmentSetting> Settings { get; set; }
 
-        public bool Contains(AttachmentSetting comparer)
-        {
-            if (Settings == null)
-            {
-                return false;
-            }
-
-            foreach (var setting in Settings)
-            {
-                if (setting.RoleId == comparer.RoleId)
-                {
-                    return true;
-                }
-            }
-            return false;
-        }
-
     }
 
     public class AttachmentSetting : Serializable

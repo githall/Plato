@@ -11,16 +11,16 @@ namespace Plato.Twitter.Configuration
     public class PlatoTwitterOptionsConfiguration : IConfigureOptions<PlatoTwitterOptions>
     {
 
-        private readonly ITwitterSettingsStore<PlatoTwitterSettings> _TwitterSettingsStore;        
+        private readonly ITwitterSettingsStore<PlatoTwitterSettings> _twitterSettingsStore;        
         private readonly ILogger<PlatoTwitterOptionsConfiguration> _logger;
         private readonly IEncrypter _encrypter;
 
         public PlatoTwitterOptionsConfiguration(
-            ITwitterSettingsStore<PlatoTwitterSettings> TwitterSettingsStore,
+            ITwitterSettingsStore<PlatoTwitterSettings> twitterSettingsStore,
             ILogger<PlatoTwitterOptionsConfiguration> logger,
             IEncrypter encrypter)
         {
-            _TwitterSettingsStore = TwitterSettingsStore;            
+            _twitterSettingsStore = twitterSettingsStore;            
             _encrypter = encrypter;
             _logger = logger;
         }
@@ -28,7 +28,7 @@ namespace Plato.Twitter.Configuration
         public void Configure(PlatoTwitterOptions options)
         {
 
-            var settings = _TwitterSettingsStore
+            var settings = _twitterSettingsStore
                 .GetAsync()
                 .GetAwaiter()
                 .GetResult();

@@ -1,6 +1,8 @@
 ﻿@model EntityAttachmentOptions
 @{
     var settings = GetOptions<AttachmentSettings>();
+    var allowedExtensions = settings.GetAllowedExtensions(CurrentUser);
+    var availableSpace = settings.GetAvailableSpace(CurrentUser);
     var uploadUrl = GetRouteUrl(new RouteValueDictionary()
     {
         ["area"] = "Plato.Attachments",
@@ -24,15 +26,18 @@
         ["opts.guid"] = Model.Guid,
         ["opts.entityId"] = Model.EntityId
     });
-
-    var allowedExtensions = settings.GetAllowedExtensions(CurrentUser);
-
-
 }
 
 <input type="hidden" name="@Model.GuidHtmlName" asp-for="Guid" />
 
-@allowedExtensions.ToDelimitedString().Replace(",", ", ")
+<p>
+    @allowedExtensions?.ToDelimitedString()?.Replace(",", ", ")
+</p>
+
+
+<p>
+    @availableSpace.ToFriendlyFileSize()
+</p>
 
 <div class="card card-body-flush" data-provide="attachments">
     <div class="card-header p-0 dropdown list-group-flush">
