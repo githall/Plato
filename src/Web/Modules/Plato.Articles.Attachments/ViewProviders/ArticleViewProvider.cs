@@ -15,6 +15,7 @@ using PlatoCore.Text.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.Attachments.ViewModels;
+using PlatoCore.Features.Abstractions;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {
@@ -30,6 +31,7 @@ namespace Plato.Articles.Attachments.ViewProviders
         private readonly IEntityStore<Article> _entityStore;
         private readonly IContextFacade _contextFacade;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly IFeatureFacade _featureFacade;
         private readonly HttpRequest _request;
 
         public ArticleViewProvider(
@@ -37,15 +39,17 @@ namespace Plato.Articles.Attachments.ViewProviders
             IAttachmentStore<Attachment> attachmentStore,
             IAuthorizationService authorizationService,
             IHttpContextAccessor httpContextAccessor,
-            IEntityStore<Article> entityStore,
-            IKeyGenerator keyGenerator,
-            IContextFacade contextFacade)
+            IEntityStore<Article> entityStore,            
+            IFeatureFacade featureFacade,
+            IContextFacade contextFacade,
+            IKeyGenerator keyGenerator)
         {            
             _request = httpContextAccessor.HttpContext.Request;
             _entityAttachmentStore = entityAttachmentStore;
             _authorizationService = authorizationService;
             _attachmentStore = attachmentStore;
             _contextFacade = contextFacade;
+            _featureFacade = featureFacade;
             _keyGenerator = keyGenerator;
             _entityStore = entityStore;
         }
@@ -102,9 +106,17 @@ namespace Plato.Articles.Attachments.ViewProviders
                 return await BuildIndexAsync(new Article(), context);
             }
 
+            var featureId = 0; 
             var entityId = entity.Id;
             var contentGuid = string.Empty;
-            var user = await _contextFacade.GetAuthenticatedUserAsync();
+            var user = await _contextFacade.GetAuthenticatedUserAsync();            
+
+            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Articles.Attachments");
+
+            if (feature != null)
+            {
+                featureId = feature.Id;
+            }
 
             // Use posted guid if available
             var postedGuid = PostedGuidValue();
@@ -127,6 +139,7 @@ namespace Plato.Articles.Attachments.ViewProviders
             return Views(
                 View<EntityAttachmentOptions>("Attachments.Edit.Sidebar", model =>
                 {
+                    model.FeatureId = featureId;
                     model.EntityId = entityId;
                     model.Guid = contentGuid;
                     model.GuidHtmlName = GuidHtmlName;

@@ -1,32 +1,45 @@
 ﻿@model AttachmentListItemViewModel
 
-@{ 
-    var viewText = Model.Attachment.TotalViews == 1 ? T["view"] : T["views"];    
+@{
+    var viewText = Model.Attachment.TotalViews == 1 ? T["view"] : T["views"];
     var extension = System.IO.Path.GetExtension(Model.Attachment.Name);
     var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
     var views = $"{Model.Attachment.TotalViews.ToPrettyInt()} {viewText.Value}";
 }
 
-<div>
-    @if (!string.IsNullOrEmpty(iconCss))
-    {
-        <span class="fiv-sqo @iconCss align-middle mr-1"></span>
-    }
-    <a href="#" class="font-weight-bold align-middle">
-        @Model.Attachment.Name
-    </a>
-</div>
-<div class="text-muted">
-    <ul class="list-inline">
-        <li class="list-inline-item">
-            @Model.Attachment.ContentLength.ToFriendlyFileSize()
-        </li>
-        <li class="list-inline-item">
-            @views
-        </li>
-        <li class="list-inline-item">
-            @T["Added"] <date utc="Model.Attachment.CreatedDate"></date>
-        </li>
-    </ul>  
+
+@if (Model.Attachment.CreatedBy != null)
+{
+    <div class="list-left text-center">
+        <a asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Attachment.CreatedUserId" asp-route-opts.alias="@Model.Attachment.CreatedBy.Alias">    <avatar data-toggle="tooltip" title="@Model.Attachment.CreatedBy.DisplayName" class="avatar avatar-sm" url="@Model.Attachment.CreatedBy.Avatar.Url" /></a>
+    </div>
+}
+<div class="list-body">
+
+    <span title="@extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo float-right @iconCss"></span>
+
+    <div>
+
+        <a href="#" class="font-weight-bold">
+            @Model.Attachment.Name
+        </a>
+    </div>
+    <div>
+        <ul class="list-inline text-muted">
+            <li class="list-inline-item">
+                @Model.Attachment.ContentLength.ToFriendlyFileSize()
+            </li>
+            <li class="list-inline-item">
+                @views
+            </li>
+            <li class="list-inline-item">
+                @T["Added"] <date utc="Model.Attachment.CreatedDate"></date>
+            </li>
+        </ul>
+    </div>
 
 </div>
+
+
+
+

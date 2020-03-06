@@ -34,11 +34,10 @@
                 <br />
                 <span class="text-muted">@T["Control the file types each user within this role can upload"]</span>
             </label>
-            <a href="#selectExtensionModal" data-toggle="modal" data-target="#selectExtensionModal" role="button">
-                <input readonly="readonly" value="@allowedExtensions" class="form-control" />
+            <a href="#selectExtensionModal" data-toggle="modal" class="form-control text-decoration-none" data-target="#selectExtensionModal" role="button">
+                @allowedExtensions
             </a>
         </div>
-
     </card-body>
 </card>
 
@@ -56,7 +55,7 @@
         {
             <button class="btn btn-primary" type="submit">@T["Save"]</button>
         }
-        <a class="btn btn-secondary" asp-route-action="Index">@T["Cancel"]</a>
+        <a class="btn btn-secondary" asp-route-action="Settings">@T["Cancel"]</a>
     </card-footer>
 </card>
 
@@ -64,7 +63,7 @@
     <div class="modal-dialog modal-dialog-centered" role="document" style="min-width: 90%;">
         <div class="modal-content">
             <div class="modal-header">
-                <h6 class="modal-title">@T["Settings"]</h6>
+                <h6 class="modal-title">@T["Allowed Extensions"]</h6>
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
@@ -96,7 +95,6 @@
                                         <span><i class="@css"></i></span>
                                     </span>
                                 </span>
-
                             </span>
                         </label>
 

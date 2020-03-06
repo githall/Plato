@@ -127,6 +127,7 @@ namespace Plato.Attachments.Repositories
         {
             var id = await InsertUpdateInternal(
                 model.Id,
+                model.FeatureId,
                 model.Name,
                 model.ContentBlob,
                 model.ContentType,
@@ -179,6 +180,7 @@ namespace Plato.Attachments.Repositories
 
         private async Task<int> InsertUpdateInternal(
             int id,
+            int featureId,
             string name,
             byte[] contentBlob,
             string contentType,
@@ -201,6 +203,7 @@ namespace Plato.Attachments.Repositories
                     new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
+                        new DbParam("FeatureId", DbType.Int32, featureId),
                         new DbParam("Name", DbType.String, 255, name.ToSafeFileName().ToEmptyIfNull()),
                         new DbParam("ContentBlob", DbType.Binary, contentBlob ?? new byte[0]),
                         new DbParam("ContentType", DbType.String, 75, contentType.ToEmptyIfNull()),

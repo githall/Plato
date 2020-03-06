@@ -26,6 +26,7 @@ namespace Plato.Attachments.Controllers
     {
 
         public const string GuidKey = "guid";
+        public const string FeatureIdKey = "featureId";
 
         private static readonly string[] SupportedImageContentTypes = new string[]
         {
@@ -88,6 +89,8 @@ namespace Plato.Attachments.Controllers
             {
                 return BadRequest($"A \"{GuidKey}\" query string parameter is required!");
             }
+
+            var ok = int.TryParse(Request.Query[FeatureIdKey], out var featureId);
 
             var guid = Request.Query[GuidKey];
             if (string.IsNullOrEmpty(guid))
@@ -195,6 +198,7 @@ namespace Plato.Attachments.Controllers
             // Store media
             var attachment = await _attachmentStore.CreateAsync(new Attachment
             {
+                FeatureId = featureId,
                 Name = name,
                 ContentType = contentType,
                 ContentLength = contentLength,

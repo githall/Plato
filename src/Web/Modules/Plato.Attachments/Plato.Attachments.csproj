@@ -6,32 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Views\Admin\GetAttachments.cshtml" />
-    <None Remove="Views\Shared\Components\GetAttachmentList\Default.cshtml" />
-    <None Remove="Views\Shared\Components\AttachmentListItem\Default.cshtml" />
-    <None Remove="Views\Shared\Components\AttachmentList\Default.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Views\Admin\GetAttachments.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\Components\GetAttachmentList\Default.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\Components\AttachmentListItem\Default.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\Components\AttachmentList\Default.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Core\PlatoCore.csproj" />
     <ProjectReference Include="..\Plato.Roles\Plato.Roles.csproj" />
     <ProjectReference Include="..\Plato.WebApi\Plato.WebApi.csproj" />

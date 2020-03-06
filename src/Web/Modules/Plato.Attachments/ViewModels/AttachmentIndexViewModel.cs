@@ -84,12 +84,13 @@ namespace Plato.Attachments.ViewModels
     {
         Id = 1,
         FeatureId = 2,
-        Title = 3,
-        Url = 4,
-        IpV4Address = 5,
-        IpV6Address = 6,
-        UserAgent = 7,
-        Created = 8
+        Name = 3,
+        Type = 4,
+        Size = 5,
+        Uniqueness = 6,
+        Views = 7,
+        CreatedUserId = 8,
+        Created = 9,
     }
 
     public enum FilterBy

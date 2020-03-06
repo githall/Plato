@@ -93,17 +93,21 @@ namespace Plato.Entities.Attachments.Stores
     {
 
         #region "Constructor"
-
-        private readonly string _attachmentsTableName;
+  
         private readonly string _entityAttachmentsTableName;
+        private readonly string _shellFeaturesTableName;
+        private readonly string _attachmentsTableName;
+        private readonly string _usersTableName;
 
         private readonly EntityAttachmentQuery _query;
 
         public EntityAttachmentQueryBuilder(EntityAttachmentQuery query)
         {
-            _query = query;
+            _query = query;            
+            _entityAttachmentsTableName = GetTableNameWithPrefix("EntityAttachments");            
+            _shellFeaturesTableName = GetTableNameWithPrefix("ShellFeatures");
             _attachmentsTableName = GetTableNameWithPrefix("Attachments");
-            _entityAttachmentsTableName = GetTableNameWithPrefix("EntityAttachments");
+            _usersTableName = GetTableNameWithPrefix("Users");
         }
 
         #endregion
@@ -159,7 +163,28 @@ namespace Plato.Entities.Attachments.Stores
                 .Append("a.ContentLength, ")
                 .Append("a.ContentGuid, ")
                 .Append("a.ContentCheckSum, ")
-                .Append("a.TotalViews ");
+                .Append("a.TotalViews, ")
+                .Append("f.ModuleId, ")
+                .Append("c.UserName AS CreatedUserName, ")
+                .Append("c.DisplayName AS CreatedDisplayName, ")
+                .Append("c.Alias AS CreatedAlias, ")
+                .Append("c.PhotoUrl AS CreatedPhotoUrl, ")
+                .Append("c.PhotoColor AS CreatedPhotoColor, ")
+                .Append("c.SignatureHtml AS CreatedSignatureHtml, ")
+                .Append("c.IsVerified AS CreatedIsVerified, ")
+                .Append("c.IsStaff AS CreatedIsStaff, ")
+                .Append("c.IsSpam AS CreatedIsSpam, ")
+                .Append("c.IsBanned AS CreatedIsBanned, ")
+                .Append("m.UserName AS ModifiedUserName, ")
+                .Append("m.DisplayName AS ModifiedDisplayName, ")
+                .Append("m.Alias AS ModifiedAlias, ")
+                .Append("m.PhotoUrl AS ModifiedPhotoUrl, ")
+                .Append("m.PhotoColor AS ModifiedPhotoColor, ")
+                .Append("m.SignatureHtml AS ModifiedSignatureHtml, ")
+                .Append("m.IsVerified AS ModifiedIsVerified, ")
+                .Append("m.IsStaff AS ModifiedIsStaff, ")
+                .Append("m.IsSpam AS ModifiedIsSpam, ")
+                .Append("m.IsBanned AS ModifiedIsBanned");
             return sb.ToString();
 
         }
@@ -168,10 +193,30 @@ namespace Plato.Entities.Attachments.Stores
         {
             var sb = new StringBuilder();
             sb.Append(_entityAttachmentsTableName)
-                .Append(" ea INNER JOIN ")
+                .Append(" ea ");
+                
+            // join attachments
+            sb.Append("INNER JOIN ")
                 .Append(_attachmentsTableName)
                 .Append(" a ON ea.AttachmentId = a.Id ");
+
+            // join shell features
+            sb.Append("LEFT OUTER JOIN ")
+                .Append(_shellFeaturesTableName)
+                .Append(" f ON a.FeatureId = f.Id ");
+
+            // join created user
+            sb.Append("LEFT OUTER JOIN ")
+                .Append(_usersTableName)
+                .Append(" c ON a.CreatedUserId = c.Id ");
+
+            // join last modified user
+            sb.Append("LEFT OUTER JOIN ")
+                .Append(_usersTableName)
+                .Append(" m ON a.ModifiedUserId = m.Id ");
+
             return sb.ToString();
+
         }
 
         private string GetTableNameWithPrefix(string tableName)
