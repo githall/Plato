@@ -44,6 +44,7 @@ namespace Plato.Attachments.Controllers
             "application/octet-stream"
         };
 
+        private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
         private readonly ILogger<StreamingController> _logger;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
 
@@ -51,10 +52,12 @@ namespace Plato.Attachments.Controllers
         // to set the default limits for request body data
         private readonly FormOptions _defaultFormOptions = new FormOptions();
 
-        public StreamingController(            
+        public StreamingController(      
+            IAttachmentOptionsFactory attachmentOptionsFactory,
             IAttachmentStore<Attachment> attachmentStore,
             ILogger<StreamingController> logger)
-        {       
+        {
+            _attachmentOptionsFactory = attachmentOptionsFactory;
             _attachmentStore = attachmentStore;
             _logger = logger;
         }
@@ -91,7 +94,6 @@ namespace Plato.Attachments.Controllers
             }
 
             var ok = int.TryParse(Request.Query[FeatureIdKey], out var featureId);
-
             var guid = Request.Query[GuidKey];
             if (string.IsNullOrEmpty(guid))
             {
@@ -192,34 +194,67 @@ namespace Plato.Attachments.Controllers
                 return BadRequest($"Could not obtain a byte array for the uploaded file.");
             }
 
-            // Get MD5 checksum
-            var checkSum = bytes?.ToMD5().ToHex() ?? string.Empty;
+            // Get attachment options
+            var attachmentOptions = await _attachmentOptionsFactory.GetSettingsAsync();
+            var validExtension = true;
+            var validSize = bytes.Length <= attachmentOptions.MaxFileSize;
 
-            // Store media
-            var attachment = await _attachmentStore.CreateAsync(new Attachment
+            if (validExtension && validSize)
             {
-                FeatureId = featureId,
-                Name = name,
-                ContentType = contentType,
-                ContentLength = contentLength,
-                ContentBlob = bytes,
-                ContentGuid = guid,
-                ContentCheckSum = checkSum,
-                CreatedUserId = user.Id
-            });
 
-            // Build friendly results
-            if (attachment != null)
-            {
-                output.Add(new UploadedFile()
+                // Get MD5 checksum
+                var checkSum = bytes?.ToMD5().ToHex() ?? string.Empty;
+
+                // Store attachment
+                var attachment = await _attachmentStore.CreateAsync(new Attachment
                 {
-                    Id = attachment.Id,
-                    Name = attachment.Name,
-                    FriendlySize = attachment.ContentLength.ToFriendlyFileSize(),
-                    IsImage = IsContentTypeSupported(attachment.ContentType, SupportedImageContentTypes),
-                    IsBinary = IsContentTypeSupported(attachment.ContentType, SupportedBinaryContentTypes),
+                    FeatureId = featureId,
+                    Name = name,
+                    ContentType = contentType,
+                    ContentLength = contentLength,
+                    ContentBlob = bytes,
+                    ContentGuid = guid,
+                    ContentCheckSum = checkSum,
+                    CreatedUserId = user.Id
                 });
+
+                // Build friendly results
+                if (attachment != null)
+                {
+                    output.Add(new UploadedFile()
+                    {
+                        Id = attachment.Id,
+                        Name = attachment.Name,
+                        FriendlySize = attachment.ContentLength.ToFriendlyFileSize(),
+                        IsImage = IsContentTypeSupported(attachment.ContentType, SupportedImageContentTypes),
+                        IsBinary = IsContentTypeSupported(attachment.ContentType, SupportedBinaryContentTypes),
+                    });
+                }
+
             }
+            else
+            {
+
+                // File to large
+                if (!validSize)
+                {
+                    output.Add(new UploadedFile()
+                    {
+                        Name = name,
+                        Error = $"The file \"{name}\" exceeds the maximum size allowed for individual uploads!"
+                    });
+                }
+
+                // Invalid extension
+                if (!validExtension)
+                {
+                    output.Add(new UploadedFile()
+                    {
+                        Name = name,
+                        Error = $"The file \"{name}\" is not an allowed file type!"
+                    });
+                }
+            }        
 
             return base.Result(output);
 

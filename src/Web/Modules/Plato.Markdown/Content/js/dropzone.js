@@ -320,7 +320,7 @@ var Dropzone = function (_Emitter) {
                 addedfile: function addedfile(file) {
 
                     var _this2 = this;
-
+     
                     if (this.previewsContainer && !this.options.disablePreview) {
 
                         if (this.element === this.previewsContainer) {
@@ -405,8 +405,8 @@ var Dropzone = function (_Emitter) {
                         }
                     }
                 },                
-                removedfile: function removedfile(file) {
-                    if (file.previewElement !== null && file.previewElement.parentNode !== null) {
+                removedfile: function removedfile(file) {                 
+                    if (file.previewElement && file.previewElement.parentNode) {
                         file.previewElement.parentNode.removeChild(file.previewElement);
                     }
                     return this._updateMaxFilesReachedClass();

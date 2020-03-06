@@ -59,26 +59,26 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function ($caller) {                
-                
+            bind: function ($caller) {
+
                 $caller.find('[data-provide="attachment-dropzone"]')
                     .attachmentDropzone({
                         allowedExtensions: app.attachments.allowedExtensions,
                         maxFileSize: app.attachments.maxFileSize,
-                        availableSpace: app.attachments.availableSpace,                        
+                        availableSpace: app.attachments.availableSpace,
                         onDrop: function () {
-                            $caller.find(".dropdown").each(function () {                              
-                                $(this).find(".dropdown-menu").removeClass('show');                            
+                            $caller.find(".dropdown").each(function () {
+                                $(this).find(".dropdown-menu").removeClass('show');
                             });
                         },
-                        onAddedFile: function (file) {                                
+                        onAddedFile: function (file) {
                         },
                         onComplete: function (file) {
-                            $caller.find('[data-provide="http-content"]').httpContent("reload");                                             
+                            $caller.find('[data-provide="http-content"]').httpContent("reload");
                         },
                         onSuccess: function (response) {
                         },
-                        onError: function (file, error, xhr) {                            
+                        onError: function (file, error, xhr) {
                         }
                     });
 
@@ -157,6 +157,8 @@ $(function (win, doc, $) {
                 "jpeg",
                 "pdf"
             ],
+            maxFileSize: 2097152, // 2mb
+            availableSpace: 10485760, // 10mb
             dropZoneOptions: {
                 url: '/api/attachments/streaming/upload',
                 fallbackClick: false,
@@ -186,7 +188,7 @@ $(function (win, doc, $) {
 
         var methods = {
             init: function ($caller, methodName) {
-     
+
                 if (methodName) {
                     if (this[methodName]) {
                         this[methodName].apply(this, [$caller]);
@@ -197,10 +199,10 @@ $(function (win, doc, $) {
                 }
 
                 this.bind($caller);
-                
+
             },
             bind: function ($caller) {
-            
+
                 var opts = $caller.data(dataKey).dropZoneOptions,
                     url = this._getUrl($caller);
                 if (url === null) {
@@ -230,8 +232,9 @@ $(function (win, doc, $) {
 
                     opts.init = function () {
 
-                        var $progressPreview = methods._getProgressPreview($caller),                           
-                            allowedExtensions = $caller.data(dataKey).allowedExtensions;                                        
+                        var $progressPreview = methods._getProgressPreview($caller),
+                            maxFileSize = $caller.data(dataKey).maxFileSize,
+                            allowedExtensions = $caller.data(dataKey).allowedExtensions;
 
                         function getProgressId(file) {
                             return "progress-" + file.upload.uuid;
@@ -244,14 +247,14 @@ $(function (win, doc, $) {
                                 "class": "progress-row m-3"
                             });
 
-                            var $info = $("<div>", {                          
+                            var $info = $("<div>", {
                                 "class": "progress-info text-center mb-2"
                             });
 
                             var $bar = $("<div>", {
                                 "class": "progress"
                             });
-                            
+
                             $bar.append($("<div>", {
                                 "class": "progress-bar",
                                 "role": "progressbar",
@@ -260,60 +263,93 @@ $(function (win, doc, $) {
 
                             $row.append($info);
                             $row.append($bar);
-                            
+
                             return $row;
 
                         }
+                        
+                        function validateFileExtensions(files) {
+
+                            var valid = true;
+                            for (var i = 0; i < files.length; i++) {                           
+                                if (!validateFileExtension(files[i])) {
+                                    valid = false;
+                                }
+                            }
+
+                            // Allowed?
+                            if (valid === false) {
+
+                                var title = app.T("Some files won't be attached"),
+                                    message = app.T("One or more file types you attached are not allowed. File types that are allowed will still be uploaded. Allowed types are...") + "\n\n" +
+                                        allowedExtensions.join(", ");
+
+                                // Show error dialog
+                                $().dialog({
+                                    title: title,
+                                    body: {
+                                        url: null,
+                                        html: message.replace(/\n/g, "<br/>")
+                                    },
+                                    buttons: [
+                                        {
+                                            id: "ok",
+                                            text: "OK",
+                                            css: "btn btn-primary",
+                                            click: function ($dialog, $button) {
+                                                $().dialog("hide");
+                                                return false;
+                                            }
+                                        }
+                                    ]
+                                },
+                                    "show");
+
+                            }
+
+                            return valid;
+
+                        }
+
+                        function validateFileExtension(file) {
+
+                            if (allowedExtensions === null) {
+                                return false;
+                            }
+                            if (allowedExtensions.length === 0) {
+                                return false;
+                            }
+
+                            var fileName = file.upload.filename,
+                                bits = fileName.split("."),
+                                fileExtension = bits[bits.length - 1],
+                                allowedExtension = null;
+                            for (var i = 0; i < allowedExtensions.length; i++) {
+                                allowedExtension = allowedExtensions[i];
+                                if (fileExtension.toLowerCase() === allowedExtension.toLowerCase()) {
+                                    return true;
+                                }
+                            }
+
+                            return false;
+
+                        }
+
+                        // ------------
+
+                        this.on("addedfiles",
+                            function (files) {
+                                return validateFileExtensions(files);
+                            });
 
                         this.on('addedfile',
                             function (file) {
 
-                                // Validate file extension
-                                var fileName = file.upload.filename;
-                                var allowed = false;
-                                if (fileName && allowedExtensions) {
-                                    var bits = fileName.split(".");
-                                    var fileExtension = bits[bits.length - 1];
-                                    for (var i = 0; i < allowedExtensions.length; i++) {
-                                        var allowedExtension = allowedExtensions[i];
-                                        if (fileExtension.toLowerCase() === allowedExtension.toLowerCase()) {
-                                            allowed = true;
-                                        }
-                                    }
-                                }
-
-                                // Allowed?
-                                if (allowed === false) {                                    
-
-                                    var title = app.T("Some files won't be attached"),
-                                        message = app.T("One or more file types you attached are not allowed. File types that are allowed will still be uploaded. Allowed types are...") + "\n\n" +
-                                        allowedExtensions.join(", ");
-
-                                    // Show error dialog
-                                    $().dialog({
-                                        title: title,
-                                        body: {
-                                            url: null,
-                                            html: message.replace(/\n/g, "<br/>")
-                                        },
-                                        buttons: [                                         
-                                            {
-                                                id: "ok",
-                                                text: "OK",
-                                                css: "btn btn-primary",
-                                                click: function ($dialog, $button) {
-                                                    $().dialog("hide");
-                                                    return false;
-                                                }
-                                            }
-                                        ]
-                                    },
-                                        "show");
-
-                                    this.removeFile(file);
+                                // Validate extension                                                                                        
+                                if (!validateFileExtension(file)) {
+                                    this.removeFile(file);    
                                     return false;
                                 }
-
 
                                 // Append a progress bar for the upload
                                 if ($progressPreview) {                             
@@ -349,7 +385,16 @@ $(function (win, doc, $) {
 
                         this.on('success',
                             function (file, response) {
-                                
+
+                                if (response.statusCode === 200) {
+                                    if (response && response.result) {
+                                        for (var i = 0; i < response.result.length; i++) {
+                                            var result = response.result[i];
+                                           
+                                        }
+                                    }
+                                }
+
                                 // Remove progress 
                                 if ($progressPreview) {
                                     var selector = '#' + getProgressId(file),
@@ -404,6 +449,7 @@ $(function (win, doc, $) {
                                 }
 
                             });
+
                     };
                 }
 
