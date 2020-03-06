@@ -118,6 +118,7 @@ namespace Plato.Attachments.ViewProviders
             }
 
             // Defaults
+            var maxFileSize = DefaultAttachmentSettings.MaxFilesize;
             long availableSpace = DefaultAttachmentSettings.AvailableSpace;
             var allowedExtensions = DefaultAttachmentSettings.AllowedExtensions;
 
@@ -125,6 +126,7 @@ namespace Plato.Attachments.ViewProviders
             var settings = await _attachmentSettingsStore.GetByRoleIdAsync(role.Id);
             if (settings != null)
             {
+                maxFileSize = settings.MaxFileSize;
                 availableSpace = settings.AvailableSpace;
                 allowedExtensions = settings.AllowedExtensions;
             }
@@ -134,6 +136,7 @@ namespace Plato.Attachments.ViewProviders
             {
                 RoleId = role.Id,
                 Role = role,
+                MaxFileSize = maxFileSize,
                 AvailableSpace = availableSpace,
                 AvailableSpaces = GetAvailableSpaces(),
                 DefaultExtensions = DefaultExtensions.Extensions,
@@ -170,6 +173,7 @@ namespace Plato.Attachments.ViewProviders
                 settings = new AttachmentSetting()
                 {
                     RoleId = role.Id,
+                    MaxFileSize = model.MaxFileSize,
                     AvailableSpace = model.AvailableSpace,
                     AllowedExtensions = GetPostedExtensions()
                 };

@@ -19,6 +19,9 @@ using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Attachments.Configuration;
 using Microsoft.Extensions.Options;
+using Plato.Attachments.Services;
+using Plato.Attachments.ActionFilters;
+using PlatoCore.Layout.ActionFilters;
 
 namespace Plato.Attachments
 {
@@ -59,9 +62,14 @@ namespace Plato.Attachments
             services.AddScoped<IViewProviderManager<AttachmentIndex>, ViewProviderManager<AttachmentIndex>>();
             services.AddScoped<IViewProvider<AttachmentIndex>, AttachmentIndexViewProvider>();
 
-            // Register permissions provider
+            // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
-            
+
+            // Services
+            services.AddScoped<IAttachmentOptionsFactory, AttachmentOptionsFactory>();
+
+            // Action filters
+            services.AddScoped<IModularActionFilter, AttachmentClientOptionsFilter>();
 
         }
 

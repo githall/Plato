@@ -55,6 +55,54 @@ namespace Plato.Attachments.Extensions
 
         }
 
+        public static long GetMaxFileSize(this AttachmentSettings settings, User user)
+        {
+
+            // We need to be authenticated to upload attachments
+            if (user == null)
+            {
+                return 0;
+            }
+
+            // We need to be authenticated to upload attachments
+            if (user.UserRoles == null)
+            {
+                return 0;
+            }
+
+            // No settings use defaults
+            if (settings == null)
+            {
+                return DefaultAttachmentSettings.AvailableSpace;
+            }
+
+            // No settings use defaults
+            if (settings.Settings == null)
+            {
+                return DefaultAttachmentSettings.AvailableSpace;
+            }
+
+            // Calculate the highest available space for given roles
+            long output = 0;
+            var roles = user.UserRoles;
+            foreach (var role in roles)
+            {
+                foreach (var setting in settings.Settings)
+                {
+                    if (setting.RoleId == role.Id)
+                    {
+                        if (setting.MaxFileSize > output)
+                        {
+                            output = setting.MaxFileSize;
+                        }
+                    }
+                }
+            }
+
+            return output;
+
+        }
+
         public static string[] GetAllowedExtensions(this AttachmentSettings settings, User user)
         {
 

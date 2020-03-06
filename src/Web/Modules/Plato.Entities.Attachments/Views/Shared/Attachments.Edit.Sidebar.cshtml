@@ -3,6 +3,7 @@
     var settings = GetOptions<AttachmentSettings>();
     var allowedExtensions = settings.GetAllowedExtensions(CurrentUser);
     var availableSpace = settings.GetAvailableSpace(CurrentUser);
+    var maxFileSize = settings.GetMaxFileSize(CurrentUser);
     var uploadUrl = GetRouteUrl(new RouteValueDictionary()
     {
         ["area"] = "Plato.Attachments",
@@ -34,12 +35,14 @@
 <p>
     @allowedExtensions?.ToDelimitedString()?.Replace(",", ", ")
 </p>
-
-
 <p>
+    <strong>Available Space</strong>
     @availableSpace.ToFriendlyFileSize()
 </p>
-
+<p>
+    <strong>Max File Size</strong>
+    @maxFileSize.ToFriendlyFileSize()
+</p>
 <div class="card card-body-flush" data-provide="attachments">
     <div class="card-header p-0 dropdown list-group-flush">
         <a href="#" class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">

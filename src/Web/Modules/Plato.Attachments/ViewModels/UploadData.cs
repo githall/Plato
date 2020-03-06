@@ -14,6 +14,8 @@
 
         public bool IsBinary { get; set; }
 
+        public string Error { get; set; }
+
     }
 
 }
