@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
@@ -16,6 +17,7 @@ using Plato.Attachments.ViewModels;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
 using Plato.Attachments.Models;
+using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace Plato.Attachments.Controllers
 {
@@ -48,6 +50,9 @@ namespace Plato.Attachments.Controllers
         private readonly ILogger<StreamingController> _logger;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
 
+        public IHtmlLocalizer T { get; }
+
+
         // Get the default form options so that we can use them
         // to set the default limits for request body data
         private readonly FormOptions _defaultFormOptions = new FormOptions();
@@ -55,11 +60,15 @@ namespace Plato.Attachments.Controllers
         public StreamingController(      
             IAttachmentOptionsFactory attachmentOptionsFactory,
             IAttachmentStore<Attachment> attachmentStore,
-            ILogger<StreamingController> logger)
+            ILogger<StreamingController> logger,
+            IHtmlLocalizer htmlLocalizer)
         {
             _attachmentOptionsFactory = attachmentOptionsFactory;
             _attachmentStore = attachmentStore;
             _logger = logger;
+
+            T = htmlLocalizer;
+
         }
 
         #region "Actions"
@@ -116,6 +125,7 @@ namespace Plato.Attachments.Controllers
             var reader = new MultipartReader(boundary, HttpContext.Request.Body);
 
             var name = string.Empty;
+            var extension = string.Empty;
             var contentType = string.Empty;
             long contentLength = 0;
             byte[] bytes = null;
@@ -131,6 +141,7 @@ namespace Plato.Attachments.Controllers
                     {
 
                         name = contentDisposition.FileName.ToString();
+                        extension = Path.GetExtension(name);
                         contentType = section.ContentType;
 
                         // Create an in-memory stream to get the bytes and length
@@ -195,9 +206,22 @@ namespace Plato.Attachments.Controllers
             }
 
             // Get attachment options
-            var attachmentOptions = await _attachmentOptionsFactory.GetSettingsAsync();
-            var validExtension = true;
-            var validSize = bytes.Length <= attachmentOptions.MaxFileSize;
+            var options = await _attachmentOptionsFactory.GetSettingsAsync();   
+
+            // Ensure attachment extension is allowed
+            var validExtension = false;
+            if (!string.IsNullOrEmpty(extension))
+            {        
+                foreach (var allowedExtension in options.AllowedExtensions)
+                {
+                    if (extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase)) 
+                    {
+                        validExtension = true;
+                    }
+                }
+            }         
+
+            var validSize = contentLength <= options.MaxFileSize;
 
             if (validExtension && validSize)
             {
@@ -238,21 +262,47 @@ namespace Plato.Attachments.Controllers
                 // File to large
                 if (!validSize)
                 {
+                    var text = T["The file {0} is {1} in size which exceeds your configured maximum allowed individual attachment size of {2}."];     
                     output.Add(new UploadedFile()
                     {
                         Name = name,
-                        Error = $"The file \"{name}\" exceeds the maximum size allowed for individual uploads!"
-                    });
+                        Error = string.Format(
+                                text.Value,
+                                name,
+                                contentLength.ToFriendlyFileSize(),
+                                options.MaxFileSize.ToFriendlyFileSize())
+                    }); 
                 }
 
                 // Invalid extension
                 if (!validExtension)
                 {
-                    output.Add(new UploadedFile()
+                    var allowedExtensions = string.Join(",", options.AllowedExtensions.Select(e => e));
+                    if (!string.IsNullOrEmpty(allowedExtensions))
                     {
-                        Name = name,
-                        Error = $"The file \"{name}\" is not an allowed file type!"
-                    });
+                        var text = T["The file {0} is not an allowed type. You are allowed to attach the following types:- {1}"];
+                        output.Add(new UploadedFile()
+                        {
+                            Name = name,
+                            Error = string.Format(
+                                    text.Value,
+                                    name,
+                                    allowedExtensions.Replace(",", ", "))
+
+                        });
+                    } 
+                    else
+                    {
+                        var text = T["The file {0} is not an allowed type. No allowed file extensions have been configured for your account."];
+                        output.Add(new UploadedFile()
+                        {
+                            Name = name,
+                            Error = string.Format(
+                                    text.Value,
+                                    name)
+                        });
+                    }
+
                 }
             }        
 

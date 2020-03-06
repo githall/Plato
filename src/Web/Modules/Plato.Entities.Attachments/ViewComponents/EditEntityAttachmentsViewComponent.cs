@@ -55,6 +55,7 @@ namespace Plato.Entities.Attachments.ViewComponents
 
             return await _attachmentStore
                 .QueryAsync()
+                .Take(int.MaxValue, false)
                 .Select<AttachmentQueryParams>(async q =>
                 {
 

@@ -388,9 +388,43 @@ $(function (win, doc, $) {
 
                                 if (response.statusCode === 200) {
                                     if (response && response.result) {
+
+                                        // Compile any errors
+                                        var messages = "";
                                         for (var i = 0; i < response.result.length; i++) {
                                             var result = response.result[i];
-                                           
+                                            if (result.error && result.error !== "") {
+                                                messages += result.error;
+                                                if (i < response.result.length - 1) {
+                                                    messages += "\n\n";
+                                                }
+                                            }
+                                        }
+
+                                        // Show errors
+                                        if (messages !== "") {
+
+                                            // Show error dialog
+                                            $().dialog({
+                                                title: app.T("Insufficient Permissions"),
+                                                body: {
+                                                    url: null,
+                                                    html: messages.replace(/\n/g, "<br/>")
+                                                },
+                                                buttons: [
+                                                    {
+                                                        id: "ok",
+                                                        text: "OK",
+                                                        css: "btn btn-primary",
+                                                        click: function ($dialog, $button) {
+                                                            $().dialog("hide");
+                                                            return false;
+                                                        }
+                                                    }
+                                                ]
+                                            },
+                                                "show");
+
                                         }
                                     }
                                 }

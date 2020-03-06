@@ -61,41 +61,7 @@ namespace Plato.Articles.Attachments.ViewProviders
         
         public override Task<IViewProviderResult> BuildDisplayAsync(Article entity, IViewProviderContext updater)
         {
-
             return Task.FromResult(default(IViewProviderResult));
-
-            //if (entity == null)
-            //{
-            //    return await BuildIndexAsync(new Article(), updater);
-            //}
-
-            //var isFollowing = false;
-            //var followType = FollowTypes.Article;
-
-            //var user = await _contextFacade.GetAuthenticatedUserAsync();
-            //if (user != null)
-            //{
-            //    var entityFollow = await _followStore.SelectByNameThingIdAndCreatedUserId(
-            //        followType.Name,
-            //        entity.Id,
-            //        user.Id);
-            //    if (entityFollow != null)
-            //    {
-            //        isFollowing = true;
-            //    }
-            //}
-            
-            //return Views(
-            //    View<FollowViewModel>("Follow.Display.Tools", model =>
-            //    {
-            //        model.FollowType = followType;
-            //        model.ThingId = entity.Id;
-            //        model.IsFollowing = isFollowing;
-            //        model.Permission = Permissions.FollowArticles;
-            //        return model;
-            //    }).Zone("tools").Order(-4)
-            //);
-
         }
 
         public override async Task<IViewProviderResult> BuildEditAsync(Article entity, IViewProviderContext context)
