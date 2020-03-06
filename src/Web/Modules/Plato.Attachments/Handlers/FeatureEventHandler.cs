@@ -26,6 +26,11 @@ namespace Plato.Attachments.Handlers
                         DbType = DbType.Int32
                     },
                     new SchemaColumn()
+                    {                        
+                        Name = "FeatureId",
+                        DbType = DbType.Int32
+                    },
+                    new SchemaColumn()
                     {
                         Name = "[Name]",
                         Length = "255",
@@ -210,11 +215,63 @@ namespace Plato.Attachments.Handlers
 
         void Attachments(ISchemaBuilder builder)
         {
-            
+
+            // Create tables
             builder.TableBuilder.CreateTable(_attachments);
 
+            // Create default procedures
+            builder.ProcedureBuilder.CreateDefaultProcedures(_attachments);
+
+            // Replace default SelectAttachmentById
             builder.ProcedureBuilder
-                .CreateDefaultProcedures(_attachments)
+                .CreateProcedure(
+                    new SchemaProcedure(
+                            $"SelectAttachmentById",
+                            @"SELECT 
+                                    a.Id,
+                                    a.FeatureId,
+                                    a.[Name],
+                                    a.ContentBlob,
+                                    a.ContentType,
+                                    a.ContentLength,
+                                    a.ContentGuid,
+                                    a.ContentCheckSum,
+                                    a.TotalViews,
+                                    a.CreatedUserId,
+                                    a.CreatedDate,
+                                    a.ModifiedUserId,
+                                    a.ModifiedDate,
+                                    f.ModuleId,
+                                    c.UserName AS CreatedUserName,
+                                    c.DisplayName AS CreatedDisplayName,
+                                    c.Alias AS CreatedAlias,
+                                    c.PhotoUrl AS CreatedPhotoUrl,
+                                    c.PhotoColor AS CreatedPhotoColor,
+                                    c.SignatureHtml AS CreatedSignatureHtml,
+                                    c.IsVerified AS CreatedIsVerified,
+                                    c.IsStaff AS CreatedIsStaff,
+                                    c.IsSpam AS CreatedIsSpam,
+                                    c.IsBanned AS CreatedIsBanned,
+                                    m.UserName AS ModifiedUserName,
+                                    m.DisplayName AS ModifiedDisplayName,
+                                    m.Alias AS ModifiedAlias,
+                                    m.PhotoUrl AS ModifiedPhotoUrl,
+                                    m.PhotoColor AS ModifiedPhotoColor,
+                                    m.SignatureHtml AS ModifiedSignatureHtml,
+                                    m.IsVerified AS ModifiedIsVerified,
+                                    m.IsStaff AS ModifiedIsStaff,
+                                    m.IsSpam AS ModifiedIsSpam,
+                                    m.IsBanned AS ModifiedIsBanned
+                                FROM {prefix}_Attachments a WITH (nolock)                                     
+                                    LEFT OUTER JOIN {prefix}_ShellFeatures f ON a.FeatureId = f.Id
+                                    LEFT OUTER JOIN {prefix}_Users c ON a.CreatedUserId = c.Id
+                                    LEFT OUTER JOIN {prefix}_Users m ON a.ModifiedUserId = m.Id
+                                WHERE (
+                                   a.Id = @Id
+                                );")
+                        .ForTable(_attachments)
+                        .WithParameter(_attachments.PrimaryKeyColumn))
+
                 .CreateProcedure(new SchemaProcedure("SelectAttachmentsPaged", StoredProcedureType.SelectPaged)
                 .ForTable(_attachments)
                 .WithParameters(new List<SchemaColumn>()
@@ -230,17 +287,17 @@ namespace Plato.Attachments.Handlers
                         Name = "ContentCheckSum",
                         DbType = DbType.String,
                         Length = "32"
-                    },                     
+                    },
                     new SchemaColumn()
                     {
                         Name = "Keywords",
                         DbType = DbType.String,
                         Length = "255"
                     }
-                }));
+                }))
 
-            // UpdateAttachmentContentGuidById
-            builder.ProcedureBuilder.CreateProcedure(
+                // UpdateAttachmentContentGuidById
+                .CreateProcedure(
                     new SchemaProcedure(
                             $"UpdateAttachmentContentGuidById",
                             @"UPDATE {prefix}_Attachments SET
@@ -254,7 +311,7 @@ namespace Plato.Attachments.Handlers
                              new SchemaColumn()
                             {
                                 Name = "Id",
-                                DbType = DbType.Int32,                                
+                                DbType = DbType.Int32,
                             },
                             new SchemaColumn()
                             {
@@ -270,12 +327,12 @@ namespace Plato.Attachments.Handlers
                 TableName = _attachments.Name,
                 Columns = new string[]
                 {
+                    "FeatureId",
                     "[Name]",
                     "ContentGuid",
                     "ContentCheckSum"
                 }
             });
-
 
         }
 

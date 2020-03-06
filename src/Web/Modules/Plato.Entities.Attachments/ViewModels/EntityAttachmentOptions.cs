@@ -9,6 +9,8 @@ namespace Plato.Entities.Attachments.ViewModels
 
         public string Guid { get; set; }
 
+        public int FeatureId { get; set; }
+
         public int EntityId { get; set; }
 
         public IPermission Permission { get; set; }

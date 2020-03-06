@@ -103,6 +103,8 @@ namespace Plato.Attachments.Stores
 
         #region "Constructor"
 
+        private readonly string _shellFeaturesTableName;       
+        private readonly string _usersTableName;
         private readonly string _attachmentsTableName;
 
         private readonly AttachmentQuery _query;
@@ -110,6 +112,8 @@ namespace Plato.Attachments.Stores
         public AttachmentQueryBuilder(AttachmentQuery query)
         {
             _query = query;
+            _shellFeaturesTableName = GetTableNameWithPrefix("ShellFeatures");
+            _usersTableName = GetTableNameWithPrefix("Users");
             _attachmentsTableName = GetTableNameWithPrefix("Attachments");
         }
 
@@ -160,6 +164,7 @@ namespace Plato.Attachments.Stores
             var sb = new StringBuilder();
             sb
                 .Append("a.Id, ")
+                .Append("a.FeatureId, ")
                 .Append("a.[Name], ")
                 .Append("CAST(1 AS BINARY(1)) AS ContentBlob, ") // for perf not returned with paged results
                 .Append("a.ContentType, ")
@@ -170,7 +175,29 @@ namespace Plato.Attachments.Stores
                 .Append("a.CreatedUserId, ")
                 .Append("a.CreatedDate, ")
                 .Append("a.ModifiedUserId, ")
-                .Append("a.ModifiedDate ");
+                .Append("a.ModifiedDate, ")
+                .Append("f.ModuleId, ")
+                .Append("c.UserName AS CreatedUserName, ")
+                .Append("c.DisplayName AS CreatedDisplayName, ")
+                .Append("c.Alias AS CreatedAlias, ")
+                .Append("c.PhotoUrl AS CreatedPhotoUrl, ")
+                .Append("c.PhotoColor AS CreatedPhotoColor, ")
+                .Append("c.SignatureHtml AS CreatedSignatureHtml, ")
+                .Append("c.IsVerified AS CreatedIsVerified, ")
+                .Append("c.IsStaff AS CreatedIsStaff, ")
+                .Append("c.IsSpam AS CreatedIsSpam, ")
+                .Append("c.IsBanned AS CreatedIsBanned, ")
+                .Append("m.UserName AS ModifiedUserName, ")
+                .Append("m.DisplayName AS ModifiedDisplayName, ")
+                .Append("m.Alias AS ModifiedAlias, ")
+                .Append("m.PhotoUrl AS ModifiedPhotoUrl, ")
+                .Append("m.PhotoColor AS ModifiedPhotoColor, ")
+                .Append("m.SignatureHtml AS ModifiedSignatureHtml, ")
+                .Append("m.IsVerified AS ModifiedIsVerified, ")
+                .Append("m.IsStaff AS ModifiedIsStaff, ")
+                .Append("m.IsSpam AS ModifiedIsSpam, ")
+                .Append("m.IsBanned AS ModifiedIsBanned");
+
             return sb.ToString();
         }
 
@@ -179,6 +206,23 @@ namespace Plato.Attachments.Stores
             var sb = new StringBuilder();
             sb.Append(_attachmentsTableName)
                 .Append(" a ");
+
+            // join shell features table
+            sb.Append("INNER JOIN ")
+                .Append(_shellFeaturesTableName)
+                .Append(" f ON a.FeatureId = f.Id ");
+
+            // join created user
+            sb.Append("LEFT OUTER JOIN ")
+                .Append(_usersTableName)
+                .Append(" c ON a.CreatedUserId = c.Id ");
+
+            // join last modified user
+            sb.Append("LEFT OUTER JOIN ")
+                .Append(_usersTableName)
+                .Append(" m ON a.ModifiedUserId = m.Id ");
+
+
             return sb.ToString();
         }
 
@@ -284,7 +328,15 @@ namespace Plato.Attachments.Stores
                 case "featureid":
                     return "a.FeatureId";
                 case "name":
-                    return "a.[Name]";            
+                    return "a.[Name]";
+                case "type":
+                    return "a.ContentType";
+                case "size":
+                    return "a.ContentLength";
+                case "uniqueness":
+                    return "a.ContentCheckSum";
+                case "views":
+                    return "a.TotalViews";
                 case "createduserid":
                     return "a.CreatedUserId";
                 case "created":

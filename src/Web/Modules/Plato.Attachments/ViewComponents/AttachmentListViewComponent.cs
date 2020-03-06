@@ -25,7 +25,7 @@ namespace Plato.Reports.PageViews.ViewComponents
             },
             new Filter()
             {
-                Text = "My Topics",
+                Text = "My Attachments",
                 Value = FilterBy.Started
             },
             new Filter()
@@ -63,28 +63,33 @@ namespace Plato.Reports.PageViews.ViewComponents
         {
             new SortColumn()
             {
-                Text = "Created Date",
+                Text = "Created",
                 Value = SortBy.Created
             },
             new SortColumn()
             {
-                Text = "Title",
-                Value =  SortBy.Title
+                Text = "Name",
+                Value =  SortBy.Name
             },
             new SortColumn()
             {
-                Text = "Url",
-                Value = SortBy.Url
+                Text = "Type",
+                Value = SortBy.Type
             },
             new SortColumn()
             {
-                Text = "IP Address",
-                Value =  SortBy.IpV4Address
+                Text = "Size",
+                Value =  SortBy.Size
             },
             new SortColumn()
             {
-                Text = "User Agent",
-                Value =  SortBy.UserAgent
+                Text = "Uniqueness",
+                Value =  SortBy.Uniqueness
+            },
+            new SortColumn()
+            {
+                Text = "Views",
+                Value =  SortBy.Views
             }
         };
 

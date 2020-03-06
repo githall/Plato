@@ -183,16 +183,41 @@ namespace Plato.Entities.Attachments.Handlers
                     new SchemaProcedure(
                             $"SelectEntityAttachmentById",
                             @"SELECT 
-                                    ea.*,          
+                                    ea.*,
+                                    a.FeatureId,
                                     a.[Name],
                                     CAST(1 AS BINARY(1)) AS ContentBlob, -- for perf not returned with results
                                     a.ContentType,
                                     a.ContentLength,
                                     a.ContentGuid,
                                     a.ContentCheckSum,
-                                    a.TotalViews
+                                    a.TotalViews,
+                                    f.ModuleId,
+                                    c.UserName AS CreatedUserName,
+                                    c.DisplayName AS CreatedDisplayName,
+                                    c.Alias AS CreatedAlias,
+                                    c.PhotoUrl AS CreatedPhotoUrl,
+                                    c.PhotoColor AS CreatedPhotoColor,
+                                    c.SignatureHtml AS CreatedSignatureHtml,
+                                    c.IsVerified AS CreatedIsVerified,
+                                    c.IsStaff AS CreatedIsStaff,
+                                    c.IsSpam AS CreatedIsSpam,
+                                    c.IsBanned AS CreatedIsBanned,
+                                    m.UserName AS ModifiedUserName,
+                                    m.DisplayName AS ModifiedDisplayName,
+                                    m.Alias AS ModifiedAlias,
+                                    m.PhotoUrl AS ModifiedPhotoUrl,
+                                    m.PhotoColor AS ModifiedPhotoColor,
+                                    m.SignatureHtml AS ModifiedSignatureHtml,
+                                    m.IsVerified AS ModifiedIsVerified,
+                                    m.IsStaff AS ModifiedIsStaff,
+                                    m.IsSpam AS ModifiedIsSpam,
+                                    m.IsBanned AS ModifiedIsBanned
                                 FROM {prefix}_Attachments a WITH (nolock) 
                                     INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id                                    
+                                    LEFT OUTER JOIN {prefix}_ShellFeatures f ON a.FeatureId = f.Id
+                                    LEFT OUTER JOIN {prefix}_Users c ON a.CreatedUserId = c.Id
+                                    LEFT OUTER JOIN {prefix}_Users m ON a.ModifiedUserId = m.Id
                                 WHERE (
                                    ea.Id = @Id
                                 );")
@@ -203,16 +228,41 @@ namespace Plato.Entities.Attachments.Handlers
                     new SchemaProcedure(
                             $"SelectEntityAttachmentsByEntityId",
                             @"SELECT 
-                                    ea.*,          
+                                    ea.*,    
+                                    a.FeatureId,
                                     a.[Name],
                                     CAST(1 AS BINARY(1)) AS ContentBlob, -- for perf not returned with results
                                     a.ContentType,
                                     a.ContentLength,
                                     a.ContentGuid,
                                     a.ContentCheckSum,
-                                    a.TotalViews 
+                                    a.TotalViews,
+                                    f.ModuleId,
+                                    c.UserName AS CreatedUserName,
+                                    c.DisplayName AS CreatedDisplayName,
+                                    c.Alias AS CreatedAlias,
+                                    c.PhotoUrl AS CreatedPhotoUrl,
+                                    c.PhotoColor AS CreatedPhotoColor,
+                                    c.SignatureHtml AS CreatedSignatureHtml,
+                                    c.IsVerified AS CreatedIsVerified,
+                                    c.IsStaff AS CreatedIsStaff,
+                                    c.IsSpam AS CreatedIsSpam,
+                                    c.IsBanned AS CreatedIsBanned,
+                                    m.UserName AS ModifiedUserName,
+                                    m.DisplayName AS ModifiedDisplayName,
+                                    m.Alias AS ModifiedAlias,
+                                    m.PhotoUrl AS ModifiedPhotoUrl,
+                                    m.PhotoColor AS ModifiedPhotoColor,
+                                    m.SignatureHtml AS ModifiedSignatureHtml,
+                                    m.IsVerified AS ModifiedIsVerified,
+                                    m.IsStaff AS ModifiedIsStaff,
+                                    m.IsSpam AS ModifiedIsSpam,
+                                    m.IsBanned AS ModifiedIsBanned
                                 FROM {prefix}_Attachments a WITH (nolock) 
                                     INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id                                    
+                                    LEFT OUTER JOIN {prefix}_ShellFeatures f ON a.FeatureId = f.Id
+                                    LEFT OUTER JOIN {prefix}_Users c ON a.CreatedUserId = c.Id
+                                    LEFT OUTER JOIN {prefix}_Users m ON a.ModifiedUserId = m.Id
                                 WHERE (
                                    ea.EntityId = @EntityId
                                 );")
