@@ -54,8 +54,7 @@ $(function (win, doc, $) {
                 // Unbind default auto linking of images
                 $caller.autoLinkImages("unbind");
 
-                var selector = $caller.data(dataKey).selector;
-                console.log(selector)
+                var selector = $caller.data(dataKey).selector;                
                 $caller.find(selector).each(function (i) {
                     var src = $(this).attr("src");
                     if (src) {

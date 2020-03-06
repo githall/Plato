@@ -10,7 +10,6 @@ using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Titles;
-using PlatoCore.Layout.Views;
 using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Models.Users;
 

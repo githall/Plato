@@ -22,6 +22,9 @@ namespace Plato.Attachments.ViewModels
         public Role Role { get; set; }
 
         [Required]
+        public long MaxFileSize { get; set; }
+
+        [Required]
         public long AvailableSpace { get; set; }
 
         public IEnumerable<SelectListItem> AvailableSpaces { get; set; }

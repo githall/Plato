@@ -15,17 +15,30 @@
     </card-title>
     <card-body>
 
-        <div class="form-group" asp-validation-class-for="AvailableSpace">
-            <label asp-for="AvailableSpace">
-                <strong>@T["Available Space"]</strong>
+        <div class="form-group" asp-validation-class-for="MaxFileSize">
+            <label asp-for="MaxFileSize">
+                <strong>@T["Individual File Size"]</strong>
                 <span asp-validation-for="AvailableSpace" class="text-danger"></span>
                 <br />
-                <span class="text-muted">@T["Control the maximum space available for each user within this role"]</span>
+                <span class="text-muted">@T["The maximum size allowed for individual attachments for each user within this role"]</span>
+            </label>
+            <select class="form-control"
+                    asp-for="MaxFileSize"
+                    asp-items="@Model.AvailableSpaces"></select>
+        </div>
+
+        <div class="form-group" asp-validation-class-for="AvailableSpace">
+            <label asp-for="AvailableSpace">
+                <strong>@T["Total Space"]</strong>
+                <span asp-validation-for="AvailableSpace" class="text-danger"></span>
+                <br />
+                <span class="text-muted">@T["The maximum total space available for all attachments for each user within this role"]</span>
             </label>
             <select class="form-control"
                     asp-for="AvailableSpace"
                     asp-items="@Model.AvailableSpaces"></select>
         </div>
+
 
         <div class="form-group" asp-validation-class-for="AllowedExtensions">
             <label asp-for="AllowedExtensions">

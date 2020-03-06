@@ -12,6 +12,22 @@ $(function (win, doc, $) {
 
     "use strict";
 
+    // A global object that allows Plato to configure attachment settings
+    win.$.Plato.attachments = {
+        allowedExtensions: [
+            "txt",
+            "html",
+            "zip",
+            "png",
+            "gif",
+            "bmp",
+            "jpg",
+            "jpeg"
+        ],
+        maxFileSize: 0,
+        availableSpace: 0
+    };
+
     // Plato Global Object
     var app = win.$.Plato;
 
@@ -43,12 +59,13 @@ $(function (win, doc, $) {
                 this.bind($caller);
 
             },
-            bind: function ($caller) {
-
-                // Configure attachment dropdown ensuring we reload any
-                // httpContent elements within the attachments area
+            bind: function ($caller) {                
+                
                 $caller.find('[data-provide="attachment-dropzone"]')
                     .attachmentDropzone({
+                        allowedExtensions: app.attachments.allowedExtensions,
+                        maxFileSize: app.attachments.maxFileSize,
+                        availableSpace: app.attachments.availableSpace,                        
                         onDrop: function () {
                             $caller.find(".dropdown").each(function () {                              
                                 $(this).find(".dropdown-menu").removeClass('show');                            
@@ -129,7 +146,7 @@ $(function (win, doc, $) {
 
         var defaults = {
             progressPreview: "#progress",
-            allowedUploadExtensions: [
+            allowedExtensions: [
                 "txt",
                 "html",
                 "zip",
@@ -214,7 +231,7 @@ $(function (win, doc, $) {
                     opts.init = function () {
 
                         var $progressPreview = methods._getProgressPreview($caller),                           
-                            allowedUploadExtensions = $caller.data(dataKey).allowedUploadExtensions;                                        
+                            allowedExtensions = $caller.data(dataKey).allowedExtensions;                                        
 
                         function getProgressId(file) {
                             return "progress-" + file.upload.uuid;
@@ -254,11 +271,11 @@ $(function (win, doc, $) {
                                 // Validate file extension
                                 var fileName = file.upload.filename;
                                 var allowed = false;
-                                if (fileName && allowedUploadExtensions) {
+                                if (fileName && allowedExtensions) {
                                     var bits = fileName.split(".");
                                     var fileExtension = bits[bits.length - 1];
-                                    for (var i = 0; i < allowedUploadExtensions.length; i++) {
-                                        var allowedExtension = allowedUploadExtensions[i];
+                                    for (var i = 0; i < allowedExtensions.length; i++) {
+                                        var allowedExtension = allowedExtensions[i];
                                         if (fileExtension.toLowerCase() === allowedExtension.toLowerCase()) {
                                             allowed = true;
                                         }
@@ -266,12 +283,37 @@ $(function (win, doc, $) {
                                 }
 
                                 // Allowed?
-                                if (allowed === false) {
-                                    alert("File type is not allowed.\n\nAllowed types are " +
-                                        allowedUploadExtensions.join(", "));
+                                if (allowed === false) {                                    
+
+                                    var title = app.T("Some files won't be attached"),
+                                        message = app.T("One or more file types you attached are not allowed. File types that are allowed will still be uploaded. Allowed types are...") + "\n\n" +
+                                        allowedExtensions.join(", ");
+
+                                    // Show error dialog
+                                    $().dialog({
+                                        title: title,
+                                        body: {
+                                            url: null,
+                                            html: message.replace(/\n/g, "<br/>")
+                                        },
+                                        buttons: [                                         
+                                            {
+                                                id: "ok",
+                                                text: "OK",
+                                                css: "btn btn-primary",
+                                                click: function ($dialog, $button) {
+                                                    $().dialog("hide");
+                                                    return false;
+                                                }
+                                            }
+                                        ]
+                                    },
+                                        "show");
+
                                     this.removeFile(file);
                                     return false;
                                 }
+
 
                                 // Append a progress bar for the upload
                                 if ($progressPreview) {                             

@@ -18,6 +18,8 @@ namespace Plato.Attachments.Models
 
         public long AvailableSpace { get; set; }
 
+        public long MaxFileSize { get; set; }
+
         public string[] AllowedExtensions { get; set; }
 
     }
