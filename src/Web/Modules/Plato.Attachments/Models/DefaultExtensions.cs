@@ -415,10 +415,7 @@
 
         public static string[] AllowedExtensions { get; } = new string[]
         {
-            "bmp",
-            "config",
-            "doc",
-            "docx",
+            "bmp",       
             "gif",
             "ini",
             "log",
@@ -427,9 +424,7 @@
             "jpeg",
             "rar",
             "txt",
-            "zip",
-            "xls",
-            "xlsx",
+            "zip",         
             "yaml"
         };
 

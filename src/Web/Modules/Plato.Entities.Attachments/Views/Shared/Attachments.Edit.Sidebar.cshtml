@@ -1,9 +1,6 @@
 ﻿@model EntityAttachmentOptions
 @{
-    var settings = GetOptions<AttachmentSettings>();
-    var allowedExtensions = settings.GetAllowedExtensions(CurrentUser);
-    var availableSpace = settings.GetAvailableSpace(CurrentUser);
-    var maxFileSize = settings.GetMaxFileSize(CurrentUser);
+
     var uploadUrl = GetRouteUrl(new RouteValueDictionary()
     {
         ["area"] = "Plato.Attachments",
@@ -30,19 +27,8 @@
     });
 }
 
-<input type="text" name="@Model.GuidHtmlName" asp-for="Guid" />
+<input type="hidden" name="@Model.GuidHtmlName" asp-for="Guid" />
 
-<p>
-    @allowedExtensions?.ToDelimitedString()?.Replace(",", ", ")
-</p>
-<p>
-    <strong>Available Space</strong>
-    @availableSpace.ToFriendlyFileSize()
-</p>
-<p>
-    <strong>Max File Size</strong>
-    @maxFileSize.ToFriendlyFileSize()
-</p>
 <div class="card card-body-flush" data-provide="attachments">
     <div class="card-header p-0 dropdown list-group-flush">
         <a href="#" class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
@@ -50,7 +36,7 @@
             @T["Attachments"]
         </a>
         <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in p-0 min-w-500" aria-labelledby="attachmentDropdown">
-            <div class="list-group list-group-flush list-group-hover">
+            <div class="list-group list-group-flush">
                 <div class="list-group-item list-group-item-dropzone">
                     <div class="dropzone"
                          data-dropzone-url="@uploadUrl"

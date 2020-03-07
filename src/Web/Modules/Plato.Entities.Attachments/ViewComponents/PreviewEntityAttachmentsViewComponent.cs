@@ -11,25 +11,37 @@ using Plato.Entities.Attachments.Models;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.ViewModels;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Hosting.Abstractions;
+using Plato.Attachments.Services;
+using Microsoft.AspNetCore.Http;
+using PlatoCore.Models.Users;
 
 namespace Plato.Entities.Attachments.ViewComponents
 {
 
     public class PreviewEntityAttachmentsViewComponent : ViewComponent
     {
-
-        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;        
+        
+        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
+        private readonly IAttachmentInfoStore<AttachmentInfo> _attachmentInfoStore;
         private readonly ILogger<PreviewEntityAttachmentsViewComponent> _logger;
+        private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
+        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PreviewEntityAttachmentsViewComponent(
-
+        public PreviewEntityAttachmentsViewComponent(            
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
+            IAttachmentInfoStore<AttachmentInfo> attachmentInfoStore,
             ILogger<PreviewEntityAttachmentsViewComponent> logger,
-            IAttachmentStore<Attachment> attachmentStore)
+            IAttachmentOptionsFactory attachmentOptionsFactory,
+            IAttachmentStore<Attachment> attachmentStore,         
+            IHttpContextAccessor httpContextAccessor)
         {
+            _attachmentOptionsFactory = attachmentOptionsFactory;
             _entityAttachmentStore = entityAttachmentStore;
-            _attachmentStore = attachmentStore;
+            _attachmentInfoStore = attachmentInfoStore;
+            _httpContextAccessor = httpContextAccessor;
+            _attachmentStore = attachmentStore;           
             _logger = logger;
         }
 
@@ -48,15 +60,20 @@ namespace Plato.Entities.Attachments.ViewComponents
                 throw new ArgumentNullException(nameof(model.Guid));
             }
 
-            // Get data & return view
+            // Get current authenticated user
+            var user = _httpContextAccessor.HttpContext.Features[typeof(User)] as User;
+
+            // Build model & return view
             return View(new AttachmentsViewModel()
             {
-                Results = await GetDataAsync(model)
+                Info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0),
+                Options = await _attachmentOptionsFactory.GetOptionsAsync(user),
+                Results = await GetResultsAsync(model),
             });
 
         }
 
-        private async Task<IPagedResults<Attachment>> GetDataAsync(EntityAttachmentOptions model)
+        private async Task<IPagedResults<Attachment>> GetResultsAsync(EntityAttachmentOptions model)
         {
 
             IEnumerable<EntityAttachment> relaationships = null;

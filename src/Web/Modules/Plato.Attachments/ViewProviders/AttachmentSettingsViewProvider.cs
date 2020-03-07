@@ -115,7 +115,7 @@ namespace Plato.Attachments.ViewProviders
             }
 
             // Defaults
-            var maxFileSize = DefaultAttachmentSettings.MaxFilesize;
+            var maxFileSize = DefaultAttachmentSettings.MaxFileSize;
             long availableSpace = DefaultAttachmentSettings.AvailableSpace;
             var allowedExtensions = DefaultAttachmentSettings.AllowedExtensions;
 

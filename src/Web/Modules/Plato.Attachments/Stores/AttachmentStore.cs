@@ -137,6 +137,8 @@ namespace Plato.Attachments.Stores
 
             _cacheManager.CancelTokens(this.GetType());
 
+            _cacheManager.CancelTokens(typeof(AttachmentInfoStore));
+
             if (model != null)
             {
                 _cacheManager.CancelTokens(this.GetType(), ById, model.Id);

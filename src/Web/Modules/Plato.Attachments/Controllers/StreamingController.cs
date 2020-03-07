@@ -124,12 +124,14 @@ namespace Plato.Attachments.Controllers
 
             var reader = new MultipartReader(boundary, HttpContext.Request.Body);
 
+            // Store file information
             var name = string.Empty;
             var extension = string.Empty;
             var contentType = string.Empty;
             long contentLength = 0;
             byte[] bytes = null;
 
+            // Prase multipart sections
             var section = await reader.ReadNextSectionAsync();
             while (section != null)
             {
@@ -196,57 +198,72 @@ namespace Plato.Attachments.Controllers
                 section = await reader.ReadNextSectionAsync();
             }
 
-            // Get btye array from memory stream for storage
-          
-            var output = new List<UploadedFile>();
-
+            // Get btye array from memory stream for storage         
+    
             if (bytes == null)
             {
-                return BadRequest($"Could not obtain a byte array for the uploaded file.");
+                return BadRequest($"Could not construct a byte array for the uploaded file.");
             }
 
-            // Get attachment options
-            var options = await _attachmentOptionsFactory.GetSettingsAsync();   
+            // At this stage everything was OK with the file, build the attachment
+            // -------------------
 
-            // Ensure attachment extension is allowed
+            var attachment = new Attachment
+            {
+                FeatureId = featureId,
+                Name = name,
+                ContentType = contentType,
+                ContentLength = contentLength,
+                ContentBlob = bytes,
+                ContentGuid = guid,
+                ContentCheckSum = bytes?.ToMD5().ToHex() ?? string.Empty,
+                CreatedUserId = user.Id
+            };
+
+            // Validate the attachment
+            // -------------------
+
             var validExtension = false;
-            if (!string.IsNullOrEmpty(extension))
-            {        
-                foreach (var allowedExtension in options.AllowedExtensions)
+            var validSize = false;
+
+            // Get attachment options
+            var options = await _attachmentOptionsFactory.GetOptionsAsync(user);
+            if (options != null)
+            {
+
+                // Ensure content is below or equal to our max file size
+                validSize = attachment.ContentLength <= options.MaxFileSize;
+
+                // Ensure extension is allowed
+                if (!string.IsNullOrEmpty(extension))
                 {
-                    if (extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase)) 
+                    foreach (var allowedExtension in options.AllowedExtensions)
                     {
-                        validExtension = true;
+                        if (extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase))
+                        {
+                            validExtension = true;
+                        }
                     }
                 }
-            }         
 
-            var validSize = contentLength <= options.MaxFileSize;
+            }
 
-            // Validate
+            // Build results
+            // -------------------
+
+            var output = new List<UploadResult>();
+
+            // Validation OK?
             if (validExtension && validSize)
             {
 
-                // Get MD5 checksum
-                var checkSum = bytes?.ToMD5().ToHex() ?? string.Empty;
-
                 // Store attachment
-                var attachment = await _attachmentStore.CreateAsync(new Attachment
-                {
-                    FeatureId = featureId,
-                    Name = name,
-                    ContentType = contentType,
-                    ContentLength = contentLength,
-                    ContentBlob = bytes,
-                    ContentGuid = guid,
-                    ContentCheckSum = checkSum,
-                    CreatedUserId = user.Id
-                });
+                attachment = await _attachmentStore.CreateAsync(attachment);
 
-                // Build friendly results
+                // Build friendly result
                 if (attachment != null)
                 {
-                    output.Add(new UploadedFile()
+                    output.Add(new UploadResult()
                     {
                         Id = attachment.Id,
                         Name = attachment.Name,
@@ -264,7 +281,7 @@ namespace Plato.Attachments.Controllers
                 if (!validSize)
                 {
                     var text = T["The file is {0} which exceeds your configured maximum allowed file size of {1}."];     
-                    output.Add(new UploadedFile()
+                    output.Add(new UploadResult()
                     {
                         Name = name,
                         Error = string.Format(
@@ -280,8 +297,9 @@ namespace Plato.Attachments.Controllers
                     var allowedExtensions = string.Join(",", options.AllowedExtensions.Select(e => e));
                     if (!string.IsNullOrEmpty(allowedExtensions))
                     {
+                        // Our extension does not appear within the allowed extensions white list
                         var text = T["The file is not an allowed type. You are allowed to attach the following types:- {0}"];
-                        output.Add(new UploadedFile()
+                        output.Add(new UploadResult()
                         {
                             Name = name,
                             Error = string.Format(
@@ -291,15 +309,16 @@ namespace Plato.Attachments.Controllers
                     } 
                     else
                     {
+                        // We don't have any configured allowed extensions
                         var text = T["The file is not an allowed type. No allowed file extensions have been configured for your account."];
-                        output.Add(new UploadedFile()
+                        output.Add(new UploadResult()
                         {
                             Name = name,
-                            Error =  text.Value
+                            Error = text.Value
                         });
                     }
-
                 }
+
             }
 
             return base.Result(output);

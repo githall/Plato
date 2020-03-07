@@ -1,7 +1,7 @@
 ﻿namespace Plato.Attachments.ViewModels
 {
 
-    public class UploadedFile
+    public class UploadResult
     {
 
         public int Id { get; set; }

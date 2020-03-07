@@ -1,4 +1,14 @@
 ﻿@model AttachmentsViewModel
+@{
+    var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
+    if (availableSpace < 0)
+    {
+        availableSpace = 0;
+    }
+    var maxFileSize = Model.Options.MaxFileSize;
+    var allowedTypes = string.Join(", ", Model.Options.AllowedExtensions.Select(e => e));
+}
+
 
 @if (Model.Results?.Data != null)
 {
@@ -31,11 +41,10 @@
         }
     </div>
 }
-else
-{
-    <div class="list-group list-group-flush select-dropdown-preview">
-        <div class="list-group-item">
-            @T["No attachments added yet"]
-        </div>
-    </div>
-}
+
+<div class="alert  m-0 border-0 text-center">
+    <span class="text-muted">@T["Available Space"]</span>
+    <span class="font-weight-bold">@availableSpace.ToFriendlyFileSize()</span>
+    <span class="text-muted">@T["Max File Size"]</span>
+    <span class="font-weight-bold">@maxFileSize.ToFriendlyFileSize()</span>
+</div>

@@ -152,7 +152,7 @@ var Dropzone = function (_Emitter) {
                 dictDefaultMessage: "Drop images here to upload or click to select",
                 dictFallbackMessage: "Your browser does not support drag'n'drop file uploads.",
                 dictFallbackText: "Please use the fallback form below to upload your files like in the olden days.",
-                dictFileTooBig: "File is too big ({{filesize}}MiB). Max filesize: {{maxFilesize}}MiB.",
+                dictFileTooBig: "File is too big ({{filesize}}mb). Max filesize: {{maxFilesize}}mb.",
                 dictInvalidFileType: "You can't upload files of this type.",
                 dictResponseError: "Server responded with {{statusCode}} code.",
                 dictCancelUpload: "Cancel upload",

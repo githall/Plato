@@ -1,6 +1,13 @@
 ﻿@model AttachmentsViewModel
 @{
     Layout = null;
+    var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
+    if (availableSpace < 0)
+    {
+        availableSpace = 0;
+    }
+    var maxFileSize = Model.Options.MaxFileSize;
+    var allowedTypes = string.Join(", ", Model.Options.AllowedExtensions.Select(e => e));
 }
 
 @if (Model.Results?.Data != null)
@@ -27,6 +34,6 @@ else
     <div class="list-group list-group-flush select-dropdown-preview">
         <div class="list-group-item">
             @T["No attachments added yet"]
-        </div>
+        </div>    
     </div>
 }

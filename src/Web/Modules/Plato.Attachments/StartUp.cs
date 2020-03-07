@@ -48,10 +48,12 @@ namespace Plato.Attachments
 
             // Repositories 
             services.AddScoped<IAttachmentRepository<Attachment>, AttachmentRepository>();
+            services.AddScoped<IAttachmentInfoRepository<AttachmentInfo>, AttachmentInfoRepository>();
 
             // Stores
             services.AddScoped<IAttachmentStore<Attachment>, AttachmentStore>();
             services.AddScoped<IAttachmentSettingsStore<AttachmentSettings>, AttachmentSettingsStore>();
+            services.AddScoped<IAttachmentInfoStore<AttachmentInfo>, AttachmentInfoStore>();
 
             // Configuration
             services.AddSingleton<IConfigureOptions<AttachmentSettings>, AttachmentSettingsConfiguration>();
