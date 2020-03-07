@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Attachments.Models;
 using Plato.Attachments.Stores;
@@ -9,6 +10,7 @@ using Plato.Entities.Attachments.Models;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.ViewModels;
 using PlatoCore.Data.Abstractions;
+
 
 namespace Plato.Entities.Attachments.ViewComponents
 {
@@ -53,25 +55,27 @@ namespace Plato.Entities.Attachments.ViewComponents
         private async Task<IPagedResults<Attachment>> GetDataAsync(EntityAttachmentOptions model)
         {
 
+
+            IEnumerable<EntityAttachment> relaationships = null;
+            if (model.EntityId > 0)
+            {
+                relaationships = await _entityAttachmentStore
+                    .GetByEntityIdAsync(model.EntityId);
+            }
+
             return await _attachmentStore
                 .QueryAsync()
                 .Take(int.MaxValue, false)
-                .Select<AttachmentQueryParams>(async q =>
+                .Select<AttachmentQueryParams>(q =>
                 {
-
-                    // Get attachments for entity
-                    if (model.EntityId > 0)
+                    // Get attachments for entity                               
+                    if (relaationships != null)
                     {
-                        var relaationships = await _entityAttachmentStore
-                            .GetByEntityIdAsync(model.EntityId);
-                        if (relaationships != null)
-                        {
-                            q.Id.IsIn(relaationships.Select(r => r.AttachmentId).ToArray());
-                        }
+                        q.Id.IsIn(relaationships.Select(r => r.AttachmentId).ToArray());
                     }
 
                     // Get attachments for guid
-                    q.ContentGuid.Or().Equals(model.Guid);
+                    q.ContentGuid.Equals(model.Guid).Or();
 
                 })
                 .ToList();

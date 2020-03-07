@@ -14,9 +14,9 @@ namespace Plato.Attachments.Stores
         private const string ById = "ById";
 
         private readonly IAttachmentRepository<Models.Attachment> _attachmentRepository;
+        private readonly ILogger<AttachmentStore> _logger;
         private readonly IDbQueryConfiguration _dbQuery;
         private readonly ICacheManager _cacheManager;
-        private readonly ILogger<AttachmentStore> _logger;
        
         public AttachmentStore(
             IAttachmentRepository<Models.Attachment> attachmentRepository, 
@@ -118,8 +118,18 @@ namespace Plato.Attachments.Stores
         public async Task<IPagedResults<Models.Attachment>> SelectAsync(IDbDataParameter[] dbParams)
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType(), dbParams.Select(p => p.Value).ToArray());
-            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>         
-                await _attachmentRepository.SelectAsync(dbParams));
+            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
+            {
+
+                if (_logger.IsEnabled(LogLevel.Information))
+                {
+                    _logger.LogInformation("Selecting attachments for key '{0}' with the following parameters: {1}",
+                            token.ToString(), dbParams.Select(p => p.Value));
+                }
+
+                return await _attachmentRepository.SelectAsync(dbParams);
+                
+            });
         }
 
         public void CancelTokens(Models.Attachment model = null)

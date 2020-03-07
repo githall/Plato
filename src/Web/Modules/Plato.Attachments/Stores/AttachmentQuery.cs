@@ -242,7 +242,7 @@ namespace Plato.Attachments.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.Id.Operator);
-                sb.Append(_query.Params.Id.ToSqlString("a.Id"));
+                sb.Append("(").Append(_query.Params.Id.ToSqlString("a.Id")).Append(")");
             }
 
             // ContentGuid
@@ -250,7 +250,7 @@ namespace Plato.Attachments.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.ContentGuid.Operator);
-                sb.Append(_query.Params.ContentGuid.ToSqlString("a.ContentGuid", "ContentGuid"));
+                sb.Append("(").Append(_query.Params.ContentGuid.ToSqlString("a.ContentGuid", "ContentGuid")).Append(")");
             }
 
             // ContentCheckSum
@@ -260,7 +260,6 @@ namespace Plato.Attachments.Stores
                     sb.Append(_query.Params.ContentCheckSum.Operator);
                 sb.Append(_query.Params.ContentCheckSum.ToSqlString("a.ContentCheckSum", "ContentCheckSum"));
             }
-
 
             return sb.ToString();
 
