@@ -12,6 +12,7 @@ using PlatoCore.Scripting.Abstractions;
 
 namespace Plato.Attachments.ActionFilters
 {
+
     public class AttachmentClientOptionsFilter : IModularActionFilter
     {
 
@@ -78,10 +79,9 @@ namespace Plato.Attachments.ActionFilters
                 return null;
             }
 
-            var script = "$(function (win) { $.extend(win.$.Plato.attachments, { allowedExtensions: {allowedExtensions}, maxFileSize: {maxFileSize}, availableSpace: {availableSpace} }); } (window));";
+            var script = "$(function (win) { $.extend(win.$.Plato.attachments, { allowedExtensions: {allowedExtensions}, maxFileSize: {maxFileSize} }); } (window));";
             script = script.Replace("{allowedExtensions}", BuildAllowedExtensions(options.AllowedExtensions));
             script = script.Replace("{maxFileSize}", options.MaxFileSize.ToString());
-            script = script.Replace("{availableSpace}", options.AvailableSpace.ToString());
             return new ScriptBlock(script);
 
         }

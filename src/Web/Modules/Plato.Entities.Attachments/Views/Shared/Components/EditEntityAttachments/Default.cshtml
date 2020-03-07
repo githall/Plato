@@ -1,40 +1,27 @@
 ﻿@model AttachmentsViewModel
 @{
     var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
-    if (availableSpace < 0)
-    {
-        availableSpace = 0;
-    }
-    var maxFileSize = Model.Options.MaxFileSize;
-    var allowedTypes = string.Join(", ", Model.Options.AllowedExtensions.Select(e => e));
+    if (availableSpace < 0)    
+        availableSpace = 0;    
+    var maxFileSize = Model.Options.MaxFileSize;    
 }
-
 
 @if (Model.Results?.Data != null)
 {
     <div class="list-group list-group-flush list-group-hover select-dropdown-preview">
         @foreach (var attachment in Model.Results.Data)
-        {
-            var views = attachment.TotalViews == 1 ? T["view"] : T["views"];
-            var tooltip = $"{attachment.ContentLength.ToFriendlyFileSize()}, {attachment.TotalViews.ToPrettyInt()} {views.Value}";
+        {            
             var extension = System.IO.Path.GetExtension(attachment.Name);
-            var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
-            var checksum = $"{attachment.ContentCheckSum}";
+            var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;            
             <div class="list-group-item list-group-item-action">
-                <a href="#" class="btn float-right text-muted" data-provide="confirm" data-toggle="tooltip" title="@T["Delete Attachment"]">
+                <a asp-route-area="@attachment.ModuleId" asp-route-controller="Attachment" asp-route-action="Delete" asp-route-id="@attachment.Id" class="btn float-right text-muted" data-provide="confirm" data-toggle="tooltip" title="@T["Delete Attachment"]">
                     <i class="fal fa-times"></i>
                 </a>
-                <span class="btn float-right text-muted" data-toggle="tooltip" title="@tooltip">
-                    <i class="fal fa-info-circle"></i>
-                </span>
-                <span class="btn float-right text-muted" data-toggle="tooltip" title="@checksum">
-                    <i class="fal fa-hashtag"></i>
-                </span>
                 @if (!string.IsNullOrEmpty(iconCss))
                 {
                     <span class="fiv-sqo @iconCss align-middle mr-1"></span>
                 }
-                <a href="#" class="align-middle">
+                <a asp-route-area="@attachment.ModuleId" asp-route-controller="Attachment" asp-route-action="Download" asp-route-id="@attachment.Id" class="align-middle">
                     @attachment.Name
                 </a>
             </div>
@@ -42,9 +29,9 @@
     </div>
 }
 
-<div class="alert  m-0 border-0 text-center">
-    <span class="text-muted">@T["Available Space"]</span>
+<div class="alert m-0 border-0 text-center">
+    <span class="text-muted">@T["Available space"]</span>
     <span class="font-weight-bold">@availableSpace.ToFriendlyFileSize()</span>
-    <span class="text-muted">@T["Max File Size"]</span>
+    <span class="text-muted">@T["Maximum file size"]</span>
     <span class="font-weight-bold">@maxFileSize.ToFriendlyFileSize()</span>
 </div>

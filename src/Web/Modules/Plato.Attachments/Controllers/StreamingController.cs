@@ -27,9 +27,9 @@ namespace Plato.Attachments.Controllers
     public class StreamingController : BaseWebApiController
     {
 
-        public const string GuidKey = "guid";
         public const string FeatureIdKey = "featureId";
-
+        public const string GuidKey = "guid";
+    
         private static readonly string[] SupportedImageContentTypes = new string[]
         {
             "image/jpeg",
@@ -46,24 +46,26 @@ namespace Plato.Attachments.Controllers
             "application/octet-stream"
         };
 
+        private readonly IAttachmentInfoStore<AttachmentInfo> _attachmentInfoStore;
         private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
-        private readonly ILogger<StreamingController> _logger;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
+        private readonly ILogger<StreamingController> _logger;
 
         public IHtmlLocalizer T { get; }
-
 
         // Get the default form options so that we can use them
         // to set the default limits for request body data
         private readonly FormOptions _defaultFormOptions = new FormOptions();
 
-        public StreamingController(      
+        public StreamingController(
+             IAttachmentInfoStore<AttachmentInfo> attachmentInfoStore,
             IAttachmentOptionsFactory attachmentOptionsFactory,
             IAttachmentStore<Attachment> attachmentStore,
             ILogger<StreamingController> logger,
             IHtmlLocalizer htmlLocalizer)
-        {
+        {            
             _attachmentOptionsFactory = attachmentOptionsFactory;
+            _attachmentInfoStore = attachmentInfoStore;
             _attachmentStore = attachmentStore;
             _logger = logger;
 
@@ -223,11 +225,15 @@ namespace Plato.Attachments.Controllers
             // Validate the attachment
             // -------------------
 
-            var validExtension = false;
-            var validSize = false;
+            bool validExtension = false, 
+                validSize = false, 
+                validSpace = false;
 
-            // Get attachment options
+            long spaceRemaining = 0;
+
+            // Get options & info
             var options = await _attachmentOptionsFactory.GetOptionsAsync(user);
+
             if (options != null)
             {
 
@@ -246,6 +252,19 @@ namespace Plato.Attachments.Controllers
                     }
                 }
 
+                // Ensure the upload would not exceed available space
+                var info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0);
+                if (info != null)
+                {
+                    if ((info.Length + attachment.ContentLength) <= options.AvailableSpace)
+                    {
+                        validSpace = true;
+                    }
+                    spaceRemaining = options.AvailableSpace - info.Length;
+                    if (spaceRemaining < 0)
+                        spaceRemaining = 0;
+                }
+
             }
 
             // Build results
@@ -254,7 +273,7 @@ namespace Plato.Attachments.Controllers
             var output = new List<UploadResult>();
 
             // Validation OK?
-            if (validExtension && validSize)
+            if (validExtension && validSize && validSpace)
             {
 
                 // Store attachment
@@ -317,6 +336,20 @@ namespace Plato.Attachments.Controllers
                             Error = text.Value
                         });
                     }
+                }
+
+                // No space available
+                if (!validSpace)
+                {
+                    var text = T["Not enough free space. You only have {0} of free space available but the upload was {1}."];
+                    output.Add(new UploadResult()
+                    {
+                        Name = name,
+                        Error = string.Format(
+                                text.Value,                             
+                                spaceRemaining.ToFriendlyFileSize(),
+                                attachment.ContentLength.ToFriendlyFileSize())
+                    });
                 }
 
             }

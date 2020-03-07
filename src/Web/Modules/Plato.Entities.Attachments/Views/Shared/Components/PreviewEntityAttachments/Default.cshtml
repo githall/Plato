@@ -1,14 +1,4 @@
 ﻿@model AttachmentsViewModel
-@{
-    Layout = null;
-    var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
-    if (availableSpace < 0)
-    {
-        availableSpace = 0;
-    }
-    var maxFileSize = Model.Options.MaxFileSize;
-    var allowedTypes = string.Join(", ", Model.Options.AllowedExtensions.Select(e => e));
-}
 
 @if (Model.Results?.Data != null)
 {
@@ -21,7 +11,7 @@
                 var tooltip = $"{attachment.Name} - {attachment.ContentLength.ToFriendlyFileSize()}";
                 @if (!string.IsNullOrEmpty(iconCss))
                 {
-                    <a asp-route-area="Plato.Articles.Attachments" asp-route-controller="Attachment" asp-route-action="Index" asp-route-id="@attachment.Id" data-toggle="tooltip" title="@tooltip" class="d-inline-block mr-1">
+                    <a asp-route-area="@attachment.ModuleId" asp-route-controller="Attachment" asp-route-action="Download" asp-route-id="@attachment.Id" data-toggle="tooltip" title="@tooltip" class="d-inline-block mr-1">
                         <i class="fiv-sqo @iconCss"></i>
                     </a>
                 }

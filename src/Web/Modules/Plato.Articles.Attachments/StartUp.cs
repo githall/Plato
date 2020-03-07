@@ -42,12 +42,20 @@ namespace Plato.Articles.Attachments
             IServiceProvider serviceProvider)
         {
 
-            // Attachment
+            // Download
             routes.MapAreaRoute(
-                name: "ArticlesAttachment",
+                name: "ArticlesAttachmentDownload",
                 areaName: "Plato.Articles.Attachments",
-                template: "articles/attachment/{id:int}",
-                defaults: new { controller = "Attachment", action = "Index" }
+                template: "articles/attachments/download/{id:int}",
+                defaults: new { controller = "Attachment", action = "Download" }
+            );
+
+            // Delete
+            routes.MapAreaRoute(
+                name: "ArticlesAttachmentDelete",
+                areaName: "Plato.Articles.Attachments",
+                template: "articles/attachments/delete/{id:int}",
+                defaults: new { controller = "Attachment", action = "Delete" }
             );
 
         }

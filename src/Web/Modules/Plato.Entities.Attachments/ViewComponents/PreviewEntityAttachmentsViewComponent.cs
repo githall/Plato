@@ -22,25 +22,17 @@ namespace Plato.Entities.Attachments.ViewComponents
     public class PreviewEntityAttachmentsViewComponent : ViewComponent
     {
         
-        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
-        private readonly IAttachmentInfoStore<AttachmentInfo> _attachmentInfoStore;
-        private readonly ILogger<PreviewEntityAttachmentsViewComponent> _logger;
-        private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
+        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;        
+        private readonly ILogger<PreviewEntityAttachmentsViewComponent> _logger;    
         private readonly IAttachmentStore<Attachment> _attachmentStore;
-        private readonly IHttpContextAccessor _httpContextAccessor;
 
-        public PreviewEntityAttachmentsViewComponent(            
+        public PreviewEntityAttachmentsViewComponent(
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
-            IAttachmentInfoStore<AttachmentInfo> attachmentInfoStore,
-            ILogger<PreviewEntityAttachmentsViewComponent> logger,
-            IAttachmentOptionsFactory attachmentOptionsFactory,
-            IAttachmentStore<Attachment> attachmentStore,         
-            IHttpContextAccessor httpContextAccessor)
+            ILogger<PreviewEntityAttachmentsViewComponent> logger,     
+            IAttachmentStore<Attachment> attachmentStore)
         {
-            _attachmentOptionsFactory = attachmentOptionsFactory;
-            _entityAttachmentStore = entityAttachmentStore;
-            _attachmentInfoStore = attachmentInfoStore;
-            _httpContextAccessor = httpContextAccessor;
+
+            _entityAttachmentStore = entityAttachmentStore;      
             _attachmentStore = attachmentStore;           
             _logger = logger;
         }
@@ -60,14 +52,9 @@ namespace Plato.Entities.Attachments.ViewComponents
                 throw new ArgumentNullException(nameof(model.Guid));
             }
 
-            // Get current authenticated user
-            var user = _httpContextAccessor.HttpContext.Features[typeof(User)] as User;
-
             // Build model & return view
             return View(new AttachmentsViewModel()
             {
-                Info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0),
-                Options = await _attachmentOptionsFactory.GetOptionsAsync(user),
                 Results = await GetResultsAsync(model),
             });
 
