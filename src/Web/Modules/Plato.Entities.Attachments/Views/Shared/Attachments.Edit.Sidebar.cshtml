@@ -30,7 +30,7 @@
     });
 }
 
-<input type="hidden" name="@Model.GuidHtmlName" asp-for="Guid" />
+<input type="text" name="@Model.GuidHtmlName" asp-for="Guid" />
 
 <p>
     @allowedExtensions?.ToDelimitedString()?.Replace(",", ", ")

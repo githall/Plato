@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using Plato.Attachments.Models;
 using Plato.Attachments.Stores;
 using Plato.Attachments.ViewModels;
@@ -16,15 +18,19 @@ namespace Plato.Entities.Attachments.ViewComponents
     public class PreviewEntityAttachmentsViewComponent : ViewComponent
     {
 
-        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
+        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;        
+        private readonly ILogger<PreviewEntityAttachmentsViewComponent> _logger;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
 
         public PreviewEntityAttachmentsViewComponent(
+
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
+            ILogger<PreviewEntityAttachmentsViewComponent> logger,
             IAttachmentStore<Attachment> attachmentStore)
         {
             _entityAttachmentStore = entityAttachmentStore;
             _attachmentStore = attachmentStore;
+            _logger = logger;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(EntityAttachmentOptions model)
@@ -53,24 +59,26 @@ namespace Plato.Entities.Attachments.ViewComponents
         private async Task<IPagedResults<Attachment>> GetDataAsync(EntityAttachmentOptions model)
         {
 
+            IEnumerable<EntityAttachment> relaationships = null;
+            if (model.EntityId > 0)
+            {
+                relaationships = await _entityAttachmentStore
+                    .GetByEntityIdAsync(model.EntityId);
+            }
+
             return await _attachmentStore
                 .QueryAsync()
-                .Select<AttachmentQueryParams>(async q =>
+                .Take(int.MaxValue, false)
+                .Select<AttachmentQueryParams>(q =>
                 {
-
-                    // Get attachments for entity
-                    if (model.EntityId > 0)
+                    // Get attachments for entity                               
+                    if (relaationships != null)
                     {
-                        var relaationships = await _entityAttachmentStore
-                            .GetByEntityIdAsync(model.EntityId);
-                        if (relaationships != null)
-                        {
-                            q.Id.IsIn(relaationships.Select(r => r.AttachmentId).ToArray());
-                        }
+                        q.Id.IsIn(relaationships.Select(r => r.AttachmentId).ToArray());
                     }
 
                     // Get attachments for guid
-                    q.ContentGuid.Or().Equals(model.Guid);
+                    q.ContentGuid.Equals(model.Guid).Or();
 
                 })
                 .ToList();

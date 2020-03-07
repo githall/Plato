@@ -1,15 +1,7 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Plato.Attachments.Stores;
-using Plato.Attachments.Models;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
-using Plato.Attachments.ViewModels;
-using PlatoCore.Data.Abstractions;
-using Plato.Entities.Attachments.Stores;
-using Plato.Entities.Attachments.Models;
 using Plato.Entities.Attachments.ViewModels;
 
 namespace Plato.Entities.Attachments.Controllers
