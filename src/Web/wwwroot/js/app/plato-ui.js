@@ -229,7 +229,9 @@ $(function (win, doc, $) {
             buttons: null,  // see above comment for example
             css: {
                 modal: "modal fade",
-                dialog: "modal-dialog" // add modal-lg,  modal-sm for sizing
+                dialog: "modal-dialog", // add modal-lg,  modal-sm for sizing
+                content: "modal-content",
+                body: "modal-body"
             },
             onLoad: function ($caller) { }, // triggers when body.url is loaded
             onShow: function ($caller) { }, // triggers when the dialog is shown
@@ -343,7 +345,7 @@ $(function (win, doc, $) {
                 if (html && html !== "") {
                     var $body = $("<div>",
                         {
-                            "class": "modal-body"
+                            "class": $caller.data(dataKey).css.body || "modal-body"
                         }).html(html);
                     $content.append($body);
                 }
@@ -387,17 +389,17 @@ $(function (win, doc, $) {
                         {
                             "id": id,
                             "role": "dialog",
-                            "class": $caller.data(dataKey).css.modal,
+                            "class": $caller.data(dataKey).css.modal || "modal fade",
                             "tabIndex": "-1"
                         });
 
                     var $model = $("<div>",
                         {
-                            "class": $caller.data(dataKey).css.dialog
+                            "class": $caller.data(dataKey).css.dialog || "modal-dialog"
                         }),
                         $content = $("<div>",
                             {
-                                "class": "modal-content"
+                                "class": $caller.data(dataKey).css.content || "modal-content"
                             }).append($('<p class="my-4 text-center"><i class="fal my-4 fa-spinner fa-spin"></i></p>'));
 
 

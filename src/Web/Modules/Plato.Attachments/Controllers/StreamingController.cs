@@ -92,7 +92,7 @@ namespace Plato.Attachments.Controllers
                 return base.UnauthorizedException();
             }
 
-            // TODO: Add permission checks
+            // TODO: Add upload permission checks
             // ----------------------
 
             // Validate temporary global unique identifier
@@ -223,6 +223,7 @@ namespace Plato.Attachments.Controllers
 
             var validSize = contentLength <= options.MaxFileSize;
 
+            // Validate
             if (validExtension && validSize)
             {
 
@@ -259,16 +260,15 @@ namespace Plato.Attachments.Controllers
             else
             {
 
-                // File to large
+                // File to big
                 if (!validSize)
                 {
-                    var text = T["The file {0} is {1} in size which exceeds your configured maximum allowed individual attachment size of {2}."];     
+                    var text = T["The file is {0} which exceeds your configured maximum allowed file size of {1}."];     
                     output.Add(new UploadedFile()
                     {
                         Name = name,
                         Error = string.Format(
-                                text.Value,
-                                name,
+                                text.Value,                          
                                 contentLength.ToFriendlyFileSize(),
                                 options.MaxFileSize.ToFriendlyFileSize())
                     }); 
@@ -280,31 +280,27 @@ namespace Plato.Attachments.Controllers
                     var allowedExtensions = string.Join(",", options.AllowedExtensions.Select(e => e));
                     if (!string.IsNullOrEmpty(allowedExtensions))
                     {
-                        var text = T["The file {0} is not an allowed type. You are allowed to attach the following types:- {1}"];
+                        var text = T["The file is not an allowed type. You are allowed to attach the following types:- {0}"];
                         output.Add(new UploadedFile()
                         {
                             Name = name,
                             Error = string.Format(
-                                    text.Value,
-                                    name,
+                                    text.Value,                                  
                                     allowedExtensions.Replace(",", ", "))
-
                         });
                     } 
                     else
                     {
-                        var text = T["The file {0} is not an allowed type. No allowed file extensions have been configured for your account."];
+                        var text = T["The file is not an allowed type. No allowed file extensions have been configured for your account."];
                         output.Add(new UploadedFile()
                         {
                             Name = name,
-                            Error = string.Format(
-                                    text.Value,
-                                    name)
+                            Error =  text.Value
                         });
                     }
 
                 }
-            }        
+            }
 
             return base.Result(output);
 

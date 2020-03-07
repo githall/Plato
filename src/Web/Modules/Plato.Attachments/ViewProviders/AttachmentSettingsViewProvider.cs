@@ -24,10 +24,7 @@ namespace Plato.Attachments.ViewProviders
     public class AttachmentSettingsViewProvider : ViewProviderBase<AttachmentSetting>
     {
 
-        public static readonly long[] SizesInBytes = new long[] {
-            51200,
-            102400,
-            524288,
+        public static readonly long[] SizesInBytes = new long[] {        
             1048576,
             2097152,
             3145728,

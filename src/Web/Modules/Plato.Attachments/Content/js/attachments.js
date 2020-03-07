@@ -166,6 +166,7 @@ $(function (win, doc, $) {
                 autoDiscover: false,
                 disablePreview: true,
                 uploadMultiple: false,
+                maxFilesize: 256,
                 dictDefaultMessage:
                     '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
             },
@@ -211,6 +212,9 @@ $(function (win, doc, $) {
 
                 if (!opts.init) {
 
+                    // Set dropzone max file size
+                    opts.maxFilesize = Math.ceil($caller.data(dataKey).maxFileSize / (1024 * 1024));
+
                     // Get Plato options
                     if (app.defaults) {
 
@@ -234,7 +238,8 @@ $(function (win, doc, $) {
 
                         var $progressPreview = methods._getProgressPreview($caller),
                             maxFileSize = $caller.data(dataKey).maxFileSize,
-                            allowedExtensions = $caller.data(dataKey).allowedExtensions;
+                            allowedExtensions = $caller.data(dataKey).allowedExtensions,
+                            errors = [];
 
                         function getProgressId(file) {
                             return "progress-" + file.upload.uuid;
@@ -339,6 +344,7 @@ $(function (win, doc, $) {
 
                         this.on("addedfiles",
                             function (files) {
+                                errors = []; // reset errors when files are added
                                 return validateFileExtensions(files);
                             });
 
@@ -388,43 +394,12 @@ $(function (win, doc, $) {
 
                                 if (response.statusCode === 200) {
                                     if (response && response.result) {
-
-                                        // Compile any errors
-                                        var messages = "";
+                                        // Compile any errors                                     
                                         for (var i = 0; i < response.result.length; i++) {
                                             var result = response.result[i];
                                             if (result.error && result.error !== "") {
-                                                messages += result.error;
-                                                if (i < response.result.length - 1) {
-                                                    messages += "\n\n";
-                                                }
+                                                errors.push(result.error);
                                             }
-                                        }
-
-                                        // Show errors
-                                        if (messages !== "") {
-
-                                            // Show error dialog
-                                            $().dialog({
-                                                title: app.T("Insufficient Permissions"),
-                                                body: {
-                                                    url: null,
-                                                    html: messages.replace(/\n/g, "<br/>")
-                                                },
-                                                buttons: [
-                                                    {
-                                                        id: "ok",
-                                                        text: "OK",
-                                                        css: "btn btn-primary",
-                                                        click: function ($dialog, $button) {
-                                                            $().dialog("hide");
-                                                            return false;
-                                                        }
-                                                    }
-                                                ]
-                                            },
-                                                "show");
-
                                         }
                                     }
                                 }
@@ -445,17 +420,54 @@ $(function (win, doc, $) {
                             });
 
                         this.on("complete", function (file) {
+
+                            // Show errors
+                            if (errors.length > 0) {
+
+                                var messages = "";
+                                for (var i = 0; i < errors.length; i++) {
+                                    messages += errors[i];
+                                    if (i < errors.length - 1) {
+                                        messages += "\n\n";
+                                    }
+                                }
+
+                                // Show error dialog
+                                $().dialog({
+                                    title: app.T("Insufficient Permissions"),
+                                    body: {
+                                        url: null,
+                                        html: messages.replace(/\n/g, "<br/>")
+                                    },
+                                    css: {
+                                        body: "modal-body max-h-200 overflow-auto"
+                                    },
+                                    buttons: [
+                                        {
+                                            id: "ok",
+                                            text: "OK",
+                                            css: "btn btn-primary",
+                                            click: function ($dialog, $button) {
+                                                $().dialog("hide");
+                                                return false;
+                                            }
+                                        }
+                                    ]
+                                },
+                                    "show");
+
+                            }
+
                             if ($caller.data(dataKey).onComplete) {
                                 $caller.data(dataKey).onComplete(file);
                             }
                         });
 
                         this.on('error',
-                            function (file, error, xhr) {
+                            function (file, error, xhr) {                                
 
-                                var s = '<h6>' + app.T("An error occurred!") + '</h6>';
-                                s += app.T("Information is provided below...") + "<br/><br/>";
-                                s += '<textarea style="min-height: 130px;" class="form-control">' + error + '</textarea>';                             
+                                var s = '<h6>' + app.T("A problem occurred!") + '</h6>';                          
+                                s += '<textarea class="form-control">' + error + '</textarea>';                             
 
                                 // Bootstrap notify
                                 app.ui.notify({
