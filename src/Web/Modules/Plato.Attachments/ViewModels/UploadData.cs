@@ -10,9 +10,9 @@
 
         public string FriendlySize { get; set; }
 
-        public bool IsImage { get; set; }
+        public string ContentType { get; set; }
 
-        public bool IsBinary { get; set; }
+        public long ContentLength { get; set; }
 
         public string Error { get; set; }
 

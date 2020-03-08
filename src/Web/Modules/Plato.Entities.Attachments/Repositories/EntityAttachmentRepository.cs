@@ -160,9 +160,9 @@ namespace Plato.Entities.Attachments.Repositories
                             output = new List<EntityAttachment>();
                             while (await reader.ReadAsync())
                             {
-                                var entity = new EntityAttachment();
-                                entity.PopulateModel(reader);
-                                output.Add(entity);
+                                var entityAttachment = new EntityAttachment();
+                                entityAttachment.PopulateModel(reader);
+                                output.Add(entityAttachment);
                             }
 
                         }

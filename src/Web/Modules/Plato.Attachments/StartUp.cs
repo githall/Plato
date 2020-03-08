@@ -97,7 +97,7 @@ namespace Plato.Attachments
                 defaults: new { controller = "Admin", action = "Settings" }
             );
 
-            // EditSettings
+            // Edit Settings
             routes.MapAreaRoute(
                 name: "AttachmentsEditSettings",
                 areaName: "Plato.Attachments",
@@ -109,7 +109,7 @@ namespace Plato.Attachments
             routes.MapAreaRoute(
                 name: "ServeAttachment",
                 areaName: "Plato.Attachments",
-                template: "attachment/{id?}",
+                template: "attachment/{id:int}",
                 defaults: new { controller = "Attachment", action = "Serve" }
             );
 
@@ -117,8 +117,8 @@ namespace Plato.Attachments
             routes.MapAreaRoute(
                 name: "AttachmentWebApi",
                 areaName: "Plato.Attachments",
-                template: "api/attachments/{controller}/{action}/{id?}",
-                defaults: new { controller = "Upload", action = "Index" }
+                template: "api/attachments/{action}/{id:int?}",
+                defaults: new { controller = "Api", action = "Index" }
             );
 
 

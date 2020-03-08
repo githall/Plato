@@ -220,8 +220,7 @@ $(function (win, doc, $) {
     };
 
     /* Plato Http */
-    var platoHttp = function(config) {
-        
+    var platoHttp = function(config) {        
      
         if (!win.$.Plato.defaults) {
             throw new Error("platoHttp requires a valid $.Plato.defaults object");
@@ -259,7 +258,7 @@ $(function (win, doc, $) {
 
         // set content type & API version
         config.headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=utf-8',
             'X-Api-Version': '1',
             "X-Csrf-Token": win.$.Plato.defaults.getCsrfCookieToken()
         };
@@ -514,10 +513,7 @@ $(function (win, doc, $) {
             share: function (url) {
                 win.twttr.ready(function (twttr) {
                     twttr.events.bind('tweet',
-                        function (event) {
-                            //console.log(event);
-                            //alert('published');
-                        });
+                        function (event) { });
                 });
                 var popup = window.open('https://twitter.com/intent/tweet?text=' + url,
                     'popupwindow',

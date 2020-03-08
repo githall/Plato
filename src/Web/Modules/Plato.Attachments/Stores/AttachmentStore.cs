@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -11,6 +12,7 @@ namespace Plato.Attachments.Stores
 
     public class AttachmentStore : IAttachmentStore<Models.Attachment>
     {
+
         private const string ById = "ById";
 
         private readonly IAttachmentRepository<Models.Attachment> _attachmentRepository;
@@ -19,10 +21,10 @@ namespace Plato.Attachments.Stores
         private readonly ICacheManager _cacheManager;
        
         public AttachmentStore(
-            IAttachmentRepository<Models.Attachment> attachmentRepository, 
+            IAttachmentRepository<Models.Attachment> attachmentRepository,
+            ILogger<AttachmentStore> logger,
             IDbQueryConfiguration dbQuery,
-            ICacheManager cacheManager,
-            ILogger<AttachmentStore> logger)
+            ICacheManager cacheManager)
         {
             _attachmentRepository = attachmentRepository;
             _cacheManager = cacheManager;
@@ -34,6 +36,17 @@ namespace Plato.Attachments.Stores
 
         public async Task<Models.Attachment> CreateAsync(Models.Attachment model)
         {
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (model.Id > 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(model.Id));
+            }
+
             var result = await _attachmentRepository.InsertUpdateAsync(model);
             if (result != null)
             {
@@ -46,6 +59,17 @@ namespace Plato.Attachments.Stores
 
         public async Task<Models.Attachment> UpdateAsync(Models.Attachment model)
         {
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (model.Id <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(model.Id));
+            }
+
             var result = await _attachmentRepository.InsertUpdateAsync(model);
             if (result != null)
             {
@@ -58,6 +82,11 @@ namespace Plato.Attachments.Stores
 
         public async Task<bool> DeleteAsync(Models.Attachment model)
         {
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
 
             var success = await _attachmentRepository.DeleteAsync(model.Id);
             if (success)
