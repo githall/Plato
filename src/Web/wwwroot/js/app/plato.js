@@ -513,10 +513,7 @@ $(function (win, doc, $) {
             share: function (url) {
                 win.twttr.ready(function (twttr) {
                     twttr.events.bind('tweet',
-                        function (event) {
-                            //console.log(event);
-                            //alert('published');
-                        });
+                        function (event) { });
                 });
                 var popup = window.open('https://twitter.com/intent/tweet?text=' + url,
                     'popupwindow',
@@ -554,7 +551,7 @@ $(function (win, doc, $) {
     win.$.Plato = {
         // defaults
         defaults: {
-            debug: true,
+            debug: false,
             url: "",
             locale: "en-US",
             apiKey: "",

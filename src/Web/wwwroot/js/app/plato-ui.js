@@ -219,8 +219,7 @@ $(function (win, doc, $) {
                         id: "cancel",
                         text: "Cancel",
                         css: "btn btn-secondary",
-                        click: function ($modal, e) {
-                            console.log("cancel clicked!");
+                        click: function ($modal, e) {                          
                             $().dialog("hide");
                         }
                     },

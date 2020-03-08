@@ -28,11 +28,9 @@ namespace Plato.Entities.Attachments.ViewComponents
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            var results = await _entityAttachmentStore.GetByEntityIdAsync(entity.Id);
-
             return View(new EntityAttachmentsViewModel()
             {
-                Results = results
+                Results = await _entityAttachmentStore.GetByEntityIdAsync(entity.Id)
             });
 
         }

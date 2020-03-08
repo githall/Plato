@@ -58,18 +58,23 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {
 
-                // Configure httpContent
+                // Configure httpContent upon load
                 $caller.find('[data-provide="http-content"]').httpContent({
                     onLoad: function ($el) {
-
                         // Bind delete buttons
                         var $btns = $el.find('[data-provide="delete-attachment"]');
                         if ($btns.length > 0) {
-
                             $btns.click(function (e) {
 
                                 e.preventDefault();
                                 e.stopPropagation();
+
+                                var $icon = $(this).find("i");
+                                if ($icon.length > 0) {
+                                    $icon.removeClass("fa-times")
+                                        .addClass("fa-spinner")
+                                        .addClass("fa-spin");
+                                }                             
 
                                 var id = parseInt($(this).data("attachmentId"));
                                 if (isNaN(id)) {
@@ -81,12 +86,11 @@ $(function (win, doc, $) {
                                     url: 'api/attachments/delete',                                  
                                     data: JSON.stringify(id)
                                 }).done(function (response) {
-                                    console.log(response);
+                                    $el.httpContent("reload");
                                 });
 
                             });
                         }                  
-
                     }
                 });
 

@@ -29,22 +29,6 @@ namespace Plato.Attachments.Controllers
 
         public const string FeatureIdKey = "featureId";
         public const string GuidKey = "guid";
-    
-        private static readonly string[] SupportedImageContentTypes = new string[]
-        {
-            "image/jpeg",
-            "image/png",
-            "image/gif",
-            "image/jpg",
-            "image/bmp"
-        };
-
-        private static readonly string[] SupportedBinaryContentTypes = new string[]
-        {
-            "text/plain",
-            "text/html",
-            "application/octet-stream"
-        };
 
         private readonly IAttachmentInfoStore<AttachmentInfo> _attachmentInfoStore;
         private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
@@ -76,14 +60,17 @@ namespace Plato.Attachments.Controllers
         // -----------
         // Post
         // -----------
-            
+
         [HttpPost, DisableFormValueModelBinding, ValidateClientAntiForgeryToken]
         [RequestFormLimits(MultipartBodyLengthLimit = 1073741824)]
         [RequestSizeLimit(1073741824)]
         public async Task<IActionResult> Post()
         {
 
+            // Get authenticated user
             var user = await base.GetAuthenticatedUserAsync();
+
+            // We need to be authenticated
             if (user == null)
             {
                 return base.UnauthorizedException();
@@ -280,10 +267,10 @@ namespace Plato.Attachments.Controllers
                     output.Add(new UploadResult()
                     {
                         Id = attachment.Id,
-                        Name = attachment.Name,
-                        FriendlySize = attachment.ContentLength.ToFriendlyFileSize(),
-                        IsImage = IsContentTypeSupported(attachment.ContentType, SupportedImageContentTypes),
-                        IsBinary = IsContentTypeSupported(attachment.ContentType, SupportedBinaryContentTypes),
+                        Name = attachment.Name,                        
+                        ContentType = attachment.ContentType,
+                        ContentLength = attachment.ContentLength,
+                        FriendlySize = attachment.ContentLength.ToFriendlyFileSize()
                     });
                 }
 
@@ -360,7 +347,7 @@ namespace Plato.Attachments.Controllers
         [HttpPost, ValidateClientAntiForgeryToken]
         public async Task<IActionResult> Delete([FromBody] int id)
         {
-     
+
             // Validate
             if (id <= 0)
             {
