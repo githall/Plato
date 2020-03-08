@@ -1,11 +1,10 @@
 ﻿@model EntityAttachmentOptions
 @{
-
     var uploadUrl = GetRouteUrl(new RouteValueDictionary()
     {
         ["area"] = "Plato.Attachments",
-        ["controller"] = "streaming",
-        ["action"] = "upload",
+        ["controller"] = "Api",
+        ["action"] = "Post",
         ["guid"] = Model.Guid,
         ["featureId"] = Model.FeatureId
     });
@@ -39,7 +38,7 @@
             <div class="list-group list-group-flush">
                 <div class="list-group-item list-group-item-dropzone">
                     <div class="dropzone"
-                         data-dropzone-url="@uploadUrl"
+                         data-dropzone-url="@uploadUrl.ToLower()"
                          data-progress-preview="#progress"
                          data-provide="attachment-dropzone"></div>
                 </div>

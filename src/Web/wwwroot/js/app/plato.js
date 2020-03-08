@@ -220,8 +220,7 @@ $(function (win, doc, $) {
     };
 
     /* Plato Http */
-    var platoHttp = function(config) {
-        
+    var platoHttp = function(config) {        
      
         if (!win.$.Plato.defaults) {
             throw new Error("platoHttp requires a valid $.Plato.defaults object");
@@ -259,7 +258,7 @@ $(function (win, doc, $) {
 
         // set content type & API version
         config.headers = {
-            'Content-Type': 'application/json',
+            'Content-Type': 'application/json; charset=utf-8',
             'X-Api-Version': '1',
             "X-Csrf-Token": win.$.Plato.defaults.getCsrfCookieToken()
         };
@@ -555,7 +554,7 @@ $(function (win, doc, $) {
     win.$.Plato = {
         // defaults
         defaults: {
-            debug: false,
+            debug: true,
             url: "",
             locale: "en-US",
             apiKey: "",

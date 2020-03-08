@@ -65,18 +65,25 @@ namespace Plato.Articles.Attachments.Controllers
             {              
                 return;
             }
+            
+            if (attachment.ContentLength <= 0)
+            {
+                return;
+            }
 
             // Update total views
-            attachment.TotalViews = attachment.TotalViews + 1;
+            attachment.TotalViews += 1;
+
+            // Update attachment
             await _attachmentStore.UpdateAsync(attachment);
 
-            if (attachment.ContentLength >= 0)
-            {
-                r.ContentType = attachment.ContentType;
-                r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
-                r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));                
-                await r.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);
-            }        
+            _entityAttachmentStore.CancelTokens(null);
+
+            // Serve attachment         
+            r.ContentType = attachment.ContentType;
+            r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
+            r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));                
+            await r.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);            
 
         }
 

@@ -24,7 +24,7 @@ namespace Plato.Attachments.Controllers
 
     // https://github.com/aspnet/Docs/tree/master/aspnetcore/mvc/models/file-uploads/sample/FileUploadSample
 
-    public class StreamingController : BaseWebApiController
+    public class ApiController : BaseWebApiController
     {
 
         public const string FeatureIdKey = "featureId";
@@ -49,7 +49,7 @@ namespace Plato.Attachments.Controllers
         private readonly IAttachmentInfoStore<AttachmentInfo> _attachmentInfoStore;
         private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
-        private readonly ILogger<StreamingController> _logger;
+        private readonly ILogger<ApiController> _logger;
 
         public IHtmlLocalizer T { get; }
 
@@ -57,13 +57,13 @@ namespace Plato.Attachments.Controllers
         // to set the default limits for request body data
         private readonly FormOptions _defaultFormOptions = new FormOptions();
 
-        public StreamingController(
-             IAttachmentInfoStore<AttachmentInfo> attachmentInfoStore,
+        public ApiController(
+            IAttachmentInfoStore<AttachmentInfo> attachmentInfoStore,
             IAttachmentOptionsFactory attachmentOptionsFactory,
             IAttachmentStore<Attachment> attachmentStore,
-            ILogger<StreamingController> logger,
+            ILogger<ApiController> logger,
             IHtmlLocalizer htmlLocalizer)
-        {            
+        {
             _attachmentOptionsFactory = attachmentOptionsFactory;
             _attachmentInfoStore = attachmentInfoStore;
             _attachmentStore = attachmentStore;
@@ -73,19 +73,14 @@ namespace Plato.Attachments.Controllers
 
         }
 
-        #region "Actions"
-
-        [HttpGet]
-        public IActionResult Index()
-        {
-            return View();
-        }
-
-        // 524288000 bytes = 500mb
+        // -----------
+        // Post
+        // -----------
+            
         [HttpPost, DisableFormValueModelBinding, ValidateClientAntiForgeryToken]
-        [RequestFormLimits(MultipartBodyLengthLimit = 524288000)]
-        [RequestSizeLimit(524288000)]
-        public async Task<IActionResult> Upload()
+        [RequestFormLimits(MultipartBodyLengthLimit = 1073741824)]
+        [RequestSizeLimit(1073741824)]
+        public async Task<IActionResult> Post()
         {
 
             var user = await base.GetAuthenticatedUserAsync();
@@ -358,9 +353,47 @@ namespace Plato.Attachments.Controllers
 
         }
 
-        #endregion
+        // -----------
+        // Delete
+        // -----------
 
-        #region "Private Methods"
+        [HttpPost, ValidateClientAntiForgeryToken]
+        public async Task<IActionResult> Delete([FromBody] int id)
+        {
+     
+            // Validate
+            if (id <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(id));
+            }
+
+            // Get authenticated user
+            var user = await base.GetAuthenticatedUserAsync();
+
+            // We need to be authenticated
+            if (user == null)
+            {
+                return base.UnauthorizedException();
+            }
+
+            // Get attachment
+            var attachment = await _attachmentStore.GetByIdAsync(id);
+
+            // Ensure attachment exists
+            if (attachment == null)
+            {
+                return NotFound();
+            }
+
+            // Delete attachment
+            var success = await _attachmentStore.DeleteAsync(attachment);
+
+            // Return result
+            return base.Result(success);
+
+        }
+
+        // -----------------
 
         bool IsContentTypeSupported(string contentType, string[] supportedTypes)
         {
@@ -393,8 +426,6 @@ namespace Plato.Attachments.Controllers
             }
             return mediaType.Encoding;
         }
-
-        #endregion
 
     }
 

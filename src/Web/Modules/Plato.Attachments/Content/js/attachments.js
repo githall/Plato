@@ -58,6 +58,39 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {
 
+                // Configure httpContent
+                $caller.find('[data-provide="http-content"]').httpContent({
+                    onLoad: function ($el) {
+
+                        // Bind delete buttons
+                        var $btns = $el.find('[data-provide="delete-attachment"]');
+                        if ($btns.length > 0) {
+
+                            $btns.click(function (e) {
+
+                                e.preventDefault();
+                                e.stopPropagation();
+
+                                var id = parseInt($(this).data("attachmentId"));
+                                if (isNaN(id)) {
+                                    throw new Error("An attachment id to delete is required!");
+                                }
+
+                                app.http({
+                                    method: "POST",
+                                    url: 'api/attachments/delete',                                  
+                                    data: JSON.stringify(id)
+                                }).done(function (response) {
+                                    console.log(response);
+                                });
+
+                            });
+                        }                  
+
+                    }
+                });
+
+                // Configure dropzone
                 $caller.find('[data-provide="attachment-dropzone"]')
                     .attachmentDropzone({
                         allowedExtensions: app.attachments.allowedExtensions,

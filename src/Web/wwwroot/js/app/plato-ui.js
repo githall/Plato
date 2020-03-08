@@ -39,6 +39,7 @@ $(function (win, doc, $) {
             defer: false, // boolean to indicate if the URL is loaded immediately, if true the url is not loaded upon load
             enableLoader: true, // boolean to indicate if the loader template will be added to the content area for every request
             loaderTemplate: '<p class="text-center my-3"><i class="fal fa-spinner fa-spin"></i></p>', // a handlebars style template for auto complete list items
+            onLoad: function ($el) {}
         };
 
         var methods = {
@@ -76,13 +77,12 @@ $(function (win, doc, $) {
 
                     // If our httpContent element has content use this content
                     // as the loader template for subsequent requests only if the 
-                    // request is not deferred                  
+                    // request is loaded immediately and not deferred                  
                     var loaderTemplate = $caller.html();
                     if (loaderTemplate !== "" && defer === false) {
                         $caller.data(dataKey).loaderTemplate = loaderTemplate;
                     }
-                 
-                  
+                    
                     methods._request($caller, function (response) {
                         $caller.data(url, true);
                     });
@@ -111,16 +111,24 @@ $(function (win, doc, $) {
                 }).done(function (response) {
 
                     $caller.empty();
+
                     if (response !== "") {
+
                         $caller.html(response);
+
                         // Enable tooltips within loaded content
                         app.ui.initToolTips($caller);
                         // confirm
                         $caller.find('[data-provide="confirm"]').confirm();
+
                     }
 
                     if (fn) {
                         fn(response);
+                    }
+
+                    if ($caller.data(dataKey).onLoad) {
+                        $caller.data(dataKey).onLoad($caller, response);
                     }
 
                 });
