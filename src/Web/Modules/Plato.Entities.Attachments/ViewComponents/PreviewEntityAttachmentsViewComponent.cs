@@ -11,25 +11,29 @@ using Plato.Entities.Attachments.Models;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.ViewModels;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Hosting.Abstractions;
+using Plato.Attachments.Services;
+using Microsoft.AspNetCore.Http;
+using PlatoCore.Models.Users;
 
 namespace Plato.Entities.Attachments.ViewComponents
 {
 
     public class PreviewEntityAttachmentsViewComponent : ViewComponent
     {
-
+        
         private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;        
-        private readonly ILogger<PreviewEntityAttachmentsViewComponent> _logger;
+        private readonly ILogger<PreviewEntityAttachmentsViewComponent> _logger;    
         private readonly IAttachmentStore<Attachment> _attachmentStore;
 
         public PreviewEntityAttachmentsViewComponent(
-
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
-            ILogger<PreviewEntityAttachmentsViewComponent> logger,
+            ILogger<PreviewEntityAttachmentsViewComponent> logger,     
             IAttachmentStore<Attachment> attachmentStore)
         {
-            _entityAttachmentStore = entityAttachmentStore;
-            _attachmentStore = attachmentStore;
+
+            _entityAttachmentStore = entityAttachmentStore;      
+            _attachmentStore = attachmentStore;           
             _logger = logger;
         }
 
@@ -48,15 +52,15 @@ namespace Plato.Entities.Attachments.ViewComponents
                 throw new ArgumentNullException(nameof(model.Guid));
             }
 
-            // Get data & return view
+            // Build model & return view
             return View(new AttachmentsViewModel()
             {
-                Results = await GetDataAsync(model)
+                Results = await GetResultsAsync(model),
             });
 
         }
 
-        private async Task<IPagedResults<Attachment>> GetDataAsync(EntityAttachmentOptions model)
+        private async Task<IPagedResults<Attachment>> GetResultsAsync(EntityAttachmentOptions model)
         {
 
             IEnumerable<EntityAttachment> relaationships = null;

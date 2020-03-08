@@ -8,6 +8,10 @@ namespace Plato.Attachments.ViewModels
 
         public IPagedResults<Attachment> Results { get; set; }
 
+        public AttachmentInfo Info { get; set; }
+
+        public AttachmentOptions Options { get; set; }
+
     }
 
 }

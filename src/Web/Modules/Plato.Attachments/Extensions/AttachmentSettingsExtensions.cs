@@ -7,7 +7,7 @@ namespace Plato.Attachments.Extensions
     public static class AttachmentSettingsExtensions
     {
 
-        public static long GetAvailableSpace(this AttachmentSettings settings, User user)
+        public static long GetAvailableSpace(this AttachmentSettings settings, IUser user)
         {
 
             // We need to be authenticated to upload attachments
@@ -55,7 +55,7 @@ namespace Plato.Attachments.Extensions
 
         }
 
-        public static long GetMaxFileSize(this AttachmentSettings settings, User user)
+        public static long GetMaxFileSize(this AttachmentSettings settings, IUser user)
         {
 
             // We need to be authenticated to upload attachments
@@ -103,7 +103,7 @@ namespace Plato.Attachments.Extensions
 
         }
 
-        public static string[] GetAllowedExtensions(this AttachmentSettings settings, User user)
+        public static string[] GetAllowedExtensions(this AttachmentSettings settings, IUser user)
         {
 
             // We need to be authenticated to upload attachments

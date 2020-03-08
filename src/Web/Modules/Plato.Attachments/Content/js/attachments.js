@@ -24,8 +24,7 @@ $(function (win, doc, $) {
             "jpg",
             "jpeg"
         ],
-        maxFileSize: 0,
-        availableSpace: 0
+        maxFileSize: 0
     };
 
     // Plato Global Object
@@ -37,9 +36,7 @@ $(function (win, doc, $) {
         var dataKey = "attachments",
             dataIdKey = dataKey + "Id";
 
-        var defaults = {
-
-        };
+        var defaults = {};
 
         var methods = {
             init: function ($caller, methodName, func) {
@@ -65,7 +62,6 @@ $(function (win, doc, $) {
                     .attachmentDropzone({
                         allowedExtensions: app.attachments.allowedExtensions,
                         maxFileSize: app.attachments.maxFileSize,
-                        availableSpace: app.attachments.availableSpace,
                         onDrop: function () {
                             $caller.find(".dropdown").each(function () {
                                 $(this).find(".dropdown-menu").removeClass('show');
@@ -157,8 +153,7 @@ $(function (win, doc, $) {
                 "jpeg",
                 "pdf"
             ],
-            maxFileSize: 2097152, // 2mb
-            availableSpace: 10485760, // 10mb
+            maxFileSize: 2097152, // 2mb     
             dropZoneOptions: {
                 url: '/api/attachments/streaming/upload',
                 fallbackClick: false,
@@ -419,7 +414,8 @@ $(function (win, doc, $) {
 
                             });
 
-                        this.on("complete", function (file) {
+                        this.on("complete",
+                            function (file) {
 
                             // Show errors
                             if (errors.length > 0) {
@@ -434,7 +430,7 @@ $(function (win, doc, $) {
 
                                 // Show error dialog
                                 $().dialog({
-                                    title: app.T("Insufficient Permissions"),
+                                    title: app.T("Some problems occurred"),
                                     body: {
                                         url: null,
                                         html: messages.replace(/\n/g, "<br/>")
@@ -502,7 +498,7 @@ $(function (win, doc, $) {
                 // Init dropzone
                 var dropzone = new Dropzone($caller[0], opts);
 
-                // Store dropzone object in data for access within event handlers (i.e. paste)
+                // Store dropzone object in data for access within event handlers
                 $caller.data("dropzone", dropzone);
 
             },        

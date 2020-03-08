@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlatoCore.Models.Roles;
+using System;
 using System.Collections.Generic;
 
 namespace PlatoCore.Models.Users
@@ -80,12 +81,15 @@ namespace PlatoCore.Models.Users
         int ModifiedUserId { get; set; }
 
         DateTimeOffset? ModifiedDate { get; set; }
-        
-        IEnumerable<string> RoleNames { get; set; }
 
         string ResetToken { get; set; }
 
         string ConfirmationToken { get; set; }
+
+        IEnumerable<string> RoleNames { get; set; }
+
+        IEnumerable<Role> UserRoles { get; set; }
+
     }
 
     public enum UserType

@@ -156,7 +156,8 @@ namespace Plato.Entities.Attachments.Stores
         {
             var sb = new StringBuilder();
             sb
-                .Append("ea.*, ")            
+                .Append("ea.*, ")   
+                .Append("a.FeatureId, ")
                 .Append("a.[Name], ")
                 .Append("CAST(1 AS BINARY(1)) AS ContentBlob, ") // for perf not returned with paged results
                 .Append("a.ContentType, ")

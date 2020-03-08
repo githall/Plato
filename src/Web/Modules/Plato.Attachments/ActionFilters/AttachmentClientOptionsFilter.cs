@@ -7,10 +7,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Attachments.Services;
 using PlatoCore.Layout;
 using PlatoCore.Layout.ActionFilters;
+using PlatoCore.Models.Users;
 using PlatoCore.Scripting.Abstractions;
 
 namespace Plato.Attachments.ActionFilters
 {
+
     public class AttachmentClientOptionsFilter : IModularActionFilter
     {
 
@@ -58,24 +60,29 @@ namespace Plato.Attachments.ActionFilters
         async Task<ScriptBlock> BuildScriptBlockAsync(HttpContext context)
         {
 
+            // Get options factory
             var factory = context.RequestServices.GetRequiredService<IAttachmentOptionsFactory>();
             if (factory == null)
             {
                 return null;
             }
 
-            var settings = await factory.GetSettingsAsync();
+            // Get authenticated user
+            var user = context.Features[typeof(User)] as User;
 
-            if (settings != null)
+            // Get attachment options
+            var options = await factory.GetOptionsAsync(user);
+
+            // We need options
+            if (options == null)
             {
-                var script = "$(function (win) { $.extend(win.$.Plato.attachments, { allowedExtensions: {allowedExtensions}, maxFileSize: {maxFileSize}, availableSpace: {availableSpace} }); } (window));";
-                script = script.Replace("{allowedExtensions}", BuildAllowedExtensions(settings.AllowedExtensions));
-                script = script.Replace("{maxFileSize}", settings.MaxFileSize.ToString());
-                script = script.Replace("{availableSpace}", settings.AvailableSpace.ToString());
-                return new ScriptBlock(script);
+                return null;
             }
 
-            return null;
+            var script = "$(function (win) { $.extend(win.$.Plato.attachments, { allowedExtensions: {allowedExtensions}, maxFileSize: {maxFileSize} }); } (window));";
+            script = script.Replace("{allowedExtensions}", BuildAllowedExtensions(options.AllowedExtensions));
+            script = script.Replace("{maxFileSize}", options.MaxFileSize.ToString());
+            return new ScriptBlock(script);
 
         }
 

@@ -4,17 +4,14 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Hosting;
 using Microsoft.Net.Http.Headers;
 using PlatoCore.Abstractions;
 using PlatoCore.Security.Abstractions;
-using PlatoCore.Stores.Abstractions.Files;
 using Plato.Attachments.Stores;
 using Plato.Entities.Models;
 using Plato.Attachments.Models;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.Models;
-using Plato.Articles;
 using Plato.Articles.Models;
 using Plato.Entities.Stores;
 
@@ -42,11 +39,11 @@ namespace Plato.Articles.Attachments.Controllers
         }
 
         // ----------
-        // Serve
+        // Download
         // ----------
 
         [HttpGet, AllowAnonymous]
-        public async Task Index(int id)
+        public async Task Download(int id)
         {
 
             // Clear response
@@ -82,6 +79,50 @@ namespace Plato.Articles.Attachments.Controllers
             }        
 
         }
+
+        // ----------
+        // Delete
+        // ----------
+
+        [HttpGet, AllowAnonymous]
+        public async Task Delete(int id)
+        {
+
+            // Clear response
+            var r = Response;
+            r.Clear();
+
+            // Get attachment
+            var attachment = await _attachmentStore.GetByIdAsync(id);
+
+            // Ensure attachment exists
+            if (attachment == null)
+            {
+                return;
+            }
+
+            // Do we have permission to view at least one of the
+            // entities the attachment is associated with
+            if (!await AuthorizeAsync(attachment))
+            {
+                return;
+            }
+
+            // Update total views
+            attachment.TotalViews = attachment.TotalViews + 1;
+            await _attachmentStore.UpdateAsync(attachment);
+
+            if (attachment.ContentLength >= 0)
+            {
+                r.ContentType = attachment.ContentType;
+                r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
+                r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));
+                await r.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);
+            }
+
+        }
+
+        // ------------------------------
 
         async Task<bool> AuthorizeAsync(Attachment attachment)
         {

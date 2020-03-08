@@ -124,6 +124,9 @@ namespace Plato.Attachments.Handlers
                 // Attachments schema
                 Attachments(builder);
 
+                // Attachment info schema
+                AttachmentInfo(builder);
+
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
                 {
@@ -170,8 +173,9 @@ namespace Plato.Attachments.Handlers
                 builder.ProcedureBuilder
                     .DropDefaultProcedures(_attachments)
                     .DropProcedure(new SchemaProcedure("SelectAttachmentsPaged"))
-                    .DropProcedure(new SchemaProcedure("UpdateAttachmentContentGuidById"));
-
+                    .DropProcedure(new SchemaProcedure("UpdateAttachmentContentGuidById"))
+                    .DropProcedure(new SchemaProcedure("SelectAttachmentInfoByUserId"));
+                
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
                 {
@@ -333,6 +337,31 @@ namespace Plato.Attachments.Handlers
                     "ContentCheckSum"
                 }
             });
+
+        }
+
+        void AttachmentInfo(ISchemaBuilder builder)
+        {
+      
+
+            builder.ProcedureBuilder
+                .CreateProcedure(
+                    new SchemaProcedure(
+                            $"SelectAttachmentInfoByUserId",
+                            @"SELECT
+	                            COUNT(a.Id) AS [Count],
+	                            SUM(a.ContentLength) AS [Length]
+                            FROM
+	                            {prefix}_Attachments a
+                            WHERE (
+	                            a.CreatedUserId = @UserId
+                            );")
+                        .ForTable(_attachments)
+                        .WithParameter(new SchemaColumn()
+                        {
+                            Name = "UserId",
+                            DbType = DbType.Int32,                        
+                        }));
 
         }
 
