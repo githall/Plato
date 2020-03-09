@@ -3,7 +3,7 @@
     var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
     if (availableSpace < 0)
         availableSpace = 0;
-    var maxFileSize = Model.Options.MaxFileSize;
+    var maxFileSize = Model.Options.MaxFileSize;    
 }
 
 @if (Model.Results?.Data != null)
@@ -11,12 +11,19 @@
     <div class="list-group list-group-flush list-group-hover select-dropdown-preview">
         @foreach (var attachment in Model.Results.Data)
         {
+            var deletePermission = attachment.CreatedUserId == CurrentUser.Id
+                ? Model.DeleteOwnPermission
+                : Model.DeleteAnyPermission;
             var extension = System.IO.Path.GetExtension(attachment.Name);
             var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
-            <div class="list-group-item list-group-item-action">
-                <a href="#" data-provide="delete-attachment" data-attachment-id="@attachment.Id" class="btn float-right text-muted" title="@T["Delete"]">
-                    <i class="fal fa-times"></i>
-                </a>
+            <div class="list-group-item list-group-item-action">                
+                <authorize asp-permission="@deletePermission.Name">
+                    <authorize-success>
+                        <a href="#" data-provide="delete-attachment" data-attachment-id="@attachment.Id" class="btn float-right text-muted" title="@T["Delete"]">
+                            <i class="fal fa-times"></i>
+                        </a>
+                    </authorize-success>
+                </authorize>
                 @if (!string.IsNullOrEmpty(iconCss))
                 {
                     <span class="fiv-sqo @iconCss align-middle mr-1"></span>
@@ -28,7 +35,6 @@
         }
     </div>
 }
-
 
 <authorize asp-permission="@Model.PostPermission.Name">
     <authorize-success>

@@ -57,12 +57,20 @@ namespace Plato.Articles.Attachments
                 defaults: new { controller = "Attachment", action = "Download" }
             );
 
-            // Delete
+            // Edit
             routes.MapAreaRoute(
-                name: "ArticlesAttachmentDelete",
+                name: "EditArticlesAttachment",
                 areaName: "Plato.Articles.Attachments",
-                template: "articles/attachments/delete/{id:int}",
-                defaults: new { controller = "Attachment", action = "Delete" }
+                template: "articles/attachments/edit/{opts.guid}/{opts.entityId:int?}",
+                defaults: new { controller = "Home", action = "Edit" }
+            );
+
+            // Preview
+            routes.MapAreaRoute(
+                name: "PreviewArticlesAttachments",
+                areaName: "Plato.Articles.Attachments",
+                template: "articles/attachments/preview/{opts.guid}/{opts.entityId:int?}",
+                defaults: new { controller = "Home", action = "Preview" }
             );
 
         }

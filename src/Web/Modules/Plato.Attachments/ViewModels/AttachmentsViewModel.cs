@@ -15,6 +15,10 @@ namespace Plato.Attachments.ViewModels
 
         public IPermission PostPermission { get; set; }
 
+        public IPermission DeleteOwnPermission { get; set; }
+
+        public IPermission DeleteAnyPermission { get; set; }
+
     }
 
 }

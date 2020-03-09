@@ -14,10 +14,10 @@ namespace Plato.Articles.Attachments.Controllers
         }
 
         // -----------
-        // Index
+        // Edit
         // -----------
 
-        public Task<IActionResult> Index(EntityAttachmentOptions opts)
+        public Task<IActionResult> Edit(EntityAttachmentOptions opts)
         {
 
             if (opts == null)

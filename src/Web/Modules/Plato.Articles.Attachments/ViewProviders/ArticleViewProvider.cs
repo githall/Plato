@@ -126,14 +126,14 @@ namespace Plato.Articles.Attachments.ViewProviders
                         ["controller"] = "Api",
                         ["action"] = "Post",
                         ["guid"] = contentGuid,
-                        ["featureId"] = entityId
+                        ["featureId"] = featureId
                     };
 
                     model.EditRoute = new RouteValueDictionary()
                     {
                         ["area"] = moduleId,
                         ["controller"] = "Home",
-                        ["action"] = "Index",
+                        ["action"] = "Edit",
                         ["opts.guid"] = contentGuid,
                         ["opts.entityId"] = entityId
                     };

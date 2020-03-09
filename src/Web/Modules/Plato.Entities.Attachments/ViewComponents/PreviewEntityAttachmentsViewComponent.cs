@@ -11,10 +11,6 @@ using Plato.Entities.Attachments.Models;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.ViewModels;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
-using Plato.Attachments.Services;
-using Microsoft.AspNetCore.Http;
-using PlatoCore.Models.Users;
 
 namespace Plato.Entities.Attachments.ViewComponents
 {
@@ -31,7 +27,6 @@ namespace Plato.Entities.Attachments.ViewComponents
             ILogger<PreviewEntityAttachmentsViewComponent> logger,     
             IAttachmentStore<Attachment> attachmentStore)
         {
-
             _entityAttachmentStore = entityAttachmentStore;      
             _attachmentStore = attachmentStore;           
             _logger = logger;
@@ -52,10 +47,15 @@ namespace Plato.Entities.Attachments.ViewComponents
                 throw new ArgumentNullException(nameof(model.Guid));
             }
 
+            var results = await GetResultsAsync(model);
+
             // Build model & return view
             return View(new AttachmentsViewModel()
             {
-                Results = await GetResultsAsync(model),
+                Results = results,
+                PostPermission = model.PostPermission,
+                DeleteOwnPermission = model.DeleteOwnPermission,
+                DeleteAnyPermission = model.DeleteAnyPermission
             });
 
         }
