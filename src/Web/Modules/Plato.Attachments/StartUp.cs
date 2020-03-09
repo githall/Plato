@@ -64,7 +64,7 @@ namespace Plato.Attachments
             services.AddScoped<IViewProviderManager<AttachmentIndex>, ViewProviderManager<AttachmentIndex>>();
             services.AddScoped<IViewProvider<AttachmentIndex>, AttachmentIndexViewProvider>();
 
-            // Permissions provider
+            // Permissionss
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
             // Services

@@ -6,60 +6,60 @@ using Plato.Entities.Attachments.ViewModels;
 
 namespace Plato.Entities.Attachments.Controllers
 {
-    public class HomeController : Controller, IUpdateModel
-    {
+    //public class HomeController : Controller, IUpdateModel
+    //{
 
-        public HomeController()
-        { 
-        }
+    //    public HomeController()
+    //    { 
+    //    }
 
-        // -----------
-        // Index
-        // -----------
+    //    // -----------
+    //    // Index
+    //    // -----------
 
-        public Task<IActionResult> Index(EntityAttachmentOptions opts)
-        {
+    //    public Task<IActionResult> Index(EntityAttachmentOptions opts)
+    //    {
 
-            if (opts == null)
-            {
-                opts = new EntityAttachmentOptions();
-            }
+    //        if (opts == null)
+    //        {
+    //            opts = new EntityAttachmentOptions();
+    //        }
 
-            // We always need a guid
-            if (string.IsNullOrEmpty(opts.Guid))
-            {
-                throw new ArgumentNullException(nameof(opts.Guid));
-            }
+    //        // We always need a guid
+    //        if (string.IsNullOrEmpty(opts.Guid))
+    //        {
+    //            throw new ArgumentNullException(nameof(opts.Guid));
+    //        }
 
-            // Return view
-            return Task.FromResult((IActionResult)View(opts));
+    //        // Return view
+    //        return Task.FromResult((IActionResult)View(opts));
 
 
-        }
+    //    }
 
-        // -----------
-        // Preview
-        // -----------
+    //    // -----------
+    //    // Preview
+    //    // -----------
 
-        public Task<IActionResult> Preview(EntityAttachmentOptions opts)
-        {
+    //    public Task<IActionResult> Preview(EntityAttachmentOptions opts)
+    //    {
 
-            if (opts == null)
-            {
-                opts = new EntityAttachmentOptions();
-            }
+    //        if (opts == null)
+    //        {
+    //            opts = new EntityAttachmentOptions();
+    //        }
 
-            // We always need a guid
-            if (string.IsNullOrEmpty(opts.Guid))
-            {
-                throw new ArgumentNullException(nameof(opts.Guid));
-            }
+    //        // We always need a guid
+    //        if (string.IsNullOrEmpty(opts.Guid))
+    //        {
+    //            throw new ArgumentNullException(nameof(opts.Guid));
+    //        }
 
-            // Return view
-            return Task.FromResult((IActionResult) View(opts));
+    //        // Return view
+    //        return Task.FromResult((IActionResult) View(opts));
 
-        }
+    //    }
 
-    }
+    //}
 
 }

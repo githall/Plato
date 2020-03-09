@@ -58,10 +58,10 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {
 
-                // Configure httpContent upon load
+                // Configure httpContent
                 $caller.find('[data-provide="http-content"]').httpContent({
                     onLoad: function ($el) {
-                        // Bind delete buttons
+                        // Bind delete
                         var $btns = $el.find('[data-provide="delete-attachment"]');
                         if ($btns.length > 0) {
                             $btns.click(function (e) {
@@ -86,7 +86,7 @@ $(function (win, doc, $) {
                                     url: 'api/attachments/delete',                                  
                                     data: JSON.stringify(id)
                                 }).done(function (response) {
-                                    $el.httpContent("reload");
+                                    $caller.find('[data-provide="http-content"]').httpContent("reload");
                                 });
 
                             });

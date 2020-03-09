@@ -1,29 +1,8 @@
 ﻿@model EntityAttachmentOptions
 @{
-    var uploadUrl = GetRouteUrl(new RouteValueDictionary()
-    {
-        ["area"] = "Plato.Attachments",
-        ["controller"] = "Api",
-        ["action"] = "Post",
-        ["guid"] = Model.Guid,
-        ["featureId"] = Model.FeatureId
-    });
-    var editUrl = GetRouteUrl(new RouteValueDictionary()
-    {
-        ["area"] = "Plato.Entities.Attachments",
-        ["controller"] = "Home",
-        ["action"] = "Index",
-        ["opts.guid"] = Model.Guid,
-        ["opts.entityId"] = Model.EntityId
-    });
-    var previewUrl = GetRouteUrl(new RouteValueDictionary()
-    {
-        ["area"] = "Plato.Entities.Attachments",
-        ["controller"] = "Home",
-        ["action"] = "Preview",
-        ["opts.guid"] = Model.Guid,
-        ["opts.entityId"] = Model.EntityId
-    });
+    var uploadUrl = GetRouteUrl(Model.PostRoute);
+    var editUrl = GetRouteUrl(Model.EditRoute);
+    var previewUrl = GetRouteUrl(Model.PreviewRoute);
 }
 
 <input type="hidden" name="@Model.GuidHtmlName" asp-for="Guid" />
@@ -37,10 +16,21 @@
         <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in p-0 min-w-500" aria-labelledby="attachmentDropdown">
             <div class="list-group list-group-flush">
                 <div class="list-group-item list-group-item-dropzone">
-                    <div class="dropzone"
-                         data-dropzone-url="@uploadUrl.ToLower()"
-                         data-progress-preview="#progress"
-                         data-provide="attachment-dropzone"></div>
+
+                    <authorize asp-permission="@Model.PostPermission.Name">
+                        <authorize-success>
+                            <div class="dropzone"
+                                 data-dropzone-url="@uploadUrl.ToLower()"
+                                 data-progress-preview="#progress"
+                                 data-provide="attachment-dropzone"></div>
+                        </authorize-success>
+                        <authorize-fail>
+                            <div class="alert alert-danger m-0">
+                                @T["You don't have permission to post attachments"]
+                            </div>
+                        </authorize-fail>
+                    </authorize>
+
                 </div>
             </div>
             <div class="max-h-300 overflow-auto">                

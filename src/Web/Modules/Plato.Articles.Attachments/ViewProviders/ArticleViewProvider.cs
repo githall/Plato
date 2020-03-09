@@ -16,6 +16,8 @@ using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.Attachments.ViewModels;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Models.Users;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {
@@ -75,10 +77,13 @@ namespace Plato.Articles.Attachments.ViewProviders
             var featureId = 0; 
             var entityId = entity.Id;
             var contentGuid = string.Empty;
-            var user = await _contextFacade.GetAuthenticatedUserAsync();            
 
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Articles.Attachments");
+            // Get authenticated user
+            var user = context.Controller.HttpContext.Features[typeof(User)] as User;
 
+            // Get current feature
+            var moduleId = "Plato.Articles.Attachments";
+            var feature = await _featureFacade.GetFeatureByIdAsync(moduleId);
             if (feature != null)
             {
                 featureId = feature.Id;
@@ -105,10 +110,43 @@ namespace Plato.Articles.Attachments.ViewProviders
             return Views(
                 View<EntityAttachmentOptions>("Attachments.Edit.Sidebar", model =>
                 {
+
                     model.FeatureId = featureId;
                     model.EntityId = entityId;
                     model.Guid = contentGuid;
                     model.GuidHtmlName = GuidHtmlName;
+
+                    model.PostPermission = Permissions.PostArticleAttachments;
+                    model.DeleteOwnPermission = Permissions.DeleteOwnArticleAttachments;
+                    model.DeleteAnyPermission = Permissions.DeleteAnyArticleAttachments;
+
+                    model.PostRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Attachments",
+                        ["controller"] = "Api",
+                        ["action"] = "Post",
+                        ["guid"] = contentGuid,
+                        ["featureId"] = entityId
+                    };
+
+                    model.EditRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = moduleId,
+                        ["controller"] = "Home",
+                        ["action"] = "Index",
+                        ["opts.guid"] = contentGuid,
+                        ["opts.entityId"] = entityId
+                    };
+
+                    model.PreviewRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = moduleId,
+                        ["controller"] = "Home",
+                        ["action"] = "Preview",
+                        ["opts.guid"] = contentGuid,
+                        ["opts.entityId"] = entityId
+                    };
+
                     return model;
                 }).Zone("sidebar").Order(1)
             );

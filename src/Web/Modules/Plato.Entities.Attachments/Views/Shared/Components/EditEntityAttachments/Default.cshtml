@@ -1,9 +1,9 @@
 ﻿@model AttachmentsViewModel
 @{
     var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
-    if (availableSpace < 0)    
-        availableSpace = 0;    
-    var maxFileSize = Model.Options.MaxFileSize;    
+    if (availableSpace < 0)
+        availableSpace = 0;
+    var maxFileSize = Model.Options.MaxFileSize;
 }
 
 @if (Model.Results?.Data != null)
@@ -12,7 +12,7 @@
         @foreach (var attachment in Model.Results.Data)
         {
             var extension = System.IO.Path.GetExtension(attachment.Name);
-            var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;            
+            var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
             <div class="list-group-item list-group-item-action">
                 <a href="#" data-provide="delete-attachment" data-attachment-id="@attachment.Id" class="btn float-right text-muted" title="@T["Delete"]">
                     <i class="fal fa-times"></i>
@@ -29,9 +29,14 @@
     </div>
 }
 
-<div class="alert m-0 border-0 text-center">
-    <span class="text-muted">@T["Available space"]</span>
-    <span class="font-weight-bold">@availableSpace.ToFriendlyFileSize()</span>
-    <span class="text-muted">@T["Maximum file size"]</span>
-    <span class="font-weight-bold">@maxFileSize.ToFriendlyFileSize()</span>
-</div>
+
+<authorize asp-permission="@Model.PostPermission.Name">
+    <authorize-success>
+        <div class="alert m-0 border-0 text-center">
+            <span class="text-muted">@T["Available space"]</span>
+            <span class="font-weight-bold">@availableSpace.ToFriendlyFileSize()</span>
+            <span class="text-muted">@T["Maximum file size"]</span>
+            <span class="font-weight-bold">@maxFileSize.ToFriendlyFileSize()</span>
+        </div>
+    </authorize-success>
+</authorize>

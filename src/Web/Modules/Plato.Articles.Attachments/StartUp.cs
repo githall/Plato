@@ -10,6 +10,9 @@ using PlatoCore.Layout.ViewProviders;
 using Plato.Articles.Attachments.ViewProviders;
 using Plato.Articles.Attachments.Navigation;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Security.Abstractions;
+using Plato.Articles.Attachments.Handlers;
+using PlatoCore.Features.Abstractions;
 
 namespace Plato.Articles.Attachments
 {
@@ -25,14 +28,18 @@ namespace Plato.Articles.Attachments
         public override void ConfigureServices(IServiceCollection services)
         {
 
+            // Feature installation event handler
+            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
+
             // Register navigation provider     
             services.AddScoped<INavigationProvider, ArticleFooterMenu>();
-          
+
             // View providers
             services.AddScoped<IViewProviderManager<Article>, ViewProviderManager<Article>>();
             services.AddScoped<IViewProvider<Article>, ArticleViewProvider>();
-            services.AddScoped<IViewProviderManager<Comment>, ViewProviderManager<Comment>>();
-            services.AddScoped<IViewProvider<Comment>, CommentViewProvider>();
+
+            // Permissionss
+            services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
         }
 

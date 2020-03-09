@@ -189,7 +189,7 @@ namespace Plato.Articles.Attachments.Controllers
             if (entity.IsHidden)
             {
                 if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Permissions.ViewHiddenArticles))
+                    entity.CategoryId, Articles.Permissions.ViewHiddenArticles))
                 {
                     return result.Failed(error);
                 }
@@ -199,7 +199,7 @@ namespace Plato.Articles.Attachments.Controllers
             if (entity.IsPrivate)
             {
                 if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Permissions.ViewPrivateArticles))
+                    entity.CategoryId, Articles.Permissions.ViewPrivateArticles))
                 {
                     return result.Failed(error);
                 }
@@ -209,7 +209,7 @@ namespace Plato.Articles.Attachments.Controllers
             if (entity.IsSpam)
             {
                 if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Permissions.ViewSpamArticles))
+                    entity.CategoryId, Articles.Permissions.ViewSpamArticles))
                 {
                     return result.Failed(error);
                 }
@@ -219,7 +219,7 @@ namespace Plato.Articles.Attachments.Controllers
             if (entity.IsDeleted)
             {
                 if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Permissions.ViewDeletedArticles))
+                    entity.CategoryId, Articles.Permissions.ViewDeletedArticles))
                 {
                     return result.Failed(error);
                 }
