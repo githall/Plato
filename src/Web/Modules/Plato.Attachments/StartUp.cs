@@ -22,8 +22,6 @@ using Microsoft.Extensions.Options;
 using Plato.Attachments.Services;
 using Plato.Attachments.ActionFilters;
 using PlatoCore.Layout.ActionFilters;
-using PlatoCore.Net;
-using PlatoCore.Net.Abstractions;
 
 namespace Plato.Attachments
 {

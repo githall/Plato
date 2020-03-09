@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
 using Plato.Entities.Stores;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Search.Abstractions;

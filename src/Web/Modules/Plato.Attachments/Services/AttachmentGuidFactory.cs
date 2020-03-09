@@ -6,7 +6,7 @@ using PlatoCore.Abstractions.Extensions;
 namespace Plato.Attachments.Services
 {
 
-    class AttachmentGuidFactory : IAttachmentGuidFactory
+    public class AttachmentGuidFactory : IAttachmentGuidFactory
     {
 
         private readonly IKeyGenerator _keyGenerator;
