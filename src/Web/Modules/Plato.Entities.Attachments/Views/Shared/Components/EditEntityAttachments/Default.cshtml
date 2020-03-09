@@ -1,9 +1,10 @@
 ﻿@model AttachmentsViewModel
 @{
+    var deleteUrl = GetRouteUrl(Model.DeleteRoute);
     var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
     if (availableSpace < 0)
         availableSpace = 0;
-    var maxFileSize = Model.Options.MaxFileSize;    
+    var maxFileSize = Model.Options.MaxFileSize;
 }
 
 @if (Model.Results?.Data != null)
@@ -19,7 +20,7 @@
             <div class="list-group-item list-group-item-action">                
                 <authorize asp-permission="@deletePermission.Name">
                     <authorize-success>
-                        <a href="#" data-provide="delete-attachment" data-attachment-id="@attachment.Id" class="btn float-right text-muted" title="@T["Delete"]">
+                        <a href="@deleteUrl" data-provide="delete-attachment" data-attachment-id="@attachment.Id" class="btn float-right text-muted" title="@T["Delete"]">
                             <i class="fal fa-times"></i>
                         </a>
                     </authorize-success>

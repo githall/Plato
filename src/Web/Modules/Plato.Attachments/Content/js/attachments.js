@@ -76,6 +76,11 @@ $(function (win, doc, $) {
                                         .addClass("fa-spin");
                                 }                             
 
+                                var url = $(this).attr("href");
+                                if (url === "") {
+                                    throw new Error("A delete url is required!");
+                                }
+
                                 var id = parseInt($(this).data("attachmentId"));
                                 if (isNaN(id)) {
                                     throw new Error("An attachment id to delete is required!");
@@ -83,7 +88,7 @@ $(function (win, doc, $) {
 
                                 app.http({
                                     method: "POST",
-                                    url: 'api/attachments/delete',                                  
+                                    url: url,                                  
                                     data: JSON.stringify(id)
                                 }).done(function (response) {
                                     $caller.find('[data-provide="http-content"]').httpContent("reload");

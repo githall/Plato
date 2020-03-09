@@ -22,6 +22,8 @@ using Microsoft.Extensions.Options;
 using Plato.Attachments.Services;
 using Plato.Attachments.ActionFilters;
 using PlatoCore.Layout.ActionFilters;
+using PlatoCore.Net;
+using PlatoCore.Net.Abstractions;
 
 namespace Plato.Attachments
 {
@@ -69,6 +71,7 @@ namespace Plato.Attachments
 
             // Services
             services.AddScoped<IAttachmentOptionsFactory, AttachmentOptionsFactory>();
+            services.AddScoped<IAttachmentGuidFactory, AttachmentGuidFactory>();
 
             // Action filters
             services.AddScoped<IModularActionFilter, AttachmentClientOptionsFilter>();
@@ -104,23 +107,6 @@ namespace Plato.Attachments
                 template: "admin/attachments/settings/{id:int}",
                 defaults: new { controller = "Admin", action = "EditSettings" }
             );
-
-            // Display
-            routes.MapAreaRoute(
-                name: "ServeAttachment",
-                areaName: "Plato.Attachments",
-                template: "attachment/{id:int}",
-                defaults: new { controller = "Attachment", action = "Serve" }
-            );
-
-            // API
-            routes.MapAreaRoute(
-                name: "AttachmentWebApi",
-                areaName: "Plato.Attachments",
-                template: "api/attachments/{action}/{id:int?}",
-                defaults: new { controller = "Api", action = "Index" }
-            );
-
 
         }
 

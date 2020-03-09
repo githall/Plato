@@ -2,15 +2,16 @@
 using System.IO;
 using Microsoft.Net.Http.Headers;
 
-namespace Plato.Attachments.Services
+namespace PlatoCore.Net
 {
-    public static class MultipartRequestHelper
+    public static class HttpMultiPartRequestHelper
     {
 
         // Content-Type: multipart/form-data; boundary="----WebKitFormBoundarymx2fSWqWSd0OxQqq"
         // The spec says 70 characters is a reasonable limit.
         public static string GetBoundary(MediaTypeHeaderValue contentType, int lengthLimit)
         {
+
             var boundary = HeaderUtilities.RemoveQuotes(contentType.Boundary);
             if (string.IsNullOrWhiteSpace(boundary.ToString()))
             {

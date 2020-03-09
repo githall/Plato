@@ -1,14 +1,10 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
 using PlatoCore.Abstractions.Extensions;
 using Plato.Attachments.Attributes;
 using Plato.Attachments.Services;
@@ -18,22 +14,27 @@ using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
 using Plato.Attachments.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
+using PlatoCore.Features.Abstractions;
+using PlatoCore.Net.Abstractions;
+using Microsoft.AspNetCore.Authorization;
+using PlatoCore.Security.Abstractions;
 
-namespace Plato.Attachments.Controllers
+namespace Plato.Articles.Attachments.Controllers
 {
-
-    // https://github.com/aspnet/Docs/tree/master/aspnetcore/mvc/models/file-uploads/sample/FileUploadSample
 
     public class ApiController : BaseWebApiController
     {
 
-        public const string FeatureIdKey = "featureId";
-        public const string GuidKey = "guid";
+        public const string ModuleId = "Plato.Articles.Attachments";
+        public const string GuidKey = "guid";        
 
         private readonly IAttachmentInfoStore<AttachmentInfo> _attachmentInfoStore;
         private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
+        private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
+        private readonly IAuthorizationService _authorizationService;
         private readonly ILogger<ApiController> _logger;
+        private readonly IFeatureFacade _featureFacade;
 
         public IHtmlLocalizer T { get; }
 
@@ -44,13 +45,19 @@ namespace Plato.Attachments.Controllers
         public ApiController(
             IAttachmentInfoStore<AttachmentInfo> attachmentInfoStore,
             IAttachmentOptionsFactory attachmentOptionsFactory,
+            IHttpMultiPartRequestHandler multiPartRequestHandler,
             IAttachmentStore<Attachment> attachmentStore,
+            IAuthorizationService authorizationService,
             ILogger<ApiController> logger,
-            IHtmlLocalizer htmlLocalizer)
+            IHtmlLocalizer htmlLocalizer,
+            IFeatureFacade featureFacade)
         {
             _attachmentOptionsFactory = attachmentOptionsFactory;
-            _attachmentInfoStore = attachmentInfoStore;
+            _multiPartRequestHandler = multiPartRequestHandler;
+            _authorizationService = authorizationService;
+            _attachmentInfoStore = attachmentInfoStore;            
             _attachmentStore = attachmentStore;
+            _featureFacade = featureFacade;
             _logger = logger;
 
             T = htmlLocalizer;
@@ -67,6 +74,12 @@ namespace Plato.Attachments.Controllers
         public async Task<IActionResult> Post()
         {
 
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.PostArticleAttachments))
+            {
+                return Unauthorized();
+            }
+
             // Get authenticated user
             var user = await base.GetAuthenticatedUserAsync();
 
@@ -76,131 +89,50 @@ namespace Plato.Attachments.Controllers
                 return base.UnauthorizedException();
             }
 
+            // Get current feature
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
+
+            // Ensure the feature exists
+            if (feature == null)
+            {
+                throw new Exception($"A feature named \"{ModuleId}\" could not be found!");
+            }
+
             // TODO: Add upload permission checks
             // ----------------------
 
             // Validate temporary global unique identifier
-
-            if (!Request.Query.ContainsKey(GuidKey))
-            {
-                return BadRequest($"A \"{GuidKey}\" query string parameter is required!");
-            }
-
-            var ok = int.TryParse(Request.Query[FeatureIdKey], out var featureId);
-            var guid = Request.Query[GuidKey];
+            var guid = GetGuid();
             if (string.IsNullOrEmpty(guid))
             {
                 return BadRequest($"The \"{GuidKey}\" query string parameter is empty!");
             }
 
-            // Ensure we are dealing with a multipart request
-            if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
+            // Validate & process multipart request
+            var result = await _multiPartRequestHandler.ProcessAsync(Request);
+
+            // Return any errors
+            if (!result.Succeeded)
             {
-                return BadRequest($"Expected a multipart request, but got {Request.ContentType}");
-            }
-
-            // Used to accumulate all the form url
-            // encoded key value pairs in the request.
-            var formAccumulator = new KeyValueAccumulator();
-            var boundary = MultipartRequestHelper.GetBoundary(
-                MediaTypeHeaderValue.Parse(Request.ContentType),
-                _defaultFormOptions.MultipartBoundaryLengthLimit);
-
-            var reader = new MultipartReader(boundary, HttpContext.Request.Body);
-
-            // Store file information
-            var name = string.Empty;
-            var extension = string.Empty;
-            var contentType = string.Empty;
-            long contentLength = 0;
-            byte[] bytes = null;
-
-            // Prase multipart sections
-            var section = await reader.ReadNextSectionAsync();
-            while (section != null)
-            {
-
-                var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition);            
-                if (hasContentDispositionHeader)
+                foreach (var error in result.Errors)
                 {
-                    if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
-                    {
-
-                        name = contentDisposition.FileName.ToString();
-                        extension = Path.GetExtension(name);
-                        contentType = section.ContentType;
-
-                        // Create an in-memory stream to get the bytes and length
-                        using (var ms = new MemoryStream())
-                        {
-
-                            // Read the seciton into our memory stream
-                            await section.Body.CopyToAsync(ms);
-
-                            // get bytes and length
-                            bytes = ms.ToByteArray();
-                            contentLength = ms.Length;
-
-                        }
-
-                    }
-                    else if (MultipartRequestHelper.HasFormDataContentDisposition(contentDisposition))
-                    {
-
-                        // Content-Disposition: form-data; name="key" value
-                        // Do not limit the key name length here because the 
-                        // multipart headers length limit is already in effect.
-
-                        var key = HeaderUtilities.RemoveQuotes(contentDisposition.Name).ToString();
-                        var encoding = GetEncoding(section);
-
-                        using (var streamReader = new StreamReader(
-                            section.Body,
-                            encoding,
-                            detectEncodingFromByteOrderMarks: true,
-                            bufferSize: 1024,
-                            leaveOpen: true))
-                        {
-                            // The value length limit is enforced by MultipartBodyLengthLimit
-                            var value = await streamReader.ReadToEndAsync();
-                            if (String.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
-                            {
-                                value = String.Empty;
-                            }
-                            formAccumulator.Append(key, value);
-
-                            if (formAccumulator.ValueCount > _defaultFormOptions.ValueCountLimit)
-                            {
-                                throw new InvalidDataException($"Form key count limit {_defaultFormOptions.ValueCountLimit} exceeded.");
-                            }
-                        }
-                    }
+                    return BadRequest(error);
                 }
-
-                // Drains any remaining section body that has not been consumed and
-                // reads the headers for the next section.
-                section = await reader.ReadNextSectionAsync();
-            }
-
-            // Get btye array from memory stream for storage         
-    
-            if (bytes == null)
-            {
-                return BadRequest($"Could not construct a byte array for the uploaded file.");
             }
 
             // At this stage everything was OK with the file, build the attachment
             // -------------------
 
+            var md5 = result.Response.ContentBytes?.ToMD5().ToHex() ?? string.Empty;
             var attachment = new Attachment
             {
-                FeatureId = featureId,
-                Name = name,
-                ContentType = contentType,
-                ContentLength = contentLength,
-                ContentBlob = bytes,
+                FeatureId = feature.Id,
+                Name = result.Response.Name,
+                ContentType = result.Response.ContentType,
+                ContentLength = result.Response.ContentLength,
+                ContentBlob = result.Response.ContentBytes,
                 ContentGuid = guid,
-                ContentCheckSum = bytes?.ToMD5().ToHex() ?? string.Empty,
+                ContentCheckSum = md5,
                 CreatedUserId = user.Id
             };
 
@@ -223,11 +155,11 @@ namespace Plato.Attachments.Controllers
                 validSize = attachment.ContentLength <= options.MaxFileSize;
 
                 // Ensure extension is allowed
-                if (!string.IsNullOrEmpty(extension))
+                if (!string.IsNullOrEmpty(result.Response.Extension))
                 {
                     foreach (var allowedExtension in options.AllowedExtensions)
                     {
-                        if (extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase))
+                        if (result.Response.Extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase))
                         {
                             validExtension = true;
                         }
@@ -284,10 +216,10 @@ namespace Plato.Attachments.Controllers
                     var text = T["The file is {0} which exceeds your configured maximum allowed file size of {1}."];     
                     output.Add(new UploadResult()
                     {
-                        Name = name,
+                        Name = result.Response.Name,
                         Error = string.Format(
-                                text.Value,                          
-                                contentLength.ToFriendlyFileSize(),
+                                text.Value,
+                                result.Response.ContentLength.ToFriendlyFileSize(),
                                 options.MaxFileSize.ToFriendlyFileSize())
                     }); 
                 }
@@ -302,7 +234,7 @@ namespace Plato.Attachments.Controllers
                         var text = T["The file is not an allowed type. You are allowed to attach the following types:- {0}"];
                         output.Add(new UploadResult()
                         {
-                            Name = name,
+                            Name = result.Response.Name,
                             Error = string.Format(
                                     text.Value,                                  
                                     allowedExtensions.Replace(",", ", "))
@@ -314,7 +246,7 @@ namespace Plato.Attachments.Controllers
                         var text = T["The file is not an allowed type. No allowed file extensions have been configured for your account."];
                         output.Add(new UploadResult()
                         {
-                            Name = name,
+                            Name = result.Response.Name,
                             Error = text.Value
                         });
                     }
@@ -326,7 +258,7 @@ namespace Plato.Attachments.Controllers
                     var text = T["Not enough free space. You only have {0} of free space available but the upload was {1}."];
                     output.Add(new UploadResult()
                     {
-                        Name = name,
+                        Name = result.Response.Name,
                         Error = string.Format(
                                 text.Value,                             
                                 spaceRemaining.ToFriendlyFileSize(),
@@ -362,7 +294,7 @@ namespace Plato.Attachments.Controllers
             {
                 return base.UnauthorizedException();
             }
-
+                       
             // Get attachment
             var attachment = await _attachmentStore.GetByIdAsync(id);
 
@@ -370,6 +302,17 @@ namespace Plato.Attachments.Controllers
             if (attachment == null)
             {
                 return NotFound();
+            }
+
+            // Get current permission based on attachment ownership
+            var deletePermission = attachment.CreatedUserId == user.Id
+                ? Permissions.DeleteOwnArticleAttachments
+                : Permissions.DeleteAnyArticleAttachments;
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, deletePermission))
+            {
+                return Unauthorized();
             }
 
             // Delete attachment
@@ -382,36 +325,21 @@ namespace Plato.Attachments.Controllers
 
         // -----------------
 
-        bool IsContentTypeSupported(string contentType, string[] supportedTypes)
+        string GetGuid()
         {
 
-            if (String.IsNullOrEmpty(contentType))
+            if (Request.Query.ContainsKey(GuidKey))
             {
-                return false;
-            }
-
-            foreach (var supportedType in supportedTypes)
-            {
-                if (contentType.Equals(supportedType, StringComparison.OrdinalIgnoreCase))
+                
+                var guid = Request.Query[GuidKey];
+                if (!string.IsNullOrEmpty(guid))
                 {
-                    return true;
+                    return guid;
                 }
             }
 
-            return false;
+            return string.Empty;
 
-        }
-
-        Encoding GetEncoding(MultipartSection section)
-        {
-            var hasMediaTypeHeader = MediaTypeHeaderValue.TryParse(section.ContentType, out var mediaType);
-            // UTF-7 is insecure and should not be honored.
-            // UTF-8 will succeed in most cases.
-            if (!hasMediaTypeHeader || Encoding.UTF7.Equals(mediaType.Encoding))
-            {
-                return Encoding.UTF8;
-            }
-            return mediaType.Encoding;
         }
 
     }

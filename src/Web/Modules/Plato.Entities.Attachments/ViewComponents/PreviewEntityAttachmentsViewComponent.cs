@@ -47,12 +47,10 @@ namespace Plato.Entities.Attachments.ViewComponents
                 throw new ArgumentNullException(nameof(model.Guid));
             }
 
-            var results = await GetResultsAsync(model);
-
             // Build model & return view
             return View(new AttachmentsViewModel()
             {
-                Results = results,
+                Results = await GetResultsAsync(model),
                 PostPermission = model.PostPermission,
                 DeleteOwnPermission = model.DeleteOwnPermission,
                 DeleteAnyPermission = model.DeleteAnyPermission

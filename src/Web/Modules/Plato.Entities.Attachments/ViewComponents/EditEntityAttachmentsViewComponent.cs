@@ -64,6 +64,7 @@ namespace Plato.Entities.Attachments.ViewComponents
                 Info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0),
                 Options = await _attachmentOptionsFactory.GetOptionsAsync(user),
                 Results = await GetResultsAsync(model),
+                DeleteRoute = model.DeleteRoute,
                 PostPermission = model.PostPermission,
                 DeleteOwnPermission = model.DeleteOwnPermission,
                 DeleteAnyPermission = model.DeleteAnyPermission

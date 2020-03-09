@@ -73,6 +73,14 @@ namespace Plato.Articles.Attachments
                 defaults: new { controller = "Home", action = "Preview" }
             );
 
+            // API
+            routes.MapAreaRoute(
+                name: "ArticleAttachmentWebApi",
+                areaName: "Plato.Articles.Attachments",
+                template: "api/articles/attachments/{action}/{id:int?}",
+                defaults: new { controller = "Api", action = "Index" }
+            );
+
         }
 
     }

@@ -10,11 +10,11 @@ namespace Plato.Entities.Attachments.ViewModels
 
         public string Guid { get; set; }
 
-        public int FeatureId { get; set; }
-
         public int EntityId { get; set; }
 
         public RouteValueDictionary PostRoute { get; set; }
+
+        public RouteValueDictionary DeleteRoute { get; set; }
 
         public RouteValueDictionary EditRoute { get; set; }
 
