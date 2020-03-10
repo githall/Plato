@@ -1,6 +1,4 @@
-﻿using Plato.Attachments.Models;
-using Plato.Entities.Attachments.Models;
-using PlatoCore.Data.Abstractions;
+﻿using Plato.Entities.Attachments.Models;
 using System.Collections.Generic;
 
 namespace Plato.Entities.Attachments.ViewModels

@@ -64,11 +64,12 @@ namespace Plato.Attachments
             services.AddScoped<IViewProviderManager<AttachmentIndex>, ViewProviderManager<AttachmentIndex>>();
             services.AddScoped<IViewProvider<AttachmentIndex>, AttachmentIndexViewProvider>();
 
-            // Permissions provider
+            // Permissionss
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
             // Services
             services.AddScoped<IAttachmentOptionsFactory, AttachmentOptionsFactory>();
+            services.AddScoped<IAttachmentGuidFactory, AttachmentGuidFactory>();
 
             // Action filters
             services.AddScoped<IModularActionFilter, AttachmentClientOptionsFilter>();
@@ -104,23 +105,6 @@ namespace Plato.Attachments
                 template: "admin/attachments/settings/{id:int}",
                 defaults: new { controller = "Admin", action = "EditSettings" }
             );
-
-            // Display
-            routes.MapAreaRoute(
-                name: "ServeAttachment",
-                areaName: "Plato.Attachments",
-                template: "attachment/{id:int}",
-                defaults: new { controller = "Attachment", action = "Serve" }
-            );
-
-            // API
-            routes.MapAreaRoute(
-                name: "AttachmentWebApi",
-                areaName: "Plato.Attachments",
-                template: "api/attachments/{action}/{id:int?}",
-                defaults: new { controller = "Api", action = "Index" }
-            );
-
 
         }
 

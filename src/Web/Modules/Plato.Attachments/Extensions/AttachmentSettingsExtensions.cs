@@ -9,27 +9,15 @@ namespace Plato.Attachments.Extensions
 
         public static long GetAvailableSpace(this AttachmentSettings settings, IUser user)
         {
-
+           
             // We need to be authenticated to upload attachments
-            if (user == null)
-            {
-                return 0;
-            }
-
-            // We need to be authenticated to upload attachments
-            if (user.UserRoles == null)
+            if (user?.UserRoles == null)
             {
                 return 0;
             }
 
             // No settings use defaults
-            if (settings == null)
-            {
-                return DefaultAttachmentSettings.AvailableSpace;
-            }
-
-            // No settings use defaults
-            if (settings.Settings == null)
+            if (settings?.Settings == null)
             {
                 return DefaultAttachmentSettings.AvailableSpace;
             }
@@ -57,27 +45,15 @@ namespace Plato.Attachments.Extensions
 
         public static long GetMaxFileSize(this AttachmentSettings settings, IUser user)
         {
-
+         
             // We need to be authenticated to upload attachments
-            if (user == null)
-            {
-                return 0;
-            }
-
-            // We need to be authenticated to upload attachments
-            if (user.UserRoles == null)
+            if (user?.UserRoles == null)
             {
                 return 0;
             }
 
             // No settings use defaults
-            if (settings == null)
-            {
-                return DefaultAttachmentSettings.AvailableSpace;
-            }
-
-            // No settings use defaults
-            if (settings.Settings == null)
+            if (settings?.Settings == null)
             {
                 return DefaultAttachmentSettings.AvailableSpace;
             }
@@ -107,13 +83,7 @@ namespace Plato.Attachments.Extensions
         {
 
             // We need to be authenticated to upload attachments
-            if (user == null)
-            {
-                return null;
-            }
-
-            // We need to be authenticated to upload attachments
-            if (user.UserRoles == null)
+            if (user?.UserRoles == null)
             {
                 return null;
             }

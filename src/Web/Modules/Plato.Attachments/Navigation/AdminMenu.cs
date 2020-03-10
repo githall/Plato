@@ -25,7 +25,7 @@ namespace Plato.Attachments.Navigation
                     .IconCss("fal fa-paperclip")
                     .Add(T["Manage"], int.MinValue + 30, installed => installed
                         .Action("Index", "Admin", "Plato.Attachments")
-                        .Permission(Permissions.ManageAttachmentSettings)
+                        .Permission(Permissions.ManageAttachments)
                         .LocalNav()
                     ).Add(T["Settings"], int.MinValue + 30, installed => installed
                        .Action("Settings", "Admin", "Plato.Attachments")

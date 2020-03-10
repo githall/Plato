@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Text;
-using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Plato.Articles.Models;
@@ -16,6 +16,9 @@ using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.Attachments.ViewModels;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Models.Users;
+using Microsoft.AspNetCore.Routing;
+using Plato.Attachments.Services;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {
@@ -27,33 +30,30 @@ namespace Plato.Articles.Attachments.ViewProviders
 
         private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
         private readonly IAttachmentStore<Attachment> _attachmentStore; 
-        private readonly IAuthorizationService _authorizationService; 
+        private readonly IAttachmentGuidFactory _guidBuilder;
         private readonly IEntityStore<Article> _entityStore;
-        private readonly IContextFacade _contextFacade;
-        private readonly IKeyGenerator _keyGenerator;
+        private readonly IContextFacade _contextFacade;        
         private readonly IFeatureFacade _featureFacade;
         private readonly HttpRequest _request;
 
         public ArticleViewProvider(
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
-            IAttachmentStore<Attachment> attachmentStore,
-            IAuthorizationService authorizationService,
+            IAttachmentStore<Attachment> attachmentStore,           
             IHttpContextAccessor httpContextAccessor,
+            IAttachmentGuidFactory guidBuilder,
             IEntityStore<Article> entityStore,            
             IFeatureFacade featureFacade,
-            IContextFacade contextFacade,
-            IKeyGenerator keyGenerator)
-        {            
+            IContextFacade contextFacade)
+        {
             _request = httpContextAccessor.HttpContext.Request;
-            _entityAttachmentStore = entityAttachmentStore;
-            _authorizationService = authorizationService;
+            _entityAttachmentStore = entityAttachmentStore;          
             _attachmentStore = attachmentStore;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
-            _keyGenerator = keyGenerator;
+            _guidBuilder = guidBuilder;
             _entityStore = entityStore;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(Article entity, IViewProviderContext updater)
         {
             return Task.FromResult(default(IViewProviderResult));
@@ -71,17 +71,23 @@ namespace Plato.Articles.Attachments.ViewProviders
             {
                 return await BuildIndexAsync(new Article(), context);
             }
-
-            var featureId = 0; 
+   
             var entityId = entity.Id;
             var contentGuid = string.Empty;
-            var user = await _contextFacade.GetAuthenticatedUserAsync();            
 
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Articles.Attachments");
+            // Get authenticated user
+            var user = context.Controller.HttpContext.Features[typeof(User)] as User;
 
-            if (feature != null)
+            // Get current feature
+            var moduleId = "Plato.Articles.Attachments";
+
+            // Get current feature
+            var feature = await _featureFacade.GetFeatureByIdAsync(moduleId);
+
+            // Ensure the feature exists
+            if (feature == null)
             {
-                featureId = feature.Id;
+                throw new Exception($"A feature named \"{moduleId}\" could not be found!");
             }
 
             // Use posted guid if available
@@ -92,23 +98,48 @@ namespace Plato.Articles.Attachments.ViewProviders
             } 
             else
             {
-                // Create a new temporary 256 bit unique ASCII string
-                var key = _keyGenerator.GenerateKey(o =>
-                {
-                    o.MaxLength = 32;
-                    o.UniqueIdentifier = $"{user.Id.ToString()}-{entity.Id.ToString()}";
-                });
-                // Convert to 256 bit / 32 character hexadecimal string
-                contentGuid = key.ToStream(Encoding.ASCII).ToMD5().ToHex();
+                var uniqueKey = $"{user.Id.ToString()}-{entity.Id.ToString()}";
+                contentGuid = _guidBuilder.NewGuid(uniqueKey);
             }
 
             return Views(
                 View<EntityAttachmentOptions>("Attachments.Edit.Sidebar", model =>
                 {
-                    model.FeatureId = featureId;
+                   
                     model.EntityId = entityId;
                     model.Guid = contentGuid;
                     model.GuidHtmlName = GuidHtmlName;
+
+                    model.PostPermission = Permissions.PostArticleAttachments;
+                    model.DeleteOwnPermission = Permissions.DeleteOwnArticleAttachments;
+                    model.DeleteAnyPermission = Permissions.DeleteAnyArticleAttachments;
+
+                    model.PostRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = moduleId,
+                        ["controller"] = "Api",
+                        ["action"] = "Post",
+                        ["guid"] = contentGuid
+                    };
+
+                    model.EditRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = moduleId,
+                        ["controller"] = "Home",
+                        ["action"] = "Edit",
+                        ["opts.guid"] = contentGuid,
+                        ["opts.entityId"] = entityId
+                    };
+
+                    model.PreviewRoute = new RouteValueDictionary()
+                    {
+                        ["area"] = moduleId,
+                        ["controller"] = "Home",
+                        ["action"] = "Preview",
+                        ["opts.guid"] = contentGuid,
+                        ["opts.entityId"] = entityId
+                    };
+
                     return model;
                 }).Zone("sidebar").Order(1)
             );

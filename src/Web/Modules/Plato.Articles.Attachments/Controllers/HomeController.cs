@@ -14,19 +14,24 @@ using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.Models;
 using Plato.Articles.Models;
 using Plato.Entities.Stores;
+using PlatoCore.Layout.ModelBinding;
+using Plato.Entities.Attachments.ViewModels;
+using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Articles.Attachments.Controllers
 {
 
-    public class AttachmentController : Controller
+    public class HomeController : Controller, IUpdateModel
     {
+
+        public const string ModuleId = "Plato.Articles.Attachments";
 
         private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityStore<Article> _entityStore;
 
-        public AttachmentController(
+        public HomeController(
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
             IAttachmentStore<Attachment> attachmentStore,
             IAuthorizationService authorizationService,
@@ -38,37 +43,40 @@ namespace Plato.Articles.Attachments.Controllers
             _entityStore = entityStore;
         }
 
+
         // ----------
         // Download
         // ----------
 
         [HttpGet, AllowAnonymous]
-        public async Task Download(int id)
+        public async Task<IActionResult> Download(int id)
         {
 
-            // Clear response
-            var r = Response;
-            r.Clear();
-            
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DownloadArticleAttachments))
+            {
+                return Unauthorized();
+            }
+
             // Get attachment
             var attachment = await _attachmentStore.GetByIdAsync(id);
 
             // Ensure attachment exists
             if (attachment == null)
-            {           
-                return;
+            {
+                return NotFound();
             }
 
             // Do we have permission to view at least one of the
             // entities the attachment is associated with
             if (!await AuthorizeAsync(attachment))
-            {              
-                return;
+            {
+                return Unauthorized(); ;
             }
-            
+
             if (attachment.ContentLength <= 0)
             {
-                return;
+                return NotFound();
             }
 
             // Update total views
@@ -79,53 +87,88 @@ namespace Plato.Articles.Attachments.Controllers
 
             _entityAttachmentStore.CancelTokens(null);
 
-            // Serve attachment         
-            r.ContentType = attachment.ContentType;
-            r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
-            r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));                
-            await r.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);            
-
-        }
-
-        // ----------
-        // Delete
-        // ----------
-
-        [HttpGet, AllowAnonymous]
-        public async Task Delete(int id)
-        {
-
             // Clear response
             var r = Response;
             r.Clear();
 
-            // Get attachment
-            var attachment = await _attachmentStore.GetByIdAsync(id);
+            // Serve attachment         
+            r.ContentType = attachment.ContentType;
+            r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
+            r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));
+            await r.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);
 
-            // Ensure attachment exists
-            if (attachment == null)
+            return null;
+
+        }
+
+        // -----------
+        // Edit
+        // -----------
+
+        [HttpGet, AllowAnonymous]
+        public Task<IActionResult> Edit(EntityAttachmentOptions opts)
+        {
+
+            if (opts == null)
             {
-                return;
+                opts = new EntityAttachmentOptions();
             }
 
-            // Do we have permission to view at least one of the
-            // entities the attachment is associated with
-            if (!await AuthorizeAsync(attachment))
+            // We always need a guid
+            if (string.IsNullOrEmpty(opts.Guid))
             {
-                return;
+                throw new ArgumentNullException(nameof(opts.Guid));
             }
 
-            // Update total views
-            attachment.TotalViews = attachment.TotalViews + 1;
-            await _attachmentStore.UpdateAsync(attachment);
+            opts.PostPermission = Permissions.PostArticleAttachments;
+            opts.DeleteOwnPermission = Permissions.DeleteOwnArticleAttachments;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleAttachments;
 
-            if (attachment.ContentLength >= 0)
+            opts.DeleteRoute = new RouteValueDictionary()
             {
-                r.ContentType = attachment.ContentType;
-                r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
-                r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));
-                await r.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);
+                ["area"] = ModuleId,
+                ["controller"] = "Api",
+                ["action"] = "Delete"
+            };
+
+            // Return view
+            return Task.FromResult((IActionResult)View(opts));
+
+
+        }
+
+        // -----------
+        // Preview
+        // -----------
+
+        [HttpGet, AllowAnonymous]
+        public Task<IActionResult> Preview(EntityAttachmentOptions opts)
+        {
+
+            if (opts == null)
+            {
+                opts = new EntityAttachmentOptions();
             }
+
+            // We always need a guid
+            if (string.IsNullOrEmpty(opts.Guid))
+            {
+                throw new ArgumentNullException(nameof(opts.Guid));
+            }
+
+            opts.PostPermission = Permissions.PostArticleAttachments;
+            opts.DeleteOwnPermission = Permissions.DeleteOwnArticleAttachments;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleAttachments;
+
+            opts.DeleteRoute = new RouteValueDictionary()
+            {
+                ["area"] = ModuleId,
+                ["controller"] = "Api",
+                ["action"] = "Delete"
+            };
+
+            // Return view
+            return Task.FromResult((IActionResult) View(opts));
 
         }
 
@@ -181,7 +224,7 @@ namespace Plato.Articles.Attachments.Controllers
 
             // Our result
             var result = new CommandResultBase();
-         
+
             // Generic failure message
             const string error = "Unauthorized";
 
@@ -189,7 +232,7 @@ namespace Plato.Articles.Attachments.Controllers
             if (entity.IsHidden)
             {
                 if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Permissions.ViewHiddenArticles))
+                    entity.CategoryId, Articles.Permissions.ViewHiddenArticles))
                 {
                     return result.Failed(error);
                 }
@@ -199,7 +242,7 @@ namespace Plato.Articles.Attachments.Controllers
             if (entity.IsPrivate)
             {
                 if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Permissions.ViewPrivateArticles))
+                    entity.CategoryId, Articles.Permissions.ViewPrivateArticles))
                 {
                     return result.Failed(error);
                 }
@@ -209,7 +252,7 @@ namespace Plato.Articles.Attachments.Controllers
             if (entity.IsSpam)
             {
                 if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Permissions.ViewSpamArticles))
+                    entity.CategoryId, Articles.Permissions.ViewSpamArticles))
                 {
                     return result.Failed(error);
                 }
@@ -219,7 +262,7 @@ namespace Plato.Articles.Attachments.Controllers
             if (entity.IsDeleted)
             {
                 if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Permissions.ViewDeletedArticles))
+                    entity.CategoryId, Articles.Permissions.ViewDeletedArticles))
                 {
                     return result.Failed(error);
                 }

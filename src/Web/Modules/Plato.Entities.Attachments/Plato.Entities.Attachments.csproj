@@ -6,47 +6,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <None Remove="Views\Home\Index.cshtml" />
-    <None Remove="Views\Home\Preview.cshtml" />
-    <None Remove="Views\Shared\Attachments.Edit.Sidebar.cshtml" />
-    <None Remove="Views\Shared\Components\EditEntityAttachments\Default.cshtml" />
-    <None Remove="Views\Shared\Components\PreviewEntityAttachments\Default.cshtml" />
-    <None Remove="Views\Shared\Components\EntityAttachments\Default.cshtml" />
-    <None Remove="Views\_ViewImports.cshtml" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Content Include="Views\Home\Preview.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Home\Index.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\Attachments.Edit.Sidebar.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\Components\EditEntityAttachments\Default.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\Components\PreviewEntityAttachments\Default.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\Shared\Components\EntityAttachments\Default.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-    <Content Include="Views\_ViewImports.cshtml">
-      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
-      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
-    </Content>
-  </ItemGroup>
-
-  <ItemGroup>
     <ProjectReference Include="..\..\..\Core\PlatoCore.csproj" />
     <ProjectReference Include="..\Plato.Attachments\Plato.Attachments.csproj" />
     <ProjectReference Include="..\Plato.Entities\Plato.Entities.csproj" />

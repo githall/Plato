@@ -10,6 +10,9 @@ using PlatoCore.Layout.ViewProviders;
 using Plato.Articles.Attachments.ViewProviders;
 using Plato.Articles.Attachments.Navigation;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Security.Abstractions;
+using Plato.Articles.Attachments.Handlers;
+using PlatoCore.Features.Abstractions;
 
 namespace Plato.Articles.Attachments
 {
@@ -25,14 +28,18 @@ namespace Plato.Articles.Attachments
         public override void ConfigureServices(IServiceCollection services)
         {
 
+            // Feature installation event handler
+            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
+
             // Register navigation provider     
             services.AddScoped<INavigationProvider, ArticleFooterMenu>();
-          
+
             // View providers
             services.AddScoped<IViewProviderManager<Article>, ViewProviderManager<Article>>();
             services.AddScoped<IViewProvider<Article>, ArticleViewProvider>();
-            services.AddScoped<IViewProviderManager<Comment>, ViewProviderManager<Comment>>();
-            services.AddScoped<IViewProvider<Comment>, CommentViewProvider>();
+
+            // Permissionss
+            services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
         }
 
@@ -47,15 +54,31 @@ namespace Plato.Articles.Attachments
                 name: "ArticlesAttachmentDownload",
                 areaName: "Plato.Articles.Attachments",
                 template: "articles/attachments/download/{id:int}",
-                defaults: new { controller = "Attachment", action = "Download" }
+                defaults: new { controller = "Home", action = "Download" }
             );
 
-            // Delete
+            // Edit
             routes.MapAreaRoute(
-                name: "ArticlesAttachmentDelete",
+                name: "EditArticleAttachments",
                 areaName: "Plato.Articles.Attachments",
-                template: "articles/attachments/delete/{id:int}",
-                defaults: new { controller = "Attachment", action = "Delete" }
+                template: "articles/attachments/edit/{opts.guid}/{opts.entityId:int?}",
+                defaults: new { controller = "Home", action = "Edit" }
+            );
+
+            // Preview
+            routes.MapAreaRoute(
+                name: "PreviewArticleAttachments",
+                areaName: "Plato.Articles.Attachments",
+                template: "articles/attachments/preview/{opts.guid}/{opts.entityId:int?}",
+                defaults: new { controller = "Home", action = "Preview" }
+            );
+
+            // API
+            routes.MapAreaRoute(
+                name: "ArticleAttachmentWebApi",
+                areaName: "Plato.Articles.Attachments",
+                template: "api/articles/attachments/{action}/{id:int?}",
+                defaults: new { controller = "Api", action = "Index" }
             );
 
         }

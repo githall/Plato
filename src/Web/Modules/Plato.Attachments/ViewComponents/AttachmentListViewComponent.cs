@@ -7,7 +7,7 @@ using Plato.Attachments.Models;
 using Plato.Attachments.Stores;
 using Plato.Attachments.ViewModels;
 
-namespace Plato.Reports.PageViews.ViewComponents
+namespace Plato.Attachments.ViewComponents
 {
     public class AttachmentListViewComponent : ViewComponent
     {

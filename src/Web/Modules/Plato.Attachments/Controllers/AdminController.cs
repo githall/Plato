@@ -72,7 +72,7 @@ namespace Plato.Attachments.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageAttachmentSettings))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageAttachments))
             {
                 return Unauthorized();
             }
