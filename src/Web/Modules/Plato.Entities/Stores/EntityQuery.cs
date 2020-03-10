@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Text;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions;
@@ -24,7 +24,7 @@ namespace Plato.Entities.Stores
         public EntityQueryParams Params { get; set; }
 
         private readonly IQueryableStore<TModel> _store;
-        
+
         public EntityQueryBuilder<TModel> Builder { get; private set; }
         
         public EntityQuery(IQueryableStore<TModel> store)
@@ -39,7 +39,7 @@ namespace Plato.Entities.Stores
             Params = (EntityQueryParams)Convert.ChangeType(defaultParams, typeof(EntityQueryParams));
             return this;
         }
-        
+
         public override async Task<IPagedResults<TModel>> ToList()
         {
 

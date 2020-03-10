@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Plato.Articles.Models;
 using Plato.Entities.Stores;
@@ -11,8 +9,6 @@ using Plato.Attachments.Models;
 using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Attachments.Stores;
 using Plato.Entities.Attachments.Models;
-using PlatoCore.Text.Abstractions;
-using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.Attachments.ViewModels;
 using PlatoCore.Features.Abstractions;
