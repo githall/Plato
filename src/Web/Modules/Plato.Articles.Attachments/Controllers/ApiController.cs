@@ -98,9 +98,6 @@ namespace Plato.Articles.Attachments.Controllers
                 throw new Exception($"A feature named \"{ModuleId}\" could not be found!");
             }
 
-            // TODO: Add upload permission checks
-            // ----------------------
-
             // Validate temporary global unique identifier
             var guid = GetGuid();
             if (string.IsNullOrEmpty(guid))
@@ -111,7 +108,7 @@ namespace Plato.Articles.Attachments.Controllers
             // Validate & process multipart request
             var result = await _multiPartRequestHandler.ProcessAsync(Request);
 
-            // Return any errors
+            // Return any errors parsing the multipart request
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)

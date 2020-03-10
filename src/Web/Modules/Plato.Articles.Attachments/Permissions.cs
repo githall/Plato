@@ -7,6 +7,9 @@ namespace Plato.Articles.Attachments
     public class Permissions : IPermissionsProvider<Permission>
     {
 
+        public static readonly Permission DownloadArticleAttachments =
+            new Permission("DownloadArticleAttachments", "Download article attachments");
+
         public static readonly Permission PostArticleAttachments =
             new Permission("PostArticleAttachments", "Post article attachments");
 
@@ -20,9 +23,10 @@ namespace Plato.Articles.Attachments
         {
             return new[]
             {
+                DownloadArticleAttachments,
                 PostArticleAttachments,
                 DeleteOwnArticleAttachments,
-                DeleteAnyArticleAttachments
+                DeleteAnyArticleAttachments          
             };
         }
 
@@ -32,11 +36,31 @@ namespace Plato.Articles.Attachments
             {
                 new DefaultPermissions<Permission>
                 {
+                    RoleName = DefaultRoles.Anonymous,
+                    Permissions = new[]
+                    {
+                        DownloadArticleAttachments
+                    }
+                },
+                new DefaultPermissions<Permission>
+                {
+                    RoleName = DefaultRoles.Member,
+                    Permissions = new[]
+                    {
+                        DownloadArticleAttachments,
+                        PostArticleAttachments,
+                        DeleteOwnArticleAttachments
+                    }
+                },
+                new DefaultPermissions<Permission>
+                {
                     RoleName = DefaultRoles.Staff,
                     Permissions = new[]
                     {
+                        DownloadArticleAttachments,
                         PostArticleAttachments,
-                        DeleteOwnArticleAttachments
+                        DeleteOwnArticleAttachments,
+                        DeleteAnyArticleAttachments
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -44,6 +68,7 @@ namespace Plato.Articles.Attachments
                     RoleName = DefaultRoles.Administrator,
                     Permissions = new[]
                     {
+                        DownloadArticleAttachments,
                         PostArticleAttachments,
                         DeleteOwnArticleAttachments,
                         DeleteAnyArticleAttachments

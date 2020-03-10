@@ -54,12 +54,12 @@ namespace Plato.Articles.Attachments
                 name: "ArticlesAttachmentDownload",
                 areaName: "Plato.Articles.Attachments",
                 template: "articles/attachments/download/{id:int}",
-                defaults: new { controller = "Attachment", action = "Download" }
+                defaults: new { controller = "Home", action = "Download" }
             );
 
             // Edit
             routes.MapAreaRoute(
-                name: "EditArticlesAttachment",
+                name: "EditArticleAttachments",
                 areaName: "Plato.Articles.Attachments",
                 template: "articles/attachments/edit/{opts.guid}/{opts.entityId:int?}",
                 defaults: new { controller = "Home", action = "Edit" }
@@ -67,7 +67,7 @@ namespace Plato.Articles.Attachments
 
             // Preview
             routes.MapAreaRoute(
-                name: "PreviewArticlesAttachments",
+                name: "PreviewArticleAttachments",
                 areaName: "Plato.Articles.Attachments",
                 template: "articles/attachments/preview/{opts.guid}/{opts.entityId:int?}",
                 defaults: new { controller = "Home", action = "Preview" }
