@@ -70,7 +70,8 @@ namespace Plato.Attachments
             // Services
             services.AddScoped<IAttachmentOptionsFactory, AttachmentOptionsFactory>();
             services.AddScoped<IAttachmentGuidFactory, AttachmentGuidFactory>();
-
+            services.AddScoped<IAttachmentValidator, AttachmentValidator>();
+            
             // Action filters
             services.AddScoped<IModularActionFilter, AttachmentClientOptionsFilter>();
 

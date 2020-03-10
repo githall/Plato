@@ -48,7 +48,7 @@ if (typeof window.$.Plato === "undefined") {
                     autoDiscover: false,
                     disablePreview: true,
                     dictDefaultMessage:
-                        'Embed files by dragging and dropping here, <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a> or paste from the clipboard'
+                        'Embed images by dragging and dropping here, <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a> or paste from the clipboard'
                 },
                 enableDropDataUri: false,
                 footer: '',
