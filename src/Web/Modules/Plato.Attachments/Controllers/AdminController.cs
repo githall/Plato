@@ -93,11 +93,7 @@ namespace Plato.Attachments.Controllers
             var defaultViewOptions = new AttachmentIndexOptions();
             var defaultPagerOptions = new PagerOptions();
 
-            // Add non default route data for pagination purposes
-            if (opts.Start != defaultViewOptions.Start)
-                this.RouteData.Values.Add("opts.start", opts.Start);
-            if (opts.End != defaultViewOptions.End)
-                this.RouteData.Values.Add("opts.end", opts.End);
+            // Add non default route data for pagination purposes                
             if (opts.Search != defaultViewOptions.Search)
                 this.RouteData.Values.Add("opts.search", opts.Search);
             if (opts.Sort != defaultViewOptions.Sort)

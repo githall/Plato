@@ -38,6 +38,18 @@ namespace Plato.Attachments.Handlers
                     },
                     new SchemaColumn()
                     {
+                        Name = "Alias",
+                        Length = "255",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "Extension",
+                        Length = "16",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
                         Name = "ContentBlob",
                         Nullable = true,
                         DbType = DbType.Binary
@@ -235,6 +247,8 @@ namespace Plato.Attachments.Handlers
                                     a.Id,
                                     a.FeatureId,
                                     a.[Name],
+                                    a.Alias,
+                                    a.Extension,
                                     a.ContentBlob,
                                     a.ContentType,
                                     a.ContentLength,
@@ -333,6 +347,7 @@ namespace Plato.Attachments.Handlers
                 {
                     "FeatureId",
                     "[Name]",
+                    "Extension",
                     "ContentGuid",
                     "ContentCheckSum"
                 }

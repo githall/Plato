@@ -126,6 +126,7 @@ namespace Plato.Articles.Attachments.Controllers
             {
                 FeatureId = feature.Id,
                 Name = result.Response.Name,
+                Extension = result.Response.Extension,
                 ContentType = result.Response.ContentType,
                 ContentLength = result.Response.ContentLength,
                 ContentBlob = result.Response.ContentBytes,

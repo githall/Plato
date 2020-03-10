@@ -166,6 +166,8 @@ namespace Plato.Attachments.Stores
                 .Append("a.Id, ")
                 .Append("a.FeatureId, ")
                 .Append("a.[Name], ")
+                .Append("a.Alias, ")
+                .Append("a.Extension, ")
                 .Append("CAST(1 AS BINARY(1)) AS ContentBlob, ") // for perf not returned with paged results
                 .Append("a.ContentType, ")
                 .Append("a.ContentLength, ")

@@ -2,13 +2,13 @@
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Localization;
-using Plato.Attachments.Models;
 using PlatoCore.Abstractions;
+using Plato.Attachments.Models;
 using Plato.Attachments.Stores;
-using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Hosting.Abstractions;
 using System.Collections.Generic;
+using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Abstractions.Extensions;
+using Microsoft.AspNetCore.Mvc.Localization;
 
 namespace Plato.Attachments.Services
 {
@@ -64,24 +64,22 @@ namespace Plato.Attachments.Services
                 return result.Failed("You must be authenticated to post attachments");
             }
 
-            // Get users attachment restrictions (max file size, total available space & allowed extensions)
+            // Get users attachment options (max file size, total available space & allowed extensions)
             var options = await _attachmentOptionsFactory.GetOptionsAsync(user);
 
-            // We need restrictions to validate
+            // We need options to validate
             if (options == null)
             {
-                return result.Failed("Could not obtain attachment restrictions for your account..");
+                return result.Failed("Could not obtain attachment settings for your account..");
             }
 
             // Compile errors
             var errors = new List<string>();
 
             // Validate file size 
-            // ----------------------------------
 
-            // Ensure content is below or equal to our max file size
-            var validSize = attachment.ContentLength <= options.MaxFileSize;
-            if (!validSize)
+            // Is the file larger than our max file size?
+            if (attachment.ContentLength > options.MaxFileSize)
             {
                 var error = T["The file is {0} which exceeds your configured maximum allowed file size of {1}."];
                 errors.Add(string.Format(
@@ -91,21 +89,18 @@ namespace Plato.Attachments.Services
             }
 
             // Validate file extension
-            // ----------------------------------
 
-            var validExtension = false;
-            var extension = Path.GetExtension(attachment.Name);
-            if (!string.IsNullOrEmpty(extension))
+            var validExtension = false;   
+            if (!string.IsNullOrEmpty(attachment.Extension))
             {
                 foreach (var allowedExtension in options.AllowedExtensions)
                 {
-                    if (extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase))
+                    if (attachment.Extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase))
                     {
                         validExtension = true;
                     }
                 }
             }
-
             if (!validExtension)
             {
                 var allowedExtensions = string.Join(",", options.AllowedExtensions.Select(e => e));
@@ -126,14 +121,13 @@ namespace Plato.Attachments.Services
             }
 
             // Validate available space 
-            // ----------------------------------
 
-            // Ensure the upload would not exceed available space            
             var validSpace = false;
             long currentLength = 0;
             var info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0);
             if (info != null)
             {
+                // Ensure the upload would not exceed available space    
                 if ((info.Length + attachment.ContentLength) <= options.AvailableSpace)
                 {
                     validSpace = true;
@@ -141,20 +135,16 @@ namespace Plato.Attachments.Services
                 currentLength = info.Length;
             }
 
-            // No space available
             if (!validSpace)
             {
                 var remaining = options.AvailableSpace - currentLength;
                 if (remaining < 0) remaining = 0;
-                var error = T["Not enough free space. You only have {0} of free space available but the file was {1}."];
+                var error = T["Not enough free space. You have {0} of free space available but the file was {1}."];
                 errors.Add(string.Format(
                             error.Value,
                             remaining.ToFriendlyFileSize(),
                             attachment.ContentLength.ToFriendlyFileSize()));
             }
-
-            // Return result
-            // ----------------------------------
 
             return errors.Count > 0
                 ? result.Failed(errors)

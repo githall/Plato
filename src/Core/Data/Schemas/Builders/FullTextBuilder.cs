@@ -227,11 +227,41 @@ namespace PlatoCore.Data.Schemas.Builders
             sb.Append(alter ? "ALTER" : "CREATE")
                 .Append(" FULLTEXT INDEX ON ")
                 .Append(PrependTablePrefix(index.TableName))
-                .Append(" (")
-                .Append(index.ColumnNames.ToDelimitedString())
-                .Append(" LANGUAGE ")
-                .Append(index.LanguageCode)
-                .Append(") KEY INDEX ")
+                .Append(NewLine)
+                .Append("(")
+                .Append(NewLine);
+
+            var i = 0;
+            foreach (var column in index.Columns)
+            {
+                sb.Append(column.ColumnName);
+
+                if (!string.IsNullOrEmpty(column.TypeColumnName))
+                {
+                    sb
+                        .Append(NewLine)
+                        .Append("   TYPE COLUMN ").Append(column.TypeColumnName);
+                }
+
+                sb
+                    .Append(NewLine)
+                    .Append("   LANGUAGE ").Append(column.LanguageCode);
+
+                if (i < index.Columns.Count - 1)
+                {
+                    sb.Append(",")
+                        .Append(NewLine);
+                }
+                
+                sb.Append(NewLine);
+                i++;
+
+            }
+
+            sb.Append(")")
+             .Append(NewLine);
+
+            sb.Append("KEY INDEX ")
                 .Append(index.PrimaryKeyName)
                 .Append(" ON ")
                 .Append(index.CatalogName)

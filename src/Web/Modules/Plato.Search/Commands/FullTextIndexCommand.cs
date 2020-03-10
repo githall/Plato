@@ -91,9 +91,9 @@ namespace Plato.Search.Commands
             // Drop index
             using (var builder = _schemaBuilder)
             {
-                if (model.ColumnNames != null)
+                if (model.Columns != null)
                 {
-                    foreach (var columnName in model.ColumnNames)
+                    foreach (var columnName in model.Columns.Select(c => c.ColumnName))
                     {
                         builder.FullTextBuilder.DropIndex(model.TableName, columnName);
                     }

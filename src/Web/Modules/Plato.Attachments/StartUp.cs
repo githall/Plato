@@ -22,6 +22,7 @@ using Microsoft.Extensions.Options;
 using Plato.Attachments.Services;
 using Plato.Attachments.ActionFilters;
 using PlatoCore.Layout.ActionFilters;
+using PlatoCore.Search.Abstractions;
 
 namespace Plato.Attachments
 {
@@ -75,6 +76,9 @@ namespace Plato.Attachments
             // Action filters
             services.AddScoped<IModularActionFilter, AttachmentClientOptionsFilter>();
 
+            // Full text index providers
+            services.AddScoped<IFullTextIndexProvider, FullTextIndexes>();
+
         }
 
         public override void Configure(
@@ -87,7 +91,7 @@ namespace Plato.Attachments
             routes.MapAreaRoute(
                 name: "AttachmentsIndex",
                 areaName: "Plato.Attachments",
-                template: "admin/attachments",
+                template: "admin/attachments/{pager.offset:int?}",
                 defaults: new { controller = "Admin", action = "Index" }
             );
 

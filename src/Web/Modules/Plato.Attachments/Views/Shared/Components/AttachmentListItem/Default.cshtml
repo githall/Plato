@@ -7,19 +7,22 @@
     var views = $"{Model.Attachment.TotalViews.ToPrettyInt()} {viewText.Value}";
 }
 
-@if (Model.Attachment.CreatedBy != null)
-{
-    <div class="list-left text-center">
-        <a asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Attachment.CreatedUserId" asp-route-opts.alias="@Model.Attachment.CreatedBy.Alias">    <avatar data-toggle="tooltip" title="@Model.Attachment.CreatedBy.DisplayName" class="avatar avatar-sm" url="@Model.Attachment.CreatedBy.Avatar.Url" /></a>
-    </div>
-}
+
+<div class="list-left">
+    <span title="@extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo fa-2x mt-2 @iconCss"></span>
+</div>
+
 <div class="list-body">
 
-    <span title="@extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo float-right @iconCss"></span>
 
+    @if (Model.Attachment.CreatedBy != null)
+    {
+        <div class="float-right">
+            <a asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Attachment.CreatedUserId" asp-route-opts.alias="@Model.Attachment.CreatedBy.Alias">    <avatar data-toggle="tooltip" title="@Model.Attachment.CreatedBy.DisplayName" class="avatar avatar-sm" url="@Model.Attachment.CreatedBy.Avatar.Url" /></a>
+        </div>
+    }
     <div>
-
-        <a href="#" class="font-weight-bold">
+        <a asp-route-area="@Model.Attachment.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@Model.Attachment.Id" target="_blank" class="font-weight-bold">
             @Model.Attachment.Name
         </a>
     </div>
