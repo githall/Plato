@@ -8,7 +8,9 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
     public interface ITagHelperAdapter
     {
 
-        string Id { get; set; }
+        string ViewName { get; }
+
+        string TagId { get; }
 
         Task ProcessAsync(TagHelperContext context, TagHelperOutput output);
 
@@ -17,19 +19,23 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
     public class TagHelperAdapter : ITagHelperAdapter
     {
 
-        public string Id { get; set; }
+        public string ViewName { get; private set; }
+
+        public string TagId { get; private set; }
 
         readonly Func<TagHelperContext, TagHelperOutput, Task> _adapter;
 
-        public TagHelperAdapter(string id, Func<TagHelperContext, TagHelperOutput, Task> adapter)
+        public TagHelperAdapter(string viewName, string tagId, Func<TagHelperContext, TagHelperOutput, Task> adapter)
         {
-            Id = id;
+            ViewName = viewName;
+            TagId = tagId;
             _adapter = adapter;
         }
 
-        public TagHelperAdapter(string id, Action<TagHelperContext, TagHelperOutput> adapter)
+        public TagHelperAdapter(string viewName, string tagId, Action<TagHelperContext, TagHelperOutput> adapter)
         {
-            Id = id;
+            ViewName = viewName;
+            TagId = tagId;
             // Wrap action wtihin func
             _adapter = (context, output) =>
             {
@@ -37,6 +43,7 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
                 return Task.CompletedTask;
             };
         }
+
 
         public async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {

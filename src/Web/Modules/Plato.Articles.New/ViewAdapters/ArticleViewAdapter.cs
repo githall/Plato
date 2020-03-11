@@ -108,17 +108,16 @@ namespace Plato.Articles.New.ViewAdapters
                         lastVisit = _lastVisits[model.Entity.Id];
                     }
 
+                    lastVisit = System.DateTime.Now.AddDays(-10);
+
                     // Build tag adapters
                     var adapters = new[]
                     {
                         // Add a "New" label after the title tag 
-                        new TagHelperAdapter("title", (context, output) =>
+                        new TagHelperAdapter(ViewName, "title", (context, output) =>
                         {
                             if (lastVisit != null)
                             {
-
-                                // Optionally remove bold title for read entities
-                                // output.Attributes.RemoveAll("class");
 
                                 // New
                                 if (model.Entity.LastReplyAfter(lastVisit))
@@ -126,15 +125,7 @@ namespace Plato.Articles.New.ViewAdapters
                                     output.PostElement.SetHtmlContent(
                                         $"<span data-toggle=\"tooltip\" title=\"{T["This article has new replies"].Value}\" class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
                                 }
-                                else
-                                {
-                                    // Modified
-                                    if (model.Entity.ModifiedAfter(lastVisit))
-                                    {
-                                        output.PostElement.SetHtmlContent(
-                                            $"<span data-toggle=\"tooltip\" title=\"{T["This article has been updated since it was last read"].Value}\" class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
-                                    }
-                                }
+                                
                             }                         
                         })
                     };

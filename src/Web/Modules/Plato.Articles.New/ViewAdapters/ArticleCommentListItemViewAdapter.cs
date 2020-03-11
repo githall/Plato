@@ -40,7 +40,7 @@ namespace Plato.Articles.New.ViewAdapters
                     // Build tag adapters
                     var adapters = new[]
                     {
-                        new TagHelperAdapter("title", (context, output) =>
+                        new TagHelperAdapter(ViewName, "title", (context, output) =>
                         {
                             output.PostElement.SetHtmlContent(
                                         $"<span class=\"badge badge-primary ml-2\">{T["Article Comment List Item View Adapter"].Value}</span>");

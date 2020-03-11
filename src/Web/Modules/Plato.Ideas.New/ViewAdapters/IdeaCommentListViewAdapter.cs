@@ -40,7 +40,7 @@ namespace Plato.Ideas.New.ViewAdapters
                     // Build tag adapters
                     var adapters = new[]
                     {
-                        new TagHelperAdapter("title", (context, output) =>
+                        new TagHelperAdapter(ViewName, "title", (context, output) =>
                         {
                             output.Attributes.SetAttribute("class", "d-inline-block");
                             output.PostElement.SetHtmlContent(

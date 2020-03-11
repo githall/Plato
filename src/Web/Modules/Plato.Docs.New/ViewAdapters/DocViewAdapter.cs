@@ -112,7 +112,7 @@ namespace Plato.Docs.New.ViewAdapters
                     var adapters = new[]
                     {
                         // Add a "New" label after the title tag 
-                        new TagHelperAdapter("title", (context, output) =>
+                        new TagHelperAdapter(ViewName, "title", (context, output) =>
                         {
                             if (lastVisit != null)
                             {

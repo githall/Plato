@@ -69,9 +69,9 @@ namespace Plato.Entities.Services
             // Special edge case for popular entities
             if (options.Sort == SortBy.Popular)
             {
-                options.AddSortColumn(SortBy.Participants.ToString(), options.Order);
-                options.AddSortColumn(SortBy.Replies.ToString(), options.Order);
                 options.AddSortColumn(SortBy.Views.ToString(), options.Order);
+                options.AddSortColumn(SortBy.Participants.ToString(), options.Order);
+                options.AddSortColumn(SortBy.Replies.ToString(), options.Order);                
                 options.AddSortColumn(SortBy.LastReply.ToString(), options.Order);
             }
             else

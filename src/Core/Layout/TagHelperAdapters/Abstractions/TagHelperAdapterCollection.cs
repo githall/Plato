@@ -12,14 +12,11 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
 
     public class TagHelperAdapterCollection : ITagHelperAdapterCollection
     {
-
-        private readonly IList<ITagHelperAdapter> _adapters;
-
-        public IList<ITagHelperAdapter> Adapters => _adapters;
+        public IList<ITagHelperAdapter> Adapters { get; }
 
         public TagHelperAdapterCollection()
         {
-            _adapters = new List<ITagHelperAdapter>();
+            Adapters = new List<ITagHelperAdapter>();
         }
 
     }
@@ -40,7 +37,7 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
             tagHelperAdapterCollection.Adapters.Add(adapter);
         }
 
-        public static IEnumerable<ITagHelperAdapter> First(this ITagHelperAdapterCollection tagHelperAdapterCollection, string id)
+        public static IEnumerable<ITagHelperAdapter> First(this ITagHelperAdapterCollection tagHelperAdapterCollection, string viewName, string tagId)
         {
 
             if (tagHelperAdapterCollection.Adapters == null)
@@ -56,7 +53,9 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
             IList<ITagHelperAdapter> output = null;
             foreach (var adapter in tagHelperAdapterCollection.Adapters)
             {
-                if (adapter.Id.Equals(id, System.StringComparison.OrdinalIgnoreCase))
+                var isView = adapter.ViewName?.Equals(viewName, System.StringComparison.OrdinalIgnoreCase) ?? false;
+                var isTag = adapter.TagId?.Equals(tagId, System.StringComparison.OrdinalIgnoreCase) ?? false;
+                if (isView && isTag)
                 {
                     if (output == null)
                     {
@@ -69,9 +68,9 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
         }
 
         public static IEnumerable<ITagHelperAdapter> FirstOrDefault(
-            this ITagHelperAdapterCollection tagHelperAdapterCollection, string id)
+            this ITagHelperAdapterCollection tagHelperAdapterCollection, string viewName, string tagId)
         {
-            var first = tagHelperAdapterCollection.First(id);
+            var first = tagHelperAdapterCollection.First(viewName, tagId);
             return first ?? default(List<ITagHelperAdapter>);
         }
 

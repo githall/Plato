@@ -1,7 +1,9 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.AspNetCore.Mvc.ViewComponents;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
+using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout.TagHelperAdapters.Abstractions;
 
 namespace PlatoCore.Layout.TagHelpers
@@ -22,15 +24,35 @@ namespace PlatoCore.Layout.TagHelpers
 
             // Populated via TagHelperAdapterModelFilter
             var adapters = ViewContext.HttpContext.Items[typeof(TagHelperAdapterCollection)] as ITagHelperAdapterCollection;
+
             if (adapters == null)
             {
                 return;
             }
 
-            // Get adapters for our identifier
-            var matchingAdapters = adapters.First(this.Id);
+            if (adapters.Adapters == null)
+            {
+                return;
+            }
 
-            // No adapters for identifier
+            if (adapters.Adapters.Count == 0)
+            {
+                return;
+            }
+
+            // Get executing views name
+            var viewName = GetViewName(ViewContext.ExecutingFilePath);
+
+            // We need a name
+            if (string.IsNullOrEmpty(viewName))
+            {
+                return;
+            }
+
+            // Get adapters for our view and tag identifier
+            var matchingAdapters = adapters.First(viewName, Id);
+
+            // No adapters found
             if (matchingAdapters == null)
             {
                 return;
@@ -41,6 +63,32 @@ namespace PlatoCore.Layout.TagHelpers
             {
                 await adapter.ProcessAsync(context, output);
             }
+
+        }
+
+        string GetViewName(string executingFilePath)
+        {
+
+            if (string.IsNullOrEmpty(executingFilePath))
+            {
+                return string.Empty;
+            }
+
+            var parts = executingFilePath.Split('/');
+
+            if (parts.Length == 0)
+            {
+                return string.Empty;
+            }
+
+            var isComponent = parts.Contains("Components") && parts.Contains("Default.cshtml");
+
+            if (isComponent)
+            {
+                return parts[parts.Length - 2];
+            }
+
+            return string.Empty;
 
         }
 
