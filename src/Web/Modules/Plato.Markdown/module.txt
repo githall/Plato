@@ -9,6 +9,10 @@ Icon: /plato.markdown/content/images/icon.png
 Dependencies: 
 [
 	{
+		Id: "Plato.Dropzone",
+		Version: "1.0.0"
+	},
+	{
 		Id: "Plato.Media",
 		Version: "1.0.0"
 	},

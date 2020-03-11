@@ -186,6 +186,8 @@ namespace Plato.Entities.Attachments.Handlers
                                     ea.*,
                                     a.FeatureId,
                                     a.[Name],
+                                    a.Alias,
+                                    a.Extension,
                                     CAST(1 AS BINARY(1)) AS ContentBlob, -- for perf not returned with results
                                     a.ContentType,
                                     a.ContentLength,
@@ -231,6 +233,8 @@ namespace Plato.Entities.Attachments.Handlers
                                     ea.*,    
                                     a.FeatureId,
                                     a.[Name],
+                                    a.Alias,
+                                    a.Extension,
                                     CAST(1 AS BINARY(1)) AS ContentBlob, -- for perf not returned with results
                                     a.ContentType,
                                     a.ContentLength,

@@ -1,11 +1,5 @@
 [
   {
-    "outputFileName": "Content/css/dropzone.min.css",
-    "inputFiles": [
-      "Content/css/dropzone.css"
-    ]
-  },
-  {
     "outputFileName": "Content/css/markdown.min.css",
     "inputFiles": [
       "Content/css/markdown.css"
@@ -15,12 +9,6 @@
     "outputFileName": "Content/js/markdown.min.js",
     "inputFiles": [
       "Content/js/markdown.js"
-    ]
-  },
-  {
-    "outputFileName": "Content/js/dropzone.min.js",
-    "inputFiles": [
-      "Content/js/dropzone.js"
     ]
   }
 ]

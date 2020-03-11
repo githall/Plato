@@ -6,6 +6,7 @@ using Microsoft.Extensions.Logging;
 using Plato.Attachments.Repositories;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Text.Abstractions;
 
 namespace Plato.Attachments.Stores
 {
@@ -19,17 +20,20 @@ namespace Plato.Attachments.Stores
         private readonly ILogger<AttachmentStore> _logger;
         private readonly IDbQueryConfiguration _dbQuery;
         private readonly ICacheManager _cacheManager;
+        private readonly IAliasCreator _aliasCreator;
        
         public AttachmentStore(
             IAttachmentRepository<Models.Attachment> attachmentRepository,
             ILogger<AttachmentStore> logger,
             IDbQueryConfiguration dbQuery,
-            ICacheManager cacheManager)
+            ICacheManager cacheManager,
+            IAliasCreator aliasCreator)
         {
             _attachmentRepository = attachmentRepository;
             _cacheManager = cacheManager;
-            _logger = logger;
+            _aliasCreator = aliasCreator;            
             _dbQuery = dbQuery;
+            _logger = logger;
         }
 
         #region "Implementation"
@@ -45,6 +49,11 @@ namespace Plato.Attachments.Stores
             if (model.Id > 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(model.Id));
+            }
+
+            if (string.IsNullOrEmpty(model.Alias))
+            {
+                model.Alias = _aliasCreator.Create(model.Name);
             }
 
             var result = await _attachmentRepository.InsertUpdateAsync(model);
@@ -68,6 +77,11 @@ namespace Plato.Attachments.Stores
             if (model.Id <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(model.Id));
+            }
+
+            if (string.IsNullOrEmpty(model.Alias))
+            {
+                model.Alias = _aliasCreator.Create(model.Name);
             }
 
             var result = await _attachmentRepository.InsertUpdateAsync(model);

@@ -19,7 +19,8 @@ namespace PlatoCore.Text.Alias
         {
             InitialReplacements = new Dictionary<string, string>
             {
-                {" ", "-"},
+                {"-", ""},
+                {" ", "-"}                
             };
 
             ForceLowerCase = true;

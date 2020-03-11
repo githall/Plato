@@ -53,7 +53,7 @@ namespace Plato.Articles.Attachments
             routes.MapAreaRoute(
                 name: "ArticlesAttachmentDownload",
                 areaName: "Plato.Articles.Attachments",
-                template: "articles/attachments/download/{id:int}",
+                template: "articles/attachments/d/{id:int}/{alias?}",
                 defaults: new { controller = "Home", action = "Download" }
             );
 

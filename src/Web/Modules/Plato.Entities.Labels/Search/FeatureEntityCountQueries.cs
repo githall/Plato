@@ -115,7 +115,7 @@ namespace Plato.Entities.Labels.Search
                 q1.Append(", ").Append(query.Options.MaxResults.ToString());
             q1.Append(") AS i ON i.[Key] = l.Id ")
                 .Append("INNER JOIN {prefix}_EntityLabels el ON el.LabelId = l.Id ")
-                .Append("INNER JOIN plato_Entities e ON e.Id = el.EntityId ")
+                .Append("INNER JOIN {prefix}_Entities e ON e.Id = el.EntityId ")
                 .Append("WHERE ");
             if (!string.IsNullOrEmpty(query.Builder.Where))
             {

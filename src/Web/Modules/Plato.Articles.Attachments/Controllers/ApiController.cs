@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.AspNetCore.Http.Features;
@@ -28,11 +27,10 @@ namespace Plato.Articles.Attachments.Controllers
         public const string ModuleId = "Plato.Articles.Attachments";
         public const string GuidKey = "guid";        
 
-        private readonly IAttachmentInfoStore<AttachmentInfo> _attachmentInfoStore;
-        private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
         private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IAttachmentValidator _attachmentValidator;
         private readonly ILogger<ApiController> _logger;
         private readonly IFeatureFacade _featureFacade;
 
@@ -42,20 +40,18 @@ namespace Plato.Articles.Attachments.Controllers
         // to set the default limits for request body data
         private readonly FormOptions _defaultFormOptions = new FormOptions();
 
-        public ApiController(
-            IAttachmentInfoStore<AttachmentInfo> attachmentInfoStore,
-            IAttachmentOptionsFactory attachmentOptionsFactory,
+        public ApiController(     
             IHttpMultiPartRequestHandler multiPartRequestHandler,
             IAttachmentStore<Attachment> attachmentStore,
             IAuthorizationService authorizationService,
+            IAttachmentValidator attachmentValidator,
             ILogger<ApiController> logger,
             IHtmlLocalizer htmlLocalizer,
             IFeatureFacade featureFacade)
-        {
-            _attachmentOptionsFactory = attachmentOptionsFactory;
+        {            
             _multiPartRequestHandler = multiPartRequestHandler;
-            _authorizationService = authorizationService;
-            _attachmentInfoStore = attachmentInfoStore;            
+            _authorizationService = authorizationService;           
+            _attachmentValidator = attachmentValidator;
             _attachmentStore = attachmentStore;
             _featureFacade = featureFacade;
             _logger = logger;
@@ -67,6 +63,9 @@ namespace Plato.Articles.Attachments.Controllers
         // -----------
         // Post
         // -----------
+
+        // Request limits for attachments are enforced by Plato so set MVCs request limits 
+        // for this action to some arbitrary high value, in this case 1 gigabyte
 
         [HttpPost, DisableFormValueModelBinding, ValidateClientAntiForgeryToken]
         [RequestFormLimits(MultipartBodyLengthLimit = 1073741824)]
@@ -106,6 +105,8 @@ namespace Plato.Articles.Attachments.Controllers
             }
 
             // Validate & process multipart request
+            // -------------------
+
             var result = await _multiPartRequestHandler.ProcessAsync(Request);
 
             // Return any errors parsing the multipart request
@@ -117,7 +118,7 @@ namespace Plato.Articles.Attachments.Controllers
                 }
             }
 
-            // At this stage everything was OK with the file, build the attachment
+            // Build attachment
             // -------------------
 
             var md5 = result.Response.ContentBytes?.ToMD5().ToHex() ?? string.Empty;
@@ -125,6 +126,7 @@ namespace Plato.Articles.Attachments.Controllers
             {
                 FeatureId = feature.Id,
                 Name = result.Response.Name,
+                Extension = result.Response.Extension,
                 ContentType = result.Response.ContentType,
                 ContentLength = result.Response.ContentLength,
                 ContentBlob = result.Response.ContentBytes,
@@ -133,58 +135,13 @@ namespace Plato.Articles.Attachments.Controllers
                 CreatedUserId = user.Id
             };
 
-            // Validate the attachment
-            // -------------------
-
-            bool validExtension = false, 
-                validSize = false, 
-                validSpace = false;
-
-            long spaceRemaining = 0;
-
-            // Get options & info
-            var options = await _attachmentOptionsFactory.GetOptionsAsync(user);
-
-            if (options != null)
-            {
-
-                // Ensure content is below or equal to our max file size
-                validSize = attachment.ContentLength <= options.MaxFileSize;
-
-                // Ensure extension is allowed
-                if (!string.IsNullOrEmpty(result.Response.Extension))
-                {
-                    foreach (var allowedExtension in options.AllowedExtensions)
-                    {
-                        if (result.Response.Extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase))
-                        {
-                            validExtension = true;
-                        }
-                    }
-                }
-
-                // Ensure the upload would not exceed available space
-                var info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0);
-                if (info != null)
-                {
-                    if ((info.Length + attachment.ContentLength) <= options.AvailableSpace)
-                    {
-                        validSpace = true;
-                    }
-                    spaceRemaining = options.AvailableSpace - info.Length;
-                    if (spaceRemaining < 0)
-                        spaceRemaining = 0;
-                }
-
-            }
-
-            // Build results
+            // Validate attachment
             // -------------------
 
             var output = new List<UploadResult>();
 
-            // Validation OK?
-            if (validExtension && validSize && validSpace)
+            var validationResult = await _attachmentValidator.ValidateAsync(attachment);
+            if (validationResult.Succeeded)
             {
 
                 // Store attachment
@@ -196,7 +153,7 @@ namespace Plato.Articles.Attachments.Controllers
                     output.Add(new UploadResult()
                     {
                         Id = attachment.Id,
-                        Name = attachment.Name,                        
+                        Name = attachment.Name,
                         ContentType = attachment.ContentType,
                         ContentLength = attachment.ContentLength,
                         FriendlySize = attachment.ContentLength.ToFriendlyFileSize()
@@ -206,63 +163,14 @@ namespace Plato.Articles.Attachments.Controllers
             }
             else
             {
-
-                // File to big
-                if (!validSize)
+                foreach (var error in validationResult.Errors)
                 {
-                    var text = T["The file is {0} which exceeds your configured maximum allowed file size of {1}."];     
                     output.Add(new UploadResult()
                     {
                         Name = result.Response.Name,
-                        Error = string.Format(
-                                text.Value,
-                                result.Response.ContentLength.ToFriendlyFileSize(),
-                                options.MaxFileSize.ToFriendlyFileSize())
-                    }); 
-                }
-
-                // Invalid extension
-                if (!validExtension)
-                {
-                    var allowedExtensions = string.Join(",", options.AllowedExtensions.Select(e => e));
-                    if (!string.IsNullOrEmpty(allowedExtensions))
-                    {
-                        // Our extension does not appear within the allowed extensions white list
-                        var text = T["The file is not an allowed type. You are allowed to attach the following types:- {0}"];
-                        output.Add(new UploadResult()
-                        {
-                            Name = result.Response.Name,
-                            Error = string.Format(
-                                    text.Value,                                  
-                                    allowedExtensions.Replace(",", ", "))
-                        });
-                    } 
-                    else
-                    {
-                        // We don't have any configured allowed extensions
-                        var text = T["The file is not an allowed type. No allowed file extensions have been configured for your account."];
-                        output.Add(new UploadResult()
-                        {
-                            Name = result.Response.Name,
-                            Error = text.Value
-                        });
-                    }
-                }
-
-                // No space available
-                if (!validSpace)
-                {
-                    var text = T["Not enough free space. You only have {0} of free space available but the upload was {1}."];
-                    output.Add(new UploadResult()
-                    {
-                        Name = result.Response.Name,
-                        Error = string.Format(
-                                text.Value,                             
-                                spaceRemaining.ToFriendlyFileSize(),
-                                attachment.ContentLength.ToFriendlyFileSize())
+                        Error = error.Description
                     });
                 }
-
             }
 
             return base.Result(output);
@@ -291,7 +199,7 @@ namespace Plato.Articles.Attachments.Controllers
             {
                 return base.UnauthorizedException();
             }
-                       
+
             // Get attachment
             var attachment = await _attachmentStore.GetByIdAsync(id);
 
@@ -326,12 +234,10 @@ namespace Plato.Articles.Attachments.Controllers
         {
 
             if (Request.Query.ContainsKey(GuidKey))
-            {
-                
-                var guid = Request.Query[GuidKey];
-                if (!string.IsNullOrEmpty(guid))
+            {           
+                if (!string.IsNullOrEmpty(Request.Query[GuidKey]))
                 {
-                    return guid;
+                    return Request.Query[GuidKey];
                 }
             }
 

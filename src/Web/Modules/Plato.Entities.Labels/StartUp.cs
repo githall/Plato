@@ -24,10 +24,8 @@ namespace Plato.Entities.Labels
         {
 
             // Federated search
-
             services.AddScoped<IFederatedQueryManager<Entity>, FederatedQueryManager<Entity>>();
             services.AddScoped<IFederatedQueryProvider<Entity>, EntityQueries<Entity>>();
-
             services.AddScoped<IFederatedQueryManager<FeatureEntityCount>, FederatedQueryManager<FeatureEntityCount>>();
             services.AddScoped<IFederatedQueryProvider<FeatureEntityCount>, FeatureEntityCountQueries<FeatureEntityCount>>();
 

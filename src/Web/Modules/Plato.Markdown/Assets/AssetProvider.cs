@@ -20,25 +20,13 @@ namespace Plato.Markdown.Assets
                         Url = $"/plato.markdown/content/js/markdown.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.markdown/content/js/dropzone.js",
-                        Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
-                    },
+                    },            
                     new Asset()
                     {
                         Url = $"/plato.markdown/content/css/markdown.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.markdown/content/css/dropzone.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
-                    }
+                    },               
                 }),
 
                 // Staging
@@ -49,25 +37,13 @@ namespace Plato.Markdown.Assets
                         Url = $"/plato.markdown/content/js/markdown.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.markdown/content/js/dropzone.min.js",
-                        Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
-                    },
+                    },               
                     new Asset()
                     {
                         Url = $"/plato.markdown/content/css/markdown.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.markdown/content/css/dropzone.min.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
-                    }
+                    }                  
                 }),
 
                 // Production
@@ -78,25 +54,13 @@ namespace Plato.Markdown.Assets
                         Url = $"/plato.markdown/content/js/markdown.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.markdown/content/js/dropzone.min.js",
-                        Type = AssetType.IncludeJavaScript,
-                        Section = AssetSection.Footer
-                    },
+                    },                
                     new Asset()
                     {
                         Url = $"/plato.markdown/content/css/markdown.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.markdown/content/css/dropzone.min.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
-                    }
+                    }                 
                 })
 
             };

@@ -27,23 +27,6 @@ namespace Plato.Attachments.ViewModels
     public class AttachmentIndexOptions
     {
 
-        public DateTimeOffset Start { get; set; } = DateTimeOffset.UtcNow.AddDays(-7);
-
-        private DateTimeOffset _end = DateTimeOffset.UtcNow;
-
-        public DateTimeOffset End
-        {
-            get
-            {
-                if (_end.Equals(Start))
-                {
-                    _end = _end.AddDays(1);
-                }
-                return _end;
-            }
-            set => _end = value;
-        }
-
         public FilterBy Filter { get; set; } = FilterBy.All;
 
         public int FeatureId { get; set; }

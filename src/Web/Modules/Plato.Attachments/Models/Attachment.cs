@@ -16,6 +16,10 @@ namespace Plato.Attachments.Models
 
         public string Name { get; set; }
 
+        public string Alias { get; set; }
+
+        public string Extension { get; set; }
+
         public byte[] ContentBlob { get; set; }
 
         public string ContentType { get; set; }
@@ -53,6 +57,12 @@ namespace Plato.Attachments.Models
 
             if (dr.ColumnIsNotNull("Name"))
                 Name = Convert.ToString(dr["Name"]);
+
+            if (dr.ColumnIsNotNull("Alias"))
+                Alias = Convert.ToString(dr["Alias"]);
+
+            if (dr.ColumnIsNotNull("Extension"))
+                Extension = Convert.ToString(dr["Extension"]);            
 
             if (dr.ColumnIsNotNull("ContentBlob"))
                 ContentBlob = (byte[])(dr["ContentBlob"]);

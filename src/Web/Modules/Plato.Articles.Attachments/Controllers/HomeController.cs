@@ -43,7 +43,6 @@ namespace Plato.Articles.Attachments.Controllers
             _entityStore = entityStore;
         }
 
-
         // ----------
         // Download
         // ----------
@@ -76,7 +75,7 @@ namespace Plato.Articles.Attachments.Controllers
 
             if (attachment.ContentLength <= 0)
             {
-                return NotFound();
+                return BadRequest($"The requested attachment has an invalid length. Length must be above zero.");
             }
 
             // Update total views
@@ -85,6 +84,7 @@ namespace Plato.Articles.Attachments.Controllers
             // Update attachment
             await _attachmentStore.UpdateAsync(attachment);
 
+            // Expire entity attachments cache to ensure view count is reflected correctly
             _entityAttachmentStore.CancelTokens(null);
 
             // Clear response
@@ -97,6 +97,7 @@ namespace Plato.Articles.Attachments.Controllers
             r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));
             await r.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);
 
+            // No need to return any view
             return null;
 
         }

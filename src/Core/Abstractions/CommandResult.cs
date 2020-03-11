@@ -105,6 +105,27 @@ namespace PlatoCore.Abstractions
             return result;
         }
 
+        public virtual ICommandResult<TResponse> Failed(IEnumerable<string> messages)
+        {
+
+            if (messages == null)
+            {
+                throw new ArgumentNullException(nameof(messages));
+            }
+
+            var result = new CommandResult<TResponse>()
+            {
+                Succeeded = false
+            };
+
+            foreach (var message in messages)
+            {
+                result._errors.Add(new CommandError(message));
+            }            
+
+            return result;
+        }
+
         public virtual ICommandResult<TResponse> Failed(params CommandError[] errors)
         {
             var result = new CommandResult<TResponse>()

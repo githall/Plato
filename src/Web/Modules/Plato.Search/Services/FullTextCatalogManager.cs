@@ -10,6 +10,7 @@ using PlatoCore.Stores.Abstractions.Schema;
 using PlatoCore.Stores.Extensions;
 using Plato.Search.Commands;
 using Plato.Search.Stores;
+using System.Collections.Generic;
 
 namespace Plato.Search.Services
 {
@@ -93,7 +94,7 @@ namespace Plato.Search.Services
             
             // Build result
             var result = new CommandResultBase();
-            
+
             // Create indexes
             var createIndexes = await CreateIndexesInternalAsync(GetCatalogName());
             if (!createIndexes.Succeeded)
@@ -195,7 +196,7 @@ namespace Plato.Search.Services
 
                 // Attempt to get existing index within database
                 var existingIndex = installedIndexes?.FirstOrDefault(i =>
-                    i.TableName == providedIndex.TableName && providedIndex.ColumnNames.Contains(i.ColumnName));
+                    i.TableName == providedIndex.TableName && providedIndex.Columns.Select(c => c.ColumnName).Contains(i.ColumnName));
 
                 // Index does not already exist within the database
                 if (existingIndex == null)
@@ -210,14 +211,19 @@ namespace Plato.Search.Services
                     {
                         return result.Failed($"Could not find a primary key constraint for table {tableName}");
                     }
-               
+
+                    var columns = new List<SchemaFullTextColumn>();
+                    foreach (var column in providedIndex.Columns)
+                    {
+                        columns.Add(new SchemaFullTextColumn(column.ColumnName, column.TypeColumnName, column.LanguageCode));
+                    }
+
                     // Create the index
                     var createIndex = await _fullTextIndexCommand.CreateAsync(new SchemaFullTextIndex()
                     {
                         PrimaryKeyName = primaryKey.ConstraintName,
                         TableName = providedIndex.TableName,
-                        ColumnNames = providedIndex.ColumnNames,
-                        LanguageCode = providedIndex.LanguageCode,
+                        Columns = columns,                      
                         FillFactor = providedIndex.FillFactor,
                         CatalogName = catalogName
                     });

@@ -537,11 +537,20 @@ $(function (win, doc, $) {
                     };
                 }
 
-                // Init dropzone
-                var dropzone = new Dropzone($caller[0], opts);
+                if (win.Dropzone) {
 
-                // Store dropzone object in data for access within event handlers
-                $caller.data("dropzone", dropzone);
+                    // Init dropzone
+                    var dropzone = new win.Dropzone($caller[0], opts);
+
+                    // Store dropzone object in data for access within event handlers
+                    $caller.data("dropzone", dropzone);
+
+                } else {
+
+                    console.log('Dropzone was configured but Dropzone was not detected. Ensure the Plato.Dropzone feature is enabled.');
+
+                }
+              
 
             },        
             _getProgressPreview: function ($caller) {

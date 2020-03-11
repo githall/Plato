@@ -29,7 +29,7 @@
                 {
                     <span class="fiv-sqo @iconCss align-middle mr-1"></span>
                 }
-                <a asp-route-area="@attachment.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@attachment.Id" target="_blank" class="align-middle">
+                <a asp-route-area="@attachment.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@attachment.Id" asp-route-alias="@attachment.Alias" target="_blank" class="align-middle">
                     @attachment.Name
                 </a>
             </div>

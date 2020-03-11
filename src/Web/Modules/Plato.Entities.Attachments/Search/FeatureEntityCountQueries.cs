@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Text;
 using System.Collections.Generic;
+using System.Text;
 using Plato.Entities.Stores;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Search.Abstractions;
@@ -42,16 +42,16 @@ namespace Plato.Entities.Attachments.Search
             /*
                  Produces the following federated query...
                  -----------------
-                 SELECT el.EntityId, 0 FROM plato_Labels l
-                 INNER JOIN plato_EntityLabels el ON el.LabelId = l.Id
-                 INNER JOIN plato_Entities e ON e.Id = el.EntityId
-                 WHERE (l.[Name] LIKE '%percent') GROUP BY el.EntityId;     
+                 SELECT ea.EntityId, 0 FROM plato_Attachments a
+                 INNER JOIN plato_EntityAttachments ea ON ea.AttachmentId = a.Id
+                 INNER JOIN plato_Entities e ON e.Id = ea.EntityId
+                 WHERE (a.[Name] LIKE '%percent') GROUP BY ea.EntityId;     
              */
 
             var q1 = new StringBuilder();
-            q1.Append("SELECT el.EntityId, 0 FROM {prefix}_Labels l ")
-                .Append("INNER JOIN {prefix}_EntityLabels el ON el.LabelId = l.Id ")
-                .Append("INNER JOIN {prefix}_Entities e ON e.Id = el.EntityId ")
+            q1.Append("SELECT ea.EntityId, 0 FROM {prefix}_Attachments a ")
+                .Append("INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id ")
+                .Append("INNER JOIN {prefix}_Entities e ON e.Id = ea.EntityId ")
                 .Append("WHERE (");
             if (!string.IsNullOrEmpty(query.Builder.Where))
             {
@@ -60,7 +60,7 @@ namespace Plato.Entities.Attachments.Search
             q1.Append("(")
                 .Append(query.Params.Keywords.ToSqlString("l.[Name]", "Keywords"))
                 .Append(" OR ")
-                .Append(query.Params.Keywords.ToSqlString("l.[Description]", "Keywords"))
+                .Append(query.Params.Keywords.ToSqlString("l.Extension", "Keywords"))
                 .Append("));");
 
             // Return queries
@@ -92,36 +92,36 @@ namespace Plato.Entities.Attachments.Search
             /*
                 Produces the following federated query...
                 -----------------
-                SELECT el.EntityId, SUM(i.[Rank]) AS [Rank] 
-                FROM plato_Labels l INNER JOIN 
-                CONTAINSTABLE(plato_Labels, *, 'FORMSOF(INFLECTIONAL, creative)') AS i ON i.[Key] = l.Id 
-                INNER JOIN plato_EntityLabels el ON el.LabelId = l.Id
-                INNER JOIN plato_Entities e ON e.Id = el.EntityId
-                WHERE (l.Id IN (IsNull(i.[Key], 0))) GROUP BY el.EntityId;
+                SELECT ea.EntityId, SUM(i.[Rank]) AS [Rank] 
+                FROM plato_Attachments a INNER JOIN 
+                CONTAINSTABLE(plato_Attachments, *, 'FORMSOF(INFLECTIONAL, creative)') AS i ON i.[Key] = l.Id 
+                INNER JOIN plato_EntityAttachments ea ON ea.AttachmentId = a.Id
+                INNER JOIN plato_Entities e ON e.Id = ea.EntityId
+                WHERE (a.Id IN (IsNull(i.[Key], 0))) GROUP BY ea.EntityId;
              */
 
             var q1 = new StringBuilder();
             q1
-                .Append("SELECT el.EntityId, SUM(i.[Rank]) ")
+                .Append("SELECT ea.EntityId, SUM(i.[Rank]) ")
                 .Append("FROM ")
-                .Append("{prefix}_Labels")
-                .Append(" l ")
+                .Append("{prefix}_Attachments")
+                .Append(" a ")
                 .Append("INNER JOIN ")
                 .Append(query.Options.SearchType.ToString().ToUpper())
                 .Append("(")
-                .Append("{prefix}_Labels")
+                .Append("{prefix}_Attachments")
                 .Append(", *, '").Append(fullTextQuery).Append("'");
             if (query.Options.MaxResults > 0)
                 q1.Append(", ").Append(query.Options.MaxResults.ToString());
-            q1.Append(") AS i ON i.[Key] = l.Id ")
-                .Append("INNER JOIN {prefix}_EntityLabels el ON el.LabelId = l.Id ")
-                .Append("INNER JOIN plato_Entities e ON e.Id = el.EntityId ")
+            q1.Append(") AS i ON i.[Key] = a.Id ")
+                .Append("INNER JOIN {prefix}_EntityAttachments ea ON ea.AttachmentId = a.Id ")
+                .Append("INNER JOIN {prefix}_Entities e ON e.Id = ea.EntityId ")
                 .Append("WHERE ");
             if (!string.IsNullOrEmpty(query.Builder.Where))
             {
                 q1.Append("(").Append(query.Builder.Where).Append(") AND ");
             }
-            q1.Append("(l.Id IN (IsNull(i.[Key], 0))) GROUP BY el.EntityId;");
+            q1.Append("(a.Id IN (IsNull(i.[Key], 0))) GROUP BY ea.EntityId;");
 
             // Return queries
             return new List<string>()
