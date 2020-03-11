@@ -1727,6 +1727,7 @@ if (typeof window.$.Plato === "undefined") {
                     if (options.dropZoneOptions) {
                         
                         if (this.$editor.dropzone) {
+
                             if (!options.dropZoneOptions.init) {
 
                                 // Get Plato options
@@ -1926,8 +1927,11 @@ if (typeof window.$.Plato === "undefined") {
                             this.$editor.data("dropzone", dropzone);
 
                         } else {
-                            console.log('dropZoneOptions was configured, but DropZone was not detected.');
+
+                            console.log('Dropzone options were configured but Dropzone was not detected. Ensure the Plato.Dropzone feature is enabled.');
+
                         }
+
                     }
 
                     // Paste handler

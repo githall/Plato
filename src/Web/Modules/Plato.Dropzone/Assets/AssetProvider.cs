@@ -1,13 +1,10 @@
 ﻿using System.Collections.Generic;
 using PlatoCore.Assets.Abstractions;
 
-namespace Plato.Attachments.Assets
+namespace Plato.Dropzone.Assets
 {
     public class AssetProvider : IAssetProvider
     {
-
-        // Plato.Attachments uses the awesome file icons font library...
-        // https://github.com/dmhendricks/file-icon-vectors
 
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
         {
@@ -17,22 +14,16 @@ namespace Plato.Attachments.Assets
 
                 // Development
                 new AssetEnvironment(TargetEnvironment.Development, new List<Asset>()
-                {
+                {                  
                     new Asset()
                     {
-                        Url = $"/plato.attachments/content/js/attachments.js",
+                        Url = $"/plato.dropzone/content/js/dropzone.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },                
+                    },              
                     new Asset()
                     {
-                        Url = $"/plato.attachments/content/css/attachments.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
-                    },                    
-                    new Asset()
-                    {
-                        Url = $"/plato.attachments/content/css/file-icons/file-icon-square-o.css",
+                        Url = $"/plato.dropzone/content/css/dropzone.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     }
@@ -40,22 +31,16 @@ namespace Plato.Attachments.Assets
 
                 // Staging
                 new AssetEnvironment(TargetEnvironment.Staging, new List<Asset>()
-                {
+                {                 
                     new Asset()
                     {
-                        Url = $"/plato.attachments/content/js/attachments.min.js",
+                        Url = $"/plato.dropzone/content/js/dropzone.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },               
+                    },                 
                     new Asset()
                     {
-                        Url = $"/plato.attachments/content/css/attachments.min.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.attachments/content/css/file-icons/file-icon-square-o.min.css",
+                        Url = $"/plato.dropzone/content/css/dropzone.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     }
@@ -63,22 +48,16 @@ namespace Plato.Attachments.Assets
 
                 // Production
                 new AssetEnvironment(TargetEnvironment.Production, new List<Asset>()
-                {
+                {               
                     new Asset()
                     {
-                        Url = $"/plato.attachments/content/js/attachments.min.js",
+                        Url = $"/plato.dropzone/content/js/dropzone.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },
+                    },               
                     new Asset()
                     {
-                        Url = $"/plato.attachments/content/css/attachments.min.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.attachments/content/css/file-icons/file-icon-square-o.min.css",
+                        Url = $"/plato.dropzone/content/css/dropzone.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
                     }

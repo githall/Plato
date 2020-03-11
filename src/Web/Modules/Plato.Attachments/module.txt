@@ -9,6 +9,10 @@ Icon: /plato.attachments/content/images/icon.png
 Dependencies: 
 [
 	{
+		Id: "Plato.Dropzone",
+		Version: "1.0.0"
+	},
+	{
 		Id: "Plato.Roles",
 		Version: "1.0.0"
 	},

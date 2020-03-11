@@ -1,0 +1,8 @@
+Name: Plato Dropzone
+Description: Adds asynchronous file uploading functionality to Plato.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: User Interface
+PlatoVersion: 1.1.1
+Version: 1.0.0
+Icon: /plato.dropzone/content/images/icon.png
