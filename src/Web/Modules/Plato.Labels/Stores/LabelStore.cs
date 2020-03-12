@@ -215,6 +215,7 @@ namespace Plato.Labels.Stores
 
             // Get all label data matching supplied label ids
             var results = await _labelDataStore.QueryAsync()
+                .Take(int.MaxValue, false)
                 .Select<LabelDataQueryParams>(q => { q.LabelId.IsIn(labels.Select(e => e.Id).ToArray()); })
                 .ToList();
 

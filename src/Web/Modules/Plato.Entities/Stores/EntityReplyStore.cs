@@ -186,6 +186,7 @@ namespace Plato.Entities.Stores
 
             // Get all entity reply data matching supplied entity ids
             var results = await _entityReplyDataStore.QueryAsync()
+                .Take(int.MaxValue, false)
                 .Select<EntityReplyDataQueryParams>(q => { q.ReplyId.IsIn(replies.Select(e => e.Id).ToArray()); })
                 .ToList();
 
