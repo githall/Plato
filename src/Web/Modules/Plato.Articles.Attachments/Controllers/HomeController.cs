@@ -17,6 +17,7 @@ using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
 using Plato.Entities.Attachments.ViewModels;
 using Microsoft.AspNetCore.Routing;
+using Plato.Attachments.Services;
 
 namespace Plato.Articles.Attachments.Controllers
 {
@@ -26,17 +27,21 @@ namespace Plato.Articles.Attachments.Controllers
 
         public const string ModuleId = "Plato.Articles.Attachments";
 
+        private readonly IAttachmentViewIncrementer<Attachment> _attachmentViewIncrementer;
         private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
         private readonly IAttachmentStore<Attachment> _attachmentStore;
         private readonly IAuthorizationService _authorizationService;
+        
         private readonly IEntityStore<Article> _entityStore;
 
         public HomeController(
+            IAttachmentViewIncrementer<Attachment> attachmentViewIncrementer,
             IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
             IAttachmentStore<Attachment> attachmentStore,
             IAuthorizationService authorizationService,
             IEntityStore<Article> entityStore)
         {
+            _attachmentViewIncrementer = attachmentViewIncrementer;
             _entityAttachmentStore = entityAttachmentStore;
             _authorizationService = authorizationService;
             _attachmentStore = attachmentStore;
@@ -78,11 +83,10 @@ namespace Plato.Articles.Attachments.Controllers
                 return BadRequest($"The requested attachment has an invalid length. Length must be above zero.");
             }
 
-            // Update total views
-            attachment.TotalViews += 1;
-
-            // Update attachment
-            await _attachmentStore.UpdateAsync(attachment);
+            // Increment view count
+            await _attachmentViewIncrementer
+                .Contextulize(HttpContext)
+                .IncrementAsync(attachment);
 
             // Expire entity attachments cache to ensure view count is reflected correctly
             _entityAttachmentStore.CancelTokens(null);
