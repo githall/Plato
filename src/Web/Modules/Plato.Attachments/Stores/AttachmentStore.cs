@@ -6,6 +6,8 @@ using Microsoft.Extensions.Logging;
 using Plato.Attachments.Repositories;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Data.Abstractions;
+using PlatoCore.Stores.Abstractions.FederatedQueries;
+using PlatoCore.Stores.Abstractions.QueryAdapters;
 using PlatoCore.Text.Abstractions;
 
 namespace Plato.Attachments.Stores
@@ -15,21 +17,27 @@ namespace Plato.Attachments.Stores
     {
 
         private const string ById = "ById";
-
+        
         private readonly IAttachmentRepository<Models.Attachment> _attachmentRepository;
+        private readonly IFederatedQueryManager<Models.Attachment> _federatedQueryManager;
+        private readonly IQueryAdapterManager<Models.Attachment> _queryAdapterManager;
         private readonly ILogger<AttachmentStore> _logger;
         private readonly IDbQueryConfiguration _dbQuery;
         private readonly ICacheManager _cacheManager;
         private readonly IAliasCreator _aliasCreator;
        
-        public AttachmentStore(
+        public AttachmentStore(            
+            IFederatedQueryManager<Models.Attachment> federatedQueryManager,
             IAttachmentRepository<Models.Attachment> attachmentRepository,
+            IQueryAdapterManager<Models.Attachment> queryAdapterManager,
             ILogger<AttachmentStore> logger,
             IDbQueryConfiguration dbQuery,
             ICacheManager cacheManager,
             IAliasCreator aliasCreator)
         {
+            _federatedQueryManager = federatedQueryManager;
             _attachmentRepository = attachmentRepository;
+            _queryAdapterManager = queryAdapterManager;
             _cacheManager = cacheManager;
             _aliasCreator = aliasCreator;            
             _dbQuery = dbQuery;
@@ -154,6 +162,12 @@ namespace Plato.Attachments.Stores
 
         public IQuery<Models.Attachment> QueryAsync()
         {
+
+            return _dbQuery.ConfigureQuery(new AttachmentQuery(this)
+            {
+                FederatedQueryManager = _federatedQueryManager,
+                QueryAdapterManager = _queryAdapterManager
+            });
             var query = new AttachmentQuery(this);
             return _dbQuery.ConfigureQuery<Models.Attachment>(query); ;
         }

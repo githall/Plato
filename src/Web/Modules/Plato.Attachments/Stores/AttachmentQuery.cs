@@ -5,6 +5,8 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions;
+using PlatoCore.Stores.Abstractions.FederatedQueries;
+using PlatoCore.Stores.Abstractions.QueryAdapters;
 
 namespace Plato.Attachments.Stores
 {
@@ -14,7 +16,13 @@ namespace Plato.Attachments.Stores
     public class AttachmentQuery : DefaultQuery<Models.Attachment>
     {
 
+        public IFederatedQueryManager<Models.Attachment> FederatedQueryManager { get; set; }
+
+        public IQueryAdapterManager<Models.Attachment> QueryAdapterManager { get; set; }
+
         private readonly IQueryableStore<Models.Attachment> _store;
+
+        public AttachmentQueryBuilder Builder { get; private set; }
 
         public AttachmentQuery(IQueryableStore<Models.Attachment> store)
         {
@@ -34,9 +42,9 @@ namespace Plato.Attachments.Stores
         public override async Task<IPagedResults<Models.Attachment>> ToList()
         {
 
-            var builder = new AttachmentQueryBuilder(this);
-            var populateSql = builder.BuildSqlPopulate();
-            var countSql = builder.BuildSqlCount();
+            Builder = new AttachmentQueryBuilder(this);
+            var populateSql = Builder.BuildSqlPopulate();
+            var countSql = Builder.BuildSqlCount();
             var contentGuid = Params.ContentGuid.Value ?? string.Empty;
             var contentCheckSum = Params.ContentCheckSum.Value ?? string.Empty;
             var keywords = Params.Keywords.Value ?? string.Empty;
@@ -123,9 +131,13 @@ namespace Plato.Attachments.Stores
 
         public string BuildSqlPopulate()
         {
-            var whereClause = BuildWhereClause();
+            var whereClause = BuildWhere();
             var orderBy = BuildOrderBy();
             var sb = new StringBuilder();
+            sb.Append("DECLARE @MaxRank int;")
+            .Append(Environment.NewLine)
+            .Append(BuildFederatedResults())
+            .Append(Environment.NewLine);
             sb.Append("SELECT ")
                 .Append(BuildPopulateSelect())
                 .Append(" FROM ")
@@ -146,8 +158,12 @@ namespace Plato.Attachments.Stores
         {
             if (!_query.CountTotal)
                 return string.Empty;
-            var whereClause = BuildWhereClause();
+            var whereClause = BuildWhere();
             var sb = new StringBuilder();
+            sb.Append("DECLARE @MaxRank int;")
+            .Append(Environment.NewLine)
+            .Append(BuildFederatedResults())
+            .Append(Environment.NewLine);
             sb.Append("SELECT COUNT(a.Id) FROM ")
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
@@ -155,9 +171,13 @@ namespace Plato.Attachments.Stores
             return sb.ToString();
         }
 
+        public string Where => _where ?? (_where = BuildWhere());
+
         #endregion
 
         #region "Private Methods"
+
+        private string _where = null;
 
         private string BuildPopulateSelect()
         {
@@ -198,7 +218,14 @@ namespace Plato.Attachments.Stores
                 .Append("m.IsVerified AS ModifiedIsVerified, ")
                 .Append("m.IsStaff AS ModifiedIsStaff, ")
                 .Append("m.IsSpam AS ModifiedIsSpam, ")
-                .Append("m.IsBanned AS ModifiedIsBanned");
+                .Append("m.IsBanned AS ModifiedIsBanned,")               
+                .Append(HasKeywords() ? "r.[Rank] AS [Rank] " : "0 AS [Rank]");
+
+            // -----------------
+            // Apply any select query adapters
+            // -----------------
+
+            _query.QueryAdapterManager?.BuildSelect(_query, sb);
 
             return sb.ToString();
         }
@@ -208,6 +235,12 @@ namespace Plato.Attachments.Stores
             var sb = new StringBuilder();
             sb.Append(_attachmentsTableName)
                 .Append(" a ");
+
+            // join search results if we have keywords
+            if (HasKeywords())
+            {
+                sb.Append("INNER JOIN @results r ON r.Id = a.Id ");
+            }
 
             // join shell features table
             sb.Append("INNER JOIN ")
@@ -224,6 +257,11 @@ namespace Plato.Attachments.Stores
                 .Append(_usersTableName)
                 .Append(" m ON a.ModifiedUserId = m.Id ");
 
+            // -----------------
+            // Apply any table query adapters
+            // -----------------
+
+            _query.QueryAdapterManager?.BuildTables(_query, sb);
 
             return sb.ToString();
         }
@@ -235,9 +273,24 @@ namespace Plato.Attachments.Stores
                 : tableName;
         }
 
-        private string BuildWhereClause()
+        private string BuildWhere()
         {
             var sb = new StringBuilder();
+
+            // -----------------
+            // Apply any where query adapters
+            // -----------------
+
+            _query.QueryAdapterManager?.BuildWhere(_query, sb);
+
+            // -----------------
+            // Ensure we have params
+            // -----------------
+
+            if (_query.Params == null)
+            {
+                return string.Empty;
+            }
 
             // Id
             if (_query.Params.Id.Value > -1)
@@ -261,6 +314,14 @@ namespace Plato.Attachments.Stores
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.ContentCheckSum.Operator);
                 sb.Append(_query.Params.ContentCheckSum.ToSqlString("a.ContentCheckSum", "ContentCheckSum"));
+            }
+
+            // Keywords
+            if (!String.IsNullOrEmpty(_query.Params.Keywords.Value))
+            {
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                    sb.Append(_query.Params.Keywords.Operator);
+                sb.Append(_query.Params.Keywords.ToSqlString("a.[Name]", "Keywords"));
             }
 
             return sb.ToString();
@@ -351,6 +412,73 @@ namespace Plato.Attachments.Stores
             return string.Empty;
 
         }
+
+
+        // -- Search
+
+        string BuildFederatedResults()
+        {
+
+            // No keywords
+            if (string.IsNullOrEmpty(GetKeywords()))
+            {
+                return string.Empty;
+            }
+
+            // Build standard SQL or full text queries
+            var sb = new StringBuilder();
+
+            // Compose federated queries
+            var queries = _query.FederatedQueryManager.GetQueries(_query);
+
+            // Create a temporary table for all our federated queries
+            sb.Append("DECLARE @temp TABLE (Id int, [Rank] int); ");
+
+            // Execute each federated query adding results to temporary table
+            foreach (var query in queries)
+            {
+                sb.Append("INSERT INTO @temp ")
+                    .Append(Environment.NewLine)
+                    .Append(query)
+                    .Append(Environment.NewLine);
+            }
+
+            // Build final distinct and aggregated results from federated results
+            sb.Append("DECLARE @results TABLE (Id int, [Rank] int); ")
+                .Append(Environment.NewLine)
+                .Append("INSERT INTO @results ")
+                .Append(Environment.NewLine)
+                .Append("SELECT Id, SUM(Rank) FROM @temp GROUP BY Id;")
+                .Append(Environment.NewLine);
+
+            // Get max / highest rank from final results table
+            sb.Append("SET @MaxRank = ")
+                .Append(_query.Options.SearchType != SearchTypes.Tsql
+                    ? "(SELECT TOP 1 [Rank] FROM @results ORDER BY [Rank] DESC)"
+                    : "0")
+                .Append(";");
+
+            return sb.ToString();
+
+        }
+
+        bool HasKeywords()
+        {
+            return !string.IsNullOrEmpty(GetKeywords());
+        }
+
+        string GetKeywords()
+        {
+
+            if (string.IsNullOrEmpty(_query.Params.Keywords.Value))
+            {
+                return string.Empty;
+            }
+
+            return _query.Params.Keywords.Value;
+
+        }
+
 
         #endregion
 

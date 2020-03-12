@@ -144,12 +144,14 @@ namespace Plato.Attachments.ViewComponents
                 .Take(pager.Page, pager.Size, pager.CountTotal)
                 .Select<AttachmentQueryParams>(q =>
                 {
-                    //q.StartDate.GreaterThanOrEqual(options.Start);
-                    //q.EndDate.LessThanOrEqual(options.End);
+                    if (!string.IsNullOrEmpty(options.Search))
+                    {
+                        q.Keywords.Like(options.Search);
+                    }
                 })
                 .OrderBy(options.Sort.ToString(), options.Order)
                 .ToList();
-              
+
             // Set total on pager
             pager.SetTotal(results?.Total ?? 0);
 

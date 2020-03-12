@@ -23,6 +23,10 @@ using Plato.Attachments.Services;
 using Plato.Attachments.ActionFilters;
 using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Search.Abstractions;
+using PlatoCore.Stores.Abstractions.FederatedQueries;
+using Plato.Attachments.Search;
+using PlatoCore.Stores;
+using PlatoCore.Stores.Abstractions.QueryAdapters;
 
 namespace Plato.Attachments
 {
@@ -55,6 +59,13 @@ namespace Plato.Attachments
             services.AddScoped<IAttachmentStore<Attachment>, AttachmentStore>();
             services.AddScoped<IAttachmentSettingsStore<AttachmentSettings>, AttachmentSettingsStore>();
             services.AddScoped<IAttachmentInfoStore<AttachmentInfo>, AttachmentInfoStore>();
+
+            // Federated queries
+            services.AddScoped<IFederatedQueryManager<Attachment>, FederatedQueryManager<Attachment>>();
+            services.AddScoped<IFederatedQueryProvider<Attachment>, AttachmentQueries<Attachment>>();
+
+            // Query adapters
+            services.AddScoped<IQueryAdapterManager<Attachment>, QueryAdapterManager<Attachment>>();
 
             // Configuration
             services.AddSingleton<IConfigureOptions<AttachmentSettings>, AttachmentSettingsConfiguration>();
