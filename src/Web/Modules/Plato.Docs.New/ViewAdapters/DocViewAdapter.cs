@@ -116,25 +116,12 @@ namespace Plato.Docs.New.ViewAdapters
                         {
                             if (lastVisit != null)
                             {
-
-                                // Optionally remove bold title for read entities
-                                // output.Attributes.RemoveAll("class");
-
                                 // New
                                 if (model.Entity.LastReplyAfter(lastVisit))
                                 {
                                     output.PostElement.SetHtmlContent(
                                         $"<span data-toggle=\"tooltip\" title=\"{T["This doc has new replies"].Value}\" class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
-                                }
-                                else
-                                {
-                                    // Modified
-                                    if (model.Entity.ModifiedAfter(lastVisit))
-                                    {
-                                        output.PostElement.SetHtmlContent(
-                                            $"<span data-toggle=\"tooltip\" title=\"{T["This doc has been updated since it was last read"].Value}\" class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
-                                    }
-                                }
+                                }                               
                             }                         
                         })
                     };

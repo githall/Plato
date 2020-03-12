@@ -108,8 +108,6 @@ namespace Plato.Articles.New.ViewAdapters
                         lastVisit = _lastVisits[model.Entity.Id];
                     }
 
-                    lastVisit = System.DateTime.Now.AddDays(-10);
-
                     // Build tag adapters
                     var adapters = new[]
                     {
@@ -118,15 +116,13 @@ namespace Plato.Articles.New.ViewAdapters
                         {
                             if (lastVisit != null)
                             {
-
                                 // New
                                 if (model.Entity.LastReplyAfter(lastVisit))
                                 {
                                     output.PostElement.SetHtmlContent(
                                         $"<span data-toggle=\"tooltip\" title=\"{T["This article has new replies"].Value}\" class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
                                 }
-                                
-                            }                         
+                            }
                         })
                     };
 
@@ -141,7 +137,6 @@ namespace Plato.Articles.New.ViewAdapters
 
                 });
             });
-
 
         }
 

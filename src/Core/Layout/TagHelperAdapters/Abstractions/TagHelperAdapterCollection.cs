@@ -54,7 +54,7 @@ namespace PlatoCore.Layout.TagHelperAdapters.Abstractions
             foreach (var adapter in tagHelperAdapterCollection.Adapters)
             {
                 var isView = adapter.ViewName?.Equals(viewName, System.StringComparison.OrdinalIgnoreCase) ?? false;
-                var isTag = adapter.TagId?.Equals(tagId, System.StringComparison.OrdinalIgnoreCase) ?? false;
+                var isTag = adapter.TagHelperId?.Equals(tagId, System.StringComparison.OrdinalIgnoreCase) ?? false;
                 if (isView && isTag)
                 {
                     if (output == null)

@@ -135,23 +135,19 @@ namespace Plato.Questions.New.ViewAdapters
                         {
                             if (lastVisit != null)
                             {
-
-                                // Optionally remove bold title for read entities
-                                // output.Attributes.RemoveAll("class");
-
                                 // New
                                 if (model.Entity.LastReplyAfter(lastVisit))
                                 {
-                                    output.PostElement.SetHtmlContent(
-                                        $"<span data-toggle=\"tooltip\" title=\"{T["This question has new replies"].Value}\" class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
+                                    output.PreElement.SetHtmlContent(
+                                        $"<span class=\"text-primary mr-2 smaller\" data-toggle=\"tooltip\" title=\"{T["This question has new replies"].Value}\"><i class=\"fa fa-circle\"></i></span>");
                                 }
                                 else
                                 {
-                                    // Updated
+                                    // Modified
                                     if (model.Entity.ModifiedAfter(lastVisit))
                                     {
-                                        output.PostElement.SetHtmlContent(
-                                            $"<span data-toggle=\"tooltip\" title=\"{T["This question has been updated since it was last read"].Value}\" class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
+                                        output.PreElement.SetHtmlContent(
+                                            $"<span class=\"text-primary mr-2 smaller\" data-toggle=\"tooltip\" title=\"{T["This question has been updated since it was last read"].Value}\"><i class=\"fa fa-circle\"></i></span>");
                                     }
                                 }
                             }
@@ -159,7 +155,7 @@ namespace Plato.Questions.New.ViewAdapters
                             {
                                 // Unread
                                 output.PreElement.SetHtmlContent(
-                                    $"<span data-toggle=\"tooltip\" title=\"{T["You've not read this question yet"].Value}\" class=\"text-primary mr-2 smaller\"><i class=\"fa fa-circle\"></i></span>");
+                                    $"<span data-toggle=\"tooltip\" title=\"{T["You've not read this question"].Value}\" class=\"text-primary mr-2 smaller\"><i class=\"fa fa-circle\"></i></span>");
                             }
                         })
                     };
