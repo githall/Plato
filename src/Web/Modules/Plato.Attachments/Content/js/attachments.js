@@ -203,7 +203,7 @@ $(function (win, doc, $) {
                 autoDiscover: false,
                 disablePreview: true,
                 uploadMultiple: false,
-                maxFilesize: 256,
+                maxFilesize: 256, // 256mb
                 dictDefaultMessage:
                     '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
             },

@@ -8,12 +8,12 @@ using PlatoCore.Drawing.Abstractions.Letters;
 
 namespace PlatoCore.Drawing.Letters
 {
-    
+
     public class InMemoryLetterRenderer : IInMemoryLetterRenderer
     {
 
         private MemoryStream _stream;
-     
+
         private readonly IDisposableBitmap _renderer;
 
         public InMemoryLetterRenderer(IDisposableBitmap renderer)
