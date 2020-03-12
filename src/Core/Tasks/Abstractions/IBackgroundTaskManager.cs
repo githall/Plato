@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.Extensions.DependencyInjection;
+using System;
 
 namespace PlatoCore.Tasks.Abstractions
 {
@@ -7,6 +8,8 @@ namespace PlatoCore.Tasks.Abstractions
     {
         
         void StartTasks();
+
+        void StartTasks(IServiceProvider serviceProvider);
 
         void StopTasks();
 

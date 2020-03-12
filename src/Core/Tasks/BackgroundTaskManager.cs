@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Tasks.Abstractions;
 
@@ -14,9 +15,9 @@ namespace PlatoCore.Tasks
        /// </summary>    
         public bool Enabled { get; set; }= true;
 
-        private readonly IEnumerable<IBackgroundTaskProvider> _providers;
-        private readonly ILogger<BackgroundTaskManager> _logger;
-        private readonly ISafeTimerFactory _safeTimerFactory;
+        private IEnumerable<IBackgroundTaskProvider> _providers;
+        private ILogger<BackgroundTaskManager> _logger;
+        private ISafeTimerFactory _safeTimerFactory;
 
         public BackgroundTaskManager(
             IEnumerable<IBackgroundTaskProvider> providers,
@@ -26,6 +27,20 @@ namespace PlatoCore.Tasks
             _safeTimerFactory = safeTimerFactory;
             _providers = providers;
             _logger = logger;
+        }
+
+        public void StartTasks(IServiceProvider serviceProvider)
+        {
+
+            if (serviceProvider == null)
+            {
+                throw new ArgumentNullException(nameof(serviceProvider));
+            }
+
+            _providers = serviceProvider.GetService<IEnumerable<IBackgroundTaskProvider>>();
+            _safeTimerFactory = serviceProvider.GetService<ISafeTimerFactory>();
+            _logger = serviceProvider.GetService<ILogger<BackgroundTaskManager>>();
+            StartTasks();
         }
 
         public void StartTasks()
@@ -43,7 +58,7 @@ namespace PlatoCore.Tasks
                 {
                     _logger.LogInformation($"Initializing background task provider of type '{provider.GetType()}'.");
                 }
-                
+
                 _safeTimerFactory.Start(async (sender, args) =>
                 {
                     try

@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
@@ -76,7 +77,7 @@ namespace PlatoCore.Hosting.Web.Middleware
 
                                 // Activate background tasks 
                                 var backgroundTaskManager = scope.ServiceProvider.GetService<IBackgroundTaskManager>();
-                                backgroundTaskManager?.StartTasks();
+                                backgroundTaskManager?.StartTasks(scope.ServiceProvider);
 
                             }
                         }
