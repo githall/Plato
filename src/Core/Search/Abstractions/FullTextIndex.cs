@@ -58,7 +58,7 @@ namespace PlatoCore.Search.Abstractions
         public FullTextColumn(
             string columnName,
             string typeColumnName)
-            :this(columnName)
+            : this(columnName)
         {        
             TypeColumnName = typeColumnName;
         }

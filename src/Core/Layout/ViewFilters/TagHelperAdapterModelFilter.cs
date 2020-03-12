@@ -42,7 +42,7 @@ namespace PlatoCore.Layout.ViewFilters
         }
 
         public void OnViewComponentExecuted(ViewComponentExecutedContext context)
-        {
+        {           
         }
 
     }

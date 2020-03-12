@@ -18,11 +18,13 @@ namespace PlatoCore.Layout.Views.Abstractions
                 Model = model
             };
 
+            var viewName = ViewComponentContext?.ViewComponentDescriptor?.ShortName ?? string.Empty;
+
             foreach (var filter in filters)
             {
                 filter.OnViewComponentExecuting(new ViewComponentExecutingContext()
                 {
-                    ViewName = null,
+                    ViewName = viewName,
                     ViewData = viewData,
                     ViewContext = ViewContext
                 });

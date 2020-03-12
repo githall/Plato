@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Http;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions.Extensions;
+using PlatoCore.Data.Abstractions;
 using PlatoCore.Models.Shell;
 
 namespace Plato.Entities.Services
@@ -19,13 +20,16 @@ namespace Plato.Entities.Services
 
         private readonly IShellSettings _shellSettings;
         private readonly IEntityStore<TEntity> _entityStore;
-   
+        private readonly IDbHelper _dbHelper;
+
         public EntityViewIncrementer(
             IEntityStore<TEntity> entityStore, 
-            IShellSettings shellSettings)
+            IShellSettings shellSettings,
+            IDbHelper dbHelper)
         {
             _entityStore = entityStore;
             _shellSettings = shellSettings;
+            _dbHelper = dbHelper;
         }
 
         public IEntityViewIncrementer<TEntity> Contextulize(HttpContext context)
@@ -61,43 +65,53 @@ namespace Plato.Entities.Services
                 }
             }
 
-            // Increment counts for view
-            entity.TotalViews = entity.TotalViews + 1;
-            
-            var result = await _entityStore.UpdateAsync(entity);
-            
-            if (result != null)
+            await UpdateTotalViewsAsync(entity);
+
+
+            if (values == null)
             {
-                if (values == null)
-                {
-                    values = new List<int>();
-                }
-
-                values.Add(result.Id);
-
-                var tennantPath = "/";
-                if (_shellSettings != null)
-                {
-                    tennantPath += _shellSettings.RequestedUrlPrefix;
-                }
-
-                // If a context is supplied use a client side cookie to track views
-                // Expire the cookie every 10 minutes using a sliding expiration to
-                // ensure views are updated often but not on every refresh
-                _context?.Response.Cookies.Append(
-                    CookieName,
-                    values.ToArray().ToDelimitedString(),
-                    new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Path = tennantPath,
-                        Expires = DateTime.Now.AddMinutes(10)
-                    });
-                
+                values = new List<int>();
             }
-            
+
+            values.Add(entity.Id);
+
+            var tennantPath = "/";
+            if (_shellSettings != null)
+            {
+                tennantPath += _shellSettings.RequestedUrlPrefix;
+            }
+
+            // If a context is supplied use a client side cookie to track views
+            // Expire the cookie every 10 minutes using a sliding expiration to
+            // ensure views are updated often but not on every refresh
+            _context?.Response.Cookies.Append(
+                CookieName,
+                values.ToArray().ToDelimitedString(),
+                new CookieOptions
+                {
+                    HttpOnly = true,
+                    Path = tennantPath,
+                    Expires = DateTime.Now.AddMinutes(10)
+                });
+                
+          
             return entity;
 
+        }
+
+        async Task UpdateTotalViewsAsync(TEntity entity)
+        {
+            // Sql query
+            const string sql = "UPDATE {prefix}_Entities SET TotalViews = {views} WHERE Id = {id};";
+
+            // Execute and return results
+            await _dbHelper.ExecuteScalarAsync<int>(sql, new Dictionary<string, string>()
+            {
+                ["{id}"] = entity.Id.ToString(),
+                ["{views}"] = (entity.TotalViews += 1).ToString()
+            });
+
+            _entityStore.CancelTokens(entity);
         }
 
     }

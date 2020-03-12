@@ -518,7 +518,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     position: relative;
 }
 
-.icon-wrapper i
+.icon-wrapper > i
 {
     position: absolute; 
     top: 50%; 

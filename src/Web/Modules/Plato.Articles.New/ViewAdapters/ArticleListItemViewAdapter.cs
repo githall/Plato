@@ -131,35 +131,33 @@ namespace Plato.Articles.New.ViewAdapters
                     var adapters = new[]
                     {
                         // Add a "New" label after the title tag 
-                        new TagHelperAdapter("title", (context, output) =>
+                        new TagHelperAdapter(ViewName, "title", (context, output) =>
                         {
                             if (lastVisit != null)
                             {
-
-                                // Optionally remove bold title for read entities
-                                // output.Attributes.RemoveAll("class");
-
                                 // New
                                 if (model.Entity.LastReplyAfter(lastVisit))
                                 {
-                                    output.PostElement.SetHtmlContent(
-                                        $"<span data-toggle=\"tooltip\" title=\"{T["This article has new replies"].Value}\" class=\"badge badge-primary ml-2\">{T["New"].Value}</span>");
+                                    output.PreElement.SetHtmlContent(
+                                        $"<span class=\"text-primary mr-2 smaller\" data-toggle=\"tooltip\" title=\"{T["This article has new replies"].Value}\"><i class=\"fa fa-circle\"></i></span>");
                                 }
                                 else
                                 {
                                     // Modified
                                     if (model.Entity.ModifiedAfter(lastVisit))
                                     {
-                                        output.PostElement.SetHtmlContent(
-                                            $"<span data-toggle=\"tooltip\" title=\"{T["This article has been updated since it was last read"].Value}\" class=\"badge badge-secondary ml-2\">{T["Updated"].Value}</span>");
+                                        output.PreElement.SetHtmlContent(
+                                            $"<span class=\"text-primary mr-2 smaller\" data-toggle=\"tooltip\" title=\"{T["This article has been updated since it was last read"].Value}\"><i class=\"fa fa-circle\"></i></span>");
                                     }
                                 }
                             }
                             else
                             {
+                                // Unread
                                 output.PreElement.SetHtmlContent(
-                                    $"<span data-toggle=\"tooltip\" title=\"{T["You've not read this article yet"].Value}\" class=\"text-primary mr-2 smaller\"><i class=\"fa fa-circle\"></i></span>");
+                                    $"<span data-toggle=\"tooltip\" title=\"{T["You've not read this article"].Value}\" class=\"text-primary mr-2 smaller\"><i class=\"fa fa-circle\"></i></span>");
                             }
+
                         })
                     };
 

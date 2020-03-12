@@ -1,15 +1,12 @@
 ﻿using System;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Plato.Entities.Models;
-using Plato.Entities.Repositories;
 using Plato.Entities.Services;
 using PlatoCore.Layout;
 using PlatoCore.Layout.ActionFilters;
-using PlatoCore.Models.Metrics;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Entities.ActionFilters

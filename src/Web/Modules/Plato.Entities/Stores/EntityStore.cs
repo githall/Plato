@@ -274,6 +274,7 @@ namespace Plato.Entities.Stores
 
             // Get all entity data matching supplied entity ids
             var results = await _entityDataStore.QueryAsync()
+                .Take(int.MaxValue, false)
                 .Select<EntityDataQueryParams>(q => { q.EntityId.IsIn(entities.Select(e => e.Id).ToArray()); })
                 .ToList();
 

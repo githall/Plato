@@ -95,6 +95,7 @@ namespace Plato.Entities.Reactions.Stores
 
             // Get all reactions for entity (this includes entity replies for perf)
             var entityReactions = await _entityReactionStore.QueryAsync()
+                .Take(int.MaxValue, false)
                 .Select<EntityReactionsQueryParams>(q =>
                 {
                     q.EntityId.Equals(entityId);
