@@ -97,6 +97,7 @@ namespace Plato.Entities.Attachments.ViewComponents
                     q.ContentGuid.Equals(model.Guid).Or();
 
                 })
+                .OrderBy("TotalViews", OrderBy.Desc)
                 .ToList();
 
         }

@@ -338,6 +338,8 @@ namespace Plato.Attachments.Stores
                     return "a.ContentCheckSum";
                 case "views":
                     return "a.TotalViews";
+                case "totalviews":
+                    return "a.TotalViews";
                 case "createduserid":
                     return "a.CreatedUserId";
                 case "created":

@@ -269,7 +269,8 @@ namespace Plato.Entities.Attachments.Handlers
                                     LEFT OUTER JOIN {prefix}_Users m ON a.ModifiedUserId = m.Id
                                 WHERE (
                                    ea.EntityId = @EntityId
-                                );")
+                                )
+                                ORDER BY a.TotalViews DESC;")
                         .ForTable(_entityyAttachments)
                         .WithParameter(new SchemaColumn() { Name = "EntityId", DbType = DbType.Int32 }))
 
