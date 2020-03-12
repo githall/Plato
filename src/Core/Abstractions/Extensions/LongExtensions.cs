@@ -28,7 +28,10 @@ namespace PlatoCore.Abstractions.Extensions
             }
 
             // 1 gb = 1073741824 bytes
-            return $"{Math.Floor((decimal)input / 1073741824):N0}{Gb}";
+            var gb = Math.Floor((decimal)input / 1073741824);
+            return gb >= 1
+                  ? $"{gb:N0}{Gb}"
+                  : $"{input / (1024 * 1024):N0}{Mb}";
 
         }
 

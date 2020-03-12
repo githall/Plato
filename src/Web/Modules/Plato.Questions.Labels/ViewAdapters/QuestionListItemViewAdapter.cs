@@ -1,7 +1,8 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Questions.Models;
 using Plato.Entities.ViewModels;
@@ -11,7 +12,6 @@ using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Labels.Models;
 using Plato.Labels.Stores;
 using Plato.Questions.Labels.Models;
-using System;
 
 namespace Plato.Questions.Labels.ViewAdapters
 {
@@ -170,6 +170,7 @@ namespace Plato.Questions.Labels.ViewAdapters
             if (entities?.Data != null)
             {
                 entityLabels = await _entityLabelStore.QueryAsync()
+                    .Take(int.MaxValue, false)
                     .Select<EntityLabelQueryParams>(q =>
                     {
                         q.EntityId.IsIn(entities.Data.Select(e => e.Id).ToArray());
