@@ -25,7 +25,7 @@ namespace Plato.Attachments.ViewComponents
             },
             new Filter()
             {
-                Text = "My Attachments",
+                Text = "My Files",
                 Value = FilterBy.Started
             },
             new Filter()
