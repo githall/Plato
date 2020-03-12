@@ -18,6 +18,7 @@ using PlatoCore.Layout.ModelBinding;
 using Plato.Entities.Attachments.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Plato.Attachments.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Articles.Attachments.Controllers
 {
@@ -53,13 +54,15 @@ namespace Plato.Articles.Attachments.Controllers
         // ----------
 
         [HttpGet, AllowAnonymous]
-        public async Task<IActionResult> Download(int id)
+        public async Task Download(int id)
         {
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, Permissions.DownloadArticleAttachments))
             {
-                return Unauthorized();
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.Unauthorized);
+                return;
             }
 
             // Get attachment
@@ -68,19 +71,25 @@ namespace Plato.Articles.Attachments.Controllers
             // Ensure attachment exists
             if (attachment == null)
             {
-                return NotFound();
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
             }
 
             // Do we have permission to view at least one of the
             // entities the attachment is associated with
             if (!await AuthorizeAsync(attachment))
-            {
-                return Unauthorized(); ;
+            {             
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.Unauthorized);
+                return;
             }
 
             if (attachment.ContentLength <= 0)
             {
-                return BadRequest($"The requested attachment has an invalid length. Length must be above zero.");
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
             }
 
             // Increment view count
@@ -91,18 +100,12 @@ namespace Plato.Articles.Attachments.Controllers
             // Expire entity attachments cache to ensure view count is reflected correctly
             _entityAttachmentStore.CancelTokens(null);
 
-            // Clear response
-            var r = Response;
-            r.Clear();
-
-            // Serve attachment         
-            r.ContentType = attachment.ContentType;
-            r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
-            r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));
-            await r.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);
-
-            // No need to return any view
-            return null;
+            // Serve attachment        
+            Response.Clear();
+            Response.ContentType = attachment.ContentType;
+            Response.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
+            Response.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));
+            await Response.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);     
 
         }
 

@@ -47,27 +47,26 @@ namespace Plato.Media.Controllers
         {
 
             var media = await _mediaStore.GetByIdAsync(id);
-            var r = Response;
-            r.Clear();
+            Response.Clear();
 
             if ((media != null) && (media.ContentLength >= 0))
             {
-                r.ContentType = media.ContentType;
-                r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + media.Name + "\"");
-                r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)media.ContentLength));
-                r.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
-                await r.Body.WriteAsync(media.ContentBlob, 0, (int)media.ContentLength);
+                Response.ContentType = media.ContentType;
+                Response.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + media.Name + "\"");
+                Response.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)media.ContentLength));
+                Response.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
+                await Response.Body.WriteAsync(media.ContentBlob, 0, (int)media.ContentLength);
             }
             else
             {
                 var fileBytes = await _fileStore.GetFileBytesAsync(_pathToEmptyImage);
                 if (fileBytes != null)
                 {
-                    r.ContentType = "image/png";
-                    r.Headers.Add(HeaderNames.ContentDisposition, "filename=\"empty.png\"");
-                    r.Headers.Add(HeaderNames.ContentLength, Convert.ToString((int)fileBytes.Length));
-                    r.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
-                    await r.Body.WriteAsync(fileBytes, 0, fileBytes.Length);
+                    Response.ContentType = "image/png";
+                    Response.Headers.Add(HeaderNames.ContentDisposition, "filename=\"empty.png\"");
+                    Response.Headers.Add(HeaderNames.ContentLength, Convert.ToString((int)fileBytes.Length));
+                    Response.Headers.Add(HeaderNames.CacheControl, "public,max-age=7776000"); // 7776000 = 90 days
+                    await Response.Body.WriteAsync(fileBytes, 0, fileBytes.Length);
                 }
             }
 

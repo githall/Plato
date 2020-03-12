@@ -54,7 +54,8 @@ namespace Plato.Media
                 defaults: new { controller = "Media", action = "Serve" }
             );
 
-
         }
+
     }
+
 }
