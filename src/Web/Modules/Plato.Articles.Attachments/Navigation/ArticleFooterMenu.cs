@@ -35,7 +35,7 @@ namespace Plato.Articles.Attachments.Navigation
 
             // Replies are options
             var reply = builder.ActionContext.HttpContext.Items[typeof(Comment)] as Comment;
-            
+
             builder
                 .Add(T["Attachments"], react => react
                     .View("EntityFiles", new
