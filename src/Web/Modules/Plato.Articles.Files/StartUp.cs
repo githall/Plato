@@ -7,17 +7,19 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Articles.Models;
 using PlatoCore.Layout.ViewProviders;
-using Plato.Articles.Attachments.ViewProviders;
-using Plato.Articles.Attachments.Navigation;
+using Plato.Articles.Files.ViewProviders;
+using Plato.Articles.Files.Navigation;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
-using Plato.Articles.Attachments.Handlers;
+using Plato.Articles.Files.Handlers;
 using PlatoCore.Features.Abstractions;
 
-namespace Plato.Articles.Attachments
+namespace Plato.Articles.Files
 {
+
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)
@@ -52,32 +54,32 @@ namespace Plato.Articles.Attachments
             // Download
             routes.MapAreaRoute(
                 name: "ArticlesAttachmentDownload",
-                areaName: "Plato.Articles.Attachments",
-                template: "articles/attachments/d/{id:int}/{alias?}",
+                areaName: "Plato.Articles.Files",
+                template: "articles/files/d/{id:int}/{alias?}",
                 defaults: new { controller = "Home", action = "Download" }
             );
 
             // Edit
             routes.MapAreaRoute(
                 name: "EditArticleAttachments",
-                areaName: "Plato.Articles.Attachments",
-                template: "articles/attachments/edit/{opts.guid}/{opts.entityId:int?}",
+                areaName: "Plato.Articles.Files",
+                template: "articles/files/edit/{opts.guid}/{opts.entityId:int?}",
                 defaults: new { controller = "Home", action = "Edit" }
             );
 
             // Preview
             routes.MapAreaRoute(
                 name: "PreviewArticleAttachments",
-                areaName: "Plato.Articles.Attachments",
-                template: "articles/attachments/preview/{opts.guid}/{opts.entityId:int?}",
+                areaName: "Plato.Articles.Files",
+                template: "articles/files/preview/{opts.guid}/{opts.entityId:int?}",
                 defaults: new { controller = "Home", action = "Preview" }
             );
 
             // API
             routes.MapAreaRoute(
                 name: "ArticleAttachmentWebApi",
-                areaName: "Plato.Articles.Attachments",
-                template: "api/articles/attachments/{action}/{id:int?}",
+                areaName: "Plato.Articles.Files",
+                template: "api/articles/files/{action}/{id:int?}",
                 defaults: new { controller = "Api", action = "Index" }
             );
 

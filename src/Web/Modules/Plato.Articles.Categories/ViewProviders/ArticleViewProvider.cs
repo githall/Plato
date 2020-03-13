@@ -227,7 +227,7 @@ namespace Plato.Articles.Categories.ViewProviders
                 builder.Add(S[entity.Id > 0 ? "Edit Article" : "New Article"]);
 
             });
-            
+
             var viewModel = new CategoryDropDownViewModel()
             {
                 Options = new CategoryIndexOptions()
@@ -239,7 +239,7 @@ namespace Plato.Articles.Categories.ViewProviders
             };
 
             return Views(
-                View<CategoryDropDownViewModel>("Articles.Categories.Edit.Sidebar", model => viewModel).Zone("sidebar").Order(1)
+                View<CategoryDropDownViewModel>("Articles.Categories.Edit.Sidebar", model => viewModel).Zone("sidebar").Order(5)
             );
 
         }

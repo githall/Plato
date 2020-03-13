@@ -59,7 +59,7 @@ namespace Plato.Entities.Files.ViewComponents
             var user = _httpContextAccessor.HttpContext.Features[typeof(User)] as User;
 
             // Build model & return view
-            return View(new AttachmentsViewModel()
+            return View(new FilesViewModel()
             {
                 Info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0),
                 Options = await _attachmentOptionsFactory.GetOptionsAsync(user),

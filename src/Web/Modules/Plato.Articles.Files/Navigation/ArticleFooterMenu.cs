@@ -3,7 +3,7 @@ using Microsoft.Extensions.Localization;
 using Plato.Articles.Models;
 using PlatoCore.Navigation.Abstractions;
 
-namespace Plato.Articles.Attachments.Navigation
+namespace Plato.Articles.Files.Navigation
 {
 
     public class ArticleFooterMenu : INavigationProvider

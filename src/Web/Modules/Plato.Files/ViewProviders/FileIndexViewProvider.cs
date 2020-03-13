@@ -13,18 +13,18 @@ namespace Plato.Files.ViewProviders
         {
 
             // Get view model from context
-            var viewModel = context.Controller.HttpContext.Items[typeof(AttachmentIndexViewModel)] as AttachmentIndexViewModel;
+            var viewModel = context.Controller.HttpContext.Items[typeof(FileIndexViewModel)] as FileIndexViewModel;
 
             // Ensure we have the view model
             if (viewModel == null)
             {
-                throw new Exception($"No type of \"{typeof(AttachmentIndexViewModel)}\" has been registered with HttpContext.Items");
+                throw new Exception($"No type of \"{typeof(FileIndexViewModel)}\" has been registered with HttpContext.Items");
             }
 
             return Task.FromResult(Views(
-                View<AttachmentIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<AttachmentIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
-                View<AttachmentIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
+                View<FileIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
+                View<FileIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<FileIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
 
         }

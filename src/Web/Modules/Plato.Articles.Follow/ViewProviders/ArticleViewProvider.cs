@@ -161,7 +161,7 @@ namespace Plato.Articles.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Permissions.FollowArticles;
                     return model;
-                }).Zone("sidebar").Order(2)
+                }).Zone("sidebar").Order(20)
             );
 
         }

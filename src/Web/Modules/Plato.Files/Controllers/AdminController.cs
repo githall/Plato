@@ -68,7 +68,7 @@ namespace Plato.Files.Controllers
         // Index
         // ---------------
 
-        public async Task<IActionResult> Index(AttachmentIndexOptions opts, PagerOptions pager)
+        public async Task<IActionResult> Index(FileIndexOptions opts, PagerOptions pager)
         {
 
             // Ensure we have permission
@@ -80,7 +80,7 @@ namespace Plato.Files.Controllers
             // Default options
             if (opts == null)
             {
-                opts = new AttachmentIndexOptions();
+                opts = new FileIndexOptions();
             }
 
             // Default pager
@@ -90,7 +90,7 @@ namespace Plato.Files.Controllers
             }
 
             // Get default options
-            var defaultViewOptions = new AttachmentIndexOptions();
+            var defaultViewOptions = new FileIndexOptions();
             var defaultPagerOptions = new PagerOptions();
 
             // Add non default route data for pagination purposes                
@@ -109,7 +109,7 @@ namespace Plato.Files.Controllers
             var viewModel = await GetIndexViewModelAsync(opts, pager);
 
             // Add view model to context
-            HttpContext.Items[typeof(AttachmentIndexViewModel)] = viewModel;
+            HttpContext.Items[typeof(FileIndexViewModel)] = viewModel;
 
             // If we have a pager.page querystring value return paged view
             if (int.TryParse(HttpContext.Request.Query["pager.page"], out var page))
@@ -282,7 +282,7 @@ namespace Plato.Files.Controllers
 
         // -------------------
 
-        async Task<AttachmentIndexViewModel> GetIndexViewModelAsync(AttachmentIndexOptions options, PagerOptions pager)
+        async Task<FileIndexViewModel> GetIndexViewModelAsync(FileIndexOptions options, PagerOptions pager)
         {
 
             // Get current feature
@@ -298,7 +298,7 @@ namespace Plato.Files.Controllers
             pager.Url = _contextFacade.GetRouteUrl(pager.Route(RouteData));
 
             // Return updated model
-            return new AttachmentIndexViewModel()
+            return new FileIndexViewModel()
             {
                 Options = options,
                 Pager = pager

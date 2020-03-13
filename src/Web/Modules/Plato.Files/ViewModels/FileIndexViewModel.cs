@@ -7,14 +7,14 @@ using PlatoCore.Navigation.Abstractions;
 namespace Plato.Files.ViewModels
 {
 
-    public class AttachmentIndexViewModel
+    public class FileIndexViewModel
     {
 
         public IPagedResults<File> Results { get; set; }
 
         public PagerOptions Pager { get; set; }
 
-        public AttachmentIndexOptions Options { get; set; }
+        public FileIndexOptions Options { get; set; }
 
         public ICollection<SortColumn> SortColumns { get; set; }
 
@@ -24,7 +24,7 @@ namespace Plato.Files.ViewModels
 
     }
 
-    public class AttachmentIndexOptions
+    public class FileIndexOptions
     {
 
         public FilterBy Filter { get; set; } = FilterBy.All;

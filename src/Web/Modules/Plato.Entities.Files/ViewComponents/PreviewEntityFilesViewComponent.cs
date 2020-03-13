@@ -48,7 +48,7 @@ namespace Plato.Entities.Files.ViewComponents
             }
 
             // Build model & return view
-            return View(new AttachmentsViewModel()
+            return View(new FilesViewModel()
             {
                 Results = await GetResultsAsync(model),
                 PostPermission = model.PostPermission,

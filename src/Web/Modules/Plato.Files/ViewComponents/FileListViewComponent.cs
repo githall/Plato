@@ -116,13 +116,13 @@ namespace Plato.Files.ViewComponents
         }
 
         public async Task<IViewComponentResult> InvokeAsync(
-            AttachmentIndexOptions options,
+            FileIndexOptions options,
             PagerOptions pager)
         {
 
             if (options == null)
             {
-                options = new AttachmentIndexOptions();
+                options = new FileIndexOptions();
             }
 
             if (pager == null)
@@ -134,8 +134,8 @@ namespace Plato.Files.ViewComponents
 
         }
 
-        async Task<AttachmentIndexViewModel> GetViewModel(
-            AttachmentIndexOptions options,
+        async Task<FileIndexViewModel> GetViewModel(
+            FileIndexOptions options,
             PagerOptions pager)
         {
 
@@ -156,7 +156,7 @@ namespace Plato.Files.ViewComponents
             pager.SetTotal(results?.Total ?? 0);
 
             // Return view model
-            return new AttachmentIndexViewModel()
+            return new FileIndexViewModel()
             {
                 SortColumns = _defaultSortColumns,
                 SortOrder = _defaultSortOrder,

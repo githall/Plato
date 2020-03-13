@@ -18,13 +18,13 @@ using PlatoCore.Net.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using PlatoCore.Security.Abstractions;
 
-namespace Plato.Articles.Attachments.Controllers
+namespace Plato.Articles.Files.Controllers
 {
 
     public class ApiController : BaseWebApiController
     {
 
-        public const string ModuleId = "Plato.Articles.Attachments";
+        public const string ModuleId = "Plato.Articles.Files";
         public const string GuidKey = "guid";        
 
         private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;

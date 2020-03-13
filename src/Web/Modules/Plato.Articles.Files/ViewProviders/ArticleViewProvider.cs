@@ -16,13 +16,15 @@ using PlatoCore.Models.Users;
 using Microsoft.AspNetCore.Routing;
 using Plato.Files.Services;
 
-namespace Plato.Articles.Attachments.ViewProviders
+namespace Plato.Articles.Files.ViewProviders
 {
 
     public class ArticleViewProvider : ViewProviderBase<Article>
     {
+        // Get current feature
+        public const string ModuleId = "Plato.Articles.Files";
 
-        private const string GuidHtmlName = "attachment-guid";     
+        private const string GuidHtmlName = "file-guid";     
 
         private readonly IEntityFileStore<EntityFile> _entityFileStore;
         private readonly IFileStore<File> _fileStore; 
@@ -67,7 +69,7 @@ namespace Plato.Articles.Attachments.ViewProviders
             {
                 return await BuildIndexAsync(new Article(), context);
             }
-   
+
             var entityId = entity.Id;
             var contentGuid = string.Empty;
 
@@ -75,15 +77,12 @@ namespace Plato.Articles.Attachments.ViewProviders
             var user = context.Controller.HttpContext.Features[typeof(User)] as User;
 
             // Get current feature
-            var moduleId = "Plato.Articles.Attachments";
-
-            // Get current feature
-            var feature = await _featureFacade.GetFeatureByIdAsync(moduleId);
+            var feature = await _featureFacade.GetFeatureByIdAsync(ModuleId);
 
             // Ensure the feature exists
             if (feature == null)
             {
-                throw new Exception($"A feature named \"{moduleId}\" could not be found!");
+                throw new Exception($"A feature named \"{ModuleId}\" could not be found!");
             }
 
             // Use posted guid if available
@@ -99,7 +98,7 @@ namespace Plato.Articles.Attachments.ViewProviders
             }
 
             return Views(
-                View<EntityAttachmentOptions>("Attachments.Edit.Sidebar", model =>
+                View<EntityAttachmentOptions>("Files.Edit.Sidebar", model =>
                 {
                    
                     model.EntityId = entityId;
@@ -112,7 +111,7 @@ namespace Plato.Articles.Attachments.ViewProviders
 
                     model.PostRoute = new RouteValueDictionary()
                     {
-                        ["area"] = moduleId,
+                        ["area"] = ModuleId,
                         ["controller"] = "Api",
                         ["action"] = "Post",
                         ["guid"] = contentGuid
@@ -120,7 +119,7 @@ namespace Plato.Articles.Attachments.ViewProviders
 
                     model.EditRoute = new RouteValueDictionary()
                     {
-                        ["area"] = moduleId,
+                        ["area"] = ModuleId,
                         ["controller"] = "Home",
                         ["action"] = "Edit",
                         ["opts.guid"] = contentGuid,
@@ -129,7 +128,7 @@ namespace Plato.Articles.Attachments.ViewProviders
 
                     model.PreviewRoute = new RouteValueDictionary()
                     {
-                        ["area"] = moduleId,
+                        ["area"] = ModuleId,
                         ["controller"] = "Home",
                         ["action"] = "Preview",
                         ["opts.guid"] = contentGuid,
@@ -137,7 +136,7 @@ namespace Plato.Articles.Attachments.ViewProviders
                     };
 
                     return model;
-                }).Zone("sidebar").Order(1)
+                }).Zone("sidebar").Order(10)
             );
 
         }

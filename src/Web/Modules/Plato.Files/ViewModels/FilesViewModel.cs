@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Routing;
 
 namespace Plato.Files.ViewModels
 {
-    public class AttachmentsViewModel
+    public class FilesViewModel
     {
 
         public IPagedResults<File> Results { get; set; }

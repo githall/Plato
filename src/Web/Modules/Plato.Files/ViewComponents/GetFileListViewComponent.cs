@@ -17,13 +17,13 @@ namespace Plato.Files.ViewComponents
             _metricStore = metricStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(AttachmentIndexOptions options, PagerOptions pager)
+        public async Task<IViewComponentResult> InvokeAsync(FileIndexOptions options, PagerOptions pager)
         {
 
             // Build default
             if (options == null)
             {
-                options = new AttachmentIndexOptions();
+                options = new FileIndexOptions();
             }
 
             // Build default
@@ -37,8 +37,8 @@ namespace Plato.Files.ViewComponents
 
         }
 
-        async Task<AttachmentIndexViewModel> GetViewModel(
-            AttachmentIndexOptions options,
+        async Task<FileIndexViewModel> GetViewModel(
+            FileIndexOptions options,
             PagerOptions pager)
         {
 
@@ -57,7 +57,7 @@ namespace Plato.Files.ViewComponents
             pager.SetTotal(results?.Total ?? 0);
 
             // Return view model
-            return new AttachmentIndexViewModel
+            return new FileIndexViewModel
             {
                 Results = results,
                 Options = options,

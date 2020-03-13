@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using PlatoCore.Security.Abstractions;
 
-namespace Plato.Articles.Attachments
+namespace Plato.Articles.Files
 {
 
     public class Permissions : IPermissionsProvider<Permission>

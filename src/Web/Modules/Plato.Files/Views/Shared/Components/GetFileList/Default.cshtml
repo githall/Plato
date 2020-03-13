@@ -1,4 +1,4 @@
-﻿@model AttachmentIndexViewModel
+﻿@model FileIndexViewModel
 
 @if (Model.Results != null)
 {
@@ -11,9 +11,9 @@
              : "p-3 infinite-scroll-item";
          <li class="list-group-item list-group-item-action p-0">
              <div class="@css" data-infinite-scroll-offset="@rowOffset" data-infinite-scroll-highlight="@rowOffset">
-                 @await DisplayAsync(new View("AttachmentListItem", new
+                 @await DisplayAsync(new View("FileListItem", new
                  {
-                     model = new AttachmentListItemViewModel()
+                     model = new FileListItemViewModel()
                      {
                          Attachment = attachment,
                          Options = Model.Options

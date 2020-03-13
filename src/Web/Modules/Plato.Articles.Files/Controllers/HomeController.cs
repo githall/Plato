@@ -20,13 +20,13 @@ using Microsoft.AspNetCore.Routing;
 using Plato.Files.Services;
 using PlatoCore.Hosting.Abstractions;
 
-namespace Plato.Articles.Attachments.Controllers
+namespace Plato.Articles.Files.Controllers
 {
 
     public class HomeController : Controller, IUpdateModel
     {
 
-        public const string ModuleId = "Plato.Articles.Attachments";
+        public const string ModuleId = "Plato.Articles.Files";
 
         private readonly IFileViewIncrementer<File> _fileViewIncrementer;
         private readonly IEntityFileStore<EntityFile> _entityFileStore;        
