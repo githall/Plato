@@ -1,0 +1,44 @@
+﻿@model AttachmentListItemViewModel
+
+@{
+    var viewText = Model.Attachment.TotalViews == 1 ? T["view"] : T["views"];    
+    var iconCss = !string.IsNullOrEmpty(Model.Attachment.Extension) ? $"fiv-icon-{Model.Attachment.Extension.Replace(".", "")}" : string.Empty;
+    var views = $"{Model.Attachment.TotalViews.ToPrettyInt()} {viewText.Value}";
+}
+
+<div class="list-left">
+    <span title="@Model.Attachment.Extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo fa-2x mt-2 @iconCss"></span>
+</div>
+
+<div class="list-body">
+    <div>
+        <a asp-route-area="@Model.Attachment.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@Model.Attachment.Id" target="_blank" class="font-weight-bold">
+            @Model.Attachment.Name
+        </a>
+    </div>
+    <div>
+        <ul class="list-inline text-muted">
+            <li class="list-inline-item">
+                @Model.Attachment.ContentLength.ToFriendlyFileSize()
+            </li>
+            <li class="list-inline-item">
+                @views
+            </li>
+            @if (Model.Attachment.CreatedBy != null)
+            {
+                <li class="list-inline-item">                  
+                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Attachment.CreatedUserId" asp-route-opts.alias="@Model.Attachment.CreatedBy.Alias" data-provide="popper" data-popper-url="@Model.Attachment.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">                        
+                        @Model.Attachment.CreatedBy.DisplayName
+                    </a>
+                </li>
+            }
+            <li class="list-inline-item">
+                <date utc="Model.Attachment.CreatedDate"></date>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+

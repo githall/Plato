@@ -7,7 +7,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\PlatoCore.csproj" />
     <ProjectReference Include="..\Plato.Articles\Plato.Articles.csproj" />
-    <ProjectReference Include="..\Plato.Entities.Attachments\Plato.Entities.Attachments.csproj" />
+    <ProjectReference Include="..\Plato.Entities.Files\Plato.Entities.Files.csproj" />
   </ItemGroup>
 
   <ItemGroup>

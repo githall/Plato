@@ -4,17 +4,17 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Http;
 using Plato.Articles.Models;
 using Plato.Entities.Stores;
-using Plato.Attachments.Stores;
-using Plato.Attachments.Models;
+using Plato.Files.Stores;
+using Plato.Files.Models;
 using PlatoCore.Hosting.Abstractions;
-using Plato.Entities.Attachments.Stores;
-using Plato.Entities.Attachments.Models;
+using Plato.Entities.Files.Stores;
+using Plato.Entities.Files.Models;
 using PlatoCore.Layout.ViewProviders.Abstractions;
-using Plato.Entities.Attachments.ViewModels;
+using Plato.Entities.Files.ViewModels;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Users;
 using Microsoft.AspNetCore.Routing;
-using Plato.Attachments.Services;
+using Plato.Files.Services;
 
 namespace Plato.Articles.Attachments.ViewProviders
 {
@@ -24,8 +24,8 @@ namespace Plato.Articles.Attachments.ViewProviders
 
         private const string GuidHtmlName = "attachment-guid";     
 
-        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
-        private readonly IAttachmentStore<Attachment> _attachmentStore; 
+        private readonly IEntityFileStore<EntityFile> _entityFileStore;
+        private readonly IFileStore<File> _fileStore; 
         private readonly IAttachmentGuidFactory _guidBuilder;
         private readonly IEntityStore<Article> _entityStore;
         private readonly IContextFacade _contextFacade;        
@@ -33,8 +33,8 @@ namespace Plato.Articles.Attachments.ViewProviders
         private readonly HttpRequest _request;
 
         public ArticleViewProvider(
-            IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
-            IAttachmentStore<Attachment> attachmentStore,           
+            IEntityFileStore<EntityFile> entityFileStore,
+            IFileStore<File> fileStore,           
             IHttpContextAccessor httpContextAccessor,
             IAttachmentGuidFactory guidBuilder,
             IEntityStore<Article> entityStore,            
@@ -42,8 +42,8 @@ namespace Plato.Articles.Attachments.ViewProviders
             IContextFacade contextFacade)
         {
             _request = httpContextAccessor.HttpContext.Request;
-            _entityAttachmentStore = entityAttachmentStore;          
-            _attachmentStore = attachmentStore;
+            _entityFileStore = entityFileStore;          
+            _fileStore = fileStore;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _guidBuilder = guidBuilder;
@@ -167,9 +167,9 @@ namespace Plato.Articles.Attachments.ViewProviders
             }
 
             // Get attachments for temporary guid
-            var attachments = await _attachmentStore
+            var attachments = await _fileStore
                 .QueryAsync()
-                .Select<AttachmentQueryParams>(q => q.ContentGuid.Equals(postedGuid))
+                .Select<FileQueryParams>(q => q.ContentGuid.Equals(postedGuid))
                 .ToList();
 
             // Create relationships
@@ -180,15 +180,15 @@ namespace Plato.Articles.Attachments.ViewProviders
                 foreach (var attachment in attachments.Data)
                 {
                     // Create a relationship for any attachment matching our guid
-                    var relationship = await _entityAttachmentStore.CreateAsync(new EntityAttachment()
+                    var relationship = await _entityFileStore.CreateAsync(new EntityFile()
                     {
                         EntityId = entity.Id,
-                        AttachmentId = attachment.Id,
+                        FileId = attachment.Id,
                         CreatedUserId = user.Id
                     });
                     if (relationship != null)
                     {
-                        attachmentIds.Add(relationship.AttachmentId);
+                        attachmentIds.Add(relationship.FileId);
                     }
                 }
             }
@@ -196,7 +196,7 @@ namespace Plato.Articles.Attachments.ViewProviders
             // Reset temporary guid for established relationships
             if (attachmentIds != null)
             {
-                await _attachmentStore.UpdateContentGuidAsync(
+                await _fileStore.UpdateContentGuidAsync(
                     attachmentIds.ToArray(), string.Empty);
             }          
 

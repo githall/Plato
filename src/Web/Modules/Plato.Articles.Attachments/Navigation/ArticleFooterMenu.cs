@@ -38,7 +38,7 @@ namespace Plato.Articles.Attachments.Navigation
             
             builder
                 .Add(T["Attachments"], react => react
-                    .View("EntityAttachments", new
+                    .View("EntityFiles", new
                     {
                         entity,
                         reply

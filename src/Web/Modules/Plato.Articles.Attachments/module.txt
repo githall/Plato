@@ -13,7 +13,7 @@ Dependencies:
 		Version: "1.0.0"
 	},
 	{
-		Id: "Plato.Entities.Attachments",
+		Id: "Plato.Entities.Files",
 		Version: "1.0.0"
 	}
 ]

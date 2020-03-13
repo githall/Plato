@@ -7,17 +7,17 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
 using PlatoCore.Abstractions;
 using PlatoCore.Security.Abstractions;
-using Plato.Attachments.Stores;
+using Plato.Files.Stores;
 using Plato.Entities.Models;
-using Plato.Attachments.Models;
-using Plato.Entities.Attachments.Stores;
-using Plato.Entities.Attachments.Models;
+using Plato.Files.Models;
+using Plato.Entities.Files.Stores;
+using Plato.Entities.Files.Models;
 using Plato.Articles.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
-using Plato.Entities.Attachments.ViewModels;
+using Plato.Entities.Files.ViewModels;
 using Microsoft.AspNetCore.Routing;
-using Plato.Attachments.Services;
+using Plato.Files.Services;
 using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Articles.Attachments.Controllers
@@ -28,17 +28,17 @@ namespace Plato.Articles.Attachments.Controllers
 
         public const string ModuleId = "Plato.Articles.Attachments";
 
-        private readonly IAttachmentViewIncrementer<Attachment> _attachmentViewIncrementer;
-        private readonly IEntityAttachmentStore<EntityAttachment> _entityAttachmentStore;
-        private readonly IAttachmentStore<Attachment> _attachmentStore;
+        private readonly IAttachmentViewIncrementer<File> _attachmentViewIncrementer;
+        private readonly IEntityFileStore<EntityFile> _entityAttachmentStore;
+        private readonly IFileStore<File> _attachmentStore;
         private readonly IAuthorizationService _authorizationService;
         
         private readonly IEntityStore<Article> _entityStore;
 
         public HomeController(
-            IAttachmentViewIncrementer<Attachment> attachmentViewIncrementer,
-            IEntityAttachmentStore<EntityAttachment> entityAttachmentStore,
-            IAttachmentStore<Attachment> attachmentStore,
+            IAttachmentViewIncrementer<File> attachmentViewIncrementer,
+            IEntityFileStore<EntityFile> entityAttachmentStore,
+            IFileStore<File> attachmentStore,
             IAuthorizationService authorizationService,
             IEntityStore<Article> entityStore)
         {
@@ -182,15 +182,15 @@ namespace Plato.Articles.Attachments.Controllers
 
         // ------------------------------
 
-        async Task<bool> AuthorizeAsync(Attachment attachment)
+        async Task<bool> AuthorizeAsync(File attachment)
         {
 
             // Get all entities associated with the attachment
             var relationships = await _entityAttachmentStore
                 .QueryAsync()
-                .Select<EntityAttachmentQueryParams>(q =>
+                .Select<EntityFileQueryParams>(q =>
                 {
-                    q.AttachmentId.Equals(attachment.Id);
+                    q.FileId.Equals(attachment.Id);
                 })
                 .ToList();
 

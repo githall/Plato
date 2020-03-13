@@ -1,0 +1,10 @@
+﻿@model AttachmentIndexViewModel
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+}
+
+@await DisplayAsync(new View("FileList", new
+{
+    options = Model.Options,
+    pager = Model.Pager
+}))

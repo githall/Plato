@@ -5,13 +5,13 @@ using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Extensions;
-using Plato.Attachments.Attributes;
-using Plato.Attachments.Services;
-using Plato.Attachments.Stores;
-using Plato.Attachments.ViewModels;
+using Plato.Files.Attributes;
+using Plato.Files.Services;
+using Plato.Files.Stores;
+using Plato.Files.ViewModels;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
-using Plato.Attachments.Models;
+using Plato.Files.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Net.Abstractions;
@@ -28,7 +28,7 @@ namespace Plato.Articles.Attachments.Controllers
         public const string GuidKey = "guid";        
 
         private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;
-        private readonly IAttachmentStore<Attachment> _attachmentStore;
+        private readonly IFileStore<File> _attachmentStore;
         private readonly IAuthorizationService _authorizationService;
         private readonly IAttachmentValidator _attachmentValidator;
         private readonly ILogger<ApiController> _logger;
@@ -42,7 +42,7 @@ namespace Plato.Articles.Attachments.Controllers
 
         public ApiController(     
             IHttpMultiPartRequestHandler multiPartRequestHandler,
-            IAttachmentStore<Attachment> attachmentStore,
+            IFileStore<File> attachmentStore,
             IAuthorizationService authorizationService,
             IAttachmentValidator attachmentValidator,
             ILogger<ApiController> logger,
@@ -122,7 +122,7 @@ namespace Plato.Articles.Attachments.Controllers
             // -------------------
 
             var md5 = result.Response.ContentBytes?.ToMD5().ToHex() ?? string.Empty;
-            var attachment = new Attachment
+            var attachment = new File
             {
                 FeatureId = feature.Id,
                 Name = result.Response.Name,
