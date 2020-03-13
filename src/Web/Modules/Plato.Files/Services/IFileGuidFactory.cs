@@ -1,6 +1,6 @@
 ﻿namespace Plato.Files.Services
 {
-    public interface IAttachmentGuidFactory
+    public interface IFileGuidFactory
     {
 
         string NewGuid(string uniqueKey);

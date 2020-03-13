@@ -68,7 +68,7 @@ namespace Plato.Files
             services.AddScoped<IQueryAdapterManager<File>, QueryAdapterManager<File>>();
 
             // Configuration
-            services.AddSingleton<IConfigureOptions<FileSettings>, AttachmentSettingsConfiguration>();
+            services.AddSingleton<IConfigureOptions<FileSettings>, FileSettingsConfiguration>();
 
             // View providers
             services.AddScoped<IViewProviderManager<FileSetting>, ViewProviderManager<FileSetting>>();
@@ -80,13 +80,13 @@ namespace Plato.Files
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
             // Services
-            services.AddScoped<IAttachmentOptionsFactory, AttachmentOptionsFactory>();
-            services.AddScoped<IAttachmentGuidFactory, AttachmentGuidFactory>();
-            services.AddScoped<IAttachmentValidator, AttachmentValidator>();
-            services.AddScoped<IAttachmentViewIncrementer<File>, AttachmentViewIncrementer>();
+            services.AddScoped<IFileOptionsFactory, FileOptionsFactory>();
+            services.AddScoped<IFileGuidFactory, FileGuidFactory>();
+            services.AddScoped<IFileValidator, FileValidator>();
+            services.AddScoped<IFileViewIncrementer<File>, FileViewIncrementer>();
 
             // Action filters
-            services.AddScoped<IModularActionFilter, AttachmentClientOptionsFilter>();
+            services.AddScoped<IModularActionFilter, FileClientOptionsFilter>();
 
             // Full text index providers
             services.AddScoped<IFullTextIndexProvider, FullTextIndexes>();

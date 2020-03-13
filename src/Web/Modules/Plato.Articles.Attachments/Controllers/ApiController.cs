@@ -28,9 +28,9 @@ namespace Plato.Articles.Attachments.Controllers
         public const string GuidKey = "guid";        
 
         private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;
-        private readonly IFileStore<File> _attachmentStore;
+        private readonly IFileStore<File> _fileStore;
         private readonly IAuthorizationService _authorizationService;
-        private readonly IAttachmentValidator _attachmentValidator;
+        private readonly IFileValidator _fileValidator;
         private readonly ILogger<ApiController> _logger;
         private readonly IFeatureFacade _featureFacade;
 
@@ -44,15 +44,15 @@ namespace Plato.Articles.Attachments.Controllers
             IHttpMultiPartRequestHandler multiPartRequestHandler,
             IFileStore<File> attachmentStore,
             IAuthorizationService authorizationService,
-            IAttachmentValidator attachmentValidator,
+            IFileValidator attachmentValidator,
             ILogger<ApiController> logger,
             IHtmlLocalizer htmlLocalizer,
             IFeatureFacade featureFacade)
         {            
             _multiPartRequestHandler = multiPartRequestHandler;
             _authorizationService = authorizationService;           
-            _attachmentValidator = attachmentValidator;
-            _attachmentStore = attachmentStore;
+            _fileValidator = attachmentValidator;
+            _fileStore = attachmentStore;
             _featureFacade = featureFacade;
             _logger = logger;
 
@@ -74,7 +74,7 @@ namespace Plato.Articles.Attachments.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.PostArticleAttachments))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.PostArticleFiles))
             {
                 return Unauthorized();
             }
@@ -140,12 +140,12 @@ namespace Plato.Articles.Attachments.Controllers
 
             var output = new List<UploadResult>();
 
-            var validationResult = await _attachmentValidator.ValidateAsync(attachment);
+            var validationResult = await _fileValidator.ValidateAsync(attachment);
             if (validationResult.Succeeded)
             {
 
                 // Store attachment
-                attachment = await _attachmentStore.CreateAsync(attachment);
+                attachment = await _fileStore.CreateAsync(attachment);
 
                 // Build friendly result
                 if (attachment != null)
@@ -201,7 +201,7 @@ namespace Plato.Articles.Attachments.Controllers
             }
 
             // Get attachment
-            var attachment = await _attachmentStore.GetByIdAsync(id);
+            var attachment = await _fileStore.GetByIdAsync(id);
 
             // Ensure attachment exists
             if (attachment == null)
@@ -211,8 +211,8 @@ namespace Plato.Articles.Attachments.Controllers
 
             // Get current permission based on attachment ownership
             var deletePermission = attachment.CreatedUserId == user.Id
-                ? Permissions.DeleteOwnArticleAttachments
-                : Permissions.DeleteAnyArticleAttachments;
+                ? Permissions.DeleteOwnArticleFiles
+                : Permissions.DeleteAnyArticleFiles;
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, deletePermission))
@@ -221,7 +221,7 @@ namespace Plato.Articles.Attachments.Controllers
             }
 
             // Delete attachment
-            var success = await _attachmentStore.DeleteAsync(attachment);
+            var success = await _fileStore.DeleteAsync(attachment);
 
             // Return result
             return base.Result(success);

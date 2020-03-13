@@ -5,9 +5,9 @@ using System.Threading.Tasks;
 namespace Plato.Files.Services
 {
 
-    public interface IAttachmentValidator
+    public interface IFileValidator
     {
-        Task<ICommandResult<File>> ValidateAsync(File attachment);
+        Task<ICommandResult<File>> ValidateAsync(File file);
     }
 
 }

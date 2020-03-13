@@ -28,25 +28,24 @@ namespace Plato.Articles.Attachments.Controllers
 
         public const string ModuleId = "Plato.Articles.Attachments";
 
-        private readonly IAttachmentViewIncrementer<File> _attachmentViewIncrementer;
-        private readonly IEntityFileStore<EntityFile> _entityAttachmentStore;
-        private readonly IFileStore<File> _attachmentStore;
-        private readonly IAuthorizationService _authorizationService;
-        
+        private readonly IFileViewIncrementer<File> _fileViewIncrementer;
+        private readonly IEntityFileStore<EntityFile> _entityFileStore;        
+        private readonly IAuthorizationService _authorizationService;        
         private readonly IEntityStore<Article> _entityStore;
+        private readonly IFileStore<File> _fileStore;
 
         public HomeController(
-            IAttachmentViewIncrementer<File> attachmentViewIncrementer,
-            IEntityFileStore<EntityFile> entityAttachmentStore,
-            IFileStore<File> attachmentStore,
+            IFileViewIncrementer<File> fileViewIncrementer,
+            IEntityFileStore<EntityFile> entityFileStore,            
             IAuthorizationService authorizationService,
-            IEntityStore<Article> entityStore)
+            IEntityStore<Article> entityStore,
+            IFileStore<File> fileStore)
         {
-            _attachmentViewIncrementer = attachmentViewIncrementer;
-            _entityAttachmentStore = entityAttachmentStore;
             _authorizationService = authorizationService;
-            _attachmentStore = attachmentStore;
+            _fileViewIncrementer = fileViewIncrementer;
+            _entityFileStore = entityFileStore;
             _entityStore = entityStore;
+            _fileStore = fileStore;
         }
 
         // ----------
@@ -58,18 +57,18 @@ namespace Plato.Articles.Attachments.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DownloadArticleAttachments))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DownloadArticleFiles))
             {
                 Response.StatusCode = StatusCodes.Status302Found;
                 Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.Unauthorized);
                 return;
             }
 
-            // Get attachment
-            var attachment = await _attachmentStore.GetByIdAsync(id);
+            // Get file
+            var file = await _fileStore.GetByIdAsync(id);
 
             // Ensure attachment exists
-            if (attachment == null)
+            if (file == null)
             {
                 Response.StatusCode = StatusCodes.Status302Found;
                 Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
@@ -77,35 +76,35 @@ namespace Plato.Articles.Attachments.Controllers
             }
 
             // Do we have permission to view at least one of the
-            // entities the attachment is associated with
-            if (!await AuthorizeAsync(attachment))
+            // entities the file is associated with
+            if (!await AuthorizeAsync(file))
             {             
                 Response.StatusCode = StatusCodes.Status302Found;
                 Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.Unauthorized);
                 return;
             }
 
-            if (attachment.ContentLength <= 0)
+            if (file.ContentLength <= 0)
             {
                 Response.StatusCode = StatusCodes.Status302Found;
                 Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
                 return;
             }
 
-            // Increment view count
-            await _attachmentViewIncrementer
+            // Increment file view count
+            await _fileViewIncrementer
                 .Contextulize(HttpContext)
-                .IncrementAsync(attachment);
+                .IncrementAsync(file);
 
-            // Expire entity attachments cache to ensure view count is reflected correctly
-            _entityAttachmentStore.CancelTokens(null);
+            // Expire entity files cache to ensure view count is reflected correctly
+            _entityFileStore.CancelTokens(null);
 
-            // Serve attachment        
+            // Serve file
             Response.Clear();
-            Response.ContentType = attachment.ContentType;
-            Response.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + attachment.Name + "\"");
-            Response.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)attachment.ContentLength));
-            await Response.Body.WriteAsync(attachment.ContentBlob, 0, (int)attachment.ContentLength);     
+            Response.ContentType = file.ContentType;
+            Response.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + file.Name + "\"");
+            Response.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)file.ContentLength));
+            await Response.Body.WriteAsync(file.ContentBlob, 0, (int)file.ContentLength);     
 
         }
 
@@ -128,9 +127,9 @@ namespace Plato.Articles.Attachments.Controllers
                 throw new ArgumentNullException(nameof(opts.Guid));
             }
 
-            opts.PostPermission = Permissions.PostArticleAttachments;
-            opts.DeleteOwnPermission = Permissions.DeleteOwnArticleAttachments;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleAttachments;
+            opts.PostPermission = Permissions.PostArticleFiles;
+            opts.DeleteOwnPermission = Permissions.DeleteOwnArticleFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleFiles;
 
             opts.DeleteRoute = new RouteValueDictionary()
             {
@@ -164,9 +163,9 @@ namespace Plato.Articles.Attachments.Controllers
                 throw new ArgumentNullException(nameof(opts.Guid));
             }
 
-            opts.PostPermission = Permissions.PostArticleAttachments;
-            opts.DeleteOwnPermission = Permissions.DeleteOwnArticleAttachments;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleAttachments;
+            opts.PostPermission = Permissions.PostArticleFiles;
+            opts.DeleteOwnPermission = Permissions.DeleteOwnArticleFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleFiles;
 
             opts.DeleteRoute = new RouteValueDictionary()
             {
@@ -186,7 +185,7 @@ namespace Plato.Articles.Attachments.Controllers
         {
 
             // Get all entities associated with the attachment
-            var relationships = await _entityAttachmentStore
+            var relationships = await _entityFileStore
                 .QueryAsync()
                 .Select<EntityFileQueryParams>(q =>
                 {

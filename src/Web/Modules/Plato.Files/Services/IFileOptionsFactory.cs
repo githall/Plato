@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 namespace Plato.Files.Services
 {
 
-    public interface IAttachmentOptionsFactory
+    public interface IFileOptionsFactory
     {
         Task<FileOptions> GetOptionsAsync(IUser user);
     }

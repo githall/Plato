@@ -13,7 +13,7 @@ using PlatoCore.Scripting.Abstractions;
 namespace Plato.Files.ActionFilters
 {
 
-    public class AttachmentClientOptionsFilter : IModularActionFilter
+    public class FileClientOptionsFilter : IModularActionFilter
     {
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -61,7 +61,7 @@ namespace Plato.Files.ActionFilters
         {
 
             // Get options factory
-            var factory = context.RequestServices.GetRequiredService<IAttachmentOptionsFactory>();
+            var factory = context.RequestServices.GetRequiredService<IFileOptionsFactory>();
             if (factory == null)
             {
                 return null;
@@ -70,7 +70,7 @@ namespace Plato.Files.ActionFilters
             // Get authenticated user
             var user = context.Features[typeof(User)] as User;
 
-            // Get attachment options
+            // Get file options
             var options = await factory.GetOptionsAsync(user);
 
             // We need options

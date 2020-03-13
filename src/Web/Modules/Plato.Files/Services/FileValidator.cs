@@ -13,64 +13,64 @@ using Microsoft.AspNetCore.Mvc.Localization;
 namespace Plato.Files.Services
 {
 
-    public class AttachmentValidator : IAttachmentValidator
+    public class FileValidator : IFileValidator
     {
 
-        private readonly IFileInfoStore<Models.FileInfo> _attachmentInfoStore;
-        private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
+        private readonly IFileInfoStore<Models.FileInfo> _fileInfoStore;
+        private readonly IFileOptionsFactory _fileOptionsFactory;
         private readonly IContextFacade _contextFacade;
 
         public IHtmlLocalizer T { get; }
 
-        public AttachmentValidator(
+        public FileValidator(
             IHtmlLocalizer htmlLocalizer,
-            IFileInfoStore<Models.FileInfo> attachmentInfoStore,
-            IAttachmentOptionsFactory attachmentOptionsFactory,
+            IFileInfoStore<Models.FileInfo> fileInfoStore,
+            IFileOptionsFactory fileOptionsFactory,
             IContextFacade contextFacade)
         {
 
-            _attachmentOptionsFactory = attachmentOptionsFactory;
-            _attachmentInfoStore = attachmentInfoStore;
+            _fileOptionsFactory = fileOptionsFactory;
+            _fileInfoStore = fileInfoStore;
             _contextFacade = contextFacade;
 
             T = htmlLocalizer;
 
         }
 
-        public async Task<ICommandResult<Models.File>> ValidateAsync(Models.File attachment)
+        public async Task<ICommandResult<Models.File>> ValidateAsync(Models.File file)
         {
 
-            // We need an attachment to validate
-            if (attachment == null)
+            // We need a file to validate
+            if (file == null)
             {
-                throw new ArgumentNullException(nameof(attachment));
+                throw new ArgumentNullException(nameof(file));
             }
 
             // Our result
             var result = new CommandResult<Models.File>();
 
-            // Our attachment must have a name
-            if (string.IsNullOrEmpty(attachment.Name))
+            // Our file must have a name
+            if (string.IsNullOrEmpty(file.Name))
             {
-                return result.Failed("The attachment must have a name");
+                return result.Failed("The file must have a name");
             }
 
             // Get authenticated user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
-            // We need to be authenticated to post attachments
+            // We need to be authenticated to post files
             if (user == null)
             {
-                return result.Failed("You must be authenticated to post attachments");
+                return result.Failed("You must be authenticated to post files");
             }
 
-            // Get users attachment options (max file size, total available space & allowed extensions)
-            var options = await _attachmentOptionsFactory.GetOptionsAsync(user);
+            // Get users file options (max file size, total available space & allowed extensions)
+            var options = await _fileOptionsFactory.GetOptionsAsync(user);
 
             // We need options to validate
             if (options == null)
             {
-                return result.Failed("Could not obtain attachment settings for your account..");
+                return result.Failed("Could not obtain file settings for your account..");
             }
 
             // Compile errors
@@ -79,7 +79,7 @@ namespace Plato.Files.Services
             // Validate file size 
 
             // Is the file larger than our max file size?
-            if (attachment.ContentLength > options.MaxFileSize)
+            if (file.ContentLength > options.MaxFileSize)
             {
                 var error = T["The file is {0} which exceeds your configured maximum allowed file size of {1}."];
                 errors.Add(string.Format(
@@ -91,11 +91,11 @@ namespace Plato.Files.Services
             // Validate file extension
 
             var validExtension = false;   
-            if (!string.IsNullOrEmpty(attachment.Extension))
+            if (!string.IsNullOrEmpty(file.Extension))
             {
                 foreach (var allowedExtension in options.AllowedExtensions)
                 {
-                    if (attachment.Extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase))
+                    if (file.Extension.Equals($".{allowedExtension}", StringComparison.OrdinalIgnoreCase))
                     {
                         validExtension = true;
                     }
@@ -124,11 +124,11 @@ namespace Plato.Files.Services
 
             var validSpace = false;
             long currentLength = 0;
-            var info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0);
+            var info = await _fileInfoStore.GetByUserIdAsync(user?.Id ?? 0);
             if (info != null)
             {
                 // Ensure the upload would not exceed available space    
-                if ((info.Length + attachment.ContentLength) <= options.AvailableSpace)
+                if ((info.Length + file.ContentLength) <= options.AvailableSpace)
                 {
                     validSpace = true;
                 }
@@ -143,12 +143,12 @@ namespace Plato.Files.Services
                 errors.Add(string.Format(
                             error.Value,
                             remaining.ToFriendlyFileSize(),
-                            attachment.ContentLength.ToFriendlyFileSize()));
+                            file.ContentLength.ToFriendlyFileSize()));
             }
 
             return errors.Count > 0
                 ? result.Failed(errors)
-                : result.Success(attachment);
+                : result.Success(file);
 
         }
 

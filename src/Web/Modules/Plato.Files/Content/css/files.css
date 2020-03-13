@@ -5,7 +5,3 @@
     border-radius: 3px;
     background: rgba(150, 150, 150, 0.05);
 }
-
-.attachments-card .card-body .float-right {
-    display: none;
-}

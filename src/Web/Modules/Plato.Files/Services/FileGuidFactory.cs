@@ -6,12 +6,12 @@ using PlatoCore.Abstractions.Extensions;
 namespace Plato.Files.Services
 {
 
-    public class AttachmentGuidFactory : IAttachmentGuidFactory
+    public class FileGuidFactory : IFileGuidFactory
     {
 
         private readonly IKeyGenerator _keyGenerator;
 
-        public AttachmentGuidFactory(IKeyGenerator keyGenerator)
+        public FileGuidFactory(IKeyGenerator keyGenerator)
         {
             _keyGenerator = keyGenerator;
         }

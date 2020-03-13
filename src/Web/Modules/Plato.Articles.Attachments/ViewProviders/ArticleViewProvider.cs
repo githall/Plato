@@ -26,7 +26,7 @@ namespace Plato.Articles.Attachments.ViewProviders
 
         private readonly IEntityFileStore<EntityFile> _entityFileStore;
         private readonly IFileStore<File> _fileStore; 
-        private readonly IAttachmentGuidFactory _guidBuilder;
+        private readonly IFileGuidFactory _guidBuilder;
         private readonly IEntityStore<Article> _entityStore;
         private readonly IContextFacade _contextFacade;        
         private readonly IFeatureFacade _featureFacade;
@@ -36,7 +36,7 @@ namespace Plato.Articles.Attachments.ViewProviders
             IEntityFileStore<EntityFile> entityFileStore,
             IFileStore<File> fileStore,           
             IHttpContextAccessor httpContextAccessor,
-            IAttachmentGuidFactory guidBuilder,
+            IFileGuidFactory guidBuilder,
             IEntityStore<Article> entityStore,            
             IFeatureFacade featureFacade,
             IContextFacade contextFacade)
@@ -106,9 +106,9 @@ namespace Plato.Articles.Attachments.ViewProviders
                     model.Guid = contentGuid;
                     model.GuidHtmlName = GuidHtmlName;
 
-                    model.PostPermission = Permissions.PostArticleAttachments;
-                    model.DeleteOwnPermission = Permissions.DeleteOwnArticleAttachments;
-                    model.DeleteAnyPermission = Permissions.DeleteAnyArticleAttachments;
+                    model.PostPermission = Permissions.PostArticleFiles;
+                    model.DeleteOwnPermission = Permissions.DeleteOwnArticleFiles;
+                    model.DeleteAnyPermission = Permissions.DeleteAnyArticleFiles;
 
                     model.PostRoute = new RouteValueDictionary()
                     {

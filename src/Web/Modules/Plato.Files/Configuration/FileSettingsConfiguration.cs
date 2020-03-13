@@ -5,19 +5,19 @@ using Plato.Files.Stores;
 namespace Plato.Files.Configuration
 {
 
-    public class AttachmentSettingsConfiguration : IConfigureOptions<FileSettings>
+    public class FileSettingsConfiguration : IConfigureOptions<FileSettings>
     {
 
-        private readonly IFileSettingsStore<FileSettings> _attachmentSettingsStore;
+        private readonly IFileSettingsStore<FileSettings> _fileSettingsStore;
 
-        public AttachmentSettingsConfiguration(IFileSettingsStore<FileSettings> attachmentSettingsStore)
+        public FileSettingsConfiguration(IFileSettingsStore<FileSettings> fileSettingsStore)
         {
-            _attachmentSettingsStore = attachmentSettingsStore;             
+            _fileSettingsStore = fileSettingsStore;             
         }
 
         public void Configure(FileSettings options)
         {
-            var settings = _attachmentSettingsStore
+            var settings = _fileSettingsStore
                 .GetAsync()
                 .GetAwaiter()
                 .GetResult();

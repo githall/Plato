@@ -22,14 +22,14 @@ namespace Plato.Entities.Files.ViewComponents
 
         private readonly IEntityFileStore<EntityFile> _entityAttachmentStore;
         private readonly IFileInfoStore<FileInfo> _attachmentInfoStore;
-        private readonly IAttachmentOptionsFactory _attachmentOptionsFactory;
+        private readonly IFileOptionsFactory _attachmentOptionsFactory;
         private readonly IFileStore<File> _attachmentStore;
         private readonly IHttpContextAccessor _httpContextAccessor;  
 
         public EditEntityFilesViewComponent(
             IEntityFileStore<EntityFile> entityAttachmentStore,     
             IFileInfoStore<FileInfo> attachmentInfoStore,
-            IAttachmentOptionsFactory attachmentOptionsFactory,
+            IFileOptionsFactory attachmentOptionsFactory,
             IFileStore<File> attachmentStore,
             IHttpContextAccessor httpContextAccessor)
         {

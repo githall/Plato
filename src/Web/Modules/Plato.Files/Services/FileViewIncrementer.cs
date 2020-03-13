@@ -12,17 +12,17 @@ using PlatoCore.Models.Shell;
 namespace Plato.Files.Services
 {
 
-    public class AttachmentViewIncrementer : IAttachmentViewIncrementer<File>
+    public class FileViewIncrementer : IFileViewIncrementer<File>
     {
 
-        public const string CookieName = "plato_attachment_views";
+        public const string CookieName = "plato_file_views";
         private HttpContext _context;
 
         private readonly IFileStore<File> _attachmentStore;
         private readonly IShellSettings _shellSettings;        
         private readonly IDbHelper _dbHelper;
 
-        public AttachmentViewIncrementer(
+        public FileViewIncrementer(
             IFileStore<File> attachmentStore,
             IShellSettings shellSettings,
             IDbHelper dbHelper)
@@ -32,7 +32,7 @@ namespace Plato.Files.Services
             _dbHelper = dbHelper;
         }
 
-        public IAttachmentViewIncrementer<File> Contextulize(HttpContext context)
+        public IFileViewIncrementer<File> Contextulize(HttpContext context)
         {
             _context = context;
             return this;
@@ -98,19 +98,19 @@ namespace Plato.Files.Services
 
         }
 
-        async Task UpdateTotalViewsAsync(File attachment)
+        async Task UpdateTotalViewsAsync(File file)
         {
             // Sql query
-            const string sql = "UPDATE {prefix}_Attachments SET TotalViews = {views} WHERE Id = {id};";
+            const string sql = "UPDATE {prefix}_Files SET TotalViews = {views} WHERE Id = {id};";
 
             // Execute and return results
             await _dbHelper.ExecuteScalarAsync<int>(sql, new Dictionary<string, string>()
             {
-                ["{id}"] = attachment.Id.ToString(),
-                ["{views}"] = (attachment.TotalViews += 1).ToString()
+                ["{id}"] = file.Id.ToString(),
+                ["{views}"] = (file.TotalViews += 1).ToString()
             });
 
-            _attachmentStore.CancelTokens(attachment);
+            _attachmentStore.CancelTokens(file);
         }
 
     }

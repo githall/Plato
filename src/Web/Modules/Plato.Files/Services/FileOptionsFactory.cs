@@ -7,12 +7,12 @@ using PlatoCore.Models.Users;
 namespace Plato.Files.Services
 {
 
-    public class AttachmentOptionsFactory : IAttachmentOptionsFactory
+    public class FileOptionsFactory : IFileOptionsFactory
     {
 
         private readonly FileSettings _settings;
 
-        public AttachmentOptionsFactory(IOptions<FileSettings> settings)
+        public FileOptionsFactory(IOptions<FileSettings> settings)
         {
             _settings = settings.Value;
         }

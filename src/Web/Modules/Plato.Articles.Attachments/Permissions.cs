@@ -7,26 +7,26 @@ namespace Plato.Articles.Attachments
     public class Permissions : IPermissionsProvider<Permission>
     {
 
-        public static readonly Permission DownloadArticleAttachments =
-            new Permission("DownloadArticleAttachments", "Download article attachments");
+        public static readonly Permission DownloadArticleFiles =
+            new Permission("DownloadArticleFiles", "Download article files");
 
-        public static readonly Permission PostArticleAttachments =
-            new Permission("PostArticleAttachments", "Post article attachments");
+        public static readonly Permission PostArticleFiles =
+            new Permission("PostArticleFiles", "Post article files");
 
-        public static readonly Permission DeleteOwnArticleAttachments =
-            new Permission("DeleteOwnArticleAttachments", "Delete own article attachments");
+        public static readonly Permission DeleteOwnArticleFiles =
+            new Permission("DeleteOwnArticleFiles", "Delete own article files");
 
-        public static readonly Permission DeleteAnyArticleAttachments =
-            new Permission("DeleteAnyArticleAttachments", "Delete any article attachments");
+        public static readonly Permission DeleteAnyArticleFiles =
+            new Permission("DeleteAnyArticleFiles", "Delete any article files");
 
         public IEnumerable<Permission> GetPermissions()
         {
             return new[]
             {
-                DownloadArticleAttachments,
-                PostArticleAttachments,
-                DeleteOwnArticleAttachments,
-                DeleteAnyArticleAttachments          
+                DownloadArticleFiles,
+                PostArticleFiles,
+                DeleteOwnArticleFiles,
+                DeleteAnyArticleFiles          
             };
         }
 
@@ -39,7 +39,7 @@ namespace Plato.Articles.Attachments
                     RoleName = DefaultRoles.Anonymous,
                     Permissions = new[]
                     {
-                        DownloadArticleAttachments
+                        DownloadArticleFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -47,9 +47,9 @@ namespace Plato.Articles.Attachments
                     RoleName = DefaultRoles.Member,
                     Permissions = new[]
                     {
-                        DownloadArticleAttachments,
-                        PostArticleAttachments,
-                        DeleteOwnArticleAttachments
+                        DownloadArticleFiles,
+                        PostArticleFiles,
+                        DeleteOwnArticleFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -57,10 +57,10 @@ namespace Plato.Articles.Attachments
                     RoleName = DefaultRoles.Staff,
                     Permissions = new[]
                     {
-                        DownloadArticleAttachments,
-                        PostArticleAttachments,
-                        DeleteOwnArticleAttachments,
-                        DeleteAnyArticleAttachments
+                        DownloadArticleFiles,
+                        PostArticleFiles,
+                        DeleteOwnArticleFiles,
+                        DeleteAnyArticleFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -68,10 +68,10 @@ namespace Plato.Articles.Attachments
                     RoleName = DefaultRoles.Administrator,
                     Permissions = new[]
                     {
-                        DownloadArticleAttachments,
-                        PostArticleAttachments,
-                        DeleteOwnArticleAttachments,
-                        DeleteAnyArticleAttachments
+                        DownloadArticleFiles,
+                        PostArticleFiles,
+                        DeleteOwnArticleFiles,
+                        DeleteAnyArticleFiles
                     }
                 }
             };
