@@ -129,7 +129,7 @@ namespace Plato.Files.ViewProviders
             }
 
             // Build model
-            var viewModel = new EditAttachmentSettingsViewModel()
+            var viewModel = new EditFileSettingsViewModel()
             {
                 RoleId = role.Id,
                 Role = role,
@@ -143,9 +143,9 @@ namespace Plato.Files.ViewProviders
 
             // Build view
             return Views(
-                View<EditAttachmentSettingsViewModel>("Admin.EditSettings.Header", model => viewModel).Zone("header").Order(1),
-                View<EditAttachmentSettingsViewModel>("Admin.EditSettings.Tools", model => viewModel).Zone("tools").Order(1),
-                View<EditAttachmentSettingsViewModel>("Admin.EditSettings.Content", model => viewModel).Zone("content").Order(1)
+                View<EditFileSettingsViewModel>("Admin.EditSettings.Header", model => viewModel).Zone("header").Order(1),
+                View<EditFileSettingsViewModel>("Admin.EditSettings.Tools", model => viewModel).Zone("tools").Order(1),
+                View<EditFileSettingsViewModel>("Admin.EditSettings.Content", model => viewModel).Zone("content").Order(1)
             );
 
         }
@@ -153,7 +153,7 @@ namespace Plato.Files.ViewProviders
         public override async Task<IViewProviderResult> BuildUpdateAsync(FileSetting settings, IViewProviderContext context)
         {
 
-            var model = new EditAttachmentSettingsViewModel();
+            var model = new EditFileSettingsViewModel();
 
             // Validate model
             if (!await context.Updater.TryUpdateModelAsync(model))

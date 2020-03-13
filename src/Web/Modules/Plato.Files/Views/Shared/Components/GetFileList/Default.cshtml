@@ -4,7 +4,7 @@
 {
     var offset = Model.Pager.Offset;
     var rowOffset = Model.Pager.RowOffset;
-    @foreach (var attachment in Model.Results.Data)
+    @foreach (var file in Model.Results.Data)
      {
          var css = rowOffset == offset
              ? "p-3 infinite-scroll-item infinite-scroll-item-active"
@@ -15,7 +15,7 @@
                  {
                      model = new FileListItemViewModel()
                      {
-                         Attachment = attachment,
+                         File = file,
                          Options = Model.Options
                      }
                  }))

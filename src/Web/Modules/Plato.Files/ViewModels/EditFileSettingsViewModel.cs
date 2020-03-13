@@ -5,7 +5,7 @@ using PlatoCore.Models.Roles;
 
 namespace Plato.Files.ViewModels
 {
-    public class EditAttachmentSettingsViewModel
+    public class EditFileSettingsViewModel
     {
 
         public string IconPrefix { get; } = "fiv-sqo fiv-size-md fiv-icon-";

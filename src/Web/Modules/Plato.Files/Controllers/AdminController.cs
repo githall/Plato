@@ -72,7 +72,7 @@ namespace Plato.Files.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageAttachments))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageFiles))
             {
                 return Unauthorized();
             }
@@ -139,7 +139,7 @@ namespace Plato.Files.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageAttachmentSettings))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageFileSettings))
             {
                 return Unauthorized();
             }
@@ -219,7 +219,7 @@ namespace Plato.Files.Controllers
             }
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageAttachmentSettings))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageFileSettings))
             {
                 return Unauthorized();
             }
@@ -247,11 +247,11 @@ namespace Plato.Files.Controllers
         }
 
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(EditSettings))]
-        public async Task<IActionResult> EditSettingsPost(EditAttachmentSettingsViewModel viewModel)
+        public async Task<IActionResult> EditSettingsPost(EditFileSettingsViewModel viewModel)
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageAttachmentSettings))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageFileSettings))
             {
                 return Unauthorized();
             }
