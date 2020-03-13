@@ -6,6 +6,42 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Views\Admin\Create.cshtml" />
+    <None Remove="Views\Admin\Edit.cshtml" />
+    <None Remove="Views\Shared\Admin.Edit.Actions.cshtml" />
+    <None Remove="Views\Shared\Admin.Edit.Content.cshtml" />
+    <None Remove="Views\Shared\Admin.Edit.Footer.cshtml" />
+    <None Remove="Views\Shared\Admin.Edit.Header.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Content Include="Views\Admin\Create.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Admin\Edit.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Shared\Admin.Edit.Actions.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Shared\Admin.Edit.Content.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Shared\Admin.Edit.Footer.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+    <Content Include="Views\Shared\Admin.Edit.Header.cshtml">
+      <ExcludeFromSingleFile>true</ExcludeFromSingleFile>
+      <CopyToPublishDirectory>PreserveNewest</CopyToPublishDirectory>
+    </Content>
+  </ItemGroup>
+
+  <ItemGroup>
     <ProjectReference Include="..\..\..\Core\PlatoCore.csproj" />
     <ProjectReference Include="..\Plato.Roles\Plato.Roles.csproj" />
     <ProjectReference Include="..\Plato.WebApi\Plato.WebApi.csproj" />

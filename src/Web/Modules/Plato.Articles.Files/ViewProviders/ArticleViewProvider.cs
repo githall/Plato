@@ -98,7 +98,7 @@ namespace Plato.Articles.Files.ViewProviders
             }
 
             return Views(
-                View<EntityAttachmentOptions>("Files.Edit.Sidebar", model =>
+                View<EntityFileOptions>("Files.Edit.Sidebar", model =>
                 {
                    
                     model.EntityId = entityId;

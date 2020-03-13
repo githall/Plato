@@ -53,7 +53,7 @@ namespace Plato.Articles.Files
 
             // Download
             routes.MapAreaRoute(
-                name: "ArticlesAttachmentDownload",
+                name: "ArticlesFileDownload",
                 areaName: "Plato.Articles.Files",
                 template: "articles/files/d/{id:int}/{alias?}",
                 defaults: new { controller = "Home", action = "Download" }
@@ -61,7 +61,7 @@ namespace Plato.Articles.Files
 
             // Edit
             routes.MapAreaRoute(
-                name: "EditArticleAttachments",
+                name: "EditArticleFiles",
                 areaName: "Plato.Articles.Files",
                 template: "articles/files/edit/{opts.guid}/{opts.entityId:int?}",
                 defaults: new { controller = "Home", action = "Edit" }
@@ -69,7 +69,7 @@ namespace Plato.Articles.Files
 
             // Preview
             routes.MapAreaRoute(
-                name: "PreviewArticleAttachments",
+                name: "PreviewArticleFiless",
                 areaName: "Plato.Articles.Files",
                 template: "articles/files/preview/{opts.guid}/{opts.entityId:int?}",
                 defaults: new { controller = "Home", action = "Preview" }
@@ -77,7 +77,7 @@ namespace Plato.Articles.Files
 
             // API
             routes.MapAreaRoute(
-                name: "ArticleAttachmentWebApi",
+                name: "ArticleFilesWebApi",
                 areaName: "Plato.Articles.Files",
                 template: "api/articles/files/{action}/{id:int?}",
                 defaults: new { controller = "Api", action = "Index" }

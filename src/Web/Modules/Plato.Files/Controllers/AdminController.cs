@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Files.Models;
+using Plato.Files.Stores;
 using Plato.Files.ViewModels;
 using Plato.Roles.ViewModels;
 using PlatoCore.Features.Abstractions;
@@ -23,14 +24,15 @@ namespace Plato.Files.Controllers
 
     public class AdminController : Controller, IUpdateModel
     {
-
-        private readonly IViewProviderManager<AdminFilesIndex> _indexViewProvider;
+        
         private readonly IViewProviderManager<FileSetting> _settingsViewProvider;
+        private readonly IViewProviderManager<File> _adminViewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPlatoRoleStore _platoRoleStore;
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
+        private readonly IFileStore<File> _fileStore;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -41,22 +43,24 @@ namespace Plato.Files.Controllers
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
             IViewProviderManager<FileSetting> settingsViewProvider,
-            IViewProviderManager<AdminFilesIndex> indexViewProvider,
+            IViewProviderManager<File> indexViewProvider,
             IAuthorizationService authorizationService,
             IBreadCrumbManager breadCrumbManager,
             IPlatoRoleStore platoRoleStore,
             IContextFacade contextFacade,
             IFeatureFacade featureFacade,
+            IFileStore<File> fileStore,
             IAlerter alerter)
         {
 
             _authorizationService = authorizationService;
             _settingsViewProvider = settingsViewProvider;
-            _indexViewProvider = indexViewProvider;
+            _adminViewProvider = indexViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _platoRoleStore = platoRoleStore;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
+            _fileStore = fileStore;
             _alerter = alerter;
 
             T = htmlLocalizer;
@@ -72,7 +76,7 @@ namespace Plato.Files.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageFiles))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.BrowseFiles))
             {
                 return Unauthorized();
             }
@@ -127,7 +131,73 @@ namespace Plato.Files.Controllers
             });
 
             // Return view
-            return View((LayoutViewModel)await _indexViewProvider.ProvideIndexAsync(new AdminFilesIndex(), this));
+            return View((LayoutViewModel)await _adminViewProvider.ProvideIndexAsync(new File(), this));
+
+        }
+
+
+        // ------------
+        // Create
+        // ------------
+
+        public async Task<IActionResult> Create()
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.AddFiles))
+            {
+                return Unauthorized();
+            }
+
+            _breadCrumbManager.Configure(builder =>
+            {
+                builder.Add(S["Home"], home => home
+                        .Action("Index", "Admin", "Plato.Admin")
+                        .LocalNav())
+                    .Add(S["Files"], files => files
+                        .Action("Index", "Admin", "Plato.Files")
+                        .LocalNav())
+                    .Add(S["Add File"]);
+            });
+
+            // Return view
+            return View((LayoutViewModel)await _adminViewProvider.ProvideEditAsync(new File(), this));
+
+        }
+
+        // ------------
+        // Edit
+        // ------------
+
+        public async Task<IActionResult> Edit(int id)
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditFiles))
+            {
+                return Unauthorized();
+            }
+
+            _breadCrumbManager.Configure(builder =>
+            {
+                builder.Add(S["Home"], home => home
+                        .Action("Index", "Admin", "Plato.Admin")
+                        .LocalNav())
+                    .Add(S["Files"], files => files
+                        .Action("Index", "Admin", "Plato.Files")
+                        .LocalNav())              
+                    .Add(S["Edit File"]);
+            });
+
+            var file = await _fileStore.GetByIdAsync(id);
+
+            if (file == null)
+            {
+                return NotFound();
+            }
+
+            // Return view
+            return View((LayoutViewModel)await _adminViewProvider.ProvideEditAsync(file, this));
 
         }
 

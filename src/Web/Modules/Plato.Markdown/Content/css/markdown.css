@@ -71,10 +71,10 @@
 
 .md-editor > .md-footer { padding: 14px; text-align:right; }
 
-.md-editor > .md-dropzone > .dz-message {
-    border-width: 0;
-    border-top-width: 4px;
-    border-style: dashed;
+.md-editor .dropzone {
+    border-left-width: 0;
+    border-right-width: 0;
+    border-bottom-width: 0;
 }
 
 /* Style textarea and preview */

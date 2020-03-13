@@ -3,7 +3,7 @@ using PlatoCore.Security.Abstractions;
 
 namespace Plato.Entities.Files.ViewModels
 {
-    public class EntityAttachmentOptions
+    public class EntityFileOptions
     {
 
         public string GuidHtmlName { get; set; }

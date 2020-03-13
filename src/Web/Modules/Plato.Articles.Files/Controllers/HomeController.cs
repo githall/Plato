@@ -113,12 +113,12 @@ namespace Plato.Articles.Files.Controllers
         // -----------
 
         [HttpGet, AllowAnonymous]
-        public Task<IActionResult> Edit(EntityAttachmentOptions opts)
+        public Task<IActionResult> Edit(EntityFileOptions opts)
         {
 
             if (opts == null)
             {
-                opts = new EntityAttachmentOptions();
+                opts = new EntityFileOptions();
             }
 
             // We always need a guid
@@ -149,12 +149,12 @@ namespace Plato.Articles.Files.Controllers
         // -----------
 
         [HttpGet, AllowAnonymous]
-        public Task<IActionResult> Preview(EntityAttachmentOptions opts)
+        public Task<IActionResult> Preview(EntityFileOptions opts)
         {
 
             if (opts == null)
             {
-                opts = new EntityAttachmentOptions();
+                opts = new EntityFileOptions();
             }
 
             // We always need a guid

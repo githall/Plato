@@ -30,10 +30,148 @@ $(function (win, doc, $) {
     // Plato Global Object
     var app = win.$.Plato;
 
-    /* attachments */
-    var attachments = function (options) {
+    /* files */
+    var editFile = function (options) {
 
-        var dataKey = "attachments",
+        var dataKey = "editFile",
+            dataIdKey = dataKey + "Id";
+
+        var defaults = {
+            fileId: 0
+        };
+
+        var methods = {
+            init: function ($caller, methodName, func) {
+
+                if (func) {
+                    return func(this);
+                }
+                if (methodName) {
+                    if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
+                        this[methodName].apply(this, [$caller]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return null;
+                }
+
+                this.bind($caller);
+
+            },
+            bind: function ($caller) {
+
+                // The id of the file we are editing.
+                // If 0 we are adding a new file
+                var fileId = this._getFileId($caller),
+                    dropzoneMsg = fileId === 0
+                        ? '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Add a file by dropping here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
+                        : '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Update this file by dropping a new file here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>';
+
+                // Configure dropzone
+                $caller.find('[data-provide="file-dropzone"]')
+                    .fileDropzone({
+                        allowedExtensions: app.Files.allowedExtensions,
+                        maxFileSize: app.Files.maxFileSize,
+                        dropZoneOptions: {
+                            url: '/api/files/post',
+                            fallbackClick: false,
+                            autoProcessQueue: true,
+                            autoDiscover: false,
+                            disablePreview: true,
+                            uploadMultiple: false,
+                            maxFiles: 10,
+                            maxFilesize: 256, // 256mb
+                            dictDefaultMessage: dropzoneMsg
+                        },
+                        onDrop: function () {
+                           
+                        },
+                        onAddedFile: function (file) {
+                        },
+                        onComplete: function (file, errors) {                                                                          
+                        },
+                        onSuccess: function (response) {
+
+                            if (response.statusCode === 200) {
+                                if (response && response.result) {                                                             
+                                    for (var i = 0; i < response.result.length; i++) {
+                                        var result = response.result[i];
+                                        if (result.id > 0) {
+                                            win.location = "/Plato.Files/Admin/Edit/" + result.id;
+                                        }
+                                    }
+                                }
+                            }
+
+
+                        },
+                        onError: function (file, error, xhr) {
+                        }
+                    });
+
+            },
+            _getFileId: function ($caller) {
+                return $caller.data("fileId") || $caller.data(dataKey).fileId;
+            }
+        };
+
+        return {
+            init: function () {
+
+                var options = {},
+                    methodName = null,
+                    func = null;
+                for (var i = 0; i < arguments.length; ++i) {
+                    var a = arguments[i];
+                    switch (a.constructor) {
+                        case Object:
+                            $.extend(options, a);
+                            break;
+                        case String:
+                            methodName = a;
+                            break;
+                        case Function:
+                            func = a;
+                            break;
+                    }
+                }
+
+                if (this.length > 0) {
+                    // $(selector).files()
+                    return this.each(function () {
+                        if (!$(this).data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $(this).data(dataIdKey, id);
+                            $(this).data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
+                        }
+                        methods.init($(this), methodName);
+                    });
+                } else {
+                    // $().files()
+                    var $caller = $('[data-provide="http-content"]');
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
+                            $caller.data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
+                        }
+                        return methods.init($caller, methodName, func);
+                    }
+                }
+
+            }
+        };
+
+    }();
+
+    /* fileDropdown */
+    var fileDropdown = function (options) {
+
+        var dataKey = "fileDropdown",
             dataIdKey = dataKey + "Id";
 
         var defaults = {};
@@ -62,7 +200,7 @@ $(function (win, doc, $) {
                 $caller.find('[data-provide="http-content"]').httpContent({
                     onLoad: function ($el) {
                         // Bind delete
-                        var $btns = $el.find('[data-provide="delete-attachment"]');
+                        var $btns = $el.find('[data-provide="delete-file"]');
                         if ($btns.length > 0) {
                             $btns.click(function (e) {
 
@@ -81,9 +219,9 @@ $(function (win, doc, $) {
                                     throw new Error("A delete url is required!");
                                 }
 
-                                var id = parseInt($(this).data("attachmentId"));
+                                var id = parseInt($(this).data("fileId"));
                                 if (isNaN(id)) {
-                                    throw new Error("An attachment id to delete is required!");
+                                    throw new Error("A data-file-id attribute is required!");
                                 }
 
                                 app.http({
@@ -100,8 +238,8 @@ $(function (win, doc, $) {
                 });
 
                 // Configure dropzone
-                $caller.find('[data-provide="attachment-dropzone"]')
-                    .attachmentDropzone({
+                $caller.find('[data-provide="file-dropzone"]')
+                    .fileDropzone({
                         allowedExtensions: app.Files.allowedExtensions,
                         maxFileSize: app.Files.maxFileSize,
                         onDrop: function () {
@@ -111,7 +249,7 @@ $(function (win, doc, $) {
                         },
                         onAddedFile: function (file) {
                         },
-                        onComplete: function (file) {
+                        onComplete: function (file, errors) {
                             $caller.find('[data-provide="http-content"]').httpContent("reload");
                         },
                         onSuccess: function (response) {
@@ -145,7 +283,7 @@ $(function (win, doc, $) {
                 }
 
                 if (this.length > 0) {
-                    // $(selector).attachments()
+                    // $(selector).fileDropdown()
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -157,8 +295,8 @@ $(function (win, doc, $) {
                         methods.init($(this), methodName);
                     });
                 } else {
-                    // $().attachments()
-                    var $caller = $('[data-provide="http-content"]');
+                    // $().fileDropdown()
+                    var $caller = $('[data-provide="file-dropdown"]');
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -176,10 +314,10 @@ $(function (win, doc, $) {
 
     }();
 
-    // attachmentDropzone
-    var attachmentDropzone = function () {
+    // fileDropzone
+    var fileDropzone = function () {
 
-        var dataKey = "attachmentDropzone",
+        var dataKey = "fileDropzone",
             dataIdKey = dataKey + "Id";
 
         var defaults = {
@@ -195,14 +333,16 @@ $(function (win, doc, $) {
                 "jpeg",
                 "pdf"
             ],
+            maxFiles: 10,
             maxFileSize: 2097152, // 2mb     
             dropZoneOptions: {
-                url: '/api/attachments/streaming/upload',
+                url: '/api/files/post',
                 fallbackClick: false,
                 autoProcessQueue: true,
                 autoDiscover: false,
                 disablePreview: true,
                 uploadMultiple: false,
+                maxFiles: 10,
                 maxFilesize: 256, // 256mb
                 dictDefaultMessage:
                     '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
@@ -219,7 +359,7 @@ $(function (win, doc, $) {
             onError: function (file, error, xhr) {
                 // triggers when an upload error occurrs
             },
-            onComplete: function (file) {
+            onComplete: function (file, errors) {
                 // triggers when a file is successfully uploaded
             }
         };
@@ -242,7 +382,9 @@ $(function (win, doc, $) {
             bind: function ($caller) {
 
                 var opts = $caller.data(dataKey).dropZoneOptions,
-                    url = this._getUrl($caller);
+                    url = this._getUrl($caller),
+                    maxFiles = this._getMaxFiles($caller);
+
                 if (url === null) {
                     throw new Error("An upload url is required for the dropzone!");
                 }
@@ -251,6 +393,7 @@ $(function (win, doc, $) {
 
                     // Set dropzone max file size
                     opts.maxFilesize = Math.ceil($caller.data(dataKey).maxFileSize / (1024 * 1024));
+                    opts.maxFiles = maxFiles;
 
                     // Get Plato options
                     if (app.defaults) {
@@ -497,7 +640,7 @@ $(function (win, doc, $) {
                             }
 
                             if ($caller.data(dataKey).onComplete) {
-                                $caller.data(dataKey).onComplete(file);
+                                $caller.data(dataKey).onComplete(file, errors);
                             }
                         });
 
@@ -566,6 +709,16 @@ $(function (win, doc, $) {
             _getUrl: function ($caller) {
                 return $caller.data("dropzoneUrl") ||
                     $caller.data(dataKey).dropZoneOptions.url;
+            },
+            _getMaxFiles: function ($caller) {
+                var attr = $caller.data("dropzoneMaxFiles");
+                if (attr !== null && typeof attr !== "undefined") {
+                    var value = parseInt(attr);
+                    if (!isNaN(value)) {
+                        return value;
+                    }
+                }
+                return $caller.data(dataKey).maxFiles;
             }
         };
 
@@ -590,7 +743,7 @@ $(function (win, doc, $) {
                 }
           
                 if (this.length > 0) {
-                    // $(selector).attachmentDropzone
+                    // $(selector).fileDropzone
                     return this.each(function () {
                         if (!$(this).data(dataIdKey)) {
                             var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
@@ -602,7 +755,7 @@ $(function (win, doc, $) {
                         methods.init($(this), methodName);
                     });
                 } else {
-                    // $().attachmentDropzone()
+                    // $().fileDropzone()
                     var $caller = $('[data-provide="attachment-dropzone"]');
                     if ($caller.length > 0) {
                         if (!$caller.data(dataIdKey)) {
@@ -622,16 +775,20 @@ $(function (win, doc, $) {
     }();
 
     $.fn.extend({
-        attachments: attachments.init,    
-        attachmentDropzone: attachmentDropzone.init
+        editFile: editFile.init,
+        fileDropdown: fileDropdown.init,
+        fileDropzone: fileDropzone.init
     });
 
     // --------
 
     app.ready(function () {       
-        
-        $('[data-provide="attachments"]')
-            .attachments();
+
+        $('[data-provide="edit-file"]')
+            .editFile();
+
+        $('[data-provide="file-dropdown"]')
+            .fileDropdown();
         
     });
 

@@ -7,17 +7,33 @@ namespace Plato.Files
     public class Permissions : IPermissionsProvider<Permission>
     {
 
-        public static readonly Permission ManageFiles =
-            new Permission("ManageFiles", "Browse files");
+        public static readonly Permission BrowseFiles =
+            new Permission("BrowseFiles", "Browse files");
+
+        public static readonly Permission AddFiles =
+            new Permission("AddFiles", "Add files");
+
+        public static readonly Permission EditFiles =
+            new Permission("EditFiles", "Edit files");
+
+        public static readonly Permission ShareFiles =
+            new Permission("ShareFiles", "Share files");
+
+        public static readonly Permission DeleteFiles =
+            new Permission("DeleteFiles", "Delete files");
 
         public static readonly Permission ManageFileSettings =
-            new Permission("ManageFileSettings", "Edit attachment settings");
+            new Permission("ManageFileSettings", "Manage file settings");
 
         public IEnumerable<Permission> GetPermissions()
         {
             return new[]
             {
-                ManageFiles,
+                BrowseFiles,
+                AddFiles,
+                EditFiles,
+                ShareFiles,
+                DeleteFiles,
                 ManageFileSettings
             };
         }
@@ -31,7 +47,11 @@ namespace Plato.Files
                     RoleName = DefaultRoles.Administrator,
                     Permissions = new[]
                     {
-                        ManageFiles,
+                        BrowseFiles,
+                        AddFiles,
+                        EditFiles,
+                        ShareFiles,
+                        DeleteFiles,
                         ManageFileSettings
                     }
                 }

@@ -73,8 +73,8 @@ namespace Plato.Files
             // View providers
             services.AddScoped<IViewProviderManager<FileSetting>, ViewProviderManager<FileSetting>>();
             services.AddScoped<IViewProvider<FileSetting>, FileSettingsViewProvider>();
-            services.AddScoped<IViewProviderManager<AdminFilesIndex>, ViewProviderManager<AdminFilesIndex>>();
-            services.AddScoped<IViewProvider<AdminFilesIndex>, FileIndexViewProvider>();
+            services.AddScoped<IViewProviderManager<File>, ViewProviderManager<File>>();
+            services.AddScoped<IViewProvider<File>, AdminViewProvider>();
 
             // Permissionss
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
@@ -121,6 +121,14 @@ namespace Plato.Files
                 areaName: "Plato.Files",
                 template: "admin/files/settings/{id:int}",
                 defaults: new { controller = "Admin", action = "EditSettings" }
+            );
+
+            // API
+            routes.MapAreaRoute(
+                name: "FilesWebApi",
+                areaName: "Plato.Files",
+                template: "api/files/{action}",
+                defaults: new { controller = "Api", action = "Index" }
             );
 
         }

@@ -25,7 +25,7 @@ namespace Plato.Files.Navigation
                     .IconCss("fal fa-paperclip")
                     .Add(T["Browse"], int.MinValue + 30, installed => installed
                         .Action("Index", "Admin", "Plato.Files")
-                        .Permission(Permissions.ManageFiles)
+                        .Permission(Permissions.BrowseFiles)
                         .LocalNav()
                     ).Add(T["Settings"], int.MinValue + 30, installed => installed
                        .Action("Settings", "Admin", "Plato.Files")

@@ -1,4 +1,4 @@
-﻿@model EntityAttachmentOptions
+﻿@model EntityFileOptions
 @{
     var postUrl = GetRouteUrl(Model.PostRoute);
     var editUrl = GetRouteUrl(Model.EditRoute);
@@ -7,7 +7,7 @@
 
 <input type="hidden" name="@Model.GuidHtmlName" value="@Model.Guid" />
 
-<div class="card card-body-flush" data-provide="attachments">
+<div class="card card-body-flush" data-provide="file-dropdown">
     <div class="card-header p-0 dropdown list-group-flush">
         <a href="#" class="list-group-item list-group-item-action dropdown-toggle dropdown-toggle-no-caret font-weight-bold" id="attachmentDropdown" role="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" data-display="static">
             <i class="fal fa-cog float-right"></i>
@@ -22,7 +22,7 @@
                             <div class="dropzone"
                                  data-dropzone-url="@postUrl"
                                  data-progress-preview="#progress"
-                                 data-provide="attachment-dropzone"></div>
+                                 data-provide="file-dropzone"></div>
                         </authorize-success>
                         <authorize-fail>
                             <div class="alert alert-danger text-center m-0">

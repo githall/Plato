@@ -1,4 +1,4 @@
-﻿@model EditAttachmentSettingsViewModel
+﻿@model EditFileSettingsViewModel
 @{
     var platoOpts = GetOptions<PlatoOptions>();
     var allowedExtensions = Model.AllowedExtensions.Any()
@@ -20,7 +20,7 @@
                 <strong>@T["Maximum File Size"]</strong>
                 <span asp-validation-for="AvailableSpace" class="text-danger"></span>
                 <br />
-                <span class="text-muted">@T["The maximum size allowed for individual attachments for each user within this role"]</span>
+                <span class="text-muted">@T["The maximum size allowed for individual files for each user within this role"]</span>
             </label>
             <select class="form-control"
                     asp-for="MaxFileSize"
@@ -32,13 +32,12 @@
                 <strong>@T["Total Space"]</strong>
                 <span asp-validation-for="AvailableSpace" class="text-danger"></span>
                 <br />
-                <span class="text-muted">@T["The maximum total space available for all attachments for each user within this role"]</span>
+                <span class="text-muted">@T["The maximum total space available for all files for each user within this role"]</span>
             </label>
             <select class="form-control"
                     asp-for="AvailableSpace"
                     asp-items="@Model.AvailableSpaces"></select>
         </div>
-
 
         <div class="form-group" asp-validation-class-for="AllowedExtensions">
             <label asp-for="AllowedExtensions">

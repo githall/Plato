@@ -40,7 +40,7 @@ namespace Plato.Entities.Files.ViewComponents
             _attachmentStore = attachmentStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityAttachmentOptions model)
+        public async Task<IViewComponentResult> InvokeAsync(EntityFileOptions model)
         {
 
             // We always need a model
@@ -72,7 +72,7 @@ namespace Plato.Entities.Files.ViewComponents
 
         }
 
-        private async Task<IPagedResults<File>> GetResultsAsync(EntityAttachmentOptions model)
+        private async Task<IPagedResults<File>> GetResultsAsync(EntityFileOptions model)
         {
 
             IEnumerable<EntityFile> relaationships = null;

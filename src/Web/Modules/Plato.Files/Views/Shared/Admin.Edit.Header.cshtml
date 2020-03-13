@@ -1,0 +1,17 @@
+﻿@model EditFileViewModel
+
+@if (Model.IsNewFile)
+{
+    <h4>@T["Add File"]</h4>
+    <span class="text-muted">@T["Add a new file."]</span>
+}
+else
+{
+    <h4>@T["Edit File"]</h4>
+    <span class="text-muted">@T["Edit an existing file."]</span>
+}
+
+<hr />
+
+
+
