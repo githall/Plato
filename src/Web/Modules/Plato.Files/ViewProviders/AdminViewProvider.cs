@@ -63,10 +63,9 @@ namespace Plato.Files.ViewProviders
             else
             {
 
-
                 viewModel = new EditFileViewModel()
                 {
-                    File = file,                   
+                    File = file,
                     PostRoute = new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Files",

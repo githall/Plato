@@ -10,6 +10,12 @@ namespace Plato.Files
         public static readonly Permission BrowseFiles =
             new Permission("BrowseFiles", "Browse files");
 
+        public static readonly Permission DownloadFiles =
+            new Permission("DownloadFiles", "Download files");
+
+        public static readonly Permission OpenFiles =
+            new Permission("OpenFiles", "Open files");
+
         public static readonly Permission AddFiles =
             new Permission("AddFiles", "Add files");
 
@@ -30,6 +36,8 @@ namespace Plato.Files
             return new[]
             {
                 BrowseFiles,
+                DownloadFiles,
+                OpenFiles,
                 AddFiles,
                 EditFiles,
                 ShareFiles,
@@ -48,6 +56,8 @@ namespace Plato.Files
                     Permissions = new[]
                     {
                         BrowseFiles,
+                        DownloadFiles,
+                        OpenFiles,
                         AddFiles,
                         EditFiles,
                         ShareFiles,

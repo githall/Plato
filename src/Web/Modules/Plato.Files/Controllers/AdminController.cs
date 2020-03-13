@@ -1,10 +1,14 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
+using Microsoft.Net.Http.Headers;
 using Plato.Files.Models;
+using Plato.Files.Services;
 using Plato.Files.Stores;
 using Plato.Files.ViewModels;
 using Plato.Roles.ViewModels;
@@ -26,8 +30,9 @@ namespace Plato.Files.Controllers
     {
         
         private readonly IViewProviderManager<FileSetting> _settingsViewProvider;
+        private readonly IFileViewIncrementer<File> _fileViewIncrementer;
         private readonly IViewProviderManager<File> _adminViewProvider;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IAuthorizationService _authorizationService; 
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPlatoRoleStore _platoRoleStore;
         private readonly IContextFacade _contextFacade;
@@ -41,8 +46,9 @@ namespace Plato.Files.Controllers
 
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
-            IStringLocalizer<AdminController> stringLocalizer,
+            IStringLocalizer<AdminController> stringLocalizer,            
             IViewProviderManager<FileSetting> settingsViewProvider,
+            IFileViewIncrementer<File> fileViewIncrementer,
             IViewProviderManager<File> indexViewProvider,
             IAuthorizationService authorizationService,
             IBreadCrumbManager breadCrumbManager,
@@ -55,8 +61,9 @@ namespace Plato.Files.Controllers
 
             _authorizationService = authorizationService;
             _settingsViewProvider = settingsViewProvider;
+            _fileViewIncrementer = fileViewIncrementer;
             _adminViewProvider = indexViewProvider;
-            _breadCrumbManager = breadCrumbManager;
+            _breadCrumbManager = breadCrumbManager;            
             _platoRoleStore = platoRoleStore;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
@@ -135,10 +142,9 @@ namespace Plato.Files.Controllers
 
         }
 
-
-        // ------------
+        // ---------------
         // Create
-        // ------------
+        // ---------------
 
         public async Task<IActionResult> Create()
         {
@@ -199,6 +205,142 @@ namespace Plato.Files.Controllers
             // Return view
             return View((LayoutViewModel)await _adminViewProvider.ProvideEditAsync(file, this));
 
+        }
+
+        // ---------------
+        // Open
+        // ---------------
+
+        public async Task Open(int id)
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.OpenFiles))
+            {
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.Unauthorized);
+                return;
+            }
+
+            // Get file
+            var file = await _fileStore.GetByIdAsync(id);
+
+            // Ensure attachment exists
+            if (file == null)
+            {
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
+            }
+
+            if (file.ContentLength <= 0)
+            {
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
+            }
+
+            // Increment file view count
+            await _fileViewIncrementer
+                .Contextulize(HttpContext)
+                .IncrementAsync(file);
+
+            // Serve file
+            Response.Clear();
+            Response.ContentType = file.ContentType;
+            Response.Headers.Add(HeaderNames.ContentDisposition, "filename=\"" + file.Name + "\"");
+            Response.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)file.ContentLength));
+            await Response.Body.WriteAsync(file.ContentBlob, 0, (int)file.ContentLength);
+
+        }
+
+        // ---------------
+        // Download
+        // ---------------
+
+        public async Task Download(int id)
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DownloadFiles))
+            {
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.Unauthorized);
+                return;
+            }
+
+            // Get file
+            var file = await _fileStore.GetByIdAsync(id);
+
+            // Ensure attachment exists
+            if (file == null)
+            {
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
+            }
+
+            if (file.ContentLength <= 0)
+            {
+                Response.StatusCode = StatusCodes.Status302Found;
+                Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
+            }
+
+            // Increment file view count
+            await _fileViewIncrementer
+                .Contextulize(HttpContext)
+                .IncrementAsync(file);
+
+            // Serve file
+            Response.Clear();
+            Response.ContentType = file.ContentType;
+            Response.Headers.Add(HeaderNames.ContentDisposition, "attachment; filename=\"" + file.Name + "\"");
+            Response.Headers.Add(HeaderNames.ContentLength, Convert.ToString((long)file.ContentLength));
+            await Response.Body.WriteAsync(file.ContentBlob, 0, (int)file.ContentLength);
+
+        }
+
+        // ------------
+        // Delete
+        // ------------
+
+        [HttpPost, ValidateAntiForgeryToken]
+        public async Task<IActionResult> Delete(string id)
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DeleteFiles))
+            {
+                return Unauthorized();
+            }
+
+            var ok = int.TryParse(id, out int categoryId);
+            if (!ok)
+            {
+                return NotFound();
+            }
+
+            var currentFile = await _fileStore.GetByIdAsync(categoryId);
+
+            if (currentFile == null)
+            {
+                return NotFound();
+            }
+
+            var result = await _fileStore.DeleteAsync(currentFile);
+
+            if (result)
+            {
+                _alerter.Success(T["File Deleted Successfully"]);
+            }
+            else
+            {
+
+                _alerter.Danger(T["Could not delete the file"]);
+            }
+
+            return RedirectToAction(nameof(Index));
         }
 
         // ---------------

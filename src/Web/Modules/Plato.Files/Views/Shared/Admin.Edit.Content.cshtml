@@ -14,24 +14,20 @@
     var iconCss = !string.IsNullOrEmpty(Model.File.Extension) ? $"fiv-icon-{Model.File.Extension.Replace(".", "")}" : string.Empty;
 
     <div class="row">
-        <div class="col-lg-4">
+        <div class="col-lg-6">
 
             <card>
                 <card-title>
-
-                    @T["Download"]
-
+                    <h6 class="card-title">@T["Download"]</h6>
                 </card-title>
                 <card-body class="card-body text-center">
 
                     <span title="@Model.File.Extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo fiv-size-md mb-4 @iconCss"></span>
-
                     <h6 class="card-title">
                         <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="font-weight-bold">
                             @Model.File.Name
                         </a>
                     </h6>
-
                     <ul class="list-inline">
                         <li class="list-inline-item">
                             @Model.File.ContentLength.ToFriendlyFileSize()
@@ -40,47 +36,69 @@
                             @views
                         </li>
                     </ul>
-
                     <div>
-                        <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-primary">
-                            <i class="fal fa-download"></i> @T["Download"]
+                        <a asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-secondary">
+                            <i class="fal fa-arrow-to-bottom"></i> @T["Download"]
+                        </a>
+                        <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-secondary">
+                            <i class="fal fa-external-link"></i> @T["Open"]
                         </a>
                     </div>
+
                 </card-body>
             </card>
 
             <card>
                 <card-title>
+                    <h6 class="card-title">@T["Update"]</h6>
+                </card-title>
+                <card-body>
 
-                    @T["Details"]
+                    <div id="progress"></div>
+                    <div data-provide="edit-file" data-file-id="@fileId">
+                        <div class="dropzone"
+                             data-dropzone-max-files="1"
+                             data-dropzone-url="@postUrl"
+                             data-progress-preview="#progress"
+                             data-provide="file-dropzone"></div>
+                    </div>
 
+                </card-body>
+            </card>
+
+        </div>
+        <div class="col-lg-6">
+
+
+            <card>
+                <card-title>
+                    <h6 class="card-title">@T["Details"]</h6>
                 </card-title>
                 <card-body class="card-body">
 
-                    @if (Model.File.ModifiedBy != null)
-                    {
-                        <ul class="list-inline text-muted">
-                            @if (Model.File.CreatedBy != null)
-                            {
-                                <li class="list-inline-item">
-                                    @T["Created"]
-                                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@Model.File.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
-                                        @Model.File.CreatedBy.DisplayName
-                                    </a>
-                                </li>
-                            }
+
+                    <ul class="list-inline m-0">
+                        @if (Model.File.CreatedBy != null)
+                        {
                             <li class="list-inline-item">
-                                <date utc="Model.File.CreatedDate"></date>
+                                @T["Created by"]
+                                <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@Model.File.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+                                    @Model.File.CreatedBy.DisplayName
+                                </a>
                             </li>
-                        </ul>
-                    }
+                        }
+                        <li class="list-inline-item">
+                            <date utc="Model.File.CreatedDate"></date>
+                        </li>
+                    </ul>
+
                     @if (Model.File.ModifiedBy != null)
                     {
-                        <ul class="list-inline text-muted">
+                        <ul class="list-inline m-0">
                             @if (Model.File.ModifiedBy != null)
                             {
                                 <li class="list-inline-item">
-                                    @T["Updated"]
+                                    @T["Last updated by"]
                                     <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.ModifiedUserId" asp-route-opts.alias="@Model.File.ModifiedBy.Alias" data-provide="popper" data-popper-url="@Model.File.ModifiedBy.Urls.GetProfileUrl" data-popper-position="bottom">
                                         @Model.File.ModifiedBy.DisplayName
                                     </a>
@@ -97,12 +115,9 @@
                 </card-body>
             </card>
 
-        </div>
-        <div class="col-lg-8">
-
             <card>
                 <card-title>
-                    @T["Visibility"]
+                    <h6 class="card-title">@T["Share"]</h6>
                 </card-title>
                 <card-body>
 
@@ -111,24 +126,6 @@
                     </a>
 
                     <input type="text" class="form-control" value="@shareUrl" />
-
-                </card-body>
-            </card>
-
-            <card>
-                <card-title>
-                    @T["Update"]
-                </card-title>
-                <card-body>
-
-                    <div id="progress"></div>
-                    <div data-provide="edit-file" data-file-id="@fileId">
-                        <div class="dropzone"
-                             data-dropzone-max-files="1"
-                             data-dropzone-url="@postUrl"
-                             data-progress-preview="#progress"
-                             data-provide="file-dropzone"></div>
-                    </div>
 
                 </card-body>
             </card>

@@ -23,33 +23,22 @@
 
                 <authorize asp-permission="@Permissions.EditFiles.Name">
                     <authorize-success>
-                        <a asp-route-area="Plato.Files" asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="dropdown-item">
+                        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="dropdown-item">
                             @T["Edit"]
                         </a>
                         <div class="dropdown-divider"></div>
                     </authorize-success>
                 </authorize>
-
-                <a asp-route-area="Plato.Files" asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" class="dropdown-item">
+                <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="dropdown-item">
                     @T["Open"]
                 </a>
-
-                <a asp-route-area="Plato.Files" asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" class="dropdown-item">
+                <a asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="dropdown-item">
                     @T["Download"]
-                </a>
-
-                <authorize asp-permission="@Permissions.ShareFiles.Name">
-                    <authorize-success>
-                        <a asp-route-area="Plato.Articles.Categories" asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="dropdown-item">
-                            @T["Share"]
-                        </a>
-                    </authorize-success>
-                </authorize>
-
+                </a>      
                 <authorize asp-permission="@Permissions.DeleteFiles.Name">
                     <authorize-success>
                         <div class="dropdown-divider"></div>
-                        <button type="submit" asp-route-area="Plato.Articles.Categories" asp-route-controller="Admin" asp-route-action="Delete" asp-route-id="@Model.File.Id" data-provide="confirm" class="dropdown-item dropdown-item-danger cursor-pointer">
+                        <button type="submit" asp-route-controller="Admin" asp-route-action="Delete" asp-route-id="@Model.File.Id" data-provide="confirm" class="dropdown-item dropdown-item-danger cursor-pointer">
                             @T["Delete"]
                         </button>
                     </authorize-success>
@@ -60,7 +49,7 @@
     </div>
 
     <div>
-        <a asp-route-area="@Model.File.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="font-weight-bold">
+        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="font-weight-bold">
             @Model.File.Name
         </a>
     </div>
