@@ -1,9 +1,9 @@
-﻿@model EntityAttachmentsViewModel
+﻿@model EntityFilesViewModel
 @{
     var total = Model.Results?.Count() ?? 0; 
     var text = total == 1
-        ? "attachment"
-        : "attachments";
+        ? "file"
+        : "files";
 }
 @if (total > 0)
 {
@@ -22,7 +22,7 @@
                     {
                         <span class="fiv-sqo @icon align-middle mr-1"></span>
                     }
-                    <a asp-route-area="@attachment.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@attachment.AttachmentId" asp-route-alias="@attachment.Alias" target="_blank" class="align-middle">@attachment.Name</a>
+                    <a asp-route-area="@attachment.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@attachment.FileId" asp-route-alias="@attachment.Alias" target="_blank" class="align-middle">@attachment.Name</a>
                     <span class="text-muted">@details</span>
                 </div>
             }

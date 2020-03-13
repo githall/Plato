@@ -102,8 +102,8 @@ $(function (win, doc, $) {
                 // Configure dropzone
                 $caller.find('[data-provide="attachment-dropzone"]')
                     .attachmentDropzone({
-                        allowedExtensions: app.attachments.allowedExtensions,
-                        maxFileSize: app.attachments.maxFileSize,
+                        allowedExtensions: app.Files.allowedExtensions,
+                        maxFileSize: app.Files.maxFileSize,
                         onDrop: function () {
                             $caller.find(".dropdown").each(function () {
                                 $(this).find(".dropdown-menu").removeClass('show');

@@ -240,7 +240,7 @@ namespace Plato.Files.Controllers
 
             // Add view model to context
             this.HttpContext.Items[typeof(Role)] = role;
-
+                
             // Return view
             return View((LayoutViewModel)await _settingsViewProvider.ProvideEditAsync(new FileSetting(), this));
 

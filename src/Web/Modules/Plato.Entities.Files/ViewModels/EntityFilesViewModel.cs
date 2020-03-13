@@ -4,7 +4,7 @@ using System.Collections.Generic;
 namespace Plato.Entities.Files.ViewModels
 {
 
-    public class EntityAttachmentsViewModel
+    public class EntityFilesViewModel
     {
 
         public IEnumerable<EntityFile> Results { get; set; }

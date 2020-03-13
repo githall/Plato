@@ -28,7 +28,7 @@ namespace Plato.Entities.Files.ViewComponents
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            return View(new EntityAttachmentsViewModel()
+            return View(new EntityFilesViewModel()
             {
                 Results = await _entityAttachmentStore.GetByEntityIdAsync(entity.Id)
             });
