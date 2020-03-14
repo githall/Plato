@@ -87,6 +87,7 @@ namespace Plato.Files.ViewProviders
             return Task.FromResult(Views(
                 View<EditFileViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
                 View<EditFileViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1),
+                View<EditFileViewModel>("Admin.Edit.Sidebar", model => viewModel).Zone("sidebar").Order(1),
                 View<EditFileViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions").Order(1),
                 View<EditFileViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer").Order(1)
             ));

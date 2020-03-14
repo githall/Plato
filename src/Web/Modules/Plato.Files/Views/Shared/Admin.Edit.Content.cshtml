@@ -1,7 +1,6 @@
 ﻿@model EditFileViewModel
 @{
-    var postUrl = GetRouteUrl(Model.PostRoute);
-    var shareUrl = GetRouteUrl(Model.ShareRoute);
+    var postUrl = GetRouteUrl(Model.PostRoute);  
     var postPermission = Model.IsNewFile
       ? Permissions.AddFiles
       : Permissions.EditFiles;
@@ -12,126 +11,57 @@
     var viewText = Model.File.TotalViews == 1 ? T["view"] : T["views"];
     var views = $"{Model.File.TotalViews.ToPrettyInt()} {viewText.Value}";
     var iconCss = !string.IsNullOrEmpty(Model.File.Extension) ? $"fiv-icon-{Model.File.Extension.Replace(".", "")}" : string.Empty;
+   
+    <card>
+        <card-title>
+            <h6 class="card-title">@T["Download"]</h6>
+        </card-title>
+        <card-body class="card-body text-center">
 
-    <div class="row">
-        <div class="col-lg-6">
+            <span title="@Model.File.Extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo fiv-size-md mb-4 @iconCss"></span>
+            <h6 class="card-title">
+                <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="font-weight-bold">
+                    @Model.File.Name
+                </a>
+            </h6>
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    @Model.File.ContentLength.ToFriendlyFileSize()
+                </li>
+                <li class="list-inline-item">
+                    @views
+                </li>
+            </ul>
+            <div>
+                <a asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-secondary">
+                    <i class="fal fa-arrow-to-bottom"></i> @T["Download"]
+                </a>
+                <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-secondary">
+                    <i class="fal fa-external-link"></i> @T["Open"]
+                </a>
+            </div>
 
-            <card>
-                <card-title>
-                    <h6 class="card-title">@T["Download"]</h6>
-                </card-title>
-                <card-body class="card-body text-center">
+        </card-body>
+    </card>
 
-                    <span title="@Model.File.Extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo fiv-size-md mb-4 @iconCss"></span>
-                    <h6 class="card-title">
-                        <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="font-weight-bold">
-                            @Model.File.Name
-                        </a>
-                    </h6>
-                    <ul class="list-inline">
-                        <li class="list-inline-item">
-                            @Model.File.ContentLength.ToFriendlyFileSize()
-                        </li>
-                        <li class="list-inline-item">
-                            @views
-                        </li>
-                    </ul>
-                    <div>
-                        <a asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-secondary">
-                            <i class="fal fa-arrow-to-bottom"></i> @T["Download"]
-                        </a>
-                        <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-secondary">
-                            <i class="fal fa-external-link"></i> @T["Open"]
-                        </a>
-                    </div>
+    <card>
+        <card-title>
+            <h6 class="card-title">@T["Update"]</h6>
+        </card-title>
+        <card-body>
 
-                </card-body>
-            </card>
+            <div id="progress"></div>
+            <div data-provide="edit-file" data-file-id="@fileId">
+                <div class="dropzone"
+                        data-dropzone-max-files="1"
+                        data-dropzone-url="@postUrl"
+                        data-progress-preview="#progress"
+                        data-provide="file-dropzone"></div>
+            </div>
 
-            <card>
-                <card-title>
-                    <h6 class="card-title">@T["Update"]</h6>
-                </card-title>
-                <card-body>
+        </card-body>
+    </card>
 
-                    <div id="progress"></div>
-                    <div data-provide="edit-file" data-file-id="@fileId">
-                        <div class="dropzone"
-                             data-dropzone-max-files="1"
-                             data-dropzone-url="@postUrl"
-                             data-progress-preview="#progress"
-                             data-provide="file-dropzone"></div>
-                    </div>
-
-                </card-body>
-            </card>
-
-        </div>
-        <div class="col-lg-6">
-
-
-            <card>
-                <card-title>
-                    <h6 class="card-title">@T["Details"]</h6>
-                </card-title>
-                <card-body class="card-body">
-
-
-                    <ul class="list-inline m-0">
-                        @if (Model.File.CreatedBy != null)
-                        {
-                            <li class="list-inline-item">
-                                @T["Created by"]
-                                <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@Model.File.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
-                                    @Model.File.CreatedBy.DisplayName
-                                </a>
-                            </li>
-                        }
-                        <li class="list-inline-item">
-                            <date utc="Model.File.CreatedDate"></date>
-                        </li>
-                    </ul>
-
-                    @if (Model.File.ModifiedBy != null)
-                    {
-                        <ul class="list-inline m-0">
-                            @if (Model.File.ModifiedBy != null)
-                            {
-                                <li class="list-inline-item">
-                                    @T["Last updated by"]
-                                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.ModifiedUserId" asp-route-opts.alias="@Model.File.ModifiedBy.Alias" data-provide="popper" data-popper-url="@Model.File.ModifiedBy.Urls.GetProfileUrl" data-popper-position="bottom">
-                                        @Model.File.ModifiedBy.DisplayName
-                                    </a>
-                                </li>
-                            }
-                            @if (Model.File.ModifiedDate != null)
-                            {
-                                <li class="list-inline-item">
-                                    <date utc="Model.File.ModifiedDate"></date>
-                                </li>
-                            }
-                        </ul>
-                    }
-                </card-body>
-            </card>
-
-            <card>
-                <card-title>
-                    <h6 class="card-title">@T["Share"]</h6>
-                </card-title>
-                <card-body>
-
-                    <a href="#" class="btn btn-secondary">
-                        @T["Share this file"]
-                    </a>
-
-                    <input type="text" class="form-control" value="@shareUrl" />
-
-                </card-body>
-            </card>
-
-        </div>
-    </div>
   
 
 }

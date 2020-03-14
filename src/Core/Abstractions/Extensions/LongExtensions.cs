@@ -5,33 +5,34 @@ namespace PlatoCore.Abstractions.Extensions
     public static class LongExtensions
     {
 
-        // Todo: Look at using StringLocializer for this
-        private const string Bytes = "bytes";
-        private const string Kb = "kb";
-        private const string Mb = "mb";
-        private const string Gb = "gb";
+        private static readonly string[] SizeSuffixes =
+                   { "bytes", "KB", "MB", "GB", "TB", "PB", "EB", "ZB", "YB" };
 
-        public static string ToFriendlyFileSize(this long input)
+        public static string ToFriendlyFileSize(this long value, int decimalPlaces = 1)
         {
 
-            if (input < 1024)
+            if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
+            if (value < 0) { return "-" + ((long)-value).ToFriendlyFileSize(); }
+            if (value == 0) { return string.Format("{0:n" + decimalPlaces + "} bytes", 0); }
+
+            // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
+            var mag = (int)Math.Log(value, 1024);
+
+            // 1L << (mag * 10) == 2 ^ (10 * mag) 
+            // [i.e. the number of bytes in the unit corresponding to mag]
+            var adjustedSize = (decimal)value / (1L << (mag * 10));
+
+            // make adjustment when the value is large enough that
+            // it would round up to 1000 or more
+            if (Math.Round(adjustedSize, decimalPlaces) >= 1000)
             {
-                return $"{input:N0}{Bytes}";
-            }
-            else if (input < 1024 * 1024)
-            {
-                return $"{input / 1024:N0}{Kb}";
-            }
-            else if (input < 1048576 * 1000)
-            {
-                return $"{input / (1024 * 1024):N0}{Mb}";
+                mag += 1;
+                adjustedSize /= 1024;
             }
 
-            // 1 gb = 1073741824 bytes
-            var gb = Math.Floor((decimal)input / 1073741824);
-            return gb >= 1
-                  ? $"{gb:N0}{Gb}"
-                  : $"{input / (1024 * 1024):N0}{Mb}";
+            return string.Format("{0:n" + decimalPlaces + "} {1}",
+                adjustedSize,
+                SizeSuffixes[mag]);
 
         }
 

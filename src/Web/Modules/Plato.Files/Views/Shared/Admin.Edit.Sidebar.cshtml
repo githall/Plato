@@ -1,0 +1,47 @@
+﻿@model EditFileViewModel
+@{
+    var shareUrl = GetRouteUrl(Model.ShareRoute);
+}
+
+<card class="card card-body-flush">
+    <card-title>
+        <h6 class="card-title">@T["Details"]</h6>
+    </card-title>
+    <card-body class="card-body">
+
+        <ul class="list-group list-group-flush">
+            @if (Model.File.CreatedBy != null)
+            {
+                <li class="list-group-item">
+                    @T["Created by"]
+                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@Model.File.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+                        @Model.File.CreatedBy.DisplayName
+                    </a>
+                </li>
+            }
+            <li class="list-group-item">
+                <date utc="Model.File.CreatedDate"></date>
+            </li>
+            @if (Model.File.ModifiedBy != null)
+            {
+
+                @if (Model.File.ModifiedBy != null)
+                {
+                    <li class="list-group-item">
+                        @T["Last updated by"]
+                        <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.ModifiedUserId" asp-route-opts.alias="@Model.File.ModifiedBy.Alias" data-provide="popper" data-popper-url="@Model.File.ModifiedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+                            @Model.File.ModifiedBy.DisplayName
+                        </a>
+                    </li>
+                }
+                @if (Model.File.ModifiedDate != null)
+                {
+                    <li class="list-group-item">
+                        <date utc="Model.File.ModifiedDate"></date>
+                    </li>
+                }
+
+            }
+        </ul>
+    </card-body>
+</card>

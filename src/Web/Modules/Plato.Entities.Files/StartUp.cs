@@ -13,6 +13,10 @@ using PlatoCore.Features.Abstractions;
 using Plato.Entities.Files.Repositories;
 using Plato.Entities.Files.Stores;
 using Plato.Entities.Files.Models;
+using Plato.Files.Models;
+using PlatoCore.Layout.ViewProviders.Abstractions;
+using Plato.Entities.Files.ViewProviders;
+using PlatoCore.Layout.ViewProviders;
 
 namespace Plato.Entities.Files
 {
@@ -40,6 +44,10 @@ namespace Plato.Entities.Files
             services.AddScoped<IFederatedQueryProvider<Entity>, EntityQueries<Entity>>();
             services.AddScoped<IFederatedQueryManager<FeatureEntityCount>, FederatedQueryManager<FeatureEntityCount>>();
             services.AddScoped<IFederatedQueryProvider<FeatureEntityCount>, FeatureEntityCountQueries<FeatureEntityCount>>();
+
+            // View providers
+            services.AddScoped<IViewProviderManager<File>, ViewProviderManager<File>>();
+            services.AddScoped<IViewProvider<File>, AdminViewProvider>();
 
         }
 
