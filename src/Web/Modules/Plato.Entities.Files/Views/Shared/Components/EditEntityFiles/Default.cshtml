@@ -10,17 +10,17 @@
 @if (Model.Results?.Data != null)
 {
     <div class="list-group list-group-flush list-group-hover select-dropdown-preview">
-        @foreach (var attachment in Model.Results.Data)
+        @foreach (var file in Model.Results.Data)
         {
-            var deletePermission = attachment.CreatedUserId == CurrentUser.Id
+            var deletePermission = file.CreatedUserId == CurrentUser.Id
                 ? Model.DeleteOwnPermission
                 : Model.DeleteAnyPermission;
-            var extension = System.IO.Path.GetExtension(attachment.Name);
+            var extension = System.IO.Path.GetExtension(file.Name);
             var iconCss = !string.IsNullOrEmpty(extension) ? $"fiv-icon-{extension.Replace(".", "")}" : string.Empty;
             <div class="list-group-item list-group-item-action">                
                 <authorize asp-permission="@deletePermission.Name">
                     <authorize-success>
-                        <a href="@deleteUrl" data-provide="delete-attachment" data-attachment-id="@attachment.Id" class="btn float-right text-muted" title="@T["Delete"]">
+                        <a href="@deleteUrl" data-provide="delete-file" data-file-id="@file.Id" class="btn float-right text-muted" title="@T["Delete"]">
                             <i class="fal fa-times"></i>
                         </a>
                     </authorize-success>
@@ -29,8 +29,8 @@
                 {
                     <span class="fiv-sqo @iconCss align-middle mr-1"></span>
                 }
-                <a asp-route-area="@attachment.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@attachment.Id" asp-route-alias="@attachment.Alias" target="_blank" class="align-middle">
-                    @attachment.Name
+                <a asp-route-area="@file.ModuleId" asp-route-controller="Home" asp-route-action="Download" asp-route-id="@file.Id" asp-route-alias="@file.Alias" target="_blank" class="align-middle">
+                    @file.Name
                 </a>
             </div>
         }

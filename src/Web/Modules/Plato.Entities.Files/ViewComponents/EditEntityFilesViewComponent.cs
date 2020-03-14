@@ -21,10 +21,10 @@ namespace Plato.Entities.Files.ViewComponents
     {
 
         private readonly IEntityFileStore<EntityFile> _entityAttachmentStore;
-        private readonly IFileInfoStore<FileInfo> _attachmentInfoStore;
-        private readonly IFileOptionsFactory _attachmentOptionsFactory;
-        private readonly IFileStore<File> _attachmentStore;
-        private readonly IHttpContextAccessor _httpContextAccessor;  
+        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IFileInfoStore<FileInfo> _fileInfoStore;
+        private readonly IFileOptionsFactory _fileOptionsFactory;
+        private readonly IFileStore<File> _fileStore;
 
         public EditEntityFilesViewComponent(
             IEntityFileStore<EntityFile> entityAttachmentStore,     
@@ -33,11 +33,11 @@ namespace Plato.Entities.Files.ViewComponents
             IFileStore<File> attachmentStore,
             IHttpContextAccessor httpContextAccessor)
         {
-            _attachmentOptionsFactory = attachmentOptionsFactory;
+            _fileOptionsFactory = attachmentOptionsFactory;
             _entityAttachmentStore = entityAttachmentStore;            
-            _attachmentInfoStore = attachmentInfoStore;            
+            _fileInfoStore = attachmentInfoStore;            
             _httpContextAccessor = httpContextAccessor;
-            _attachmentStore = attachmentStore;
+            _fileStore = attachmentStore;
         }
 
         public async Task<IViewComponentResult> InvokeAsync(EntityFileOptions model)
@@ -61,8 +61,8 @@ namespace Plato.Entities.Files.ViewComponents
             // Build model & return view
             return View(new FilesViewModel()
             {
-                Info = await _attachmentInfoStore.GetByUserIdAsync(user?.Id ?? 0),
-                Options = await _attachmentOptionsFactory.GetOptionsAsync(user),
+                Info = await _fileInfoStore.GetByUserIdAsync(user?.Id ?? 0),
+                Options = await _fileOptionsFactory.GetOptionsAsync(user),
                 Results = await GetResultsAsync(model),
                 DeleteRoute = model.DeleteRoute,
                 PostPermission = model.PostPermission,
@@ -82,7 +82,7 @@ namespace Plato.Entities.Files.ViewComponents
                     .GetByEntityIdAsync(model.EntityId);
             }
 
-            return await _attachmentStore
+            return await _fileStore
                 .QueryAsync()
                 .Take(int.MaxValue, false)
                 .Select<FileQueryParams>(q =>

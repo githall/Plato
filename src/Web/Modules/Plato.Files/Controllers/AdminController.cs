@@ -38,6 +38,7 @@ namespace Plato.Files.Controllers
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
         private readonly IFileStore<File> _fileStore;
+        private readonly IFileManager _fileManager;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -54,8 +55,9 @@ namespace Plato.Files.Controllers
             IBreadCrumbManager breadCrumbManager,
             IPlatoRoleStore platoRoleStore,
             IContextFacade contextFacade,
-            IFeatureFacade featureFacade,
+            IFeatureFacade featureFacade,            
             IFileStore<File> fileStore,
+            IFileManager fileManager,
             IAlerter alerter)
         {
 
@@ -67,7 +69,8 @@ namespace Plato.Files.Controllers
             _platoRoleStore = platoRoleStore;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
-            _fileStore = fileStore;
+            _fileManager = fileManager;
+            _fileStore = fileStore;            
             _alerter = alerter;
 
             T = htmlLocalizer;
@@ -163,7 +166,7 @@ namespace Plato.Files.Controllers
                     .Add(S["Files"], files => files
                         .Action("Index", "Admin", "Plato.Files")
                         .LocalNav())
-                    .Add(S["Add File"]);
+                    .Add(S["Add Files"]);
             });
 
             // Return view
@@ -339,9 +342,9 @@ namespace Plato.Files.Controllers
                 return Unauthorized();
             }
 
-            var result = await _fileStore.DeleteAsync(file);
+            var result = await _fileManager.DeleteAsync(file);
 
-            if (result)
+            if (result.Succeeded)
             {
                 _alerter.Success(T["File Deleted Successfully"]);
             }

@@ -84,6 +84,7 @@ namespace Plato.Files
             services.AddScoped<IFileGuidFactory, FileGuidFactory>();
             services.AddScoped<IFileValidator, FileValidator>();
             services.AddScoped<IFileViewIncrementer<File>, FileViewIncrementer>();
+            services.AddScoped<IFileManager, FileManager>();
 
             // Action filters
             services.AddScoped<IModularActionFilter, FileClientOptionsFilter>();

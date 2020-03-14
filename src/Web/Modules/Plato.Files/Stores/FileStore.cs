@@ -8,7 +8,6 @@ using PlatoCore.Cache.Abstractions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
-using PlatoCore.Text.Abstractions;
 
 namespace Plato.Files.Stores
 {
@@ -16,30 +15,27 @@ namespace Plato.Files.Stores
     public class FileStore : IFileStore<Models.File>
     {
 
-        private const string ById = "ById";
+        private const string ById = "ById";        
         
-        private readonly IFileRepository<Models.File> _attachmentRepository;
         private readonly IFederatedQueryManager<Models.File> _federatedQueryManager;
         private readonly IQueryAdapterManager<Models.File> _queryAdapterManager;
-        private readonly ILogger<FileStore> _logger;
+        private readonly IFileRepository<Models.File> _attachmentRepository;        
         private readonly IDbQueryConfiguration _dbQuery;
         private readonly ICacheManager _cacheManager;
-        private readonly IAliasCreator _aliasCreator;
-       
+        private readonly ILogger<FileStore> _logger;
+
         public FileStore(            
-            IFederatedQueryManager<Models.File> federatedQueryManager,
-            IFileRepository<Models.File> attachmentRepository,
+            IFederatedQueryManager<Models.File> federatedQueryManager,            
             IQueryAdapterManager<Models.File> queryAdapterManager,
-            ILogger<FileStore> logger,
+            IFileRepository<Models.File> attachmentRepository,
             IDbQueryConfiguration dbQuery,
             ICacheManager cacheManager,
-            IAliasCreator aliasCreator)
+            ILogger<FileStore> logger)
         {
             _federatedQueryManager = federatedQueryManager;
             _attachmentRepository = attachmentRepository;
             _queryAdapterManager = queryAdapterManager;
-            _cacheManager = cacheManager;
-            _aliasCreator = aliasCreator;            
+            _cacheManager = cacheManager;              
             _dbQuery = dbQuery;
             _logger = logger;
         }
@@ -57,11 +53,6 @@ namespace Plato.Files.Stores
             if (model.Id > 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(model.Id));
-            }
-
-            if (string.IsNullOrEmpty(model.Alias))
-            {
-                model.Alias = _aliasCreator.Create(model.Name);
             }
 
             var result = await _attachmentRepository.InsertUpdateAsync(model);
@@ -85,11 +76,6 @@ namespace Plato.Files.Stores
             if (model.Id <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(model.Id));
-            }
-
-            if (string.IsNullOrEmpty(model.Alias))
-            {
-                model.Alias = _aliasCreator.Create(model.Name);
             }
 
             var result = await _attachmentRepository.InsertUpdateAsync(model);
@@ -162,14 +148,11 @@ namespace Plato.Files.Stores
 
         public IQuery<Models.File> QueryAsync()
         {
-
             return _dbQuery.ConfigureQuery(new FileQuery(this)
             {
                 FederatedQueryManager = _federatedQueryManager,
                 QueryAdapterManager = _queryAdapterManager
             });
-            var query = new FileQuery(this);
-            return _dbQuery.ConfigureQuery<Models.File>(query); ;
         }
 
         public async Task<IPagedResults<Models.File>> SelectAsync(IDbDataParameter[] dbParams)

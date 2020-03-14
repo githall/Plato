@@ -248,7 +248,7 @@ namespace Plato.Files.ViewProviders
             {
                 output.Add(new SelectListItem
                 {
-                    Text = size.ToFriendlyFileSize(),
+                    Text = size.ToFriendlyFileSize(0),
                     Value = size.ToString()
                 });
             }

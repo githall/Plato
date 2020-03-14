@@ -1,7 +1,12 @@
 ﻿@model EditFileViewModel
 @{
     var postUrl = GetRouteUrl(Model.PostRoute);
+    var returnUrl = GetRouteUrl(Model.ReturnRoute);
     var fileId = Convert.ToString(Model.File?.Id ?? 0);
+    var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
+    if (availableSpace < 0)
+        availableSpace = 0;
+    var maxFileSize = Model.Options.MaxFileSize;
 }
 @if (Model.File != null)
 {
@@ -60,11 +65,18 @@
         <authorize-success>
             <card>
                 <card-title>
-                    <h6 class="card-title">@T["Update"]</h6>
+
+                    <h6 class="card-title">@T["Update File"]</h6>
+                    <div class="text-muted">
+                        <span>@T["Available space"]</span>
+                        <span>@availableSpace.ToFriendlyFileSize()</span>
+                        <span>@T["Maximum file size"]</span>
+                        <span>@maxFileSize.ToFriendlyFileSize()</span>
+                    </div>
                 </card-title>
                 <card-body>
                     <div id="progress"></div>
-                    <div data-provide="edit-file" data-file-id="@fileId">
+                    <div data-provide="edit-file" data-file-id="@fileId" data-return-url="@returnUrl">
                         <div class="dropzone"
                              data-dropzone-max-files="1"
                              data-dropzone-url="@postUrl"
@@ -84,19 +96,22 @@ else
 
     <card>
         <card-title>
-            <h6 class="card-title">@T["Add File"]</h6>
+            <h6 class="card-title">@T["Add Files"]</h6>
+            <div class="text-muted">
+                <span>@T["Available space"]</span>
+                <span>@availableSpace.ToFriendlyFileSize()</span>
+                <span>@T["Maximum file size"]</span>
+                <span>@maxFileSize.ToFriendlyFileSize()</span>
+            </div>
         </card-title>
         <card-body>
-
             <div id="progress"></div>
-            <div data-provide="edit-file" data-file-id="@fileId">
-                <div class="dropzone"
-                     data-dropzone-max-files="1"
+            <div data-provide="edit-file" data-file-id="@fileId" data-return-url="@returnUrl">
+                <div class="dropzone"                   
                      data-dropzone-url="@postUrl"
                      data-progress-preview="#progress"
                      data-provide="file-dropzone"></div>
             </div>
-
         </card-body>
     </card>
 }

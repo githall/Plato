@@ -27,6 +27,10 @@ namespace Plato.Files.Navigation
                         .Action("Index", "Admin", "Plato.Files")
                         .Permission(Permissions.BrowseFiles)
                         .LocalNav()
+                    ).Add(T["Add"], int.MinValue + 30, installed => installed
+                        .Action("Create", "Admin", "Plato.Files")
+                        .Permission(Permissions.AddFiles)
+                        .LocalNav()
                     ).Add(T["Settings"], int.MinValue + 30, installed => installed
                        .Action("Settings", "Admin", "Plato.Files")
                        .Permission(Permissions.ManageFileSettings)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Extensions;
@@ -28,32 +27,31 @@ namespace Plato.Articles.Files.Controllers
         public const string GuidKey = "guid";        
 
         private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;
-        private readonly IFileStore<File> _fileStore;
         private readonly IAuthorizationService _authorizationService;
         private readonly IFileValidator _fileValidator;
         private readonly ILogger<ApiController> _logger;
         private readonly IFeatureFacade _featureFacade;
+        private readonly IFileStore<File> _fileStore;
+        private readonly IFileManager _fileManager;
 
         public IHtmlLocalizer T { get; }
 
-        // Get the default form options so that we can use them
-        // to set the default limits for request body data
-        private readonly FormOptions _defaultFormOptions = new FormOptions();
-
         public ApiController(     
-            IHttpMultiPartRequestHandler multiPartRequestHandler,
-            IFileStore<File> attachmentStore,
+            IHttpMultiPartRequestHandler multiPartRequestHandler,            
             IAuthorizationService authorizationService,
             IFileValidator attachmentValidator,
+            IFileStore<File> attachmentStore,
             ILogger<ApiController> logger,
             IHtmlLocalizer htmlLocalizer,
-            IFeatureFacade featureFacade)
+            IFeatureFacade featureFacade,
+            IFileManager fileManager)
         {            
             _multiPartRequestHandler = multiPartRequestHandler;
             _authorizationService = authorizationService;           
-            _fileValidator = attachmentValidator;
-            _fileStore = attachmentStore;
+            _fileValidator = attachmentValidator;            
             _featureFacade = featureFacade;
+            _fileStore = attachmentStore;
+            _fileManager = fileManager;
             _logger = logger;
 
             T = htmlLocalizer;
@@ -61,10 +59,10 @@ namespace Plato.Articles.Files.Controllers
         }
 
         // -----------
-        // Post
+        // Post File
         // -----------
 
-        // Request limits for attachments are enforced by Plato so set MVCs request limits 
+        // Request limits for files are enforced by Plato so set MVCs request limits 
         // for this action to some arbitrary high value, in this case 1 gigabyte
 
         [HttpPost, DisableFormValueModelBinding, ValidateClientAntiForgeryToken]
@@ -98,7 +96,7 @@ namespace Plato.Articles.Files.Controllers
             }
 
             // Validate temporary global unique identifier
-            var guid = GetGuid();
+            var guid = GetFileContentGuid();
             if (string.IsNullOrEmpty(guid))
             {
                 return BadRequest($"The \"{GuidKey}\" query string parameter is empty!");
@@ -118,11 +116,11 @@ namespace Plato.Articles.Files.Controllers
                 }
             }
 
-            // Build attachment
+            // Build file
             // -------------------
 
             var md5 = result.Response.ContentBytes?.ToMD5().ToHex() ?? string.Empty;
-            var attachment = new File
+            var newFile = new File
             {
                 FeatureId = feature.Id,
                 Name = result.Response.Name,
@@ -132,34 +130,45 @@ namespace Plato.Articles.Files.Controllers
                 ContentBlob = result.Response.ContentBytes,
                 ContentGuid = guid,
                 ContentCheckSum = md5,
-                CreatedUserId = user.Id
+                CreatedUserId = user.Id,
+                CreatedDate = DateTimeOffset.Now
             };
 
-            // Validate attachment
+            // Validate file
             // -------------------
 
             var output = new List<UploadResult>();
 
-            var validationResult = await _fileValidator.ValidateAsync(attachment);
+            var validationResult = await _fileValidator.ValidateAsync(newFile);
             if (validationResult.Succeeded)
             {
 
-                // Store attachment
-                attachment = await _fileStore.CreateAsync(attachment);
+                // Create file
+                var fileResult = await _fileManager.CreateAsync(newFile);
 
                 // Build friendly result
-                if (attachment != null)
+                if (fileResult.Succeeded)
                 {
                     output.Add(new UploadResult()
                     {
-                        Id = attachment.Id,
-                        Name = attachment.Name,
-                        ContentType = attachment.ContentType,
-                        ContentLength = attachment.ContentLength,
-                        FriendlySize = attachment.ContentLength.ToFriendlyFileSize()
+                        Id = fileResult.Response.Id,
+                        Name = fileResult.Response.Name,
+                        ContentType = fileResult.Response.ContentType,
+                        ContentLength = fileResult.Response.ContentLength,
+                        FriendlySize = fileResult.Response.ContentLength.ToFriendlyFileSize()
                     });
                 }
-
+                else
+                {
+                    foreach (var error in fileResult.Errors)
+                    {
+                        output.Add(new UploadResult()
+                        {
+                            Name = result.Response.Name,
+                            Error = error.Description
+                        });
+                    }
+                }
             }
             else
             {
@@ -178,7 +187,7 @@ namespace Plato.Articles.Files.Controllers
         }
 
         // -----------
-        // Delete
+        // Delete File
         // -----------
 
         [HttpPost, ValidateClientAntiForgeryToken]
@@ -221,16 +230,16 @@ namespace Plato.Articles.Files.Controllers
             }
 
             // Delete attachment
-            var success = await _fileStore.DeleteAsync(attachment);
+            var deleteResult = await _fileManager.DeleteAsync(attachment);
 
             // Return result
-            return base.Result(success);
+            return base.Result(deleteResult.Succeeded);
 
         }
 
         // -----------------
 
-        string GetGuid()
+        string GetFileContentGuid()
         {
 
             if (Request.Query.ContainsKey(GuidKey))
