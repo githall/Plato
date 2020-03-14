@@ -46,12 +46,13 @@ namespace Plato.Files.ViewProviders
 
         public override Task<IViewProviderResult> BuildEditAsync(File file, IViewProviderContext context)
         {
+
             EditFileViewModel viewModel = null;
             if (file.Id == 0)
             {
+
                 viewModel = new EditFileViewModel()
-                {
-                    IsNewFile = true,
+                {              
                     PostRoute = new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Files",
@@ -59,30 +60,29 @@ namespace Plato.Files.ViewProviders
                         ["action"] = "post"
                     }
                 };
-            }
-            else
-            {
 
-                viewModel = new EditFileViewModel()
-                {
-                    File = file,
-                    PostRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Files",
-                        ["controller"] = "Api",
-                        ["action"] = "put",
-                        ["id"] = file.Id.ToString()
-                    },
-                    ShareRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Files",
-                        ["controller"] = "Home",
-                        ["action"] = "Share",
-                        ["id"] = file.Id,
-                        ["checkSum"] = file.ContentCheckSum
-                    }
-                };
+                return Task.FromResult(Views(
+                    View<EditFileViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
+                    View<EditFileViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1),                    
+                    View<EditFileViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions").Order(1),
+                    View<EditFileViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer").Order(1)
+                ));
+
             }
+          
+            // Edit file
+
+            viewModel = new EditFileViewModel()
+            {
+                File = file,
+                PostRoute = new RouteValueDictionary()
+                {
+                    ["area"] = "Plato.Files",
+                    ["controller"] = "Api",
+                    ["action"] = "put",
+                    ["id"] = file.Id.ToString()
+                }
+            };
 
             return Task.FromResult(Views(
                 View<EditFileViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),

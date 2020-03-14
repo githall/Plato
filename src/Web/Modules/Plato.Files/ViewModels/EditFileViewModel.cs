@@ -9,10 +9,6 @@ namespace Plato.Files.ViewModels
 
         public string Name { get; set; }
 
-        public bool IsNewFile { get; set; }
-
-        public RouteValueDictionary ShareRoute { get; set; }
-
         public RouteValueDictionary PostRoute { get; set; }
 
 

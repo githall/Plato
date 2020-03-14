@@ -19,14 +19,17 @@ namespace Plato.Files
         public static readonly Permission AddFiles =
             new Permission("AddFiles", "Add files");
 
-        public static readonly Permission EditFiles =
-            new Permission("EditFiles", "Edit files");
+        public static readonly Permission EditOwnFiles =
+            new Permission("EditOwnFiles", "Edit own files");
 
-        public static readonly Permission ShareFiles =
-            new Permission("ShareFiles", "Share files");
+        public static readonly Permission EditAnyFile =
+            new Permission("EditAnyFile", "Edit any file");
 
-        public static readonly Permission DeleteFiles =
-            new Permission("DeleteFiles", "Delete files");
+        public static readonly Permission DeleteOwnFiles =
+            new Permission("DeleteOwnFiles", "Delete own files");
+
+        public static readonly Permission DeleteAnyFile =
+            new Permission("DeleteAnyFile", "Delete any file");
 
         public static readonly Permission ManageFileSettings =
             new Permission("ManageFileSettings", "Manage file settings");
@@ -38,10 +41,11 @@ namespace Plato.Files
                 BrowseFiles,
                 DownloadFiles,
                 OpenFiles,
-                AddFiles,
-                EditFiles,
-                ShareFiles,
-                DeleteFiles,
+                AddFiles,            
+                EditOwnFiles,
+                EditAnyFile,
+                DeleteOwnFiles,
+                DeleteAnyFile,
                 ManageFileSettings
             };
         }
@@ -52,16 +56,30 @@ namespace Plato.Files
             {
                 new DefaultPermissions<Permission>
                 {
+                    RoleName = DefaultRoles.Staff,
+                    Permissions = new[]
+                    {
+                        BrowseFiles,
+                        DownloadFiles,
+                        OpenFiles,
+                        AddFiles,                       
+                        EditOwnFiles,
+                        DeleteOwnFiles                        
+                    }
+                },
+                new DefaultPermissions<Permission>
+                {
                     RoleName = DefaultRoles.Administrator,
                     Permissions = new[]
                     {
                         BrowseFiles,
                         DownloadFiles,
                         OpenFiles,
-                        AddFiles,
-                        EditFiles,
-                        ShareFiles,
-                        DeleteFiles,
+                        AddFiles,                        
+                        EditOwnFiles,
+                        EditAnyFile,
+                        DeleteOwnFiles,
+                        DeleteAnyFile,
                         ManageFileSettings
                     }
                 }

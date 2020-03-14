@@ -181,13 +181,7 @@ namespace Plato.Files.Controllers
         [RequestSizeLimit(1073741824)]
         public async Task<IActionResult> Put()
         {
-
-            // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditFiles))
-            {
-                return Unauthorized();
-            }
-
+            
             var id = string.Empty; 
             if (Request.Query.ContainsKey("id"))
             {
@@ -217,6 +211,17 @@ namespace Plato.Files.Controllers
             if (user == null)
             {
                 return base.UnauthorizedException();
+            }
+
+            // Determine permission to check against
+            var postPermission = file.CreatedUserId == user.Id
+                 ? Permissions.EditOwnFiles
+                 : Permissions.EditAnyFile;
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, postPermission))
+            {
+                return Unauthorized();
             }
 
             // Validate & process multipart request
@@ -328,7 +333,7 @@ namespace Plato.Files.Controllers
             }        
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DeleteFiles))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DeleteOwnFiles))
             {
                 return Unauthorized();
             }
