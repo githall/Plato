@@ -161,6 +161,7 @@ namespace Plato.Discuss.Labels.ViewAdapters
             if (entities?.Data != null)
             {
                 entityLabels = await _entityLabelStore.QueryAsync()
+                    .Take(int.MaxValue, false)
                     .Select<EntityLabelQueryParams>(q =>
                     {
                         q.EntityId.IsIn(entities.Data.Select(e => e.Id).ToArray());

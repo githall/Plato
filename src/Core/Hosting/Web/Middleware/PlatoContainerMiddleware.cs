@@ -76,7 +76,7 @@ namespace PlatoCore.Hosting.Web.Middleware
 
                                 // Activate background tasks 
                                 var backgroundTaskManager = scope.ServiceProvider.GetService<IBackgroundTaskManager>();
-                                backgroundTaskManager?.StartTasks();
+                                backgroundTaskManager?.StartTasks(scope.ServiceProvider);
 
                             }
                         }

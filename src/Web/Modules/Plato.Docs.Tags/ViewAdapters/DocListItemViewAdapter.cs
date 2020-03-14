@@ -138,6 +138,7 @@ namespace Plato.Docs.Tags.ViewAdapters
             if (entities?.Data != null)
             {
                 entityTags = await _entityTagStore.QueryAsync()
+                    .Take(int.MaxValue, false)
                     .Select<EntityTagQueryParams>(q =>
                     {
                         q.EntityId.IsIn(entities.Data.Select(e => e.Id).ToArray());

@@ -1,0 +1,81 @@
+﻿@model FileListItemViewModel
+
+@{
+    var viewText = Model.File.TotalViews == 1 ? T["view"] : T["views"];
+    var views = $"{Model.File.TotalViews.ToPrettyInt()} {viewText.Value}";
+    var iconCss = !string.IsNullOrEmpty(Model.File.Extension) ? $"fiv-icon-{Model.File.Extension.Replace(".", "")}" : string.Empty;
+    
+    var dropdownId = "dropdown" + Model.File.Id.ToString();
+}
+
+<div class="list-left">
+    <span title="@Model.File.Extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo fa-2x mt-2 @iconCss"></span>
+</div>
+
+<div class="list-body">
+
+    <div class="dropdown float-right">
+        <a class="btn btn-secondary dropdown-toggle" href="#" id="@dropdownId" role="button" data-toggle="dropdown" aria-haspopup="true" data-display="static" aria-expanded="false">
+            @T["Edit"]
+        </a>
+        <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" aria-labelledby="@dropdownId">
+            <div class="min-w-200 max-h-250 overflow-auto">
+
+                <authorize asp-permission="@Permissions.EditFiles.Name">
+                    <authorize-success>
+                        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="dropdown-item">
+                            @T["Edit"]
+                        </a>
+                        <div class="dropdown-divider"></div>
+                    </authorize-success>
+                </authorize>
+                <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="dropdown-item">
+                    @T["Open"]
+                </a>
+                <a asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="dropdown-item">
+                    @T["Download"]
+                </a>      
+                <authorize asp-permission="@Permissions.DeleteFiles.Name">
+                    <authorize-success>
+                        <div class="dropdown-divider"></div>
+                        <button type="submit" asp-route-controller="Admin" asp-route-action="Delete" asp-route-id="@Model.File.Id" data-provide="confirm" class="dropdown-item dropdown-item-danger cursor-pointer">
+                            @T["Delete"]
+                        </button>
+                    </authorize-success>
+                </authorize>
+
+            </div>
+        </div>
+    </div>
+
+    <div>
+        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="font-weight-bold">
+            @Model.File.Name
+        </a>
+    </div>
+    <div>
+        <ul class="list-inline text-muted">
+            <li class="list-inline-item">
+                @Model.File.ContentLength.ToFriendlyFileSize()
+            </li>
+            <li class="list-inline-item">
+                @views
+            </li>
+            @if (Model.File.CreatedBy != null)
+            {
+                <li class="list-inline-item">
+                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@Model.File.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+                        @Model.File.CreatedBy.DisplayName
+                    </a>
+                </li>
+            }
+            <li class="list-inline-item">
+                <date utc="Model.File.CreatedDate"></date>
+            </li>
+        </ul>
+    </div>
+</div>
+
+
+
+

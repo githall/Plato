@@ -238,9 +238,8 @@ namespace Plato.Discuss.Labels.Controllers
                     .Add(S["Edit Label"]);
             });
             
-            var category = await _labelStore.GetByIdAsync(id);
-            var model = await _viewProvider.ProvideEditAsync(category, this);
-            return View(model);
+            var label = await _labelStore.GetByIdAsync(id);        
+            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(label, this));
 
         }
 

@@ -1,0 +1,19 @@
+﻿@model FileIndexViewModel
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+}
+
+<div class="position-relative mb-4">
+    <div class="search-input-group">
+        <input class="form-control" name="opts.search" value="@Model.Options.Search" type="search" placeholder="@T["Search files..."]" aria-label="Search" autofocus />
+        <button class="btn btn-primary" type="submit">
+            <i class="fal fa-search"></i>
+        </button>
+    </div>
+</div>
+
+@await DisplayAsync(new View("FileList", new
+{
+    options = Model.Options,
+    pager = Model.Pager
+}))

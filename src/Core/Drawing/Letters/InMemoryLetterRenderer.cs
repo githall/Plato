@@ -1,19 +1,19 @@
 ﻿using System;
+using System.IO;
 using System.Drawing;
 using System.Drawing.Imaging;
-using System.IO;
 using PlatoCore.Drawing.Extensions;
 using PlatoCore.Drawing.Abstractions;
 using PlatoCore.Drawing.Abstractions.Letters;
 
 namespace PlatoCore.Drawing.Letters
 {
-    
+
     public class InMemoryLetterRenderer : IInMemoryLetterRenderer
     {
 
         private MemoryStream _stream;
-     
+
         private readonly IDisposableBitmap _renderer;
 
         public InMemoryLetterRenderer(IDisposableBitmap renderer)
@@ -102,7 +102,7 @@ namespace PlatoCore.Drawing.Letters
 
                     });
 
-                result.Save(_stream, ImageFormat.Bmp);
+                result.Save(_stream, ImageFormat.Png);
 
             }
 

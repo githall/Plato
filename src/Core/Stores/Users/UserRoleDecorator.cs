@@ -30,6 +30,7 @@ namespace PlatoCore.Stores.Users
 
             // Get all user roles matching supplied users
             var userRoles = await _userRoleStore.QueryAsync()
+                .Take(int.MaxValue, false)
                 .Select<UserRoleQueryParams>(q =>
                 {
                     q.UserId.IsIn(users.Select(u => u.Id).ToArray());

@@ -9,7 +9,7 @@ namespace PlatoCore.Tasks.Abstractions
         int IntervalInSeconds { get; }
 
         Task ExecuteAsync(object sender, SafeTimerEventArgs args);
-        
+
     }
 
 }

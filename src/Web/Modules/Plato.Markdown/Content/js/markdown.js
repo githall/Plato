@@ -44,6 +44,7 @@ if (typeof window.$.Plato === "undefined") {
                 dropZoneOptions: {
                     url: '/api/media/streaming/upload',
                     fallbackClick: false,
+                    maxFilesize: 32, // 32mb
                     autoProcessQueue: true,
                     autoDiscover: false,
                     disablePreview: true,

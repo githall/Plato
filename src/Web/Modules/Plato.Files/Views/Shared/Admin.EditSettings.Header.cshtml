@@ -1,0 +1,9 @@
+﻿@model EditFileSettingsViewModel
+@{
+    var text = T["Manage file settings for users within the {0} role."];
+    var desc = text.Value.ToString().Replace("{0}", Model.Role?.Name?.ToLower() ?? "Unknown");
+}
+
+<h4>@T["Edit Settings"]</h4>
+<span class="text-muted">@desc</span>
+<hr />

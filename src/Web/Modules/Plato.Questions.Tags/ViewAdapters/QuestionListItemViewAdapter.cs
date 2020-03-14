@@ -1,7 +1,8 @@
-﻿using System.Collections.Concurrent;
-using System.Collections.Generic;
+﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
+using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Plato.Questions.Models;
 using Plato.Entities.ViewModels;
@@ -9,7 +10,6 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;
-using System;
 
 namespace Plato.Questions.Tags.ViewAdapters
 {
@@ -138,6 +138,7 @@ namespace Plato.Questions.Tags.ViewAdapters
             if (entities?.Data != null)
             {
                 entityTags = await _entityTagStore.QueryAsync()
+                    .Take(int.MaxValue, false)
                     .Select<EntityTagQueryParams>(q =>
                     {
                         q.EntityId.IsIn(entities.Data.Select(e => e.Id).ToArray());

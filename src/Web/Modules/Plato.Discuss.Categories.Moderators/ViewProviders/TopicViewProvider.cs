@@ -34,22 +34,20 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
 
         public override async Task<IViewProviderResult> BuildIndexAsync(Topic topic, IViewProviderContext context)
         {
-            
+
+            // Get all moderators
+            var moderators = await _moderatorStore.QueryAsync()
+                .Take(int.MaxValue, false)
+                .ToList();
+
             // Add moderator to context
-            await HydrateModeratorContext(topic, context);
+            await HydrateModeratorContext(topic, context, moderators);
 
             // ----------------
 
             // Add moderators panel to sidebar
 
             IPagedResults<User> users = null;
-
-            // Get all moderators
-            var moderators = await _moderatorStore            
-                .QueryAsync()
-                .Take(int.MaxValue, false)
-                .ToList();
-
             if (moderators != null)
             {
                 users = await _platoUserStore.QueryAsync()
@@ -105,7 +103,10 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
 
         #region "Private Methods"
 
-        async Task HydrateModeratorContext(Topic topic, IViewProviderContext context)
+        async Task HydrateModeratorContext(
+            Topic topic,
+            IViewProviderContext context,
+            IPagedResults<Moderator> moderators = null)
         {
 
             // Add moderator to context
@@ -114,18 +115,26 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
                 var user = await _contextFacade.GetAuthenticatedUserAsync();
                 if (user != null)
                 {
-                    context.Controller.HttpContext.Items[typeof(Moderator)] = await GetModerator(user, topic);
+                    context.Controller.HttpContext.Items[typeof(Moderator)] = await GetModerator(user, topic, moderators);
                 }
             }
 
         }
-        async Task<Moderator> GetModerator(User user, Topic topic)
+
+        async Task<Moderator> GetModerator(
+            User user, 
+            Topic topic,
+            IPagedResults<Moderator> moderators)
         {
-            
+
             // Get all moderators
-            var moderators = await _moderatorStore
-                .QueryAsync()
-                .ToList();
+            if (moderators == null)
+            {
+                moderators = await _moderatorStore.QueryAsync()
+                    .Take(int.MaxValue, false)
+                    .ToList();
+            }        
+
             if (moderators == null)
             {
                 return null;

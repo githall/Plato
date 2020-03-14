@@ -133,7 +133,7 @@ namespace Plato.Articles.Labels.ViewProviders
             
             return Views(
                 View<LabelDropDownViewModel>("Article.Labels.Edit.Sidebar", model => viewModel).Zone("sidebar")
-                    .Order(2)
+                    .Order(15)
             );
 
         }

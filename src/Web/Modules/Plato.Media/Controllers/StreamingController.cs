@@ -1,25 +1,18 @@
 ﻿using System;
-using System.IO;
-using System.Text;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using Microsoft.AspNetCore.Http.Features;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Extensions.Logging;
-using Microsoft.Net.Http.Headers;
 using PlatoCore.Abstractions.Extensions;
 using Plato.Media.Attributes;
-using Plato.Media.Services;
 using Plato.Media.Stores;
 using Plato.Media.ViewModels;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
+using PlatoCore.Net.Abstractions;
 
 namespace Plato.Media.Controllers
 {
-
-    // https://github.com/aspnet/Docs/tree/master/aspnetcore/mvc/models/file-uploads/sample/FileUploadSample
 
     public class StreamingController : BaseWebApiController
     {
@@ -40,19 +33,18 @@ namespace Plato.Media.Controllers
             "application/octet-stream"
         };
 
+        private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;
         private readonly ILogger<StreamingController> _logger;
         private readonly IMediaStore<Models.Media> _mediaStore;
 
-        // Get the default form options so that we can use them
-        // to set the default limits for request body data
-        private readonly FormOptions _defaultFormOptions = new FormOptions();
-
         public StreamingController(
+            IHttpMultiPartRequestHandler multiPartRequestHandler,
             ILogger<StreamingController> logger,
             IMediaStore<Models.Media> mediaStore)
         {
-            _logger = logger;
+            _multiPartRequestHandler = multiPartRequestHandler;
             _mediaStore = mediaStore;
+            _logger = logger;            
         }
 
         #region "Actions"
@@ -76,107 +68,32 @@ namespace Plato.Media.Controllers
                 return base.UnauthorizedException();
             }
 
-            // Ensure we are dealing with a multipart request
-            if (!MultipartRequestHelper.IsMultipartContentType(Request.ContentType))
+            // Validate & process multipart request
+            // -------------------
+
+            var result = await _multiPartRequestHandler.ProcessAsync(Request);
+
+            // Return any errors parsing the multipart request
+            if (!result.Succeeded)
             {
-                return BadRequest($"Expected a multipart request, but got {Request.ContentType}");
-            }
-
-            // Used to accumulate all the form url
-            // encoded key value pairs in the request.
-            var formAccumulator = new KeyValueAccumulator();
-            var boundary = MultipartRequestHelper.GetBoundary(
-                MediaTypeHeaderValue.Parse(Request.ContentType),
-                _defaultFormOptions.MultipartBoundaryLengthLimit);
-
-            var reader = new MultipartReader(boundary, HttpContext.Request.Body);
-
-            var name = string.Empty;
-            var contentType = string.Empty;
-            long contentLength = 0;
-            byte[] bytes = null;
-
-            var section = await reader.ReadNextSectionAsync();
-            while (section != null)
-            {
-                var hasContentDispositionHeader = ContentDispositionHeaderValue.TryParse(section.ContentDisposition, out var contentDisposition);
-            
-                if (hasContentDispositionHeader)
+                foreach (var error in result.Errors)
                 {
-                    if (MultipartRequestHelper.HasFileContentDisposition(contentDisposition))
-                    {
-
-                        name = contentDisposition.FileName.ToString();
-                        contentType = section.ContentType;
-
-                        // Create an in-memory stream to get the bytes and length
-                        using (var ms = new MemoryStream())
-                        {
-
-                            // Read the seciton into our memory stream
-                            await section.Body.CopyToAsync(ms);
-
-                            // get bytes and length
-                            bytes = ms.ToByteArray();
-                            contentLength = ms.Length;
-
-                        }
-
-                    }
-                    else if (MultipartRequestHelper.HasFormDataContentDisposition(contentDisposition))
-                    {
-
-                        // Content-Disposition: form-data; name="key" value
-                        // Do not limit the key name length here because the 
-                        // multipart headers length limit is already in effect.
-
-                        var key = HeaderUtilities.RemoveQuotes(contentDisposition.Name).ToString();
-                        var encoding = GetEncoding(section);
-
-                        using (var streamReader = new StreamReader(
-                            section.Body,
-                            encoding,
-                            detectEncodingFromByteOrderMarks: true,
-                            bufferSize: 1024,
-                            leaveOpen: true))
-                        {
-                            // The value length limit is enforced by MultipartBodyLengthLimit
-                            var value = await streamReader.ReadToEndAsync();
-                            if (String.Equals(value, "undefined", StringComparison.OrdinalIgnoreCase))
-                            {
-                                value = String.Empty;
-                            }
-                            formAccumulator.Append(key, value);
-
-                            if (formAccumulator.ValueCount > _defaultFormOptions.ValueCountLimit)
-                            {
-                                throw new InvalidDataException($"Form key count limit {_defaultFormOptions.ValueCountLimit} exceeded.");
-                            }
-                        }
-                    }
+                    return BadRequest(error);
                 }
-
-                // Drains any remaining section body that has not been consumed and
-                // reads the headers for the next section.
-                section = await reader.ReadNextSectionAsync();
             }
 
-            // Get btye array from memory stream for storage
-          
+            // Build output
+            // -------------------
+
             var output = new List<UploadedFile>();
-
-            if (bytes == null)
-            {
-                return BadRequest($"Could not obtain a byte array for the uploaded file.");
-            }
 
             // Store media
             var media = await _mediaStore.CreateAsync(new Models.Media
             {
-                Name = name,
-                ContentType = contentType,
-                ContentLength = contentLength,
-                ContentBlob = bytes,
+                Name = result.Response.Name,
+                ContentType = result.Response.ContentType,
+                ContentLength = result.Response.ContentLength,
+                ContentBlob = result.Response.ContentBytes,
                 CreatedUserId = user.Id
             });
 
@@ -219,18 +136,6 @@ namespace Plato.Media.Controllers
 
             return false;
 
-        }
-
-        Encoding GetEncoding(MultipartSection section)
-        {
-            var hasMediaTypeHeader = MediaTypeHeaderValue.TryParse(section.ContentType, out var mediaType);
-            // UTF-7 is insecure and should not be honored.
-            // UTF-8 will succeed in most cases.
-            if (!hasMediaTypeHeader || Encoding.UTF7.Equals(mediaType.Encoding))
-            {
-                return Encoding.UTF8;
-            }
-            return mediaType.Encoding;
         }
 
         #endregion

@@ -6,7 +6,6 @@ using Plato.Media.Handlers;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Navigation.Abstractions;
 using Plato.Media.Repositories;
 using Plato.Media.Stores;
 
@@ -55,7 +54,8 @@ namespace Plato.Media
                 defaults: new { controller = "Media", action = "Serve" }
             );
 
-
         }
+
     }
+
 }

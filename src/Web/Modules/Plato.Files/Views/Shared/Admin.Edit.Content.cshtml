@@ -1,0 +1,90 @@
+﻿@model EditFileViewModel
+@{
+    var postUrl = GetRouteUrl(Model.PostRoute);  
+    var postPermission = Model.IsNewFile
+      ? Permissions.AddFiles
+      : Permissions.EditFiles;
+    var fileId = Convert.ToString(Model.File?.Id ?? 0);
+}
+@if (Model.File != null)
+{
+    var viewText = Model.File.TotalViews == 1 ? T["view"] : T["views"];
+    var views = $"{Model.File.TotalViews.ToPrettyInt()} {viewText.Value}";
+    var iconCss = !string.IsNullOrEmpty(Model.File.Extension) ? $"fiv-icon-{Model.File.Extension.Replace(".", "")}" : string.Empty;
+   
+    <card>
+        <card-title>
+            <h6 class="card-title">@T["Download"]</h6>
+        </card-title>
+        <card-body class="card-body text-center">
+
+            <span title="@Model.File.Extension.Replace(".", "")" data-toggle="tooltip" class="fiv-sqo fiv-size-md mb-4 @iconCss"></span>
+            <h6 class="card-title">
+                <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="font-weight-bold">
+                    @Model.File.Name
+                </a>
+            </h6>
+            <ul class="list-inline">
+                <li class="list-inline-item">
+                    @Model.File.ContentLength.ToFriendlyFileSize()
+                </li>
+                <li class="list-inline-item">
+                    @views
+                </li>
+            </ul>
+            <div>
+                <a asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-secondary">
+                    <i class="fal fa-arrow-to-bottom"></i> @T["Download"]
+                </a>
+                <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="btn btn-secondary">
+                    <i class="fal fa-external-link"></i> @T["Open"]
+                </a>
+            </div>
+
+        </card-body>
+    </card>
+
+    <card>
+        <card-title>
+            <h6 class="card-title">@T["Update"]</h6>
+        </card-title>
+        <card-body>
+
+            <div id="progress"></div>
+            <div data-provide="edit-file" data-file-id="@fileId">
+                <div class="dropzone"
+                        data-dropzone-max-files="1"
+                        data-dropzone-url="@postUrl"
+                        data-progress-preview="#progress"
+                        data-provide="file-dropzone"></div>
+            </div>
+
+        </card-body>
+    </card>
+
+  
+
+}
+else
+{
+
+    <card>
+        <card-title>
+
+            <h6 class="card-title">@T["Add File"]</h6>
+
+        </card-title>
+        <card-body>
+
+            <div id="progress"></div>
+            <div data-provide="edit-file" data-file-id="@fileId">
+                <div class="dropzone"
+                     data-dropzone-max-files="1"
+                     data-dropzone-url="@postUrl"
+                     data-progress-preview="#progress"
+                     data-provide="file-dropzone"></div>
+            </div>
+
+        </card-body>
+    </card>
+}

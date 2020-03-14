@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using PlatoCore.Hosting.Web.Middleware;
 using PlatoCore.Hosting.Web.Routing;
 using PlatoCore.Modules.FileProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace PlatoCore.Hosting.Web.Extensions
 {
@@ -49,12 +50,6 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Execute the endpoint selected by the routing middleware
             app.UseEndpoints(endpoints =>
             {
-                //endpoints.MapControllers();
-
-                //endpoints.MapControllerRoute(
-                //    name: "default",
-                //    pattern: "{controller=Home}/{action=Index}/{id?}");
-
                 endpoints.MapRazorPages();
             });
 
@@ -69,10 +64,10 @@ namespace PlatoCore.Hosting.Web.Extensions
                 switch (context.HttpContext.Response.StatusCode)
                 {
                     case 401:
-                        context.HttpContext.Response.Redirect("/denied");
+                        context.HttpContext.Response.Redirect(StatusCodePagePaths.Unauthorized);
                         break;
                     case 404:
-                        context.HttpContext.Response.Redirect("/moved");
+                        context.HttpContext.Response.Redirect(StatusCodePagePaths.NotFound);
                         break;
                 }
 

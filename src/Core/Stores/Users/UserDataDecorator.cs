@@ -34,6 +34,7 @@ namespace PlatoCore.Stores.Users
 
             // Get all user data matching supplied users
             var results = await _userDataStore.QueryAsync()
+                .Take(int.MaxValue, false)
                 .Select<UserDataQueryParams>(q =>
                 {
                     q.UserId.IsIn(users.Select(u => u.Id).ToArray());
@@ -75,7 +76,7 @@ namespace PlatoCore.Stores.Users
             return user;
 
         }
-  
+
         async Task<IList<User>> MergeData(IList<User> users, IList<UserData> data)
         {
 
