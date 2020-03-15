@@ -11,6 +11,8 @@ namespace Plato.Entities.Files.Stores
 
         Task<bool> DeleteByEntityIdAsync(int entityId);
 
+        Task<bool> DeleteByFileIdAsync(int fileId);
+
         Task<bool> DeleteByEntityIdAndFileIdAsync(int entityId, int LabelId);
 
     }

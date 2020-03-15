@@ -1,9 +1,7 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using PlatoCore.Abstractions;
-using Plato.Files.Models;
 using Plato.Files.Stores;
 using System.Collections.Generic;
 using PlatoCore.Hosting.Abstractions;
@@ -101,6 +99,7 @@ namespace Plato.Files.Services
                     }
                 }
             }
+
             if (!validExtension)
             {
                 var allowedExtensions = string.Join(",", options.AllowedExtensions.Select(e => e));

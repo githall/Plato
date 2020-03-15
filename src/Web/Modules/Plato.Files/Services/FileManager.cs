@@ -181,7 +181,7 @@ namespace Plato.Files.Services
                 }
 
                 // Return success
-                return result.Success();
+                return result.Success(model);
 
             }
 

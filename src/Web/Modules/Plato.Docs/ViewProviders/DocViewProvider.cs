@@ -131,7 +131,7 @@ namespace Plato.Docs.ViewProviders
             return Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EntityDropDownViewModel>("Home.Edit.Sidebar", model => entityDropDownViewModel).Zone("sidebar"),
+                View<EntityDropDownViewModel>("Home.Edit.Sidebar", model => entityDropDownViewModel).Zone("sidebar").Order(7),
                 View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("Footer")
             );
 

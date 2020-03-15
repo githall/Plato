@@ -19,13 +19,13 @@ using PlatoCore.Security.Abstractions;
 using Plato.Entities.Files.Stores;
 using Plato.Entities.Files.Models;
 
-namespace Plato.Articles.Files.Controllers
+namespace Plato.Docs.Files.Controllers
 {
 
     public class ApiController : BaseWebApiController
     {
 
-        public const string ModuleId = "Plato.Articles.Files";
+        public const string ModuleId = "Plato.Docs.Files";
         public const string GuidKey = "guid";        
 
         private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;

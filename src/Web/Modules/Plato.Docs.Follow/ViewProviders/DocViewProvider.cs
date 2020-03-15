@@ -14,7 +14,6 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Docs.Follow.ViewModels;
-using Plato.Entities.Extensions;
 using Plato.Entities.Models;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Models.Users;
@@ -161,7 +160,7 @@ namespace Plato.Docs.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Permissions.FollowDocs;
                     return model;
-                }).Zone("sidebar").Order(2)
+                }).Zone("sidebar").Order(20)
             );
 
         }

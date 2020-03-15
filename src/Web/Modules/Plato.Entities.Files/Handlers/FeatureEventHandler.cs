@@ -126,6 +126,7 @@ namespace Plato.Entities.Files.Handlers
                     .DropDefaultProcedures(_entityyFiles)
                     .DropProcedure(new SchemaProcedure("SelectEntityFilesByEntityId"))
                     .DropProcedure(new SchemaProcedure("DeleteEntityFilesByEntityId"))
+                    .DropProcedure(new SchemaProcedure("DeleteEntityFilesByFileId"))
                     .DropProcedure(new SchemaProcedure("DeleteEntityFileByEntityIdAndFileId"))
                     .DropProcedure(new SchemaProcedure("SelectEntityFilesPaged"));
 
@@ -277,6 +278,10 @@ namespace Plato.Entities.Files.Handlers
                 .CreateProcedure(new SchemaProcedure("DeleteEntityFilesByEntityId", StoredProcedureType.DeleteByKey)
                     .ForTable(_entityyFiles)
                     .WithParameter(new SchemaColumn() { Name = "EntityId", DbType = DbType.Int32 }))
+                
+                .CreateProcedure(new SchemaProcedure("DeleteEntityFilesByFileId", StoredProcedureType.DeleteByKey)
+                    .ForTable(_entityyFiles)
+                    .WithParameter(new SchemaColumn() { Name = "FileId", DbType = DbType.Int32 }))
 
                 .CreateProcedure(new SchemaProcedure("DeleteEntityFileByEntityIdAndFileId",
                         StoredProcedureType.DeleteByKey)

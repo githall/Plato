@@ -1,15 +1,15 @@
-Name: Plato Articles Files
-Description: Adds the ability to attach files to articles.
+Name: Plato Docs Files
+Description: Adds the ability to attach files to docs.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
-Category: Articles
+Category: Docs
 PlatoVersion: 1.1.1
 Version: 1.0.0
-Icon: /plato.articles.files/content/images/icon.png
+Icon: /plato.docs.files/content/images/icon.png
 Dependencies: 
 [
 	{
-		Id: "Plato.Articles",
+		Id: "Plato.Docs",
 		Version: "1.0.0"
 	},
 	{
