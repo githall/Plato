@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Plato.Docs.Flipper.ViewModels;
 using Plato.Docs.Models;
 using Plato.Entities.Models;
 using Plato.Entities.Services;
@@ -11,17 +12,18 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Security.Abstractions;
 
-namespace Plato.Docs.ViewComponents
+namespace Plato.Docs.Flipper.ViewComponents
 {
 
-    public class DocViewComponent : ViewComponentBase
+    public class DocFlipperViewComponent : ViewComponent
     {
+
 
         private readonly IAuthorizationService _authorizationService;
         private readonly ISimpleEntityService<SimpleEntity> _simpleEntityService;
         private readonly IEntityStore<Doc> _entityStore;
 
-        public DocViewComponent(            
+        public DocFlipperViewComponent(
             ISimpleEntityService<SimpleEntity> simpleEntityService,
             IAuthorizationService authorizationService,
             IEntityStore<Doc> entityStore)
@@ -31,66 +33,35 @@ namespace Plato.Docs.ViewComponents
             _entityStore = entityStore;
         }
 
-        public async Task<IViewComponentResult> InvokeAsync(EntityViewModel<Doc, DocComment> model)
+        public async Task<IViewComponentResult> InvokeAsync(Doc entity, DocComment reply)
         {
 
-            if (model == null)
-            {
-                model = new EntityViewModel<Doc, DocComment>();
-            }
+            // Populate previous and next entity
+            var model = await GetModelAsync(entity);
 
-            if (model.Options == null)
-            {
-                model.Options = new EntityOptions();
-            }
-
-            return View(await GetViewModel(model));
+            // Return view
+            return View(model);
 
         }
 
-        async Task<EntityViewModel<Doc, DocComment>> GetViewModel(EntityViewModel<Doc, DocComment> model)
+
+        async Task<DocFlipperViewModel> GetModelAsync(Doc entity)
         {
 
-            if (model.Entity == null)
-            {
-
-                if (model.Options.Id <= 0)
-                {
-                    throw new ArgumentOutOfRangeException(nameof(model.Options.Id));
-                }
-
-                // Get entity
-                var entity = await _entityStore.GetByIdAsync(model.Options.Id);
-
-                if (entity == null)
-                {
-                    throw new ArgumentNullException();
-                }
-
-                model.Entity = entity;
-
-            }
-         
-            // Populate child entities
-            await PopulateChildEntitiesAsync(model.Entity);
-
-            return model;
-
-        }
-  
-        async Task PopulateChildEntitiesAsync(Doc entity)
-        {
-
+      
             if (entity == null)
             {
                 throw new ArgumentNullException(nameof(entity));
             }
 
-            // Get all child entities
+            // Get all other entities at the same level as our current entity
             var entities = await _simpleEntityService
                 .ConfigureQuery(async q =>
                 {
-                    q.ParentId.Equals(entity.Id);
+
+                    q.FeatureId.Equals(entity.FeatureId);
+                    q.ParentId.Equals(entity.ParentId);
+                    q.CategoryId.Equals(entity.CategoryId);
 
                     // Hide private?
                     if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
@@ -119,7 +90,7 @@ namespace Plato.Docs.ViewComponents
                     {
                         q.HideDeleted.True();
                     }
-                    
+
                 })
                 .GetResultsAsync(new EntityIndexOptions()
                 {
@@ -127,10 +98,44 @@ namespace Plato.Docs.ViewComponents
                     Order = OrderBy.Asc
                 });
 
-            // Get the previous and next entities via the sort order
-            entity.ChildEntities = entities?.Data;
+
+            var model = new DocFlipperViewModel();
+
+            if (entities?.Data == null)
+            {
+                return model;
+            }
+
+            // Similar to entities.Data?
+            //              .OrderByDescending(e => e.SortOrder)
+            //              .FirstOrDefault(e => e.SortOrder < entity.SortOrder); ;
+            // But avoiding LINQ for performance reasons
+            for (var i = entities.Data.Count - 1; i >= 0; i--)
+            {
+                if (entities.Data[i].SortOrder < entity.SortOrder)
+                {
+                    model.PreviousDoc = entities.Data[i];
+                    break;
+                }
+            }
+
+            // Similar to FirstOrDefault(e => e.SortOrder > entity.SortOrder)
+            // But avoiding LINQ for performance reasons
+            foreach (var e in entities.Data)
+            {
+                if (e.SortOrder > entity.SortOrder)
+                {
+                    model.NextDoc = e;
+                    break;
+                }
+            }
+
+            return model;
+
+           
 
         }
+
 
     }
 

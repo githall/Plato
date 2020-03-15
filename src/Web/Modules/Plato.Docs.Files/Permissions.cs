@@ -7,26 +7,26 @@ namespace Plato.Docs.Files
     public class Permissions : IPermissionsProvider<Permission>
     {
 
-        public static readonly Permission DownloadArticleFiles =
-            new Permission("DownloadArticleFiles", "Download article files");
+        public static readonly Permission DownloadDocFiles =
+            new Permission("DownloadDocFiles", "Download doc files");
 
-        public static readonly Permission PostArticleFiles =
-            new Permission("PostArticleFiles", "Post article files");
+        public static readonly Permission PostDocFiles =
+            new Permission("PostDocFiles", "Post doc files");
 
-        public static readonly Permission DeleteOwnArticleFiles =
-            new Permission("DeleteOwnArticleFiles", "Delete own article files");
+        public static readonly Permission DeleteOwnDocFiles =
+            new Permission("DeleteOwnDocFiles", "Delete own doc files");
 
-        public static readonly Permission DeleteAnyArticleFiles =
-            new Permission("DeleteAnyArticleFiles", "Delete any article files");
+        public static readonly Permission DeleteAnyDocFiles =
+            new Permission("DeleteAnyDocFiles", "Delete any doc files");
 
         public IEnumerable<Permission> GetPermissions()
         {
             return new[]
             {
-                DownloadArticleFiles,
-                PostArticleFiles,
-                DeleteOwnArticleFiles,
-                DeleteAnyArticleFiles          
+                DownloadDocFiles,
+                PostDocFiles,
+                DeleteOwnDocFiles,
+                DeleteAnyDocFiles          
             };
         }
 
@@ -39,7 +39,7 @@ namespace Plato.Docs.Files
                     RoleName = DefaultRoles.Anonymous,
                     Permissions = new[]
                     {
-                        DownloadArticleFiles
+                        DownloadDocFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -47,9 +47,9 @@ namespace Plato.Docs.Files
                     RoleName = DefaultRoles.Member,
                     Permissions = new[]
                     {
-                        DownloadArticleFiles,
-                        PostArticleFiles,
-                        DeleteOwnArticleFiles
+                        DownloadDocFiles,
+                        PostDocFiles,
+                        DeleteOwnDocFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -57,10 +57,10 @@ namespace Plato.Docs.Files
                     RoleName = DefaultRoles.Staff,
                     Permissions = new[]
                     {
-                        DownloadArticleFiles,
-                        PostArticleFiles,
-                        DeleteOwnArticleFiles,
-                        DeleteAnyArticleFiles
+                        DownloadDocFiles,
+                        PostDocFiles,
+                        DeleteOwnDocFiles,
+                        DeleteAnyDocFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -68,10 +68,10 @@ namespace Plato.Docs.Files
                     RoleName = DefaultRoles.Administrator,
                     Permissions = new[]
                     {
-                        DownloadArticleFiles,
-                        PostArticleFiles,
-                        DeleteOwnArticleFiles,
-                        DeleteAnyArticleFiles
+                        DownloadDocFiles,
+                        PostDocFiles,
+                        DeleteOwnDocFiles,
+                        DeleteAnyDocFiles
                     }
                 }
             };

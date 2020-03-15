@@ -57,7 +57,7 @@ namespace Plato.Docs.Files.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DownloadArticleFiles))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DownloadDocFiles))
             {
                 Response.StatusCode = StatusCodes.Status302Found;
                 Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.Unauthorized);
@@ -127,9 +127,9 @@ namespace Plato.Docs.Files.Controllers
                 throw new ArgumentNullException(nameof(opts.Guid));
             }
 
-            opts.PostPermission = Permissions.PostArticleFiles;
-            opts.DeleteOwnPermission = Permissions.DeleteOwnArticleFiles;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleFiles;
+            opts.PostPermission = Permissions.PostDocFiles;
+            opts.DeleteOwnPermission = Permissions.DeleteOwnDocFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyDocFiles;
 
             opts.DeleteRoute = new RouteValueDictionary()
             {
@@ -163,9 +163,9 @@ namespace Plato.Docs.Files.Controllers
                 throw new ArgumentNullException(nameof(opts.Guid));
             }
 
-            opts.PostPermission = Permissions.PostArticleFiles;
-            opts.DeleteOwnPermission = Permissions.DeleteOwnArticleFiles;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleFiles;
+            opts.PostPermission = Permissions.PostDocFiles;
+            opts.DeleteOwnPermission = Permissions.DeleteOwnDocFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyDocFiles;
 
             opts.DeleteRoute = new RouteValueDictionary()
             {

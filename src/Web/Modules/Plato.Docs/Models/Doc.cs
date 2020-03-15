@@ -6,11 +6,7 @@ namespace Plato.Docs.Models
 
     public class Doc : Entity
     {
-        public bool IsNew { get; set; }
-
-        public ISimpleEntity PreviousDoc { get; set; }
-
-        public ISimpleEntity NextDoc { get; set; }
+        public bool IsNew { get; set; }   
 
         public IEnumerable<ISimpleEntity> ChildEntities { get; set; }
 
