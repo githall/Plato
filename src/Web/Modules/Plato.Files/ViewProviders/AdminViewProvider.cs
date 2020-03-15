@@ -2,20 +2,31 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using Plato.Files.Models;
+using Plato.Files.Services;
 using Plato.Files.Stores;
 using Plato.Files.ViewModels;
+using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Files.ViewProviders
 {
     public class AdminViewProvider : ViewProviderBase<File>
     {
-
+  
+        private readonly IFileOptionsFactory _fileOptionsFactory;
+        private readonly IFileInfoStore<FileInfo> _fileInfoStore;
+        private readonly IContextFacade _contextFacade;
         private readonly IFileStore<File> _fileStore;
 
         public AdminViewProvider(
+            IFileOptionsFactory fileOptionsFactory,
+            IFileInfoStore<FileInfo> fileInfoStore,
+            IContextFacade contextFacade,
             IFileStore<File> fileStore)
         {
+            _fileOptionsFactory = fileOptionsFactory;
+            _fileInfoStore = fileInfoStore;
+            _contextFacade = contextFacade;
             _fileStore = fileStore;
         }
 
@@ -44,53 +55,70 @@ namespace Plato.Files.ViewProviders
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(File file, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(File file, IViewProviderContext context)
         {
+
+            var user = await _contextFacade.GetAuthenticatedUserAsync();
+
             EditFileViewModel viewModel = null;
             if (file.Id == 0)
             {
+
                 viewModel = new EditFileViewModel()
                 {
-                    IsNewFile = true,
+                    Info = await _fileInfoStore.GetByUserIdAsync(user?.Id ?? 0),
+                    Options = await _fileOptionsFactory.GetOptionsAsync(user),
                     PostRoute = new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Files",
                         ["controller"] = "Api",
                         ["action"] = "post"
-                    }
-                };
-            }
-            else
-            {
-
-                viewModel = new EditFileViewModel()
-                {
-                    File = file,
-                    PostRoute = new RouteValueDictionary()
-                    {
-                        ["area"] = "Plato.Files",
-                        ["controller"] = "Api",
-                        ["action"] = "put",
-                        ["id"] = file.Id.ToString()
                     },
-                    ShareRoute = new RouteValueDictionary()
+                    ReturnRoute = new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Files",
-                        ["controller"] = "Home",
-                        ["action"] = "Share",
-                        ["id"] = file.Id,
-                        ["checkSum"] = file.ContentCheckSum
+                        ["controller"] = "Admin",
+                        ["action"] = "Index"
                     }
                 };
+
+                return Views(
+                    View<EditFileViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
+                    View<EditFileViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1)                                     
+                );
+
             }
 
-            return Task.FromResult(Views(
+            // Edit file
+
+            viewModel = new EditFileViewModel()
+            {
+                File = file,
+                Info = await _fileInfoStore.GetByUserIdAsync(user?.Id ?? 0),
+                Options = await _fileOptionsFactory.GetOptionsAsync(user),
+                PostRoute = new RouteValueDictionary()
+                {
+                    ["area"] = "Plato.Files",
+                    ["controller"] = "Api",
+                    ["action"] = "put",
+                    ["id"] = file.Id.ToString()
+                },
+                ReturnRoute = new RouteValueDictionary()
+                {
+                    ["area"] = "Plato.Files",
+                    ["controller"] = "Admin",
+                    ["action"] = "Edit",
+                    ["id"] = file.Id.ToString()
+                }
+            };
+
+            return Views(
                 View<EditFileViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
                 View<EditFileViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1),
                 View<EditFileViewModel>("Admin.Edit.Sidebar", model => viewModel).Zone("sidebar").Order(1),
                 View<EditFileViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions").Order(1),
                 View<EditFileViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer").Order(1)
-            ));
+            );
 
         }
 
@@ -101,11 +129,6 @@ namespace Plato.Files.ViewProviders
                 throw new ArgumentNullException(nameof(file));
             }
 
-            //if (file.IsNewFile)
-            //{
-            //    return await BuildEditAsync(file, context);
-            //}
-
             var model = new EditFileViewModel();
 
             if (!await context.Updater.TryUpdateModelAsync(model))
@@ -115,16 +138,11 @@ namespace Plato.Files.ViewProviders
 
             model.Name = model.Name?.Trim();
 
-            //model.Description = model.Description?.Trim();
-
             if (context.Updater.ModelState.IsValid)
             {
 
                 file.Name = model.Name;
-                //file.Description = model.Description;
-                //file.ForeColor = model.ForeColor;
-                //file.BackColor = model.BackColor;
-
+             
                 var updatedFile = await _fileStore.UpdateAsync(file);
 
                 //foreach (var error in result.Errors)

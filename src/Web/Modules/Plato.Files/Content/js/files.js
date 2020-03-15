@@ -63,8 +63,9 @@ $(function (win, doc, $) {
                 // The id of the file we are editing.
                 // If 0 we are adding a new file
                 var fileId = this._getFileId($caller),
+                    returnUrl = this._getReturnUrl($caller),
                     dropzoneMsg = fileId === 0
-                        ? '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Add a file by dropping here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
+                        ? '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Add files by dropping here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
                         : '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Update this file by dropping a new file here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>';
 
                 // Configure dropzone
@@ -79,32 +80,13 @@ $(function (win, doc, $) {
                             autoDiscover: false,
                             disablePreview: true,
                             uploadMultiple: false,
-                            maxFiles: 10,
-                            maxFilesize: 256, // 256mb
                             dictDefaultMessage: dropzoneMsg
                         },
-                        onDrop: function () {
-                           
-                        },
-                        onAddedFile: function (file) {
-                        },
-                        onComplete: function (file, errors) {                                                                          
-                        },
-                        onSuccess: function (response) {
-
-                            if (response.statusCode === 200) {
-                                if (response && response.result) {                                                             
-                                    for (var i = 0; i < response.result.length; i++) {
-                                        var result = response.result[i];
-                                        if (result.id > 0) {
-                                            win.location = "/Plato.Files/Admin/Edit/" + result.id;
-                                        }
-                                    }
-                                }
+                        onQueuecomplete: function (errors) {                            
+                            if (errors.length === 0) {
+                                win.location = returnUrl;
                             }
-
-
-                        },
+                        },                      
                         onError: function (file, error, xhr) {
                         }
                     });
@@ -112,6 +94,9 @@ $(function (win, doc, $) {
             },
             _getFileId: function ($caller) {
                 return $caller.data("fileId") || $caller.data(dataKey).fileId;
+            },
+            _getReturnUrl: function ($caller) {
+                return $caller.data("returnUrl") || $caller.data(dataKey).returnUrl;
             }
         };
 
@@ -341,9 +326,7 @@ $(function (win, doc, $) {
                 autoProcessQueue: true,
                 autoDiscover: false,
                 disablePreview: true,
-                uploadMultiple: false,
-                maxFiles: 10,
-                maxFilesize: 256, // 256mb
+                uploadMultiple: false,             
                 dictDefaultMessage:
                     '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Drag & drop files here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
             },
@@ -361,6 +344,9 @@ $(function (win, doc, $) {
             },
             onComplete: function (file, errors) {
                 // triggers when a file is successfully uploaded
+            },
+            onQueuecomplete: function () {
+                // triggers when all files have completed
             }
         };
 
@@ -386,12 +372,12 @@ $(function (win, doc, $) {
                     maxFiles = this._getMaxFiles($caller);
 
                 if (url === null) {
-                    throw new Error("An upload url is required for the dropzone!");
+                    throw new Error("An post url is required for the dropzone!");
                 }
 
                 if (!opts.init) {
 
-                    // Set dropzone max file size
+                    // Set dropzone max file size & max files
                     opts.maxFilesize = Math.ceil($caller.data(dataKey).maxFileSize / (1024 * 1024));
                     opts.maxFiles = maxFiles;
 
@@ -417,7 +403,6 @@ $(function (win, doc, $) {
                     opts.init = function () {
 
                         var $progressPreview = methods._getProgressPreview($caller),
-                            maxFileSize = $caller.data(dataKey).maxFileSize,
                             allowedExtensions = $caller.data(dataKey).allowedExtensions,
                             errors = [];
 
@@ -452,50 +437,7 @@ $(function (win, doc, $) {
                             return $row;
 
                         }
-                        
-                        function validateFileExtensions(files) {
-
-                            var valid = true;
-                            for (var i = 0; i < files.length; i++) {                           
-                                if (!validateFileExtension(files[i])) {
-                                    valid = false;
-                                }
-                            }
-
-                            // Allowed?
-                            if (valid === false) {
-
-                                var title = app.T("Some files won't be attached"),
-                                    message = app.T("One or more file types you attached are not allowed. File types that are allowed will still be uploaded. Allowed types are...") + "\n\n" +
-                                        allowedExtensions.join(", ");
-
-                                // Show error dialog
-                                $().dialog({
-                                    title: title,
-                                    body: {
-                                        url: null,
-                                        html: message.replace(/\n/g, "<br/>")
-                                    },
-                                    buttons: [
-                                        {
-                                            id: "ok",
-                                            text: "OK",
-                                            css: "btn btn-primary",
-                                            click: function ($dialog, $button) {
-                                                $().dialog("hide");
-                                                return false;
-                                            }
-                                        }
-                                    ]
-                                },
-                                    "show");
-
-                            }
-
-                            return valid;
-
-                        }
-
+                      
                         function validateFileExtension(file) {
 
                             if (allowedExtensions === null) {
@@ -520,19 +462,73 @@ $(function (win, doc, $) {
 
                         }
 
+                        function showErrorsDialog() {
+
+                            var messages = "";
+                            for (var i = 0; i < errors.length; i++) {
+                                messages += errors[i];
+                                if (i < errors.length - 1) {
+                                    messages += "\n\n";
+                                }
+                            }
+
+                            // Show error dialog
+                            $().dialog({
+                                title: app.T("Some problems occurred"),
+                                body: {
+                                    url: null,
+                                    html: messages.replace(/\n/g, "<br/>")
+                                },
+                                css: {
+                                    body: "modal-body max-h-200 overflow-auto"
+                                },
+                                buttons: [
+                                    {
+                                        id: "ok",
+                                        text: "OK",
+                                        css: "btn btn-primary",
+                                        click: function ($dialog, $button) {
+                                            $().dialog("hide");
+                                            return false;
+                                        }
+                                    }
+                                ]
+                            },
+                                "show");
+                        }
+
                         // ------------
 
                         this.on("addedfiles",
                             function (files) {
-                                errors = []; // reset errors when files are added
-                                return validateFileExtensions(files);
+                                
+                                errors = []; // reset errors when new files are added
+
+                                var valid = true, file = null;
+                                for (var i = 0; i < files.length; i++) {
+                                    file = files[i];
+                                    // file.upload may be null when dropping files
+                                    if (file.upload) { 
+                                        if (!validateFileExtension(file)) {
+                                            valid = false;
+                                        }
+                                    }
+                                   
+                                }
+
+                                return valid;
                             });
 
+                        // When a file is added to the list
                         this.on('addedfile',
                             function (file) {
-
+                         
                                 // Validate extension                                                                                        
-                                if (!validateFileExtension(file)) {
+                                if (!validateFileExtension(file)) {     
+                                    errors.push(app.T("Some files are not allowed. Allowed types are ") +
+                                        allowedExtensions.join(", ") + "\n\n" +
+                                        app.T("Files that are allowed have still been uploaded"));
+                                    showErrorsDialog();
                                     this.removeFile(file);    
                                     return false;
                                 }
@@ -551,6 +547,7 @@ $(function (win, doc, $) {
 
                             });
 
+                        // The user dropped something onto the dropzone
                         this.on('drop',
                             function (e) {
                                 if ($caller.data(dataKey).onDrop) {
@@ -558,6 +555,7 @@ $(function (win, doc, $) {
                                 }
                             });
 
+                        // Gets called periodically whenever the file upload progress changes.
                         this.on('uploadprogress',
                             function (file, progress, bytesSent) {                                
                                 if ($progressPreview) {
@@ -569,12 +567,13 @@ $(function (win, doc, $) {
                                 }
                             });
 
+                        // The file has been uploaded successfully. Gets the server response as second argument. (This event was called finished previously)
                         this.on('success',
                             function (file, response) {
 
+                                // Compile any server side validation errors                                     
                                 if (response.statusCode === 200) {
-                                    if (response && response.result) {
-                                        // Compile any errors                                     
+                                    if (response && response.result) {                                        
                                         for (var i = 0; i < response.result.length; i++) {
                                             var result = response.result[i];
                                             if (result.error && result.error !== "") {
@@ -593,60 +592,25 @@ $(function (win, doc, $) {
                                     }                                    
                                 }
 
+                                // Raise success
                                 if ($caller.data(dataKey).onSuccess) {
                                     $caller.data(dataKey).onSuccess(response);
                                 }
 
                             });
 
+                        // Called when the upload was either successful or erroneous.
                         this.on("complete",
                             function (file) {
-
-                            // Show errors
-                            if (errors.length > 0) {
-
-                                var messages = "";
-                                for (var i = 0; i < errors.length; i++) {
-                                    messages += errors[i];
-                                    if (i < errors.length - 1) {
-                                        messages += "\n\n";
-                                    }
-                                }
-
-                                // Show error dialog
-                                $().dialog({
-                                    title: app.T("Some problems occurred"),
-                                    body: {
-                                        url: null,
-                                        html: messages.replace(/\n/g, "<br/>")
-                                    },
-                                    css: {
-                                        body: "modal-body max-h-200 overflow-auto"
-                                    },
-                                    buttons: [
-                                        {
-                                            id: "ok",
-                                            text: "OK",
-                                            css: "btn btn-primary",
-                                            click: function ($dialog, $button) {
-                                                $().dialog("hide");
-                                                return false;
-                                            }
-                                        }
-                                    ]
-                                },
-                                    "show");
-
-                            }
-
+                            // Raise complete
                             if ($caller.data(dataKey).onComplete) {
-                                $caller.data(dataKey).onComplete(file, errors);
+                            $caller.data(dataKey).onComplete(file, errors);
                             }
                         });
 
                         this.on('error',
-                            function (file, error, xhr) {                                
-
+                            function (file, error, xhr) {    
+                           
                                 var s = '<h6>' + app.T("A problem occurred!") + '</h6>';                          
                                 s += '<textarea class="form-control">' + error + '</textarea>';                             
 
@@ -677,6 +641,20 @@ $(function (win, doc, $) {
 
                             });
 
+                        // Called when all files in the queue finish uploading.
+                        this.on("queuecomplete",
+                            function () {
+
+                                // Show errors
+                                if (errors.length > 0) {
+                                    showErrorsDialog();
+                                }
+
+                                // Raise queue complete
+                                if ($caller.data(dataKey).onQueuecomplete) {
+                                    $caller.data(dataKey).onQueuecomplete(errors);
+                                }
+                            });
                     };
                 }
 

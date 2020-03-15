@@ -32,6 +32,7 @@ namespace Plato.Files.Controllers
         private readonly IFeatureFacade _featureFacade;
         private readonly IFileValidator _fileValidator;
         private readonly IFileStore<File> _fileStore;
+        private readonly IFileManager _fileManager;
 
         public IHtmlLocalizer T { get; }
 
@@ -46,7 +47,8 @@ namespace Plato.Files.Controllers
             IFileValidator attachmentValidator,
             ILogger<ApiController> logger,
             IHtmlLocalizer htmlLocalizer,
-            IFeatureFacade featureFacade)
+            IFeatureFacade featureFacade,
+            IFileManager fileManager)
         {
 
             _multiPartRequestHandler = multiPartRequestHandler;
@@ -54,6 +56,7 @@ namespace Plato.Files.Controllers
             _fileValidator = attachmentValidator;
             _fileStore = attachmentStore;
             _featureFacade = featureFacade;
+            _fileManager = fileManager;
             _logger = logger;
 
             T = htmlLocalizer;
@@ -64,7 +67,7 @@ namespace Plato.Files.Controllers
         // Post
         // -----------
 
-        // Request limits for attachments are enforced by Plato so set MVCs request limits 
+        // Request limits for files are enforced by Plato so set MVCs request limits 
         // for this action to some arbitrary high value, in this case 1 gigabyte
 
         [HttpPost, DisableFormValueModelBinding, ValidateClientAntiForgeryToken]
@@ -111,11 +114,11 @@ namespace Plato.Files.Controllers
                 }
             }
 
-            // Build attachment
+            // Build file
             // -------------------
 
             var md5 = result.Response.ContentBytes?.ToMD5().ToHex() ?? string.Empty;
-            var attachment = new File
+            var newFile = new File
             {
                 FeatureId = feature.Id,
                 Name = result.Response.Name,
@@ -124,32 +127,44 @@ namespace Plato.Files.Controllers
                 ContentLength = result.Response.ContentLength,
                 ContentBlob = result.Response.ContentBytes,                
                 ContentCheckSum = md5,
-                CreatedUserId = user.Id
+                CreatedUserId = user.Id,
+                CreatedDate = DateTimeOffset.Now
             };
 
-            // Validate attachment
+            // Validate file
             // -------------------
 
             var output = new List<UploadResult>();
 
-            var validationResult = await _fileValidator.ValidateAsync(attachment);
+            var validationResult = await _fileValidator.ValidateAsync(newFile);
             if (validationResult.Succeeded)
             {
 
-                // Store attachment
-                attachment = await _fileStore.CreateAsync(attachment);
+                // Create file
+                var fileResult = await _fileManager.CreateAsync(newFile);
 
-                // Build friendly result
-                if (attachment != null)
+                // Build friendly results
+                if (fileResult.Succeeded)
                 {
                     output.Add(new UploadResult()
                     {
-                        Id = attachment.Id,
-                        Name = attachment.Name,
-                        ContentType = attachment.ContentType,
-                        ContentLength = attachment.ContentLength,
-                        FriendlySize = attachment.ContentLength.ToFriendlyFileSize()
+                        Id = fileResult.Response.Id,
+                        Name = fileResult.Response.Name,
+                        ContentType = fileResult.Response.ContentType,
+                        ContentLength = fileResult.Response.ContentLength,
+                        FriendlySize = fileResult.Response.ContentLength.ToFriendlyFileSize()
                     });
+                }
+                else
+                {
+                    foreach (var error in fileResult.Errors)
+                    {
+                        output.Add(new UploadResult()
+                        {
+                            Name = result.Response.Name,
+                            Error = error.Description
+                        });
+                    }
                 }
 
             }
@@ -173,7 +188,7 @@ namespace Plato.Files.Controllers
         // Update
         // -----------
 
-        // Request limits for attachments are enforced by Plato so set MVCs request limits 
+        // Request limits for files are enforced by Plato so set MVCs request limits 
         // for this action to some arbitrary high value, in this case 1 gigabyte
 
         [HttpPost, DisableFormValueModelBinding, ValidateClientAntiForgeryToken]
@@ -181,13 +196,7 @@ namespace Plato.Files.Controllers
         [RequestSizeLimit(1073741824)]
         public async Task<IActionResult> Put()
         {
-
-            // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditFiles))
-            {
-                return Unauthorized();
-            }
-
+            
             var id = string.Empty; 
             if (Request.Query.ContainsKey("id"))
             {
@@ -219,6 +228,17 @@ namespace Plato.Files.Controllers
                 return base.UnauthorizedException();
             }
 
+            // Determine permission to check against
+            var postPermission = file.CreatedUserId == user.Id
+                 ? Permissions.EditOwnFiles
+                 : Permissions.EditAnyFile;
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, postPermission))
+            {
+                return Unauthorized();
+            }
+
             // Validate & process multipart request
             // -------------------
 
@@ -233,11 +253,11 @@ namespace Plato.Files.Controllers
                 }
             }
 
-            // Build attachment
+            // Build file
             // -------------------
 
             var md5 = result.Response.ContentBytes?.ToMD5().ToHex() ?? string.Empty;
-            var attachment = new File
+            var newFile = new File
             {
                 Id = file.Id,
                 FeatureId = file.Id,
@@ -253,29 +273,40 @@ namespace Plato.Files.Controllers
                 ModifiedDate = DateTimeOffset.Now
             };
 
-            // Validate attachment
+            // Validate file
             // -------------------
 
             var output = new List<UploadResult>();
 
-            var validationResult = await _fileValidator.ValidateAsync(attachment);
+            var validationResult = await _fileValidator.ValidateAsync(newFile);
             if (validationResult.Succeeded)
             {
 
-                // Store attachment
-                attachment = await _fileStore.UpdateAsync(attachment);
+                // Update file
+                var fileResult = await _fileManager.UpdateAsync(newFile);
 
                 // Build friendly result
-                if (attachment != null)
+                if (fileResult.Succeeded)
                 {
                     output.Add(new UploadResult()
                     {
-                        Id = attachment.Id,
-                        Name = attachment.Name,
-                        ContentType = attachment.ContentType,
-                        ContentLength = attachment.ContentLength,
-                        FriendlySize = attachment.ContentLength.ToFriendlyFileSize()
+                        Id = fileResult.Response.Id,
+                        Name = fileResult.Response.Name,
+                        ContentType = fileResult.Response.ContentType,
+                        ContentLength = fileResult.Response.ContentLength,
+                        FriendlySize = fileResult.Response.ContentLength.ToFriendlyFileSize()
                     });
+                } 
+                else
+                {
+                    foreach (var error in fileResult.Errors)
+                    {
+                        output.Add(new UploadResult()
+                        {
+                            Name = result.Response.Name,
+                            Error = error.Description
+                        });
+                    }
                 }
 
             }
@@ -328,7 +359,7 @@ namespace Plato.Files.Controllers
             }        
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DeleteFiles))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DeleteOwnFiles))
             {
                 return Unauthorized();
             }

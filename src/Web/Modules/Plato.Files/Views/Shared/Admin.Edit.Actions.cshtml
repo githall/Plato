@@ -2,10 +2,17 @@
 
 @if (Model.File != null)
 {
-    <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.File.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">
-        <i class="fal fa-trash"></i>
-        @T["Delete"]
-    </button>
+    var deletePermission = Model.File.CreatedUserId == CurrentUser.Id
+        ? Permissions.DeleteOwnFiles
+        : Permissions.DeleteAnyFile;
+    <authorize asp-permission="@deletePermission.Name">
+        <authorize-success>
+            <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.File.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">
+                <i class="fal fa-trash"></i>
+                @T["Delete"]
+            </button>
+        </authorize-success>
+    </authorize>
 }
 
 

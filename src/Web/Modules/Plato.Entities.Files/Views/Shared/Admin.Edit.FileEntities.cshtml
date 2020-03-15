@@ -5,7 +5,25 @@
         <h6 class="card-title">@T["Related Entities"]</h6>
     </card-title>
     <card-body>
-        @T["No related entities"]
+
+        @if (Model.Results?.Data != null)
+        {
+
+            foreach (var entity in Model.Results.Data)
+            {
+
+                <a asp-route-area="@entity.ModuleId" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@entity.Id" asp-route-opts.alias="@entity.Alias" class="font-weight-bold">
+                   @entity.Title
+                </a>
+            }
+
+        }
+        else
+        {
+            <span>
+                @T["No related entities"]
+            </span>
+        }
     </card-body>
 </card>
 

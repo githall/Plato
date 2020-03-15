@@ -1,5 +1,5 @@
 Name: Plato Files
-Description: Adds file sharing functionality into Plato.
+Description: Adds file management & search capabilities into Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Files

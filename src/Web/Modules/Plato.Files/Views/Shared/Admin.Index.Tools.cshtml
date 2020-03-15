@@ -1,12 +1,12 @@
 ﻿@model FileIndexViewModel
 
-    <nav class="navbar p-0">
-        @*<form class="form-inline" asp-route-controller="Admin" asp-route-action="Index" method="get" enctype="multipart/form-data">
-
-        </form>*@
-     
-        <a asp-rooute-controller="Admin" asp-route-action="Create" class="btn btn-primary ml-sm-2">
-            <i class="fal fa-plus"></i>
-            @T["Add File"]
-        </a>
-    </nav>
+<authorize asp-permission="@Permissions.AddFiles.Name">
+    <authorize-success>
+        <nav class="navbar p-0">
+            <a asp-rooute-controller="Admin" asp-route-action="Create" class="btn btn-primary ml-sm-2">
+                <i class="fal fa-plus"></i>
+                @T["Add Files"]
+            </a>
+        </nav>
+    </authorize-success>
+</authorize>

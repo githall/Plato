@@ -1,22 +1,33 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Routing;
-using Plato.Entities.Files.ViewModels;
+using Plato.Entities.Models;
+using Plato.Entities.Stores;
 using Plato.Files.Models;
 using Plato.Files.Stores;
 using Plato.Files.ViewModels;
+using PlatoCore.Data.Abstractions;
+using Plato.Entities.Files.Models;
+using Plato.Entities.Files.Stores;
+using Plato.Entities.Files.ViewModels;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Entities.Files.ViewProviders
 {
     public class AdminViewProvider : ViewProviderBase<File>
     {
-
+        
+        private readonly IEntityFileStore<EntityFile> _entityFileStore;
+        private readonly IEntityStore<Entity> _entityStore;
         private readonly IFileStore<File> _fileStore;
 
         public AdminViewProvider(
+            IEntityFileStore<EntityFile> entityfileStore,
+            IEntityStore<Entity> entityStore,
             IFileStore<File> fileStore)
         {
+            _entityFileStore = entityfileStore;
+            _entityStore = entityStore;
             _fileStore = fileStore;
         }
 
@@ -31,16 +42,48 @@ namespace Plato.Entities.Files.ViewProviders
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(File file, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildEditAsync(File file, IViewProviderContext context)
         {
 
-            var viewModel = new FileEntitiesViewModel();
+            // No need to update the Create / Add view
+            if (file.Id == 0)
+            {
+                return default(IViewProviderResult);
+            }
 
-            return Task.FromResult(Views(
-                
-                View<FileEntitiesViewModel>("Admin.Edit.FileEntities", model => viewModel).Zone("sidebar").Order(5)
-                
-            ));
+            // Get entity relationships for file
+            var relationships = await _entityFileStore.QueryAsync()
+                .Take(int.MaxValue, false)
+                .Select<EntityFileQueryParams>(q =>
+                {
+                    q.FileId.Equals(file.Id);
+                })
+                .ToList();
+
+            // Get entities for file
+            IPagedResults<Entity> entities = null;            
+            if (relationships?.Data != null)
+            {
+                entities = await _entityStore.QueryAsync()
+                  .Take(int.MaxValue, false)
+                  .Select<EntityQueryParams>(q =>
+                  {
+                      q.Id.IsIn(relationships.Data.Select(f => f.EntityId).ToArray());
+                  })
+                  .ToList();
+            }
+
+            // Build view model
+            var viewModel = new FileEntitiesViewModel()
+            {
+                Results = entities
+            };
+
+            // Return view
+            return Views(                
+                View<FileEntitiesViewModel>("Admin.Edit.FileEntities", model => viewModel)
+                    .Zone("sidebar").Order(5)
+            );
 
         }
 

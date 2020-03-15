@@ -38,6 +38,7 @@ namespace Plato.Files.Controllers
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
         private readonly IFileStore<File> _fileStore;
+        private readonly IFileManager _fileManager;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -54,8 +55,9 @@ namespace Plato.Files.Controllers
             IBreadCrumbManager breadCrumbManager,
             IPlatoRoleStore platoRoleStore,
             IContextFacade contextFacade,
-            IFeatureFacade featureFacade,
+            IFeatureFacade featureFacade,            
             IFileStore<File> fileStore,
+            IFileManager fileManager,
             IAlerter alerter)
         {
 
@@ -67,7 +69,8 @@ namespace Plato.Files.Controllers
             _platoRoleStore = platoRoleStore;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
-            _fileStore = fileStore;
+            _fileManager = fileManager;
+            _fileStore = fileStore;            
             _alerter = alerter;
 
             T = htmlLocalizer;
@@ -163,7 +166,7 @@ namespace Plato.Files.Controllers
                     .Add(S["Files"], files => files
                         .Action("Index", "Admin", "Plato.Files")
                         .LocalNav())
-                    .Add(S["Add File"]);
+                    .Add(S["Add Files"]);
             });
 
             // Return view
@@ -179,7 +182,7 @@ namespace Plato.Files.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditFiles))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.BrowseFiles))
             {
                 return Unauthorized();
             }
@@ -309,8 +312,9 @@ namespace Plato.Files.Controllers
         public async Task<IActionResult> Delete(string id)
         {
 
-            // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.DeleteFiles))
+            var user = await _contextFacade.GetAuthenticatedUserAsync();
+
+            if (user == null)
             {
                 return Unauthorized();
             }
@@ -321,16 +325,26 @@ namespace Plato.Files.Controllers
                 return NotFound();
             }
 
-            var currentFile = await _fileStore.GetByIdAsync(categoryId);
+            var file = await _fileStore.GetByIdAsync(categoryId);
 
-            if (currentFile == null)
+            if (file == null)
             {
                 return NotFound();
             }
 
-            var result = await _fileStore.DeleteAsync(currentFile);
+            var deletePermission = file.CreatedUserId == user.Id
+                 ? Permissions.DeleteOwnFiles
+                 : Permissions.DeleteAnyFile;
 
-            if (result)
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, deletePermission))
+            {
+                return Unauthorized();
+            }
+
+            var result = await _fileManager.DeleteAsync(file);
+
+            if (result.Succeeded)
             {
                 _alerter.Success(T["File Deleted Successfully"]);
             }

@@ -3,9 +3,11 @@
 @{
     var viewText = Model.File.TotalViews == 1 ? T["view"] : T["views"];
     var views = $"{Model.File.TotalViews.ToPrettyInt()} {viewText.Value}";
-    var iconCss = !string.IsNullOrEmpty(Model.File.Extension) ? $"fiv-icon-{Model.File.Extension.Replace(".", "")}" : string.Empty;
-    
+    var iconCss = !string.IsNullOrEmpty(Model.File.Extension) ? $"fiv-icon-{Model.File.Extension.Replace(".", "")}" : string.Empty;    
     var dropdownId = "dropdown" + Model.File.Id.ToString();
+    var deletePermission = Model.File.CreatedUserId == CurrentUser.Id
+        ? Permissions.DeleteOwnFiles
+        : Permissions.DeleteAnyFile;
 }
 
 <div class="list-left">
@@ -13,29 +15,32 @@
 </div>
 
 <div class="list-body">
-
     <div class="dropdown float-right">
         <a class="btn btn-secondary dropdown-toggle" href="#" id="@dropdownId" role="button" data-toggle="dropdown" aria-haspopup="true" data-display="static" aria-expanded="false">
             @T["Edit"]
         </a>
         <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" aria-labelledby="@dropdownId">
             <div class="min-w-200 max-h-250 overflow-auto">
-
-                <authorize asp-permission="@Permissions.EditFiles.Name">
+                <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="dropdown-item">
+                    @T["Edit"]
+                </a>
+                <authorize asp-permission="@Permissions.OpenFiles.Name">
                     <authorize-success>
-                        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="dropdown-item">
-                            @T["Edit"]
+                        <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="dropdown-item">
+                            @T["Open"]
                         </a>
-                        <div class="dropdown-divider"></div>
                     </authorize-success>
                 </authorize>
-                <a asp-route-controller="Admin" asp-route-action="Open" asp-route-id="@Model.File.Id" target="_blank" class="dropdown-item">
-                    @T["Open"]
-                </a>
-                <a asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="dropdown-item">
-                    @T["Download"]
-                </a>      
-                <authorize asp-permission="@Permissions.DeleteFiles.Name">
+
+                <authorize asp-permission="@Permissions.DownloadFiles.Name">
+                    <authorize-success>
+                        <a asp-route-controller="Admin" asp-route-action="Download" asp-route-id="@Model.File.Id" target="_blank" class="dropdown-item">
+                            @T["Download"]
+                        </a>
+                    </authorize-success>
+                </authorize>
+
+                <authorize asp-permission="@deletePermission.Name">
                     <authorize-success>
                         <div class="dropdown-divider"></div>
                         <button type="submit" asp-route-controller="Admin" asp-route-action="Delete" asp-route-id="@Model.File.Id" data-provide="confirm" class="dropdown-item dropdown-item-danger cursor-pointer">
@@ -47,8 +52,7 @@
             </div>
         </div>
     </div>
-
-    <div>
+    <div>      
         <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="font-weight-bold">
             @Model.File.Name
         </a>

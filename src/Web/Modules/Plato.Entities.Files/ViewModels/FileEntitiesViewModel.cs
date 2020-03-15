@@ -6,7 +6,7 @@ namespace Plato.Entities.Files.ViewModels
     public class FileEntitiesViewModel
     {
 
-        IPagedResults<Entity> Results { get; set; }
+        public IPagedResults<Entity> Results { get; set; }
 
     }
 }
