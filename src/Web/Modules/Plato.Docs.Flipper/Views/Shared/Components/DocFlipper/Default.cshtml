@@ -3,7 +3,7 @@
 @if (Model.PreviousDoc != null || Model.NextDoc != null)
 {
     var css = Model.PreviousDoc != null && Model.NextDoc != null ? "col-6" : "col-12";
-    <div asp-id="previous-and-next" class="row pl-3 pr-3 pb-3">
+    <div class="row pl-3 pr-3 pb-3">
         @if (Model.PreviousDoc != null)
         {
             <div class="@css">

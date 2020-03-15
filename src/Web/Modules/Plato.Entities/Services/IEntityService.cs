@@ -31,6 +31,8 @@ namespace Plato.Entities.Services
 
         IEntityService<TModel> ConfigureQuery(Action<EntityQueryParams> configure);
 
+        Task<TModel> GetResultAsync();
+
         Task<IPagedResults<TModel>> GetResultsAsync();
 
         Task<IPagedResults<TModel>> GetResultsAsync(EntityIndexOptions options);

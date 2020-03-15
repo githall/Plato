@@ -72,6 +72,7 @@ namespace Plato.Articles
             services.AddScoped<IEntityStore<Article>, EntityStore<Article>>();
             services.AddScoped<IEntityManager<Article>, EntityManager<Article>>();
 
+            // Repositories
             services.AddScoped<IEntityReplyRepository<Comment>, EntityReplyRepository<Comment>>();
             services.AddScoped<IEntityReplyStore<Comment>, EntityReplyStore<Comment>>();
             services.AddScoped<IEntityReplyManager<Comment>, EntityReplyManager<Comment>>();

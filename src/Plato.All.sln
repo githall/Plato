@@ -391,6 +391,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Docs.Files", "Web\Mod
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Docs.Flipper", "Web\Modules\Plato.Docs.Flipper\Plato.Docs.Flipper.csproj", "{4D819B29-425D-40EF-B925-C0B8EDF39B15}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Discuss.Files", "Web\Modules\Plato.Discuss.Files\Plato.Discuss.Files.csproj", "{070BB903-939F-4463-9675-7ADA3DE000C3}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1161,6 +1163,10 @@ Global
 		{4D819B29-425D-40EF-B925-C0B8EDF39B15}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D819B29-425D-40EF-B925-C0B8EDF39B15}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D819B29-425D-40EF-B925-C0B8EDF39B15}.Release|Any CPU.Build.0 = Release|Any CPU
+		{070BB903-939F-4463-9675-7ADA3DE000C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{070BB903-939F-4463-9675-7ADA3DE000C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{070BB903-939F-4463-9675-7ADA3DE000C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{070BB903-939F-4463-9675-7ADA3DE000C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1357,6 +1363,7 @@ Global
 		{BD01B7D1-6BDF-42B2-A3CD-EFF455AECFD3} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 		{9A767E8E-01FC-4CBA-A184-F31CDCE6E62B} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 		{4D819B29-425D-40EF-B925-C0B8EDF39B15} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
+		{070BB903-939F-4463-9675-7ADA3DE000C3} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D0A5670-4936-4ADF-AF0F-46D7F9842EC1}

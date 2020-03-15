@@ -456,90 +456,16 @@ namespace Plato.Entities.Stores
         private string _where = null;
 
        
-        private string[] _columns = new string[]
+     
+        private string BuildSelect()
         {
-            "e.Id",
-            "e.ParentId",
-            "e.FeatureId",
-            "e.CategoryId",
-            "e.Title",
-            "e.Alias",
-            "e.Abstract",      
-            "e.IsHidden",
-            "e.IsPrivate",
-            "e.IsSpam",
-            "e.IsPinned",
-            "e.IsDeleted",
-            "e.IsLocked",
-            "e.IsClosed",
-            "e.TotalViews",
-            "e.TotalReplies",
-            "e.TotalAnswers",
-            "e.TotalParticipants",
-            "e.TotalReactions",
-            "e.TotalFollows",
-            "e.TotalReports",
-            "e.TotalStars",
-            "e.TotalRatings",
-            "e.SummedRating",
-            "e.MeanRating",
-            "e.TotalLinks",
-            "e.TotalImages",
-            "e.TotalWords",          
-            "e.SortOrder",
-            "e.CreatedUserId",
-            "e.CreatedDate",
-            "e.EditedUserId",
-            "e.EditedDate",
-            "e.ModifiedUserId",
-            "e.ModifiedDate",
-            "e.LastReplyId",
-            "e.LastReplyUserId",
-            "e.LastReplyDate",
-            "0 AS [Message]",  // not returned with a list for performance reasons
-            "0 AS Html", 
-            "0 AS Urls", 
-            "0 AS IpV4Address",
-            "0 AS IpV6Address", 
-            "f.ModuleId",
-            "c.UserName AS CreatedUserName",
-            "c.DisplayName AS CreatedDisplayName",
-            "c.Alias AS CreatedAlias",
-            "c.PhotoUrl AS CreatedPhotoUrl",
-            "c.PhotoColor AS CreatedPhotoColor",
-            "c.SignatureHtml AS CreatedSignatureHtml",
-            "c.IsVerified AS CreatedIsVerified",
-            "c.IsStaff AS CreatedIsStaff",
-            "c.IsSpam AS CreatedIsSpam",
-            "c.IsBanned AS CreatedIsBanned",
-            "m.UserName AS ModifiedUserName",
-            "m.DisplayName AS ModifiedDisplayName",
-            "m.Alias AS ModifiedAlias",
-            "m.PhotoUrl AS ModifiedPhotoUrl",
-            "m.PhotoColor AS ModifiedPhotoColor",
-            "m.SignatureHtml AS ModifiedSignatureHtml",
-            "m.IsVerified AS ModifiedIsVerified",
-            "m.IsStaff AS ModifiedIsStaff",
-            "m.IsSpam AS ModifiedIsSpam",
-            "m.IsBanned AS ModifiedIsBanned",
-            "l.UserName AS LastReplyUserName",
-            "l.DisplayName AS LastReplyDisplayName",
-            "l.Alias AS LastReplyAlias",
-            "l.PhotoUrl AS LastReplyPhotoUrl",
-            "l.PhotoColor AS LastReplyPhotoColor",
-            "l.SignatureHtml AS LastReplySignatureHtml",
-            "l.IsVerified AS LastReplyIsVerified",
-            "l.IsStaff AS LastReplyIsStaff",
-            "l.IsSpam AS LastReplyIsSpam",
-            "l.IsBanned AS LastReplyIsBanned",
-            "@MaxRank AS MaxRank"
-        };
 
-        string BuildSelect()
-        {
+
+            var columns = PrepareColumns();
+
             var sb = new StringBuilder();
             sb
-                .Append(_columns.ToDelimitedString())
+                .Append(columns.ToDelimitedString())
                 .Append(", ")            
                 .Append(HasKeywords() ? "r.[Rank] AS [Rank] " : "0 AS [Rank]");                
 
@@ -552,8 +478,8 @@ namespace Plato.Entities.Stores
             return sb.ToString();
 
         }
-        
-        string BuildTables()
+
+        private string BuildTables()
         {
 
             var sb = new StringBuilder();
@@ -595,7 +521,7 @@ namespace Plato.Entities.Stores
 
         }
 
-        string BuildWhere()
+        private string BuildWhere()
         {
 
             var sb = new StringBuilder();
@@ -944,8 +870,8 @@ namespace Plato.Entities.Stores
             return sb.ToString();
 
         }
-        
-        string GetTableNameWithPrefix(string tableName)
+
+        private string GetTableNameWithPrefix(string tableName)
         {
             return !string.IsNullOrEmpty(_query.Options.TablePrefix)
                 ? _query.Options.TablePrefix + tableName
@@ -968,6 +894,108 @@ namespace Plato.Entities.Stores
                 i += 1;
             }
             return sb.ToString();
+        }
+
+        IList<string> PrepareColumns()
+        {
+
+            var columns = new List<string>()
+            {
+                "e.Id",
+                "e.ParentId",
+                "e.FeatureId",
+                "e.CategoryId",
+                "e.Title",
+                "e.Alias",
+                "e.Abstract",
+                "e.IsHidden",
+                "e.IsPrivate",
+                "e.IsSpam",
+                "e.IsPinned",
+                "e.IsDeleted",
+                "e.IsLocked",
+                "e.IsClosed",
+                "e.TotalViews",
+                "e.TotalReplies",
+                "e.TotalAnswers",
+                "e.TotalParticipants",
+                "e.TotalReactions",
+                "e.TotalFollows",
+                "e.TotalReports",
+                "e.TotalStars",
+                "e.TotalRatings",
+                "e.SummedRating",
+                "e.MeanRating",
+                "e.TotalLinks",
+                "e.TotalImages",
+                "e.TotalWords",
+                "e.SortOrder",
+                "e.CreatedUserId",
+                "e.CreatedDate",
+                "e.EditedUserId",
+                "e.EditedDate",
+                "e.ModifiedUserId",
+                "e.ModifiedDate",
+                "e.LastReplyId",
+                "e.LastReplyUserId",
+                "e.LastReplyDate",    
+                "f.ModuleId",
+                "c.UserName AS CreatedUserName",
+                "c.DisplayName AS CreatedDisplayName",
+                "c.Alias AS CreatedAlias",
+                "c.PhotoUrl AS CreatedPhotoUrl",
+                "c.PhotoColor AS CreatedPhotoColor",
+                "c.SignatureHtml AS CreatedSignatureHtml",
+                "c.IsVerified AS CreatedIsVerified",
+                "c.IsStaff AS CreatedIsStaff",
+                "c.IsSpam AS CreatedIsSpam",
+                "c.IsBanned AS CreatedIsBanned",
+                "m.UserName AS ModifiedUserName",
+                "m.DisplayName AS ModifiedDisplayName",
+                "m.Alias AS ModifiedAlias",
+                "m.PhotoUrl AS ModifiedPhotoUrl",
+                "m.PhotoColor AS ModifiedPhotoColor",
+                "m.SignatureHtml AS ModifiedSignatureHtml",
+                "m.IsVerified AS ModifiedIsVerified",
+                "m.IsStaff AS ModifiedIsStaff",
+                "m.IsSpam AS ModifiedIsSpam",
+                "m.IsBanned AS ModifiedIsBanned",
+                "l.UserName AS LastReplyUserName",
+                "l.DisplayName AS LastReplyDisplayName",
+                "l.Alias AS LastReplyAlias",
+                "l.PhotoUrl AS LastReplyPhotoUrl",
+                "l.PhotoColor AS LastReplyPhotoColor",
+                "l.SignatureHtml AS LastReplySignatureHtml",
+                "l.IsVerified AS LastReplyIsVerified",
+                "l.IsStaff AS LastReplyIsStaff",
+                "l.IsSpam AS LastReplyIsSpam",
+                "l.IsBanned AS LastReplyIsBanned",
+                "@MaxRank AS MaxRank"
+            };
+                    
+            if (_query.PageSize == 1)
+            {
+                // If we are only returning a single result return nvarchar(max) data types
+                columns.Add("e.[Message]");
+                columns.Add("e.Html");
+                columns.Add("e.Urls");
+                columns.Add("e.IpV4Address");
+                columns.Add("e.IpV6Address");
+            }
+            else
+            {
+                // We are returning more than 1 result, for performance
+                // reasons we stub out the nvarchar(max) data types with 4 bytes 
+                // This helps minimize the network traffic for the query
+                columns.Add("0 AS [Message]");
+                columns.Add("0 AS Html");
+                columns.Add("0 AS Urls");
+                columns.Add("0 AS IpV4Address");
+                columns.Add("0 AS IpV6Address");
+            }
+
+            return columns;
+
         }
 
         IDictionary<string, OrderBy> GetSafeSortColumns()
