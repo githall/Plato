@@ -5,20 +5,18 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Net.Http.Headers;
-using PlatoCore.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Files.Stores;
-using Plato.Entities.Models;
 using Plato.Files.Models;
 using Plato.Entities.Files.Stores;
 using Plato.Entities.Files.Models;
 using Plato.Discuss.Models;
-using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
 using Plato.Entities.Files.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Plato.Files.Services;
 using PlatoCore.Hosting.Abstractions;
+using Plato.Entities.Services;
 
 namespace Plato.Discuss.Files.Controllers
 {
@@ -30,21 +28,22 @@ namespace Plato.Discuss.Files.Controllers
 
         private readonly IFileViewIncrementer<File> _fileViewIncrementer;
         private readonly IEntityFileStore<EntityFile> _entityFileStore;        
-        private readonly IAuthorizationService _authorizationService;        
-        private readonly IEntityStore<Topic> _entityStore;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IEntityService<Topic> _entityService;      
         private readonly IFileStore<File> _fileStore;
 
         public HomeController(
             IFileViewIncrementer<File> fileViewIncrementer,
             IEntityFileStore<EntityFile> entityFileStore,            
             IAuthorizationService authorizationService,
-            IEntityStore<Topic> entityStore,
+            IEntityService<Topic> entityService,              
             IFileStore<File> fileStore)
         {
             _authorizationService = authorizationService;
             _fileViewIncrementer = fileViewIncrementer;
-            _entityFileStore = entityFileStore;
-            _entityStore = entityStore;
+            _entityFileStore = entityFileStore;         
+            _entityService = entityService;
+       
             _fileStore = fileStore;
         }
 
@@ -130,7 +129,6 @@ namespace Plato.Discuss.Files.Controllers
             opts.PostPermission = Permissions.PostDiscussFiles;
             opts.DeleteOwnPermission = Permissions.DeleteOwnDiscussFiles;
             opts.DeleteAnyPermission = Permissions.DeleteAnyDiscussFiles;
-
             opts.DeleteRoute = new RouteValueDictionary()
             {
                 ["area"] = ModuleId,
@@ -166,7 +164,6 @@ namespace Plato.Discuss.Files.Controllers
             opts.PostPermission = Permissions.PostDiscussFiles;
             opts.DeleteOwnPermission = Permissions.DeleteOwnDiscussFiles;
             opts.DeleteAnyPermission = Permissions.DeleteAnyDiscussFiles;
-
             opts.DeleteRoute = new RouteValueDictionary()
             {
                 ["area"] = ModuleId,
@@ -181,101 +178,73 @@ namespace Plato.Discuss.Files.Controllers
 
         // ------------------------------
 
-        async Task<bool> AuthorizeAsync(File attachment)
-        {
+        async Task<bool> AuthorizeAsync(File file)
+        {     
 
-            // Get all entities associated with the attachment
+            // Get all relationships for the file
             var relationships = await _entityFileStore
                 .QueryAsync()
                 .Select<EntityFileQueryParams>(q =>
                 {
-                    q.FileId.Equals(attachment.Id);
+                    q.FileId.Equals(file.Id);
                 })
                 .ToList();
 
-            // Deny access by default
-            var authorized = false;
+            // We don't have any relationships to check against
+            // Allow access as the file may not have been associated yet
+            if (relationships?.Data == null)
+            {                
+                return true;
+            }
 
-            if (relationships?.Data != null)
-            {
-
-                // Get all related entities
-                var entities = await _entityStore
-                    .QueryAsync()
-                    .Select<EntityQueryParams>(q =>
-                    {
-                        q.Id.IsIn(relationships.Data.Select(r => r.EntityId).ToArray());
-                    })
-                    .ToList();
-
-                if (entities?.Data != null)
+            // Get all entities for relationships
+            var entities = await _entityService
+                .ConfigureQuery(async q =>
                 {
-                    // If any of the authorization checks pass allow access         
-                    foreach (var entity in entities.Data)
+
+                    // Get all entities associated with file
+                    q.Id.IsIn(relationships.Data.Select(r => r.EntityId).ToArray());
+
+                    // Hide private?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Discuss.Permissions.ViewPrivateTopics))
                     {
-                        var authorizeResult = await AuthorizeAsync(entity);
-                        if (authorizeResult.Succeeded)
-                        {
-                            authorized = true;
-                        }
+                        q.HidePrivate.True();
                     }
-                }
-            }
 
-            return authorized;
+                    // Hide hidden?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Discuss.Permissions.ViewHiddenTopics))
+                    {
+                        q.HideHidden.True();
+                    }
 
-        }
+                    // Hide spam?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Discuss.Permissions.ViewSpamTopics))
+                    {
+                        q.HideSpam.True();
+                    }
 
-        async Task<ICommandResultBase> AuthorizeAsync(IEntity entity)
-        {
+                    // Hide deleted?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Discuss.Permissions.ViewDeletedTopics))
+                    {
+                        q.HideDeleted.True();
+                    }
 
-            // Our result
-            var result = new CommandResultBase();
+                })
+                .GetResultsAsync();
 
-            // Generic failure message
-            const string error = "Unauthorized";
-
-            // IsHidden
-            if (entity.IsHidden)
+            // If we have results we have permission to view 
+            // at least one of the entities associted with the file
+            if (entities?.Data != null)
             {
-                if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Discuss.Permissions.ViewHiddenTopics))
-                {
-                    return result.Failed(error);
-                }
+                return true;
             }
+         
 
-            // IsPrivate
-            if (entity.IsPrivate)
-            {
-                if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Discuss.Permissions.ViewPrivateTopics))
-                {
-                    return result.Failed(error);
-                }
-            }
-
-            // IsSpam
-            if (entity.IsSpam)
-            {
-                if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Discuss.Permissions.ViewSpamTopics))
-                {
-                    return result.Failed(error);
-                }
-            }
-
-            // IsDeleted
-            if (entity.IsDeleted)
-            {
-                if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Discuss.Permissions.ViewDeletedTopics))
-                {
-                    return result.Failed(error);
-                }
-            }
-
-            return result.Success();
+            return false;
 
         }
 

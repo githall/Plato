@@ -22,7 +22,7 @@ namespace Plato.Files.Services
 
             if (user == null)
             {
-                return Task.FromResult(default(FileOptions));
+                return Task.FromResult(new FileOptions());
             }
 
             return Task.FromResult(new FileOptions()

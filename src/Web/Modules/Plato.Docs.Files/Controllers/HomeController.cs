@@ -19,6 +19,7 @@ using Plato.Entities.Files.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Plato.Files.Services;
 using PlatoCore.Hosting.Abstractions;
+using Plato.Entities.Services;
 
 namespace Plato.Docs.Files.Controllers
 {
@@ -30,21 +31,21 @@ namespace Plato.Docs.Files.Controllers
 
         private readonly IFileViewIncrementer<File> _fileViewIncrementer;
         private readonly IEntityFileStore<EntityFile> _entityFileStore;        
-        private readonly IAuthorizationService _authorizationService;        
-        private readonly IEntityStore<Doc> _entityStore;
+        private readonly IAuthorizationService _authorizationService;
+        private readonly IEntityService<Doc> _entityService; 
         private readonly IFileStore<File> _fileStore;
 
         public HomeController(
             IFileViewIncrementer<File> fileViewIncrementer,
             IEntityFileStore<EntityFile> entityFileStore,            
             IAuthorizationService authorizationService,
-            IEntityStore<Doc> entityStore,
+            IEntityService<Doc> entityService,       
             IFileStore<File> fileStore)
         {
             _authorizationService = authorizationService;
             _fileViewIncrementer = fileViewIncrementer;
             _entityFileStore = entityFileStore;
-            _entityStore = entityStore;
+            _entityService = entityService;        
             _fileStore = fileStore;
         }
 
@@ -181,101 +182,69 @@ namespace Plato.Docs.Files.Controllers
 
         // ------------------------------
 
-        async Task<bool> AuthorizeAsync(File attachment)
+        async Task<bool> AuthorizeAsync(File file)
         {
 
-            // Get all entities associated with the attachment
+            // Get all relationships for the file
             var relationships = await _entityFileStore
                 .QueryAsync()
                 .Select<EntityFileQueryParams>(q =>
                 {
-                    q.FileId.Equals(attachment.Id);
+                    q.FileId.Equals(file.Id);
                 })
                 .ToList();
-
-            // Deny access by default
-            var authorized = false;
 
             if (relationships?.Data != null)
             {
 
-                // Get all related entities
-                var entities = await _entityStore
-                    .QueryAsync()
-                    .Select<EntityQueryParams>(q =>
+                // Get all entities for relationships
+                var entities = await _entityService
+                    .ConfigureQuery(async q =>
                     {
-                        q.Id.IsIn(relationships.Data.Select(r => r.EntityId).ToArray());
-                    })
-                    .ToList();
 
+                        // Get all entities associated with file
+                        q.Id.IsIn(relationships.Data.Select(r => r.EntityId).ToArray());
+
+                        // Hide private?
+                        if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                            Docs.Permissions.ViewPrivateDocs))
+                        {
+                            q.HidePrivate.True();
+                        }
+
+                        // Hide hidden?
+                        if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                            Docs.Permissions.ViewHiddenDocs))
+                        {
+                            q.HideHidden.True();
+                        }
+
+                        // Hide spam?
+                        if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                            Docs.Permissions.ViewSpamDocs))
+                        {
+                            q.HideSpam.True();
+                        }
+
+                        // Hide deleted?
+                        if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                            Docs.Permissions.ViewDeletedDocs))
+                        {
+                            q.HideDeleted.True();
+                        }
+
+                    })
+                    .GetResultsAsync();
+
+                // If we have results we have permission to view 
+                // at least one of the entities associted with the file
                 if (entities?.Data != null)
                 {
-                    // If any of the authorization checks pass allow access         
-                    foreach (var entity in entities.Data)
-                    {
-                        var authorizeResult = await AuthorizeAsync(entity);
-                        if (authorizeResult.Succeeded)
-                        {
-                            authorized = true;
-                        }
-                    }
+                    return true;
                 }
             }
 
-            return authorized;
-
-        }
-
-        async Task<ICommandResultBase> AuthorizeAsync(IEntity entity)
-        {
-
-            // Our result
-            var result = new CommandResultBase();
-
-            // Generic failure message
-            const string error = "Unauthorized";
-
-            // IsHidden
-            if (entity.IsHidden)
-            {
-                if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Docs.Permissions.ViewHiddenDocs))
-                {
-                    return result.Failed(error);
-                }
-            }
-
-            // IsPrivate
-            if (entity.IsPrivate)
-            {
-                if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Docs.Permissions.ViewPrivateDocs))
-                {
-                    return result.Failed(error);
-                }
-            }
-
-            // IsSpam
-            if (entity.IsSpam)
-            {
-                if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Docs.Permissions.ViewSpamDocs))
-                {
-                    return result.Failed(error);
-                }
-            }
-
-            // IsDeleted
-            if (entity.IsDeleted)
-            {
-                if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                    entity.CategoryId, Docs.Permissions.ViewDeletedDocs))
-                {
-                    return result.Failed(error);
-                }
-            }
-
-            return result.Success();
+            return false;
 
         }
 

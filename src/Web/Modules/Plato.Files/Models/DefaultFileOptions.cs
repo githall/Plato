@@ -1,6 +1,6 @@
 ﻿namespace Plato.Files.Models
 {
-    public class DefaultFileSettings
+    public class DefaultFileOptions
     {
 
         public const long MaxFileSize = 2097152; // 2mb
