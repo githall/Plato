@@ -23,7 +23,7 @@ namespace Plato.Ideas.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, IdeaListItemViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, IdeaViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, IdeaViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, IdeaListViewAdapter>();            
             //services.AddScoped<IViewAdapterProvider, IdeaCommentListViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, IdeaCommentListItemViewAdapter>();

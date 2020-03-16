@@ -526,12 +526,6 @@ namespace Plato.Ideas.Controllers
 
         public async Task<IActionResult> Edit(EntityOptions opts)
         {
-            // Get entity we are editing
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
-            if (entity == null)
-            {
-                return NotFound();
-            }
 
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
@@ -540,6 +534,19 @@ namespace Plato.Ideas.Controllers
             if (user == null)
             {
                 return Unauthorized();
+            }
+
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
+
+            // We don't have permission or the entity does not exist
+            if (entity == null)
+            {
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Do we have permission
@@ -702,13 +709,19 @@ namespace Plato.Ideas.Controllers
                 return NotFound();
             }
 
-            // Get reply entity
-            var entity = await _entityStore.GetByIdAsync(reply.EntityId);
+            // Get the entity
+            var entity = await GetEntityAsync(reply.EntityId);
+
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(reply.EntityId) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
-            
+
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
