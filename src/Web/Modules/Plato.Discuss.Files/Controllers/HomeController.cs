@@ -242,7 +242,6 @@ namespace Plato.Discuss.Files.Controllers
             {
                 return true;
             }
-         
 
             return false;
 

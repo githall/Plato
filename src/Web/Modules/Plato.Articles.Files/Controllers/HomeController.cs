@@ -192,54 +192,57 @@ namespace Plato.Articles.Files.Controllers
                 })
                 .ToList();
 
-            if (relationships?.Data != null)
+            // We don't have any relationships to check against
+            // Allow access as the file may not have been associated yet
+            if (relationships?.Data == null)
             {
+                return true;
+            }
 
-                // Get all entities for relationships
-                var entities = await _entityService
-                    .ConfigureQuery(async q =>
-                    {
-
-                        // Get all entities associated with file
-                        q.Id.IsIn(relationships.Data.Select(r => r.EntityId).ToArray());
-
-                        // Hide private?
-                        if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                            Articles.Permissions.ViewPrivateArticles))
-                        {
-                            q.HidePrivate.True();
-                        }
-
-                        // Hide hidden?
-                        if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                            Articles.Permissions.ViewHiddenArticles))
-                        {
-                            q.HideHidden.True();
-                        }
-
-                        // Hide spam?
-                        if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                            Articles.Permissions.ViewSpamArticles))
-                        {
-                            q.HideSpam.True();
-                        }
-
-                        // Hide deleted?
-                        if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
-                            Articles.Permissions.ViewDeletedArticles))
-                        {
-                            q.HideDeleted.True();
-                        }
-
-                    })
-                    .GetResultsAsync();
-
-                // If we have results we have permission to view 
-                // at least one of the entities associted with the file
-                if (entities?.Data != null)
+            // Get all entities for relationships
+            var entities = await _entityService
+                .ConfigureQuery(async q =>
                 {
-                    return true;
-                }
+
+                    // Get all entities associated with file
+                    q.Id.IsIn(relationships.Data.Select(r => r.EntityId).ToArray());
+
+                    // Hide private?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Articles.Permissions.ViewPrivateArticles))
+                    {
+                        q.HidePrivate.True();
+                    }
+
+                    // Hide hidden?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Articles.Permissions.ViewHiddenArticles))
+                    {
+                        q.HideHidden.True();
+                    }
+
+                    // Hide spam?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Articles.Permissions.ViewSpamArticles))
+                    {
+                        q.HideSpam.True();
+                    }
+
+                    // Hide deleted?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Articles.Permissions.ViewDeletedArticles))
+                    {
+                        q.HideDeleted.True();
+                    }
+
+                })
+                .GetResultsAsync();
+
+            // If we have results we have permission to view 
+            // at least one of the entities associted with the file
+            if (entities?.Data != null)
+            {
+                return true;
             }
 
             return false;

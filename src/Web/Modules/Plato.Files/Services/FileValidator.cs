@@ -68,7 +68,7 @@ namespace Plato.Files.Services
             // We need options to validate
             if (options == null)
             {
-                return result.Failed("Could not obtain file settings for your account..");
+                return result.Failed("Could not obtain file options for your account..");
             }
 
             // Compile errors
