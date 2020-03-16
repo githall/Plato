@@ -80,7 +80,7 @@ namespace Plato.Entities.Services
 
                     _configureParams?.Invoke(q);
 
-                })            
+                })
                 .ToList();
 
             if (results?.Data != null)
