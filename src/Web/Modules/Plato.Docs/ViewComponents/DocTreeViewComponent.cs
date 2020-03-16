@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Plato.Docs.Models;
 using Microsoft.AspNetCore.Authorization;
 using Plato.Entities.Extensions;
 using Plato.Entities.Models;
@@ -14,21 +13,22 @@ using PlatoCore.Features.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Layout.Views.Abstractions;
+using Plato.Docs.Models;
 
 namespace Plato.Docs.ViewComponents
 {
 
-   public class DocTreeViewComponent : ViewComponentBase
+    public class DocTreeViewComponent : ViewComponentBase
     {
 
         private readonly IAuthorizationService _authorizationService;
-        private readonly ISimpleEntityService<SimpleEntity> _simpleEntityService;
+        private readonly ISimpleEntityService<SimpleDoc> _simpleEntityService;
         private readonly IFeatureFacade _featureFacade;
 
         private bool? _displayMenu;
 
         public DocTreeViewComponent(
-            ISimpleEntityService<SimpleEntity> simpleEntityService,
+            ISimpleEntityService<SimpleDoc> simpleEntityService,
             IAuthorizationService authorizationService,            
             IFeatureFacade featureFacade)
         {
@@ -72,7 +72,7 @@ namespace Plato.Docs.ViewComponents
 
         }
 
-        private async Task<IPagedResults<SimpleEntity>> GetSimpleEntitiesAsync(EntityIndexOptions options)
+        private async Task<IPagedResults<SimpleDoc>> GetSimpleEntitiesAsync(EntityIndexOptions options)
         {
 
             // Set default feature

@@ -437,14 +437,14 @@ namespace Plato.Entities.Stores
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
             return sb.ToString();
         }
-        
-        private string _where = null;
 
         public string Where => _where ?? (_where = BuildWhere());
 
         #endregion
 
         #region "Private Methods"
+
+        private string _where = null;
 
         private string[] _columns = new string[]
         {
@@ -470,6 +470,7 @@ namespace Plato.Entities.Stores
 
         private string BuildSelect()
         {
+       
             var sb = new StringBuilder();
             sb
                 .Append(_columns.ToDelimitedString())
@@ -485,7 +486,7 @@ namespace Plato.Entities.Stores
             return sb.ToString();
 
         }
-        
+
         private string BuildTables()
         {
 

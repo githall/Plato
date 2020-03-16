@@ -4,12 +4,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Docs.Flipper.ViewModels;
 using Plato.Docs.Models;
-using Plato.Entities.Models;
 using Plato.Entities.Services;
-using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Security.Abstractions;
 
 namespace Plato.Docs.Flipper.ViewComponents
@@ -17,20 +14,16 @@ namespace Plato.Docs.Flipper.ViewComponents
 
     public class DocFlipperViewComponent : ViewComponent
     {
-
-
-        private readonly IAuthorizationService _authorizationService;
-        private readonly ISimpleEntityService<SimpleEntity> _simpleEntityService;
-        private readonly IEntityStore<Doc> _entityStore;
+        
+        private readonly ISimpleEntityService<SimpleDoc> _simpleEntityService;
+        private readonly IAuthorizationService _authorizationService;    
 
         public DocFlipperViewComponent(
-            ISimpleEntityService<SimpleEntity> simpleEntityService,
-            IAuthorizationService authorizationService,
-            IEntityStore<Doc> entityStore)
+            ISimpleEntityService<SimpleDoc> simpleEntityService,
+            IAuthorizationService authorizationService)
         {
             _authorizationService = authorizationService;
-            _simpleEntityService = simpleEntityService;
-            _entityStore = entityStore;
+            _simpleEntityService = simpleEntityService;          
         }
 
         public async Task<IViewComponentResult> InvokeAsync(Doc entity, DocComment reply)
@@ -98,9 +91,9 @@ namespace Plato.Docs.Flipper.ViewComponents
                     Order = OrderBy.Asc
                 });
 
-
             var model = new DocFlipperViewModel();
 
+            // Return an empty model
             if (entities?.Data == null)
             {
                 return model;

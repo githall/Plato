@@ -896,7 +896,7 @@ namespace Plato.Entities.Stores
             return sb.ToString();
         }
 
-        IList<string> PrepareColumns()
+        private IList<string> PrepareColumns()
         {
 
             var columns = new List<string>()
@@ -998,7 +998,7 @@ namespace Plato.Entities.Stores
 
         }
 
-        IDictionary<string, OrderBy> GetSafeSortColumns()
+        private IDictionary<string, OrderBy> GetSafeSortColumns()
         {
             var output = new Dictionary<string, OrderBy>();
             foreach (var sortColumn in _query.SortColumns)
@@ -1012,8 +1012,8 @@ namespace Plato.Entities.Stores
 
             return output;
         }
-        
-        string GetSortColumn(string columnName)
+
+        private string GetSortColumn(string columnName)
         {
 
             if (String.IsNullOrEmpty(columnName))
@@ -1096,8 +1096,8 @@ namespace Plato.Entities.Stores
         }
 
         // -- Search
-        
-        string BuildFederatedResults()
+
+        private string BuildFederatedResults()
         {
 
             // No keywords
