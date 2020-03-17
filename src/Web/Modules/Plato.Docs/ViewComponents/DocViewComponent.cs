@@ -18,11 +18,11 @@ namespace Plato.Docs.ViewComponents
     {
 
         private readonly IAuthorizationService _authorizationService;
-        private readonly ISimpleEntityService<SimpleEntity> _simpleEntityService;
+        private readonly ISimpleEntityService<SimpleDoc> _simpleEntityService;
         private readonly IEntityStore<Doc> _entityStore;
 
         public DocViewComponent(            
-            ISimpleEntityService<SimpleEntity> simpleEntityService,
+            ISimpleEntityService<SimpleDoc> simpleEntityService,
             IAuthorizationService authorizationService,
             IEntityStore<Doc> entityStore)
         {

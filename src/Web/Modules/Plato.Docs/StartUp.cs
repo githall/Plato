@@ -85,10 +85,11 @@ namespace Plato.Docs
             services.AddScoped<IPostManager<Doc>, DocManager>();
             services.AddScoped<IPostManager<DocComment>, ReplyManager>();
 
-            // Services
-            services.AddScoped<IEntityService<Doc>, EntityService<Doc>>();            
-            services.AddScoped<IEntityReplyService<DocComment>, EntityReplyService<DocComment>>();
-            services.AddScoped<ISimpleEntityService<SimpleDoc>, SimpleEntityService<SimpleDoc>>();
+            // Entity services - transient as they contains action
+            // delegates that can change state several times per request
+            services.AddTransient<IEntityService<Doc>, EntityService<Doc>>();            
+            services.AddTransient<IEntityReplyService<DocComment>, EntityReplyService<DocComment>>();
+            services.AddTransient<ISimpleEntityService<SimpleDoc>, SimpleEntityService<SimpleDoc>>();
 
             // View incrementer
             services.AddScoped<IEntityViewIncrementer<Doc>, EntityViewIncrementer<Doc>>();

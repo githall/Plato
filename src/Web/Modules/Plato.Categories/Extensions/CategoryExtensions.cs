@@ -23,6 +23,33 @@ namespace Plato.Categories.Extensions
             return RecurseChildrenInternal<TCategory>(input.ToList(), id);
         }
 
+        public static TCategory GetById<TCategory>(this IEnumerable<ICategory> input, int id) where TCategory : class, ICategory
+        {
+            return GetByIdRecursively<TCategory>(input, id);
+        }
+
+        // ----------------
+
+        private static TCategory GetByIdRecursively<TCategory>(
+            this IEnumerable<ICategory> input,
+            int id) 
+            where TCategory : class, ICategory
+        {
+            foreach (var category in input)
+            {
+                if (category.Id == id)
+                {
+                    return (TCategory) category;
+                }
+                if (category.Children.Any())
+                {
+                    GetByIdRecursively<TCategory>(category.Children, id);
+                }
+            }
+
+            return null;
+        }
+
         private static IList<TCategory> BuildHierarchyRecursively<TCategory>(
            ILookup<int, ICategory> input,
            IList<TCategory> output = null,
@@ -38,7 +65,7 @@ namespace Plato.Categories.Extensions
             foreach (var entity in input[parentId])
             {
 
-                var item = (TCategory) entity;
+                var item = (TCategory)entity;
                 if (depth < 0) depth = 0;
                 if (parent != null) depth++;
 

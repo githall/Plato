@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -16,19 +17,23 @@ using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
+using Plato.Categories.Services;
+using Plato.Categories.Extensions;
+using Plato.Categories.Models;
 
 namespace Plato.Docs.Categories.Controllers
 {
     public class HomeController : Controller, IUpdateModel
     {
-     
+
         private readonly IViewProviderManager<Category> _categoryViewProvider;
+        private readonly ICategoryService<Category> _categoryService;
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IPageTitleBuilder _pageTitleBuilder;
-        private readonly IContextFacade _contextFacade;
+        private readonly IPageTitleBuilder _pageTitleBuilder;        
         private readonly IFeatureFacade _featureFacade;
- 
+        private readonly IContextFacade _contextFacade;
+
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
@@ -37,22 +42,25 @@ namespace Plato.Docs.Categories.Controllers
             IStringLocalizer stringLocalizer,
             IHtmlLocalizer<HomeController> localizer,
             IViewProviderManager<Category> categoryViewProvider,
-            IBreadCrumbManager breadCrumbManager,
-            ICategoryStore<Category> categoryStore,
+             ICategoryService<Category> categoryService,
+             ICategoryStore<Category> categoryStore,
+            IBreadCrumbManager breadCrumbManager,            
             IPageTitleBuilder pageTitleBuilder,
             IContextFacade contextFacade, 
             IFeatureFacade featureFacade)
         {
-      
+
             _categoryViewProvider = categoryViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
+            _categoryService = categoryService;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _categoryStore = categoryStore;
-       
+
             T = localizer;
             S = stringLocalizer;
+
         }
 
         // -----------------
@@ -74,13 +82,24 @@ namespace Plato.Docs.Categories.Controllers
                 pager = new PagerOptions();
             }
 
-            // Get category
-            var category = await _categoryStore.GetByIdAsync(opts.CategoryId);
-
-            // If supplied ensure category exists
-            if (category == null && opts.CategoryId > 0)
+            Category category = null;
+            if (opts.CategoryId > 0)
             {
-                return NotFound();
+
+                // Get category
+                category = await _categoryStore.GetByIdAsync(opts.CategoryId);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                // Get the permissioned category
+                var permissionedCategory = await GetCategoryAsync(opts.CategoryId);
+                if (permissionedCategory == null)
+                {
+                    return Unauthorized();
+                }
+
             }
 
             // Get default options
@@ -193,17 +212,45 @@ namespace Plato.Docs.Categories.Controllers
 
         // ---------------
 
-        async Task<EntityIndexViewModel<Doc>> GetIndexViewModelAsync(Category category, EntityIndexOptions options, PagerOptions pager)
-        {
-            
-            // Get current feature
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Docs");
 
-            // Restrict results to current feature
+        // Use the category service to get the category to 
+        // ensure query adapters are enforced
+        private async Task<ICategory> GetCategoryAsync(int categoryId)
+        {
+
+            if (categoryId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(categoryId));
+            }
+
+            // Get categories feature
+            var featureId = 0;
+            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Docs.Categories");
             if (feature != null)
             {
-                options.FeatureId = feature.Id;
+                featureId = feature.Id;
             }
+
+            // Build categories for feature
+            var categories = await _categoryService
+                .ConfigureQuery(q =>
+                {
+                    q.FeatureId.Equals(featureId);
+                })
+                .GetResultsAsync();
+
+            // Ensure the user has access to the category
+            if (categories?.Data != null)
+            {
+                return categories.Data.GetById<Category>(categoryId);
+            }
+
+            return null;
+
+        }
+
+        private async Task<EntityIndexViewModel<Doc>> GetIndexViewModelAsync(Category category, EntityIndexOptions options, PagerOptions pager)
+        {
             
             // Include child categories
             if (category != null)
@@ -225,6 +272,15 @@ namespace Plato.Docs.Categories.Controllers
             else
             {
                 options.CategoryId = 0;
+            }
+
+            // Get current feature
+            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Docs");
+
+            // Restrict results to current feature
+            if (feature != null)
+            {
+                options.FeatureId = feature.Id;
             }
 
             // Ensure pinned entities appear first

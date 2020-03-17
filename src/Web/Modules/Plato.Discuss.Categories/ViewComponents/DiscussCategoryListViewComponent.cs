@@ -40,7 +40,8 @@ namespace Plato.Discuss.Categories.ViewComponents
                 .GetResultsAsync(options, new PagerOptions()
                 {
                     Page = 1,
-                    Size = int.MaxValue
+                    Size = int.MaxValue,
+                    CountTotal = false
                 });
             
             return new CategoryListViewModel<Category>()

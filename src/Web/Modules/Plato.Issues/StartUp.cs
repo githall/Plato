@@ -80,9 +80,10 @@ namespace Plato.Issues
             services.AddScoped<IPostManager<Issue>, IssueManager>();
             services.AddScoped<IPostManager<Comment>, ReplyManager>();
 
-            // Entity services
-            services.AddScoped<IEntityService<Issue>, EntityService<Issue>>();
-            services.AddScoped<IEntityReplyService<Comment>, EntityReplyService<Comment>>();
+            // Entity services - transient as they contains action
+            // delegates that can change state several times per request
+            services.AddTransient<IEntityService<Issue>, EntityService<Issue>>();
+            services.AddTransient<IEntityReplyService<Comment>, EntityReplyService<Comment>>();
 
             // View incrementer
             services.AddScoped<IEntityViewIncrementer<Issue>, EntityViewIncrementer<Issue>>();

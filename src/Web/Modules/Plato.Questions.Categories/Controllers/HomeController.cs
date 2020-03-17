@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -16,6 +17,9 @@ using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
+using Plato.Categories.Services;
+using Plato.Categories.Extensions;
+using Plato.Categories.Models;
 
 namespace Plato.Questions.Categories.Controllers
 {
@@ -23,6 +27,7 @@ namespace Plato.Questions.Categories.Controllers
     {
 
         private readonly IViewProviderManager<Category> _viewProvider;
+        private readonly ICategoryService<Category> _categoryService;
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
@@ -37,14 +42,17 @@ namespace Plato.Questions.Categories.Controllers
             IStringLocalizer stringLocalizer,
             IHtmlLocalizer<HomeController> localizer,
             IViewProviderManager<Category> viewProvider,
+            ICategoryService<Category> categoryService,
             ICategoryStore<Category> categoryStore,
             IBreadCrumbManager breadCrumbManager,            
             IPageTitleBuilder pageTitleBuilder,
             IContextFacade contextFacade, 
             IFeatureFacade featureFacade)
         {
+
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
+            _categoryService = categoryService;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;            
             _categoryStore = categoryStore;
@@ -52,6 +60,7 @@ namespace Plato.Questions.Categories.Controllers
 
             T = localizer;
             S = stringLocalizer;
+
         }
 
         public async Task<IActionResult> Index(EntityIndexOptions opts, PagerOptions pager)
@@ -69,13 +78,24 @@ namespace Plato.Questions.Categories.Controllers
                 pager = new PagerOptions();
             }
 
-            // Get category
-            var category = await _categoryStore.GetByIdAsync(opts.CategoryId);
-
-            // If supplied ensure category exists
-            if (category == null && opts.CategoryId > 0)
+            Category category = null;
+            if (opts.CategoryId > 0)
             {
-                return NotFound();
+
+                // Get category
+                category = await _categoryStore.GetByIdAsync(opts.CategoryId);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                // Get the permissioned category
+                var permissionedCategory = await GetCategoryAsync(opts.CategoryId);
+                if (permissionedCategory == null)
+                {
+                    return Unauthorized();
+                }
+
             }
 
             // Get default options
@@ -186,17 +206,47 @@ namespace Plato.Questions.Categories.Controllers
 
         }
 
-        async Task<EntityIndexViewModel<Question>> GetIndexViewModelAsync(Category category, EntityIndexOptions options, PagerOptions pager)
-        {
-            
-            // Get current feature
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Questions");
+        // ---------------
 
-            // Restrict results to current feature
+
+        // Use the category service to get the category to 
+        // ensure query adapters are enforced
+        private async Task<ICategory> GetCategoryAsync(int categoryId)
+        {
+
+            if (categoryId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(categoryId));
+            }
+
+            // Get categories feature
+            var featureId = 0;
+            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Questions.Categories");
             if (feature != null)
             {
-                options.FeatureId = feature.Id;
+                featureId = feature.Id;
             }
+
+            // Build categories for feature
+            var categories = await _categoryService
+                .ConfigureQuery(q =>
+                {
+                    q.FeatureId.Equals(featureId);
+                })
+                .GetResultsAsync();
+
+            // Ensure the user has access to the category
+            if (categories?.Data != null)
+            {
+                return categories.Data.GetById<Category>(categoryId);
+            }
+
+            return null;
+
+        }
+
+        private async Task<EntityIndexViewModel<Question>> GetIndexViewModelAsync(Category category, EntityIndexOptions options, PagerOptions pager)
+        {
             
             // Include child channels
             if (category != null)
@@ -215,15 +265,24 @@ namespace Plato.Questions.Categories.Controllers
                     options.CategoryId = category.Id;
                 }
             }
-            
-            // Set pager call back Url
-            pager.Url = _contextFacade.GetRouteUrl(pager.Route(RouteData));
-            
+
+            // Get current feature
+            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Questions");
+
+            // Restrict results to current feature
+            if (feature != null)
+            {
+                options.FeatureId = feature.Id;
+            }
+
             // Ensure pinned entities appear first
             if (options.Sort == SortBy.LastReply)
             {
                 options.SortColumns.Add(SortBy.IsPinned.ToString(), OrderBy.Desc);
             }
+
+            // Set pager call back Url
+            pager.Url = _contextFacade.GetRouteUrl(pager.Route(RouteData));
 
             // Return updated model
             return new EntityIndexViewModel<Question>()

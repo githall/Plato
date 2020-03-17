@@ -85,7 +85,10 @@ namespace Plato.Entities.Services
 
             if (results?.Data != null)
             {
-                return results.Data[0] as TModel;
+                if (results.Data.Count > 0)
+                {
+                    return results.Data[0] as TModel;
+                }
             }
 
             return null;

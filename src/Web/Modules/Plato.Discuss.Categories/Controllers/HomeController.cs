@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -7,6 +8,7 @@ using Microsoft.Extensions.Localization;
 using Plato.Categories.Stores;
 using Plato.Discuss.Categories.Models;
 using Plato.Discuss.Models;
+using Plato.Categories.Extensions;
 using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
@@ -17,6 +19,10 @@ using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
+using Plato.Categories.Services;
+using PlatoCore.Models.Features;
+using System.Collections.Generic;
+using Plato.Categories.Models;
 
 namespace Plato.Discuss.Categories.Controllers
 {
@@ -25,6 +31,7 @@ namespace Plato.Discuss.Categories.Controllers
     {
 
         private readonly IViewProviderManager<Category> _categoryViewProvider;
+        private readonly ICategoryService<Category> _categoryService;
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
@@ -40,24 +47,27 @@ namespace Plato.Discuss.Categories.Controllers
             IStringLocalizer stringLocalizer,
             IHtmlLocalizer<HomeController> localizer,
             IViewProviderManager<Category> categoryViewProvider,
-            ICategoryStore<Category> channelStore,
+            ICategoryService<Category> categoryService,
+            ICategoryStore<Category> categoryStore,
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,           
             IContextFacade contextFacade, 
             IFeatureFacade featureFacade,
             IAlerter alerter)
         {
-      
+
             _categoryViewProvider = categoryViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
+            _categoryService = categoryService;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
-            _categoryStore = channelStore;
+            _categoryStore = categoryStore;            
             _alerter = alerter;
 
             T = localizer;
             S = stringLocalizer;
+
         }
 
         public async Task<IActionResult> Index(EntityIndexOptions opts, PagerOptions pager)
@@ -75,13 +85,24 @@ namespace Plato.Discuss.Categories.Controllers
                 pager = new PagerOptions();
             }
 
-            // Get category
-            var category = await _categoryStore.GetByIdAsync(opts.CategoryId);
-
-            // If supplied ensure category exists
-            if (category == null && opts.CategoryId > 0)
+            Category category = null;
+            if (opts.CategoryId > 0)
             {
-                return NotFound();
+
+                // Get category
+                category = await _categoryStore.GetByIdAsync(opts.CategoryId);
+                if (category == null)
+                {
+                    return NotFound();
+                }
+
+                // Get the permissioned category
+                var permissionedCategory = await GetCategoryAsync(opts.CategoryId);
+                if (permissionedCategory == null)
+                {
+                    return Unauthorized();
+                }
+
             }
 
             // Get default options
@@ -192,17 +213,46 @@ namespace Plato.Discuss.Categories.Controllers
 
         }
 
-        async Task<EntityIndexViewModel<Topic>> GetIndexViewModelAsync(Category category, EntityIndexOptions options, PagerOptions pager)
+        // ---------------
+
+        // Use the category service to get the category to 
+        // ensure query adapters are enforced
+        private async Task<ICategory> GetCategoryAsync(int categoryId)
         {
 
-            // Get current feature
-            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Discuss");
+            if (categoryId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(categoryId));
+            }
 
-            // Restrict results to current feature
+            // Get categories feature
+            var featureId = 0;
+            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Discuss.Categories");
             if (feature != null)
             {
-                options.FeatureId = feature.Id;
+                featureId = feature.Id;
             }
+
+            // Build categories for feature
+            var categories = await _categoryService
+                .ConfigureQuery(q =>
+                {
+                    q.FeatureId.Equals(featureId);
+                })
+                .GetResultsAsync();
+
+            // Ensure the user has access to the category
+            if (categories?.Data != null)
+            {
+                return categories.Data.GetById<Category>(categoryId);
+            }
+
+            return null;
+
+        }
+
+        private async Task<EntityIndexViewModel<Topic>> GetIndexViewModelAsync(Category category, EntityIndexOptions options, PagerOptions pager)
+        {
 
             // Include child categories
             if (category != null)
@@ -221,6 +271,13 @@ namespace Plato.Discuss.Categories.Controllers
                     options.CategoryId = category.Id;
                 }
             }
+  
+            // Get feature for entities
+            var feature = await _featureFacade.GetFeatureByIdAsync("Plato.Discuss");
+            if (feature != null)
+            {
+                options.FeatureId = feature.Id;
+            }     
 
             // Ensure pinned entities appear first
             if (options.Sort == SortBy.LastReply)

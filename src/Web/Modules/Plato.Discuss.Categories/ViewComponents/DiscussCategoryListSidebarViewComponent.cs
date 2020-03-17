@@ -35,18 +35,18 @@ namespace Plato.Discuss.Categories.ViewComponents
         {
 
             // Get categories
-            var categories = await _categoryService
+            var categories = await _categoryService              
                 .GetResultsAsync(new CategoryIndexOptions()
                 {
-                    FeatureId = options.FeatureId,
-                    CategoryId = 0
-                }, new PagerOptions()
+                    FeatureId = options.FeatureId
+                },
+                new PagerOptions()
                 {
                     Page = 1,
                     Size = int.MaxValue,
                     CountTotal = false
                 });
-            
+
             return new CategoryListViewModel<Category>()
             {
                 Options = options,
