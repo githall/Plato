@@ -3,7 +3,7 @@ Description: Adds the ability for users to follow other users.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Users
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.follow.users/content/images/icon.png
 Dependencies: 

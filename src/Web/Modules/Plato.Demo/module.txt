@@ -3,7 +3,7 @@ Description: A demo module. Used as a starting point when creating new modules.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Core
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.demo/content/images/icon.png
 Dependencies: 

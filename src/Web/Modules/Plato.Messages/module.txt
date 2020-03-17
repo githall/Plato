@@ -3,7 +3,7 @@ Description: Adds core functionality to allow messaging.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Messaging
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.messages/content/images/icon.png
 Dependencies: 

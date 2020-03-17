@@ -3,6 +3,6 @@ Description: Makes source-code snippets or code blocks within content prettier.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: User Interface
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.prettyprint/content/images/icon.png

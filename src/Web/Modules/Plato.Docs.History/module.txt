@@ -3,7 +3,7 @@ Description: Adds version history & rollback support for docs & doc comments.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Docs
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.docs.history/content/images/icon.png
 Dependencies: 

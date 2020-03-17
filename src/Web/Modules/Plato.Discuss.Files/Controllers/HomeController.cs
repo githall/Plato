@@ -128,7 +128,7 @@ namespace Plato.Discuss.Files.Controllers
 
             opts.PostPermission = Permissions.PostDiscussFiles;
             opts.DeleteOwnPermission = Permissions.DeleteOwnDiscussFiles;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyDiscussFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyDiscussFile;
             opts.DeleteRoute = new RouteValueDictionary()
             {
                 ["area"] = ModuleId,
@@ -163,7 +163,7 @@ namespace Plato.Discuss.Files.Controllers
 
             opts.PostPermission = Permissions.PostDiscussFiles;
             opts.DeleteOwnPermission = Permissions.DeleteOwnDiscussFiles;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyDiscussFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyDiscussFile;
             opts.DeleteRoute = new RouteValueDictionary()
             {
                 ["area"] = ModuleId,

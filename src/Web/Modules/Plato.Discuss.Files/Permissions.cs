@@ -16,8 +16,8 @@ namespace Plato.Discuss.Files
         public static readonly Permission DeleteOwnDiscussFiles =
             new Permission("DeleteOwnDiscussFiles", "Delete own topic files");
 
-        public static readonly Permission DeleteAnyDiscussFiles =
-            new Permission("DeleteAnyDiscussFiles", "Delete any topic file");
+        public static readonly Permission DeleteAnyDiscussFile =
+            new Permission("DeleteAnyDiscussFile", "Delete any topic file");
 
         public IEnumerable<Permission> GetPermissions()
         {
@@ -26,7 +26,7 @@ namespace Plato.Discuss.Files
                 DownloadDiscussFiles,
                 PostDiscussFiles,
                 DeleteOwnDiscussFiles,
-                DeleteAnyDiscussFiles          
+                DeleteAnyDiscussFile          
             };
         }
 
@@ -60,7 +60,7 @@ namespace Plato.Discuss.Files
                         DownloadDiscussFiles,
                         PostDiscussFiles,
                         DeleteOwnDiscussFiles,
-                        DeleteAnyDiscussFiles
+                        DeleteAnyDiscussFile
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -71,7 +71,7 @@ namespace Plato.Discuss.Files
                         DownloadDiscussFiles,
                         PostDiscussFiles,
                         DeleteOwnDiscussFiles,
-                        DeleteAnyDiscussFiles
+                        DeleteAnyDiscussFile
                     }
                 }
             };

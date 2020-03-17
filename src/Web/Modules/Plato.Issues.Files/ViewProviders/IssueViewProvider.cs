@@ -105,9 +105,9 @@ namespace Plato.Issues.Files.ViewProviders
                     model.Guid = contentGuid;
                     model.GuidHtmlName = GuidHtmlName;
 
-                    model.PostPermission = Permissions.PostIdeaFiles;
-                    model.DeleteOwnPermission = Permissions.DeleteOwnDocFiles;
-                    model.DeleteAnyPermission = Permissions.DeleteAnyIdeaFiles;
+                    model.PostPermission = Permissions.PostIssueFiles;
+                    model.DeleteOwnPermission = Permissions.DeleteOwnIssueFiles;
+                    model.DeleteAnyPermission = Permissions.DeleteAnyIssueFile;
 
                     model.PostRoute = new RouteValueDictionary()
                     {

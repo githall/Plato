@@ -3,6 +3,6 @@ Description: Provides web based set-up for Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Core
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.setup/content/images/icon.png

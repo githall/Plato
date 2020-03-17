@@ -128,7 +128,7 @@ namespace Plato.Articles.Files.Controllers
 
             opts.PostPermission = Permissions.PostArticleFiles;
             opts.DeleteOwnPermission = Permissions.DeleteOwnArticleFiles;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleFile;
 
             opts.DeleteRoute = new RouteValueDictionary()
             {
@@ -164,7 +164,7 @@ namespace Plato.Articles.Files.Controllers
 
             opts.PostPermission = Permissions.PostArticleFiles;
             opts.DeleteOwnPermission = Permissions.DeleteOwnArticleFiles;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyArticleFile;
 
             opts.DeleteRoute = new RouteValueDictionary()
             {

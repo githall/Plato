@@ -7,26 +7,26 @@ namespace Plato.Issues.Files
     public class Permissions : IPermissionsProvider<Permission>
     {
 
-        public static readonly Permission DownloadIdeaFiles =
-            new Permission("DownloadIdeaFiles", "Download idea files");
+        public static readonly Permission DownloadIssueFiles =
+            new Permission("DownloadIssueFiles", "Download issue files");
 
-        public static readonly Permission PostIdeaFiles =
-            new Permission("PostIdeaFiles", "Post idea files");
+        public static readonly Permission PostIssueFiles =
+            new Permission("PostIssueFiles", "Post issue files");
 
-        public static readonly Permission DeleteOwnDocFiles =
-            new Permission("DeleteOwnDocFiles", "Delete own idea files");
+        public static readonly Permission DeleteOwnIssueFiles =
+            new Permission("DeleteOwnIssueFiles", "Delete own issue files");
 
-        public static readonly Permission DeleteAnyIdeaFiles =
-            new Permission("DeleteAnyIdeaFiles", "Delete any idea files");
+        public static readonly Permission DeleteAnyIssueFile =
+            new Permission("DeleteAnyIssueFile", "Delete any issue files");
 
         public IEnumerable<Permission> GetPermissions()
         {
             return new[]
             {
-                DownloadIdeaFiles,
-                PostIdeaFiles,
-                DeleteOwnDocFiles,
-                DeleteAnyIdeaFiles          
+                DownloadIssueFiles,
+                PostIssueFiles,
+                DeleteOwnIssueFiles,
+                DeleteAnyIssueFile          
             };
         }
 
@@ -39,7 +39,7 @@ namespace Plato.Issues.Files
                     RoleName = DefaultRoles.Anonymous,
                     Permissions = new[]
                     {
-                        DownloadIdeaFiles
+                        DownloadIssueFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -47,9 +47,9 @@ namespace Plato.Issues.Files
                     RoleName = DefaultRoles.Member,
                     Permissions = new[]
                     {
-                        DownloadIdeaFiles,
-                        PostIdeaFiles,
-                        DeleteOwnDocFiles
+                        DownloadIssueFiles,
+                        PostIssueFiles,
+                        DeleteOwnIssueFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -57,10 +57,10 @@ namespace Plato.Issues.Files
                     RoleName = DefaultRoles.Staff,
                     Permissions = new[]
                     {
-                        DownloadIdeaFiles,
-                        PostIdeaFiles,
-                        DeleteOwnDocFiles,
-                        DeleteAnyIdeaFiles
+                        DownloadIssueFiles,
+                        PostIssueFiles,
+                        DeleteOwnIssueFiles,
+                        DeleteAnyIssueFile
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -68,10 +68,10 @@ namespace Plato.Issues.Files
                     RoleName = DefaultRoles.Administrator,
                     Permissions = new[]
                     {
-                        DownloadIdeaFiles,
-                        PostIdeaFiles,
-                        DeleteOwnDocFiles,
-                        DeleteAnyIdeaFiles
+                        DownloadIssueFiles,
+                        PostIssueFiles,
+                        DeleteOwnIssueFiles,
+                        DeleteAnyIssueFile
                     }
                 }
             };

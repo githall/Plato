@@ -16,8 +16,8 @@ namespace Plato.Articles.Files
         public static readonly Permission DeleteOwnArticleFiles =
             new Permission("DeleteOwnArticleFiles", "Delete own article files");
 
-        public static readonly Permission DeleteAnyArticleFiles =
-            new Permission("DeleteAnyArticleFiles", "Delete any article files");
+        public static readonly Permission DeleteAnyArticleFile =
+            new Permission("DeleteAnyArticleFile", "Delete any article files");
 
         public IEnumerable<Permission> GetPermissions()
         {
@@ -26,7 +26,7 @@ namespace Plato.Articles.Files
                 DownloadArticleFiles,
                 PostArticleFiles,
                 DeleteOwnArticleFiles,
-                DeleteAnyArticleFiles          
+                DeleteAnyArticleFile          
             };
         }
 
@@ -60,7 +60,7 @@ namespace Plato.Articles.Files
                         DownloadArticleFiles,
                         PostArticleFiles,
                         DeleteOwnArticleFiles,
-                        DeleteAnyArticleFiles
+                        DeleteAnyArticleFile
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -71,7 +71,7 @@ namespace Plato.Articles.Files
                         DownloadArticleFiles,
                         PostArticleFiles,
                         DeleteOwnArticleFiles,
-                        DeleteAnyArticleFiles
+                        DeleteAnyArticleFile
                     }
                 }
             };

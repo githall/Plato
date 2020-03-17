@@ -3,7 +3,7 @@ Description: Adds the ability to up vote & down vote topics & replies.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Discuss
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.discuss.votes/content/images/icon.png
 Dependencies: 

@@ -1,5 +1,5 @@
 Name: Plato Docs New
-Description: Adds a "New" or "Updated" indicator for unread or updated docs.
+Description: Adds a visual indicator for unread or updated docs.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Docs

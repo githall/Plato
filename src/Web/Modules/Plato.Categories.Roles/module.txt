@@ -3,7 +3,7 @@ Description: Adds core services to restrict access to categories based on the ro
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Categories
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.categories.roles/content/images/icon.png
 Dependencies: 

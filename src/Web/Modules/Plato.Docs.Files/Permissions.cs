@@ -16,8 +16,8 @@ namespace Plato.Docs.Files
         public static readonly Permission DeleteOwnDocFiles =
             new Permission("DeleteOwnDocFiles", "Delete own doc files");
 
-        public static readonly Permission DeleteAnyDocFiles =
-            new Permission("DeleteAnyDocFiles", "Delete any doc files");
+        public static readonly Permission DeleteAnyDocFile =
+            new Permission("DeleteAnyDocFile", "Delete any doc files");
 
         public IEnumerable<Permission> GetPermissions()
         {
@@ -26,7 +26,7 @@ namespace Plato.Docs.Files
                 DownloadDocFiles,
                 PostDocFiles,
                 DeleteOwnDocFiles,
-                DeleteAnyDocFiles          
+                DeleteAnyDocFile          
             };
         }
 
@@ -60,7 +60,7 @@ namespace Plato.Docs.Files
                         DownloadDocFiles,
                         PostDocFiles,
                         DeleteOwnDocFiles,
-                        DeleteAnyDocFiles
+                        DeleteAnyDocFile
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -71,7 +71,7 @@ namespace Plato.Docs.Files
                         DownloadDocFiles,
                         PostDocFiles,
                         DeleteOwnDocFiles,
-                        DeleteAnyDocFiles
+                        DeleteAnyDocFile
                     }
                 }
             };

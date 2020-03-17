@@ -126,8 +126,8 @@ namespace Plato.Ideas.Files.Controllers
             }
 
             opts.PostPermission = Permissions.PostIdeaFiles;
-            opts.DeleteOwnPermission = Permissions.DeleteOwnDocFiles;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyIdeaFiles;
+            opts.DeleteOwnPermission = Permissions.DeleteOwnIdeaFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyIdeaFile;
 
             opts.DeleteRoute = new RouteValueDictionary()
             {
@@ -162,8 +162,8 @@ namespace Plato.Ideas.Files.Controllers
             }
 
             opts.PostPermission = Permissions.PostIdeaFiles;
-            opts.DeleteOwnPermission = Permissions.DeleteOwnDocFiles;
-            opts.DeleteAnyPermission = Permissions.DeleteAnyIdeaFiles;
+            opts.DeleteOwnPermission = Permissions.DeleteOwnIdeaFiles;
+            opts.DeleteAnyPermission = Permissions.DeleteAnyIdeaFile;
 
             opts.DeleteRoute = new RouteValueDictionary()
             {

@@ -3,7 +3,7 @@ Description: Add public discussions to Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Discuss
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Icon: /plato.discuss/content/images/icon.png
 Version: 1.0.0
 Dependencies: 

@@ -3,7 +3,7 @@ Description: Adds the ability to follow labels within Plato.Docs.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Docs
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.docs.labels.follow/content/images/icon.png
 Dependencies: 

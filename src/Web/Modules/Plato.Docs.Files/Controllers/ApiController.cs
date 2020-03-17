@@ -226,7 +226,7 @@ namespace Plato.Docs.Files.Controllers
             // Get current permission based on attachment ownership
             var deletePermission = file.CreatedUserId == user.Id
                 ? Permissions.DeleteOwnDocFiles
-                : Permissions.DeleteAnyDocFiles;
+                : Permissions.DeleteAnyDocFile;
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, deletePermission))

@@ -3,7 +3,7 @@ Description: Adds reporting to show top pages within Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Reports
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.reports.toppages/content/images/icon.png
 Dependencies: 

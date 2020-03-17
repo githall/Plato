@@ -77,7 +77,7 @@ namespace Plato.Issues.Files.Controllers
         {
 
             // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.PostIdeaFiles))
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.PostIssueFiles))
             {
                 return Unauthorized();
             }
@@ -225,8 +225,8 @@ namespace Plato.Issues.Files.Controllers
 
             // Get current permission based on attachment ownership
             var deletePermission = file.CreatedUserId == user.Id
-                ? Permissions.DeleteOwnDocFiles
-                : Permissions.DeleteAnyIdeaFiles;
+                ? Permissions.DeleteOwnIssueFiles
+                : Permissions.DeleteAnyIssueFile;
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, deletePermission))

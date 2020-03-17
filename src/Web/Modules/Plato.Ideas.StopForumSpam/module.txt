@@ -3,7 +3,7 @@ Description: Adds StopForumSpam checks when posting new ideas or idea comments.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Ideas
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.ideas.stopforumspam/content/images/icon.png
 Dependencies: 

@@ -3,7 +3,7 @@ Description: Automated login & sample data for development purposes. This module
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Core
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.site.demo/content/images/icon.png
 Dependencies: 

@@ -3,7 +3,7 @@ Description: Provides the ability for Plato to send outbound emails.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Email
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.email/content/images/icon.png
 Dependencies: 

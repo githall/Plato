@@ -107,7 +107,7 @@ namespace Plato.Articles.Files.ViewProviders
 
                     model.PostPermission = Permissions.PostArticleFiles;
                     model.DeleteOwnPermission = Permissions.DeleteOwnArticleFiles;
-                    model.DeleteAnyPermission = Permissions.DeleteAnyArticleFiles;
+                    model.DeleteAnyPermission = Permissions.DeleteAnyArticleFile;
 
                     model.PostRoute = new RouteValueDictionary()
                     {

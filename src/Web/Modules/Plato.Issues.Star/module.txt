@@ -3,7 +3,7 @@ Description: Adds the ability for users to star or favourite issues.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Issues
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.issues.star/content/images/icon.png
 Dependencies: 

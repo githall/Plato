@@ -1,5 +1,5 @@
 Name: Plato Discuss New
-Description: Adds a "New" or "Updated" indicator for unread or updated topics.
+Description: Adds a visual indicator for unread or updated topics.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Discuss

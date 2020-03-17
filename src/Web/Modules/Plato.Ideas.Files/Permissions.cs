@@ -13,11 +13,11 @@ namespace Plato.Ideas.Files
         public static readonly Permission PostIdeaFiles =
             new Permission("PostIdeaFiles", "Post idea files");
 
-        public static readonly Permission DeleteOwnDocFiles =
-            new Permission("DeleteOwnDocFiles", "Delete own idea files");
+        public static readonly Permission DeleteOwnIdeaFiles =
+            new Permission("DeleteOwnIdeaFiles", "Delete own idea files");
 
-        public static readonly Permission DeleteAnyIdeaFiles =
-            new Permission("DeleteAnyIdeaFiles", "Delete any idea files");
+        public static readonly Permission DeleteAnyIdeaFile =
+            new Permission("DeleteAnyIdeaFile", "Delete any idea files");
 
         public IEnumerable<Permission> GetPermissions()
         {
@@ -25,8 +25,8 @@ namespace Plato.Ideas.Files
             {
                 DownloadIdeaFiles,
                 PostIdeaFiles,
-                DeleteOwnDocFiles,
-                DeleteAnyIdeaFiles          
+                DeleteOwnIdeaFiles,
+                DeleteAnyIdeaFile          
             };
         }
 
@@ -49,7 +49,7 @@ namespace Plato.Ideas.Files
                     {
                         DownloadIdeaFiles,
                         PostIdeaFiles,
-                        DeleteOwnDocFiles
+                        DeleteOwnIdeaFiles
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -59,8 +59,8 @@ namespace Plato.Ideas.Files
                     {
                         DownloadIdeaFiles,
                         PostIdeaFiles,
-                        DeleteOwnDocFiles,
-                        DeleteAnyIdeaFiles
+                        DeleteOwnIdeaFiles,
+                        DeleteAnyIdeaFile
                     }
                 },
                 new DefaultPermissions<Permission>
@@ -70,8 +70,8 @@ namespace Plato.Ideas.Files
                     {
                         DownloadIdeaFiles,
                         PostIdeaFiles,
-                        DeleteOwnDocFiles,
-                        DeleteAnyIdeaFiles
+                        DeleteOwnIdeaFiles,
+                        DeleteAnyIdeaFile
                     }
                 }
             };

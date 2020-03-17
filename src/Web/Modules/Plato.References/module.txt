@@ -3,7 +3,7 @@ Description: Adds core services to support hash tag referencing.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Core
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.references/content/images/icon.png
 Dependencies: 

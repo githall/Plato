@@ -3,7 +3,7 @@ Description: Adds the ability for users to star or favourite ideas.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Ideas
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.ideas.star/content/images/icon.png
 Dependencies: 
