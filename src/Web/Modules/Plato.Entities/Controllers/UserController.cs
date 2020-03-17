@@ -129,8 +129,7 @@ namespace Plato.Entities.Controllers
                     })
                     .LocalNav()
                 ).Add(S["All"]);
-            });
-            
+            });            
 
             //// Return view
             return View((LayoutViewModel) await _userViewProvider.ProvideDisplayAsync(new EntityUserIndex()

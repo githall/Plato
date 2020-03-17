@@ -85,11 +85,11 @@ namespace Plato.Questions.Follow.ViewProviders
 
         public override async Task<IViewProviderResult> BuildEditAsync(Question entity, IViewProviderContext context)
         {
+
             if (entity == null)
             {
                 return await BuildIndexAsync(new Question(), context);
             }
-
 
             var isFollowing = false;
             var followType = FollowTypes.Question;
@@ -125,7 +125,7 @@ namespace Plato.Questions.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Follow.Permissions.FollowQuestions;
                     return model;
-                }).Zone("sidebar").Order(2)
+                }).Zone("sidebar").Order(20)
             );
 
         }

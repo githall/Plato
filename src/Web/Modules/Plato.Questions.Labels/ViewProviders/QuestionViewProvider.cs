@@ -132,8 +132,8 @@ namespace Plato.Questions.Labels.ViewProviders
             };
             
             return Views(
-                View<LabelDropDownViewModel>("Question.Labels.Edit.Sidebar", model => viewModel).Zone("sidebar")
-                    .Order(2)
+                View<LabelDropDownViewModel>("Question.Labels.Edit.Sidebar", model => viewModel)
+                .Zone("sidebar").Order(15)
             );
 
         }
