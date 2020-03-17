@@ -125,7 +125,7 @@ namespace Plato.Ideas.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Follow.Permissions.FollowIdeas;
                     return model;
-                }).Zone("sidebar").Order(2)
+                }).Zone("sidebar").Order(20)
             );
 
         }

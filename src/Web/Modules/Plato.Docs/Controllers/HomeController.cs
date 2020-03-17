@@ -694,7 +694,7 @@ namespace Plato.Docs.Controllers
                 // Always update modified information
                 entity.ModifiedUserId = user?.Id ?? 0;
                 entity.ModifiedDate = DateTimeOffset.UtcNow;
-                
+
                 // Get composed model from view providers
                 entity = await _docViewProvider.ComposeModelAsync(entity, this);
 

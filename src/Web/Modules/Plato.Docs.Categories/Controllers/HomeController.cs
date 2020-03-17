@@ -212,7 +212,6 @@ namespace Plato.Docs.Categories.Controllers
 
         // ---------------
 
-
         // Use the category service to get the category to 
         // ensure query adapters are enforced
         private async Task<ICategory> GetCategoryAsync(int categoryId)
@@ -251,7 +250,7 @@ namespace Plato.Docs.Categories.Controllers
 
         private async Task<EntityIndexViewModel<Doc>> GetIndexViewModelAsync(Category category, EntityIndexOptions options, PagerOptions pager)
         {
-            
+
             // Include child categories
             if (category != null)
             {

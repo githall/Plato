@@ -206,7 +206,6 @@ namespace Plato.Issues.Categories.Controllers
 
         // ---------------
 
-
         // Use the category service to get the category to 
         // ensure query adapters are enforced
         private async Task<ICategory> GetCategoryAsync(int categoryId)
