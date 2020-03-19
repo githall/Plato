@@ -3,7 +3,7 @@ Description: Adds the ability for users to react to articles & comments using em
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Articles
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.articles.reactions/content/images/icon.png
 Dependencies: 

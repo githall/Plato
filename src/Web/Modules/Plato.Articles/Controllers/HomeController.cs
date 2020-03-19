@@ -44,6 +44,7 @@ namespace Plato.Articles.Controllers
         private readonly IEntityReplyService<Comment> _replyService;        
         private readonly IPostManager<Article> _articleManager;
         private readonly IPostManager<Comment> _commentManager;
+        private readonly IEntityService<Article> _articleService;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IEntityStore<Article> _entityStore;
@@ -65,8 +66,9 @@ namespace Plato.Articles.Controllers
             IViewProviderManager<Comment> replyViewProvider,
             IEntityReplyStore<Comment> entityReplyStore,
             IAuthorizationService authorizationService,
-            IEntityReplyService<Comment> replyService,            
-            IPostManager<Article> articleManager,
+            IEntityReplyService<Comment> replyService,
+            IEntityService<Article> articleService,
+            IPostManager<Article> articleManager,            
             IPostManager<Comment> commentManager,            
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
@@ -84,13 +86,14 @@ namespace Plato.Articles.Controllers
             _breadCrumbManager = breadCrumbManager;
             _replyViewProvider = replyViewProvider;
             _pageTitleBuilder = pageTitleBuilder;            
-            _entityReplyStore = entityReplyStore;
-            _articleManager = articleManager;
-            _commentManager = commentManager;            
-            _contextFacade = contextFacade;
+            _entityReplyStore = entityReplyStore;                                   
             _clientIpAddress = clientIpAddress;
+            _articleManager = articleManager;
+            _commentManager = commentManager;
+            _articleService = articleService;
+            _contextFacade = contextFacade;
             _featureFacade = featureFacade;
-            _replyService = replyService;
+            _replyService = replyService;            
             _entityStore = entityStore;
             _alerter = alerter;
 
@@ -323,42 +326,17 @@ namespace Plato.Articles.Controllers
                 return NotFound();
             }
 
-            // Get entity to display
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
 
-            // Ensure the entity exists
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
-            }
-            
-            // Ensure we have permission to view the entity
-            var authorizeResult = await AuthorizeAsync(entity);
-            if (!authorizeResult.Succeeded)
-            {
-                // Return 401
-                return Unauthorized();
-            }
-
-            // Ensure we have permission to view private entities
-            if (entity.IsPrivate)
-            {
-
-                // Get authenticated user
-                var user = await _contextFacade.GetAuthenticatedUserAsync();
-
-                // IF we didn't create this entity ensure we have permission to view private entities
-                if (entity.CreatedBy.Id != user?.Id)
-                {
-                    // Do we have permission to view private entities?
-                    if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
-                        Permissions.ViewPrivateArticles))
-                    {
-                        // Return 401
-                        return Unauthorized();
-                    }
-                }
-
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate a authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Maintain previous route data when generating page links
@@ -541,12 +519,6 @@ namespace Plato.Articles.Controllers
 
         public async Task<IActionResult> Edit(EntityOptions opts)
         {
-            // Get entity we are editing
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
-            if (entity == null)
-            {
-                return NotFound();
-            }
 
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
@@ -555,6 +527,19 @@ namespace Plato.Articles.Controllers
             if (user == null)
             {
                 return Unauthorized();
+            }
+
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
+
+            // We don't have permission or the entity does not exist
+            if (entity == null)
+            {
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Do we have permission
@@ -720,13 +705,19 @@ namespace Plato.Articles.Controllers
                 return NotFound();
             }
 
-            // Get reply entity
-            var entity = await _entityStore.GetByIdAsync(reply.EntityId);
+            // Get the entity
+            var entity = await GetEntityAsync(reply.EntityId);
+
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(reply.EntityId) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
-            
+
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -2190,6 +2181,56 @@ namespace Plato.Articles.Controllers
         #endregion
 
         #region "Private Methods"
+
+        // Use the entity service to get the entity to 
+        // ensure query adapters are enforced
+        async Task<Article> GetEntityAsync(int entityId)
+        {
+
+            if (entityId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(entityId));
+            }
+
+            return await _articleService
+                .ConfigureQuery(async q =>
+                {
+
+                    // Get entity
+                    q.Id.Equals(entityId);
+
+                    // Hide private?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewPrivateArticles))
+                    {
+                        q.HidePrivate.True();
+                    }
+
+                    // Hide hidden?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewHiddenArticles))
+                    {
+                        q.HideHidden.True();
+                    }
+
+                    // Hide spam?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewSpamArticles))
+                    {
+                        q.HideSpam.True();
+                    }
+
+                    // Hide deleted?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewDeletedArticles))
+                    {
+                        q.HideDeleted.True();
+                    }
+
+                })
+                .GetResultAsync();
+
+        }
 
         async Task<ICommandResultBase> AuthorizeAsync(IEntity entity)
         {

@@ -23,13 +23,7 @@ namespace Plato.Files.Assets
                         Url = $"/plato.files/content/js/files.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },                
-                    new Asset()
-                    {
-                        Url = $"/plato.files/content/css/files.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
-                    },                    
+                    },                                     
                     new Asset()
                     {
                         Url = $"/plato.Files/content/css/file-icons/file-icon-square-o.css",
@@ -49,12 +43,6 @@ namespace Plato.Files.Assets
                     },               
                     new Asset()
                     {
-                        Url = $"/plato.files/content/css/files.min.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
-                    },
-                    new Asset()
-                    {
                         Url = $"/plato.files/content/css/file-icons/file-icon-square-o.min.css",
                         Type = AssetType.IncludeCss,
                         Section = AssetSection.Header
@@ -69,12 +57,6 @@ namespace Plato.Files.Assets
                         Url = $"/plato.files/content/js/files.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
-                    },
-                    new Asset()
-                    {
-                        Url = $"/plato.Files/content/css/files.min.css",
-                        Type = AssetType.IncludeCss,
-                        Section = AssetSection.Header
                     },
                     new Asset()
                     {

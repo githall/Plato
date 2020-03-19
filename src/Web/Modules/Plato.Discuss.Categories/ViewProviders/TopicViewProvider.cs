@@ -28,8 +28,6 @@ namespace Plato.Discuss.Categories.ViewProviders
 
         private const string CategoryHtmlName = "category";
 
-        private readonly ICategoryService<Category> _categoryService;
-
         private readonly IEntityCategoryStore<EntityCategory> _entityCategoryStore;
         private readonly IEntityCategoryManager _entityCategoryManager;
         private readonly ICategoryDetailsUpdater _categoryDetailsUpdater;
@@ -44,13 +42,12 @@ namespace Plato.Discuss.Categories.ViewProviders
         public IStringLocalizer T;
 
         public IStringLocalizer S { get; }
-        
+
         public TopicViewProvider(
             IStringLocalizer stringLocalizer,
             IEntityCategoryStore<EntityCategory> entityCategoryStore,
             ICategoryDetailsUpdater categoryDetailsUpdater,
             IEntityCategoryManager entityCategoryManager,
-            ICategoryService<Category> categoryService,
             IHttpContextAccessor httpContextAccessor,
             ICategoryStore<Category> categoryStore, 
             IBreadCrumbManager breadCrumbManager,
@@ -63,8 +60,7 @@ namespace Plato.Discuss.Categories.ViewProviders
             _entityCategoryManager = entityCategoryManager;
             _categoryDetailsUpdater = categoryDetailsUpdater;
             _entityCategoryStore = entityCategoryStore;
-            _breadCrumbManager = breadCrumbManager;
-            _categoryService = categoryService;
+            _breadCrumbManager = breadCrumbManager;       
             _featureFacade = featureFacade;
             _entityManager = entityManager;
             _contextFacade = contextFacade;
@@ -234,7 +230,8 @@ namespace Plato.Discuss.Categories.ViewProviders
             };
 
             return Views(
-                View<CategoryDropDownViewModel>("Discuss.Categories.Edit.Sidebar", model => viewModel).Zone("sidebar").Order(1)
+                View<CategoryDropDownViewModel>("Discuss.Categories.Edit.Sidebar", model => viewModel)
+                    .Zone("sidebar").Order(5)
             );
 
         }

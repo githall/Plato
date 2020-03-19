@@ -1,0 +1,19 @@
+Name: Plato Discuss Files
+Description: Adds the ability to attach files to topics.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Docs
+PlatoVersion: 1.1.1
+Version: 1.0.0
+Icon: /plato.discuss.files/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Discuss",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Entities.Files",
+		Version: "1.0.0"
+	}
+]

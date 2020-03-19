@@ -52,7 +52,10 @@ namespace Plato.Ideas.Categories
             services.AddScoped<ICategoryRoleStore<CategoryRole>, CategoryRoleStore>();
             services.AddScoped<ICategoryStore<Category>, CategoryStore<Category>>();
             services.AddScoped<ICategoryManager<Category>, CategoryManager<Category>>();
-            services.AddScoped<ICategoryService<Category>, CategoryService<Category>>();
+
+            // CategoryService needs to be transient as it contains action
+            // delegates that can change state several times per request
+            services.AddTransient<ICategoryService<Category>, CategoryService<Category>>();
 
             // View providers
             services.AddScoped<IViewProviderManager<Idea>, ViewProviderManager<Idea>>();

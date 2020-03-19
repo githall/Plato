@@ -8,6 +8,7 @@
         availableSpace = 0;
     var maxFileSize = Model.Options.MaxFileSize;
 }
+
 @if (Model.File != null)
 {
     var viewText = Model.File.TotalViews == 1 ? T["view"] : T["views"];

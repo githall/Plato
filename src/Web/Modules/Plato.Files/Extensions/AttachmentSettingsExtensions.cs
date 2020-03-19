@@ -19,7 +19,7 @@ namespace Plato.Files.Extensions
             // No settings use defaults
             if (settings?.Settings == null)
             {
-                return DefaultFileSettings.AvailableSpace;
+                return DefaultFileOptions.AvailableSpace;
             }
 
             // Calculate the highest available space for given roles
@@ -55,7 +55,7 @@ namespace Plato.Files.Extensions
             // No settings use defaults
             if (settings?.Settings == null)
             {
-                return DefaultFileSettings.AvailableSpace;
+                return DefaultFileOptions.AvailableSpace;
             }
 
             // Calculate the highest available space for given roles
@@ -91,13 +91,13 @@ namespace Plato.Files.Extensions
             // No settings use defaults
             if (settings == null)
             {
-                return DefaultFileSettings.AllowedExtensions;
+                return DefaultFileOptions.AllowedExtensions;
             }
 
             // No settings use defaults
             if (settings.Settings == null)
             {
-                return DefaultFileSettings.AllowedExtensions;
+                return DefaultFileOptions.AllowedExtensions;
             }
 
             // Accumulate all unique extensions for given roles

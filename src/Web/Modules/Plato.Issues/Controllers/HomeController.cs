@@ -45,7 +45,8 @@ namespace Plato.Issues.Controllers
         private readonly IPostManager<Comment> _commentManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
-        private readonly IClientIpAddress _clientIpAddress;
+        private readonly IEntityService<Issue> _issueService;
+        private readonly IClientIpAddress _clientIpAddress;        
         private readonly IPostManager<Issue> _issueManager;
         private readonly IEntityStore<Issue> _entityStore;
         private readonly IContextFacade _contextFacade;
@@ -70,7 +71,8 @@ namespace Plato.Issues.Controllers
             IBreadCrumbManager breadCrumbManager,
             IPostManager<Comment> commentManager,
             IPageTitleBuilder pageTitleBuilder,
-            IClientIpAddress clientIpAddress,
+            IEntityService<Issue> issueService,
+            IClientIpAddress clientIpAddress,            
             IPostManager<Issue> issueManager,
             IEntityStore<Issue> entityStore,
             IContextFacade contextFacade,
@@ -86,12 +88,13 @@ namespace Plato.Issues.Controllers
             _breadCrumbManager = breadCrumbManager;
             _pageTitleBuilder = pageTitleBuilder;
             _entityReplyStore = entityReplyStore;
-            _clientIpAddress = clientIpAddress;
+            _clientIpAddress = clientIpAddress;            
             _commentManager = commentManager;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _replyService = replyService;
             _issueManager = issueManager;
+            _issueService = issueService;
             _entityStore = entityStore;
             _alerter = alerter;            
 
@@ -311,66 +314,19 @@ namespace Plato.Issues.Controllers
                 return NotFound();
             }
 
-            // Get entity to display
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
 
-            // Ensure the entity exists
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
-            }
-            
-            // Ensure we have permission to view deleted entities
-            if (entity.IsDeleted)
-            {
-                if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.ViewDeletedIssues))
-                {
-                    // Return 401
-                    return Unauthorized();
-                }
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
-            // Ensure we have permission to view private entities
-            if (entity.IsHidden)
-            {
-                if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.ViewHiddenIssues))
-                {
-                    // Return 401
-                    return Unauthorized();
-                }
-            }
-
-            // Ensure we have permission to view spam entities
-            if (entity.IsSpam)
-            {
-                if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId, Permissions.ViewSpamIssues))
-                {
-                    // Return 401
-                    return Unauthorized();
-                }
-            }
-            
-            // Ensure we have permission to view private entities
-            if (entity.IsPrivate)
-            {
-
-                // Get authenticated user
-                var user = await _contextFacade.GetAuthenticatedUserAsync();
-
-                // IF we didn't create this entity ensure we have permission to view private entities
-                if (entity.CreatedBy.Id != user?.Id)
-                {
-                    // Do we have permission to view private entities?
-                    if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
-                        Permissions.ViewPrivateIssues))
-                    {
-                        // Return 401
-                        return Unauthorized();
-                    }
-                }
-
-            }
-            
             // Maintain previous route data when generating page links
             var defaultViewOptions = new EntityViewModel<Issue, Comment>();
             var defaultPagerOptions = new PagerOptions();
@@ -532,14 +488,7 @@ namespace Plato.Issues.Controllers
 
         public async Task<IActionResult> Edit(EntityOptions opts)
         {
-
-            // Get entity we are editing
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-
+          
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -547,6 +496,19 @@ namespace Plato.Issues.Controllers
             if (user == null)
             {
                 return Unauthorized();
+            }
+
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
+
+            // We don't have permission or the entity does not exist
+            if (entity == null)
+            {
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Do we have permission
@@ -711,13 +673,19 @@ namespace Plato.Issues.Controllers
                 return NotFound();
             }
 
-            // Get reply entity
-            var entity = await _entityStore.GetByIdAsync(reply.EntityId);
+            // Get the entity
+            var entity = await GetEntityAsync(reply.EntityId);
+
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(reply.EntityId) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
-            
+
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -2293,7 +2261,57 @@ namespace Plato.Issues.Controllers
         #endregion
 
         #region "Private Methods"
-        
+
+        // Use the entity service to get the entity to 
+        // ensure query adapters are enforced
+        async Task<Issue> GetEntityAsync(int entityId)
+        {
+
+            if (entityId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(entityId));
+            }
+
+            return await _issueService
+                .ConfigureQuery(async q =>
+                {
+
+                    // Get entity
+                    q.Id.Equals(entityId);
+
+                    // Hide private?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewPrivateIssues))
+                    {
+                        q.HidePrivate.True();
+                    }
+
+                    // Hide hidden?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewHiddenIssues))
+                    {
+                        q.HideHidden.True();
+                    }
+
+                    // Hide spam?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewSpamIssues))
+                    {
+                        q.HideSpam.True();
+                    }
+
+                    // Hide deleted?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewDeletedIssues))
+                    {
+                        q.HideDeleted.True();
+                    }
+
+                })
+                .GetResultAsync();
+
+        }
+
         async Task<ICommandResultBase> AuthorizeAsync(IEntity entity)
         {
 

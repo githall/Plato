@@ -3,7 +3,7 @@ Description: Adds the ability to label questions.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Questions
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.questions.labels/content/images/icon.png
 Dependencies: 

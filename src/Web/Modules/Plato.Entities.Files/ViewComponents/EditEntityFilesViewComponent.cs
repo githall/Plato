@@ -29,9 +29,9 @@ namespace Plato.Entities.Files.ViewComponents
         public EditEntityFilesViewComponent(
             IEntityFileStore<EntityFile> entityAttachmentStore,     
             IFileInfoStore<FileInfo> attachmentInfoStore,
-            IFileOptionsFactory attachmentOptionsFactory,
-            IFileStore<File> attachmentStore,
-            IHttpContextAccessor httpContextAccessor)
+            IFileOptionsFactory attachmentOptionsFactory,            
+            IHttpContextAccessor httpContextAccessor,
+            IFileStore<File> attachmentStore)
         {
             _fileOptionsFactory = attachmentOptionsFactory;
             _entityAttachmentStore = entityAttachmentStore;            

@@ -23,7 +23,7 @@ namespace Plato.Questions.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, QuestionListItemViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, QuestionViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, QuestionViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, QuestionListViewAdapter>();            
             //services.AddScoped<IViewAdapterProvider, QuestionAnswerListViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, QuestionAnswerListItemViewAdapter>();

@@ -3,7 +3,7 @@ Description: Adds tagging capabilities to topics and replies within Plato.Discus
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Discuss
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.discuss.tags/content/images/icon.png
 Dependencies: 

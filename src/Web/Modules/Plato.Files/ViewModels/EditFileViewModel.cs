@@ -18,7 +18,6 @@ namespace Plato.Files.ViewModels
 
         public RouteValueDictionary ReturnRoute { get; set; }
 
-
     }
 
 }

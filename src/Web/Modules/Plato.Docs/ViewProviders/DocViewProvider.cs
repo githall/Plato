@@ -18,18 +18,21 @@ namespace Plato.Docs.ViewProviders
         public const string EditorHtmlName = "message";
         public const string ParentHtmlName = "parent";
 
+        private readonly ISimpleEntityStore<SimpleDoc> _simpleEntityStore;
         private readonly IEntityViewIncrementer<Doc> _viewIncrementer;
         private readonly IFeatureFacade _featureFacade;
 
         private readonly HttpRequest _request;
         
         public DocViewProvider(
+            ISimpleEntityStore<SimpleDoc> simpleEntityStore,
             IEntityViewIncrementer<Doc> viewIncrementer,
             IHttpContextAccessor httpContextAccessor,
             IFeatureFacade featureFacade)
         {
             _request = httpContextAccessor.HttpContext.Request;
-            _viewIncrementer = viewIncrementer;
+            _simpleEntityStore = simpleEntityStore;
+            _viewIncrementer = viewIncrementer;            
             _featureFacade = featureFacade;
         }
 
@@ -131,7 +134,7 @@ namespace Plato.Docs.ViewProviders
             return Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EntityDropDownViewModel>("Home.Edit.Sidebar", model => entityDropDownViewModel).Zone("sidebar"),
+                View<EntityDropDownViewModel>("Home.Edit.Sidebar", model => entityDropDownViewModel).Zone("sidebar").Order(7),
                 View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("Footer")
             );
 
@@ -165,15 +168,25 @@ namespace Plato.Docs.ViewProviders
             }
 
         }
-        
+
         public override async Task<IViewProviderResult> BuildUpdateAsync(Doc doc, IViewProviderContext context)
         {
+
+            // Whenever a doc is created or updated 
+            // ensure we expire simple entity cache
+            var simpleDoc = await _simpleEntityStore.GetByIdAsync(doc.Id);
+            if (simpleDoc != null)
+            {
+                _simpleEntityStore.CancelTokens(simpleDoc);
+            }            
+
             return await BuildEditAsync(doc, context);
+
         }
-        
+
         int GetParentSelection()
         {
-           
+
             foreach (var key in _request.Form.Keys)
             {
                 if (key.StartsWith(ParentHtmlName))
@@ -192,7 +205,7 @@ namespace Plato.Docs.ViewProviders
 
             return 0;
         }
-        
+
     }
 
 }

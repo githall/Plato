@@ -1,5 +1,5 @@
 Name: Plato Entities Files
-Description: Adds attachment capabilities for entities to Plato.
+Description: Adds file attachment capabilities for entities to Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Files

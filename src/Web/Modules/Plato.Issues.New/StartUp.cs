@@ -23,7 +23,7 @@ namespace Plato.Issues.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, IssueListItemViewAdapter>();            
-            services.AddScoped<IViewAdapterProvider, IssueViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, IssueViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, IssueListViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, IssueCommentListViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, IssueCommentListItemViewAdapter>();

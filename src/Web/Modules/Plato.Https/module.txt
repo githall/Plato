@@ -3,6 +3,6 @@ Description: Provides settings allowing you to enforce HTTPS within Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Security
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.https/content/images/icon.png

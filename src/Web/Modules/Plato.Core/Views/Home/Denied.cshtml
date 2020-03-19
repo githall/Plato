@@ -8,7 +8,7 @@
         <div class="layout-header-content">
             <h4>@T["Access Denied"]</h4>
             <div class="text-muted">
-                @T["You don't have permission to access the requested page"]
+                @T["You don't have permission to access the requested content"]
             </div>
         </div>
     </div>
@@ -18,7 +18,7 @@
                 <div class="col-lg-6">
                     @if (this.CurrentUser == null)  {
                         <p>
-                            @T["You must be logged in to access the requested page."]
+                            @T["You must be logged in to access the requested content."]
                         </p>
                         <p>
                             <a class="btn btn-primary" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]">
@@ -30,7 +30,7 @@
                     else 
                     {
                         <p>
-                            @T["Sorry but you don't have permission to access the requested page."]
+                            @T["Sorry but you don't have permission to access the requested content."]
                         </p>
                         <p>
                             <a class="btn btn-primary" asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index">

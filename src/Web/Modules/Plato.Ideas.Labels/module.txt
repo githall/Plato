@@ -3,7 +3,7 @@ Description: Adds the ability to label ideas.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Ideas
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.ideas.labels/content/images/icon.png
 Dependencies: 

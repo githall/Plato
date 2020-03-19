@@ -10,6 +10,8 @@ namespace Plato.Entities.Files.Repositories
 
         Task<bool> DeleteByEntityIdAsync(int entityId);
 
+        Task<bool> DeleteByFileIdAsync(int fileId);
+
         Task<bool> DeleteByEntityIdAndFileIdAsync(int entityId, int fileId);
 
     }

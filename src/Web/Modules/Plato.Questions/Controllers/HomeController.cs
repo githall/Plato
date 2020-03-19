@@ -41,10 +41,11 @@ namespace Plato.Questions.Controllers
         private readonly IViewProviderManager<Answer> _replyViewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityReplyStore<Answer> _entityReplyStore;
-        private readonly IEntityReplyService<Answer> _replyService;        
+        private readonly IEntityReplyService<Answer> _replyService;
+        private readonly IEntityService<Question> _questionService;
         private readonly IPostManager<Question> _questionManager;        
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IPageTitleBuilder _pageTitleBuilder;
+        private readonly IPageTitleBuilder _pageTitleBuilder;        
         private readonly IPostManager<Answer> _answerManager;
         private readonly IEntityStore<Question> _entityStore;
         private readonly IClientIpAddress _clientIpAddress;
@@ -66,6 +67,7 @@ namespace Plato.Questions.Controllers
             IEntityReplyStore<Answer> entityReplyStore,
             IAuthorizationService authorizationService,            
             IEntityReplyService<Answer> replyService,
+            IEntityService<Question> questionService,
             IPostManager<Question> questionManager,            
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
@@ -84,9 +86,10 @@ namespace Plato.Questions.Controllers
             _replyViewProvider = replyViewProvider;
             _breadCrumbManager = breadCrumbManager;            
             _pageTitleBuilder = pageTitleBuilder;
-            _entityReplyStore = entityReplyStore;
+            _entityReplyStore = entityReplyStore;            
             _clientIpAddress = clientIpAddress;
-            _questionManager = questionManager;            
+            _questionManager = questionManager;
+            _questionService = questionService;
             _answerManager = answerManager;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
@@ -325,44 +328,19 @@ namespace Plato.Questions.Controllers
                 return NotFound();
             }
 
-            // Get entity to display
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
 
-            // Ensure the entity exists
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
-            // Ensure we have permission to view the entity
-            var authorizeResult = await AuthorizeAsync(entity);
-            if (!authorizeResult.Succeeded)
-            {
-                // Return 401
-                return Unauthorized();
-            }
-
-            // Ensure we have permission to view private entities
-            if (entity.IsPrivate)
-            {
-
-                // Get authenticated user
-                var user = await _contextFacade.GetAuthenticatedUserAsync();
-
-                // IF we didn't create this entity ensure we have permission to view private entities
-                if (entity.CreatedBy.Id != user?.Id)
-                {
-                    // Do we have permission to view private entities?
-                    if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
-                        Permissions.ViewPrivateQuestions))
-                    {
-                        // Return 401
-                        return Unauthorized();
-                    }
-                }
-
-            }
-            
             // Maintain previous route data when generating page links
             var defaultViewOptions = new EntityViewModel<Question, Answer>();
             var defaultPagerOptions = new PagerOptions();
@@ -544,13 +522,7 @@ namespace Plato.Questions.Controllers
 
         public async Task<IActionResult> Edit(EntityOptions opts)
         {
-            // Get entity we are editing
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
-            if (entity == null)
-            {
-                return NotFound();
-            }
-
+          
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -558,6 +530,19 @@ namespace Plato.Questions.Controllers
             if (user == null)
             {
                 return Unauthorized();
+            }
+
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
+
+            // We don't have permission or the entity does not exist
+            if (entity == null)
+            {
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Do we have permission
@@ -722,13 +707,19 @@ namespace Plato.Questions.Controllers
                 return NotFound();
             }
 
-            // Get reply entity
-            var entity = await _entityStore.GetByIdAsync(reply.EntityId);
+            // Get the entity
+            var entity = await GetEntityAsync(reply.EntityId);
+
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(reply.EntityId) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
-            
+
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -2190,6 +2181,56 @@ namespace Plato.Questions.Controllers
         #endregion
 
         #region "Private Methods"
+
+        // Use the entity service to get the entity to 
+        // ensure query adapters are enforced
+        async Task<Question> GetEntityAsync(int entityId)
+        {
+
+            if (entityId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(entityId));
+            }
+
+            return await _questionService
+                .ConfigureQuery(async q =>
+                {
+
+                    // Get entity
+                    q.Id.Equals(entityId);
+
+                    // Hide private?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewPrivateQuestions))
+                    {
+                        q.HidePrivate.True();
+                    }
+
+                    // Hide hidden?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewHiddenQuestions))
+                    {
+                        q.HideHidden.True();
+                    }
+
+                    // Hide spam?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewSpamQuestions))
+                    {
+                        q.HideSpam.True();
+                    }
+
+                    // Hide deleted?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewDeletedQuestions))
+                    {
+                        q.HideDeleted.True();
+                    }
+
+                })
+                .GetResultAsync();
+
+        }
 
         async Task<ICommandResultBase> AuthorizeAsync(IEntity entity)
         {

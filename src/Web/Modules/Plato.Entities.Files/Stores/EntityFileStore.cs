@@ -173,6 +173,29 @@ namespace Plato.Entities.Files.Stores
             return success;
         }
 
+        public async Task<bool> DeleteByFileIdAsync(int fileId)
+        {
+
+            if (fileId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(fileId));
+            }
+
+            var success = await _entityFileRepository.DeleteByFileIdAsync(fileId);
+            if (success)
+            {
+                if (_logger.IsEnabled(LogLevel.Information))
+                {
+                    _logger.LogInformation("Deleted all entity relationships for file id '{0}'",
+                        fileId);
+                }
+
+                CancelTokens();
+            }
+
+            return success;
+        }
+
         public async Task<bool> DeleteByEntityIdAndFileIdAsync(int entityId, int labelId)
         {
 

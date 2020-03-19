@@ -3,7 +3,7 @@ Description: Adds Google analytics to your Plato installation.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Reports
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.google.analytics/content/images/icon.png
 Dependencies: 

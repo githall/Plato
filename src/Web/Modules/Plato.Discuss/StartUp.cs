@@ -80,10 +80,11 @@ namespace Plato.Discuss
             // Register data access
             services.AddScoped<IPostManager<Topic>, TopicManager>();
             services.AddScoped<IPostManager<Reply>, ReplyManager>();
-            
-            // Services
-            services.AddScoped<IEntityService<Topic>, EntityService<Topic>>();
-            services.AddScoped<IEntityReplyService<Reply>, EntityReplyService<Reply>>();
+
+            // Entity services - transient as they contains action
+            // delegates that can change state several times per request
+            services.AddTransient<IEntityService<Topic>, EntityService<Topic>>();
+            services.AddTransient<IEntityReplyService<Reply>, EntityReplyService<Reply>>();
 
             // View incrementer
             services.AddScoped<IEntityViewIncrementer<Topic>, EntityViewIncrementer<Topic>>();

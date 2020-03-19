@@ -4,7 +4,7 @@ Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Docs
 Version: 1.0.0
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Icon: /plato.docs.labels/content/images/icon.png
 Dependencies: 
 [

@@ -3,7 +3,7 @@ Description: Adds settings to allow for various Google integrations.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Integrations
-PlatoVersion: 1.0.0
+PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.google/content/images/icon.png
 Dependencies: 

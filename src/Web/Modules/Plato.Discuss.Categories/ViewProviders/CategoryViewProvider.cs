@@ -54,15 +54,15 @@ namespace Plato.Discuss.Categories.ViewProviders
                 existingCategory = await _categoryStore.GetByIdAsync(category.Id);
             }
 
-            // Get topic index view model from context
+            // Get entity index view model from context
             var viewModel = context.Controller.HttpContext.Items[typeof(EntityIndexViewModel<Topic>)] as EntityIndexViewModel<Topic>;
             if (viewModel == null)
             {
                 throw new Exception($"A view model of type {typeof(EntityIndexViewModel<Topic>).ToString()} has not been registered on the HttpContext!");
             }
             
-            // channel filter options
-            var channelViewOpts = new CategoryIndexOptions
+            // category filter options
+            var categoryIndexOpts = new CategoryIndexOptions
             {
                 CategoryId = existingCategory?.Id ?? 0,
                 FeatureId = feature.Id
@@ -70,7 +70,7 @@ namespace Plato.Discuss.Categories.ViewProviders
             
             var indexViewModel = new CategoryIndexViewModel()
             {
-                Options = channelViewOpts,
+                Options = categoryIndexOpts,
                 EntityIndexOptions = viewModel?.Options,
                 Pager = viewModel?.Pager
             };

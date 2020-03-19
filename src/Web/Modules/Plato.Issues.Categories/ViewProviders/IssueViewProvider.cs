@@ -232,7 +232,8 @@ namespace Plato.Issues.Categories.ViewProviders
             };
 
             return Views(
-                View<CategoryDropDownViewModel>("Issues.Categories.Edit.Sidebar", model => viewModel).Zone("sidebar").Order(1)
+                View<CategoryDropDownViewModel>("Issues.Categories.Edit.Sidebar", model => viewModel)
+                .Zone("sidebar").Order(5)
             );
 
         }

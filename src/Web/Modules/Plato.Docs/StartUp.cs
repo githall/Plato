@@ -69,22 +69,27 @@ namespace Plato.Docs
             services.AddScoped<INavigationProvider, DocMenu>();
             services.AddScoped<INavigationProvider, DocCommentMenu>();
 
+            // Repositories
+            services.AddScoped<IEntityReplyRepository<DocComment>, EntityReplyRepository<DocComment>>();
+            services.AddScoped<IEntityReplyStore<DocComment>, EntityReplyStore<DocComment>>();
+            services.AddScoped<IEntityReplyManager<DocComment>, EntityReplyManager<DocComment>>();
+            services.AddScoped<ISimpleEntityRepository<SimpleDoc>, SimpleEntityRepository<SimpleDoc>>();
+
             // Stores
             services.AddScoped<IEntityRepository<Doc>, EntityRepository<Doc>>();
             services.AddScoped<IEntityStore<Doc>, EntityStore<Doc>>();            
             services.AddScoped<IEntityManager<Doc>, EntityManager<Doc>>();
-
-            services.AddScoped<IEntityReplyRepository<DocComment>, EntityReplyRepository<DocComment>>();
-            services.AddScoped<IEntityReplyStore<DocComment>, EntityReplyStore<DocComment>>();
-            services.AddScoped<IEntityReplyManager<DocComment>, EntityReplyManager<DocComment>>();
-
+            services.AddScoped<ISimpleEntityStore<SimpleDoc>, SimpleEntityStore<SimpleDoc>>();
+        
             // Register data access
             services.AddScoped<IPostManager<Doc>, DocManager>();
             services.AddScoped<IPostManager<DocComment>, ReplyManager>();
 
-            // Services
-            services.AddScoped<IEntityService<Doc>, EntityService<Doc>>();            
-            services.AddScoped<IEntityReplyService<DocComment>, EntityReplyService<DocComment>>();
+            // Entity services - transient as they contains action
+            // delegates that can change state several times per request
+            services.AddTransient<IEntityService<Doc>, EntityService<Doc>>();            
+            services.AddTransient<IEntityReplyService<DocComment>, EntityReplyService<DocComment>>();
+            services.AddTransient<ISimpleEntityService<SimpleDoc>, SimpleEntityService<SimpleDoc>>();
 
             // View incrementer
             services.AddScoped<IEntityViewIncrementer<Doc>, EntityViewIncrementer<Doc>>();
@@ -146,12 +151,12 @@ namespace Plato.Docs
             // Federated query manager 
             services.AddScoped<IFederatedQueryManager<Doc>, FederatedQueryManager<Doc>>();
             services.AddScoped<IFederatedQueryProvider<Doc>, EntityQueries<Doc>>();
-            services.AddScoped<IFederatedQueryManager<SimpleEntity>, FederatedQueryManager<SimpleEntity>>();
-            services.AddScoped<IFederatedQueryProvider<SimpleEntity>, EntityQueries<SimpleEntity>>();
+            services.AddScoped<IFederatedQueryManager<SimpleDoc>, FederatedQueryManager<SimpleDoc>>();
+            services.AddScoped<IFederatedQueryProvider<SimpleDoc>, EntityQueries<SimpleDoc>>();
 
             // Query adapters
             services.AddScoped<IQueryAdapterManager<Doc>, QueryAdapterManager<Doc>>();
-            services.AddScoped<IQueryAdapterManager<SimpleEntity>, QueryAdapterManager<SimpleEntity>>();
+            services.AddScoped<IQueryAdapterManager<SimpleDoc>, QueryAdapterManager<SimpleDoc>>();
 
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();

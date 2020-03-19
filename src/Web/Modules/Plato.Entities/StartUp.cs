@@ -75,10 +75,11 @@ namespace Plato.Entities
             services.AddScoped<IEntityUsersStore, EntityUsersStore>();
             services.AddScoped<IFeatureEntityCountStore, FeatureEntityCountStore>();
 
-            // Services
-            services.AddScoped<IEntityService<Entity>, EntityService<Entity>>();
-            services.AddScoped<ISimpleEntityService<SimpleEntity>, SimpleEntityService<SimpleEntity>>();
-            services.AddScoped<IFeatureEntityCountService, FeatureEntityCountService>();
+            // Entity services - transient as they contains action
+            // delegates that can change state several times per request
+            services.AddTransient<IEntityService<Entity>, EntityService<Entity>>();
+            services.AddTransient<ISimpleEntityService<SimpleEntity>, SimpleEntityService<SimpleEntity>>();
+            services.AddTransient<IFeatureEntityCountService, FeatureEntityCountService>();
 
             // Managers
             services.AddScoped<IEntityManager<Entity>, EntityManager<Entity>>();

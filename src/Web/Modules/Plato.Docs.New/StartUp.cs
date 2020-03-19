@@ -23,7 +23,7 @@ namespace Plato.Docs.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, DocListItemViewAdapter>();
-            services.AddScoped<IViewAdapterProvider, DocViewAdapter>();
+            //services.AddScoped<IViewAdapterProvider, DocViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, DocListViewAdapter>();            
             //services.AddScoped<IViewAdapterProvider, DocCommentListViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, DocCommentListItemViewAdapter>();

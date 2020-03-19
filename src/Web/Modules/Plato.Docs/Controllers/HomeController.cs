@@ -42,11 +42,12 @@ namespace Plato.Docs.Controllers
         private readonly IReportEntityManager<Doc> _reportEntityManager;
         private readonly IAuthorizationService _authorizationService;
         private readonly IViewProviderManager<Doc> _docViewProvider;        
-        private readonly IPostManager<DocComment> _replyManager;
+        private readonly IPostManager<DocComment> _replyManager;        
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
         private readonly IClientIpAddress _clientIpAddress;
-        private readonly IEntityStore<Doc> _entityStore;
+        private readonly IEntityService<Doc> _docService;
+        private readonly IEntityStore<Doc> _entityStore;        
         private readonly IContextFacade _contextFacade;
         private readonly IFeatureFacade _featureFacade;
         private readonly IPostManager<Doc> _docManager;
@@ -70,6 +71,7 @@ namespace Plato.Docs.Controllers
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
             IClientIpAddress clientIpAddress,
+            IEntityService<Doc> docService,
             IEntityStore<Doc> entityStore,
             IFeatureFacade featureFacade,
             IContextFacade contextFacade,
@@ -88,9 +90,10 @@ namespace Plato.Docs.Controllers
             _clientIpAddress = clientIpAddress;            
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
-            _replyService = replyService;
-            _entityStore = entityStore;
             _replyManager = replyManager;
+            _replyService = replyService;
+            _entityStore = entityStore;            
+            _docService = docService;
             _docManager = docManager;
             _alerter = alerter;
 
@@ -353,45 +356,20 @@ namespace Plato.Docs.Controllers
             {
                 return NotFound();
             }
-            
-            // Get entity to display
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
 
-            // Ensure entity exists
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
+
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null 
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();                  
             }
 
-            // Ensure we have permission to view the entity
-            var authorizeResult = await AuthorizeAsync(entity);
-            if (!authorizeResult.Succeeded)
-            {
-                // Return 401
-                return Unauthorized();
-            }
-
-            // Ensure we have permission to view private entities
-            if (entity.IsPrivate)
-            {
-
-                // Get authenticated user
-                var user = await _contextFacade.GetAuthenticatedUserAsync();
-
-                // IF we didn't create this entity ensure we have permission to view private entities
-                if (entity.CreatedBy.Id != user?.Id)
-                {
-                    // Do we have permission to view private entities?
-                    if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
-                        Permissions.ViewPrivateDocs))
-                    {
-                        // Return 401
-                        return Unauthorized();
-                    }
-                }
-
-            }
-            
             // Maintain previous route data when generating page links
             var defaultViewOptions = new EntityViewModel<Doc, DocComment>();
             var defaultPagerOptions = new PagerOptions();
@@ -595,15 +573,6 @@ namespace Plato.Docs.Controllers
         public async Task<IActionResult> Edit(EntityOptions opts)
         {
 
-            // Get entity 
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
-
-            // Ensure the entity exists
-            if (entity == null)
-            {
-                return NotFound();
-            }
-
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -611,6 +580,19 @@ namespace Plato.Docs.Controllers
             if (user == null)
             {
                 return Unauthorized();
+            }
+
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
+
+            // We don't have permission or the entity does not exist
+            if (entity == null)
+            {
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Do we have permission
@@ -712,7 +694,7 @@ namespace Plato.Docs.Controllers
                 // Always update modified information
                 entity.ModifiedUserId = user?.Id ?? 0;
                 entity.ModifiedDate = DateTimeOffset.UtcNow;
-                
+
                 // Get composed model from view providers
                 entity = await _docViewProvider.ComposeModelAsync(entity, this);
 
@@ -786,11 +768,17 @@ namespace Plato.Docs.Controllers
                 return NotFound();
             }
 
-            // Get reply entity
-            var entity = await _entityStore.GetByIdAsync(reply.EntityId);
+            // Get the entity
+            var entity = await GetEntityAsync(reply.EntityId);
+
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(reply.EntityId) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Get current user
@@ -2543,6 +2531,56 @@ namespace Plato.Docs.Controllers
         #endregion
 
         #region "Private Methods"
+
+        // Use the entity service to get the entity to 
+        // ensure query adapters are enforced
+        async Task<Doc> GetEntityAsync(int entityId)
+        {
+
+            if (entityId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(entityId));
+            }
+
+            return await _docService
+                .ConfigureQuery(async q =>
+                {
+
+                    // Get entity
+                    q.Id.Equals(entityId);
+
+                    // Hide private?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewPrivateDocs))
+                    {
+                        q.HidePrivate.True();
+                    }
+
+                    // Hide hidden?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewHiddenDocs))
+                    {
+                        q.HideHidden.True();
+                    }
+
+                    // Hide spam?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewSpamDocs))
+                    {
+                        q.HideSpam.True();
+                    }
+
+                    // Hide deleted?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewDeletedDocs))
+                    {
+                        q.HideDeleted.True();
+                    }
+
+                })
+                .GetResultAsync();
+
+        }
 
         async Task<ICommandResultBase> AuthorizeAsync(IEntity entity)
         {

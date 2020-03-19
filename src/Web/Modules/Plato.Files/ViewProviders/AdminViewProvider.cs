@@ -59,7 +59,8 @@ namespace Plato.Files.ViewProviders
         {
 
             var user = await _contextFacade.GetAuthenticatedUserAsync();
-
+                        
+            // Add Files
             EditFileViewModel viewModel = null;
             if (file.Id == 0)
             {
@@ -89,7 +90,7 @@ namespace Plato.Files.ViewProviders
 
             }
 
-            // Edit file
+            // Edit File
 
             viewModel = new EditFileViewModel()
             {
@@ -124,36 +125,7 @@ namespace Plato.Files.ViewProviders
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(File file, IViewProviderContext context)
         {
-            if (file == null)
-            {
-                throw new ArgumentNullException(nameof(file));
-            }
-
-            var model = new EditFileViewModel();
-
-            if (!await context.Updater.TryUpdateModelAsync(model))
-            {
-                return await BuildEditAsync(file, context);
-            }
-
-            model.Name = model.Name?.Trim();
-
-            if (context.Updater.ModelState.IsValid)
-            {
-
-                file.Name = model.Name;
-             
-                var updatedFile = await _fileStore.UpdateAsync(file);
-
-                //foreach (var error in result.Errors)
-                //{
-                //    context.Updater.ModelState.AddModelError(string.Empty, error.Description);
-                //}
-
-            }
-
             return await BuildEditAsync(file, context);
-
         }
 
     }

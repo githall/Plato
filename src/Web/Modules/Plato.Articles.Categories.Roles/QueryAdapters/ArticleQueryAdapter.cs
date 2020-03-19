@@ -55,7 +55,7 @@ namespace Plato.Articles.Categories.Roles.QueryAdapters
                 }
                 builder.Append("))");
             }
-            
+
         }
 
     }

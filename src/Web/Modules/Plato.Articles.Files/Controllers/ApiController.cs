@@ -16,6 +16,8 @@ using PlatoCore.Features.Abstractions;
 using PlatoCore.Net.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using PlatoCore.Security.Abstractions;
+using Plato.Entities.Files.Stores;
+using Plato.Entities.Files.Models;
 
 namespace Plato.Articles.Files.Controllers
 {
@@ -27,17 +29,19 @@ namespace Plato.Articles.Files.Controllers
         public const string GuidKey = "guid";        
 
         private readonly IHttpMultiPartRequestHandler _multiPartRequestHandler;
-        private readonly IAuthorizationService _authorizationService;
+        private readonly IEntityFileStore<EntityFile> _entityFileStore;
+        private readonly IAuthorizationService _authorizationService; 
         private readonly IFileValidator _fileValidator;
         private readonly ILogger<ApiController> _logger;
         private readonly IFeatureFacade _featureFacade;
         private readonly IFileStore<File> _fileStore;
-        private readonly IFileManager _fileManager;
+        private readonly IFileManager _fileManager;  
 
         public IHtmlLocalizer T { get; }
 
         public ApiController(     
-            IHttpMultiPartRequestHandler multiPartRequestHandler,            
+            IHttpMultiPartRequestHandler multiPartRequestHandler,
+            IEntityFileStore<EntityFile> entityFileStore,
             IAuthorizationService authorizationService,
             IFileValidator attachmentValidator,
             IFileStore<File> attachmentStore,
@@ -48,7 +52,8 @@ namespace Plato.Articles.Files.Controllers
         {            
             _multiPartRequestHandler = multiPartRequestHandler;
             _authorizationService = authorizationService;           
-            _fileValidator = attachmentValidator;            
+            _fileValidator = attachmentValidator;
+            _entityFileStore = entityFileStore;
             _featureFacade = featureFacade;
             _fileStore = attachmentStore;
             _fileManager = fileManager;
@@ -210,18 +215,18 @@ namespace Plato.Articles.Files.Controllers
             }
 
             // Get attachment
-            var attachment = await _fileStore.GetByIdAsync(id);
+            var file = await _fileStore.GetByIdAsync(id);
 
             // Ensure attachment exists
-            if (attachment == null)
+            if (file == null)
             {
                 return NotFound();
             }
 
             // Get current permission based on attachment ownership
-            var deletePermission = attachment.CreatedUserId == user.Id
+            var deletePermission = file.CreatedUserId == user.Id
                 ? Permissions.DeleteOwnArticleFiles
-                : Permissions.DeleteAnyArticleFiles;
+                : Permissions.DeleteAnyArticleFile;
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, deletePermission))
@@ -229,8 +234,14 @@ namespace Plato.Articles.Files.Controllers
                 return Unauthorized();
             }
 
-            // Delete attachment
-            var deleteResult = await _fileManager.DeleteAsync(attachment);
+            // Delete file
+            var deleteResult = await _fileManager.DeleteAsync(file);
+
+            if (deleteResult.Succeeded)
+            {
+                // Delete all entity relationships for deleted file
+                await _entityFileStore.DeleteByFileIdAsync(deleteResult.Response.Id);
+            }
 
             // Return result
             return base.Result(deleteResult.Succeeded);

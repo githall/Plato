@@ -9,7 +9,6 @@ using Plato.Entities.Stores;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Cache.Abstractions;
-using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using Plato.Labels.Models;
@@ -67,27 +66,7 @@ namespace Plato.Docs.Labels.ViewProviders
 
         public override Task<IViewProviderResult> BuildDisplayAsync(Doc viewModel, IViewProviderContext updater)
         {
-
             return Task.FromResult(default(IViewProviderResult));
-
-            //// Get entity labels
-            //var labels = await _labelStore.QueryAsync()
-            //    .Take(1, 10)
-            //    .Select<LabelQueryParams>(q =>
-            //    {
-            //        q.EntityId.Equals(viewModel.Id);
-            //    })
-            //    .OrderBy("Name", OrderBy.Desc)
-            //    .ToList();
-            
-            //return Views(
-            //    View<LabelsViewModel<Label>>("Doc.Labels.Display.Sidebar", model =>
-            //    {
-            //        model.Labels = labels?.Data;
-            //        return model;
-            //    }).Zone("sidebar").Order(3)
-            //);
-
         }
         
         public override async Task<IViewProviderResult> BuildEditAsync(Doc topic, IViewProviderContext updater)
@@ -118,7 +97,7 @@ namespace Plato.Docs.Labels.ViewProviders
             
             return Views(
                 View<LabelDropDownViewModel>("Doc.Labels.Edit.Sidebar", model => viewModel).Zone("sidebar")
-                    .Order(2)
+                    .Order(15)
             );
 
         }

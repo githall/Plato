@@ -53,6 +53,48 @@ namespace Plato.Entities.Services
             return GetResultsAsync(options, new PagerOptions());
         }
 
+        public async Task<TModel> GetResultAsync()
+        {
+
+            // Get authenticated user 
+            var user = await _contextFacade.GetAuthenticatedUserAsync();
+
+            // Return tailored results
+            var results = await _entityStore.QueryAsync()
+                .Take(1, false)
+                .Configure(_configureDb)
+                .Select<EntityQueryParams>(q =>
+                {
+
+                    // ----------------
+                    // Set current authenticated user id
+                    // This is required for various security checks
+                    // i.e. Role based security & displaying private entities
+                    // ----------------
+
+                    q.UserId.Equals(user?.Id ?? 0);
+                    
+                    // ----------------
+                    // Additional parameter configuration
+                    // ----------------
+
+                    _configureParams?.Invoke(q);
+
+                })
+                .ToList();
+
+            if (results?.Data != null)
+            {
+                if (results.Data.Count > 0)
+                {
+                    return results.Data[0] as TModel;
+                }
+            }
+
+            return null;
+
+        }
+
         public async Task<IPagedResults<TModel>> GetResultsAsync(EntityIndexOptions options, PagerOptions pager)
         {
 

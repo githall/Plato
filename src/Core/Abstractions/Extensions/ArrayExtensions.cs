@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Text;
 
 namespace PlatoCore.Abstractions.Extensions
@@ -6,6 +7,21 @@ namespace PlatoCore.Abstractions.Extensions
 
     public static class ArrayExtensions
     {
+        public static IList<string> ToList(this string[] input)
+        {
+
+            var output = new List<string>(input.Length - 1);
+            if (input != null)
+            {
+                for (var i = 0; i <= input.Length - 1; i++)
+                {
+                    output.Add(input[i]);
+                }
+            }
+
+            return output;
+
+        }
 
         public static string ToDelimitedString(
             this string[] input,

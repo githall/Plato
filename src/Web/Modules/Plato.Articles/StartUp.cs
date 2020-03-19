@@ -72,6 +72,7 @@ namespace Plato.Articles
             services.AddScoped<IEntityStore<Article>, EntityStore<Article>>();
             services.AddScoped<IEntityManager<Article>, EntityManager<Article>>();
 
+            // Repositories
             services.AddScoped<IEntityReplyRepository<Comment>, EntityReplyRepository<Comment>>();
             services.AddScoped<IEntityReplyStore<Comment>, EntityReplyStore<Comment>>();
             services.AddScoped<IEntityReplyManager<Comment>, EntityReplyManager<Comment>>();
@@ -80,9 +81,10 @@ namespace Plato.Articles
             services.AddScoped<IPostManager<Article>, ArticleManager>();
             services.AddScoped<IPostManager<Comment>, ReplyManager>();
 
-            // Entity services
-            services.AddScoped<IEntityService<Article>, EntityService<Article>>();
-            services.AddScoped<IEntityReplyService<Comment>, EntityReplyService<Comment>>();
+            // Entity services - transient as they contains action
+            // delegates that can change state several times per request
+            services.AddTransient<IEntityService<Article>, EntityService<Article>>();
+            services.AddTransient<IEntityReplyService<Comment>, EntityReplyService<Comment>>();
 
             // View incrementer
             services.AddScoped<IEntityViewIncrementer<Article>, EntityViewIncrementer<Article>>();

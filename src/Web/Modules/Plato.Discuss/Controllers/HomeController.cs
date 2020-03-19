@@ -42,9 +42,10 @@ namespace Plato.Discuss.Controllers
         private readonly IViewProviderManager<Reply> _replyViewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityReplyStore<Reply> _entityReplyStore;        
-        private readonly IEntityReplyService<Reply> _replyService;        
+        private readonly IEntityReplyService<Reply> _replyService;
+        private readonly IEntityService<Topic> _topicService;
         private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IPageTitleBuilder _pageTitleBuilder;        
+        private readonly IPageTitleBuilder _pageTitleBuilder;  
         private readonly IClientIpAddress _clientIpAddress;
         private readonly IPostManager<Topic> _topicManager;
         private readonly IPostManager<Reply> _replyManager;
@@ -66,7 +67,8 @@ namespace Plato.Discuss.Controllers
             IViewProviderManager<Reply> replyViewProvider,
             IAuthorizationService authorizationService,
             IEntityReplyStore<Reply> entityReplyStore,            
-            IEntityReplyService<Reply> replyService,            
+            IEntityReplyService<Reply> replyService,
+            IEntityService<Topic> topicService,
             IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
             IClientIpAddress clientIpAddress,
@@ -84,12 +86,13 @@ namespace Plato.Discuss.Controllers
             _breadCrumbManager = breadCrumbManager;
             _replyViewProvider = replyViewProvider;
             _entityReplyStore = entityReplyStore;
-            _pageTitleBuilder = pageTitleBuilder;            
+            _pageTitleBuilder = pageTitleBuilder;
             _clientIpAddress = clientIpAddress;            
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
             _replyManager = replyManager;
             _topicManager = topicManager;
+            _topicService = topicService;
             _replyService = replyService;
             _entityStore = entityStore;
             _alerter = alerter;
@@ -324,42 +327,17 @@ namespace Plato.Discuss.Controllers
                 return NotFound();
             }
 
-            // Get entity to display
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
 
-            // Ensure entity exists
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
-            }
-
-            // Ensure we have permission to view the entity
-            var authorizeResult = await AuthorizeAsync(entity);
-            if (!authorizeResult.Succeeded)
-            {
-                // Return 401
-                return Unauthorized();
-            }
-            
-            // Ensure we have permission to view private entities
-            if (entity.IsPrivate)
-            {
-
-                // Get authenticated user
-                var user = await _contextFacade.GetAuthenticatedUserAsync();
-
-                // IF we didn't create this entity ensure we have permission to view private entities
-                if (entity.CreatedBy.Id != user?.Id)
-                {
-                    // Do we have permission to view private entities?
-                    if (!await _authorizationService.AuthorizeAsync(this.User, entity.CategoryId,
-                        Permissions.ViewPrivateTopics))
-                    {
-                        // Return 401
-                        return Unauthorized();
-                    }
-                }
-
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Maintain previous route data when generating page links
@@ -541,16 +519,7 @@ namespace Plato.Discuss.Controllers
 
         public async Task<IActionResult> Edit(EntityOptions opts)
         {
-
-            // Get entity 
-            var entity = await _entityStore.GetByIdAsync(opts.Id);
-
-            // Ensure the entity exists
-            if (entity == null)
-            {
-                return NotFound();
-            }
-
+          
             // Get current user
             var user = await _contextFacade.GetAuthenticatedUserAsync();
 
@@ -558,6 +527,19 @@ namespace Plato.Discuss.Controllers
             if (user == null)
             {
                 return Unauthorized();
+            }
+
+            // Get the entity
+            var entity = await GetEntityAsync(opts.Id);
+
+            // We don't have permission or the entity does not exist
+            if (entity == null)
+            {
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(opts.Id) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Do we have permission
@@ -720,11 +702,17 @@ namespace Plato.Discuss.Controllers
                 return NotFound();
             }
 
-            // Get reply entity
-            var entity = await _entityStore.GetByIdAsync(reply.EntityId);
+            // Get the entity
+            var entity = await GetEntityAsync(reply.EntityId);
+
+            // We don't have permission or the entity does not exist
             if (entity == null)
             {
-                return NotFound();
+                // Return a 404 if the entity does not exist
+                // Return a 401 to indicate am authorization issue
+                return await _entityStore.GetByIdAsync(reply.EntityId) == null
+                    ? (IActionResult)NotFound()
+                    : (IActionResult)Unauthorized();
             }
 
             // Get current user
@@ -2189,6 +2177,56 @@ namespace Plato.Discuss.Controllers
         #endregion
 
         #region "Private Methods"
+
+        // Use the entity service to get the entity to 
+        // ensure query adapters are enforced
+        async Task<Topic> GetEntityAsync(int entityId)
+        {
+
+            if (entityId <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(entityId));
+            }
+
+            return await _topicService
+                .ConfigureQuery(async q =>
+                {
+
+                    // Get entity
+                    q.Id.Equals(entityId);
+
+                    // Hide private?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewPrivateTopics))
+                    {
+                        q.HidePrivate.True();
+                    }
+
+                    // Hide hidden?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewHiddenTopics))
+                    {
+                        q.HideHidden.True();
+                    }
+
+                    // Hide spam?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewSpamTopics))
+                    {
+                        q.HideSpam.True();
+                    }
+
+                    // Hide deleted?
+                    if (!await _authorizationService.AuthorizeAsync(HttpContext.User,
+                        Permissions.ViewDeletedTopics))
+                    {
+                        q.HideDeleted.True();
+                    }
+
+                })
+                .GetResultAsync();
+
+        }
 
         async Task<ICommandResultBase> AuthorizeAsync(IEntity entity)
         {

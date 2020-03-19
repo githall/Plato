@@ -43,6 +43,52 @@ namespace Plato.Categories.Services
             return this;
         }
 
+        public async Task<TModel> GetResultAsync()
+        {
+
+            // Get authenticated user 
+            var user = await _contextFacade.GetAuthenticatedUserAsync();
+
+            // Return tailored results
+            var results = await _categoryStore.QueryAsync()
+                .Take(1, false)
+                .Configure(_configureDb)
+                .Select<CategoryQueryParams>(q =>
+                {
+
+                    // ----------------
+                    // Set current authenticated user id
+                    // This is required for various security checks
+                    // ----------------
+
+                    q.UserId.Equals(user?.Id ?? 0);
+
+                    // ----------------
+                    // Additional parameter configuration
+                    // ----------------
+
+                    _configureParams?.Invoke(q);
+
+                })
+                .ToList();
+
+            if (results?.Data != null)
+            {
+                if (results.Data.Count > 0)
+                {
+                    return results.Data[0] as TModel;
+                }                
+            }
+
+            return null;
+
+        }
+
+        public Task<IPagedResults<TModel>> GetResultsAsync()
+        {
+            return GetResultsAsync(new CategoryIndexOptions(), new PagerOptions());
+        }
+
         public async Task<IPagedResults<TModel>> GetResultsAsync(CategoryIndexOptions options, PagerOptions pager)
         {
 
@@ -83,7 +129,7 @@ namespace Plato.Categories.Services
                     // ----------------
                     // Basic parameters
                     // ----------------
-                    
+
                     // FeatureId
                     if (options.FeatureId > 0)
                     {
@@ -93,7 +139,7 @@ namespace Plato.Categories.Services
                     // ----------------
                     // Additional parameter configuration
                     // ----------------
-                    
+
                     _configureParams?.Invoke(q);
 
                 })

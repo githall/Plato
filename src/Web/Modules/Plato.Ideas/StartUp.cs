@@ -80,9 +80,10 @@ namespace Plato.Ideas
             services.AddScoped<IPostManager<Idea>, IdeaManager>();
             services.AddScoped<IPostManager<IdeaComment>, IdeaCommentManager>();
 
-            // Entity services
-            services.AddScoped<IEntityService<Idea>, EntityService<Idea>>();
-            services.AddScoped<IEntityReplyService<IdeaComment>, EntityReplyService<IdeaComment>>();
+            // Entity services - transient as they contains action
+            // delegates that can change state several times per request
+            services.AddTransient<IEntityService<Idea>, EntityService<Idea>>();
+            services.AddTransient<IEntityReplyService<IdeaComment>, EntityReplyService<IdeaComment>>();
 
             // View incrementer
             services.AddScoped<IEntityViewIncrementer<Idea>, EntityViewIncrementer<Idea>>();

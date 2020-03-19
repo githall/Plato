@@ -39,9 +39,6 @@ namespace Plato.Entities.ViewComponents
                 pager = new PagerOptions();
             }
 
-            // Get search settings
-            //_searchSettings = await _searchSettingsStore.GetAsync();
-            
             return View(await GetViewModel(options, pager));
 
         }

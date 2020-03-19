@@ -65,8 +65,8 @@ $(function (win, doc, $) {
                 var fileId = this._getFileId($caller),
                     returnUrl = this._getReturnUrl($caller),
                     dropzoneMsg = fileId === 0
-                        ? '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Add files by dropping here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>'
-                        : '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>Update this file by dropping a new file here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a></p>';
+                        ? 'Add files by dropping here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a>'
+                        : 'Update this file by dropping a new file here or <a id="#dzUpload" class=\"dz-clickable\" href="#">click to browse</a>';
 
                 // Configure dropzone
                 $caller.find('[data-provide="file-dropzone"]')
@@ -80,7 +80,8 @@ $(function (win, doc, $) {
                             autoDiscover: false,
                             disablePreview: true,
                             uploadMultiple: false,
-                            dictDefaultMessage: dropzoneMsg
+                            dictDefaultMessage: '<p class=\"text-center\"><i class=\"fal fa-arrow-from-top fa-flip-vertical fa-2x d-block text-muted mb-2\"></i>' +
+                                dropzoneMsg + '</p>'
                         },
                         onQueuecomplete: function (errors) {                            
                             if (errors.length === 0) {

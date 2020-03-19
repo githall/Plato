@@ -42,10 +42,10 @@ namespace Plato.Entities.Files.Search
            /*
                 Produces the following federated query...
                 -----------------
-                SELECT ea.EntityId, 0 FROM plato_Attachments a
-                INNER JOIN plato_EntityAttachments ea ON ea.AttachmentId = a.Id
-                INNER JOIN plato_Entities e ON e.Id = ea.EntityId
-                WHERE (a.[Name] LIKE '%percent') GROUP BY ea.EntityId;     
+                SELECT ef.EntityId, 0 FROM plato_Files f
+                INNER JOIN plato_EntityFiles ef ON ef.FileId = f.Id
+                INNER JOIN plato_Entities e ON e.Id = ef.EntityId
+                WHERE (a.[Name] LIKE '%percent') GROUP BY ef.EntityId;     
             */
 
             var q1 = new StringBuilder();
@@ -92,17 +92,17 @@ namespace Plato.Entities.Files.Search
             /*
                 Produces the following federated query...
                 -----------------
-                SELECT ea.EntityId, SUM(i.[Rank]) AS [Rank] 
-                FROM plato_Attachments a INNER JOIN 
-                CONTAINSTABLE(plato_Attachments, *, 'FORMSOF(INFLECTIONAL, creative)') AS i ON i.[Key] = a.Id 
-                INNER JOIN plato_EntityAttachments ea ON ea.AttachmentId = a.Id
-                INNER JOIN plato_Entities e ON e.Id = ea.EntityId
-                WHERE (a.Id IN (IsNull(i.[Key], 0))) GROUP BY ea.EntityId;
+                SELECT ef.EntityId, SUM(i.[Rank]) AS [Rank] 
+                FROM plato_Files f INNER JOIN 
+                CONTAINSTABLE(plato_Files, *, 'FORMSOF(INFLECTIONAL, creative)') AS i ON i.[Key] = f.Id 
+                INNER JOIN plato_EntityFiles ef ON ef.FileId = f.Id
+                INNER JOIN plato_Entities e ON e.Id = ef.EntityId
+                WHERE (f.Id IN (IsNull(i.[Key], 0))) GROUP BY ef.EntityId;
              */
 
             var q1 = new StringBuilder();
             q1
-                .Append("SELECT ea.EntityId, SUM(i.[Rank]) ")
+                .Append("SELECT ef.EntityId, SUM(i.[Rank]) ")
                 .Append("FROM ")
                 .Append("{prefix}_Files")
                 .Append(" f ")
@@ -113,7 +113,7 @@ namespace Plato.Entities.Files.Search
                 .Append(", *, '").Append(fullTextQuery).Append("'");
             if (query.Options.MaxResults > 0)
                 q1.Append(", ").Append(query.Options.MaxResults.ToString());
-            q1.Append(") AS i ON i.[Key] = a.Id ")
+            q1.Append(") AS i ON i.[Key] = f.Id ")
                 .Append("INNER JOIN {prefix}_EntityFiles ef ON ef.FileId = f.Id ")
                 .Append("INNER JOIN {prefix}_Entities e ON e.Id = ef.EntityId ")
                 .Append("WHERE ");
@@ -121,7 +121,7 @@ namespace Plato.Entities.Files.Search
             {
                 q1.Append("(").Append(query.Builder.Where).Append(") AND ");
             }
-            q1.Append("(a.Id IN (IsNull(i.[Key], 0))) GROUP BY ea.EntityId;");
+            q1.Append("(f.Id IN (IsNull(i.[Key], 0))) GROUP BY ef.EntityId;");
 
             // Return queries
             return new List<string>()

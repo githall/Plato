@@ -52,7 +52,10 @@ namespace Plato.Questions.Categories
             services.AddScoped<ICategoryRoleStore<CategoryRole>, CategoryRoleStore>();
             services.AddScoped<ICategoryStore<Category>, CategoryStore<Category>>();
             services.AddScoped<ICategoryManager<Category>, CategoryManager<Category>>();
-            services.AddScoped<ICategoryService<Category>, CategoryService<Category>>();
+
+            // CategoryService needs to be transient as it contains action
+            // delegates that can change state several times per request
+            services.AddTransient<ICategoryService<Category>, CategoryService<Category>>();
 
             // Discuss view providers
             services.AddScoped<IViewProviderManager<Question>, ViewProviderManager<Question>>();
@@ -78,7 +81,7 @@ namespace Plato.Questions.Categories
 
             // Channel details updater
             services.AddScoped<ICategoryDetailsUpdater, CategoryDetailsUpdater>();
-       
+
             // Query adapters
             services.AddScoped<IQueryAdapterManager<Category>, QueryAdapterManager<Category>>();
 

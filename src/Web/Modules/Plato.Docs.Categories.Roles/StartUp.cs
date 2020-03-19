@@ -14,6 +14,7 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
 using Plato.Docs.Categories.Roles.Handlers;
+using Plato.Entities.Models;
 
 namespace Plato.Docs.Categories.Roles
 {
@@ -39,8 +40,9 @@ namespace Plato.Docs.Categories.Roles
 
             // Query adapters to limit access by role
             services.AddScoped<IQueryAdapterProvider<Doc>, DocQueryAdapter>();
-            services.AddScoped<IQueryAdapterProvider<Category>, CategoryQueryAdapter>();
-          
+            services.AddScoped<IQueryAdapterProvider<SimpleDoc>, SimpleDocQueryAdapter>();
+            services.AddScoped<IQueryAdapterProvider<Category>, CategoryQueryAdapter>();            
+
             // Services
             services.AddScoped<IDefaultCategoryRolesManager<Category>, DefaultCategoryRolesManager<Category>>();
 

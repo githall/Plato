@@ -200,6 +200,29 @@ namespace Plato.Entities.Files.Repositories
             return success > 0 ? true : false;
         }
 
+        public async Task<bool> DeleteByFileIdAsync(int fileId)
+        {
+            if (_logger.IsEnabled(LogLevel.Information))
+            {
+                _logger.LogInformation($"Deleting all entity file relationships for file id: {fileId}");
+            }
+
+            var success = 0;
+            using (var context = _dbContext)
+            {
+                success = await context.ExecuteScalarAsync<int>(
+                    CommandType.StoredProcedure,
+                    "DeleteEntityFilesByFileId",
+                    new IDbDataParameter[]
+                    {
+                        new DbParam("FileId", DbType.Int32, fileId)
+                    });
+            }
+
+            return success > 0 ? true : false;
+        }
+
+
         public async Task<bool> DeleteByEntityIdAndFileIdAsync(int entityId, int fileId)
         {
             if (_logger.IsEnabled(LogLevel.Information))
