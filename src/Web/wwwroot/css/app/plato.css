@@ -1018,11 +1018,11 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .nav a.nav-link .nav-text { margin-left: 0.50rem; }
 .nav a.text-hidden .nav-text { display: none;  }
 
-.nav-site { border: 0; border-bottom-width: 1px; border-style: solid; }
+.nav-site { border: 0; }
 .nav-site .navbar { border: 0 !important; }
 .nav-site .collapsing { overflow: hidden; }
 
-.nav-site > .navbar .navbar-nav a.nav-link { height: 44px; padding: 0.5rem 1rem !important }
+.nav-site > .navbar .navbar-nav .nav-item { padding-left: 1.5rem !important }
 .nav-site > .navbar { width: 100%; }
 
 .nav-site > .navbar .dropdown .dropdown-menu { min-width: 200px; }

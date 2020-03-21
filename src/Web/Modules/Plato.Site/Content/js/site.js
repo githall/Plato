@@ -168,6 +168,20 @@ $(function (win, doc, $) {
         // gitHubButton
         $(".github-button").gitHubButton();
 
+
+        $(".nav-site").find('[data-toggle="nav-dropdown"]').hover(function () {
+            var selector = $(this).attr("href"),
+                $menu = $(selector);
+            if ($menu.length > 0) {
+                $menu.addClass("show");
+            }       
+        });
+
+        $(".nav-site").find(".nav-dropdown-menu").mouseleave(function () {
+            $(this).removeClass("show");
+        });
+
+
     });
 
     // infinite scroll load

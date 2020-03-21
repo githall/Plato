@@ -1,16 +1,131 @@
 ﻿
+
+.site-nav {
+    display: block;
+    width: 100%;
+    height: 76px;
+}
+
+.site-nav-fixed {
+    position: fixed;
+    z-index: 10;
+    top: 0;
+    left: 0;
+}
+
+.site-nav .navbar {
+    position:absolute;
+    top: 0;
+    left:0;
+    z-index:2;
+    padding: 1rem;
+}
+
+.site-nav-fixed + main.body {
+    margin-top: 76px;
+}
+
+/* nav-dropdown */
+
+.nav-dropdown-menu {
+    background: #f8f8f8;
+    width: 100%;
+    visibility: hidden;   
+    position: absolute;
+    z-index: 1;
+    top: -800px;
+    left: 0;
+    transition: all 0.2s ease-out;
+  
+}
+
+    .nav-dropdown-menu.show {
+        visibility: visible;
+        top: 76px;
+        opacity: 1;
+    }
+
+    .nav-dropdown-menu .container,
+    .nav-dropdown-menu .container-fluid {
+        padding: 2rem 0;
+    }
+
+.nav-dropdown-item {
+    display: block;
+    color: black;
+    border-color: #333;
+    padding: 1rem;
+    border-radius: 3px;
+}
+
+    a.nav-dropdown-item {
+        text-decoration: none;          
+    }
+
+        a.nav-dropdown-item.border {
+            border-color: #aaa !important;
+        }
+
+    a.nav-dropdown-item:hover {
+        background: #007bff;
+        color:white;
+    }
+
+    a.nav-dropdown-item:hover i {
+        color:white;
+    }
+
+
+.box {
+    border-radius: 2px;
+}
+
+.nav-dropdown-menu .box {
+    color:#888;
+    background:white !important;
+    border-color:#ddd !important;
+}
+
+a.box {
+    text-decoration: none;
+    color: black;
+}
+
+a.box:hover {
+    border-color: #007bff !important;
+}
+
+    a.box .icon-circle {
+        transition: all .2s ease-out;
+    }
+
+    a.box:hover .icon-circle {
+        transform: scale(1.2);
+    }
+    
+
 /* Colors */
 
-.bg-black { background: black; }
-.bg-purple { background: #5C2D91; }
+.bg-black { background-color: black !important; }
+.bg-black-alt { background-color: #111 !important; }
+
+.bg-slate { background-color: #2C3E50 !important; }
+
+.bg-purple { background-color: #5C2D91 !important; }
 
 .border-purple { border-color: #5C2D91; }
 .purple { background: #5C2D91; border-color: #5C2D91; }
 .text-purple { color: #5C2D91; }
 
-.bg-primary-75 { background: rgba(0, 123, 255, 0.75); }
-.bg-primary-50 { background: rgba(0, 123, 255, 0.50); }
-.bg-primary-25 { background: rgba(0, 123, 255, 0.25); }
+.bg-white-75 { background-color: rgba(255, 255, 255, 0.75) !important; }
+.bg-white-50 { background-color: rgba(255, 255, 255, 0.50) !important; }
+.bg-white-25 { background-color: rgba(255, 255, 255, 0.25) !important; }
+.bg-white-10 { background-color: rgba(255, 255, 255, 0.10) !important; }
+.bg-white-5 { background-color: rgba(255, 255, 255, 0.05) !important; }
+
+.bg-primary-75 { background-color: rgba(0, 123, 255, 0.75) !important; }
+.bg-primary-50 { background-color: rgba(0, 123, 255, 0.50) !important; }
+.bg-primary-25 { background-color: rgba(0, 123, 255, 0.25) !important; }
 
 .bg-primary-people {
     background: #007bff url(/plato.site/content/images/bg-people.png) center center repeat-x;
@@ -73,16 +188,23 @@
 /* Dividers */
 
 hr.divider { max-width: 3.25rem; border-width: .2rem; border-color: #007BFF }
+hr.divider.warning { border-color:#F9B32F; }
 hr.divider-left { display: inline-block; width: 3.25rem; }
 hr.light { border-color: #fff }
+
+/* Container */
+
+@media (min-width: 1440px) {
+    .container {
+        max-width: 1400px;
+    }
+}
 
 /* Page container */
 
 .page {
     display: block;
     position: relative;
-    padding: 0;
-    margin: 0;
 }
 
 .page .container,
@@ -90,6 +212,7 @@ hr.light { border-color: #fff }
     display: block;
     margin: 3rem auto;
 }
+
 
 /* full screen */
 @media (min-width: 992px) {
@@ -107,25 +230,36 @@ hr.light { border-color: #fff }
     height: 80px;
     display: inline-block;
     border-radius: 50%;
-    background: #BFDEFF;
+    background: #CBE4FF;
     text-align: center;
     border: 0;
-    box-shadow: 0 0 0 10px rgba(0,0,0,0.1);
     position: relative;
-    color: white;
+    color: #007bff;
 }
 
-.icon-circle i {
-    font-size: 2.75rem;
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    .icon-circle i {
+        font-size: 2.75rem;
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+/* Plato icons */
+.icon-wrapper {
+    color: #007bff !important;
+    background: #E8F3FF !important;
+}
+
+.img-32 {
+    width: 32px;
+    height: 32px;
 }
 
 /* Responsive images */
-
-.img-md-fluid { width: 100%; }
+.img-md-fluid {
+    width: 100%;
+}
 
 /* full screen */
 @media (min-width: 992px) {    
@@ -205,4 +339,52 @@ a.img-thumbnail:hover .img-caption {
     display: inline-block;
     margin: 5px auto;
     height: 49px;
+}
+
+/* March 2020 */
+
+
+.display-5 {
+    font-size: 3rem;
+    font-weight: 300;
+    line-height: 1.2;
+}
+
+.card-primary-price {
+    border-radius: 0;
+    text-align:center;
+    border-top: 8px solid #007bff;
+}
+
+.card-danger-price { 
+    border-radius: 0;
+    text-align: center;
+    border-top: 8px solid #FE6E41;
+}
+
+.text-danger {
+    color: ##FE6E41;
+}
+
+.btn-danger {
+    background-color: #FE6E41;
+    border-color: #FE6E41;
+}
+
+.text-warning {
+    color: #F9B32F !important;
+}
+
+.card-info-price {
+    border-radius: 0;
+    text-align: center;
+    border-top: 8px solid #479CC8;
+}
+
+.text-info {
+    color: #479CC8;
+}
+
+.btn-info {
+    background: #479CC8;
 }

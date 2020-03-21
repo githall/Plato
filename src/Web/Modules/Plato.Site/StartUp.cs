@@ -60,9 +60,12 @@ namespace Plato.Site
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-            
-            
-            // About
+
+            // -----------
+            // Home
+            // -----------
+
+            // Index
             routes.MapAreaRoute(
                 name: "PlatoSiteAbout",
                 areaName: "Plato.Site",
@@ -70,68 +73,136 @@ namespace Plato.Site
                 defaults: new { controller = "Home", action = "About" }
             );
 
-            // Features
+            // -----------
+            // Plato
+            // -----------
+
+            // Index
             routes.MapAreaRoute(
                 name: "PlatoSiteFeatures",
                 areaName: "Plato.Site",
-                template: "features",
-                defaults: new { controller = "Home", action = "Features" }
+                template: "plato",
+                defaults: new { controller = "Plato", action = "Features" }
+            );
+
+            // Discuss
+            routes.MapAreaRoute(
+                name: "PlatoSiteDiscuss",
+                areaName: "Plato.Site",
+                template: "plato/discuss",
+                defaults: new { controller = "Plato", action = "Discuss" }
+            );
+
+            // Docs
+            routes.MapAreaRoute(
+                name: "PlatoSiteDocs",
+                areaName: "Plato.Site",
+                template: "plato/docs",
+                defaults: new { controller = "Plato", action = "Docs" }
+            );
+            
+            // Articles
+            routes.MapAreaRoute(
+                name: "PlatoSiteArticles",
+                areaName: "Plato.Site",
+                template: "plato/articles",
+                defaults: new { controller = "Plato", action = "Articles" }
+            );
+
+            // Questions
+            routes.MapAreaRoute(
+                name: "PlatoSiteQuestions",
+                areaName: "Plato.Site",
+                template: "plato/questions",
+                defaults: new { controller = "Plato", action = "Questions" }
+            );
+
+            // Ideas
+            routes.MapAreaRoute(
+                name: "PlatoSiteIdeas",
+                areaName: "Plato.Site",
+                template: "plato/ideas",
+                defaults: new { controller = "Plato", action = "Ideas" }
+            );
+
+            // Issues
+            routes.MapAreaRoute(
+                name: "PlatoSiteIssues",
+                areaName: "Plato.Site",
+                template: "plato/issues",
+                defaults: new { controller = "Plato", action = "Issues" }
             );
 
             // Modules
             routes.MapAreaRoute(
                 name: "PlatoSiteModules",
                 areaName: "Plato.Site",
-                template: "modules",
-                defaults: new { controller = "Home", action = "Modules" }
+                template: "plato/modules",
+                defaults: new { controller = "Plato", action = "Modules" }
             );
 
-            // Download
+            // Desktop
             routes.MapAreaRoute(
                 name: "PlatoSiteDownload",
                 areaName: "Plato.Site",
-                template: "download",
-                defaults: new { controller = "Home", action = "Download" }
+                template: "plato/desktop",
+                defaults: new { controller = "Plato", action = "Desktop" }
             );
 
+            // -----------
             // Pricing
+            // -----------
+
             routes.MapAreaRoute(
                 name: "PlatoSitePricing",
                 areaName: "Plato.Site",
                 template: "pricing",
-                defaults: new { controller = "Home", action = "Pricing" }
+                defaults: new { controller = "Pricing", action = "Index" }
             );
+
+            // -----------
+            // Support
+            // -----------
 
             // Support Options
             routes.MapAreaRoute(
                 name: "PlatoSiteSupport",
                 areaName: "Plato.Site",
-                template: "support/options",
-                defaults: new { controller = "Home", action = "SupportOptions" }
+                template: "support-options",
+                defaults: new { controller = "Support", action = "Index" }
             );
-            
+
+            // -----------
+            // Company
+            // -----------
+
             // Contact
             routes.MapAreaRoute(
                 name: "PlatoSiteContact",
                 areaName: "Plato.Site",
                 template: "contact",
-                defaults: new { controller = "Home", action = "Contact" }
+                defaults: new { controller = "Company", action = "Contact" }
             );
+
+
+            // -----------
+            // Legal
+            // -----------
 
             // Privacy
             routes.MapAreaRoute(
                 name: "PlatoSitePrivacy",
                 areaName: "Plato.Site",
-                template: "privacy",
-                defaults: new { controller = "Home", action = "Privacy" }
+                template: "legal/privacy",
+                defaults: new { controller = "Legal", action = "Privacy" }
             );
 
             // Terms
             routes.MapAreaRoute(
                 name: "PlatoSiteTerms",
                 areaName: "Plato.Site",
-                template: "terms",
-                defaults: new { controller = "Home", action = "Terms" }
+                template: "legal/terms",
+                defaults: new { controller = "Legal", action = "Terms" }
             );
 
             // Admin Settings
