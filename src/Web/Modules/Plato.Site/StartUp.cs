@@ -189,6 +189,14 @@ namespace Plato.Site
             // Legal
             // -----------
 
+            // License
+            routes.MapAreaRoute(
+                name: "PlatoSiteLicense",
+                areaName: "Plato.Site",
+                template: "legal/license",
+                defaults: new { controller = "Legal", action = "License" }
+            );
+
             // Privacy
             routes.MapAreaRoute(
                 name: "PlatoSitePrivacy",

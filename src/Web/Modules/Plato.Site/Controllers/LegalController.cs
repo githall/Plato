@@ -29,6 +29,18 @@ namespace Plato.Site.Controllers
         #region "Actions"
 
         // ---------------------
+        // License
+        // ---------------------
+
+        [HttpGet, AllowAnonymous]
+        public Task<IActionResult> License()
+        {
+            // Return view
+            return Task.FromResult((IActionResult)View());
+
+        }
+
+        // ---------------------
         // Terms
         // ---------------------
 
