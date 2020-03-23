@@ -5,10 +5,20 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title asp-separator=" - ">Plato</title>
-    <link rel="stylesheet" href="/css/vendors/bootstrap.min.css" />
-    <link rel="stylesheet" href="/css/vendors/font-awesome.min.css" />
-    <link rel="stylesheet" href="/css/app/plato.min.css" />
-    <link rel="stylesheet" href="/plato.site/content/css/site.min.css" />
+    <environment names="Development">
+        <link rel="stylesheet" href="/css/vendors/bootstrap.css" />
+        <link rel="stylesheet" href="/css/vendors/font-awesome.css" />
+        <link rel="stylesheet" href="/css/vendors/font-awesome.css" />
+        <link rel="stylesheet" href="/css/app/plato.css" />
+        <link rel="stylesheet" href="/plato.site/content/css/site.css" />
+        <link rel="stylesheet" href="/plato.site/content/css/vendors/livicons/liviconsevo.css" />
+    </environment>
+    <environment names="Staging,Production">
+        <link rel="stylesheet" href="/css/vendors/bootstrap.min.css" />
+        <link rel="stylesheet" href="/css/vendors/font-awesome.min.css" />
+        <link rel="stylesheet" href="/css/app/plato.min.css" />
+        <link rel="stylesheet" href="/plato.site/content/css/site.min.css" />
+    </environment>
     <link rel="stylesheet" href="/sites/plato/themes/plato-site/theme.css" />
     <link rel="icon" href="/favicon.ico" />
     @await RenderSectionAsync("Header", required: false)
@@ -31,7 +41,7 @@
             sticky = true
         }))
     </cache>
-    <main class="d-flex flex-column" role="main">
+    <main class="d-flex flex-column body" role="main">
         @RenderBody()
     </main>
     <cache expires-after="@TimeSpan.FromMinutes(30)">
@@ -47,14 +57,27 @@
         </a>
     </div>
 
-    <script src="~/js/vendors/jquery.min.js"></script>
-    <script src="~/js/vendors/bootstrap.min.js"></script>
-    <script src="~/js/app/plato.min.js" asp-append-version="true"></script>
-    <script src="~/js/app/plato-ui.min.js" asp-append-version="true"></script>
+    <environment names="Development">
+        <script src="~/js/vendors/jquery.js"></script>
+        <script src="~/js/vendors/bootstrap.js"></script>
+        <script src="~/js/app/plato.js" asp-append-version="true"></script>
+        <script src="~/js/app/plato-ui.js" asp-append-version="true"></script>
+        <script src="~/plato.site/content/js/vendors/livicons/liviconscvo.tools.js" asp-append-version="true"></script>
+        <script src="~/plato.site/content/js/vendors/livicons/liviconscvo.defaults.js" asp-append-version="true"></script>
+        <script src="~/plato.site/content/js/vendors/livicons/liviconsevo.min.js" asp-append-version="true"></script>
+        <script src="~/plato.site/content/js/site.js" asp-append-version="true"></script>
+    </environment>
+    <environment names="Staging,Production">
+        <script src="~/js/vendors/jquery.min.js"></script>
+        <script src="~/js/vendors/bootstrap.min.js"></script>
+        <script src="~/js/app/plato.min.js" asp-append-version="true"></script>
+        <script src="~/js/app/plato-ui.min.js" asp-append-version="true"></script>
+        <script src="~/plato.site/content/js/site.min.js" asp-append-version="true"></script>
+    </environment>
+
     @RenderSection("Scripts", required: false)
-    <script src="~/plato.site/content/js/site.min.js" asp-append-version="true"></script>
     <script src="https://www.googletagmanager.com/gtag/js?id=UA-152865008-1"></script>
-    <script>window.dataLayer = window.dataLayer || [];function gtag() { dataLayer.push(arguments); }gtag('js', new Date());gtag('config', 'UA-152865008-1');</script>
+    <script>window.dataLayer = window.dataLayer || []; function gtag() { dataLayer.push(arguments); } gtag('js', new Date()); gtag('config', 'UA-152865008-1');</script>
 
 </body>
 </html>

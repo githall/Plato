@@ -1,0 +1,230 @@
+﻿@{
+    AddTitleSegment(T["About Plato"]);
+    var platoSiteOptions = GetOptions<PlatoSiteOptions>();
+}
+
+<!-- Jumbotron -->
+<section class="page bg-ligt" style="background: url(/plato.site/content/images/bg16.png) bottom center repeat-x;">
+    <div class="container mb-0">
+        <div class="row text-center">
+            <div class="col-12">
+                <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
+                <h1 class=" display-4 text-primary text-uppercase font-weight-bold">
+                    Document Everything
+                </h1>
+                <h2 class="font-weight-light  my-4">
+                    Beautiful docs for your APIs, Products, FAQs & User Guides
+                </h2>
+            </div>
+            <div class="col-12">
+                <img alt="Plato Homepage Screen Grab" src="~/plato.site/content/images/docs.png" class="img-fluid  d-inline-block mt-4" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Live Demo -->
+<section class="py-4 border-top border-bottom border-light">
+    <div class="container text-center">
+        Try a live demo of our documentation software
+        <a href="@platoSiteOptions.DemoUrl" target="_blank" data-provide="loader-spy" class="btn btn-outline-primary">
+            Live Demo
+        </a>
+    </div>
+</section>
+
+<!-- Docs you’ll find useful -->
+<section class="page bg-light">
+    <div class="container">
+
+        <div class="row">
+            <div class="col-lg-6 text-center text-lg-left">
+                <h5 class="text-muted text-uppercase">Come together</h5>
+                <h1 class="display-5 text-primary font-weight-bold">
+                    Docs you’ll find useful
+                </h1>
+                <hr class="divider divider-left my-4" />
+                <h4 class="font-weight-light">
+                    The support your customers seek doesn’t always have to come from your team. Build a community forum where your users can turn to each other for help and exchange their own tips and tricks. If complex issues come up, @@mention your team to ensure conversations flow and remain productive.
+                </h4>
+            </div>
+            <div class="col-lg-6 text-center text-lg-right">
+                <div class="product-image mx-auto mx-lg-0 mt-4 mt-lg-0">
+                    <div class="img-star-primary img-corner-top-right img-48"></div>
+                    <img alt="Plato - Docs" src="/plato.site/content/images/usefuldocs.png" class="img-md-fluid float-none float-lg-right mx-md-auto d-inline-block max-w-600 ml-lg-3 mb-4 mb-lg-0" />
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- A collaborative approach -->
+<section class="page bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 text-center text-lg-left order-lg-2">
+                <h5 class="text-muted text-uppercase">Peer to peer</h5>
+                <h1 class="display-5 text-primary font-weight-bold">
+                    A collaborative approach
+                </h1>
+                <hr class="divider divider-left my-4" />
+                <h4 class="font-weight-light">
+                    User collaboration is at the heart of Plato and our docs are no exception. As users read your docs, they can help improve your docs by providing feedback or asking questions. Overtime this collaborative approach can help ensure you have the best docs in town.
+                </h4>
+            </div>
+            <div class="col-lg-6 order-lg-1 text-center text-lg-left">
+                <div class="product-image mx-auto mx-lg-0 mt-4 mt-lg-0">
+                    <div class="img-star-warning img-corner-top-left img-48"></div>
+                    <img alt="Plato Docs - User Feedback" src="/plato.site/content/images/docfeedback.png" class="img-fluid" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Beautifully consistent -->
+<section class="page bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-6 text-center text-lg-left ">
+                <h5 class="text-muted text-uppercase">Build Trust</h5>
+                <h1 class="display-5 text-primary font-weight-bold">
+                    Beautifully consistent
+                </h1>
+                <hr class="divider divider-left my-4" />
+                <h4 class="font-weight-light">
+                    Plato offers a simple yet powerful markdown editor for composing all your documentation. This ensures authors don’t need to worry about HTML whilst developing content but more importantly ensures all your docs have a simple structure and super consistent look & feel.
+                </h4>
+            </div>
+            <div class="col-lg-6 text-center text-lg-right">
+                <div class="product-image mx-auto mx-lg-0 mt-4 mt-lg-0">
+                    <div class="img-star-success img-corner-top-right img-48"></div>
+                    <img alt="Plato - Beautiful Docs" src="/plato.site/content/images/beautifuldocs.png" class="img-fluid" />
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Docs Features -->
+<section class="page bg-primary-25">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <h1 class="text-uppercase text-white font-weight-bold mt-4">
+                    Documentation Features
+                </h1>
+                <hr class="divider border-white my-4" />
+            </div>
+        </div>
+        <div class="row mt-5">
+            <div class="col-12">
+                <div class="row">
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="d-block p-5 text-center bg-white border">
+                            <strong class="d-block h4 mb-2">
+                                Markdown
+                            </strong>
+                            <span class="d-block mb-0">
+                                Focus on your content and not the HTML for your docs.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="d-block p-5 text-center bg-white border">
+                            <strong class="d-block h4 mb-2">
+                                Drafts
+                            </strong>
+                            <span class="d-block mb-0">
+                                Work on docs privately until they are ready for your users.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="d-block p-5 text-center bg-white border">
+                            <strong class="d-block h4 mb-2">
+                                #references
+                            </strong>
+                            <span class="d-block mb-0">
+                                Provide rich linking to other docs via hash references.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="d-block p-5 text-center bg-white border">
+                            <strong class="d-block h4 mb-2">
+                                Auto Save
+                            </strong>
+                            <span class="d-block mb-0">
+                                Never lose work with automatic save & restore.
+                            </span>
+                        </div>
+                    </div>
+                
+                </div>
+                <div class="row">
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="d-block p-5 text-center bg-white border">
+                            <strong class="d-block h4 mb-2">
+                                Categories
+                            </strong>
+                            <span class="d-block mb-0">
+                                Group documentation by product or project.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="d-block p-5 text-center bg-white border">
+                            <strong class="d-block h4 mb-2">
+                                Tags & Labels
+                            </strong>
+                            <span class="d-block mb-0">
+                                Discover & follow documentation by tag or label.
+                            </span>
+                        </div>
+                    </div>
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="d-block p-5 text-center bg-white border">
+                            <strong class="d-block h4 mb-2">
+                                Follows
+                            </strong>
+                            <span class="d-block mb-0">
+                                Follow docs & get notified of important changes.
+                            </span>
+                        </div>
+                    </div>
+
+                    <div class="col-12 col-lg-3 mb-4">
+                        <div class="d-block p-5 text-center bg-white border">
+                            <strong class="d-block h4 mb-2">
+                                Versioning
+                            </strong>
+                            <span class="d-block mb-0">
+                                A history of all edits made to docs with roll back support.
+                            </span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<!-- Shared Features -->
+<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    @await DisplayAsync(new View("SiteSharedFeatures", new
+    {
+        sticky = false
+    }))
+</cache>
+
+<!-- Call to action -->
+<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    @await DisplayAsync(new View("SiteCallToAction", new
+    {
+        sticky = false
+    }))
+</cache>

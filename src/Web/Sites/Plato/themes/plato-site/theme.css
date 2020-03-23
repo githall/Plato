@@ -21,8 +21,6 @@
 /* Navigation  */
 /* ------------------- */
 
-.nav-site { border-color: rgba(0, 0, 0, 0.15); }
-
 .nav-site > .navbar-light .navbar-nav .nav-pills .show > .nav-link,
 .nav-site > .navbar-light .navbar-nav .nav-pills .active > .nav-link,
 .nav-site > .navbar-light .navbar-nav .nav-pills .nav-link.show,
@@ -62,10 +60,11 @@
 
 .nav-site > .navbar-light { border-bottom: 1px solid rgba(0, 0, 0, 0.15); }
 
+.navbar.border-light { border-bottom: 1px solid #ddd !important; }
+
 /* ------------------- */
 /* Validation */
 /* ------------------- */
-
 .validation-summary-errors {
     background-color: #f8d7da;
     border-color: #f5c6cb;
@@ -339,7 +338,7 @@ a.label:hover, .label.active {
 
 .dropdown-item-danger:hover,
 .dropdown-item-danger:focus {
-    background: #dc3545;
+    background: #FE6E41;
 }
 
 /* arrow border */
@@ -524,8 +523,8 @@ a.label:hover, .label.active {
 }
 
 .counter-danger {
-    background-color: #dc3545;
-    border-color: #dc3545;
+    background-color: #FE6E41;
+    border-color: #FE6E41;
     color: white;
 }
 
@@ -554,8 +553,8 @@ a.label:hover, .label.active {
 }
 
 .counter-outline-danger {
-    border-color: #EE7E6F;
-    color: #dc3545;
+    border-color: #FE6E41;
+    color: #FE6E41;
 }
 
 /* ------------------------- */
