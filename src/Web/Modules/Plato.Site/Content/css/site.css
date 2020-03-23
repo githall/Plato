@@ -16,6 +16,7 @@
     top: -800px;
     left: 0;
     transition: all 0.2s ease-out;  
+    box-shadow: 0 0 20px 3px #ddd;
 }
 
 .nav-dropdown-menu.show {
@@ -55,18 +56,22 @@ a.box:hover .icon-circle { transform: scale(1.2); }
 .bg-primary-75 { background-color: rgba(0, 123, 255, 0.75) !important; }
 .bg-primary-50 { background-color: rgba(0, 123, 255, 0.50) !important; }
 .bg-primary-25 { background-color: rgba(0, 123, 255, 0.25) !important; }
+.bg-primary-15 { background-color: rgba(0, 123, 255, 0.15) !important; }
 
-.bg-warning-75 { background-color: rgba(0, 123, 255, 0.75) !important; }
-.bg-warning-50 { background-color: rgba(0, 123, 255, 0.50) !important; }
-.bg-warning-25 { background-color: rgba(0, 123, 255, 0.25) !important; }
+.bg-warning-75 { background-color: rgba(255, 193, 7, 0.75) !important; }
+.bg-warning-50 { background-color: rgba(255, 193, 7, 0.50) !important; }
+.bg-warning-25 { background-color: rgba(255, 193, 7, 0.25) !important; }
+.bg-warning-15 { background-color: rgba(255, 193, 7, 0.15) !important; }
 
-.bg-danger-75 { background-color: rgba(0, 123, 255, 0.75) !important; }
-.bg-danger-50 { background-color: rgba(0, 123, 255, 0.50) !important; }
-.bg-danger-25 { background-color: rgba(0, 123, 255, 0.25) !important; }
+.bg-danger-75 { background-color: rgba(220, 53, 69, 0.75) !important; }
+.bg-danger-50 { background-color: rgba(220, 53, 69, 0.50) !important; }
+.bg-danger-25 { background-color: rgba(220, 53, 69, 0.25) !important; }
+.bg-danger-15 { background-color: rgba(220, 53, 69, 0.15) !important; }
 
-.bg-success-75 { background-color: rgba(0, 123, 255, 0.75) !important; }
-.bg-success-50 { background-color: rgba(0, 123, 255, 0.50) !important; }
-.bg-success-25 { background-color: rgba(0, 123, 255, 0.25) !important; }
+.bg-success-75 { background-color: rgba(40, 167, 69, 0.75) !important; }
+.bg-success-50 { background-color: rgba(40, 167, 69, 0.50) !important; }
+.bg-success-25 { background-color: rgba(40, 167, 69, 0.25) !important; }
+.bg-success-15 { background-color: rgba(40, 167, 69, 0.15) !important; }
 
 /* full screen */
 @media (min-width: 992px) {
@@ -240,18 +245,22 @@ hr.light { border-color: #fff }
     display:inline-block;
 }
 
-    .product-image img {
-        display:inline-block;
-        border: 1px solid #ddd;
-        box-shadow: 0 0 20px #efefef;
-    }
+.product-image img {
+    display:inline-block;
+    border: 1px solid #ddd;
+    background-clip: padding-box;
+    border: 1px solid #ddd;
+    box-shadow: 0 0 20px 5px #eee;
+    border-radius: 0.25rem;
+  
+}
 
-    .img-corner-top-left {
-        position: absolute;
-        top: -20px;
-        left: -20px;
-        transform: rotate(-90deg);
-    }
+.img-corner-top-left {
+    position: absolute;
+    top: -20px;
+    left: -20px;
+    transform: rotate(-90deg);
+}
 
 .img-corner-top-right {
     position: absolute;
@@ -418,3 +427,10 @@ a.img-thumbnail:hover .img-caption {
 .text-purple {
     color: #5C2D91;
 }
+
+
+
+/* customer grid */
+
+.customer-box { height: 178px; text-align: center; padding: 0 32px; background: #fff; border: 1px solid #ededed; }
+.customer-box img { margin: 38px 0; }
