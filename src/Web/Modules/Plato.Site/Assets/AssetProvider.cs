@@ -7,7 +7,7 @@ namespace Plato.Site.Assets
     {
 
         public IEnumerable<AssetEnvironment> GetAssetEnvironments()
-        {
+        {   
 
             return new List<AssetEnvironment>
             {
@@ -24,6 +24,24 @@ namespace Plato.Site.Assets
                     new Asset()
                     {
                         Url = "/plato.site/content/js/site.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.tools.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.defaults.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconsevo.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }
@@ -43,6 +61,24 @@ namespace Plato.Site.Assets
                         Url = "/plato.site/content/js/site.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.tools.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.defaults.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconsevo.min.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
                     }
                 }),
 
@@ -58,6 +94,24 @@ namespace Plato.Site.Assets
                     new Asset()
                     {
                         Url = "/plato.site/content/js/site.min.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.tools.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.defaults.js",
+                        Type = AssetType.IncludeJavaScript,
+                        Section = AssetSection.Footer
+                    },
+                    new Asset()
+                    {
+                        Url = "/plato.site/content/js/vendors/livicons/liviconsevo.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     }

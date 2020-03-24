@@ -160,6 +160,14 @@ namespace Plato.Site
                 defaults: new { controller = "Pricing", action = "Index" }
             );
 
+            routes.MapAreaRoute(
+                name: "PlatoSitePricingFullyManaged",
+                areaName: "Plato.Site",
+                template: "pricing/managed",
+                defaults: new { controller = "Pricing", action = "FullyManaged" }
+            );
+
+
             // -----------
             // Support
             // -----------

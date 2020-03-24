@@ -5,7 +5,7 @@ using PlatoCore.Layout.ModelBinding;
 
 namespace Plato.Site.Controllers
 {
-    public class PricingController : Controller, IUpdateModel
+    public class UpgradeController : Controller, IUpdateModel
     {
 
         // ---------------------
@@ -14,14 +14,6 @@ namespace Plato.Site.Controllers
 
         [HttpGet, AllowAnonymous]
         public Task<IActionResult> Index()
-        {
-            // Return view
-            return Task.FromResult((IActionResult) View());
-
-        }
-
-        [HttpGet, AllowAnonymous]
-        public Task<IActionResult> FullyManaged()
         {
             // Return view
             return Task.FromResult((IActionResult)View());

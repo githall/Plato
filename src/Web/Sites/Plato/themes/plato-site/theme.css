@@ -462,8 +462,8 @@ a.label:hover, .label.active {
 /* ------------------- */
 
 .icon-wrapper {
-    background: #BFDEFF;
-    color: white;
+    background: white;
+    color: #007bff;
 }
 
 /* ------------------- */

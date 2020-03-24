@@ -46,10 +46,10 @@
 
         <!-- Plato Nav  -->
         <nav class="nav-site">
-            <div class="navbar navbar-expand-lg navbar-light border-light">
+            <div class="navbar navbar-expand-lg navbar-light border-bottom border-light">
                 <div class="container">
-                    <a asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index" class="navbar-brand text-primary">
-                        @siteOpts.SiteName
+                    <a asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index" class="navbar-brand text-muted">
+                        Help & Support
                     </a>
                     <div class="navbar-mobile">
                         <div class="navbar-nav w-100">
@@ -81,7 +81,7 @@
                                         class="nav nav-pills"
                                         child-ul-css-class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" />
                         </div>
-                    </div>
+                    </div>                 
                 </div>
             </div>
         </nav>
@@ -91,25 +91,55 @@
             <div class="mb-4 bg-light">
                 <div class="container">
                     <div class="row">
-                        <div class="col-12 my-8 text-center">
-                            <h1 class="font-weight-bold text-primary text-uppercase">
-                                @T["How can we help?"]
-                            </h1>
+                        <div class="col-12 my-6 text-center">
+                            <h3 class="text-muted font-weight-bold">
+                                @T["Welcome to the Plato community"]
+                            </h3>
                             <form class="form-inline mt-4" asp-route-area="Plato.Search" asp-route-controller="Home" asp-route-action="Index" method="get" enctype="multipart/form-data">
                                 <div class="w-80 mx-auto position-relative min-w-250">
                                     <div class="search-input-group">
-                                        <input data-provide="searchAutoComplete" type="search" class="form-control" autocomplete="off" placeholder="Search for keywords..." id="Search" name="Search" value="" />
+                                        <input data-provide="searchAutoComplete" type="search" class="form-control" autocomplete="off" placeholder="How can we help you?" id="Search" name="Search" value="" />
                                         <div id="searchResults" class="dropdown-menu dropdown-menu-no-arrow w-100" role="menu">
                                             <p class="text-center">
                                                 <i class="fal fa-spinner fa-spin"></i>
                                             </p>
                                         </div>
-                                        <button type="submit" class="btn btn-primary" role="button">
+                                        <button type="submit" class="btn bg-white text-primary" role="button">
                                             <i class="fal fa-search"></i>
                                         </button>
                                     </div>
                                 </div>
                             </form>
+                            <div class="mt-4">
+                                <a href="/docs/d/3/introduction" class="btn btn-outline-primary">
+                                    Documentation
+                                </a>
+                                @if (CurrentUser != null)
+                                {
+                                    <a asp-route-area="Plato.Questions" asp-route-controller="Home" asp-route-action="Create" class="btn btn-outline-primary">
+                                        Ask a question
+                                    </a>
+                                    <a asp-route-area="Plato.Issues" asp-route-controller="Home" asp-route-action="Create" class="btn btn-outline-primary">
+                                        Report an issue
+                                    </a>
+                                    <a asp-route-area="Plato.Ideas" asp-route-controller="Home" asp-route-action="Create" class="btn btn-outline-primary">
+                                        Suggest am idea
+                                    </a>
+                                }
+                                else
+                                {
+                                    <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="/questions/new" class="btn btn-outline-primary">
+                                        Ask a question
+                                    </a>
+                                    <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="/issues/new" class="btn btn-outline-primary">
+                                        Report an issue
+                                    </a>
+                                    <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="/ideas/new" class="btn btn-outline-primary">
+                                        Suggest am idea
+                                    </a>
+                                }
+
+                            </div>
                         </div>
                     </div>
                 </div>
