@@ -4,13 +4,13 @@
 }
 
 <!-- Jumbotron -->
-<section class="page bg-ligt" style="background: url(/plato.site/content/images/bg14.png) bottom center repeat-x;">
+<section class="page bg-light" style="background: url(/plato.site/content/images/bg14.png) bottom center repeat-x;">
     <div class="container mb-0">
         <div class="row text-center">
             <div class="col-12">
                 <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
                 <h1 class=" display-4 text-primary text-uppercase font-weight-bold">
-                    Collaboration & Support Made Easy
+                    Collaboration & support software
                 </h1>
                 <h2 class="font-weight-light  my-4">
                     Plato offers a fully integrated suite of tools to help you build & support amazing software
@@ -33,9 +33,6 @@
                     Key Features
                 </h1>
                 <hr class="divider my-4">
-                <h3 class="font-weight-light">
-                    Plato offers a fully integrated suite of tools to help you build & support amazing software
-                </h3>
             </div>
         </div>
         <cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
@@ -47,51 +44,14 @@
     </div>
 </section>
 
+<!-- Explore The Demo -->
+<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    @await DisplayAsync(new View("SiteExploreDemo", new
+    {
+        sticky = false
+    }))
+</cache>
 
-<!-- Who, What, Why -->
-<section class="page bg-white">
-    <div class="container">
-        <div class="row mt-4">
-            <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-                <h1 class="font-weight-bold text-primary text-uppercase">
-                    Who?
-                </h1>
-            </div>
-            <div class="col-12 col-lg-6">
-                <h3 class="font-weight-light">
-                    Plato is developed and maintained by <a href="https://www.instantasp.co.uk/">InstantASP</a>.
-                    We've been developing user community & customer support software for over 18 years. It's what we love.
-                </h3>
-            </div>
-        </div>
-        <hr />
-        <div class="row mt-4">
-            <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-                <h1 class="font-weight-bold text-primary text-uppercase">
-                    Why?
-                </h1>
-            </div>
-            <div class="col-12 col-lg-6">
-                <h3 class="font-weight-light">
-                    Plato is our next evolution of customer support software. Written from scratch, we wanted to take everything we've learned over the last 18 years and develop a better. more modern customer support experience.
-                </h3>
-            </div>
-        </div>
-        <hr />
-        <div class="row mt-4">
-            <div class="col-12 col-lg-6 mb-4 mb-lg-0">
-                <h1 class="font-weight-bold text-primary text-uppercase">
-                    Free?
-                </h1>
-            </div>
-            <div class="col-12 col-lg-6">
-                <h3 class="font-weight-light">
-                    Yep, free forever. We want to create a thriving eco-system of <a asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Modules">modules</a> that extend & add value to Plato. We can't do this alone.
-                </h3>
-            </div>
-        </div>
-    </div>
-</section>
 
 <!-- Features you'll love -->
 <section class="page bg-light">
@@ -100,7 +60,7 @@
         <div class="row">
             <div class="col-12 text-center">
                 <h1 class="text-uppercase text-primary font-weight-bold mt-4">
-                    Features your users will love
+                    For Users
                 </h1>
             </div>
         </div>
@@ -176,7 +136,7 @@
         <div class="row">
             <div class="col-12 text-center">
                 <h1 class="text-uppercase text-primary font-weight-bold mt-4">
-                    Features your team will love
+                    For teams
                 </h1>
             </div>
         </div>
@@ -251,7 +211,7 @@
 
         <div class="row">
             <div class="col-12 text-center">
-                <h1 class="text-uppercase text-primary font-weight-bold mt-4">Features your devs will love</h1>
+                <h1 class="text-uppercase text-primary font-weight-bold mt-4">For Devs</h1>
             </div>
         </div>
 
@@ -323,14 +283,47 @@
     </div>
 </section>
 
+<!-- An Extensible Modular Platform -->
+<section class="page bg-primary-15">
+    <div class="container">
+        <div class="p-5 bg-white">
+            <div class="row">
+                <div class="col-12 text-center text-lg-left ">
+                    <img alt="Plato Logo" src="~/plato.site/content/images/vsmodules.png" class="img-md-fluid float-none float-lg-right mx-md-auto max-w-400 d-inline-block ml-lg-5 mb-4 mb-lg-0" />
+                    <h1 class="display-5 font-weight-bold text-primary text-uppercase">
+                        An Extensible Modular Platform
+                    </h1>
+                    <hr class="divider divider-left my-4" />
+                    <p>
+                        Plato is built from the ground up to be super extensible via the built-in module system.
+                        All of the features offered by Plato are offered as modules and built upon this same module system - even the module system is a module.
+                    </p>
+                    <p>
+                        Modules are independent NuGet packages or Visual Studio projects that can extend Plato to add or modify functionality. Plato exposes hundreds of extensibility points allowing module developers to easily customize every aspect of Plato.
+                    </p>
+                    <p>
+                        You can see various module projects provided with Plato opposite within the Visual Studio solution explorer.
+                    </p>
+                    <p>
+                        <h3 class="font-weight-light">
+                            <a class="btn btn-primary btn-lg my-4" href="https://github.com/InstantASP/plato/tree/master/src/Web/Modules" target="_blank">
+                                <i class="fab fa-github align-middle mr-2"></i>Browse all modules on GitHub
+                            </a>
+                        </h3>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
 <!-- The Module System -->
 <section class="page bg-white">
     <div class="container">
         <div class="row">
             <div class="col-12 text-center">
-                <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
                 <h1 class="text-uppercase text-primary font-weight-bold">
-                    BUILT FOR EXTENSION
+                    Module Features
                 </h1>
                 <h3 class="font-weight-light my-4">
                     Everything within Plato is a module. The Plato module system offers the following benefits:-
@@ -403,71 +396,10 @@
     </div>
 </section>
 
-<!-- An Extensible Modular Platform -->
-<section class="page bg-primary-25">
-    <div class="container">
-        <div class="p-5 bg-white">
-            <div class="row">
-                <div class="col-12 text-center text-lg-left ">
-                    <img alt="Plato Logo" src="~/plato.site/content/images/vsmodules.png" class="img-md-fluid float-none float-lg-right mx-md-auto max-w-500 d-inline-block ml-lg-5 mb-4 mb-lg-0" />
-                    <h1 class="font-weight-bold text-primary text-uppercase">
-                        An Extensible Modular Platform
-                    </h1>
-                    <p class="mt-4">
-                        Plato is built from the ground up to be super extensible via the built-in module system.
-                        All of the features offered by Plato are offered as modules and built upon this same module system - even the module system is a module.
-                    </p>
-                    <p>
-                        Modules are independent NuGet packages or Visual Studio projects that can extend Plato to add or modify functionality. Plato exposes hundreds of extensibility points allowing module developers to easily customize every aspect of Plato.
-                    </p>
-                    <p>
-                        You can see various module projects provided with Plato opposite within the Visual Studio solution explorer.
-                    </p>
-                    <p>
-                        <h3 class="font-weight-light">
-                            <a class="btn btn-primary btn-lg my-4" href="https://github.com/InstantASP/plato/tree/master/src/Web/Modules" target="_blank">
-                                <i class="fab fa-github align-middle mr-2"></i>Browse all modules on GitHub
-                            </a>
-                        </h3>
-                    </p>
-                </div>
-            </div>
-        </div>
-    </div>
-</section>
-
-<!-- Explore The Demo -->
-<section class="page">
-    <div class="container">
-        <div class="p-5 text-center bg-white">
-            <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
-            <h1 class="text-uppercase text-primary font-weight-bold">
-                Explore The Demo
-            </h1>
-            <hr class="divider primary my-4" />
-            <h3 class="font-weight-light">
-                Take Plato for a spin. The demo provides access to a default administrator account so you can fully explore Plato. Questions? <a asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Contact">Get in touch</a>
-            </h3>
-            <a class="btn btn-primary btn-lg mt-4" href="@platoSiteOptions.DemoUrl" target="_blank" data-provide="loader-spy">
-                Launch Demo
-            </a>
-        </div>
-    </div>
-</section>
-
 <!-- Call to action -->
-<section class="page bg-primary-people">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h4 class="font-weight-bold text-white">
-                    Plato can help you help your users & reduce inbound support
-                </h4>
-                <a class="btn btn-light text-primary btn-lg mt-4" asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Pricing" data-provide="loader-spy">
-                    Get Started For Free
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
-
+<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    @await DisplayAsync(new View("SiteCallToAction", new
+    {
+        sticky = false
+    }))
+</cache>

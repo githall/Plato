@@ -1,6 +1,6 @@
 ﻿@model ContactFormViewModel
 @{
-    AddTitleSegment(T["Support Options"]);
+    AddTitleSegment(T["Plato - Support Options"]);
 }
 
 <div style="background: url(/plato.site/content/images/bg10.png) top right no-repeat;">
@@ -26,14 +26,14 @@
 
                     <div class="w-100 p-4 bg-white box-shadow">
                         <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-40 align-middle mr-2" />
-                        <h3 class="d-inline-block align-bottom font-weight-bold text-uppercase text-primary">Free Support</h3>
+                        <h3 class="d-inline-block align-bottom font-weight-bold text-uppercase text-primary">Community</h3>
                         <hr />
                         <p class="font-weight-bold">
-                            Included with a self hosted free license
+                            Included with a self hosted community license
                         </p>
                         <p>
-                            We will always do our best to assist but unfortunately whilst we would love to help everyone, we are only a small team and as such cannot guarantee official support for Plato if your using a free version of Plato.
-                            If your using the free version of Plato the best place to obtain support is through our own installation of Plato. Use the button below to browse our support resources or post your questions.
+                            We will always do our best to assist but unfortunately whilst we would love to help everyone, we are only a small team and as such cannot guarantee official support for Plato if your using our community edition of Plato.
+                            If your using the free community edition the best place to obtain support is through our own installation of Plato. Use the button below to browse our support resources or post your questions.
                             Should you require guaranteed technical support for your self-hosted Plato installation please consider our business or enterprise options detailed below.
                         </p>
                         <p>
@@ -43,11 +43,8 @@
                     </div>
 
                     <div class="mt-4 w-100 p-4 bg-white box-shadow">
-                        <div class="float-right text-muted">
-                            optional renewal at $400 per year after the first year
-                        </div>
                         <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-40 align-middle mr-2" />
-                        <h3 class="d-inline-block align-middle font-weight-bold text-uppercase text-primary">Business Support</h3>
+                        <h3 class="d-inline-block align-middle font-weight-bold text-uppercase text-primary">Business</h3>
                         <hr />
                         <p class="font-weight-bold">
                             Included with a self-hosted business license
@@ -89,25 +86,19 @@
                             </li>
                         </ol>
                         <p>
-                            Our self-hosted Plato <a asp-route-action="Pricing">business license</a> comes with priority support included.
+                            Our self-hosted Plato <a asp-route-action="Pricing">business license</a> comes with business support included.
                         </p>
                         <p>
                             <a asp-route-action="Pricing" class="btn btn-primary">
-                                Purchase - $1,299
-                            </a>
-                            <a href="https://order.shareit.com/cart/add?vendorid=200279505&PRODUCT[300965436]=1" class="btn btn-primary">
-                                Renew - $400
+                                See Pricing
                             </a>
                             <a name="enterprise-support"></a>
                         </p>
                     </div>
 
                     <div class="mt-4 w-100 p-4 bg-white box-shadow">
-                        <div class="float-right text-muted">
-                            optional renewal at $600 per year after the first year
-                        </div>
                         <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-40 align-middle mr-2" />
-                        <h3 class="d-inline-block align-middle font-weight-bold text-uppercase text-primary">Enterprise Support</h3>
+                        <h3 class="d-inline-block align-middle font-weight-bold text-uppercase text-primary">Enterprise</h3>
                         <hr />
                         <p class="font-weight-bold">
                             Included with a self-hosted enterprise license
@@ -150,14 +141,11 @@
                             </li>
                         </ol>
                         <p>
-                            Our self-hosted Plato <a asp-route-action="Pricing">enterprise license</a> comes with our concierge service included.
+                            Our self-hosted Plato <a asp-route-action="Pricing">enterprise license</a> comes with enterprise support included.
                         </p>
                         <p>
                             <a asp-route-action="Pricing" class="btn btn-primary">
-                                Purchase - $2,499
-                            </a>
-                            <a href="https://order.shareit.com/cart/add?vendorid=200279505&PRODUCT[300965437]=1" class="btn btn-primary">
-                                Renew - $600
+                                See Pricing
                             </a>
                         </p>
                     </div>
@@ -169,17 +157,9 @@
 </div>
 
 <!-- Call to action -->
-<section class="page bg-primary-people">
-    <div class="container">
-        <div class="row">
-            <div class="col-12 text-center">
-                <h4 class="font-weight-bold text-white">
-                    Plato can help you help your users & reduce inbound support
-                </h4>
-                <a class="btn btn-light text-primary btn-lg mt-4" asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Pricing" data-provide="loader-spy">
-                    Get Started For Free
-                </a>
-            </div>
-        </div>
-    </div>
-</section>
+<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    @await DisplayAsync(new View("SiteCallToAction", new
+    {
+        sticky = false
+    }))
+</cache>

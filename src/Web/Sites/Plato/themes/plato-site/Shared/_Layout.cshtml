@@ -88,11 +88,11 @@
 
         @if (RouteEquals("Plato.Core", "Home", "Index"))
         {
-            <div class="mb-4"  style="background: url(/plato.site/content/images/bg5.png) top center no-repeat;">
+            <div class="mb-4 bg-light">
                 <div class="container">
                     <div class="row">
                         <div class="col-12 my-8 text-center">
-                            <h1 class="font-weight-bold text-white text-uppercase">
+                            <h1 class="font-weight-bold text-primary text-uppercase">
                                 @T["How can we help?"]
                             </h1>
                             <form class="form-inline mt-4" asp-route-area="Plato.Search" asp-route-controller="Home" asp-route-action="Index" method="get" enctype="multipart/form-data">

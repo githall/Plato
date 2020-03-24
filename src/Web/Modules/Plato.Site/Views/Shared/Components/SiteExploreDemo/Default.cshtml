@@ -1,0 +1,21 @@
+﻿@{    
+    var platoSiteOptions = GetOptions<PlatoSiteOptions>();
+}
+
+<section class="page bg-primary-25">
+    <div class="container">
+        <div class="p-5 text-center bg-white">
+            <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
+            <h1 class="text-uppercase text-primary font-weight-bold">
+                Explore The Demo
+            </h1>
+            <hr class="divider primary my-4" />
+            <h3 class="font-weight-light">
+                Take Plato for a spin. Our live demo provides access to an administrator account so you can fully explore Plato for as long as you need. Should you have questions whilst exploring <a asp-route-area="Plato.Site" asp-route-controller="Company" asp-route-action="Contact">we would love to help</a>
+            </h3>
+            <a class="btn btn-primary btn-lg mt-4" href="@platoSiteOptions.DemoUrl" target="_blank" data-provide="loader-spy">
+                Launch Demo
+            </a>
+        </div>
+    </div>
+</section>
