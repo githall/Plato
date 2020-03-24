@@ -1,8 +1,8 @@
 ﻿
 
 .site-nav { display: block; width: 100%; height: 76px; }
-.site-nav-fixed { position: fixed; z-index: 10; top: 0; left: 0; }
-.site-nav-fixed + main.body { margin-top: 76px; }
+.site-nav-fixed { position: sticky; z-index: 10; top: 0; left: 0; }
+.site-nav-fixed + main.body {  }
 .site-nav .navbar { position:absolute; top: 0; left:0; z-index:2; padding: 1rem; }
 
 /* Nav Dropdown */
@@ -40,8 +40,6 @@ a.nav-dropdown-item:hover i { color:white; }
 .box { border-radius: 2px; }
 a.box { text-decoration: none; color: black; }
 a.box:hover { border-color: #007bff !important; }
-a.box .icon-circle { transition: all .2s ease-out; }
-a.box:hover .icon-circle { transform: scale(1.2); }
 
 /* Borders */
 
@@ -72,20 +70,6 @@ a.box:hover .icon-circle { transform: scale(1.2); }
 .bg-success-50 { background-color: rgba(40, 167, 69, 0.50) !important; }
 .bg-success-25 { background-color: rgba(40, 167, 69, 0.25) !important; }
 .bg-success-15 { background-color: rgba(40, 167, 69, 0.15) !important; }
-
-/* full screen */
-@media (min-width: 992px) {
-
-    .bg-primary-85-percent {
-        padding: 3em 0;
-        background: #BFDEFF; 
-        background: linear-gradient(135deg,#BFDEFF 0,#BFDEFF 100%); 
-        background-size: 85%; 
-        background-repeat: no-repeat;
-        background-position: center center;
-    }
-    
-}
 
 /* Widths */
 
@@ -167,24 +151,10 @@ hr.light { border-color: #fff }
 
 /* Icon circles */
 
-.icon-circle {
-    width: 80px;
-    height: 80px;
-    display: inline-block;
-    border-radius: 50%;
-    background: #CBE4FF;
-    text-align: center;
-    border: 0;
-    position: relative;
-    color: #007bff;
-}
 
     .icon-circle i {
-        font-size: 2.75rem;
-        position: absolute;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
+        font-size: 3rem;
+       
     }
 
 /* Plato icons */
@@ -346,6 +316,20 @@ a.img-thumbnail:hover .img-caption {
     transform: rotate(90deg);
 }
 
+.accordion a[data-toggle="collapse"] {
+    color:#222;
+}
+.accordion a[data-toggle="collapse"]:active,
+.accordion a[data-toggle="collapse"][aria-expanded="true"] {
+    border-radius:3px;    
+    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
+    color:#222;
+}
+
+.accordion .list-group {
+      margin-top:0.2rem !important;
+}
+
 .accordion .card-header {
     border:0;
 }
@@ -427,8 +411,6 @@ a.img-thumbnail:hover .img-caption {
 .text-purple {
     color: #5C2D91;
 }
-
-
 
 /* customer grid */
 

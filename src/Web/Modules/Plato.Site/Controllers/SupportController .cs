@@ -5,7 +5,7 @@ using PlatoCore.Layout.ModelBinding;
 
 namespace Plato.Site.Controllers
 {
-    public class PricingController : Controller, IUpdateModel
+    public class SupportController : Controller, IUpdateModel
     {
 
         // ---------------------
@@ -16,7 +16,7 @@ namespace Plato.Site.Controllers
         public Task<IActionResult> Index()
         {
             // Return view
-            return Task.FromResult((IActionResult) View());
+            return Task.FromResult((IActionResult)View());
 
         }
 

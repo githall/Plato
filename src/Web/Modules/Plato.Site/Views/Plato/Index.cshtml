@@ -10,7 +10,7 @@
             <div class="col-12">
                 <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
                 <h1 class=" display-4 text-primary text-uppercase font-weight-bold">
-                    Collaboration & Support Made Easy
+                    Collaboration & support software
                 </h1>
                 <h2 class="font-weight-light  my-4">
                     Plato offers a fully integrated suite of tools to help you build & support amazing software
@@ -45,23 +45,12 @@
 </section>
 
 <!-- Explore The Demo -->
-<section class="page bg-primary-25">
-    <div class="container">
-        <div class="p-5 text-center bg-white">
-            <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
-            <h1 class="text-uppercase text-primary font-weight-bold">
-                Explore The Demo
-            </h1>
-            <hr class="divider primary my-4" />
-            <h3 class="font-weight-light">
-                Take Plato for a spin. The demo provides access to a default administrator account so you can fully explore Plato. Questions? <a asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Contact">Get in touch</a>
-            </h3>
-            <a class="btn btn-primary btn-lg mt-4" href="@platoSiteOptions.DemoUrl" target="_blank" data-provide="loader-spy">
-                Launch Demo
-            </a>
-        </div>
-    </div>
-</section>
+<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    @await DisplayAsync(new View("SiteExploreDemo", new
+    {
+        sticky = false
+    }))
+</cache>
 
 
 <!-- Features you'll love -->
@@ -71,7 +60,7 @@
         <div class="row">
             <div class="col-12 text-center">
                 <h1 class="text-uppercase text-primary font-weight-bold mt-4">
-                    Features your users will love
+                    For Users
                 </h1>
             </div>
         </div>
@@ -147,7 +136,7 @@
         <div class="row">
             <div class="col-12 text-center">
                 <h1 class="text-uppercase text-primary font-weight-bold mt-4">
-                    Features your team will love
+                    For teams
                 </h1>
             </div>
         </div>
@@ -222,7 +211,7 @@
 
         <div class="row">
             <div class="col-12 text-center">
-                <h1 class="text-uppercase text-primary font-weight-bold mt-4">Features your devs will love</h1>
+                <h1 class="text-uppercase text-primary font-weight-bold mt-4">For Devs</h1>
             </div>
         </div>
 
@@ -332,7 +321,7 @@
 <section class="page bg-white">
     <div class="container">
         <div class="row">
-            <div class="col-12 text-center">                
+            <div class="col-12 text-center">
                 <h1 class="text-uppercase text-primary font-weight-bold">
                     Module Features
                 </h1>
