@@ -1019,7 +1019,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .nav a.text-hidden .nav-text { display: none;  }
 
 .nav-site { border: 0; }
-.nav-site .navbar { border: 0 !important; }
+
 .nav-site .collapsing { overflow: hidden; }
 
 .nav-site > .navbar { width: 100%; }
@@ -1035,6 +1035,15 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .nav-site > .navbar .navbar-search { width: 100%; }
 .nav-site > .navbar .navbar-search .nav { display: block; }
 .nav-site > .navbar .navbar-user { display: none; }
+
+.navbar-expand-lg .navbar-nav .nav-link {
+    padding-right: 1rem !important;
+    padding-left: 1rem !important;
+}
+
+@media (min-width: 992px) {
+    .site-nav .navbar .navbar-nav .nav-item { padding-left: 1rem !important; }   
+}
 
 .nav-site > .navbar-expand-lg .navbar-collapse .navbar-nav {
     float: none;

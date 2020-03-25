@@ -64,13 +64,13 @@ namespace Plato.Site.Assets
                     },
                     new Asset()
                     {
-                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.tools.js",
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.tools.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.defaults.js",
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.defaults.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
@@ -99,13 +99,13 @@ namespace Plato.Site.Assets
                     },
                     new Asset()
                     {
-                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.tools.js",
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.tools.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },
                     new Asset()
                     {
-                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.defaults.js",
+                        Url = "/plato.site/content/js/vendors/livicons/liviconscvo.defaults.min.js",
                         Type = AssetType.IncludeJavaScript,
                         Section = AssetSection.Footer
                     },

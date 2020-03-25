@@ -4,14 +4,6 @@
 .site-nav-fixed + main.body {  }
 .site-nav .navbar { position:absolute; top: 0; left:0; z-index:11; padding: 1rem; }
 
-.navbar-expand-lg .navbar-nav .nav-link {
-    padding-right: 1rem !important;
-    padding-left: 1rem !important;
-}
-
-@media (min-width: 992px) {
-    .site-nav .navbar .navbar-nav .nav-item { padding-left: 1rem !important; }   
-}
 
 /* Nav Dropdown */
 
