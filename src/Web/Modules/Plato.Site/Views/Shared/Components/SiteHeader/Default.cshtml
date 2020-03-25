@@ -14,7 +14,8 @@
         <div class="navbar navbar-expand-lg navbar-light bg-white border-bottom border-light">
             <div class="@containerCss">
                 <a class="navbar-brand" asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Index" data-provide="loader-spy">                        
-                    <img src="/plato.site/content/images/instantasp-logo.png" class="img-32" alt="InstantASP" title="InstantASP"/>
+                    <span class="plato-brand align-middle mr-2"></span> 
+                    <span class="d-inline-block align-middle text-primary">Plato</span>
                 </a>
                 <div class="navbar-mobile">
                     <div class="navbar-nav">
@@ -24,7 +25,6 @@
                                     <i class="fal fa-bars"></i>
                                 </a>
                             </li>
-
                             @if (this.CurrentUser != null)
                             {
                                 <li class="nav-item dropdown user-dropdown">
@@ -64,7 +64,7 @@
                         <div class="nav nav-pills">
                             <div class="nav-item">
                                 <a class="nav-link text-nowrap" asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Index" data-provide="loader-spy" data-toggle="nav-dropdown" data-target="#product-menu" aria-expanded="false">
-                                    Products <i class="fal fa-chevron-down nav-dropdown-toggle"></i>
+                                    Features <i class="fal fa-chevron-down nav-dropdown-toggle"></i>
                                 </a>                             
                             </div>
                             <div class="nav-item">
@@ -272,11 +272,11 @@
                         </div>
                     </div>
                     <div class="col-lg-3">
-                        <h6 class="text-uppercase">Plato</h6>
+                        <h6 class="text-uppercase">Learn more</h6>
                         <hr />
                         <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Index" data-provide="loader-spy" class="nav-dropdown-item">
                             About Plato
-                        </a>                     
+                        </a>
                         <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Modules" data-provide="loader-spy" class="nav-dropdown-item">
                             108+ Modules
                         </a>
@@ -286,15 +286,10 @@
                         <a href="https://github.com/InstantASP/plato" data-provide="loader-spy" class="nav-dropdown-item">
                             Plato on GitHub
                         </a>
-
-                        <h6 class="text-uppercase mt-4">Other Software</h6>
-                        <hr />
-                        <a href="#" data-provide="loader-spy" class="nav-dropdown-item">
-                            InstantForum
+                        <a href="https://github.com/InstantASP/Plato/releases" data-provide="loader-spy" class="nav-dropdown-item">
+                            Release Notes
                         </a>
-                        <a href="#" data-provide="loader-spy" class="nav-dropdown-item">
-                            InstantKB
-                        </a>
+                       
 
                     </div>
                 </div>

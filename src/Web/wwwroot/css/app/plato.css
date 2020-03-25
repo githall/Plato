@@ -1022,7 +1022,6 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .nav-site .navbar { border: 0 !important; }
 .nav-site .collapsing { overflow: hidden; }
 
-.nav-site > .navbar .navbar-nav .nav-item { padding-left: 1.5rem !important }
 .nav-site > .navbar { width: 100%; }
 
 .nav-site > .navbar .dropdown .dropdown-menu { min-width: 200px; }

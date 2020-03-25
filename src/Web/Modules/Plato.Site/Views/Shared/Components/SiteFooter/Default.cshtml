@@ -7,7 +7,7 @@
         <div class="my-md-5">
             <div class="row">
                 <div class="col-12 col-md">
-                    <h5 class="text-uppercase text-muted font-weight-bold">Products</h5>               
+                    <h5 class="text-uppercase text-muted font-weight-bold">Features</h5>               
                     <ul class="list-inline mt-4">
                         <li class="d-block mb-2">
                             <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Discuss" class="text-muted" data-provide="loader-spy">
@@ -21,7 +21,7 @@
                         </li>
                         <li class="d-block mb-2">
                             <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Articles" class="text-muted" data-provide="loader-spy">
-                                Knowledgebase
+                                Knowledge Base
                             </a>
                         </li>
                         <li class="d-block mb-2">
@@ -94,12 +94,12 @@
                         </li>
                         <li class="d-block mb-2">
                             <a asp-route-area="Plato.Site" asp-route-controller="Support" asp-route-action="Index" class="text-muted" data-provide="loader-spy">
-                                Paid Support
+                                Support Options
                             </a>
                         </li>
                         <li class="d-block mb-2">
                             <a asp-route-area="Plato.Site" asp-route-controller="Upgrade" asp-route-action="Index" class="text-muted" data-provide="loader-spy">
-                                Paid Upgrades
+                                Upgrade Options
                             </a>
                         </li>
                     </ul>
@@ -140,21 +140,16 @@
                       
                     </ul>
                 </div>
-            </div>
-         
+            </div>         
             <div class="row my-4">
                 <div class="col-12 col-lg-6">
                     <p class="d-block text-muted">
-                        <a class="mr-2" asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Index" data-provide="loader-spy">
-                            <img src="/plato.site/content/images/instantasp-logo.png" class="img-32" alt="InstantASP" title="InstantASP" />
-                        </a>
-                        Copyright &copy; @DateTime.Now.Year All Rights Reserved.
+                        <a class="mr-2" asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Index" data-provide="loader-spy"><span class="plato-brand align-middle mr-2"></span></a>
+                        Copyright &copy; @DateTime.Now.Year All Rights Reserved. <a href="https://www.instantasp.co.uk/" class="text-muted">InstantASP Ltd</a>
                     </p>
                 </div>
-
                 <div class="col-12 col-lg-6">
-                    <ul class="list-inline float-lg-right">
-                    
+                    <ul class="list-inline float-lg-right">                    
                         <li class="list-inline-item">
                             <a asp-route-area="Plato.Site" asp-route-controller="Legal" asp-route-action="Terms" class="text-muted" data-provide="loader-spy">
                                 Terms of Use
