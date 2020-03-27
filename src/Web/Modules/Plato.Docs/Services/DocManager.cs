@@ -71,7 +71,7 @@ namespace Plato.Docs.Services
                 _simpleEntityStore.CancelTokens(null);
             }
 
-            return null;
+            return result;
 
         }
 
