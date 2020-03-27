@@ -60,8 +60,6 @@
 
 .nav-site > .navbar-light { border-bottom: 1px solid rgba(0, 0, 0, 0.15); }
 
-.navbar.border-light { border-bottom: 1px solid #ddd !important; }
-
 /* ------------------- */
 /* Validation */
 /* ------------------- */
@@ -462,8 +460,8 @@ a.label:hover, .label.active {
 /* ------------------- */
 
 .icon-wrapper {
-    background: #BFDEFF;
-    color: white;
+    background: white;
+    color: #007bff;
 }
 
 /* ------------------- */

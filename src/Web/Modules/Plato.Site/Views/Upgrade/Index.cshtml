@@ -1,0 +1,95 @@
+﻿@model ContactFormViewModel
+@{
+    AddTitleSegment(T["Upgrade Options"]);
+}
+
+<div style="background: url(/plato.site/content/images/bg10.png) top right no-repeat;">
+    <section class="page">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h1 class="text-uppercase display-4 text-primary font-weight-bold">
+                        Upgrade
+                    </h1>
+                    <h2 class="font-weight-light">
+                        Self-hosted upgrade options explained
+                    </h2>
+                    <a name="community-support"></a>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="page">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+
+                    <div class="w-100 p-4 bg-white box-shadow">
+                        <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-40 align-middle mr-2" />
+                        <h3 class="d-inline-block align-bottom font-weight-bold text-uppercase text-primary">Community</h3>
+                        <hr />
+                        <p>
+                            You can download the latest release of Plato via our <a href="https://github.com/InstantASP/Plato/releases" target="_blank">GitHub releases page</a>. Unfortunately, whilst we would love to help everyone, we cannot guarantee support for upgrades if your using the free community edition of Plato. Should you require assistance with upgrading please post within our support site using the button below.
+                        </p>
+                        <p>
+                            <a asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index" class="btn btn-primary">Browse Support</a>
+                            <a name="business-support"></a>
+                        </p>
+                    </div>
+
+                    <div class="mt-4 w-100 p-4 bg-white box-shadow">
+                        <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-40 align-middle mr-2" />
+                        <h3 class="d-inline-block align-middle font-weight-bold text-uppercase text-primary">Business</h3>
+                        <hr />
+                        <p class="font-weight-bold">
+                            Annual Business Support Renewal
+                        </p>
+                        <p>
+                            Our self-hosted business license includes all updates & priority support for Plato for the first year. After the first year should you wish to continue receiving updates & guaranteed priority support for Plato you will need to purchase an annual subscription for your business license. Once purchased you will receive all the benefits again of our <a asp-route-controller="Support" asp-route-action="Index" asp-fragment="business-support">business support package</a> for one full year from date of purchase. Use the button below to renew your business support...
+                        </p>
+                        <p>
+                            <h1 class="display-4 text-primary">
+                                $389
+                            </h1>
+                        </p>
+                        <p>
+                            annual subscription / VAT may apply
+                        </p>
+                        <p>                      
+                            <a href="https://order.shareit.com/cart/add?vendorid=200279505&PRODUCT[300965436]=1" target="_blank" class="btn btn-primary">
+                                Purchase <i class="fal fa-external-link"></i>
+                            </a>
+                            <a name="enterprise-support"></a>
+                        </p>
+                    </div>
+
+                    <div class="mt-4 w-100 p-4 bg-white box-shadow">
+                        <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-40 align-middle mr-2" />
+                        <h3 class="d-inline-block align-middle font-weight-bold text-uppercase text-primary">Enterprise</h3>
+                        <hr />
+                        <p class="font-weight-bold">
+                            Annual Enterprise Support Renewal
+                        </p>
+                        <p>
+                            Our self-hosted enterprise license includes all updates & priority support for Plato for the first year. After the first year should you wish to continue receiving updates & guaranteed priority support for Plato you will need to purchase an annual subscription for your enterprise license. Once purchased you will receive all the benefits again of our <a asp-route-controller="Support" asp-route-action="Index" asp-fragment="enterprise-support">enterprise support package</a> for one full year from date of purchase. Use the button below to renew your enterprise support...
+                        </p>
+                        <p>
+                            <h1 class="display-4 text-primary">
+                                $789
+                            </h1>
+                        </p>
+                        <p>
+                            annual subscription / VAT may apply
+                        </p>
+                        <p>
+                            <a href="https://order.shareit.com/cart/add?vendorid=200279505&PRODUCT[300965437]=1" target="_blank" class="btn btn-primary">
+                                Purchase <i class="fal fa-external-link"></i>
+                            </a>
+                        </p>                     
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

@@ -169,8 +169,8 @@ $(function (win, doc, $) {
         $(".github-button").gitHubButton();
 
 
-        $(".nav-site").find('[data-toggle="nav-dropdown"]').hover(function () {
-            var selector = $(this).attr("href"),
+        $('[data-toggle="nav-dropdown"]').hover(function () {
+            var selector = $(this).data("target"),
                 $menu = $(selector);
             if ($menu.length > 0) {
                 $menu.addClass("show");

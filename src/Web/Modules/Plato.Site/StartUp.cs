@@ -74,22 +74,22 @@ namespace Plato.Site
             );
 
             // -----------
-            // Plato
+            // Features
             // -----------
 
             // Index
             routes.MapAreaRoute(
                 name: "PlatoSiteFeatures",
                 areaName: "Plato.Site",
-                template: "plato",
-                defaults: new { controller = "Plato", action = "Features" }
+                template: "features",
+                defaults: new { controller = "Plato", action = "Index" }
             );
 
             // Discuss
             routes.MapAreaRoute(
                 name: "PlatoSiteDiscuss",
                 areaName: "Plato.Site",
-                template: "plato/discuss",
+                template: "features/discuss",
                 defaults: new { controller = "Plato", action = "Discuss" }
             );
 
@@ -97,7 +97,7 @@ namespace Plato.Site
             routes.MapAreaRoute(
                 name: "PlatoSiteDocs",
                 areaName: "Plato.Site",
-                template: "plato/docs",
+                template: "features/docs",
                 defaults: new { controller = "Plato", action = "Docs" }
             );
             
@@ -105,7 +105,7 @@ namespace Plato.Site
             routes.MapAreaRoute(
                 name: "PlatoSiteArticles",
                 areaName: "Plato.Site",
-                template: "plato/articles",
+                template: "features/articles",
                 defaults: new { controller = "Plato", action = "Articles" }
             );
 
@@ -113,7 +113,7 @@ namespace Plato.Site
             routes.MapAreaRoute(
                 name: "PlatoSiteQuestions",
                 areaName: "Plato.Site",
-                template: "plato/questions",
+                template: "features/questions",
                 defaults: new { controller = "Plato", action = "Questions" }
             );
 
@@ -121,7 +121,7 @@ namespace Plato.Site
             routes.MapAreaRoute(
                 name: "PlatoSiteIdeas",
                 areaName: "Plato.Site",
-                template: "plato/ideas",
+                template: "features/ideas",
                 defaults: new { controller = "Plato", action = "Ideas" }
             );
 
@@ -129,7 +129,7 @@ namespace Plato.Site
             routes.MapAreaRoute(
                 name: "PlatoSiteIssues",
                 areaName: "Plato.Site",
-                template: "plato/issues",
+                template: "features/issues",
                 defaults: new { controller = "Plato", action = "Issues" }
             );
 
@@ -137,7 +137,7 @@ namespace Plato.Site
             routes.MapAreaRoute(
                 name: "PlatoSiteModules",
                 areaName: "Plato.Site",
-                template: "plato/modules",
+                template: "features/modules",
                 defaults: new { controller = "Plato", action = "Modules" }
             );
 
@@ -145,7 +145,7 @@ namespace Plato.Site
             routes.MapAreaRoute(
                 name: "PlatoSiteDownload",
                 areaName: "Plato.Site",
-                template: "plato/desktop",
+                template: "features/desktop",
                 defaults: new { controller = "Plato", action = "Desktop" }
             );
 
@@ -159,6 +159,14 @@ namespace Plato.Site
                 template: "pricing",
                 defaults: new { controller = "Pricing", action = "Index" }
             );
+
+            routes.MapAreaRoute(
+                name: "PlatoSitePricingFullyManaged",
+                areaName: "Plato.Site",
+                template: "pricing/managed",
+                defaults: new { controller = "Pricing", action = "FullyManaged" }
+            );
+
 
             // -----------
             // Support

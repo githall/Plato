@@ -1,6 +1,6 @@
 ﻿@model ContactFormViewModel
 @{
-    AddTitleSegment(T["Plato - Support Options"]);
+    AddTitleSegment(T["Support Options"]);
 }
 
 <div style="background: url(/plato.site/content/images/bg10.png) top right no-repeat;">
@@ -12,9 +12,9 @@
                         Support
                     </h1>
                     <h2 class="font-weight-light">
-                        The Plato support options explained
+                        Self-hosted support options explained
                     </h2>
-                    <a name="free-support"></a>
+                    <a name="community-support"></a>
                 </div>
             </div>
         </div>
@@ -58,19 +58,19 @@
                         <ol class="list-inline">
                             <li class="d-block p-0">
                                 <i class="fal fa-check text-primary mr-2"></i>
-                                Access to pre-packaged, tested, officially supported builds
+                                Access to pre-packaged, tested, officially supported updates for the first year
                             </li>
                             <li class="d-block p-0">
                                 <i class="fal fa-check text-primary mr-2"></i>
-                                Priority support direct from Plato developers for a single installation for one year
+                                Priority support from Plato developers for a single installation for the first year
                             </li>
                             <li class="d-block p-0">
                                 <i class="fal fa-check text-primary mr-2"></i>
-                                A guaranteed response via email within 48 hours (usually quicker)
+                                A guaranteed response via email within 48 hours (usually quicker) for the first year
                             </li>
                             <li class="d-block p-0">
                                 <i class="fal fa-check text-primary mr-2"></i>
-                                Ongoing priority assistance with customizations & upgrades
+                                Ongoing priority assistance with customizations & upgrades for the first year
                             </li>
                             <li class="d-block p-0">
                                 <i class="fal fa-check text-primary mr-2"></i>
@@ -78,18 +78,18 @@
                             </li>
                             <li class="d-block p-0">
                                 <i class="fal fa-check text-primary mr-2"></i>
-                                Escalation to real-time remote assistance within 72 hours if needed
+                                Escalation to real-time remote assistance within 72 hours if needed for the first year
                             </li>
                             <li class="d-block p-0">
                                 <i class="fal fa-check text-primary mr-2"></i>
-                                Cancel anytime after the first year and continue to use Plato forever
+                                No recurring licensing fees - Use the version of Plato you purchased forever
                             </li>
                         </ol>
                         <p>
-                            Our self-hosted Plato <a asp-route-action="Pricing">business license</a> comes with business support included.
+                            After the first year to continue receiving updates & guaranteed priority ssupport you will need to purchase our optional <a asp-route-controller="Upgrade" asp-route-action="Index">annual support</a>.
                         </p>
                         <p>
-                            <a asp-route-action="Pricing" class="btn btn-primary">
+                            <a asp-route-controller="Pricing" asp-route-action="Index" class="btn btn-primary">
                                 See Pricing
                             </a>
                             <a name="enterprise-support"></a>
@@ -112,7 +112,7 @@
                                     <i class="fal fa-check text-primary mt-1"></i>
                                 </div>
                                 <div class="list-body">
-                                    Up to 6 hours (usually three 2 hour calls) of personal training from Plato product developers via GotoMeeting or Microsoft Teams to assist with on-boarding, employee training or anything else to help you succeed with Plato
+                                    Up to 4 hours (usually two 2 hour calls) of personal training from Plato product developers via GotoMeeting, Zoom or Microsoft Teams to assist with on-boarding, employee training or anything else to help you succeed with Plato
                                 </div>
                             </li>
                             <li class="d-block p-0">
@@ -120,7 +120,7 @@
                                     <i class="fal fa-check text-primary mt-1"></i>
                                 </div>
                                 <div class="list-body">
-                                    Up to 6 hours (usually three 2 hour calls) of in-depth real-time technical assistance via GotoMeeting to assist with installation, configuration, upgrading, optimizations, 3rd party integrations, data migrations, single sign-on or any other technical aspect you need
+                                    Up to 4 hours (usually two 2 hour calls) of in-depth real-time technical assistance via GotoMeeting to assist with installation, configuration, upgrading, optimizations, 3rd party integrations, data migrations, single sign-on or any other technical aspect you need
                                 </div>
                             </li>
                             <li class="d-block p-0">
@@ -128,7 +128,7 @@
                                     <i class="fal fa-check text-primary mt-1"></i>
                                 </div>
                                 <div class="list-body">
-                                    We will work with you to develop & deliver a unique theme for your Plato installation. We will present up-to 5 unique mock-ups until you are 100% happy our Plato theme perfectly matches your brand or existing web site.
+                                    We will work with you to develop & deliver a unique theme for your Plato installation. We will present up-to 3 unique mock-ups until you are 100% happy our Plato theme perfectly matches your brand or existing web site.
                                 </div>
                             </li>
                             <li class="d-block p-0">
@@ -136,15 +136,15 @@
                                     <i class="fal fa-check text-primary mt-1"></i>
                                 </div>
                                 <div class="list-body">
-                                    Cancel anytime after the first year and continue to use Plato forever
+                                    No recurring licensing fees - Use the version of Plato you purchased forever
                                 </div>
                             </li>
                         </ol>
                         <p>
-                            Our self-hosted Plato <a asp-route-action="Pricing">enterprise license</a> comes with enterprise support included.
+                            After the first year to continue receiving updates & guaranteed priority ssupport you will need to purchase our optional <a asp-route-controller="Upgrade" asp-route-action="Index">annual support</a>.
                         </p>
                         <p>
-                            <a asp-route-action="Pricing" class="btn btn-primary">
+                            <a asp-route-controller="Pricing" asp-route-action="Index" class="btn btn-primary">
                                 See Pricing
                             </a>
                         </p>
@@ -155,11 +155,3 @@
         </div>
     </section>
 </div>
-
-<!-- Call to action -->
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
-    @await DisplayAsync(new View("SiteCallToAction", new
-    {
-        sticky = false
-    }))
-</cache>

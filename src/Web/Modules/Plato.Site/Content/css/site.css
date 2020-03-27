@@ -1,22 +1,29 @@
 ﻿
-
 .site-nav { display: block; width: 100%; height: 76px; }
-.site-nav-fixed { position: sticky; z-index: 10; top: 0; left: 0; }
-.site-nav-fixed + main.body {  }
-.site-nav .navbar { position:absolute; top: 0; left:0; z-index:2; padding: 1rem; }
+.site-nav-fixed { position: sticky; z-index:10; top: 0; left: 0; }
+.site-nav .navbar { position:absolute; top: 0; left:0; z-index:3; padding: 1rem; }
 
 /* Nav Dropdown */
+
+.nav-dropdown-toggle {
+    display:none;
+}
 
 .nav-dropdown-menu {
     background: #f8f8f8;
     width: 100%;
     visibility: hidden;   
     position: absolute;
-    z-index: 1;
+    z-index: 2;
     top: -800px;
     left: 0;
+    display:none;
     transition: all 0.2s ease-out;  
     box-shadow: 0 0 20px 3px #ddd;
+}
+@media (min-width: 992px) {
+    .nav-dropdown-menu { display:block; }    
+    .nav-dropdown-toggle { display:inline-block; }
 }
 
 .nav-dropdown-menu.show {
@@ -50,6 +57,8 @@ a.box:hover { border-color: #007bff !important; }
 
 .bg-black { background-color: black !important; }
 .bg-purple { background-color: #5C2D91 !important; }
+.bg-yellow { background-color:#FFFF7A !important; }
+.bg-red { background-color:#FF0702 !important; }
 
 .bg-primary-75 { background-color: rgba(0, 123, 255, 0.75) !important; }
 .bg-primary-50 { background-color: rgba(0, 123, 255, 0.50) !important; }
@@ -136,7 +145,7 @@ hr.light { border-color: #fff }
 .page .container,
 .page .container-fluid {
     display: block;
-    margin: 3rem auto;
+    margin: 4rem auto;
 }
 
 
@@ -151,16 +160,9 @@ hr.light { border-color: #fff }
 
 /* Icon circles */
 
-
-    .icon-circle i {
-        font-size: 3rem;
+.icon-circle i {
+    font-size: 3rem;
        
-    }
-
-/* Plato icons */
-.icon-wrapper {
-    color: #007bff !important;
-    background: #E8F3FF !important;
 }
 
 .img-corner-primary {
@@ -382,7 +384,7 @@ a.img-thumbnail:hover .img-caption {
 }
 
 .text-danger {
-    color: ##FE6E41;
+    color: #FE6E41;
 }
 
 .btn-danger {

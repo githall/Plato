@@ -16,5 +16,17 @@
     "inputFiles": [
       "Content/css/site.css"
     ]
+  },
+  {
+    "outputFileName": "Content/js/vendors/livicons/liviconscvo.tools.min.js",
+    "inputFiles": [
+      "Content/js/vendors/livicons/liviconscvo.tools.js"
+    ]
+  },
+  {
+    "outputFileName": "Content/js/vendors/livicons/liviconscvo.defaults.min.js",
+    "inputFiles": [
+      "Content/js/vendors/livicons/liviconscvo.defaults.js"
+    ]
   }
 ]
