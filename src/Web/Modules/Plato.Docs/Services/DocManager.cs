@@ -12,17 +12,17 @@ namespace Plato.Docs.Services
     public class DocManager : IPostManager<Doc>
     {
 
-        private readonly IEntityStore<Doc> _entityStore;
+        private readonly ISimpleEntityStore<SimpleDoc> _simpleEntityStore;
         private readonly IEntityManager<Doc> _entityManager;
         private readonly IFeatureFacade _featureFacade;
         
         public DocManager(
             IEntityManager<Doc> entityManager,
-            IEntityStore<Doc> entityStore,
+            ISimpleEntityStore<SimpleDoc> simpleEntityStore,
             IFeatureFacade featureFacade)
         {
-            _entityManager = entityManager;
-            _entityStore = entityStore;
+            _simpleEntityStore = simpleEntityStore; 
+            _entityManager = entityManager;            
             _featureFacade = featureFacade;
         }
 
@@ -38,7 +38,15 @@ namespace Plato.Docs.Services
                 }
             }
             
-            return await _entityManager.CreateAsync(model);
+            var result = await _entityManager.CreateAsync(model);
+
+            if (result.Succeeded)
+            {
+                // Expire simple entity cache for docs
+                _simpleEntityStore.CancelTokens(null);
+            }
+
+            return result;
 
         }
 
@@ -55,18 +63,45 @@ namespace Plato.Docs.Services
                 }
             }
             
-            return await _entityManager.UpdateAsync(model);
+            var result = await _entityManager.UpdateAsync(model);
+
+            if (result.Succeeded)
+            {
+                // Expire simple entity cache for docs
+                _simpleEntityStore.CancelTokens(null);
+            }
+
+            return null;
 
         }
 
         public async Task<ICommandResult<Doc>> DeleteAsync(Doc model)
         {
-            return await _entityManager.DeleteAsync(model);
+
+            var result = await _entityManager.DeleteAsync(model);
+
+            if (result.Succeeded)
+            {
+                // Expire simple entity cache for docs
+                _simpleEntityStore.CancelTokens(null);
+            }
+
+            return result;
         }
 
         public async Task<ICommandResult<Doc>> Move(Doc model, MoveDirection direction)
         {
-            return await _entityManager.Move(model, direction);
+
+            var result = await _entityManager.Move(model, direction);
+
+            if (result.Succeeded)
+            {
+                // Expire simple entity cache for docs
+                _simpleEntityStore.CancelTokens(null);
+            }
+
+            return result;
+
         }
         
     }
