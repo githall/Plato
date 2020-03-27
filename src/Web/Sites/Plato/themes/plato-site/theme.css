@@ -607,8 +607,3 @@ a.label:hover, .label.active {
 .core-layout .layout-tools {
     display: none;
 }
-
-.layout-sidebar-content > .card,
-.layout-asides-content > .card {
-    border: 0 !important;
-}

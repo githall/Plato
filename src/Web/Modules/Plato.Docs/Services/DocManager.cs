@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Plato.Docs.Models;
 using Plato.Entities.Services;
 using Plato.Entities.Stores;
@@ -15,10 +14,10 @@ namespace Plato.Docs.Services
         private readonly ISimpleEntityStore<SimpleDoc> _simpleEntityStore;
         private readonly IEntityManager<Doc> _entityManager;
         private readonly IFeatureFacade _featureFacade;
-        
+
         public DocManager(
-            IEntityManager<Doc> entityManager,
             ISimpleEntityStore<SimpleDoc> simpleEntityStore,
+            IEntityManager<Doc> entityManager,            
             IFeatureFacade featureFacade)
         {
             _simpleEntityStore = simpleEntityStore; 

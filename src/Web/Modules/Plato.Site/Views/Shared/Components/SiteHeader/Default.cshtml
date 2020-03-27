@@ -63,26 +63,26 @@
                     <div class="navbar-nav">
                         <div class="nav nav-pills">
                             <div class="nav-item">
-                                <a class="nav-link text-nowrap" asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Index" data-provide="loader-spy" data-toggle="nav-dropdown" data-target="#product-menu" aria-expanded="false">
+                                <a class="nav-link text-nowrap font-weight-bold" asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Index" data-provide="loader-spy" data-toggle="nav-dropdown" data-target="#product-menu" aria-expanded="false">
                                     Features <i class="fal fa-chevron-down nav-dropdown-toggle"></i>
                                 </a>                             
                             </div>
                             <div class="nav-item">
-                                <a class="nav-link" href="@platoSiteOptions.DemoUrl" data-provide="loader-spy" target="_blank">
+                                <a class="nav-link font-weight-bold" href="@platoSiteOptions.DemoUrl" data-provide="loader-spy" target="_blank">
                                     <span class="nav-text">
                                         Demo
                                     </span>
                                 </a>
                             </div>
                             <div class="nav-item">
-                                <a class="nav-link" asp-route-area="Plato.Site" asp-route-controller="Pricing" asp-route-action="Index" data-provide="loader-spy">
+                                <a class="nav-link font-weight-bold" asp-route-area="Plato.Site" asp-route-controller="Pricing" asp-route-action="Index" data-provide="loader-spy">
                                     <span class="nav-text">
                                         Pricing
                                     </span>
                                 </a>
                             </div>
                             <div class="nav-item">
-                                <a class="nav-link" asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index" data-provide="loader-spy">
+                                <a class="nav-link font-weight-bold" asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index" data-provide="loader-spy">
                                     <span class="nav-text">
                                         Support
                                     </span>
@@ -152,7 +152,7 @@
                         <div class="mt-9">
                             <div class="row">
                                 <div class="col-12 col-lg-4 mb-4">
-                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Discuss" class="d-block py-4 text-center border box box-shadow">
+                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Discuss" class="d-block py-4 text-center border box box-shadow" data-provide="loader-spy">
                                         <div class="livicon-evo d-inline-block" data-options="
                                             name:comment;
                                             repeat: loop;
@@ -170,7 +170,7 @@
                                     </a>
                                 </div>
                                 <div class="col-12 col-lg-4 mb-4">
-                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Docs" class="d-block py-4 text-center border box box-shadow">
+                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Docs" class="d-block py-4 text-center border box box-shadow" data-provide="loader-spy">
                                         <div class="livicon-evo d-inline-block" data-options="
                                             name: notebook;
                                             repeat: loop;
@@ -188,7 +188,7 @@
                                     </a>
                                 </div>
                                 <div class="col-12 col-lg-4 mb-4">
-                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Articles" class="d-block py-4 text-center border box box-shadow">
+                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Articles" class="d-block py-4 text-center border box box-shadow" data-provide="loader-spy">
                                         <div class="livicon-evo d-inline-block" data-options="
                                             name: help;
                                             repeat: loop;
@@ -208,7 +208,7 @@
                             </div>
                             <div class="row">
                                 <div class="col-12 col-lg-4">
-                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Questions" class="d-block py-4 text-center bg-white border box box-shadow">
+                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Questions" class="d-block py-4 text-center bg-white border box box-shadow" data-provide="loader-spy">
                                         <div class="livicon-evo d-inline-block" data-options="
                                             name: question-alt;
                                             repeat: loop;
@@ -226,7 +226,7 @@
                                     </a>
                                 </div>
                                 <div class="col-12 col-lg-4">
-                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Ideas" class="d-block py-4 text-center bg-white border box box-shadow">
+                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Ideas" class="d-block py-4 text-center bg-white border box box-shadow" data-provide="loader-spy">
                                         <div class="livicon-evo d-inline-block" data-options="
                                             name:bulb;
                                             repeat: loop;
@@ -244,7 +244,7 @@
                                     </a>
                                 </div>
                                 <div class="col-12 col-lg-4">
-                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Issues" class="d-block py-4 text-center bg-white border box box-shadow">
+                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Issues" class="d-block py-4 text-center bg-white border box box-shadow" data-provide="loader-spy">
                                         <div class="livicon-evo d-inline-block" data-options="
                                             name: bug;
                                             repeat: loop;
@@ -282,12 +282,15 @@
                         </a>
                         <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Desktop" data-provide="loader-spy" class="nav-dropdown-item">
                             Plato Desktop
+                        </a>                      
+                        <a href="https://github.com/InstantASP/plato" data-provide="loader-spy" class="nav-dropdown-item" target="_blank">
+                            Plato on GitHub<i class="fal fa-external-link ml-2"></i>
                         </a>
-                        <a href="https://github.com/InstantASP/plato" data-provide="loader-spy" class="nav-dropdown-item">
-                            Plato on GitHub
+                        <a href="https://github.com/InstantASP/Plato/releases" data-provide="loader-spy" class="nav-dropdown-item" target="_blank">
+                            Release History<i class="fal fa-external-link ml-2"></i>
                         </a>
-                        <a href="https://github.com/InstantASP/Plato/releases" data-provide="loader-spy" class="nav-dropdown-item">
-                            Release Notes
+                        <a href="https://github.com/InstantASP/Plato/commits/master" data-provide="loader-spy" class="nav-dropdown-item" target="_blank">
+                            Latest Commits<i class="fal fa-external-link ml-2"></i>
                         </a>
                     </div>
                 </div>

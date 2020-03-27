@@ -3,7 +3,7 @@
 }
 
 <!-- Jumbotron -->
-<section class="page bg-light">
+<section class="page bg-light border-bottom border-light">
     <div class="container">
         <div class="row text-center">
             <div class="col-12">
@@ -11,7 +11,7 @@
                     Pricing from free? Yes, please!
                 </h1>
                 <h2 class="font-weight-light  my-4">
-                    Plato is 100% free & open source software. If you get value from Plato or are using Plato for commerical purposes please consider supporting our ongoing development via our paid licenses
+                    Plato is 100% free & open source software. If you get value from Plato or are using Plato for commercial purposes please consider supporting our ongoing development via our paid licenses
                 </h2>
             </div>
         </div>
@@ -81,7 +81,8 @@
                                 <i class="fal fa-info-circle" data-toggle="tooltip" title="Customize your Plato installation with over 180 modules"></i>
                             </li>
                             <li class="d-block p-3">
-                                <a asp-route-controller="Legal" asp-route-action="License">Commerical License</a>
+                                <a asp-route-controller="Legal" asp-route-action="License">Commercial License</a>
+                                <i class="fal fa-info-circle" data-toggle="tooltip" title="Our commercial license allows businesses to use Plato within a commercial project and is backed by updates & guaranteed priority technical support."></i>
                             </li>
                             <li class="d-block p-3">
                                 <a asp-route-controller="Support" asp-route-action="Index" asp-fragment="business-support">Business Support</a>
@@ -113,14 +114,15 @@
                         <ol class="list-inline">
                             <li class="d-block p-3">
                                 <a href="https://github.com/InstantASP/plato/tree/master/src" target="_blank">Full source code + Builds</a>
-                                <i class="fal fa-info-circle" data-toggle="tooltip" title="Complete access to over 200 Visual Studio C# .NET Core projects that make up Plato plus access to pre-packaged, fully supported builds you can deploy right into production."></i>
+                                <i class="fal fa-info-circle" data-toggle="tooltip" title="Complete access to over 200 Visual Studio C# .NET Core projects that make up Plato plus access to packaged, fully supported builds you can deploy right into production."></i>
                             </li>
                             <li class="d-block p-3">
                                 <a asp-route-controller="Plato" asp-route-action="Modules">180+ modules</a>
                                 <i class="fal fa-info-circle" data-toggle="tooltip" title="Customize your Plato installation with over 180 modules"></i>
                             </li>
                             <li class="d-block p-3">
-                                <a asp-route-controller="Legal" asp-route-action="License">Commerical License</a>
+                                <a asp-route-controller="Legal" asp-route-action="License">Commercial License</a>
+                                <i class="fal fa-info-circle" data-toggle="tooltip" title="Our commercial license allows businesses to use Plato within a commercial project and is backed by updates & guaranteed priority technical support."></i>
                             </li>
                             <li class="d-block p-3">
                                 <a asp-route-controller="Support" asp-route-action="Index" asp-fragment="enterprise-support">Enterprise Support</a>
@@ -138,38 +140,34 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-4">
+            <div class="col-12 text-center text-muted">
+                Prices shown are in USD and subject to applicable tax
+            </div>
+        </div>
     </div>
 </section>
 
 <!-- Fully Managed -->
-<section class="page">
-    <div class="container mt-0 text-center">
+<section class="page bg-primary-15">
+    <div class="container my-5 text-center">
         <h3>
-            We can also host Plato for you. See our <a asp-route-action="FullyManaged">fully managed pricing</a>.
+            Looking for a hosted solution - See our <a asp-route-action="FullyManaged">fully managed pricing</a>.
         </h3>
     </div>
 </section>
 
-<!-- Call to action -->
-<section class="page bg-primary-25">
-    <div class="container">
-        <div class="p-5 bg-white text-center">
-            <div class="livicon-evo d-inline-block" data-options="
-                name: envelope-put;
-                repeat: loop;
-                style: linesAlt;
-                size: 120px;
-                strokeWidth: 4px;
-                strokeColor: #007bff;
-                strokeColorAlt: #F9B32F;
-                eventType: none;">
-            </div>
-            <h1 class="font-weight-bold text-primary">
-                Questions? We would love to help
-            </h1>
-            <a class="btn btn-primary btn-lg mt-4" asp-route-area="Plato.Site" asp-route-controller="Company" asp-route-action="Contact" data-provide="loader-spy">
-                Contact Us
-            </a>
-        </div>
+<!-- Questions -->
+<section class="page">
+    <div class="container text-center">
+        <h1 class="font-weight-bold text-primary text-uppercase">
+            Questions
+        </h1>
+        <h2 class="font-weight-light my-4">
+            Call us on <a href="tel:441565832827" class="font-weight-bold">+44 (0) 1565 832 827</a> to get your questions answered right away
+        </h2>
+        <a class="btn btn-primary btn-lg" asp-route-area="Plato.Site" asp-route-controller="Company" asp-route-action="Contact" data-provide="loader-spy">
+            <i class="fal fa-envelope mr-2"></i>Send us a message
+        </a>
     </div>
 </section>
