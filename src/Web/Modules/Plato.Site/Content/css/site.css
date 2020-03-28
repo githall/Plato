@@ -321,16 +321,6 @@ a.img-thumbnail:hover .img-caption {
 .accordion a[data-toggle="collapse"] {
     color:#222;
 }
-.accordion a[data-toggle="collapse"]:active,
-.accordion a[data-toggle="collapse"][aria-expanded="true"] {
-    border-radius:3px;    
-    box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25) !important;
-    color:#222;
-}
-
-.accordion .list-group {
-      margin-top:0.2rem !important;
-}
 
 .accordion .card-header {
     border:0;

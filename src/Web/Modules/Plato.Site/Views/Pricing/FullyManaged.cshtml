@@ -3,15 +3,15 @@
 }
 
 <!-- Jumbotron -->
-<section class="page bg-light">
+<section class="page bg-light border-bottom border-light">
     <div class="container">
         <div class="row text-center">
             <div class="col-12">
                 <h1 class="display-4 text-primary text-uppercase font-weight-bold">
-                    Fully Managed
+                    Plans & Pricing
                 </h1>
                 <h2 class="font-weight-light  my-4">
-                    The entire Plato platform fully managed & hassle free.
+                    Everything you need to work with users to evolve & support your software
                 </h2>
             </div>
         </div>
@@ -21,8 +21,7 @@
 <!-- Fully Managed -->
 <section class="page" style="margin-top: -100px;">
     <div class="container mt-0">
-        <div class="row mt-4">
-
+        <div class="row">
             <div class="col-12 col-lg-4 mb-5 mb-lg-0">
                 <div class="card card-primary-price box-shadow">
                     <div class="card-body">
@@ -32,12 +31,12 @@
                             <h3 class="text-primary">Standard</h3>
                         </p>
                         <p>
-                            For teams and businesses ready to make Plato the hub for their customer support and collaboration.
+                            For growing businesses ready to make Plato the hub to collaborate with users & support software projects.
                         </p>
                         <ol class="list-inline">
                             <li class="d-block p-3 pt-0">
                                 Managed hosting within Azure
-                                <i class="fal fa-info-circle" data-toggle="tooltip" title="We will host & manage your Plato site. Your site will be hosted upon highly resilient Azure infrastructure within Microsoft operated data centers."></i>
+                                <i class="fal fa-info-circle" data-toggle="tooltip" title="We will host & manage your Plato installation. Your installation will be hosted upon highly resilient Azure infrastructure within Microsoft operated data centers."></i>
                             </li>
                             <li class="d-block p-3">
                                 <strong>100K</strong> page views per month
@@ -80,7 +79,7 @@
                             <h3 class="text-danger">Business</h3>
                         </p>
                         <p>
-                            For businesses needing all standard features plus branding, remote access and high availability.
+                            For organizations needing all standard features plus custom branding, remote access and high availability.
                         </p>
                         <ol class="list-inline">
                             <li class="d-block p-3 pt-0">
@@ -170,29 +169,37 @@
                 </div>
             </div>
         </div>
+        <div class="row mt-4">
+            <div class="col-12 text-center text-muted">
+                Prices shown are in USD and subject to applicable tax
+            </div>
+        </div>
     </div>
 </section>
 
-<section class="page">
-    <div class="container mt-0 text-center">
+<!-- Self hosted pricing -->
+<section class="page bg-primary-15">
+    <div class="container my-5 text-center">
         <h3>
-            Looking to host Plato yourself? See our <a asp-route-action="Index">self hosted pricing</a>.
+            Looking to host Plato yourself - See our <a asp-route-action="Index">self hosted pricing</a>.
         </h3>
     </div>
 </section>
 
+<!-- Hosted Features -->
 <section class="page">
-    <div class="container mt-0">
+    <div class="container">
         <!-- Security -->
         <div class="row">
             <div class="col-12 text-center">
-                <h2 class="text-uppercase font-weight-bold text-primary">
-                    Fully managed features
-                </h2>
+                <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
+                <h1 class="text-uppercase font-weight-bold text-primary">
+                    Managed features
+                </h1>
                 <h3 class="font-weight-light">
                     Our hosted services are backed by <a href="https://www.iso.org/isoiec-27001-information-security.html" target="_blank">ISO/IEC 27001</a> standards for security and reliability
                 </h3>
-                <hr class="divider border-primary" />
+                <hr class="divider" />
             </div>
         </div>
         <div class="row mt-4">
@@ -324,7 +331,7 @@
                 </div>
                 <div id="q3" role="tabpanel" aria-labelledby="PlatoHeader" data-parent="#accordion" class="list-group list-group-flush collapse">
                     <div class="list-group-item">
-                        All our hosted services are built upon the Windows Azure platform and hosted in datacenters fully managed by Microsoft. Windows Azure runs in geographically dispersed datacenters that comply with key industry standards, such as ISO/IEC 27001:2005, for security and reliability. In addition to datacenter, network, and personnel security practices, InstantASP incorporates security practices at the application and platform layers to enhance security for our customers.
+                        All our hosted services are built upon the Windows Azure platform and hosted in data centers fully managed by Microsoft. Windows Azure runs in geographically dispersed data centers that comply with key industry standards, such as ISO/IEC 27001:2005, for security and reliability. In addition to data center, network, and personnel security practices, InstantASP incorporates security practices at the application and platform layers to enhance security for our customers.
                     </div>
                 </div>
             </div>
@@ -401,7 +408,6 @@
                     <div class="list-group-item">
                         You should expect your page views & storage requirements to grow over time. If you exceed storage or page view limits you'll need to purchase additional storage and / or page views to match your growth.
                         For an extra $50 USD per month you will get 100k additional page views and an additional 10gb of storage
-
                     </div>
                 </div>
             </div>
@@ -485,91 +491,17 @@
     </div>
 </section>
 
-@*<section class="page">
-        <div class="container mt-0">
-             Security
-            <div class="row">
-                <div class="col-12 text-center">
-                    <h2 class="text-uppercase font-weight-bold text-primary">
-                        Why choose us
-                    </h2>
-                </div>
-            </div>
-
-             Brand
-            <div class="row">
-                <div class="flex-column flex-lg-row d-flex justify-content-start justify-content-lg-center align-items-start align-items-lg-center w-100 text-center">
-                    <div class="w-100 mx-2 py-5 px-4 text-center">
-                        <div class="icon-circle">
-                            <i class="fal fa-clock text-muted opacity-50"></i>
-                        </div>
-                        <div class="d-block">
-                            <h5 class="font-weight-bold text-primary text-uppercase mt-4">
-                                First class support
-                            </h5>
-                            All our customers get a response within 24 hours (usually less) directly from our product developers.
-                        </div>
-                    </div>
-                    <div class="w-100 mx-2 py-5 px-4 text-center">
-                        <div class="icon-circle">
-                            <i class="fal fa-angle-double-up text-muted opacity-50"></i>
-                        </div>
-                        <div class="d-block">
-                            <h5 class="font-weight-bold text-primary text-uppercase mt-4">
-                                Expertise
-                            </h5>
-                            Established in 2001 we've been in business developing community & support software for over 19 years.
-                        </div>
-                    </div>
-                    <div class="w-100 mx-2 py-5 px-4 text-center">
-                        <div class="icon-circle">
-                            <i class="fal fa-heart text-muted opacity-50"></i>
-                        </div>
-                        <div class="d-block">
-                            <h5 class="font-weight-bold text-primary text-uppercase mt-4">
-                                20,000 Customers
-                            </h5>
-                            We strive to support those that support us.
-                            Over the years we've helped over 20,000 happy customers.
-                        </div>
-                    </div>
-                    <div class="w-100 mx-2 py-5 px-4 text-center">
-                        <div class="icon-circle">
-                            <i class="fal fa-chart-bar text-muted opacity-50"></i>
-                        </div>
-                        <div class="d-block">
-                            <h5 class="font-weight-bold text-primary text-uppercase mt-4">
-                                Proven Results
-                            </h5>
-                            We've helped thousands of companies deliver community & support experiences.
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>*@
-
-<!-- Call to action -->
-<section class="page bg-primary-25">
-    <div class="container">
-        <div class="p-5 bg-white text-center">
-            <div class="livicon-evo d-inline-block" data-options="
-                        name: envelope-put;
-                        repeat: loop;
-                        style: linesAlt;
-                        size: 120px;
-                        strokeWidth: 4px;
-                        strokeColor: #007bff;
-                        strokeColorAlt: #F9B32F;
-                        eventType: none;">
-            </div>
-            <h1 class="font-weight-bold text-primary">
-                Questions? We would love to help
-            </h1>
-            <a class="btn btn-primary btn-lg mt-4" asp-route-area="Plato.Site" asp-route-controller="Company" asp-route-action="Contact" data-provide="loader-spy">
-                Contact Us
-            </a>
-
-        </div>
+<!-- Questions -->
+<section class="page">
+    <div class="container mt-0 text-center">
+        <h1 class="font-weight-bold text-primary text-uppercase">
+            Questions
+        </h1>
+        <h2 class="font-weight-light my-4">
+            Call us on <a href="tel:441565832827" class="font-weight-bold">+44 (0) 1565 832 827</a> to get your questions answered right away
+        </h2>
+        <a class="btn btn-primary btn-lg" asp-route-area="Plato.Site" asp-route-controller="Company" asp-route-action="Contact" data-provide="loader-spy">
+            <i class="fal fa-envelope mr-2"></i>Send us a message
+        </a>
     </div>
 </section>
