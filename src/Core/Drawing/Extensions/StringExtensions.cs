@@ -110,7 +110,7 @@ namespace PlatoCore.Drawing.Extensions
             var sb = new StringBuilder();
             sb
                 .Append(r)
-                .Append(b)
+                .Append(g)
                 .Append(b);
 
             // Validate again
