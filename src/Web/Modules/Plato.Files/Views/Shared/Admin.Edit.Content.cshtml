@@ -5,7 +5,9 @@
     var fileId = Convert.ToString(Model.File?.Id ?? 0);
     var availableSpace = Model.Options.AvailableSpace - Model.Info.Length;
     if (availableSpace < 0)
+    {
         availableSpace = 0;
+    }
     var maxFileSize = Model.Options.MaxFileSize;
 }
 
