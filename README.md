@@ -33,11 +33,15 @@ You can see below the main modules offered with Plato. You can custom fit Plato 
 
 Plato.Discuss adds a fully featured user community to Plato.
 
+https://plato.instantasp.co.uk/features/discuss
+
 ![discuss.png](https://plato.instantasp.co.uk/plato.site/content/images/discuss.png)
 
 ### Docs
 
 Plato.Docs adds beautiful product documentation all written in Markdown to Plato.
+
+https://plato.instantasp.co.uk/features/docs
 
 ![docs.png](https://plato.instantasp.co.uk/plato.site/content/images/docs.png)
 
@@ -45,11 +49,15 @@ Plato.Docs adds beautiful product documentation all written in Markdown to Plato
 
 Plato.Articles adds a searchable knowledgebase to Plato. 
 
+https://plato.instantasp.co.uk/features/articles
+
 ![articles.png](https://plato.instantasp.co.uk/plato.site/content/images/articles.png)
 
 ### Questions
 
 Plato.Questions adds public or private Q&A to Plato.
+
+https://plato.instantasp.co.uk/features/questions
 
 ![questions.png](https://plato.instantasp.co.uk/plato.site/content/images/questions.png)
 
@@ -57,11 +65,15 @@ Plato.Questions adds public or private Q&A to Plato.
 
 Plato.Ideas adds public or private ideation to Plato.
 
+https://plato.instantasp.co.uk/features/ideas
+
 ![ideas.png](https://plato.instantasp.co.uk/plato.site/content/images/ideas.png)
 
 ### Issues
 
 Plato.Issues adds public or private issues tracking to Plato.
+
+https://plato.instantasp.co.uk/features/issues
 
 ![issues.png](https://plato.instantasp.co.uk/plato.site/content/images/issues.png)
 
@@ -123,13 +135,15 @@ We strive to ensure Plato is as secure as possible. Plato is open source softwar
 
 # License
 
-Plato is **100% free** and **open source** software licensed under the GNU General Public License 3.0. Before using Plato please review [the GPL 3.0 license](https://github.com/InstantASP/plato/blob/master/COPYING) and ensure your happy with the terms and conditions defined by the license.
+Plato is **100% free** and **open source** software licensed under the GNU General Public License 3.0. Before using thhe community edition of Plato please review [the GPL 3.0 license](https://github.com/InstantASP/plato/blob/master/COPYING) and ensure your happy with the terms and conditions defined by the license.
 
-# Commercial Use
+# We need your support
 
-Whilst Plato is free & open source software if your using Plato for commercial purposes please consider supporting the ongoing development of Plato by purchasing a [paid license](https://plato.instantasp.co.uk/pricing). 
+Whilst Plato is free & open source software if your using Plato for commercial purposes please consider supporting the ongoing development of Plato by purchasing a [commercial license](https://plato.instantasp.co.uk/pricing). 
 
-Buying a license helps us keep Plato free & open source for those less fortunate and ensures you receive the latest updates & guaranteed priority technical support. We sincerely appreciate you using Plato and will go above and beyond to support those that support us.
+Buying a commercial license for Plato helps us keep Plato free & open source for those less fortunate and ensures you receive the latest updates & guaranteed priority technical support from our team.
+
+We will go above and beyond to help those that help us keep Plato free & open source for others.
 
 ---
 
