@@ -11,9 +11,20 @@ namespace PlatoCore.Abstractions.Extensions
         public static string ToFriendlyFileSize(this long value, int decimalPlaces = 1)
         {
 
-            if (decimalPlaces < 0) { throw new ArgumentOutOfRangeException("decimalPlaces"); }
-            if (value < 0) { return "-" + ((long)-value).ToFriendlyFileSize(); }
-            if (value == 0) { return string.Format("{0:n" + decimalPlaces + "} bytes", 0); }
+            if (decimalPlaces < 0)
+            {
+                throw new ArgumentOutOfRangeException("decimalPlaces");
+            }
+
+            if (value < 0)
+            {
+                return "-" + ((long)-value).ToFriendlyFileSize();
+            }
+
+            if (value == 0)
+            {
+                return string.Format("{0:n" + decimalPlaces + "} bytes", 0);
+            }
 
             // mag is 0 for bytes, 1 for KB, 2, for MB, etc.
             var mag = (int)Math.Log(value, 1024);
