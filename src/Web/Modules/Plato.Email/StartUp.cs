@@ -37,6 +37,7 @@ namespace Plato.Email
 
             // Repositories
             services.AddScoped<IEmailRepository<EmailMessage>, EmailRepository>();
+            services.AddScoped<IEmailAttachmentRepository<EmailAttachment>, EmailAttachmentRepository>();
 
             // Stores
             services.AddScoped<IEmailSettingsStore<EmailSettings>, EmailSettingsStore>();

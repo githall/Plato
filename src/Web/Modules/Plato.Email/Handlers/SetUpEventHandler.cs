@@ -84,6 +84,77 @@ namespace Plato.Email.Handlers
                 }
         };
 
+        // Email attachments table
+        private readonly SchemaTable _emailAttachments = new SchemaTable()
+        {
+            Name = "EmailAttachments",
+            Columns = new List<SchemaColumn>()
+                {
+                    new SchemaColumn()
+                    {
+                        PrimaryKey = true,
+                        Name = "Id",
+                        DbType = DbType.Int32
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "EmailId",
+                        DbType = DbType.Int32
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "[Name]",
+                        Length = "255",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "Alias",
+                        Length = "255",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "Extension",
+                        Length = "16",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "ContentBlob",
+                        Nullable = true,
+                        DbType = DbType.Binary
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "ContentType",
+                        Length = "75",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "ContentLength",
+                        DbType = DbType.Int64
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "ContentCheckSum",
+                        Length = "32",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "CreatedUserId",
+                        DbType = DbType.Int32
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "CreatedDate",
+                        DbType = DbType.DateTimeOffset
+                    }
+                }
+        };
+
         private readonly ISchemaBuilder _schemaBuilder;
         private readonly ISchemaManager _schemaManager;
 
@@ -142,6 +213,27 @@ namespace Plato.Email.Handlers
                 .CreateDefaultProcedures(_emails)
                 .CreateProcedure(new SchemaProcedure("SelectEmailsPaged", StoredProcedureType.SelectPaged)
                     .ForTable(_emails)
+                    .WithParameters(new List<SchemaColumn>()
+                    {
+                        new SchemaColumn()
+                        {
+                            Name = "Keywords",
+                            DbType = DbType.String,
+                            Length = "255"
+                        }
+                    }));
+
+        }
+
+        void EmailAttachments(ISchemaBuilder builder)
+        {
+
+            builder.TableBuilder.CreateTable(_emailAttachments);
+
+            builder.ProcedureBuilder
+                .CreateDefaultProcedures(_emailAttachments)
+                .CreateProcedure(new SchemaProcedure("SelectEmailAttachmentsPaged", StoredProcedureType.SelectPaged)
+                    .ForTable(_emailAttachments)
                     .WithParameters(new List<SchemaColumn>()
                     {
                         new SchemaColumn()
