@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -133,6 +134,40 @@ namespace Plato.Email.Repositories
             }
 
             return file;
+        }
+
+        public async Task<IEnumerable<EmailAttachment>> SelectByEmailIdAsync(int emailId)
+        {
+
+            IList<EmailAttachment> output = null;
+            using (var context = _dbContext)
+            {
+                output = await context.ExecuteReaderAsync<IList<EmailAttachment>>(
+                    CommandType.StoredProcedure,
+                    "SelectEmailAttachmentsByEmailId",
+                    async reader =>
+                    {
+                        if ((reader != null) && (reader.HasRows))
+                        {
+                            output = new List<EmailAttachment>();
+                            while (await reader.ReadAsync())
+                            {
+                                var entity = new EmailAttachment();
+                                entity.PopulateModel(reader);
+                                output.Add(entity);
+                            }
+                        }
+
+                        return output;
+                    }, new[]
+                    {
+                        new DbParam("EmailId", DbType.Int32, emailId)
+                    });
+
+            }
+
+            return output;
+
         }
 
         #endregion

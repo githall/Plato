@@ -2,7 +2,6 @@
 using System.Data;
 using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Models.Users;
 
 namespace PlatoCore.Emails.Abstractions
 {

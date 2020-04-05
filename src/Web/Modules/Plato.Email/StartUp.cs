@@ -20,6 +20,10 @@ using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Tasks.Abstractions;
+using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Stores;
+using PlatoCore.Stores.Abstractions.FederatedQueries;
+using PlatoCore.Data.Migrations.Abstractions;
 
 namespace Plato.Email
 {
@@ -40,6 +44,7 @@ namespace Plato.Email
             services.AddScoped<IEmailAttachmentRepository<EmailAttachment>, EmailAttachmentRepository>();
 
             // Stores
+            services.AddScoped<IEmailAttachmentStore<EmailAttachment>, EmailAttachmentStore>();
             services.AddScoped<IEmailSettingsStore<EmailSettings>, EmailSettingsStore>();
             services.AddScoped<IEmailStore<EmailMessage>, EmailStore>();
 
@@ -59,11 +64,20 @@ namespace Plato.Email
             // Email manager
             services.AddSingleton<IEmailManager, EmailManager>();
 
+            // Query adapters
+            services.AddScoped<IQueryAdapterManager<EmailAttachment>, QueryAdapterManager<EmailAttachment>>();
+
+            // Federated queries
+            services.AddScoped<IFederatedQueryManager<EmailAttachment>, FederatedQueryManager<EmailAttachment>>();
+
             // Background Tasks
             services.AddScoped<IBackgroundTaskProvider, EmailSender>();
 
             // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
+            
+            // Migrations
+            services.AddSingleton<IMigrationProvider, Migrations>();
 
         }
 

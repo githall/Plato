@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Data.Schemas.Abstractions;
-using PlatoCore.Security.Abstractions;
 
 namespace Plato.Email.Handlers
 {
@@ -178,6 +177,9 @@ namespace Plato.Email.Handlers
                 // Emails schema
                 Emails(builder);
 
+                // Email attachments schema
+                EmailAttachments(builder);
+
                 var errors = await _schemaManager.ExecuteAsync(builder.Statements);
                 foreach (var error in errors)
                 {
@@ -242,7 +244,22 @@ namespace Plato.Email.Handlers
                             DbType = DbType.String,
                             Length = "255"
                         }
-                    }));
+                    }))
+
+                // Returns all attachments for a specific email
+                .CreateProcedure(
+                    new SchemaProcedure("SelectEmailAttachmentsByEmailId",
+                            @"SELECT *
+                                FROM {prefix}_EmailAttachments WITH (nolock)                                     
+                                WHERE (
+                                   EmailId = @EmailId
+                                )")
+                        .ForTable(_emailAttachments)
+                        .WithParameter(new SchemaColumn()
+                        {
+                            Name = "EmailId",
+                            DbType = DbType.Int32
+                        }));
 
         }
 

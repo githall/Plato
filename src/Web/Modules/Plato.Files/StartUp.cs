@@ -76,7 +76,7 @@ namespace Plato.Files
             services.AddScoped<IViewProviderManager<File>, ViewProviderManager<File>>();
             services.AddScoped<IViewProvider<File>, AdminViewProvider>();
 
-            // Permissionss
+            // Permissions
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
             // Services
