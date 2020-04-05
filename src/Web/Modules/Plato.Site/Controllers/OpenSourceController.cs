@@ -5,7 +5,7 @@ using PlatoCore.Layout.ModelBinding;
 
 namespace Plato.Site.Controllers
 {
-    public class UpgradeController : Controller, IUpdateModel
+    public class OpenSourceController : Controller, IUpdateModel
     {
 
         // ---------------------

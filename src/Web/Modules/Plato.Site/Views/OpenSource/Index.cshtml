@@ -1,0 +1,71 @@
+﻿@model ContactFormViewModel
+@{
+    AddTitleSegment(T["Open Source"]);
+}
+
+<section class="page bg-light">
+    <div class="container">
+        <div class="row">
+            <div class="col-12 text-center">
+                <img alt="GitHub Octocat Logo" src="plato.site/content/images/octocat.png" class="img-md-fluid max-w-200 d-inline-block" />
+                <h1 class="text-uppercase display-4 mt-4 text-primary font-weight-bold">
+                    Giving Back
+                </h1>
+                <h2 class="font-weight-light">
+                    Get a free license for Plato to support your open source project
+                </h2>            
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="page">
+    <div class="container">
+        <div class="row">
+            <div class="col-12">
+                <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-40 align-middle mr-2" />
+                <h3 class="d-inline-block align-middle font-weight-bold text-uppercase text-primary">How it works</h3>
+                <hr />
+                <p>
+                    Plato is the only fully integrated platform designed to help software teams connect & stay engaged with users to gather feedback, provide support & deliver better software.
+                </p>
+                <p>
+                    You may not know this but Plato started life as an open source project. We love open source and want to support others working on open source projects.
+                    If you have an open source project and would like to use Plato to support your project we would be delighted to provide a free license and get you set-up with your very own Plato site.
+                </p>
+                <p class="font-weight-bold">
+                    Your project must be...
+                </p>
+                <p>
+                    <div class="pb-2 pl-1">
+                        <i class="fal fa-check text-primary mr-2"></i>
+                        Open source & generate less than $250,000 USD in annual gross revenue
+                    </div>
+                </p>
+                <p class="font-weight-bold">
+                    What's included...
+                </p>
+                <p>
+                    <div class="pb-2 pl-1">
+                        <i class="fal fa-check text-primary mr-2"></i>
+                        A free <a asp-route-controller="Pricing" asp-route-action="Index">self hosted license</a> for Plato
+                    </div>
+                    <div class="pb-2 pl-1">
+                        <i class="fal fa-check text-primary mr-2"></i>
+                        Free ongoing updates & priority support
+                    </div>
+                </p>
+                <p>
+                    All we ask in return is you mention Plato somewhere within your readme.md file or keep the copyright message shown at the bottom of each Plato page.
+                </p>
+                <p>
+                    Sound good? Use the button below to contact us and submit a link to your open source project. We'll take a look and get back to you as quickly as possible.
+                </p>
+                <p>
+                    <a asp-route-area="Plato.Site" asp-route-controller="Company" asp-route-action="Contact" class="btn btn-lg btn-primary" data-provide="loader-spy">Apply Now<i class="fal fa-arrow-right ml-1"></i></a>
+                </p>
+            </div>
+        </div>
+    </div>
+</section>
+<

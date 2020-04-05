@@ -7116,8 +7116,11 @@ $(function (win, doc, $) {
                 var event = $caller.data(dataKey).event;
                 if (event) {
                     $caller.on(event, function () {
-                        // Simply return if we have a specific target
+                        // Simply return if we have a specific target or anchor
                         if ($(this).attr("target")) {
+                            return;
+                        }
+                        if ($(this).attr("href").indexOf("#") >= 0) {
                             return;
                         }
                         // Show loader

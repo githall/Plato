@@ -5,7 +5,7 @@
 
 Welcome to the official repository for Plato.
 
-Plato is free, open source user community & customer support software built upon .NET Core. Plato offers a complete suite of fully integrated tools to help anyone provide a simple, branded support site for your users or customers.
+Plato is the only fully integrated platform designed to help software teams connect & stay engaged with users to gather feedback, provide support & deliver better software. Plato offers everything needed to provide a simple, branded support & community site for software projects. 
 
 Plato can be used to...
 
@@ -131,19 +131,13 @@ We welcome contributions and will always support and assist contributors. Before
 
 # Security
 
-We strive to ensure Plato is as secure as possible. Plato is open source software and the code can be reviewed by anyone on the internet. We are confident in the quality of our code and have nothing to hide but should you discover any vulnerabilities, attacks or room for improvement please do let us know immediately via email to [sales@instantasp.co.uk](mailto:sales@instantasp.co.uk) and we will assist as quickly as possible. 
+We strive to ensure Plato is as secure as possible. We are confident in the quality of our code and have nothing to hide but should you discover any vulnerabilities, attacks or room for improvement please do let us know immediately via email to [sales@instantasp.co.uk](mailto:sales@instantasp.co.uk) and we will assist as quickly as possible. 
 
 # License
 
-Plato is **100% free** and **open source** software licensed under the GNU General Public License 3.0. Before using thhe community edition of Plato please review [the GPL 3.0 license](https://github.com/InstantASP/plato/blob/master/COPYING) and ensure your happy with the terms and conditions defined by the license.
+Plato is a commercial product and requires a paid license for possession or use. Using Plato is subject to the terms and conditions of the Plato EULA at https://plato.instantasp.co.uk/legal/license.
 
-# We need your support
-
-Whilst Plato is free & open source software if your using Plato for commercial purposes please consider supporting the ongoing development of Plato by purchasing a [commercial license](https://plato.instantasp.co.uk/pricing). 
-
-Buying a commercial license for Plato helps us keep Plato free & open source for those less fortunate and ensures you receive the latest updates & guaranteed priority technical support from our team.
-
-We will go above and beyond to help those that help us keep Plato free & open source for others.
+To acquire a license, you can purchase one at https://plato.instantasp.co.uk/pricing. A free open source license is also available for open source projects who have less than $250,000 USD in annual gross revenue - https://plato.instantasp.co.uk/open-source
 
 ---
 
