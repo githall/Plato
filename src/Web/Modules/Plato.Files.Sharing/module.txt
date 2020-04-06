@@ -1,0 +1,19 @@
+Name: Plato Files Sharing
+Description: Share files with anyone via email within Plato.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Files
+PlatoVersion: 1.1.2
+Version: 1.0.0
+Icon: /plato.files.sharing/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.Files",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Admin",
+		Version: "1.0.0"
+	}
+]

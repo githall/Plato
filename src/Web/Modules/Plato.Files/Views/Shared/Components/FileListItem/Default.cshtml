@@ -21,7 +21,7 @@
         </a>
         <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" aria-labelledby="@dropdownId">
             <div class="min-w-200 max-h-250 overflow-auto">
-                <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="dropdown-item">
+                <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" asp-route-alias="@Model.File.Alias" class="dropdown-item">
                     @T["Edit"]
                 </a>
                 <authorize asp-permission="@Permissions.OpenFiles.Name">
@@ -53,7 +53,7 @@
         </div>
     </div>
     <div>      
-        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" class="font-weight-bold">
+        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.File.Id" asp-route-alias="@Model.File.Alias" class="font-weight-bold">
             @Model.File.Name
         </a>
     </div>

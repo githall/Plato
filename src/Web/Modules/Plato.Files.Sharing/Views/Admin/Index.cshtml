@@ -1,0 +1,100 @@
+﻿@model ShareFileViewModel
+@{
+    Layout = null;
+}
+
+<form asp-route-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+
+    <div class="modal-header pb-0">
+        <nav style="margin-bottom: -1px;">
+            <div class="nav nav-tabs" id="nav-tab" role="tablist">
+                <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
+                    @T["Share as Attachment"]
+                </a>
+                <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
+                    @T["Share as Link"]
+                </a>
+            </div>
+        </nav>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="fal fa-times"></i>
+            </span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+
+        <input type="hidden" asp-for="@Model.FileId" />
+
+        <div class="tab-content" id="nav-tabContent">
+            <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                <fieldset>
+                    <div class="form-group mt-2" asp-validation-class-for="AttachmentEmail">
+                        <label asp-for="@Model.AttachmentEmail">
+                            <span asp-validation-for="@Model.AttachmentEmail" class="text-danger"></span>
+                            <span class="text-muted">
+                                @T["Send this file as an attachment to the email address below..."]
+                            </span>
+                        </label>
+                        <input placeholder="email@address.com" asp-for="@Model.AttachmentEmail" class="form-control" autofocus />
+                    </div>
+                </fieldset>
+
+            </div>
+            <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+
+                <fieldset>
+                    <div class="form-group mt-2" asp-validation-class-for="LinkEmail">
+                        <label asp-for="@Model.LinkEmail">
+                            <span asp-validation-for="@Model.LinkEmail" class="text-danger"></span>
+                            <span class="text-muted">
+                                @T["Share a link to this file with the email address below..."]
+                            </span>
+                        </label>
+                        <input placeholder="email@address.com" asp-for="@Model.LinkEmail" class="form-control" autofocus />
+                    </div>
+                </fieldset>
+
+            </div>
+
+            <fieldset>
+                <button type="submit" class="btn btn-primary">
+                    @T["Share File"]
+                </button>
+            </fieldset>
+
+
+        </div>
+
+
+    </div>
+
+</form>
+
+<script>
+    $(function (win, doc, $) {
+        $(doc).ready(function () {
+
+            // Plato global
+            var app = win.$.Plato;
+            if (app == null) {
+                throw Error("$.Plato has not been registered!");
+            }
+
+            // modal show
+            $("#shareDialog").on('shown.bs.modal',
+                function (e) {
+
+                    $('#nav-tab a').on('click', function (e) {
+                        e.preventDefault()
+                        $(this).tab('show')
+                    });
+
+                });
+
+        });
+
+    }(window, document, jQuery));
+</script>

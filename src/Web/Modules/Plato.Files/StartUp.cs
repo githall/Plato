@@ -108,6 +108,14 @@ namespace Plato.Files
                 defaults: new { controller = "Admin", action = "Index" }
             );
 
+            // Edit File
+            routes.MapAreaRoute(
+                name: "FilesEdit",
+                areaName: "Plato.Files",
+                template: "admin/files/d/{id:int}/{alias?}",
+                defaults: new { controller = "Admin", action = "Edit" }
+            );
+
             // Settings
             routes.MapAreaRoute(
                 name: "FilesSettings",
