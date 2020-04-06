@@ -15,9 +15,9 @@ namespace Plato.Files.Sharing.Controllers
 {
     public class AdminController : Controller, IUpdateModel
     {
-
-        private readonly IFileStore<File> _entityStore;
+        
         private readonly IContextFacade _contextFacade;
+        private readonly IFileStore<File> _fileStore;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -27,13 +27,13 @@ namespace Plato.Files.Sharing.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-            IFileStore<File> entityStore,
             IContextFacade contextFacade,
+            IFileStore<File> fileStore,            
             IAlerter alerter)
         {
-
-            _entityStore = entityStore;
+            
             _contextFacade = contextFacade;
+            _fileStore = fileStore;
             _alerter = alerter;
 
             T = htmlLocalizer;
@@ -52,43 +52,21 @@ namespace Plato.Files.Sharing.Controllers
                 throw new ArgumentOutOfRangeException(nameof(id));
             }
 
-            // Build route values
-            RouteValueDictionary routeValues = null;
+            // Get file
+            var file = await _fileStore.GetByIdAsync(id);
 
-            //// Append offset
-            //if (opts.ReplyId > 0)
-            //{
-            //    routeValues = new RouteValueDictionary()
-            //    {
-            //        ["area"] = "Plato.Docs",
-            //        ["controller"] = "Home",
-            //        ["action"] = "Reply",
-            //        ["opts.id"] = entity.Id,
-            //        ["opts.alias"] = entity.Alias,
-            //        ["opts.replyId"] = opts.ReplyId
-            //    };
-            //}
-            //else
-            //{
-            //    routeValues = new RouteValueDictionary()
-            //    {
-            //        ["area"] = "Plato.Docs",
-            //        ["controller"] = "Home",
-            //        ["action"] = "Display",
-            //        ["opts.id"] = entity.Id,
-            //        ["opts.alias"] = entity.Alias
-            //    };
-            //}
-
-            // Build view model
-            var baseUrl = await _contextFacade.GetBaseUrlAsync();
-            var viewModel = new ShareFileViewModel
+            // Ensure the file exists
+            if (file == null)
             {
-                FileId = id             
-            };
+                return NotFound();
+            }
 
             // Return view
-            return View(viewModel);
+            return View(new ShareFileViewModel
+            {
+                FileId = file.Id,
+                File = file
+            });
 
         }
 
@@ -97,7 +75,7 @@ namespace Plato.Files.Sharing.Controllers
         {
 
             // Add alert
-            _alerter.Success(T["Settings Updated Successfully!"]);     
+            _alerter.Success(T["File Shared Successfully!"]);     
 
             // Redirect to offset within entity
             return Redirect(_contextFacade.GetRouteUrl(new RouteValueDictionary()

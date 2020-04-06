@@ -1,6 +1,9 @@
 ﻿@model ShareFileViewModel
 @{
     Layout = null;
+    var size = Model.File?.ContentLength.ToFriendlyFileSize() ?? "0";
+    var text = T["The file you are sharing is {0}. Please ensure the email address you are sharing this file with can receive emails of this size. If your not sure consider sharing this file as a link."];
+    var msg = text.Value.Replace("{0}", size);
 }
 
 <form asp-route-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
@@ -9,10 +12,10 @@
         <nav style="margin-bottom: -1px;">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
-                    @T["Share as Attachment"]
+                    @T["Share Attachment"]
                 </a>
                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
-                    @T["Share as Link"]
+                    @T["Share Link"]
                 </a>
             </div>
         </nav>
@@ -24,27 +27,28 @@
     </div>
 
     <div class="modal-body">
-
         <input type="hidden" asp-for="@Model.FileId" />
-
         <div class="tab-content" id="nav-tabContent">
             <div class="tab-pane fade show active" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
-
                 <fieldset>
                     <div class="form-group mt-2" asp-validation-class-for="AttachmentEmail">
                         <label asp-for="@Model.AttachmentEmail">
                             <span asp-validation-for="@Model.AttachmentEmail" class="text-danger"></span>
                             <span class="text-muted">
-                                @T["Send this file as an attachment to the email address below..."]
+                                @T["Share this file as an email attachment with the email address below..."]
                             </span>
                         </label>
                         <input placeholder="email@address.com" asp-for="@Model.AttachmentEmail" class="form-control" autofocus />
+                        @if (Model.File.ContentLength >= 5242880) // above 5mb
+                        {
+                            <div class="mt-2">
+                                <span class="text-danger text-uppercase font-weight-bold">@T["Warning"]</span> <span class="text-muted">@msg</span>
+                            </div>
+                        }
                     </div>
                 </fieldset>
-
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
-
                 <fieldset>
                     <div class="form-group mt-2" asp-validation-class-for="LinkEmail">
                         <label asp-for="@Model.LinkEmail">
@@ -56,19 +60,15 @@
                         <input placeholder="email@address.com" asp-for="@Model.LinkEmail" class="form-control" autofocus />
                     </div>
                 </fieldset>
-
             </div>
-
+        </div>
+        <div>
             <fieldset>
                 <button type="submit" class="btn btn-primary">
                     @T["Share File"]
                 </button>
             </fieldset>
-
-
         </div>
-
-
     </div>
 
 </form>

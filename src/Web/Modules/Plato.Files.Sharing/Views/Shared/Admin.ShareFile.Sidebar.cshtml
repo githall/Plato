@@ -1,7 +1,7 @@
 ﻿@model ShareFileDialogViewModel
 
-<card class="card card-body-flush">
-    <card-body class="card-body"> 
+<card>
+    <card-body> 
         <a asp-route-area="Plato.Files.Sharing" asp-route-controller="Admin" asp-route-action="Index" asp-route-id="@Model.File.Id" data-provide="dialog" data-dialog-id="shareDialog" data-dialog-css="modal-dialog modal-lg" class="btn btn-block btn-primary">
             <i class="fal fa-share-alt mr-2"></i>Share File
         </a>      
