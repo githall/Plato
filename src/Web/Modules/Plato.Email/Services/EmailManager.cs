@@ -15,6 +15,7 @@ namespace PlatoCore.Emails.Abstractions
     public class EmailManager : IEmailManager
     {
 
+        private readonly IEmailAttachmentStore<EmailAttachment> _emailAttachmentStore;
         private readonly IEmailStore<EmailMessage> _emailStore;
         private readonly ILogger<EmailManager> _logger;
         private readonly SmtpSettings _smtpSettings;
@@ -22,22 +23,24 @@ namespace PlatoCore.Emails.Abstractions
         private readonly IBroker _broker;
 
         public EmailManager(
+             IEmailAttachmentStore<EmailAttachment> emailAttachmentStore,
             IEmailStore<EmailMessage> emailStore,
             IOptions<SmtpSettings> options,
             ILogger<EmailManager> logger,
             ISmtpService smtpService,
             IBroker broker)
         {
-            _emailStore = emailStore;
+            _emailAttachmentStore = emailAttachmentStore;
+            _smtpSettings = options.Value;            
             _smtpService = smtpService;
-            _smtpSettings = options.Value;
+            _emailStore = emailStore;
             _logger = logger;
             _broker = broker;
         }
-        
+
         public async Task<ICommandResult<EmailMessage>> SaveAsync(MailMessage message)
         {
-            
+
             var result = new CommandResult<EmailMessage>();
 
             // Ensure we've configured required email settings
@@ -71,7 +74,15 @@ namespace PlatoCore.Emails.Abstractions
                 {
                     message = await handler.Invoke(new Message<MailMessage>(message, this));
                 }
+
+                // Add email attachments
+                foreach (var attachment in message.Attachments)
+                {
+                    await _emailAttachmentStore.CreateAsync(attachment.ToEmailAttachment());
+                }
+
                 return result.Success(email);
+
             }
 
             return result.Failed($"An unknown error occurred whilst attempting to queue an email message");
@@ -80,6 +91,7 @@ namespace PlatoCore.Emails.Abstractions
 
         public async Task<ICommandResult<MailMessage>> SendAsync(MailMessage message)
         {
+
             var result = new SmtpResult();
 
             // Ensure we've configured required email settings

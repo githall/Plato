@@ -76,7 +76,7 @@ namespace Plato.Files
             services.AddScoped<IViewProviderManager<File>, ViewProviderManager<File>>();
             services.AddScoped<IViewProvider<File>, AdminViewProvider>();
 
-            // Permissionss
+            // Permissions
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
             // Services
@@ -106,6 +106,14 @@ namespace Plato.Files
                 areaName: "Plato.Files",
                 template: "admin/files/{pager.offset:int?}",
                 defaults: new { controller = "Admin", action = "Index" }
+            );
+
+            // Edit File
+            routes.MapAreaRoute(
+                name: "FilesEdit",
+                areaName: "Plato.Files",
+                template: "admin/files/d/{id:int}/{alias?}",
+                defaults: new { controller = "Admin", action = "Edit" }
             );
 
             // Settings

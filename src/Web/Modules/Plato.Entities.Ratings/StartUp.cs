@@ -45,8 +45,7 @@ namespace Plato.Entities.Ratings
             services.AddScoped<IEntityRatingsManager<EntityRating>, EntityRatingsManager>();
             
             // Register client resources
-            services.AddScoped<IAssetProvider, AssetProvider>();
-            
+            services.AddScoped<IAssetProvider, AssetProvider>();            
 
         }
 

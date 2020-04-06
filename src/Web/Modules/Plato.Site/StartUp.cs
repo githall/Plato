@@ -161,10 +161,10 @@ namespace Plato.Site
             );
 
             routes.MapAreaRoute(
-                name: "PlatoSitePricingFullyManaged",
+                name: "PlatoSitePricingOpenSource",
                 areaName: "Plato.Site",
-                template: "pricing/managed",
-                defaults: new { controller = "Pricing", action = "FullyManaged" }
+                template: "open-source",
+                defaults: new { controller = "OpenSource", action = "Index" }
             );
 
 

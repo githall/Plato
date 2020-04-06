@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -19,7 +20,8 @@ namespace Plato.Email.Tasks
 
         public int IntervalInSeconds { get; private set; }
 
-        private readonly IEmailStore<EmailMessage> _emailStore;
+        private readonly IEmailAttachmentStore<EmailAttachment> _emailAttachmentStore;
+        private readonly IEmailStore<EmailMessage> _emailStore;        
         private readonly ILogger<EmailSender> _logger;
         private readonly ICacheManager _cacheManager;
         private readonly IEmailManager _emailManager;
@@ -28,6 +30,7 @@ namespace Plato.Email.Tasks
         private readonly SmtpSettings _smtpSettings;
 
         public EmailSender(
+             IEmailAttachmentStore<EmailAttachment> emailAttachmentStore,
             IEmailStore<EmailMessage> emailStore,
             IOptions<SmtpSettings> smtpSettings,
             ILogger<EmailSender> logger,
@@ -36,6 +39,7 @@ namespace Plato.Email.Tasks
             IDbHelper dbHelper)
         {
 
+            _emailAttachmentStore = emailAttachmentStore;
             _smtpSettings = smtpSettings.Value;
             _cacheManager = cacheManager;
             _emailManager = emailManager;
@@ -66,6 +70,15 @@ namespace Plato.Email.Tasks
                 return;
             }
 
+            // Get all attachments for emails
+            var attachments = await _emailAttachmentStore.QueryAsync()
+                .Take(int.MaxValue, false)
+                .Select<EmailAttachmentQueryParams>(q =>
+                {
+                    q.EmailId.IsIn(emails.Select(e => e.Id).ToArray());
+                })
+            .ToList();
+
             // Holds results to increment or delete emails
             var toDelete = new List<int>();
             var toIncrement = new List<int>();
@@ -74,8 +87,17 @@ namespace Plato.Email.Tasks
             foreach (var email in emails)
             {
 
+                // Build mail message
+                var mailMessage = email.ToMailMessage();
+
+                // Add attachments to the email
+                foreach (var emailAttacment in attachments?.Data.Where(e => e.EmailId == email.Id))
+                {
+                    mailMessage.Attachments.Add(emailAttacment.ToAttachment());
+                }            
+
                 // Send the email
-                var result = await _emailManager.SendAsync(email.ToMailMessage());
+                var result = await _emailManager.SendAsync(mailMessage);
 
                 // Success?
                 if (result.Succeeded)

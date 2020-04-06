@@ -13,20 +13,12 @@
             </h1>
             <hr class="divider border-primary my-4" />
             <h3 class="font-weight-light">
-                Plato brings your teams & users together to evolve & support your software projects.
+                Plato brings users & teams together to help evolve & support software projects.
             </h3>
             <div class="mt-4">
-                <a class="btn btn-primary btn-lg mr-2" asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Index" data-provide="loader-spy">
-                    Learn More
-                </a>
-                <div class="btn-group github-button" role="group" aria-label="GitHub button">
-                    <a class="btn btn-secondary btn-lg" href="https://github.com/InstantASP/plato" target="_blank" title="Plato on GitHub" data-provide="loader-spy">
-                        <i class="fab fa-github"></i> Star
-                    </a>
-                    <a class="btn btn-secondary btn-lg star-count" href="https://github.com/InstantASP/plato/stargazers" target="_blank" title="Stars" data-provide="loader-spy">
-                        ---
-                    </a>
-                </div>
+                <a class="btn btn-primary btn-lg" asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Index" data-provide="loader-spy">
+                    Learn More <i class="fal fa-arrow-right"></i>
+                </a>            
             </div>
         </div>
     </div>
@@ -82,7 +74,7 @@
     </div>
 </section>
 
-<!-- For Community -->
+<!-- For Open Source -->
 <section class="page">
     <div class="container">
         <div class="py-5">
@@ -90,15 +82,14 @@
                 <div class="col-12 text-center text-lg-left ">
                     <img alt="GitHub Octocat Logo" src="plato.site/content/images/octocat.png" class="img-md-fluid float-none float-lg-right mx-md-auto max-w-300 d-inline-block ml-lg-3 mb-4 mb-lg-0" />
                     <h1 class="text-uppercase text-primary font-weight-bold">
-                        For Community
+                        Open Source
                     </h1>
                     <hr class="divider divider-left primary my-4" />
                     <h3 class="font-weight-light">
-                        Our community edition of Plato is 100% free and open source licensed under a GNU General Public License. Download or contribute to improve the project on GitHub.
+                        We love open source and want to support those working on open source. If you have an open source project and would like to use Plato learn how to apply below.
                     </h3>
-                    <a class="btn btn-primary btn-lg mt-4" target="_blank" href="https://github.com/InstantASP/plato" data-provide="loader-spy">
-                        <i class="fab fa-github"></i>
-                        Plato on GitHub
+                    <a class="btn btn-primary btn-lg mt-4" asp-route-controller="OpenSource" asp-route-action="Index" data-provide="loader-spy">    
+                        Learn More<i class="fal fa-arrow-right ml-1"></i>
                     </a>
                 </div>
             </div>
@@ -114,28 +105,20 @@
                 <div class="col-12 text-center text-lg-left ">
                     <img alt="Plato Logo" src="plato.site/content/images/logo.png" class="img-md-fluid float-none float-lg-right mx-md-auto max-w-300 d-inline-block ml-lg-3 mb-4 mb-lg-0" />
                     <h1 class="text-uppercase text-primary font-weight-bold">
-                        For Business
+                        Live Demo
                     </h1>
                     <hr class="divider divider-left primary my-4" />
                     <h3 class="font-weight-light">
-                        Our commercial license is ideal for organizations who wish to use Plato within a commercial context and require the latest updates & guaranteed technical support.
+                        Our live demo provides access to an administrator account so you can fully explore Plato. Should you have questions whilst exploring <a asp-route-area="Plato.Site" asp-route-controller="Company" asp-route-action="Contact">we would love to help</a>
                     </h3>
-                    <a class="btn btn-primary btn-lg mt-4" asp-route-area="Plato.Site" asp-route-controller=Pricing asp-route-action="Index" data-provide="loader-spy">
-                        <i class="fal fa-shopping-cart"></i> See Pricing
+                    <a class="btn btn-primary btn-lg mt-4" href="@platoSiteOptions.DemoUrl" target="_blank" data-provide="loader-spy">
+                        Launch Demo<i class="fal fa-external-link ml-1"></i>
                     </a>
                 </div>
             </div>
         </div>
     </div>
 </section>
-
-<!-- Explore The Demo -->
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
-    @await DisplayAsync(new View("SiteExploreDemo", new
-    {
-        sticky = false
-    }))
-</cache>
 
 <!-- Some of our customers -->
 <section class="page bg-light">

@@ -6,7 +6,7 @@ using PlatoCore.Abstractions;
 
 namespace PlatoCore.Emails.Abstractions
 {
-    public class EmailMessage : IDbModel<EmailMessage>
+    public class EmailMessage : IDbModel
     {
         
         public int Id { get; set; }
