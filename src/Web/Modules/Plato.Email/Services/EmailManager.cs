@@ -78,7 +78,12 @@ namespace PlatoCore.Emails.Abstractions
                 // Add email attachments
                 foreach (var attachment in message.Attachments)
                 {
-                    await _emailAttachmentStore.CreateAsync(attachment.ToEmailAttachment());
+
+                    var emailAttachhment = attachment.ToEmailAttachment();
+                    emailAttachhment.EmailId = email.Id;
+
+                    await _emailAttachmentStore.CreateAsync(emailAttachhment);
+
                 }
 
                 return result.Success(email);

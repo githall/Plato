@@ -6,9 +6,8 @@ namespace PlatoCore.Emails.Abstractions.Extensions
     public static class EmailAttachmentExtensions
     {
         public static Attachment ToAttachment(this EmailAttachment attachment)
-        {
-            using var stream = new MemoryStream(attachment.ContentBlob);            
-            return new Attachment(stream, attachment.Name, attachment.ContentType);
+        {     
+            return new Attachment(new MemoryStream(attachment.ContentBlob), attachment.Name, attachment.ContentType);
         }
 
     }

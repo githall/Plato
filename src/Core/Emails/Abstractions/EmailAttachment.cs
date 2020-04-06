@@ -27,7 +27,6 @@ namespace PlatoCore.Emails.Abstractions
   
         public string ContentCheckSum { get; set; }
 
-        public string ModuleId { get; private set; }
 
         public int CreatedUserId { get; set; }
 
@@ -62,13 +61,10 @@ namespace PlatoCore.Emails.Abstractions
 
             if (dr.ColumnIsNotNull("ContentCheckSum"))
                 ContentCheckSum = Convert.ToString(dr["ContentCheckSum"]);
-         
-            if (dr.ColumnIsNotNull("ModuleId"))
-                ModuleId = Convert.ToString(dr["ModuleId"]);
 
             if (dr.ColumnIsNotNull("CreatedUserId"))
                 CreatedUserId = Convert.ToInt32(dr["CreatedUserId"]);
-     
+
             if (dr.ColumnIsNotNull("CreatedDate"))
                 CreatedDate = (DateTimeOffset)dr["CreatedDate"];
 

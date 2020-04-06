@@ -8,8 +8,9 @@ namespace Plato.Files.Extensions
 
         public static Attachment ToAttachment(this File file)
         {
-            using var stream = new System.IO.MemoryStream(file.ContentBlob);
-            return new Attachment(stream, file.Name, file.ContentType);
+            return new Attachment(new System.IO.MemoryStream(file.ContentBlob), file.Name, file.ContentType);
         }
+
     }
+
 }
