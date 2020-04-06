@@ -47,6 +47,11 @@
                         }
                     </div>
                 </fieldset>
+                <fieldset>
+                    <button asp-route-action="ShareFileAttachment" type="submit" class="btn btn-primary">
+                        @T["Share File"]
+                    </button>
+                </fieldset>
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                 <fieldset>
@@ -60,15 +65,14 @@
                         <input placeholder="email@address.com" asp-for="@Model.LinkEmail" class="form-control" autofocus />
                     </div>
                 </fieldset>
+                <fieldset>
+                    <button asp-route-action="ShareFileLink" type="submit" class="btn btn-primary">
+                        @T["Share File"]
+                    </button>
+                </fieldset>
             </div>
         </div>
-        <div>
-            <fieldset>
-                <button type="submit" class="btn btn-primary">
-                    @T["Share File"]
-                </button>
-            </fieldset>
-        </div>
+    
     </div>
 
 </form>

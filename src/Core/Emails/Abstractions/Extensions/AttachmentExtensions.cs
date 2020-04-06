@@ -31,13 +31,15 @@ namespace PlatoCore.Emails.Abstractions.Extensions
             }
 
             var bytes = attachment.ContentStream.ToByteArray();
+            var md5 = bytes?.ToMD5().ToHex() ?? string.Empty;
 
             return new EmailAttachment()
             {
                 Name = attachment.Name,
                 ContentBlob = bytes,
                 ContentLength = bytes.Length,
-                ContentType = attachment.ContentType.ToString()
+                ContentType = attachment.ContentType.ToString(),
+                ContentCheckSum = md5
             };
 
         }

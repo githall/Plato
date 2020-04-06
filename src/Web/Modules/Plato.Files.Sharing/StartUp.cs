@@ -1,4 +1,7 @@
-﻿using Microsoft.Extensions.DependencyInjection;
+﻿using System;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.AspNetCore.Builder;
+using Microsoft.AspNetCore.Routing;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
@@ -7,11 +10,10 @@ using Plato.Files.Sharing.ViewProviders;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Files.Models;
 using Plato.Files.Sharing.Handlers;
-using Plato.Files.Sharing.Assets;
-using PlatoCore.Assets.Abstractions;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using System;
+using Plato.Files.Sharing.Repositories;
+using Plato.Files.Sharing.Models;
+using Plato.Files.Sharing.Stores;
+using Plato.Files.Sharing.Services;
 
 namespace Plato.Files.Sharing
 {
@@ -30,13 +32,17 @@ namespace Plato.Files.Sharing
             // Feature installation event handler
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
-            // Register client assets
-            services.AddScoped<IAssetProvider, AssetProvider>();
+            // Data access
+            services.AddScoped<IFileInviteRepository<FileInvite>, FileInviteRepository>();
+            services.AddScoped<IFileInviteStore<FileInvite>, FileInviteStore>();
 
             // View providers     
             services.AddScoped<IViewProviderManager<File>, ViewProviderManager<File>>();
             services.AddScoped<IViewProvider<File>, AdminViewProvider>();
-       
+
+            // Services
+            services.AddScoped<IEmailFileInviteService, EmailFileInviteService>();
+
         }
 
         public override void Configure(

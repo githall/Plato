@@ -1,0 +1,13 @@
+{
+  "Emails": [
+    {
+      "Id": "ShareFileAttachment",
+      "To": "",
+      "Cc": "",
+      "Bcc": "",
+      "From": "",
+      "Subject": "[SiteName] - {0} has shared a file with you",
+      "Message": "Hi There,\n\n{0} has shared a file with you. Please find the file attached to this email.\n\n[SiteName]\n[SiteUrl]"
+    }
+  ]
+}
