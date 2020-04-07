@@ -115,7 +115,7 @@ namespace Plato.Email.Repositories
             {
                 file = await context.ExecuteReaderAsync<EmailAttachment>(
                     CommandType.StoredProcedure,
-                    "SelectEmailAttacmentById",
+                    "SelectEmailAttachmentById",
                     async reader =>
                     {
                         if ((reader != null) && reader.HasRows)

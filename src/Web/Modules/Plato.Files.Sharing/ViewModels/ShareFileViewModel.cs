@@ -1,4 +1,5 @@
 ﻿using Plato.Files.Models;
+using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Files.Sharing.ViewModels
 {
@@ -8,6 +9,7 @@ namespace Plato.Files.Sharing.ViewModels
 
         public File File { get; set; }
 
+        [Required]
         public int FileId { get; set; }
 
         public string AttachmentEmail { get; set; }

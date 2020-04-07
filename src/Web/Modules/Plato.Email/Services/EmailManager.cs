@@ -50,7 +50,7 @@ namespace PlatoCore.Emails.Abstractions
                 {
                     _logger.LogCritical($"Error sending email \"{message.Subject}\". Outbound email settings must be configured via the admin dashboard before an email can be sent. No default 'From' address had been specified!");
                 }
-                return result.Failed($"Error sending email \"{message.Subject}\". Outbound email settings must be configured via the admin dashboard  before an email can be sent. No default 'From' address had been specified!");
+                return result.Failed($"Error sending email. Outbound email settings must be configured via the admin dashboard  before an email can be sent. No default 'From' address had been specified!");
             }
 
             // Use application email if no from is specified
@@ -78,7 +78,12 @@ namespace PlatoCore.Emails.Abstractions
                 // Add email attachments
                 foreach (var attachment in message.Attachments)
                 {
-                    await _emailAttachmentStore.CreateAsync(attachment.ToEmailAttachment());
+
+                    var emailAttachhment = attachment.ToEmailAttachment();
+                    emailAttachhment.EmailId = email.Id;
+
+                    await _emailAttachmentStore.CreateAsync(emailAttachhment);
+
                 }
 
                 return result.Success(email);

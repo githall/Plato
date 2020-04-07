@@ -58,7 +58,7 @@ namespace Plato.Email.Stores
             });
 
         }
-        
+
     }
 
     #endregion
@@ -99,19 +99,15 @@ namespace Plato.Email.Stores
     public class EmailAttachmentQueryBuilder : IQueryBuilder
     {
 
-        #region "Constructor"
+        #region "Constructor"   
 
-        private readonly string _shellFeaturesTableName;       
-        private readonly string _usersTableName;
         private readonly string _attachmentTableName;
 
         private readonly EmailAttachmentQuery _query;
 
         public EmailAttachmentQueryBuilder(EmailAttachmentQuery query)
         {
-            _query = query;
-            _shellFeaturesTableName = GetTableNameWithPrefix("ShellFeatures");
-            _usersTableName = GetTableNameWithPrefix("Users");
+            _query = query;        
             _attachmentTableName = GetTableNameWithPrefix("EmailAttachments");
         }
 
@@ -123,11 +119,7 @@ namespace Plato.Email.Stores
         {
             var whereClause = BuildWhere();
             var orderBy = BuildOrderBy();
-            var sb = new StringBuilder();
-            sb.Append("DECLARE @MaxRank int;")
-            .Append(Environment.NewLine)
-            .Append(BuildFederatedResults())
-            .Append(Environment.NewLine);
+            var sb = new StringBuilder();       
             sb.Append("SELECT ")
                 .Append(BuildPopulateSelect())
                 .Append(" FROM ")
@@ -149,12 +141,8 @@ namespace Plato.Email.Stores
             if (!_query.CountTotal)
                 return string.Empty;
             var whereClause = BuildWhere();
-            var sb = new StringBuilder();
-            sb.Append("DECLARE @MaxRank int;")
-            .Append(Environment.NewLine)
-            .Append(BuildFederatedResults())
-            .Append(Environment.NewLine);
-            sb.Append("SELECT COUNT(f.Id) FROM ")
+            var sb = new StringBuilder();      
+            sb.Append("SELECT COUNT(ea.Id) FROM ")
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
@@ -230,7 +218,7 @@ namespace Plato.Email.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.Id.Operator);
-                sb.Append("(").Append(_query.Params.Id.ToSqlString("f.Id")).Append(")");
+                sb.Append("(").Append(_query.Params.Id.ToSqlString("ea.Id")).Append(")");
             }
 
             // EmailId
@@ -238,7 +226,7 @@ namespace Plato.Email.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.EmailId.Operator);
-                sb.Append("(").Append(_query.Params.Id.ToSqlString("ea.EmailId")).Append(")");
+                sb.Append("(").Append(_query.Params.EmailId.ToSqlString("ea.EmailId")).Append(")");
             }
 
             // Keywords
@@ -246,7 +234,7 @@ namespace Plato.Email.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.Keywords.Operator);
-                sb.Append(_query.Params.Keywords.ToSqlString("f.[Name]", "Keywords"));
+                sb.Append(_query.Params.Keywords.ToSqlString("ea.[Name]", "Keywords"));
             }
 
             return sb.ToString();
@@ -262,7 +250,7 @@ namespace Plato.Email.Stores
 
             return columnName.IndexOf('.') >= 0
                 ? columnName
-                : "f." + columnName;
+                : "ea." + columnName;
         }
 
         private string BuildOrderBy()
@@ -311,96 +299,24 @@ namespace Plato.Email.Stores
             switch (columnName.ToLowerInvariant())
             {
                 case "id":
-                    return "f.Id";
-                case "featureid":
-                    return "f.FeatureId";
+                    return "ea.Id";      
                 case "name":
-                    return "f.[Name]";
+                    return "ea.[Name]";
                 case "type":
-                    return "f.ContentType";
+                    return "ea.ContentType";
                 case "size":
-                    return "f.ContentLength";
+                    return "ea.ContentLength";
                 case "uniqueness":
-                    return "f.ContentCheckSum";
-                case "views":
-                    return "f.TotalViews";
-                case "totalviews":
-                    return "f.TotalViews";
+                    return "ea.ContentCheckSum";              
                 case "createduserid":
-                    return "f.CreatedUserId";
+                    return "ea.CreatedUserId";
                 case "created":
-                    return "f.CreatedDate";
+                    return "ea.CreatedDate";
                 case "createddate":
-                    return "f.CreatedDate";
+                    return "ea.CreatedDate";
             }
 
             return string.Empty;
-
-        }
-
-
-        // -- Search
-
-        string BuildFederatedResults()
-        {
-
-            // No keywords
-            if (string.IsNullOrEmpty(GetKeywords()))
-            {
-                return string.Empty;
-            }
-
-            // Build standard SQL or full text queries
-            var sb = new StringBuilder();
-
-            // Compose federated queries
-            var queries = _query.FederatedQueryManager.GetQueries(_query);
-
-            // Create a temporary table for all our federated queries
-            sb.Append("DECLARE @temp TABLE (Id int, [Rank] int); ");
-
-            // Execute each federated query adding results to temporary table
-            foreach (var query in queries)
-            {
-                sb.Append("INSERT INTO @temp ")
-                    .Append(Environment.NewLine)
-                    .Append(query)
-                    .Append(Environment.NewLine);
-            }
-
-            // Build final distinct and aggregated results from federated results
-            sb.Append("DECLARE @results TABLE (Id int, [Rank] int); ")
-                .Append(Environment.NewLine)
-                .Append("INSERT INTO @results ")
-                .Append(Environment.NewLine)
-                .Append("SELECT Id, SUM(Rank) FROM @temp GROUP BY Id;")
-                .Append(Environment.NewLine);
-
-            // Get max / highest rank from final results table
-            sb.Append("SET @MaxRank = ")
-                .Append(_query.Options.SearchType != SearchTypes.Tsql
-                    ? "(SELECT TOP 1 [Rank] FROM @results ORDER BY [Rank] DESC)"
-                    : "0")
-                .Append(";");
-
-            return sb.ToString();
-
-        }
-
-        bool HasKeywords()
-        {
-            return !string.IsNullOrEmpty(GetKeywords());
-        }
-
-        string GetKeywords()
-        {
-
-            if (string.IsNullOrEmpty(_query.Params.Keywords.Value))
-            {
-                return string.Empty;
-            }
-
-            return _query.Params.Keywords.Value;
 
         }
 

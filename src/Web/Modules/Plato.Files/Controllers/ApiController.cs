@@ -53,9 +53,9 @@ namespace Plato.Files.Controllers
 
             _multiPartRequestHandler = multiPartRequestHandler;
             _authorizationService = authorizationService;           
-            _fileValidator = attachmentValidator;
-            _fileStore = attachmentStore;
+            _fileValidator = attachmentValidator;            
             _featureFacade = featureFacade;
+            _fileStore = attachmentStore;
             _fileManager = fileManager;
             _logger = logger;
 
@@ -100,12 +100,12 @@ namespace Plato.Files.Controllers
                 throw new Exception($"A feature named \"{ModuleId}\" could not be found!");
             }
 
-            // Validate & process multipart request
+            // Validate & process multi-part request
             // -------------------
 
             var result = await _multiPartRequestHandler.ProcessAsync(Request);
 
-            // Return any errors parsing the multipart request
+            // Return any errors parsing the multi-part request
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)

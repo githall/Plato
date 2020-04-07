@@ -1,4 +1,5 @@
 ﻿using System;
+using System.IO;
 using System.Net.Mail;
 using PlatoCore.Abstractions.Extensions;
 
@@ -31,13 +32,16 @@ namespace PlatoCore.Emails.Abstractions.Extensions
             }
 
             var bytes = attachment.ContentStream.ToByteArray();
+            var md5 = bytes?.ToMD5().ToHex() ?? string.Empty;
 
             return new EmailAttachment()
             {
                 Name = attachment.Name,
+                Extension = Path.GetExtension(attachment.Name),
                 ContentBlob = bytes,
                 ContentLength = bytes.Length,
-                ContentType = attachment.ContentType.ToString()
+                ContentType = attachment.ContentType.MediaType.ToString(),
+                ContentCheckSum = md5
             };
 
         }
