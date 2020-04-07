@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
-using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Net.Http.Headers;
 using Plato.Files.Models;
@@ -13,13 +12,11 @@ using Plato.Files.Services;
 using Plato.Files.Sharing.Models;
 using Plato.Files.Sharing.Services;
 using Plato.Files.Sharing.Stores;
-using Plato.Files.Sharing.ViewModels;
 using Plato.Files.Stores;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Security.Abstractions;
 
 namespace Plato.Files.Sharing.Controllers
 {
@@ -32,8 +29,6 @@ namespace Plato.Files.Sharing.Controllers
         private readonly IAuthorizationService _authorizationService;
         private readonly IContextFacade _contextFacade;
         private readonly IFileStore<File> _fileStore;
-        
-
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -110,7 +105,7 @@ namespace Plato.Files.Sharing.Controllers
             // Get file
             var file = await _fileStore.GetByIdAsync(invite.FileId);
 
-            // Ensure attachment exists
+            // Ensure file exists
             if (file == null)
             {
                 Response.StatusCode = StatusCodes.Status302Found;

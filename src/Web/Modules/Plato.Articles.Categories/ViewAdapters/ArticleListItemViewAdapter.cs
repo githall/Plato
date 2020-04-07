@@ -15,16 +15,16 @@ namespace Plato.Articles.Categories.ViewAdapters
     public class ArticleListItemViewAdapter : ViewAdapterProviderBase
     {
 
-        private readonly ICategoryStore<Category> _channelStore;
+        private readonly ICategoryStore<Category> _categoryStore;
         private readonly IFeatureFacade _featureFacade;
 
         private IEnumerable<Category> _categories;
 
         public ArticleListItemViewAdapter(
-            ICategoryStore<Category> channelStore,
+            ICategoryStore<Category> categoryStore,
             IFeatureFacade featureFacade)
         {
-            _channelStore = channelStore;
+            _categoryStore = categoryStore;
             _featureFacade = featureFacade;
             ViewName = "ArticleListItem";
         }
@@ -70,7 +70,7 @@ namespace Plato.Articles.Categories.ViewAdapters
                             };
                         }
 
-                        _categories = await _channelStore.GetByFeatureIdAsync(feature.Id);
+                        _categories = await _categoryStore.GetByFeatureIdAsync(feature.Id);
 
                     }
                     

@@ -23,8 +23,6 @@ namespace Plato.Files.Sharing.Controllers
         private readonly IEmailFileInviteService _shareInviteService;
         private readonly IContextFacade _contextFacade;
         private readonly IFileStore<File> _fileStore;
-        
-
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -32,7 +30,6 @@ namespace Plato.Files.Sharing.Controllers
         public IStringLocalizer S { get; }
 
         public AdminController(
-
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
             IFileInviteStore<FileInvite> fileInviteStore,
