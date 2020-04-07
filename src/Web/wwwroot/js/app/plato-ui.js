@@ -6480,8 +6480,7 @@ $(function (win, doc, $) {
                 var event = $caller.data(dataKey).event;
                 if (event) {
                     $caller.off(event);
-                    if (event === "mouseenter" || event === "mouseover") {
-                        //$caller.off("mouseleave");
+                    if (event === "mouseenter" || event === "mouseover") {                   
                         $caller.leaveSpy("unbind");
                     }
                 }
@@ -6573,7 +6572,7 @@ $(function (win, doc, $) {
                 var $popper = methods._getOrCreate($caller);
                 if ($popper) {
 
-                    // Update entity dropdown
+                    // Update entity drop down
                     app.http({
                         method: "GET",
                         url: url

@@ -86,7 +86,7 @@ namespace Plato.Files.Sharing.Controllers
         public async Task<IActionResult> ShareFileAttachment(ShareFileViewModel model)
         {
 
-            var email = model.AttachmentEmail.Trim();
+            var email = model.AttachmentEmail?.Trim() ?? string.Empty;
 
             // Ensure we have an email to share with
             if (string.IsNullOrEmpty(email))
@@ -159,7 +159,7 @@ namespace Plato.Files.Sharing.Controllers
         public async Task<IActionResult> ShareFileLink(ShareFileViewModel model)
         {
 
-            var email = model.LinkEmail.Trim();
+            var email = model.LinkEmail?.Trim() ?? string.Empty;
 
             // Ensure we have an email to share with
             if (string.IsNullOrEmpty(email))

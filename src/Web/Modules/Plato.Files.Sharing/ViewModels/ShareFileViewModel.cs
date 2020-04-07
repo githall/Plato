@@ -12,8 +12,10 @@ namespace Plato.Files.Sharing.ViewModels
         [Required]
         public int FileId { get; set; }
 
+        [EmailAddress, DataType(DataType.EmailAddress), Display(Name = "email")]
         public string AttachmentEmail { get; set; }
 
+        [EmailAddress, DataType(DataType.EmailAddress), Display(Name = "email")]
         public string LinkEmail { get; set; }
 
     }

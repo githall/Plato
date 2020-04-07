@@ -58,7 +58,7 @@ namespace Plato.Files.Sharing
             routes.MapAreaRoute(
                 name: "ShareFileHomeIndex",
                 areaName: "Plato.Files.Sharing",
-                template: "files/d/{id:int}/{token}",
+                template: "files/d/{id:int}/{token}/{alias?}",
                 defaults: new { controller = "Home", action = "Index" }
             );
 

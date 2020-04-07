@@ -167,7 +167,8 @@ namespace Plato.Files.Sharing.Services
                     ["controller"] = "Home",
                     ["action"] = "Index",
                     ["id"] = invite.Id,
-                    ["token"] = token
+                    ["token"] = token,
+                    ["alias"] = file.Alias
                 });
 
                 // Build message from template

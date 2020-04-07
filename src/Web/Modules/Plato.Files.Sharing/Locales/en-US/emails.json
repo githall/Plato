@@ -16,7 +16,7 @@
       "Bcc": "",
       "From": "",
       "Subject": "[SiteName] - {0} has shared a file with you",
-      "Message": "Hi There,\n\n{0} has shared a file with you.\n\nFile Name: {1}\nFile Size: {2}\n\nDownload link...\n\n{3}\n\nRemember be safe. Please only download the file linked above if you were expecting to receive this file from the sender.\n\n[SiteName]\n[SiteUrl]"
+      "Message": "Hi There,\n\n{0} has shared a file with you.\n\nFile Name: {1}\nFile Size: {2}\n\n{3}\n\nRemember be safe. Please only download the file linked above if you were expecting to receive this file from the sender.\n\n[SiteName]\n[SiteUrl]"
     }
   ]
 }

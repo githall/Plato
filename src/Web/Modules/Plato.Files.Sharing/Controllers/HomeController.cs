@@ -77,6 +77,7 @@ namespace Plato.Files.Sharing.Controllers
             {
                 Response.StatusCode = StatusCodes.Status302Found;
                 Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
             }
 
             // Ensure we have a token
@@ -84,22 +85,16 @@ namespace Plato.Files.Sharing.Controllers
             {
                 Response.StatusCode = StatusCodes.Status302Found;
                 Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
             }
 
             // Ensure we have a valid base 64 token
-            if (token.IsBase64String())
+            if (!token.IsBase64String())
             {
                 Response.StatusCode = StatusCodes.Status302Found;
                 Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                return;
             }
-
-            //// Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.OpenFiles))
-            //{
-            //    Response.StatusCode = StatusCodes.Status302Found;
-            //    Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.Unauthorized);
-            //    return;
-            //}
 
             // Get invite
             var invite = await _fileInviteStore.GetByIdAsync(id);
