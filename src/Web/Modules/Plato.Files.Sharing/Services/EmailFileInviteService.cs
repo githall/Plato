@@ -184,7 +184,6 @@ namespace Plato.Files.Sharing.Services
                     baseUri + url);
                 message.IsBodyHtml = true;
                 message.To.Add(new MailAddress(invite.Email));
-                message.Attachments.Add(file.ToAttachment());
 
                 // Send message
                 var emailResult = await _emailManager.SaveAsync(message);
