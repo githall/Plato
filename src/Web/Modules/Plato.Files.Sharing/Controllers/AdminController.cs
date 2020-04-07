@@ -127,9 +127,9 @@ namespace Plato.Files.Sharing.Controllers
             {
                 var result = await _shareInviteService.SendAttachmentInviteAsync(invite);
                 if (result.Succeeded)
-                {              
+                {
                     _alerter.Success(T["File Shared Successfully!"]);
-                } 
+                }
                 else
                 {
                     foreach (var error in result.Errors)

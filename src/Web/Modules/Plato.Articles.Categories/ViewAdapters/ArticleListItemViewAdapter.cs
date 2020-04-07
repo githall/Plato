@@ -47,6 +47,15 @@ namespace Plato.Articles.Categories.ViewAdapters
                 v.AdaptModel<EntityListItemViewModel<Article>>(async model =>
                 {
                     
+                    if (model == null)
+                    {
+                        // Return an anonymous type, we are adapting a view component
+                        return new
+                        {
+                            model
+                        };
+                    }
+
                     // Get all categories for feature
                     if (_categories == null)
                     {

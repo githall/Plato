@@ -37,9 +37,10 @@ namespace PlatoCore.Emails.Abstractions.Extensions
             return new EmailAttachment()
             {
                 Name = attachment.Name,
+                Extension = Path.GetExtension(attachment.Name),
                 ContentBlob = bytes,
                 ContentLength = bytes.Length,
-                ContentType = attachment.ContentType.ToString(),
+                ContentType = attachment.ContentType.MediaType.ToString(),
                 ContentCheckSum = md5
             };
 
