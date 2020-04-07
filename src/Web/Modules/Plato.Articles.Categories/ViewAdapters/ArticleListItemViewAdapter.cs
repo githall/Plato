@@ -1,13 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Plato.Categories.Stores;
 using Plato.Articles.Categories.Models;
 using Plato.Articles.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
-using System;
-using System.Collections.Generic;
 
 namespace Plato.Articles.Categories.ViewAdapters
 {
@@ -15,7 +15,6 @@ namespace Plato.Articles.Categories.ViewAdapters
     public class ArticleListItemViewAdapter : ViewAdapterProviderBase
     {
 
-   
         private readonly ICategoryStore<Category> _channelStore;
         private readonly IFeatureFacade _featureFacade;
 
@@ -122,6 +121,5 @@ namespace Plato.Articles.Categories.ViewAdapters
         }
 
     }
-
 
 }

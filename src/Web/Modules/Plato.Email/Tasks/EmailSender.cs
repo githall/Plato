@@ -163,10 +163,11 @@ namespace Plato.Email.Tasks
             {
                 return;
             }
-            
+
             // Execute query
             await _dbHelper.ExecuteScalarAsync<int>(
-                "DELETE FROM {prefix}_Emails WHERE (Id IN ({ids}));",
+                @"DELETE FROM {prefix}_Emails WHERE (Id IN ({ids}));
+                  DELETE FROM {prefix}_EmailAttachments WHERE (EmailId IN ({ids}));",
                 new Dictionary<string, string>()
                 {
                     ["{ids}"] = ids.ToDelimitedString(',')

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Net.Mail;
+using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
@@ -9,6 +10,7 @@ using Plato.Files.Models;
 using Plato.Files.Sharing.Models;
 using Plato.Files.Stores;
 using PlatoCore.Abstractions;
+using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Emails.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Localization.Abstractions;
@@ -145,7 +147,7 @@ namespace Plato.Files.Sharing.Services
             }
 
             // Get email template
-            const string templateId = "ShareFileAttachment";
+            const string templateId = "ShareFileLink";
 
             // Configured culture
             var culture = await _contextFacade.GetCurrentCultureAsync();
@@ -154,24 +156,33 @@ namespace Plato.Files.Sharing.Services
             if (email != null)
             {
 
-                // Build topic url
+                // Ensure email is safe for URL
+                var token = Convert.ToBase64String(Encoding.UTF8.GetBytes(invite.Email));
+
+                // Build invite URL
                 var baseUri = await _capturedRouterUrlHelper.GetBaseUrlAsync();
                 var url = _capturedRouterUrlHelper.GetRouteUrl(baseUri, new RouteValueDictionary()
                 {
-                    ["area"] = "Plato.Docs",
+                    ["area"] = "Plato.Files.Sharing",
                     ["controller"] = "Home",
-                    ["action"] = "Display"
-                    //["opts.id"] = context.Model.Id,
-                    //["opts.alias"] = context.Model.Alias
+                    ["action"] = "Index",
+                    ["id"] = invite.Id,
+                    ["token"] = token
                 });
 
                 // Build message from template
                 var message = email.BuildMailMessage();
+                message.Subject = string.Format(
+                    email.Subject,
+                    invite.CreatedBy.DisplayName);
                 message.Body = string.Format(
                     email.Message,
-                    invite.CreatedBy.DisplayName);
+                    invite.CreatedBy.DisplayName,
+                    file.Name,
+                    file.ContentLength.ToFriendlyFileSize(),
+                    baseUri + url);
                 message.IsBodyHtml = true;
-                message.To.Add(new MailAddress(invite.Email.Trim()));
+                message.To.Add(new MailAddress(invite.Email));
                 message.Attachments.Add(file.ToAttachment());
 
                 // Send message
