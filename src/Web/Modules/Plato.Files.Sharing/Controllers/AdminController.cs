@@ -23,8 +23,6 @@ namespace Plato.Files.Sharing.Controllers
         private readonly IEmailFileInviteService _shareInviteService;
         private readonly IContextFacade _contextFacade;
         private readonly IFileStore<File> _fileStore;
-        
-
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -32,7 +30,6 @@ namespace Plato.Files.Sharing.Controllers
         public IStringLocalizer S { get; }
 
         public AdminController(
-
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
             IFileInviteStore<FileInvite> fileInviteStore,
@@ -86,8 +83,10 @@ namespace Plato.Files.Sharing.Controllers
         public async Task<IActionResult> ShareFileAttachment(ShareFileViewModel model)
         {
 
+            var email = model.AttachmentEmail?.Trim() ?? string.Empty;
+
             // Ensure we have an email to share with
-            if (string.IsNullOrEmpty(model.AttachmentEmail))
+            if (string.IsNullOrEmpty(email))
             {
 
                 // Add alert
@@ -117,7 +116,7 @@ namespace Plato.Files.Sharing.Controllers
             var invite = await _fileInviteStore.CreateAsync(new FileInvite()
             {
                 FileId = model.FileId,
-                Email = model.AttachmentEmail,
+                Email = email,
                 CreatedUserId = user.Id,
                 CreatedDate = DateTimeOffset.Now
             });
@@ -157,10 +156,11 @@ namespace Plato.Files.Sharing.Controllers
         public async Task<IActionResult> ShareFileLink(ShareFileViewModel model)
         {
 
-            // Ensure we have an email to share with
-            if (string.IsNullOrEmpty(model.LinkEmail))
-            {
+            var email = model.LinkEmail?.Trim() ?? string.Empty;
 
+            // Ensure we have an email to share with
+            if (string.IsNullOrEmpty(email))
+            {
                 // Add alert
                 _alerter.Danger(T["An email address is required!"]);
 
@@ -188,7 +188,7 @@ namespace Plato.Files.Sharing.Controllers
             var invite = await _fileInviteStore.CreateAsync(new FileInvite()
             {
                 FileId = model.FileId,
-                Email = model.LinkEmail,
+                Email = email,
                 CreatedUserId = user.Id,
                 CreatedDate = DateTimeOffset.Now
             });

@@ -17,8 +17,10 @@ using Plato.Files.Sharing.Services;
 
 namespace Plato.Files.Sharing
 {
+
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)
@@ -28,7 +30,7 @@ namespace Plato.Files.Sharing
 
         public override void ConfigureServices(IServiceCollection services)
         {
-     
+
             // Feature installation event handler
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
@@ -51,8 +53,19 @@ namespace Plato.Files.Sharing
             IServiceProvider serviceProvider)
         {
 
+            // Home
+
             routes.MapAreaRoute(
-                name: "ShareFile",
+                name: "ShareFileHomeIndex",
+                areaName: "Plato.Files.Sharing",
+                template: "files/d/{id:int}/{token}/{alias?}",
+                defaults: new { controller = "Home", action = "Index" }
+            );
+
+            // Admin
+
+            routes.MapAreaRoute(
+                name: "ShareFileAdminIndex",
                 areaName: "Plato.Files.Sharing",
                 template: "admin/files/share/{id:int}",
                 defaults: new { controller = "Admin", action = "Index" }

@@ -1,9 +1,7 @@
 ﻿@model ShareFileViewModel
 @{
     Layout = null;
-    var size = Model.File?.ContentLength.ToFriendlyFileSize() ?? "0";
-    var text = T["The file you are sharing is {0}. Please ensure the email address you are sharing this file with can receive emails of this size. If your not sure consider sharing this file as a link."];
-    var msg = text.Value.Replace("{0}", size);
+    var platoOpts = GetOptions<PlatoOptions>();
 }
 
 <form asp-route-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
@@ -12,10 +10,10 @@
         <nav style="margin-bottom: -1px;">
             <div class="nav nav-tabs" id="nav-tab" role="tablist">
                 <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">
-                    @T["Share Attachment"]
+                    @T["Share as Attachment"]
                 </a>
                 <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">
-                    @T["Share Link"]
+                    @T["Share as Link"]
                 </a>
             </div>
         </nav>
@@ -41,6 +39,9 @@
                         <input placeholder="email@address.com" asp-for="@Model.AttachmentEmail" class="form-control" autofocus />
                         @if (Model.File.ContentLength >= 5242880) // above 5mb
                         {
+                            var size = Model.File?.ContentLength.ToFriendlyFileSize() ?? "0";
+                            var text = T["The file you are sharing is {0}. Please ensure the email address you are sharing this file with can receive emails of this size. If your not sure consider sharing this file as a link."];
+                            var msg = text.Value.Replace("{0}", size);
                             <div class="mt-2">
                                 <span class="text-danger text-uppercase font-weight-bold">@T["Warning"]</span> <span class="text-muted">@msg</span>
                             </div>
@@ -48,10 +49,23 @@
                     </div>
                 </fieldset>
                 <fieldset>
-                    <button asp-route-action="ShareFileAttachment" type="submit" class="btn btn-primary">
-                        @T["Share File"]
-                    </button>
-                </fieldset>
+
+                    @if (platoOpts.DemoMode)
+                    {
+                        <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                            <a href="#" class="btn btn-primary disabled">
+                                @T["Share File"]
+                            </a>
+                        </span>
+                    }
+                    else
+                    {
+                        <button asp-route-action="ShareFileAttachment" type="submit" class="btn btn-primary">
+                            @T["Share File"]
+                        </button>
+                    }
+
+                    </fieldset>
             </div>
             <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
                 <fieldset>
@@ -59,16 +73,29 @@
                         <label asp-for="@Model.LinkEmail">
                             <span asp-validation-for="@Model.LinkEmail" class="text-danger"></span>
                             <span class="text-muted">
-                                @T["Share a link to this file with the email address below..."]
+                                @T["Share a download link to this file with the email address below..."]
                             </span>
                         </label>
                         <input placeholder="email@address.com" asp-for="@Model.LinkEmail" class="form-control" autofocus />
                     </div>
                 </fieldset>
                 <fieldset>
-                    <button asp-route-action="ShareFileLink" type="submit" class="btn btn-primary">
-                        @T["Share File"]
-                    </button>
+
+                    @if (platoOpts.DemoMode)
+                    {
+                        <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                            <a href="#" class="btn btn-primary disabled">
+                                @T["Share File"]
+                            </a>
+                        </span>
+                    }
+                    else
+                    {
+                        <button asp-route-action="ShareFileLink" type="submit" class="btn btn-primary">
+                            @T["Share File"]
+                        </button>
+                    }
+
                 </fieldset>
             </div>
         </div>
@@ -94,6 +121,24 @@
                     $('#nav-tab a').on('click', function (e) {
                         e.preventDefault()
                         $(this).tab('show')
+                    });
+
+                    $(this).find("form").validate({
+                        submitHandler: function () {
+
+                            // Disable the submit button?
+                            var $form = $(form);
+                            if ($form.data("disableSubmit")) {
+                                $form.find('*[type="submit"]')
+                                    .addClass("disabled")
+                                    .attr("disabled", "disabled");
+                            }
+
+                            // Note don't call $(form).submit() as this 
+                            // internally calls the validators submitHandler again
+                            form.submit();
+
+                        }
                     });
 
                 });
