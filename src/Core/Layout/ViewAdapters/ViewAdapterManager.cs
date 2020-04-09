@@ -24,6 +24,11 @@ namespace PlatoCore.Layout.ViewAdapters
         public async Task<IEnumerable<IViewAdapterResult>> GetViewAdaptersAsync(string viewName)
         {
 
+            if (viewName == null)
+            {
+                return null;
+            }
+
             List<IViewAdapterResult> matchingAdapterResults = null;
             foreach (var provider in _viewAdapterProviders)
             {
