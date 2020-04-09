@@ -75,7 +75,7 @@ namespace Plato.Email
 
             // Permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
-            
+
             // Migrations
             services.AddSingleton<IMigrationProvider, Migrations>();
 

@@ -8,7 +8,7 @@ namespace Plato.Email
 
     public class Migrations : BaseMigrationProvider
     {
-   
+
         private readonly ISchemaBuilder _schemaBuilder;
 
         public Migrations(ISchemaBuilder schemaBuilder)
@@ -147,6 +147,16 @@ namespace Plato.Email
                                 Name = "EmailId",
                                 DbType = DbType.Int32
                             }));
+
+                // Indexes
+                builder.IndexBuilder.CreateIndex(new SchemaIndex()
+                {
+                    TableName = emailAttachments.Name,
+                    Columns = new string[]
+                    {
+                        "EmailId"
+                    }
+                });
 
                 // Add builder results to output
                 output.AddRange(builder.Statements);
