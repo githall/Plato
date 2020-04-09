@@ -16,10 +16,6 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Localization.Abstractions.Models;
 using PlatoCore.Localization.Extensions;
-using PlatoCore.Models.Notifications;
-using PlatoCore.Models.Users;
-using PlatoCore.Notifications.Abstractions;
-using PlatoCore.Security.Abstractions;
 
 namespace Plato.Files.Sharing.Services
 {
