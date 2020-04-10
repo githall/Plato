@@ -261,6 +261,16 @@ namespace Plato.Email.Handlers
                             DbType = DbType.Int32
                         }));
 
+            // Indexes
+            builder.IndexBuilder.CreateIndex(new SchemaIndex()
+            {
+                TableName = _emailAttachments.Name,
+                Columns = new string[]
+                {
+                    "EmailId"
+                }
+            });
+
         }
 
         #endregion

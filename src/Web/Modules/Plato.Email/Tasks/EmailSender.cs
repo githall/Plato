@@ -91,10 +91,14 @@ namespace Plato.Email.Tasks
                 var mailMessage = email.ToMailMessage();
 
                 // Add attachments to the email
-                foreach (var emailAttacment in attachments?.Data.Where(e => e.EmailId == email.Id))
+                if (attachments?.Data != null)
                 {
-                    mailMessage.Attachments.Add(emailAttacment.ToAttachment());
-                }            
+                    foreach (var emailAttacment in attachments.Data.Where(e => e.EmailId == email.Id))
+                    {
+                        mailMessage.Attachments.Add(emailAttacment.ToAttachment());
+                    }
+                }
+                 
 
                 // Send the email
                 var result = await _emailManager.SendAsync(mailMessage);
