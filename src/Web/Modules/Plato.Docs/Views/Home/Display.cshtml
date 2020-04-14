@@ -37,26 +37,22 @@
         {
             <div class="row gutter-sm">
                 <div class="col-lg-3 layout-sidebar layout-sidebar-sticky">
-                    <div class="layout-sidebar-content">
-
-                        <card class="card">
-                            <card-body class="card-body p-2">
-                                <div class="d-block navbar-expand-lg">
-                                    <a href="#" class="w-100 navbar-toggler p-0 border-0 bg-transparent" data-toggle="collapse" data-target="#sidebar-collapse" aria-controls="sidebar-collapse" aria-expanded="false" aria-label="Toggle navigation" role="button">
-                                        <span class="btn btn-block btn-primary mb-3">
-                                            <i class="fal fa-bars"></i> @T["Table of contents"]
-                                        </span>
-                                    </a>
-                                    <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
-                                        @if (Model.SideBar != null)
-                                        {
-                                            <view model="@Model.SideBar"></view>
-                                        }
-                                    </div>
-                                </div>
-                            </card-body>
-                        </card>
-
+                    <div class="d-block navbar-expand-lg">
+                        <div class="navbar-toggler">
+                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed btn-block" style="z-index:10; left: 12px; bottom: 24px; max-width: 42px;" data-toggle="modal" data-target="#asides">
+                                <i class="fal fa-bars"></i>
+                            </a>
+                        </div>
+                        <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
+                            <card class="card">
+                                <card-body class="card-body p-2">
+                                    @if (Model.SideBar != null)
+                                    {
+                                        <view model="@Model.SideBar"></view>
+                                    }
+                                </card-body>
+                            </card>
+                        </div>
                     </div>
                 </div>
                 <div class="col-lg-7 layout-content">
@@ -104,124 +100,144 @@
                 <div class="d-none d-lg-block col-lg-2 layout-asides layout-asides-sticky">
                     @if (Model.Asides != null)
                     {
-                    <div class="layout-asides-content">                       
-                        <view model="@Model.Asides"></view>                      
-                    </div>
+                        <div class="layout-asides-content">
+                            <view model="@Model.Asides"></view>
+                        </div>
                     }
                 </div>
             </div>
         }
         else if (Model.SideBar != null)
         {
-        <div class="row gutter-sm">
-            <div class="col-lg-3 layout-sidebar layout-sidebar-sticky">
-                <div class="layout-sidebar-content">
-                    <card class="card">
-                        <card-body class="card-body p-2">
-                            <div class="d-block navbar-expand-lg">
-                                <a href="#" class="w-100 navbar-toggler p-0 border-0 bg-transparent" data-toggle="collapse" data-target="#sidebar-collapse" aria-controls="sidebar-collapse" aria-expanded="false" aria-label="Toggle navigation" role="button">
-                                    <span class="btn btn-block btn-primary mb-3">
-                                        <i class="fal fa-bars"></i> @T["Table of contents"]
-                                    </span>
-                                </a>
-                                <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
+            <div class="row gutter-sm">
+                <div class="col-lg-3 layout-sidebar layout-sidebar-sticky">
+                    <div class="d-block navbar-expand-lg">
+                        <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed btn-block navbar-toggler" style="z-index:10; left: 12px; bottom: 24px; max-width: 42px;" data-toggle="modal" data-target="#asides">
+                            <i class="fal fa-bars"></i>
+                        </a>
+                        <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
+                            <card class="card">
+                                <card-body class="card-body p-2">
                                     @if (Model.SideBar != null)
                                     {
                                         <view model="@Model.SideBar"></view>
                                     }
-                                </div>
+                                </card-body>
+                            </card>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-lg-9 layout-content">
+                    @if (Model.Content != null)
+                    {
+                        <view model="@Model.Content"></view>
+                    }
+                    <div class="resizable resizable-bottom resizable-hidden" data-provide="resizeable">
+                        <div class="resizable-bar">
+                            <i class="fal fa-bars"></i>
+                        </div>
+                        <div class="resizable-container overflow-auto">
+                            <div class="resizable-header">
+                                <h6 class="d-inline-block text-uppercase">@T["Your Feedback"]</h6>
+                                <ul class="nav navbar">
+                                    <li class="nav-item">
+                                        <a href="#" data-toggle="tooltip" title="@T["Close / Minimize"]" class="nav-link text-muted resizable-close"><i class="fal fa-fw fa-times"></i></a>
+                                    </li>
+                                </ul>
+                                <navigation name="post-reply"
+                                            class="nav navbar"
+                                            child-ul-css-class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" />
                             </div>
-                        </card-body>
-                    </card>
-                </div>
-            </div>
-            <div class="col-lg-9 layout-content">
-                @if (Model.Content != null)
-                {
-                    <view model="@Model.Content"></view>
-                }
-                <div class="resizable resizable-bottom resizable-hidden" data-provide="resizeable">
-                    <div class="resizable-bar">
-                        <i class="fal fa-bars"></i>
-                    </div>
-                    <div class="resizable-container overflow-auto">
-                        <div class="resizable-header">
-                            <h6 class="d-inline-block text-uppercase">@T["Your Feedback"]</h6>
-                            <ul class="nav navbar">
-                                <li class="nav-item">
-                                    <a href="#" data-toggle="tooltip" title="@T["Close / Minimize"]" class="nav-link text-muted resizable-close"><i class="fal fa-fw fa-times"></i></a>
-                                </li>
-                            </ul>
-                            <navigation name="post-reply"
-                                        class="nav navbar"
-                                        child-ul-css-class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" />
-                        </div>
-                        <div class="resizable-body">
-                            <form asp-controller="Home" asp-action="Display" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
-                                <div id="postReply">
-                                    @if (Model.Footer != null)
-                                    {
-                                        <div>
-                                            <view model="@Model.Footer"></view>
-                                        </div>
-                                    }
-                                    @if (Model.Actions != null)
-                                    {
-                                        <div>
-                                            <view model="@Model.Actions" />
-                                        </div>
-                                    }
-                                </div>
-                            </form>
+                            <div class="resizable-body">
+                                <form asp-controller="Home" asp-action="Display" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+                                    <div id="postReply">
+                                        @if (Model.Footer != null)
+                                        {
+                                            <div>
+                                                <view model="@Model.Footer"></view>
+                                            </div>
+                                        }
+                                        @if (Model.Actions != null)
+                                        {
+                                            <div>
+                                                <view model="@Model.Actions" />
+                                            </div>
+                                        }
+                                    </div>
+                                </form>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
-        </div>
         }
         else
         {
-        if (Model.Content != null)
-        {
-        <div class="layout-content">
-            <view model="@Model.Content"></view>
-        </div>
-        }
-        <div class="resizable resizable-bottom resizable-hidden transition" data-provide="resizeable">
-            <div class="resizable-bar">
-                <i class="fal fa-bars"></i>
-            </div>
-            <div class="resizable-container overflow-auto">
-                <div class="resizable-header">
-                    <h6 class="d-inline-block text-uppercase">@T["Your Comment"]</h6>
-                    <ul class="nav navbar">
-                        <li class="nav-item">
-                            <a href="#" data-toggle="tooltip" title="@T["Close / Minimize"]" class="nav-link text-muted resizable-close"><i class="fal fa-fw fa-times"></i></a>
-                        </li>
-                    </ul>
-                    <navigation name="post-reply"
-                                class="nav navbar"
-                                child-ul-css-class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" />
+            if (Model.Content != null)
+            {
+                <div class="layout-content">
+                    <view model="@Model.Content"></view>
                 </div>
-                <div class="resizable-body">
-                    <form asp-controller="Home" asp-action="Display" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
-                        @if (Model.Footer != null)
-                        {
-                            <div>
-                                <view model="@Model.Footer"></view>
-                            </div>
-                        }
-                        @if (Model.Actions != null)
-                        {
-                            <div>
-                                <view model="@Model.Actions" />
-                            </div>
-                        }
-                    </form>
+            }
+            <div class="resizable resizable-bottom resizable-hidden transition" data-provide="resizeable">
+                <div class="resizable-bar">
+                    <i class="fal fa-bars"></i>
+                </div>
+                <div class="resizable-container overflow-auto">
+                    <div class="resizable-header">
+                        <h6 class="d-inline-block text-uppercase">@T["Your Comment"]</h6>
+                        <ul class="nav navbar">
+                            <li class="nav-item">
+                                <a href="#" data-toggle="tooltip" title="@T["Close / Minimize"]" class="nav-link text-muted resizable-close"><i class="fal fa-fw fa-times"></i></a>
+                            </li>
+                        </ul>
+                        <navigation name="post-reply"
+                                    class="nav navbar"
+                                    child-ul-css-class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" />
+                    </div>
+                    <div class="resizable-body">
+                        <form asp-controller="Home" asp-action="Display" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+                            @if (Model.Footer != null)
+                            {
+                                <div>
+                                    <view model="@Model.Footer"></view>
+                                </div>
+                            }
+                            @if (Model.Actions != null)
+                            {
+                                <div>
+                                    <view model="@Model.Actions" />
+                                </div>
+                            }
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
         }
     </div>
     <div class="layout-footer"></div>
+</div>
+
+<div class="modal fade" id="asides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
+    <div class="modal-dialog modal-left" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h6 class="modal-title" id="searchHelpTitle">
+                    @T["Browse"]
+                </h6>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body overflow-auto">
+                @if (Model.SideBar != null)
+                {
+                    <view model="@Model.SideBar"></view>
+                }
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            </div>
+        </div>
+    </div>
 </div>

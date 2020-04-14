@@ -1227,9 +1227,24 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 /* Asides style modal */
 /* ------------------------- */
 
+
+.modal>.modal-left {
+    left: 0;
+    right: auto;
+}
+
 .modal>.modal-right {
     left: auto;
     right: 0;
+}
+
+.modal .modal-left {
+    -webkit-transform: translate3d(-100%,0,0) !important;
+    -ms-transform: translate3d(-100%,0,0) !important;
+    transform: translate3d(-100%,0,0) !important;
+    -o-transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+    -webkit-transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+    transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
 }
 
 .modal .modal-right {
@@ -2341,7 +2356,6 @@ i.is-banned:before { margin-right: 0 !important; }
     50% { transform: scale(0.6); } 
     100% { transform: scale(1.0); } 
 }
-
 
 /* spin in */
 
