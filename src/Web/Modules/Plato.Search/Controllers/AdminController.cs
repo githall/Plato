@@ -13,7 +13,7 @@ using Plato.Search.Services;
 using Plato.Search.ViewModels;
 using PlatoCore.Security.Abstractions;
 
-namespace Plato.Search.Controllers
+namespace Plato.Tenants.Controllers
 {
 
     public class AdminController : Controller, IUpdateModel
@@ -53,19 +53,19 @@ namespace Plato.Search.Controllers
         public async Task<IActionResult> Index()
         {
             
-            // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
-            {
-                return Unauthorized();
-            }
+            //// Ensure we have permission
+            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
+            //{
+            //    return Unauthorized();
+            //}
 
             _breadCrumbManager.Configure(builder =>
             {
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Admin", "Plato.Admin")
                     .LocalNav()
-                ).Add(S["Settings"], settings => settings
-                    .Action("Index", "Admin", "Plato.Settings")
+                ).Add(S["Tenants"], settings => settings
+                    .Action("Index", "Admin", "Plato.Tenants")
                     .LocalNav()
                 ).Add(S["Search"]);
             });
@@ -79,11 +79,11 @@ namespace Plato.Search.Controllers
         public async Task<IActionResult> IndexPost(SearchSettingsViewModel viewModel)
         {
 
-            // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
-            {
-                return Unauthorized();
-            }
+            //// Ensure we have permission
+            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
+            //{
+            //    return Unauthorized();
+            //}
             
             // Execute view providers ProvideUpdateAsync method
             await _viewProvider.ProvideUpdateAsync(new SearchSettings(), this);
@@ -94,88 +94,7 @@ namespace Plato.Search.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-        
-        public async Task<IActionResult> CreateCatalog()
-        {
-
-            // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
-            {
-                return Unauthorized();
-            }
-            
-            // Create catalog
-            var result = await _fullTextCatalogManager.CreateCatalogAsync();
-            if (result.Succeeded)
-            {
-                _alerter.Success(T["Catalog Created Successfully!"]);
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    _alerter.Danger(T[error.Description]);
-                }
-            }
-            
-            return RedirectToAction(nameof(Index));
-
-        }
-        
-        public async Task<IActionResult> DeleteCatalog()
-        {
-
-            // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
-            {
-                return Unauthorized();
-            }
-            
-            // Delete catalog
-            var result = await _fullTextCatalogManager.DropCatalogAsync();
-            if (result.Succeeded)
-            {
-                _alerter.Success(T["Catalog Deleted Successfully!"]);
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    _alerter.Danger(T[error.Description]);
-                }
-            }
-            
-            return RedirectToAction(nameof(Index));
-
-        }
-
-        public async Task<IActionResult> RebuildCatalog()
-        {
-
-            // Ensure we have permission
-            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
-            {
-                return Unauthorized();
-            }
-            
-            // Rebuild catalog
-            var result = await _fullTextCatalogManager.RebuildCatalogAsync();
-            if (result.Succeeded)
-            {
-                _alerter.Success(T["Catalog Rebuilt Successfully!"]);
-            }
-            else
-            {
-                foreach (var error in result.Errors)
-                {
-                    _alerter.Danger(T[error.Description]);
-                }
-            }
-            
-            return RedirectToAction(nameof(Index));
-
-        }
-        
+      
     }
 
 }

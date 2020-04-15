@@ -1,0 +1,6 @@
+﻿@model TenantIndexViewModel
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
+}
+
