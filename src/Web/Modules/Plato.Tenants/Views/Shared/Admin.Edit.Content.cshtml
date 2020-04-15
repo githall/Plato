@@ -115,5 +115,29 @@
             </div>
         </div>
 
+        <div class="form-group">
+            <h6>@T["URL Settings"]</h6>
+            @T["Specify the domain or prefix for this tenant."]
+        </div>
+   
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group" asp-validation-class-for="RequestedUrlPrefix">
+                    <label asp-for="RequestedUrlPrefix">@T["Prefix"]</label>
+                    <input asp-for="RequestedUrlPrefix" placeholder="/site1" class="form-control" />
+                    <span asp-validation-for="RequestedUrlPrefix" class="text-danger"></span>
+                    <span class="text-muted form-text small">@T["For example /sitename or /companyname"]</span>
+                </div>
+            </div>                
+            <div class="col-lg-6">
+                <div class="form-group" asp-validation-class-for="RequestedUrlHost">
+                    <label asp-for="RequestedUrlHost">@T["Host"]</label>
+                    <input asp-for="RequestedUrlHost" placeholder="site1.domain.com" class="form-control" />
+                    <span asp-validation-for="RequestedUrlHost" class="text-danger"></span>
+                    <span class="text-muted form-text small">@T["For example https://www.domain.com or https://sub.domain.com"]</span>
+                </div>
+            </div>
+        </div>
+        
     </card-body>
 </card>

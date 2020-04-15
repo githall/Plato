@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Plato.Tenants.Models;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Data.Abstractions;
@@ -9,9 +10,15 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 
-namespace Plato.SetUp.Services
+namespace Plato.Tenants.Services
 {
-    public class SetUpService :ISetUpService
+
+    public interface ITenantSetUpService
+    {
+        Task<string> SetUpAsync(TenantSetUpContext context);
+    }
+
+    public class TenantSetUpService : ITenantSetUpService
     {
 
         private const string TablePrefixSeparator = "_";
@@ -20,19 +27,19 @@ namespace Plato.SetUp.Services
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
 
-        public SetUpService(            
+        public TenantSetUpService(
             IShellContextFactory shellContextFactory,
             IShellSettings shellSettings,
             IPlatoHost platoHost)
-        {            
+        {
             _shellContextFactory = shellContextFactory;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
         }
 
-        public async Task<string> SetUpAsync(ISetUpContext context)
+        public async Task<string> SetUpAsync(TenantSetUpContext context)
         {
-            var initialState = _shellSettings.State;
+            //var initialState = _shellSettings.State;
             try
             {
                 return await SetUpInternalAsync(context);
@@ -40,25 +47,29 @@ namespace Plato.SetUp.Services
             catch (Exception ex)
             {
                 context.Errors.Add(ex.Message, ex.Message);
-                _shellSettings.State = initialState;
+                //_shellSettings.State = initialState;
                 throw;
             }
         }
-        
-        // ------------
+
+        // --------------------------
+
 
         async Task<string> SetUpInternalAsync(ISetUpContext context)
         {
 
             // Set state to "Initializing" so that subsequent HTTP requests are responded to with "Service Unavailable" while setting up.
-            _shellSettings.State = TenantState.Initializing;
+            //_shellSettings.State = TenantState.Initializing;
 
             var executionId = Guid.NewGuid().ToString("n");
 
-            var shellSettings = new ShellSettings(_shellSettings.Configuration)
+            var shellSettings = new ShellSettings()
             {
                 Name = context.SiteName,
                 Location = context.SiteName.ToSafeFileName(),
+                RequestedUrlHost = context.RequestedUrlHost,
+                RequestedUrlPrefix = context.RequestedUrlPrefix,
+                State = TenantState.Initializing,
                 IsHost = context.IsHost
             };
 
@@ -71,7 +82,7 @@ namespace Plato.SetUp.Services
                 shellSettings.ConnectionString = context.DatabaseConnectionString;
                 shellSettings.TablePrefix = tablePrefix;
             }
-       
+
             using (var shellContext = _shellContextFactory.CreateMinimalShellContext(shellSettings))
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
@@ -81,12 +92,12 @@ namespace Plato.SetUp.Services
                     {
 
                         // update dbContext confirmation
-                       dbContext.Configure(options =>
-                       {
-                           options.ConnectionString = shellSettings.ConnectionString;
-                           options.DatabaseProvider = shellSettings.DatabaseProvider;
-                           options.TablePrefix = shellSettings.TablePrefix;
-                       });
+                        dbContext.Configure(options =>
+                        {
+                            options.ConnectionString = shellSettings.ConnectionString;
+                            options.DatabaseProvider = shellSettings.DatabaseProvider;
+                            options.TablePrefix = shellSettings.TablePrefix;
+                        });
 
                         var hasErrors = false;
                         void ReportError(string key, string message)
@@ -96,15 +107,20 @@ namespace Plato.SetUp.Services
                         }
 
                         // Invoke modules to react to the setup event
-                        var setupEventHandlers = scope.ServiceProvider.GetServices<ISetUpEventHandler>();
-                        var logger = scope.ServiceProvider.GetRequiredService<ILogger<SetUpService>>();
+                     
+                        var logger = scope.ServiceProvider.GetRequiredService<ILogger<TenantSetUpService>>();
 
+                        var setupEventHandlers = scope.ServiceProvider.GetServices<ISetUpEventHandler>();
                         await setupEventHandlers.InvokeAsync(x => x.SetUp(context, ReportError), logger);
 
                         if (hasErrors)
                         {
                             return executionId;
                         }
+
+                        var shellSettingsManager = scope.ServiceProvider.GetService<IShellSettingsManager>();
+                        shellSettings.State = TenantState.Running;
+                        shellSettingsManager.SaveSettings(shellSettings);
 
                     }
 
@@ -116,10 +132,7 @@ namespace Plato.SetUp.Services
             {
                 return executionId;
             }
-
-            shellSettings.State = TenantState.Running;
-            _platoHost.UpdateShellSettings(shellSettings);
-
+            
             return executionId;
 
         }

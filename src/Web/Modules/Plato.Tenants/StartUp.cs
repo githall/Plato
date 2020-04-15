@@ -12,6 +12,7 @@ using PlatoCore.Navigation.Abstractions;
 using Plato.Tenants.ViewProviders;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
+using Plato.Tenants.Services;
 
 namespace Plato.Tenants
 {
@@ -40,7 +41,8 @@ namespace Plato.Tenants
             // Register navigation providers
             services.AddScoped<INavigationProvider, AdminMenu>();
 
-
+            // Services
+            services.AddScoped<ITenantSetUpService, TenantSetUpService>();
         }
 
         public override void Configure(

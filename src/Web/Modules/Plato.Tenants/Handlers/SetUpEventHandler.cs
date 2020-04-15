@@ -17,7 +17,7 @@ namespace Plato.Tenants.Handlers
         }
 
         public override Task SetUp(
-            SetUpContext context,
+            ISetUpContext context,
             Action<string, string> reportError)
         {
             return Task.CompletedTask;

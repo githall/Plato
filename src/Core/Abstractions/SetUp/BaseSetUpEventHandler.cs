@@ -10,7 +10,7 @@ namespace PlatoCore.Abstractions.SetUp
 
         public string ModuleId => Path.GetFileNameWithoutExtension(this.GetType().Assembly.ManifestModule.Name);
 
-        public abstract Task SetUp(SetUpContext context, Action<string, string> reportError);
+        public abstract Task SetUp(ISetUpContext context, Action<string, string> reportError);
 
     }
 

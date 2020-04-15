@@ -27,7 +27,7 @@ namespace Plato.Settings.Handlers
         }
 
         public override async Task SetUp(
-            SetUpContext context,
+            ISetUpContext context,
             Action<string, string> reportError)
         {
 

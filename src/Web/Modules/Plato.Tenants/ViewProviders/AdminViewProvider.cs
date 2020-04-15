@@ -111,11 +111,35 @@ namespace Plato.Tenants.ViewProviders
             //    CategorizedPermissions = await _permissionsManager.GetCategorizedPermissionsAsync()
             //};
 
-            var viewModel = new EditTenantViewModel()
+
+            var defaultConnectionString = "";
+
+
+
+            EditTenantViewModel viewModel = null;
+            if (string.IsNullOrEmpty(model.Name))
             {
-                SiteName = model.Name,
-                IsNewTenant = !string.IsNullOrEmpty(model.Name)                
-            };
+                viewModel = new EditTenantViewModel()
+                {                  
+                    ConnectionString = "server=localhost;trusted_connection=true;database=plato",
+                    TablePrefix = "plato",
+                    UserName = "admin",
+                    Email = "admin@admin.com",
+                    Password = "admin",
+                    PasswordConfirmation = "admin",
+                    IsNewTenant = true
+                };
+            }
+            else
+            {
+                viewModel = new EditTenantViewModel()
+                {
+                    SiteName = model.Name,
+                    ConnectionString = model.ConnectionString,
+                    TablePrefix = model.TablePrefix,              
+                    IsNewTenant = false
+                };
+            }
 
             // Return view
             return Task.FromResult(Views(
@@ -134,25 +158,25 @@ namespace Plato.Tenants.ViewProviders
         public override async Task<IViewProviderResult> BuildUpdateAsync(ShellSettings role, IViewProviderContext context)
         {
 
-            //var model = new EditRoleViewModel();
+            var model = new EditTenantViewModel();
 
-            //if (!await context.Updater.TryUpdateModelAsync(model))
-            //{
-            //    return await BuildEditAsync(role, context);
-            //}
+            if (!await context.Updater.TryUpdateModelAsync(model))
+            {
+                return await BuildEditAsync(role, context);
+            }
 
-            //if (context.Updater.ModelState.IsValid)
-            //{
+            if (context.Updater.ModelState.IsValid)
+            {
 
-            //    role.Name = model.RoleName?.Trim();
-                
-            //    var result = await _roleManager.CreateAsync(role);
-            //    foreach (var error in result.Errors)
-            //    {
-            //        context.Updater.ModelState.AddModelError(string.Empty, error.Description);
-            //    }
+                //role.Name = model.RoleName?.Trim();
 
-            //}
+                //var result = await _roleManager.CreateAsync(role);
+                //foreach (var error in result.Errors)
+                //{
+                //    context.Updater.ModelState.AddModelError(string.Empty, error.Description);
+                //}
+
+            }
 
             return await BuildEditAsync(role, context);
 

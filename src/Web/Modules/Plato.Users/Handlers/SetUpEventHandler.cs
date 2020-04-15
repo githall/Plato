@@ -47,7 +47,7 @@ namespace Plato.Users.Handlers
 
         #region "Implementation"
 
-        public override async Task SetUp(SetUpContext context, Action<string, string> reportError)
+        public override async Task SetUp(ISetUpContext context, Action<string, string> reportError)
         {
 
             // Build schemas
@@ -392,7 +392,7 @@ namespace Plato.Users.Handlers
 
         }
 
-        async Task ConfigureDefaultUsers(SetUpContext context, Action<string, string> reportError)
+        async Task ConfigureDefaultUsers(ISetUpContext context, Action<string, string> reportError)
         {
 
             try
@@ -450,7 +450,7 @@ namespace Plato.Users.Handlers
 
         }
 
-        async Task ConfigureSuperUser(SetUpContext context, Action<string, string> reportError)
+        async Task ConfigureSuperUser(ISetUpContext context, Action<string, string> reportError)
         {
 
             // Get newly installed administrator role

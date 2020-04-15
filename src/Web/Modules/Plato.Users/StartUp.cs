@@ -172,11 +172,11 @@ namespace Plato.Users
             IServiceProvider serviceProvider)
         {
 
-            // Register tenant authenticaiton middleware
+            // Register tenant authentication middle ware
             app.UseAuthentication();
 
-            // Register authenticated user middleware
-            // Must be registered after .NET authentication middleware has been 
+            // Register authenticated user middle ware
+            // Must be registered after .NET authentication middle ware has been 
             // registered i.e. after app.UseAuthentication() above
             app.UseMiddleware<AuthenticatedUserMiddleware>();
 

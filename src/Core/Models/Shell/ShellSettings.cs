@@ -56,16 +56,16 @@ namespace PlatoCore.Models.Shell
             set => this["Location"] = value;
         }
 
-        public string RequestedUrlHost
-        {
-            get => this["RequestedUrlHost"];
-            set => this["RequestedUrlHost"] = value;
-        }
-
         public string RequestedUrlPrefix
         {
             get => this["RequestedUrlPrefix"];
             set => _values["RequestedUrlPrefix"] = value;
+        }
+
+        public string RequestedUrlHost
+        {
+            get => this["RequestedUrlHost"];
+            set => this["RequestedUrlHost"] = value;
         }
 
         public string ConnectionString

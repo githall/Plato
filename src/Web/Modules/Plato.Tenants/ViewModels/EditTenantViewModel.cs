@@ -33,6 +33,12 @@ namespace Plato.Tenants.ViewModels
         [DataType(DataType.Password), Display(Name = "password confirmation")]
         public string PasswordConfirmation { get; set; }
 
+        [ StringLength(100), Display(Name = "site prefix")]
+        public string RequestedUrlPrefix { get; set; }
+
+        [StringLength(100), Display(Name = "site host")]
+        public string RequestedUrlHost { get; set; }
+
         public bool IsNewTenant { get; set; }
 
     }

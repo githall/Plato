@@ -14,6 +14,11 @@ using Plato.Tenants.ViewModels;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 using System.Linq;
+using PlatoCore.Abstractions.SetUp;
+using System.Collections.Generic;
+using Plato.Tenants.Services;
+using Plato.Tenants.Models;
+using Microsoft.Extensions.Logging;
 
 namespace Plato.Tenants.Controllers
 {
@@ -25,8 +30,11 @@ namespace Plato.Tenants.Controllers
 
         private readonly IViewProviderManager<ShellSettings> _viewProvider;
         private readonly IAuthorizationService _authorizationService;
+        private readonly ITenantSetUpService _setUpService;
         private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly ILogger<AdminController> _logger;
         private readonly IAlerter _alerter;
+        
 
         public IHtmlLocalizer T { get; }
 
@@ -35,19 +43,22 @@ namespace Plato.Tenants.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-             IShellSettingsManager shellSettingsManager,
+            IShellSettingsManager shellSettingsManager,            
             IViewProviderManager<ShellSettings> viewProvider,
             IAuthorizationService authorizationService,
             IBreadCrumbManager breadCrumbManager,
+            ILogger<AdminController> logger,
+            ITenantSetUpService setUpService,
             IAlerter alerter)
         {
-       
+
             _authorizationService = authorizationService;
             _shellSettingsManager = shellSettingsManager;
             _breadCrumbManager = breadCrumbManager;
             _viewProvider = viewProvider;
-            
+            _setUpService = setUpService;
             _alerter = alerter;
+            _logger = logger;
 
             T = htmlLocalizer;
             S = stringLocalizer;
@@ -126,7 +137,7 @@ namespace Plato.Tenants.Controllers
         }
 
         [HttpPost, ActionName(nameof(Create))]
-        public async Task<IActionResult> CreatePost()
+        public async Task<IActionResult> CreatePost(EditTenantViewModel model)
         {
 
             //var newRole = new Role();
@@ -147,20 +158,51 @@ namespace Plato.Tenants.Controllers
 
             if (!ModelState.IsValid)
             {
-                _alerter.Success(T["Tenant Created Successfully!"]);
+                return View(model);
             }
-            else
+
+            var setupContext = new TenantSetUpContext()
             {
-                foreach (var modelState in ViewData.ModelState.Values)
-                {
-                    foreach (var error in modelState.Errors)
-                    {
-                        _alerter.Danger(T[error.ErrorMessage]);
-                    }
-                }
+                SiteName = model.SiteName,
+                DatabaseProvider = "SqlClient",
+                DatabaseConnectionString = model.ConnectionString,              
+                AdminUsername = model.UserName,                
+                AdminEmail = model.Email,
+                AdminPassword = model.Password,
+                RequestedUrlHost = model.RequestedUrlHost,
+                RequestedUrlPrefix = model.RequestedUrlPrefix,
+                Errors = new Dictionary<string, string>()
+            };
+
+            if (!model.TablePrefixPreset)
+            {
+                setupContext.DatabaseTablePrefix = model.TablePrefix;
             }
 
+            var executionId = await _setUpService.SetUpAsync(setupContext);
 
+            // Check if a component in the Setup failed
+            if (setupContext.Errors.Count > 0)
+            {
+
+                if (_logger.IsEnabled(LogLevel.Information))
+                {
+                    _logger.LogInformation($"Set-up of tenant '{setupContext.SiteName}' failed with the following errors...");
+                }
+
+                foreach (var error in setupContext.Errors)
+                {
+                    if (_logger.IsEnabled(LogLevel.Information))
+                    {
+                        _logger.LogInformation(error.Key + " " + error.Value);
+                    }
+                    ModelState.AddModelError(error.Key, error.Value);
+                }
+                return await CreatePost(model);
+
+            }
+
+            _alerter.Success(T["Tenant Created Successfully!"]);
             return RedirectToAction(nameof(Index));
 
         }
