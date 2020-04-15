@@ -93,7 +93,7 @@ namespace Plato.Docs.Categories.Controllers
                     return NotFound();
                 }
 
-                // Get the permissioned category
+                // Get the category
                 var permissionedCategory = await GetCategoryAsync(opts.CategoryId);
                 if (permissionedCategory == null)
                 {
@@ -126,7 +126,7 @@ namespace Plato.Docs.Categories.Controllers
             // Add view model to context
             HttpContext.Items[typeof(EntityIndexViewModel<Doc>)] = viewModel;
 
-            // If we have a pager.page querystring value return paged results
+            // If we have a pager.page query string value return paged results
             if (int.TryParse(HttpContext.Request.Query["pager.page"], out var page))
             {
                 if (page > 0 && !pager.Enabled)
