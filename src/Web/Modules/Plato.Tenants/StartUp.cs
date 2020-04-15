@@ -48,6 +48,31 @@ namespace Plato.Tenants
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
+
+            // Index
+            routes.MapAreaRoute(
+                name: "TenantsIndex",
+                areaName: "Plato.Tenants",
+                template: "admin/tenants",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
+            // Add
+            routes.MapAreaRoute(
+                name: "TenantsCreate",
+                areaName: "Plato.Tenants",
+                template: "admin/tenants/add",
+                defaults: new { controller = "Admin", action = "Create" }
+            );
+
+            // Edit
+            routes.MapAreaRoute(
+                name: "TenantsEdit",
+                areaName: "Plato.Tenants",
+                template: "admin/tenants/edit/{id}",
+                defaults: new { controller = "Admin", action = "Edit" }
+            );
+
         }
 
     }

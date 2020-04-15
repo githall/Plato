@@ -92,6 +92,12 @@ namespace PlatoCore.Models.Shell
             set => _values["Theme"] = value;
         }
 
+        public bool IsHost
+        {
+            get => this["IsHost"] == "1" ? true : false;
+            set => _values["IsHost"] = value == true ? "1" : "0";
+        }
+
         public string AuthCookieName
         {
             get

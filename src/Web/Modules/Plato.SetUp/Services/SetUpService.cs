@@ -55,7 +55,9 @@ namespace Plato.SetUp.Services
 
             var shellSettings = new ShellSettings(_shellSettings.Configuration)
             {
-                Location = context.SiteName.ToSafeFileName()
+                Name = context.SiteName,
+                Location = context.SiteName.ToSafeFileName(),
+                IsHost = true
             };
 
             if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))

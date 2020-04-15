@@ -15,11 +15,14 @@ using PlatoCore.Stores.Abstractions.Roles;
 using PlatoCore.Stores.Roles;
 using Plato.Tenants.ViewModels;
 using PlatoCore.Models.Shell;
+using PlatoCore.Shell.Abstractions;
 
 namespace Plato.Tenants.ViewProviders
 {
     public class AdminViewProvider : ViewProviderBase<ShellSettings>
     {
+
+        private readonly IShellSettingsManager _shellSettingsManager;
 
         private readonly IDummyClaimsPrincipalFactory<User> _claimsPrincipalFactory;
         private readonly IPermissionsManager<Permission> _permissionsManager;
@@ -29,6 +32,7 @@ namespace Plato.Tenants.ViewProviders
         private readonly IPlatoRoleStore _platoRoleStore;
         
         public AdminViewProvider(
+            IShellSettingsManager shellSettingsManager,
             UserManager<User> userManager,
             IPlatoRoleStore platoRoleStore,
             RoleManager<Role> roleManager,
@@ -36,6 +40,8 @@ namespace Plato.Tenants.ViewProviders
             IAuthorizationService authorizationService,
             IDummyClaimsPrincipalFactory<User> claimsPrincipalFactory)
         {
+
+            _shellSettingsManager = shellSettingsManager;
 
             _claimsPrincipalFactory = claimsPrincipalFactory;
             _authorizationService = authorizationService;
@@ -51,6 +57,7 @@ namespace Plato.Tenants.ViewProviders
         public override Task<IViewProviderResult> BuildDisplayAsync(ShellSettings role, IViewProviderContext updater)
         {
 
+            
             return Task.FromResult(
                 Views(
                     View<ShellSettings>("Admin.Display.Header", model => role).Zone("header"),
@@ -70,9 +77,7 @@ namespace Plato.Tenants.ViewProviders
                 throw new Exception($"A view model of type {typeof(TenantIndexViewModel).ToString()} has not been registered on the HttpContext!");
             }
 
-            //var viewModel = await GetPagedModel(
-            //    indexViewModel?.Options,
-            //    indexViewModel?.Pager);
+            indexViewModel.Results = _shellSettingsManager.LoadSettings();
 
             return Task.FromResult(Views(
                 View<TenantIndexViewModel>("Admin.Index.Header", model => indexViewModel).Zone("header"),
@@ -82,8 +87,13 @@ namespace Plato.Tenants.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(ShellSettings role, IViewProviderContext updater)
+        public override Task<IViewProviderResult> BuildEditAsync(ShellSettings model, IViewProviderContext updater)
         {
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
 
             //// Locate the role we are editing within our default roles
             //var defaultRole = DefaultRoles.ToList()
@@ -101,17 +111,23 @@ namespace Plato.Tenants.ViewProviders
             //    CategorizedPermissions = await _permissionsManager.GetCategorizedPermissionsAsync()
             //};
 
-            //// Return view
-            //return Views(
-            //    View<EditRoleViewModel>("Admin.Edit.Header", model => editRoleViewModel).Zone("header"),
-            //    View<EditRoleViewModel>("Admin.Edit.Meta", model => editRoleViewModel).Zone("meta"),
-            //    View<EditRoleViewModel>("Admin.Edit.Content", model => editRoleViewModel).Zone("content"),
-            //    View<EditRoleViewModel>("Admin.Edit.Footer", model => editRoleViewModel).Zone("footer"),
-            //    View<EditRoleViewModel>("Admin.Edit.Actions", model => editRoleViewModel).Zone("actions")
-            //);
+            var viewModel = new EditTenantViewModel()
+            {
+                SiteName = model.Name,
+                IsNewTenant = !string.IsNullOrEmpty(model.Name)                
+            };
+
+            // Return view
+            return Task.FromResult(Views(
+                View<EditTenantViewModel>("Admin.Edit.Header", model => viewModel).Zone("header"),
+                View<EditTenantViewModel>("Admin.Edit.Meta", model => viewModel).Zone("meta"),
+                View<EditTenantViewModel>("Admin.Edit.Content", model => viewModel).Zone("content"),
+                View<EditTenantViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer"),
+                View<EditTenantViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions")
+            ));
 
 
-            return Task.FromResult(default(IViewProviderResult));
+            //return Task.FromResult(default(IViewProviderResult));
 
         }
 

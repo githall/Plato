@@ -1,0 +1,13 @@
+﻿@model EditTenantViewModel
+
+@if (Model.IsNewTenant)
+{
+    <h4>@T["Add Tenant"]</h4>
+    <span class="text-muted">@T["Add a new tenant."]</span>
+}
+else
+{
+    <h4>@T["Edit Tenant"]</h4>
+    <span class="text-muted">@T["Edit an existing tenant."]</span>
+}
+<hr/>

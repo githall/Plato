@@ -1,0 +1,119 @@
+﻿@model EditTenantViewModel
+
+@*<input type="hidden" asp-for="SiteName" />*@
+
+<card>
+    <card-title>
+        <h6 class="card-title">@T["Tenant Details"]</h6>
+    </card-title>
+    <card-body>
+
+        <div asp-validation-summary="All"></div>
+
+        <fieldset class="row" asp-validation-class-for="SiteName">
+            <div class="form-group col-md-12">
+                <h6>@T["Site Name"]</h6>
+                <label asp-for="SiteName">@T["What is the name of your site?"]</label>
+                <input asp-for="SiteName" class="form-control" style="width: 100%;" />
+                <span asp-validation-for="SiteName" class="text-danger"></span>
+            </div>
+        </fieldset>
+
+        @if (!Model.TablePrefixPreset || !Model.ConnectionStringPreset)
+        {
+            <div class="form-group">
+                <h6>@T["Database"]</h6>
+                @T["The Microsoft SQL Server 2016 or above database to store your Plato configuration and content. You will first need to create a new database within your instance of SQL Server and then point the connection string below to this new database."]
+            </div>
+        }
+        @if (Model.ConnectionStringPreset)
+        {
+            <input asp-for="ConnectionString" type="hidden" />
+        }
+        else
+        {
+            <fieldset class="row" asp-validation-class-for="ConnectionString">
+                <div class="form-group col-md-12">
+
+                    <label asp-for="ConnectionString">@T["Connection string"]</label>
+                    <div class="input-group mb-2 mb-sm-0">
+                        <div class="search-input-group">
+                            <input asp-for="ConnectionString"
+                                   autocomplete="off"
+                                   data-provide="password"
+                                   class="form-control" type="text" required />
+
+                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
+                                <i class="fal fa-eye"></i>
+                            </button>
+                        </div>
+
+
+                    </div>
+                    <span asp-validation-for="ConnectionString" class="text-danger"></span>
+                    <span class="text-muted form-text small">@T["The connection string to your database. e.g., server=localhost;uid=your_username;pwd=your_password;database=plato"]</span>
+                </div>
+            </fieldset>
+        }
+        @if (Model.TablePrefixPreset)
+        {
+            <input asp-for="TablePrefix" type="hidden" />
+        }
+        else
+        {
+            <fieldset class="row" asp-validation-class-for="TablePrefix">
+                <div class="form-group col-md-12">
+                    <label asp-for="TablePrefix">@T["Table Prefix"]</label>
+                    <input asp-for="TablePrefix" class="form-control" />
+                    <span asp-validation-for="TablePrefix" class="text-danger"></span>
+                    <span class="text-muted form-text small">@T["You can specify a custom table prefix if you intend to reuse the same database for multiple unique instances of Plato."]</span>
+                </div>
+            </fieldset>
+        }
+
+        <div class="form-group">
+            <h6>@T["Administrator Account"]</h6>
+            @T["The default administrator account can be used after the set up is complete to login and manage Plato."]
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <fieldset class="row" asp-validation-class-for="TablePrefix">
+                    <div class="form-group col-md-12">
+                        <label asp-for="UserName">@T["Username"]</label>
+                        <input asp-for="UserName" class="form-control" />
+                        <span asp-validation-for="UserName" class="text-danger"></span>
+                        <span class="text-muted form-text small">@T["You must specify a username for the default administrator account. The username cannot contain the @ or , characters."]</span>
+                    </div>
+                </fieldset>
+                <fieldset class="row" asp-validation-class-for="TablePrefix">
+                    <div class="form-group col-md-12">
+                        <label asp-for="Email">@T["Email Address"]</label>
+                        <input asp-for="Email" class="form-control" />
+                        <span asp-validation-for="Email" class="text-danger"></span>
+                        <span class="text-muted form-text small">@T["You must specify an email address for the default administrator account"]</span>
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col-md-6">
+
+                <fieldset class="row" asp-validation-class-for="TablePrefix">
+                    <div class="form-group col-md-12">
+                        <label asp-for="Password">@T["Password"]</label>
+                        <input asp-for="Password" class="form-control" />
+                        <span asp-validation-for="Password" class="text-danger"></span>
+                        <span class="text-muted form-text small">@T["Must contain at least 1 lower case character, 1 upper case character, 1 special character, 1 digit and be a minimum of 6 characters long."]</span>
+                    </div>
+                </fieldset>
+                <fieldset class="row" asp-validation-class-for="TablePrefix">
+                    <div class="form-group col-md-12">
+                        <label asp-for="PasswordConfirmation">@T["Confirm Password"]</label>
+                        <input asp-for="PasswordConfirmation" class="form-control" />
+                        <span asp-validation-for="PasswordConfirmation" class="text-danger"></span>
+                        <span class="text-muted form-text small">@T["Please retype your admin password to ensure you've entered this correctly."]</span>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+    </card-body>
+</card>
