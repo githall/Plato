@@ -13,21 +13,21 @@ namespace PlatoCore.Localization.Locales
 
         private static bool _watching = false;
 
-        private readonly ILocaleProvider _localeProvider;
-        private readonly ILocaleStore _localeStore;
-        private readonly ILogger<LocaleWatcher> _logger;
         private readonly IOptions<LocaleOptions> _localeOptions;
+        private readonly ILocaleProvider _localeProvider;
+        private readonly ILogger<LocaleWatcher> _logger;
+        private readonly ILocaleStore _localeStore;
 
         public LocaleWatcher(
-            ILocaleProvider localeProvider,
-            ILocaleStore localeStore,
+            IOptions<LocaleOptions> localeOptions,
+            ILocaleProvider localeProvider,       
             ILogger<LocaleWatcher> logger,
-            IOptions<LocaleOptions> localeOptions)
+            ILocaleStore localeStore)
         {
             _localeProvider = localeProvider;
+            _localeOptions = localeOptions;
             _localeStore = localeStore;
             _logger = logger;
-            _localeOptions = localeOptions;
         }
 
         public async Task WatchForChanges()

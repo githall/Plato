@@ -140,7 +140,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Add security
             services.AddPlatoSecurity();
 
-            // Let the app change the default tenant behavior and set of features
+            // Let the host change the default tenant behavior and set of features
             configure?.Invoke(services);
 
             // Register the list of services to be resolved later via ShellContainerFactory

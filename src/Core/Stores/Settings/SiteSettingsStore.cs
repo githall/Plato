@@ -4,6 +4,7 @@ using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Routing;
 using PlatoCore.Abstractions.Settings;
+using PlatoCore.Cache;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Stores.Abstract;
 using PlatoCore.Stores.Abstractions.Settings;
@@ -16,22 +17,22 @@ namespace PlatoCore.Stores.Settings
 
         private const string Key = "SiteSettings";
 
-        private readonly IDictionaryStore _dictionaryStore;
-        private readonly ICacheManager _cacheManager;
         private readonly ILogger<SiteSettingsStore> _logger;
+        private readonly IDictionaryStore _dictionaryStore;
+
         private readonly IKeyGenerator _keyGenerator;
+        private readonly ICacheManager _cacheManager;
 
         public SiteSettingsStore(
-            IDictionaryStore dictionaryStore,
-            IMemoryCache memoryCache,
-            ICacheManager cacheManager,
             ILogger<SiteSettingsStore> logger,
+            IDictionaryStore dictionaryStore,     
+            ICacheManager cacheManager,             
             IKeyGenerator keyGenerator)
         {
-            _dictionaryStore = dictionaryStore;
-            _cacheManager = cacheManager;
-            _logger = logger;
+            _dictionaryStore = dictionaryStore;        
             _keyGenerator = keyGenerator;
+            _cacheManager = cacheManager;            
+            _logger = logger;    
         }
 
         public async Task<ISiteSettings> GetAsync()

@@ -25,7 +25,7 @@ namespace Plato.Core
     {
 
         private readonly IShellSettings _shellSettings;
-  
+
         public Startup(IShellSettings shellSettings)
         {
             _shellSettings = shellSettings;

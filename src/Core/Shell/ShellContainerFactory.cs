@@ -11,6 +11,7 @@ using PlatoCore.Features;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
+using PlatoCore.Cache.Abstractions;
 
 namespace PlatoCore.Shell
 {
@@ -47,7 +48,7 @@ namespace PlatoCore.Shell
                 options.DatabaseProvider = settings.DatabaseProvider;
                 options.TablePrefix = settings.TablePrefix;
             });
-            
+
             // Add core tenant services
             AddCoreServices(tenantServiceCollection);
             

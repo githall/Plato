@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using PlatoCore.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
+using PlatoCore.Shell.Extensions;
 
 namespace PlatoCore.Hosting.Web.Routing
 {
@@ -35,17 +36,18 @@ namespace PlatoCore.Hosting.Web.Routing
                 _logger.LogInformation("Begin Routing Request");
             }
 
-            var shellSettings = (ShellSettings)context.Features[typeof(ShellSettings)];
+            // Get shell from context set via PlatoContainerMiddleware
+            var shellSettings = context.GetShellSettings();
 
             // Define a PathBase for the current request that is the RequestUrlPrefix.
             // This will allow any view to reference ~/ as the tenant's base URL.
             // Because IIS or another middle ware might have already set it, we just append the tenant prefix value.
-            if (!String.IsNullOrEmpty(shellSettings.RequestedUrlPrefix))
-            {
-                //context.Request.PathBase += "/" + shellSettings.RequestedUrlPrefix;
-                //context.Request.Path = context.Request.Path.ToString()
-                //    .Substring(context.Request.PathBase.Value.Length);
-            }
+            //if (!String.IsNullOrEmpty(shellSettings.RequestedUrlPrefix))
+            //{
+            //    context.Request.PathBase += "/" + shellSettings.RequestedUrlPrefix;
+            //    context.Request.Path = context.Request.Path.ToString()
+            //        .Substring(context.Request.PathBase.Value.Length);
+            //}
 
             // Do we need to rebuild the pipeline ?
             var rebuildPipeline = context.Items["BuildPipeline"] != null;
@@ -77,7 +79,7 @@ namespace PlatoCore.Hosting.Web.Routing
         }
 
         // Build the middle ware pipeline for the current tenant
-        public RequestDelegate BuildTenantPipeline(ShellSettings shellSettings, HttpContext httpContext)
+        public RequestDelegate BuildTenantPipeline(IShellSettings shellSettings, HttpContext httpContext)
         {
 
             var serviceProvider = httpContext.RequestServices;
@@ -125,15 +127,6 @@ namespace PlatoCore.Hosting.Web.Routing
 
             // Use router
             appBuilder.UseRouter(router);
-
-            //appBuilder.UseEndpoints(routes =>
-            //{
-            //    foreach (var startup in startups)
-            //    {
-            //        startup.Configure(appBuilder, routes, ShellScope.Services);
-            //    }
-            //});
-
 
             // Configure captured HTTP context
             ConfigureCapturedHttpContext(httpContext, serviceProvider);

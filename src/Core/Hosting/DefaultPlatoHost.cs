@@ -10,6 +10,7 @@ using PlatoCore.Tasks.Abstractions;
 
 namespace PlatoCore.Hosting
 {
+
     public class DefaultPlatoHost : IPlatoHost
     {
 
@@ -20,8 +21,8 @@ namespace PlatoCore.Hosting
         private readonly IBroker _broker;
         private readonly ILogger _logger;
         
-        static readonly object SyncLock = new object();
-            ConcurrentDictionary<string, ShellContext> _shellContexts;
+        private ConcurrentDictionary<string, ShellContext> _shellContexts;
+        private static readonly object SyncLock = new object();
 
         public DefaultPlatoHost(
             IShellSettingsManager shellSettingsManager,
