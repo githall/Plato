@@ -82,7 +82,7 @@ namespace PlatoCore.Hosting.Web.Middleware
                         }
                     }
 
-                    // Invoke the next middleware in pipeline
+                    // Invoke the next middle ware in pipeline
                     await _next.Invoke(httpContext);
 
                     // At the end determine if we need to process deferred tasks

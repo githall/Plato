@@ -34,12 +34,11 @@ namespace Plato.Tenants.Controllers
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly ILogger<AdminController> _logger;
         private readonly IAlerter _alerter;
-        
 
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
@@ -116,12 +115,6 @@ namespace Plato.Tenants.Controllers
         public async Task<IActionResult> Create()
         {
 
-            //// Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.AddRoles))
-            //{
-            //    return Unauthorized();
-            //}
-
             _breadCrumbManager.Configure(builder =>
             {
                 builder.Add(S["Home"], home => home
@@ -139,21 +132,7 @@ namespace Plato.Tenants.Controllers
         [HttpPost, ActionName(nameof(Create))]
         public async Task<IActionResult> CreatePost(EditTenantViewModel model)
         {
-
-            //var newRole = new Role();
-            //var roleClaims = new List<RoleClaim>();
-            //foreach (string key in Request.Form.Keys)
-            //{
-            //    if (key.StartsWith("Checkbox.") && Request.Form[key] == "true")
-            //    {
-            //        var permissionName = key.Substring("Checkbox.".Length);
-            //        roleClaims.Add(new RoleClaim { ClaimType = Permission.ClaimTypeName, ClaimValue = permissionName });
-            //    }
-            //}
-
-            //newRole.RoleClaims.RemoveAll(c => c.ClaimType == Permission.ClaimTypeName);
-            //newRole.RoleClaims.AddRange(roleClaims);
-
+          
             var result = await _viewProvider.ProvideUpdateAsync(new ShellSettings(), this);
 
             if (!ModelState.IsValid)
@@ -181,7 +160,6 @@ namespace Plato.Tenants.Controllers
 
             var executionId = await _setUpService.SetUpAsync(setupContext);
 
-            // Check if a component in the Setup failed
             if (setupContext.Errors.Count > 0)
             {
 
@@ -198,6 +176,7 @@ namespace Plato.Tenants.Controllers
                     }
                     ModelState.AddModelError(error.Key, error.Value);
                 }
+
                 return await CreatePost(model);
 
             }

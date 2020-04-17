@@ -57,9 +57,7 @@ namespace Plato.SetUp.Services
 
             var shellSettings = new ShellSettings(_shellSettings.Configuration)
             {
-                Name = context.SiteName,
-                Location = context.SiteName.ToSafeFileName(),
-                IsHost = context.IsHost
+                Location = context.SiteName.ToSafeFileName()             
             };
 
             if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))
@@ -71,7 +69,7 @@ namespace Plato.SetUp.Services
                 shellSettings.ConnectionString = context.DatabaseConnectionString;
                 shellSettings.TablePrefix = tablePrefix;
             }
-       
+
             using (var shellContext = _shellContextFactory.CreateMinimalShellContext(shellSettings))
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())

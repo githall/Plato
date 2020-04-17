@@ -1,4 +1,7 @@
 ﻿@model EditTenantViewModel
+@{ 
+    var isDefault = Model.SiteName?.Equals(ShellHelper.DefaultShellName, StringComparison.OrdinalIgnoreCase) ?? false;
+}
 
 @*<input type="hidden" asp-for="SiteName" />*@
 
@@ -71,73 +74,83 @@
             </fieldset>
         }
 
-        <div class="form-group">
-            <h6>@T["Administrator Account"]</h6>
-            @T["The default administrator account can be used after the set up is complete to login and manage Plato."]
-        </div>
-        <div class="row">
-            <div class="col-md-6">
-                <fieldset class="row" asp-validation-class-for="TablePrefix">
-                    <div class="form-group col-md-12">
-                        <label asp-for="UserName">@T["Username"]</label>
-                        <input asp-for="UserName" class="form-control" />
-                        <span asp-validation-for="UserName" class="text-danger"></span>
-                        <span class="text-muted form-text small">@T["You must specify a username for the default administrator account. The username cannot contain the @ or , characters."]</span>
-                    </div>
-                </fieldset>
-                <fieldset class="row" asp-validation-class-for="TablePrefix">
-                    <div class="form-group col-md-12">
-                        <label asp-for="Email">@T["Email Address"]</label>
-                        <input asp-for="Email" class="form-control" />
-                        <span asp-validation-for="Email" class="text-danger"></span>
-                        <span class="text-muted form-text small">@T["You must specify an email address for the default administrator account"]</span>
-                    </div>
-                </fieldset>
+        @if (Model.IsNewTenant)
+        {
+            <div class="form-group">
+                <h6>@T["Administrator Account"]</h6>
+                @T["The default administrator account can be used after the set up is complete to login and manage Plato."]
             </div>
-            <div class="col-md-6">
-
-                <fieldset class="row" asp-validation-class-for="TablePrefix">
-                    <div class="form-group col-md-12">
-                        <label asp-for="Password">@T["Password"]</label>
-                        <input asp-for="Password" class="form-control" />
-                        <span asp-validation-for="Password" class="text-danger"></span>
-                        <span class="text-muted form-text small">@T["Must contain at least 1 lower case character, 1 upper case character, 1 special character, 1 digit and be a minimum of 6 characters long."]</span>
-                    </div>
-                </fieldset>
-                <fieldset class="row" asp-validation-class-for="TablePrefix">
-                    <div class="form-group col-md-12">
-                        <label asp-for="PasswordConfirmation">@T["Confirm Password"]</label>
-                        <input asp-for="PasswordConfirmation" class="form-control" />
-                        <span asp-validation-for="PasswordConfirmation" class="text-danger"></span>
-                        <span class="text-muted form-text small">@T["Please retype your admin password to ensure you've entered this correctly."]</span>
-                    </div>
-                </fieldset>
-            </div>
-        </div>
-
-        <div class="form-group">
-            <h6>@T["URL Settings"]</h6>
-            @T["Specify the domain or prefix for this tenant."]
-        </div>
-   
-        <div class="row">
-            <div class="col-lg-6">
-                <div class="form-group" asp-validation-class-for="RequestedUrlPrefix">
-                    <label asp-for="RequestedUrlPrefix">@T["Prefix"]</label>
-                    <input asp-for="RequestedUrlPrefix" placeholder="/site1" class="form-control" />
-                    <span asp-validation-for="RequestedUrlPrefix" class="text-danger"></span>
-                    <span class="text-muted form-text small">@T["For example /sitename or /companyname"]</span>
+            <div class="row">
+                <div class="col-md-6">
+                    <fieldset class="row" asp-validation-class-for="TablePrefix">
+                        <div class="form-group col-md-12">
+                            <label asp-for="UserName">@T["Username"]</label>
+                            <input asp-for="UserName" class="form-control" />
+                            <span asp-validation-for="UserName" class="text-danger"></span>
+                            <span class="text-muted form-text small">@T["You must specify a username for the default administrator account. The username cannot contain the @ or , characters."]</span>
+                        </div>
+                    </fieldset>
+                    <fieldset class="row" asp-validation-class-for="TablePrefix">
+                        <div class="form-group col-md-12">
+                            <label asp-for="Email">@T["Email Address"]</label>
+                            <input asp-for="Email" class="form-control" />
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                            <span class="text-muted form-text small">@T["You must specify an email address for the default administrator account"]</span>
+                        </div>
+                    </fieldset>
                 </div>
-            </div>                
-            <div class="col-lg-6">
-                <div class="form-group" asp-validation-class-for="RequestedUrlHost">
-                    <label asp-for="RequestedUrlHost">@T["Host"]</label>
-                    <input asp-for="RequestedUrlHost" placeholder="site1.domain.com" class="form-control" />
-                    <span asp-validation-for="RequestedUrlHost" class="text-danger"></span>
-                    <span class="text-muted form-text small">@T["For example https://www.domain.com or https://sub.domain.com"]</span>
+                <div class="col-md-6">
+
+                    <fieldset class="row" asp-validation-class-for="TablePrefix">
+                        <div class="form-group col-md-12">
+                            <label asp-for="Password">@T["Password"]</label>
+                            <input asp-for="Password" class="form-control" />
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                            <span class="text-muted form-text small">@T["Must contain at least 1 lower case character, 1 upper case character, 1 special character, 1 digit and be a minimum of 6 characters long."]</span>
+                        </div>
+                    </fieldset>
+                    <fieldset class="row" asp-validation-class-for="TablePrefix">
+                        <div class="form-group col-md-12">
+                            <label asp-for="PasswordConfirmation">@T["Confirm Password"]</label>
+                            <input asp-for="PasswordConfirmation" class="form-control" />
+                            <span asp-validation-for="PasswordConfirmation" class="text-danger"></span>
+                            <span class="text-muted form-text small">@T["Please retype your admin password to ensure you've entered this correctly."]</span>
+                        </div>
+                    </fieldset>
                 </div>
             </div>
-        </div>
-        
+        }
+
+        @if (!isDefault)
+        {
+            <div class="form-group">
+                <h6>@T["URL Settings"]</h6>
+                @T["Specify the prefix name or host name for this tenant."]
+            </div>
+            <div class="row">
+                <div class="col-lg-6">
+                    <div class="form-group" asp-validation-class-for="RequestedUrlPrefix">
+                        <label asp-for="RequestedUrlPrefix">@T["Prefix"]</label>
+                        <div class="input-group mb-3">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text" id="basic-addon1">/</span>
+                            </div>
+                            <input asp-for="RequestedUrlPrefix" class="form-control" />
+                        </div>
+                        <span asp-validation-for="RequestedUrlPrefix" class="text-danger"></span>
+                        <span class="text-muted form-text small">@T["For example sitename or companyname"]</span>
+                    </div>
+                </div>
+                <div class="col-lg-6">
+                    <div class="form-group" asp-validation-class-for="RequestedUrlHost">
+                        <label asp-for="RequestedUrlHost">@T["Host"]</label>
+                        <input asp-for="RequestedUrlHost" class="form-control" />
+                        <span asp-validation-for="RequestedUrlHost" class="text-danger"></span>
+                        <span class="text-muted form-text small">@T["For example https://www.domain.com or https://sub.domain.com"]</span>
+                    </div>
+                </div>
+            </div>
+        }
+
     </card-body>
 </card>

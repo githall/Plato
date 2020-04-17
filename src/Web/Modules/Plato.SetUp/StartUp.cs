@@ -9,8 +9,10 @@ using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.SetUp
 {
+
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)
@@ -37,5 +39,7 @@ namespace Plato.SetUp
             );
 
         }
+
     }
+
 }

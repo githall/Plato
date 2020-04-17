@@ -26,8 +26,6 @@ namespace PlatoCore.Abstractions.SetUp
 
         string RequestedUrlHost { get; set; }
 
-        bool IsHost { get; set; }
-
         IDictionary<string, string> Errors { get; set; }
 
     }
@@ -52,8 +50,6 @@ namespace PlatoCore.Abstractions.SetUp
         public string RequestedUrlPrefix { get; set; }
 
         public string RequestedUrlHost { get; set; }
-
-        public bool IsHost { get; set; }
 
         public IDictionary<string, string> Errors { get; set; }
 

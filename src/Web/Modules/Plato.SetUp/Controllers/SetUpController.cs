@@ -84,8 +84,7 @@ namespace Plato.SetUp.Controllers
                 DatabaseConnectionString = model.ConnectionString,
                 AdminUsername = model.UserName,
                 AdminEmail = model.Email,
-                AdminPassword = model.Password,
-                IsHost = true,
+                AdminPassword = model.Password,              
                 Errors = new Dictionary<string, string>()
             };
 

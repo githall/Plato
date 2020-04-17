@@ -25,7 +25,8 @@ namespace PlatoCore.Cache
         private readonly ILogger<CacheManager> _logger;
         private readonly IMemoryCache _memoryCache;
 
-        public SimpleCacheManager(ICacheDependency cacheDependency,
+        public SimpleCacheManager(
+            ICacheDependency cacheDependency,
             IMemoryCache memoryCache,
             ILogger<CacheManager> logger)
         {
@@ -36,7 +37,7 @@ namespace PlatoCore.Cache
 
         public async Task<TItem> GetOrCreateAsync<TItem>(CacheToken token, Func<ICacheEntry, Task<TItem>> factory)
         {
-                    
+
             var key = token.ToString();
 
             // Item does not exist in cache
@@ -49,25 +50,25 @@ namespace PlatoCore.Cache
                 // Invoke our func delegate
                 obj = (object)await factory(entry);
 
-                // Set expiration tokens
-                entry.ExpirationTokens.Add(_cacheDependency.GetToken(key));
+                //// Set expiration tokens
+                //entry.ExpirationTokens.Add(_cacheDependency.GetToken(key));
                 
-                // Set value
-                entry.SetValue(obj);
+                //// Set value
+                //entry.SetValue(obj);
 
-                // need to manually call dispose instead of having a using
-                // statement in case the factory passed in throws, in which case we
-                // do not want to add the entry to the cache
-                entry.Dispose();
+                //// need to manually call dispose instead of having a using
+                //// statement in case the factory passed in throws, in which case we
+                //// do not want to add the entry to the cache
+                //entry.Dispose();
 
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    var type = obj != null
-                        ? ((TItem)obj).GetType()
-                        : typeof(TItem);
-                    _logger.LogInformation("Added entry to cache of type {0} with key: {1}",
-                        type.Name, key);
-                }
+                //if (_logger.IsEnabled(LogLevel.Information))
+                //{
+                //    var type = obj != null
+                //        ? ((TItem)obj).GetType()
+                //        : typeof(TItem);
+                //    _logger.LogInformation("Added entry to cache of type {0} with key: {1}",
+                //        type.Name, key);
+                //}
 
             }
 

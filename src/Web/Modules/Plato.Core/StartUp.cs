@@ -102,7 +102,7 @@ namespace Plato.Core
                 defaults: new {controller, action }
             );
 
-            // Fallback default homepage
+            // Fall-back default homepage
             routes.MapAreaRoute(
                 name: "CoreHome",
                 areaName: "Plato.Core",

@@ -37,12 +37,6 @@ namespace PlatoCore.Models.Shell
         string AuthCookieName { get; }
 
         /// <summary>
-        /// Indicates the current shell is the host shell capable of managing tenants. 
-        /// This should be true upon initial set-up but false for all subsequent tenants
-        /// </summary>
-        bool IsHost { get; set; }
-
-        /// <summary>
         /// The shell state. 
         /// </summary>
         TenantState State { get; set; }

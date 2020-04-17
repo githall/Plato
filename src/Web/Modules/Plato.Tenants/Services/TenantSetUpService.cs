@@ -69,8 +69,7 @@ namespace Plato.Tenants.Services
                 Location = context.SiteName.ToSafeFileName(),
                 RequestedUrlHost = context.RequestedUrlHost,
                 RequestedUrlPrefix = context.RequestedUrlPrefix,
-                State = TenantState.Initializing,
-                IsHost = context.IsHost
+                State = TenantState.Initializing
             };
 
             if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))

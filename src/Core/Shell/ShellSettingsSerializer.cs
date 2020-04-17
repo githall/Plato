@@ -20,7 +20,6 @@ namespace PlatoCore.Shell
                 TablePrefix = configuration["TablePrefix"],
                 DatabaseProvider = configuration["DatabaseProvider"],
                 Theme = configuration["Theme"],
-                IsHost = configuration["IsHost"] == "1" ? true : false,
                 State = Enum.TryParse(configuration["State"], true, out TenantState state)
                     ? state
                     : TenantState.Uninitialized

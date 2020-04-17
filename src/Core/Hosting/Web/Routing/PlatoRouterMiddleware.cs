@@ -38,13 +38,13 @@ namespace PlatoCore.Hosting.Web.Routing
             var shellSettings = (ShellSettings)context.Features[typeof(ShellSettings)];
 
             // Define a PathBase for the current request that is the RequestUrlPrefix.
-            // This will allow any view to reference ~/ as the tenant's base url.
-            // Because IIS or another middleware might have already set it, we just append the tenant prefix value.
+            // This will allow any view to reference ~/ as the tenant's base URL.
+            // Because IIS or another middle ware might have already set it, we just append the tenant prefix value.
             if (!String.IsNullOrEmpty(shellSettings.RequestedUrlPrefix))
             {
-                context.Request.PathBase += ("/" + shellSettings.RequestedUrlPrefix);
-                context.Request.Path = context.Request.Path.ToString()
-                    .Substring(context.Request.PathBase.Value.Length);
+                //context.Request.PathBase += "/" + shellSettings.RequestedUrlPrefix;
+                //context.Request.Path = context.Request.Path.ToString()
+                //    .Substring(context.Request.PathBase.Value.Length);
             }
 
             // Do we need to rebuild the pipeline ?
@@ -76,7 +76,7 @@ namespace PlatoCore.Hosting.Web.Routing
 
         }
 
-        // Build the middleware pipeline for the current tenant
+        // Build the middle ware pipeline for the current tenant
         public RequestDelegate BuildTenantPipeline(ShellSettings shellSettings, HttpContext httpContext)
         {
 
@@ -91,7 +91,7 @@ namespace PlatoCore.Hosting.Web.Routing
                 routePrefix = shellSettings.RequestedUrlPrefix + "/";
             }
 
-            // Create a default routebuilder using our PlatoRouter implementation 
+            // Create a default route builder using our PlatoRouter implementation 
             var routeBuilder = new RouteBuilder(appBuilder, new RouteHandler(_next))
             {
                 DefaultHandler = serviceProvider.GetRequiredService<IPlatoRouter>()
@@ -126,7 +126,16 @@ namespace PlatoCore.Hosting.Web.Routing
             // Use router
             appBuilder.UseRouter(router);
 
-            // Configure captured http context
+            //appBuilder.UseEndpoints(routes =>
+            //{
+            //    foreach (var startup in startups)
+            //    {
+            //        startup.Configure(appBuilder, routes, ShellScope.Services);
+            //    }
+            //});
+
+
+            // Configure captured HTTP context
             ConfigureCapturedHttpContext(httpContext, serviceProvider);
 
             // Configure captured router

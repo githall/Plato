@@ -136,7 +136,9 @@ namespace Plato.Tenants.ViewProviders
                 {
                     SiteName = model.Name,
                     ConnectionString = model.ConnectionString,
-                    TablePrefix = model.TablePrefix,              
+                    TablePrefix = model.TablePrefix,    
+                    RequestedUrlHost = model.RequestedUrlHost,
+                    RequestedUrlPrefix = model.RequestedUrlPrefix,
                     IsNewTenant = false
                 };
             }
@@ -149,9 +151,6 @@ namespace Plato.Tenants.ViewProviders
                 View<EditTenantViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer"),
                 View<EditTenantViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions")
             ));
-
-
-            //return Task.FromResult(default(IViewProviderResult));
 
         }
 

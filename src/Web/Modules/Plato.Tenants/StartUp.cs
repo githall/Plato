@@ -28,13 +28,7 @@ namespace Plato.Tenants
         public override void ConfigureServices(IServiceCollection services)
         {
 
-            // Set-up event handler
-            //services.AddScoped<ISetUpEventHandler, SetUpEventHandler>();
-
-            // Feature installation event handler
-            //services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
-
-            // Admin view provider
+            // View providers
             services.AddScoped<IViewProviderManager<ShellSettings>, ViewProviderManager<ShellSettings>>();
             services.AddScoped<IViewProvider<ShellSettings>, AdminViewProvider>();
 
@@ -43,6 +37,7 @@ namespace Plato.Tenants
 
             // Services
             services.AddScoped<ITenantSetUpService, TenantSetUpService>();
+
         }
 
         public override void Configure(
