@@ -22,6 +22,8 @@ namespace PlatoCore.Models.Shell
         /// </summary>
         string RequestedUrlPrefix { get; set; }
 
+        string RequestedUrl { get; }
+
         /// <summary>
         /// Unique database table prefix for the shell.
         /// </summary>

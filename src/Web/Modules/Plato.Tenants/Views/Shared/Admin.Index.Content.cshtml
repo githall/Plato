@@ -1,33 +1,35 @@
 ﻿@model TenantIndexViewModel
 @{
     var platoOpts = GetOptions<PlatoOptions>();
-    var isDemo = platoOpts?.DemoMode ?? false;
+    var isDemo = platoOpts?.DemoMode ?? false;    
 }
-
 
 <card class="card card-body-flush">
     <card-title>
-        <h6 class="card-title">@T["Roles"]</h6>
+        <h6 class="card-title">@T["Tenants"]</h6>
     </card-title>
     <card-body>
         @if (Model.Results != null)
-        {
+        {            
             <ul class="list-group list-group-flush list-group-hover">
                 @foreach (var tenant in Model.Results)
                 {
                     <li class="list-group-item list-group-item-action">
-
-                        <h6 class="d-inline-block">
-                            <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="font-weight-bold">
-                                @tenant.Name
-                            </a>
-                        </h6>
-
                         <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="btn btn-secondary float-right">
                             <i class="fal fa-pencil"></i>
                             @T["Edit"]
                         </a>
-
+                        <h6 class="d-inline-block">
+                            <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="font-weight-bold">
+                                @tenant.Name
+                            </a>                         
+                        </h6>
+                        @if (!string.IsNullOrEmpty(tenant.RequestedUrl)) 
+                        {
+                            <a href="@tenant.RequestedUrl" data-toggle="tooltip" title="@tenant.RequestedUrl" target="_blank" class="ml-2">
+                                <i class="fal fa-external-link"></i>
+                            </a>
+                        }
                     </li>
                 }
             </ul>

@@ -119,6 +119,29 @@ namespace PlatoCore.Models.Shell
                 this["State"] = value.ToString();
             }
         }
+
+        public string RequestedUrl
+        {
+            get
+            {
+
+                var host = RequestedUrlHost ?? string.Empty;
+                var prefix = RequestedUrlPrefix ?? string.Empty;
+
+                // Remove trailing / from host name
+                if (host.EndsWith("/"))
+                {
+                    host = host.Substring(host.Length - 1);
+                }
+
+                return !string.IsNullOrEmpty(host)
+                    ? host + prefix
+                    : "/" + prefix;
+
+            }
+
+        }
+
     }
 
 }

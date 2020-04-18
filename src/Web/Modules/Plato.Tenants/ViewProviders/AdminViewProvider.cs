@@ -45,7 +45,6 @@ namespace Plato.Tenants.ViewProviders
         public override Task<IViewProviderResult> BuildDisplayAsync(ShellSettings role, IViewProviderContext updater)
         {
 
-
             return Task.FromResult(
                 Views(
                     View<ShellSettings>("Admin.Display.Header", model => role).Zone("header"),
@@ -59,18 +58,18 @@ namespace Plato.Tenants.ViewProviders
         public override Task<IViewProviderResult> BuildIndexAsync(ShellSettings role, IViewProviderContext context)
         {
 
-            var indexViewModel = context.Controller.HttpContext.Items[typeof(TenantIndexViewModel)] as TenantIndexViewModel;
-            if (indexViewModel == null)
+            var viewModel = context.Controller.HttpContext.Items[typeof(TenantIndexViewModel)] as TenantIndexViewModel;
+            if (viewModel == null)
             {
                 throw new Exception($"A view model of type {typeof(TenantIndexViewModel).ToString()} has not been registered on the HttpContext!");
             }
 
-            indexViewModel.Results = _shellSettingsManager.LoadSettings();
+            viewModel.Results = _shellSettingsManager.LoadSettings();
 
             return Task.FromResult(Views(
-                View<TenantIndexViewModel>("Admin.Index.Header", model => indexViewModel).Zone("header"),
-                View<TenantIndexViewModel>("Admin.Index.Tools", model => indexViewModel).Zone("tools"),
-                View<TenantIndexViewModel>("Admin.Index.Content", model => indexViewModel).Zone("content")
+                View<TenantIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header"),
+                View<TenantIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools"),
+                View<TenantIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content")
             ));
 
         }
