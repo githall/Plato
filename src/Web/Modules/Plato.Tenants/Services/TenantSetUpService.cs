@@ -15,15 +15,6 @@ using PlatoCore.Shell.Abstractions;
 namespace Plato.Tenants.Services
 {
 
-    public interface ITenantSetUpService
-    {
-
-        Task<ICommandResult<ISetUpContext>> InstallAsync(TenantSetUpContext context);
-
-        Task<ICommandResult<ISetUpContext>> UninstallAsync(TenantSetUpContext context);
-
-    }
-
     public class TenantSetUpService : ITenantSetUpService
     {
 
@@ -44,10 +35,10 @@ namespace Plato.Tenants.Services
             _platoHost = platoHost;
         }
 
-        public async Task<ICommandResult<ISetUpContext>> InstallAsync(TenantSetUpContext context)
+        public async Task<ICommandResult<TenantSetUpContext>> InstallAsync(TenantSetUpContext context)
         {
 
-            var result = new CommandResult<ISetUpContext>();
+            var result = new CommandResult<TenantSetUpContext>();
 
             // Validate tenant
 
@@ -57,15 +48,14 @@ namespace Plato.Tenants.Services
             {
 
                 // Ensure a unique shell name
-                var shell = shells.First(s => s.Name.Equals(context.SiteName, StringComparison.OrdinalIgnoreCase));
+                var shell = shells.FirstOrDefault(s => s.Name.Equals(context.SiteName, StringComparison.OrdinalIgnoreCase));
                 if (shell != null)
                 {
-                    return result.Failed($"A tenant with the name \"{shell.Name}\" already exists!");
-                  
+                    return result.Failed($"A tenant with the name \"{shell.Name}\" already exists!");                  
                 }
 
                 // Ensure a unique connection string & table prefix
-                shell = shells.First(s =>
+                shell = shells.FirstOrDefault(s =>
                     s.ConnectionString.Equals(context.DatabaseConnectionString, StringComparison.OrdinalIgnoreCase) &&
                     s.TablePrefix.Equals(context.DatabaseTablePrefix, StringComparison.OrdinalIgnoreCase));
                 if (shell != null)
@@ -88,51 +78,35 @@ namespace Plato.Tenants.Services
 
         }
 
-        public Task<ICommandResult<ISetUpContext>> UninstallAsync(TenantSetUpContext context)
+        public async Task<ICommandResult<TenantSetUpContext>> UninstallAsync(TenantSetUpContext context)
         {
-            var result = new CommandResult<ISetUpContext>();
+            var result = new CommandResult<TenantSetUpContext>();
 
-            return Task.FromResult(result.Failed());
+
+            try
+            {
+                return await UninstallInternalAsync(context);
+            }
+            catch (Exception ex)
+            {
+                return result.Failed(ex.Message);
+            }
+
 
         }
 
         // --------------------------
 
-
-        async Task<ICommandResult<ISetUpContext>> InstallInternalAsync(ISetUpContext context)
+        private async Task<ICommandResult<TenantSetUpContext>> InstallInternalAsync(TenantSetUpContext context)
         {
 
-            var result = new CommandResult<ISetUpContext>();
+            var result = new CommandResult<TenantSetUpContext>();
 
-            // Set state to "Initializing" so that subsequent HTTP requests are responded to with "Service Unavailable" while setting up.
-            //_shellSettings.State = TenantState.Initializing;
-
-            var executionId = Guid.NewGuid().ToString("n");
-
-            var shellSettings = new ShellSettings()
-            {
-                Name = context.SiteName,
-                Location = context.SiteName.ToSafeFileName(),
-                RequestedUrlHost = context.RequestedUrlHost,
-                RequestedUrlPrefix = context.RequestedUrlPrefix,
-                State = TenantState.Initializing
-            };
-
-            if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))
-            {
-                var tablePrefix = context.DatabaseTablePrefix;
-                if (!tablePrefix.EndsWith(TablePrefixSeparator))
-                    tablePrefix += TablePrefixSeparator;
-                shellSettings.DatabaseProvider = context.DatabaseProvider;
-                shellSettings.ConnectionString = context.DatabaseConnectionString;
-                shellSettings.TablePrefix = tablePrefix;
-            }
-
+            var shellSettings = BuildShellSettings(context);
             using (var shellContext = _shellContextFactory.CreateMinimalShellContext(shellSettings))
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
                 {
-
                     using (var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>())
                     {
 
@@ -153,7 +127,7 @@ namespace Plato.Tenants.Services
                         }
 
                         // Invoke modules to react to the setup event
-                     
+
                         var logger = scope.ServiceProvider.GetRequiredService<ILogger<TenantSetUpService>>();
 
                         var setupEventHandlers = scope.ServiceProvider.GetServices<ISetUpEventHandler>();
@@ -178,8 +152,54 @@ namespace Plato.Tenants.Services
             {
                 return result.Failed(context.Errors.Select(e => e.Value).ToArray());           
             }
-            
+
             return result.Success(context);
+
+        }
+
+        private Task<ICommandResult<TenantSetUpContext>> UninstallInternalAsync(TenantSetUpContext context)
+        {
+
+            var result = new CommandResult<TenantSetUpContext>();
+
+            const string Sql = @"
+                select schema_name(t.schema_id) as schema_name,
+                       t.name as table_name
+                from sys.tables t
+                where t.name like '{prefix}%'
+                order by table_name,
+                         schema_name;
+            ";
+
+
+            return Task.FromResult(result.Failed());
+
+        }
+
+        // ---------------
+
+        private ShellSettings BuildShellSettings(TenantSetUpContext context)
+        {
+            var shellSettings = new ShellSettings()
+            {
+                Name = context.SiteName,
+                Location = context.SiteName.ToSafeFileName(),
+                RequestedUrlHost = context.RequestedUrlHost,
+                RequestedUrlPrefix = context.RequestedUrlPrefix,
+                State = TenantState.Initializing
+            };
+
+            if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))
+            {
+                var tablePrefix = context.DatabaseTablePrefix;
+                if (!tablePrefix.EndsWith(TablePrefixSeparator))
+                    tablePrefix += TablePrefixSeparator;
+                shellSettings.DatabaseProvider = context.DatabaseProvider;
+                shellSettings.ConnectionString = context.DatabaseConnectionString;
+                shellSettings.TablePrefix = tablePrefix;
+            }
+
+            return shellSettings;
 
         }
 

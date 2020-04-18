@@ -1,9 +1,16 @@
 ﻿@model EditTenantViewModel
-@{ 
-    var isDefault = Model.SiteName?.Equals(ShellHelper.DefaultShellName, StringComparison.OrdinalIgnoreCase) ?? false;
-}
 
 <input type="hidden" asp-for="IsNewTenant" />
+<input type="hidden" name="id" value="@Model.SiteName" />
+
+@if (Model.IsDefault)
+{
+
+        <div class="alert alert-danger">
+            @T["You are editing the default host. Some fields maybe readonly."]
+        </div>
+
+}
 
 <card>
     <card-title>
@@ -13,65 +20,87 @@
 
         <div asp-validation-summary="All"></div>
 
-        <fieldset class="row" asp-validation-class-for="SiteName">
-            <div class="form-group col-md-12">
-                <h6>@T["Site Name"]</h6>
-                <label asp-for="SiteName">@T["What is the name of your site?"]</label>
-                <input asp-for="SiteName" class="form-control" style="width: 100%;" />
-                <span asp-validation-for="SiteName" class="text-danger"></span>
-            </div>
-        </fieldset>
-
-        @if (!Model.TablePrefixPreset || !Model.ConnectionStringPreset)
+        @if (!Model.IsDefault)
         {
-            <div class="form-group">
-                <h6>@T["Database"]</h6>
-                @T["The Microsoft SQL Server 2016 or above database to store your Plato configuration and content. You will first need to create a new database within your instance of SQL Server and then point the connection string below to this new database."]
-            </div>
+            <fieldset class="row" asp-validation-class-for="SiteName">
+                <div class="form-group col-md-12">
+                    <h6>@T["Site Name"]</h6>
+                    <label asp-for="SiteName">@T["What is the name of your site?"]</label>
+                    <input asp-for="SiteName" class="form-control" />
+                    <span asp-validation-for="SiteName" class="text-danger"></span>
+                </div>
+            </fieldset>
         }
-        @if (Model.ConnectionStringPreset)
+        else
+        {
+            <fieldset class="row" asp-validation-class-for="SiteName">
+                <div class="form-group col-md-12">
+                    <h6>@T["Site Name"]</h6>
+                    <label asp-for="SiteName">@T["What is the name of your site?"]</label>
+                    <input readonly asp-for="SiteName" class="form-control" />
+                    <span asp-validation-for="SiteName" class="text-danger"></span>
+                </div>
+            </fieldset>
+        }
+
+        @if (Model.IsNewTenant)
+        {
+            @if (!Model.TablePrefixPreset || !Model.ConnectionStringPreset)
+            {
+                <div class="form-group">
+                    <h6>@T["Database"]</h6>
+                    @T["The Microsoft SQL Server 2016 or above database to store your Plato configuration and content. You will first need to create a new database within your instance of SQL Server and then point the connection string below to this new database."]
+                </div>
+            }
+            @if (Model.ConnectionStringPreset)
+            {
+                <input asp-for="ConnectionString" type="hidden" />
+            }
+            else
+            {
+                <fieldset class="row" asp-validation-class-for="ConnectionString">
+                    <div class="form-group col-md-12">
+
+                        <label asp-for="ConnectionString">@T["Connection string"]</label>
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="search-input-group">
+                                <input asp-for="ConnectionString"
+                                       autocomplete="off"
+                                       data-provide="password"
+                                       class="form-control" type="text" required />
+
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
+                                    <i class="fal fa-eye"></i>
+                                </button>
+                            </div>
+
+
+                        </div>
+                        <span asp-validation-for="ConnectionString" class="text-danger"></span>
+                        <span class="text-muted form-text small">@T["The connection string to your database. e.g., server=localhost;uid=your_username;pwd=your_password;database=plato"]</span>
+                    </div>
+                </fieldset>
+            }
+            @if (Model.TablePrefixPreset)
+            {
+                <input asp-for="TablePrefix" type="hidden" />
+            }
+            else
+            {
+                <fieldset class="row" asp-validation-class-for="TablePrefix">
+                    <div class="form-group col-md-12">
+                        <label asp-for="TablePrefix">@T["Table Prefix"]</label>
+                        <input asp-for="TablePrefix" class="form-control" />
+                        <span asp-validation-for="TablePrefix" class="text-danger"></span>
+                        <span class="text-muted form-text small">@T["You can specify a custom table prefix if you intend to reuse the same database for multiple unique instances of Plato."]</span>
+                    </div>
+                </fieldset>
+            }
+        }
+        else
         {
             <input asp-for="ConnectionString" type="hidden" />
-        }
-        else
-        {
-            <fieldset class="row" asp-validation-class-for="ConnectionString">
-                <div class="form-group col-md-12">
-
-                    <label asp-for="ConnectionString">@T["Connection string"]</label>
-                    <div class="input-group mb-2 mb-sm-0">
-                        <div class="search-input-group">
-                            <input asp-for="ConnectionString"
-                                   autocomplete="off"
-                                   data-provide="password"
-                                   class="form-control" type="text" required />
-
-                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
-                                <i class="fal fa-eye"></i>
-                            </button>
-                        </div>
-
-
-                    </div>
-                    <span asp-validation-for="ConnectionString" class="text-danger"></span>
-                    <span class="text-muted form-text small">@T["The connection string to your database. e.g., server=localhost;uid=your_username;pwd=your_password;database=plato"]</span>
-                </div>
-            </fieldset>
-        }
-        @if (Model.TablePrefixPreset)
-        {
             <input asp-for="TablePrefix" type="hidden" />
-        }
-        else
-        {
-            <fieldset class="row" asp-validation-class-for="TablePrefix">
-                <div class="form-group col-md-12">
-                    <label asp-for="TablePrefix">@T["Table Prefix"]</label>
-                    <input asp-for="TablePrefix" class="form-control" />
-                    <span asp-validation-for="TablePrefix" class="text-danger"></span>
-                    <span class="text-muted form-text small">@T["You can specify a custom table prefix if you intend to reuse the same database for multiple unique instances of Plato."]</span>
-                </div>
-            </fieldset>
         }
 
         @if (Model.IsNewTenant)
@@ -120,37 +149,53 @@
                 </div>
             </div>
         }
-
-        @if (!isDefault)
+        else
         {
-            <div class="form-group">
-                <h6>@T["URL Settings"]</h6>
-                @T["Specify the prefix name or host name for this tenant."]
-            </div>
-            <div class="row">
-                <div class="col-lg-6">
-                    <div class="form-group" asp-validation-class-for="RequestedUrlPrefix">
-                        <label asp-for="RequestedUrlPrefix">@T["Prefix"]</label>
-                        <div class="input-group mb-3">
-                            <div class="input-group-prepend">
-                                <span class="input-group-text" id="basic-addon1">/</span>
-                            </div>
-                            <input asp-for="RequestedUrlPrefix" class="form-control" />
-                        </div>
-                        <span asp-validation-for="RequestedUrlPrefix" class="text-danger"></span>
-                        <span class="text-muted form-text small">@T["For example sitename or companyname"]</span>
-                    </div>
-                </div>
-                <div class="col-lg-6">
-                    <div class="form-group" asp-validation-class-for="RequestedUrlHost">
-                        <label asp-for="RequestedUrlHost">@T["Host"]</label>
-                        <input asp-for="RequestedUrlHost" class="form-control" />
-                        <span asp-validation-for="RequestedUrlHost" class="text-danger"></span>
-                        <span class="text-muted form-text small">@T["For example https://www.domain.com or https://sub.domain.com"]</span>
-                    </div>
-                </div>
-            </div>
+            <input type="hidden" asp-for="UserName" />
+            <input type="hidden" asp-for="Email" />
+            <input type="hidden" asp-for="Password" />
+            <input type="hidden" asp-for="PasswordConfirmation" />
         }
+
+      
+        <div class="form-group">
+            <h6>@T["URL Settings"]</h6>
+            @T["Specify a host name or prefix for this tenant."]
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group" asp-validation-class-for="RequestedUrlHost">
+                    <label asp-for="RequestedUrlHost">
+                        @T["Host Name"]                     
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">https://</span>
+                        </div>
+                        <input asp-for="RequestedUrlHost" class="form-control" />
+                    </div>
+                        
+                    <span asp-validation-for="RequestedUrlHost" class="text-danger"></span>
+                    <span class="text-muted form-text small">@T["For example https://www.domain.com or https://sub.domain.com. Leave blank to resolve to the default host name. If requests contain this host name this tenant will be loaded."]</span>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group" asp-validation-class-for="RequestedUrlPrefix">
+                    <label asp-for="RequestedUrlPrefix">
+                        @T["Prefix"]                  
+                    </label>
+                    <div class="input-group">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text" id="basic-addon1">/</span>
+                        </div>
+                        <input asp-for="RequestedUrlPrefix" class="form-control" />
+                    </div>
+                    <span asp-validation-for="RequestedUrlPrefix" class="text-danger"></span>
+                    <span class="text-muted form-text small">@T["A prefix or folder name for this tenant. For example sitename or companyname. If requests contain this prefix and match the host name this tenant will be loaded. Leave blank to resolve this tenant to the root."]</span>
+                </div>
+            </div>
+        </div>
+      
 
     </card-body>
 </card>

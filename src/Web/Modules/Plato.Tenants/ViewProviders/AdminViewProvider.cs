@@ -75,43 +75,32 @@ namespace Plato.Tenants.ViewProviders
 
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(ShellSettings model, IViewProviderContext updater)
+        public override Task<IViewProviderResult> BuildEditAsync(ShellSettings settings, IViewProviderContext updater)
         {
 
-            if (model == null)
+            if (settings == null)
             {
-                throw new ArgumentNullException(nameof(model));
+                throw new ArgumentNullException(nameof(settings));
             }
 
-            //// Locate the role we are editing within our default roles
-            //var defaultRole = DefaultRoles.ToList()
-            //    .FirstOrDefault(r => r.Equals(role.Name, StringComparison.OrdinalIgnoreCase));
+            // Configure defaults
+            string defaultConnectionString = "server=localhost;trusted_connection=true;database=plato",
+                userName = "admin",
+                email = "admin@admin.com",
+                password = "Pa$1n@aDyN";
 
-            //// Build model
-            //var editRoleViewModel = new EditRoleViewModel()
-            //{
-            //    Id = role.Id,
-            //    RoleName = role.Name,
-            //    Role = role,
-            //    IsNewRole = await IsNewRole(role.Id),
-            //    IsDefaultRole = defaultRole != null ? true : false,
-            //    EnabledPermissions = await GetEnabledRolePermissionsAsync(role),
-            //    CategorizedPermissions = await _permissionsManager.GetCategorizedPermissionsAsync()
-            //};
-
-            var defaultConnectionString = "";
-
+            // Build view model
             EditTenantViewModel viewModel = null;
-            if (string.IsNullOrEmpty(model.Name))
+            if (string.IsNullOrEmpty(settings.Name))
             {
                 viewModel = new EditTenantViewModel()
                 {
-                    ConnectionString = "server=localhost;trusted_connection=true;database=plato",
+                    ConnectionString = defaultConnectionString,
                     TablePrefix = "plato",
-                    UserName = "admin",
-                    Email = "admin@admin.com",
-                    Password = "admin",
-                    PasswordConfirmation = "admin",
+                    UserName = userName,
+                    Email = email,
+                    Password = password,
+                    PasswordConfirmation = password,
                     IsNewTenant = true
                 };
             }
@@ -119,11 +108,15 @@ namespace Plato.Tenants.ViewProviders
             {
                 viewModel = new EditTenantViewModel()
                 {
-                    SiteName = model.Name,
-                    ConnectionString = model.ConnectionString,
-                    TablePrefix = model.TablePrefix,
-                    RequestedUrlHost = model.RequestedUrlHost,
-                    RequestedUrlPrefix = model.RequestedUrlPrefix
+                    SiteName = settings.Name,
+                    ConnectionString = settings.ConnectionString,
+                    TablePrefix = settings.TablePrefix,
+                    RequestedUrlHost = settings.RequestedUrlHost,
+                    RequestedUrlPrefix = settings.RequestedUrlPrefix,        
+                    UserName = userName,
+                    Email = email,
+                    Password = password,
+                    PasswordConfirmation = password,
                 };
             }
 
@@ -138,14 +131,14 @@ namespace Plato.Tenants.ViewProviders
 
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(ShellSettings role, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(ShellSettings settings, IViewProviderContext context)
         {
 
             var model = new EditTenantViewModel();
 
             if (!await context.Updater.TryUpdateModelAsync(model))
             {
-                return await BuildEditAsync(role, context);
+                return await BuildEditAsync(settings, context);
             }
 
             if (context.Updater.ModelState.IsValid)
@@ -206,7 +199,7 @@ namespace Plato.Tenants.ViewProviders
 
             }
 
-            return await BuildEditAsync(role, context);
+            return await BuildEditAsync(settings, context);
 
         }
 

@@ -1,4 +1,5 @@
 ﻿using PlatoCore.Security.Attributes;
+using PlatoCore.Shell.Abstractions;
 using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Tenants.ViewModels
@@ -40,6 +41,8 @@ namespace Plato.Tenants.ViewModels
         public string RequestedUrlHost { get; set; }
 
         public bool IsNewTenant { get; set; }
+
+        public bool IsDefault => SiteName?.Equals(ShellHelper.DefaultShellName, System.StringComparison.OrdinalIgnoreCase) ?? false;      
 
     }
 

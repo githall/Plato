@@ -47,8 +47,14 @@ namespace PlatoCore.Security.Attributes
 
         ICommandResultBase ValidateUserName(string username, UserNameOptions options)
         {
-
+        
             var result = new CommandResultBase();
+
+            if (username == null)
+            {
+                return result.Failed("The username is null");
+            }
+
             var friendlyBlackList = BuildFriendlyBlackList(options.BlackListedCharacters.ToArray());
 
             if (string.IsNullOrWhiteSpace(username) || username.Length < options.RequiredLength)
