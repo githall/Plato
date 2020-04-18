@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Plato.Tenants.Models;
+using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Data.Abstractions;
@@ -15,7 +17,11 @@ namespace Plato.Tenants.Services
 
     public interface ITenantSetUpService
     {
-        Task<string> SetUpAsync(TenantSetUpContext context);
+
+        Task<ICommandResult<ISetUpContext>> InstallAsync(TenantSetUpContext context);
+
+        Task<ICommandResult<ISetUpContext>> UninstallAsync(TenantSetUpContext context);
+
     }
 
     public class TenantSetUpService : ITenantSetUpService
@@ -23,40 +29,80 @@ namespace Plato.Tenants.Services
 
         private const string TablePrefixSeparator = "_";
 
+        private readonly IShellSettingsManager _shellSettingsManager;
         private readonly IShellContextFactory _shellContextFactory;
-        private readonly IShellSettings _shellSettings;
+   
         private readonly IPlatoHost _platoHost;
 
         public TenantSetUpService(
-            IShellContextFactory shellContextFactory,
-            IShellSettings shellSettings,
+            IShellSettingsManager shellSettingsManager,
+            IShellContextFactory shellContextFactory,  
             IPlatoHost platoHost)
         {
-            _shellContextFactory = shellContextFactory;
-            _shellSettings = shellSettings;
+            _shellSettingsManager = shellSettingsManager;
+            _shellContextFactory = shellContextFactory;       
             _platoHost = platoHost;
         }
 
-        public async Task<string> SetUpAsync(TenantSetUpContext context)
+        public async Task<ICommandResult<ISetUpContext>> InstallAsync(TenantSetUpContext context)
         {
-            //var initialState = _shellSettings.State;
+
+            var result = new CommandResult<ISetUpContext>();
+
+            // Validate tenant
+
+            var shells = _shellSettingsManager.LoadSettings();
+
+            if (shells != null)
+            {
+
+                // Ensure a unique shell name
+                var shell = shells.First(s => s.Name.Equals(context.SiteName, StringComparison.OrdinalIgnoreCase));
+                if (shell != null)
+                {
+                    return result.Failed($"A tenant with the name \"{shell.Name}\" already exists!");
+                  
+                }
+
+                // Ensure a unique connection string & table prefix
+                shell = shells.First(s =>
+                    s.ConnectionString.Equals(context.DatabaseConnectionString, StringComparison.OrdinalIgnoreCase) &&
+                    s.TablePrefix.Equals(context.DatabaseTablePrefix, StringComparison.OrdinalIgnoreCase));
+                if (shell != null)
+                {
+                    return result.Failed($"A tenant with the same connection string and table prefix already exists!");           
+                }
+
+            }
+        
+            // Configure tenant
+
             try
             {
-                return await SetUpInternalAsync(context);
+                return await InstallInternalAsync(context);
             }
             catch (Exception ex)
             {
-                context.Errors.Add(ex.Message, ex.Message);
-                //_shellSettings.State = initialState;
-                throw;
+                return result.Failed(ex.Message);
             }
+
+        }
+
+        public Task<ICommandResult<ISetUpContext>> UninstallAsync(TenantSetUpContext context)
+        {
+            var result = new CommandResult<ISetUpContext>();
+
+            return Task.FromResult(result.Failed());
+
         }
 
         // --------------------------
 
 
-        async Task<string> SetUpInternalAsync(ISetUpContext context)
+        async Task<ICommandResult<ISetUpContext>> InstallInternalAsync(ISetUpContext context)
         {
+
+            var result = new CommandResult<ISetUpContext>();
 
             // Set state to "Initializing" so that subsequent HTTP requests are responded to with "Service Unavailable" while setting up.
             //_shellSettings.State = TenantState.Initializing;
@@ -102,6 +148,7 @@ namespace Plato.Tenants.Services
                         void ReportError(string key, string message)
                         {
                             hasErrors = true;
+                            //result.Failed(message)
                             context.Errors[key] = message;
                         }
 
@@ -114,7 +161,7 @@ namespace Plato.Tenants.Services
 
                         if (hasErrors)
                         {
-                            return executionId;
+                            return result.Failed(context.Errors.Select(e => e.Value).ToArray());                          
                         }
 
                         var shellSettingsManager = scope.ServiceProvider.GetService<IShellSettingsManager>();
@@ -129,10 +176,10 @@ namespace Plato.Tenants.Services
 
             if (context.Errors.Count > 0)
             {
-                return executionId;
+                return result.Failed(context.Errors.Select(e => e.Value).ToArray());           
             }
             
-            return executionId;
+            return result.Success(context);
 
         }
 

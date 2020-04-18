@@ -453,9 +453,7 @@ namespace Plato.Entities.Stores
 
         #region "Private Methods"
 
-        private string _where = null;
-
-       
+        private string _where = null;       
      
         private string BuildSelect()
         {
@@ -531,12 +529,12 @@ namespace Plato.Entities.Stores
             // -----------------
 
              _query.QueryAdapterManager?.BuildWhere(_query, sb);
-      
-             // -----------------
-             // Ensure we have params
-             // -----------------
 
-             if (_query.Params == null)
+            // -----------------
+            // Ensure we have parameters
+            // -----------------
+
+            if (_query.Params == null)
              {
                  return string.Empty;
              }

@@ -34,22 +34,22 @@
                 <hr class="divider my-4">
             </div>
         </div>
-        <cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+        <caching vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
             @await DisplayAsync(new View("SiteKeyFeatures", new
             {
                 sticky = false
             }))
-        </cache>
+        </caching>
     </div>
 </section>
 
 <!-- Explore The Demo -->
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+<caching vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
     @await DisplayAsync(new View("SiteExploreDemo", new
     {
         sticky = false
     }))
-</cache>
+</caching>
 
 <!-- Features you'll love -->
 <section class="page bg-light">
@@ -395,9 +395,9 @@
 </section>
 
 <!-- Call to action -->
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+<caching vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
     @await DisplayAsync(new View("SiteCallToAction", new
     {
         sticky = false
     }))
-</cache>
+</caching>

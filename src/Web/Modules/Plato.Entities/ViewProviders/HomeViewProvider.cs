@@ -2,8 +2,8 @@
 using Plato.Core.Models;
 using Plato.Entities.Models;
 using Plato.Entities.ViewModels;
-using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Entities.ViewProviders
 {

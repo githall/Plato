@@ -1,21 +1,20 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
-using PlatoCore.Data.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Roles;
 using PlatoCore.Models.Users;
-using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
-using PlatoCore.Stores.Roles;
 using Plato.Tenants.ViewModels;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
+using System.Collections.Generic;
+using Plato.Tenants.Models;
+using Plato.Tenants.Services;
+using Microsoft.Extensions.Logging;
+using System.Linq;
 
 namespace Plato.Tenants.ViewProviders
 {
@@ -23,33 +22,22 @@ namespace Plato.Tenants.ViewProviders
     {
 
         private readonly IShellSettingsManager _shellSettingsManager;
-
-        private readonly IDummyClaimsPrincipalFactory<User> _claimsPrincipalFactory;
-        private readonly IPermissionsManager<Permission> _permissionsManager;
+   
         private readonly IAuthorizationService _authorizationService;
-        private readonly RoleManager<Role> _roleManager;
-        private readonly UserManager<User> _userManager;
-        private readonly IPlatoRoleStore _platoRoleStore;
-        
+        private readonly ITenantSetUpService _tenantSetUpService;
+        private readonly ILogger<AdminViewProvider> _logger;
+
         public AdminViewProvider(
-            IShellSettingsManager shellSettingsManager,
-            UserManager<User> userManager,
-            IPlatoRoleStore platoRoleStore,
-            RoleManager<Role> roleManager,
-            IPermissionsManager<Permission> permissionsManager, 
+            IShellSettingsManager shellSettingsManager, 
             IAuthorizationService authorizationService,
-            IDummyClaimsPrincipalFactory<User> claimsPrincipalFactory)
+            ILogger<AdminViewProvider> logger,
+            ITenantSetUpService setUpService)
         {
 
-            _shellSettingsManager = shellSettingsManager;
-
-            _claimsPrincipalFactory = claimsPrincipalFactory;
-            _authorizationService = authorizationService;
-            _permissionsManager = permissionsManager;
-            _platoRoleStore = platoRoleStore;
-            _userManager = userManager;
-            _roleManager = roleManager;
-
+            _shellSettingsManager = shellSettingsManager;        
+            _authorizationService = authorizationService;         
+            _tenantSetUpService = setUpService;
+            _logger = logger;
         }
 
         #region "Implementation"
@@ -57,7 +45,7 @@ namespace Plato.Tenants.ViewProviders
         public override Task<IViewProviderResult> BuildDisplayAsync(ShellSettings role, IViewProviderContext updater)
         {
 
-            
+
             return Task.FromResult(
                 Views(
                     View<ShellSettings>("Admin.Display.Header", model => role).Zone("header"),
@@ -111,16 +99,13 @@ namespace Plato.Tenants.ViewProviders
             //    CategorizedPermissions = await _permissionsManager.GetCategorizedPermissionsAsync()
             //};
 
-
             var defaultConnectionString = "";
-
-
 
             EditTenantViewModel viewModel = null;
             if (string.IsNullOrEmpty(model.Name))
             {
                 viewModel = new EditTenantViewModel()
-                {                  
+                {
                     ConnectionString = "server=localhost;trusted_connection=true;database=plato",
                     TablePrefix = "plato",
                     UserName = "admin",
@@ -136,10 +121,9 @@ namespace Plato.Tenants.ViewProviders
                 {
                     SiteName = model.Name,
                     ConnectionString = model.ConnectionString,
-                    TablePrefix = model.TablePrefix,    
+                    TablePrefix = model.TablePrefix,
                     RequestedUrlHost = model.RequestedUrlHost,
-                    RequestedUrlPrefix = model.RequestedUrlPrefix,
-                    IsNewTenant = false
+                    RequestedUrlPrefix = model.RequestedUrlPrefix
                 };
             }
 
@@ -167,13 +151,58 @@ namespace Plato.Tenants.ViewProviders
             if (context.Updater.ModelState.IsValid)
             {
 
-                //role.Name = model.RoleName?.Trim();
+                var setupContext = new TenantSetUpContext()
+                {
+                    SiteName = model.SiteName,
+                    DatabaseProvider = "SqlClient",
+                    DatabaseConnectionString = model.ConnectionString,
+                    AdminUsername = model.UserName,
+                    AdminEmail = model.Email,
+                    AdminPassword = model.Password,
+                    RequestedUrlHost = model.RequestedUrlHost,
+                    RequestedUrlPrefix = model.RequestedUrlPrefix,
+                    Errors = new Dictionary<string, string>()
+                };
 
-                //var result = await _roleManager.CreateAsync(role);
-                //foreach (var error in result.Errors)
-                //{
-                //    context.Updater.ModelState.AddModelError(string.Empty, error.Description);
-                //}
+                if (!model.TablePrefixPreset)
+                {
+                    setupContext.DatabaseTablePrefix = model.TablePrefix;
+                }
+
+                if (model.IsNewTenant)
+                {
+
+                    // Execute set-up
+                    var result = await _tenantSetUpService.InstallAsync(setupContext);
+
+                    // Report any errors
+                    if (!result.Succeeded)
+                    {
+
+                        if (_logger.IsEnabled(LogLevel.Information))
+                        {
+                            _logger.LogInformation($"Set-up of tenant '{setupContext.SiteName}' failed with the following errors...");
+                        }
+
+                        foreach (var error in result.Errors)
+                        {
+                            if (_logger.IsEnabled(LogLevel.Information))
+                            {
+                                _logger.LogInformation(error.Code + " " + error.Description);
+                            }
+                            context.Updater.ModelState.AddModelError(error.Code, error.Description);
+                        }
+
+                    }
+
+                }
+                else
+                {
+
+                }
+
+             
+
 
             }
 
@@ -185,7 +214,27 @@ namespace Plato.Tenants.ViewProviders
 
         #region "Private Methods"
 
+        private bool IsNewShell(string name)
+        {
+
+            var shells = _shellSettingsManager.LoadSettings();
+            if (shells != null)
+            {
+                var shell = shells.First(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
+                if (shell != null)
+                {
+                    return false;
+                }
+
+            }
+
+            return true;
+
+        }
+
         #endregion
 
     }
+
 }
+

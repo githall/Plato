@@ -137,48 +137,7 @@ namespace Plato.Tenants.Controllers
 
             if (!ModelState.IsValid)
             {
-                return View(model);
-            }
-
-            var setupContext = new TenantSetUpContext()
-            {
-                SiteName = model.SiteName,
-                DatabaseProvider = "SqlClient",
-                DatabaseConnectionString = model.ConnectionString,              
-                AdminUsername = model.UserName,                
-                AdminEmail = model.Email,
-                AdminPassword = model.Password,
-                RequestedUrlHost = model.RequestedUrlHost,
-                RequestedUrlPrefix = model.RequestedUrlPrefix,
-                Errors = new Dictionary<string, string>()
-            };
-
-            if (!model.TablePrefixPreset)
-            {
-                setupContext.DatabaseTablePrefix = model.TablePrefix;
-            }
-
-            var executionId = await _setUpService.SetUpAsync(setupContext);
-
-            if (setupContext.Errors.Count > 0)
-            {
-
-                if (_logger.IsEnabled(LogLevel.Information))
-                {
-                    _logger.LogInformation($"Set-up of tenant '{setupContext.SiteName}' failed with the following errors...");
-                }
-
-                foreach (var error in setupContext.Errors)
-                {
-                    if (_logger.IsEnabled(LogLevel.Information))
-                    {
-                        _logger.LogInformation(error.Key + " " + error.Value);
-                    }
-                    ModelState.AddModelError(error.Key, error.Value);
-                }
-
-                return await CreatePost(model);
-
+                return await Create();
             }
 
             _alerter.Success(T["Tenant Created Successfully!"]);
@@ -237,19 +196,6 @@ namespace Plato.Tenants.Controllers
             //{
             //    return NotFound();
             //}
-
-            //var roleClaims = new List<RoleClaim>();
-            //foreach (string key in Request.Form.Keys)
-            //{
-            //    if (key.StartsWith("Checkbox.") && Request.Form[key] == "true")
-            //    {
-            //        var permissionName = key.Substring("Checkbox.".Length);
-            //        roleClaims.Add(new RoleClaim { ClaimType = Permission.ClaimTypeName, ClaimValue = permissionName });
-            //    }
-            //}
-
-            //role.RoleClaims.RemoveAll(c => c.ClaimType == Permission.ClaimTypeName);
-            //role.RoleClaims.AddRange(roleClaims);
 
             var result = await _viewProvider.ProvideUpdateAsync(shell, this);
 

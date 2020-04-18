@@ -6,35 +6,27 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Cache.Abstractions;
-using PlatoCore.Models.Shell;
 
 namespace PlatoCore.Cache
 {
 
-    /// <summary>
-    /// A simple implementation with no consideration for multi threaded environments.
-    /// Mainly used when we want to simplify the cache for debugging purposes. 
-    /// </summary>
-    public class ShellCacheManager : ICacheManager
+    public class SingletonCacheManager : ISingletonCacheManager
     {
 
         public static ConcurrentDictionary<CacheToken, Type> Tokens { get; } =
             new ConcurrentDictionary<CacheToken, Type>();
 
         private readonly ILogger<ShellCacheManager> _logger;
-        private readonly ICacheDependency _cacheDependency;      
-        private readonly IShellSettings _shellSettings;
+        private readonly ICacheDependency _cacheDependency;
         private readonly IMemoryCache _memoryCache;
 
-        public ShellCacheManager(
+        public SingletonCacheManager(
             ILogger<ShellCacheManager> logger,
             ICacheDependency cacheDependency,
-            IShellSettings shellSettings,
             IMemoryCache memoryCache)
         {
             _cacheDependency = cacheDependency;
-            _shellSettings = shellSettings;
-            _memoryCache = memoryCache;            
+            _memoryCache = memoryCache;
             _logger = logger;
         }
 
@@ -55,7 +47,7 @@ namespace PlatoCore.Cache
 
                 // Set expiration tokens
                 entry.ExpirationTokens.Add(_cacheDependency.GetToken(key));
-                
+
                 // Set value
                 entry.SetValue(obj);
 
@@ -81,7 +73,7 @@ namespace PlatoCore.Cache
 
         public CacheToken GetOrCreateToken(Type type, params object[] varyBy)
         {
-            var cacheToken = new CacheToken(_shellSettings.Name, type, varyBy);
+            var cacheToken = new CacheToken(type, varyBy);
             if (Tokens.ContainsKey(cacheToken))
             {
                 return Tokens.FirstOrDefault(t => t.Key == cacheToken).Key;
@@ -102,7 +94,7 @@ namespace PlatoCore.Cache
 
         public void CancelTokens(Type type, params object[] varyBy)
         {
-            var cancellationToken = new CacheToken(_shellSettings.Name, type, varyBy);
+            var cancellationToken = new CacheToken(type, varyBy);
             var tokens = GetTokensForType(type);
             foreach (var token in tokens)
             {
