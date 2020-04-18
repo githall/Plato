@@ -165,7 +165,7 @@ namespace Plato.Email.Handlers
             _schemaManager = schemaManager;
         }
 
-        public override async Task SetUp(SetUpContext context, Action<string, string> reportError)
+        public override async Task SetUp(ISetUpContext context, Action<string, string> reportError)
         {
 
             using (var builder = _schemaBuilder)

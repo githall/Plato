@@ -22,6 +22,9 @@ namespace Plato.Demo
         public override void ConfigureServices(IServiceCollection services)
         {
 
+
+            // tenant
+
             // Set-up event handler
             services.AddScoped<ISetUpEventHandler, SetUpEventHandler>();
 

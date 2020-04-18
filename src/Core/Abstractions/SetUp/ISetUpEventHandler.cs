@@ -10,7 +10,7 @@ namespace PlatoCore.Abstractions.SetUp
         string ModuleId { get; }
 
         Task SetUp(
-            SetUpContext context,
+            ISetUpContext context,
             Action<string, string> reportError
         );
 

@@ -10,6 +10,7 @@ using PlatoCore.Tasks.Abstractions;
 
 namespace PlatoCore.Hosting
 {
+
     public class DefaultPlatoHost : IPlatoHost
     {
 
@@ -20,8 +21,8 @@ namespace PlatoCore.Hosting
         private readonly IBroker _broker;
         private readonly ILogger _logger;
         
-        static readonly object SyncLock = new object();
-            ConcurrentDictionary<string, ShellContext> _shellContexts;
+        private ConcurrentDictionary<string, ShellContext> _shellContexts;
+        private static readonly object SyncLock = new object();
 
         public DefaultPlatoHost(
             IShellSettingsManager shellSettingsManager,
@@ -85,6 +86,7 @@ namespace PlatoCore.Hosting
 
         public void RecycleShellContext(IShellSettings settings)
         {
+
             if (_logger.IsEnabled(LogLevel.Debug))
             {
                 _logger.LogDebug("Recycling shell context for tenant {0}", settings.Name);
@@ -124,7 +126,7 @@ namespace PlatoCore.Hosting
 
         // Private methods
 
-        IDictionary<string, ShellContext> BuildCurrent()
+        private IDictionary<string, ShellContext> BuildCurrent()
         {
 
             if (_shellContexts == null)
@@ -142,14 +144,18 @@ namespace PlatoCore.Hosting
             return _shellContexts;
         }
 
-        void CreateAndActivateShells()
+        private void CreateAndActivateShells()
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
+            {
                 _logger.LogInformation("Start creation of shells");
+            }                
             
             // Is there any tenant right now?
-            var allSettings = _shellSettingsManager.LoadSettings().Where(CanCreateShell).ToArray();
+            var allSettings = _shellSettingsManager
+                .LoadSettings()
+                .Where(CanCreateShell).ToArray();
             
             // Load all tenants, and activate their shell.
             if (allSettings.Any())
@@ -161,7 +167,7 @@ namespace PlatoCore.Hosting
                     GetOrCreateShellContext(settings);
                 }
                 //});
-            } 
+            }
             else
             {
                 // No settings, run the Setup.
@@ -175,10 +181,13 @@ namespace PlatoCore.Hosting
             }
         }
 
-        void ActivateShell(ShellContext context)
+        private void ActivateShell(ShellContext context)
         {
+
             if (_logger.IsEnabled(LogLevel.Debug))
+            {
                 _logger.LogDebug("Activating context for tenant {0}", context.Settings.Name);
+            }                
 
             if (_shellContexts.TryAdd(context.Settings.Name, context))
             {
@@ -187,14 +196,14 @@ namespace PlatoCore.Hosting
 
         }
 
-        ShellContext CreateSetupContext()
+        private ShellContext CreateSetupContext()
         {
             if (_logger.IsEnabled(LogLevel.Debug))
                 _logger.LogDebug("Creating shell context for root setup.");
             return _shellContextFactory.CreateSetupContext(ShellHelper.BuildDefaultUninitializedShell);
         }
 
-        bool CanCreateShell(IShellSettings shellSettings)
+        private bool CanCreateShell(IShellSettings shellSettings)
         {
             return
                 shellSettings.State == TenantState.Running ||

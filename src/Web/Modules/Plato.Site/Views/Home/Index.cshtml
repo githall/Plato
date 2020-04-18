@@ -42,12 +42,12 @@
                 </h3>
             </div>
         </div>
-        <cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+        <cacheing vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
             @await DisplayAsync(new View("SiteKeyFeatures", new
             {
                 sticky = false
             }))
-        </cache>
+        </cacheing>
     </div>
 </section>
 
@@ -185,12 +185,12 @@
 </section>
 
 <!-- Call to action -->
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+<cacheing vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
     @await DisplayAsync(new View("SiteCallToAction", new
     {
         sticky = false
     }))
-</cache>
+</cacheing>
 
 @section Scripts {
     <script src="/plato.site/content/js/home/babylon403.min.js"></script>

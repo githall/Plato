@@ -22,12 +22,12 @@ namespace Plato.Core.Handlers
         }
 
         public override async Task SetUp(
-            SetUpContext context,
+            ISetUpContext context,
             Action<string, string> reportError)
         {
 
             // --------------------------
-            // Build core schemas
+            // Build core schema
             // --------------------------
 
             var dictionaryTable = new SchemaTable()

@@ -25,7 +25,7 @@ namespace Plato.Core
     {
 
         private readonly IShellSettings _shellSettings;
-  
+
         public Startup(IShellSettings shellSettings)
         {
             _shellSettings = shellSettings;
@@ -102,7 +102,7 @@ namespace Plato.Core
                 defaults: new {controller, action }
             );
 
-            // Fallback default homepage
+            // Fall-back default homepage
             routes.MapAreaRoute(
                 name: "CoreHome",
                 areaName: "Plato.Core",

@@ -1,9 +1,8 @@
 ﻿using System;
+using System.Linq;
+using System.Threading.Tasks;
 using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Cache.Abstractions;
@@ -11,23 +10,20 @@ using PlatoCore.Cache.Abstractions;
 namespace PlatoCore.Cache
 {
 
-    /// <summary>
-    /// A simple implementation with no consideration for multi threaded environments.
-    /// Mainly used when we want to simplify the cache for debugging purposes. 
-    /// </summary>
-    public class SimpleCacheManager : ICacheManager
+    public class SingletonCacheManager : ISingletonCacheManager
     {
 
         public static ConcurrentDictionary<CacheToken, Type> Tokens { get; } =
             new ConcurrentDictionary<CacheToken, Type>();
-        
+
+        private readonly ILogger<ShellCacheManager> _logger;
         private readonly ICacheDependency _cacheDependency;
-        private readonly ILogger<CacheManager> _logger;
         private readonly IMemoryCache _memoryCache;
 
-        public SimpleCacheManager(ICacheDependency cacheDependency,
-            IMemoryCache memoryCache,
-            ILogger<CacheManager> logger)
+        public SingletonCacheManager(
+            ILogger<ShellCacheManager> logger,
+            ICacheDependency cacheDependency,
+            IMemoryCache memoryCache)
         {
             _cacheDependency = cacheDependency;
             _memoryCache = memoryCache;
@@ -36,7 +32,7 @@ namespace PlatoCore.Cache
 
         public async Task<TItem> GetOrCreateAsync<TItem>(CacheToken token, Func<ICacheEntry, Task<TItem>> factory)
         {
-                    
+
             var key = token.ToString();
 
             // Item does not exist in cache
@@ -51,7 +47,7 @@ namespace PlatoCore.Cache
 
                 // Set expiration tokens
                 entry.ExpirationTokens.Add(_cacheDependency.GetToken(key));
-                
+
                 // Set value
                 entry.SetValue(obj);
 

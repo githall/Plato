@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Distributed;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using PlatoCore.Cache.Abstractions;
@@ -32,6 +33,15 @@ namespace PlatoCore.Cache
         private readonly IMemoryCache _memoryCache;
         private readonly IConfiguration _config;
 
+        public CacheManager(IServiceProvider provider)
+        {
+            _distributedCache = provider.GetRequiredService<IDistributedCache>();
+            _cacheDependency = provider.GetRequiredService<ICacheDependency>();
+            _memoryCache = provider.GetRequiredService<IMemoryCache>();
+            _config = provider.GetRequiredService<IConfiguration>();
+            _logger = provider.GetRequiredService<ILogger<CacheManager>>();
+        }
+
         public CacheManager(
             IDistributedCache distributedCache,
             ICacheDependency cacheDependency,
@@ -45,7 +55,6 @@ namespace PlatoCore.Cache
             _config = config;
             _logger = logger;
         }
-
 
         public async  Task<TItem> GetOrCreateAsync<TItem>(CacheToken token, Func<ICacheEntry, Task<TItem>> factory)
         {

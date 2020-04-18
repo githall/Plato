@@ -36,12 +36,12 @@
     <assets section="Body" />
     <scripts section="Body" />
 
-    <cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    <cacheing vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
         @await DisplayAsync(new View("SiteHeader", new
         {
             sticky = false
         }))
-    </cache>
+    </cacheing>
 
         <!-- Plato Nav  -->
         <nav class="nav-site">
@@ -63,15 +63,15 @@
                                         <i class="fal fa-search"></i>
                                     </a>
                                 </li>
-                                <li class="nav-item nav-item-user">
+                                @*<li class="nav-item nav-item-user">
                                     <navigation name="user"
                                                 class="d-flex"
                                                 child-ul-css-class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in" />
-                                </li>
+                                </li>*@
                             </ul>
                         </div>
                     </div>
-                    <div class="navbar-search d-lg-none collapse mr-4" id="search-collapse">
+                    <div class="navbar-search d-lg-none collapse" id="search-collapse">
                         <navigation name="site-search" class="nav nav-search" />
                     </div>
                     <div class="navbar-collapse collapse" id="navbar-collapse" role="navigation">
@@ -154,13 +154,13 @@
             @RenderBody()
         </div>
 
-        <cache expires-after="@TimeSpan.FromMinutes(30)">
+        <cacheing expires-after="@TimeSpan.FromMinutes(30)">
             <footer>
                 @await DisplayAsync(new View("SiteFooterMinimal", new
                 {
                 }))
             </footer>
-        </cache>
+        </cacheing>
 
   
     <assets section="Footer" />

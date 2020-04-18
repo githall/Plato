@@ -6,6 +6,7 @@ using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
+using PlatoCore.Shell.Extensions;
 using PlatoCore.Tasks.Abstractions;
 
 namespace PlatoCore.Hosting.Web.Middleware
@@ -39,8 +40,8 @@ namespace PlatoCore.Hosting.Web.Middleware
             // Get ShellSettings for current tenant
             var shellSettings = _runningShellTable.Match(httpContext);
 
-            // Register shell settings as a custom feature
-            httpContext.Features[typeof(ShellSettings)] = shellSettings;
+            // Register shell settings on current context
+            httpContext.SetShellSettings(shellSettings);
 
             // Only serve the next request if the tenant has been resolved.
             if (shellSettings != null)
@@ -82,7 +83,7 @@ namespace PlatoCore.Hosting.Web.Middleware
                         }
                     }
 
-                    // Invoke the next middleware in pipeline
+                    // Invoke the next middle ware in pipeline
                     await _next.Invoke(httpContext);
 
                     // At the end determine if we need to process deferred tasks

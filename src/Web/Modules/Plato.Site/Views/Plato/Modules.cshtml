@@ -29,21 +29,21 @@
     <div class="container mt-0">
         <div class="row">
             <div class="col-12">
-                <cache expires-after="@TimeSpan.FromMinutes(30)">
+                <caching expires-after="@TimeSpan.FromMinutes(30)">
                     @await DisplayAsync(new View("SiteModuleList", new
                     {
                         options = new FeatureIndexOptions()
                     }))
-                </cache>
+                </caching>
             </div>
         </div>
     </div>
 </section>
 
 <!-- Call to action -->
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+<caching vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
     @await DisplayAsync(new View("SiteCallToAction", new
     {
         sticky = false
     }))
-</cache>
+</caching>

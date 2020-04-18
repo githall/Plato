@@ -216,17 +216,17 @@
 </section>
 
 <!-- Shared Features -->
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+<caching vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
     @await DisplayAsync(new View("SiteSharedFeatures", new
     {
         sticky = false
     }))
-</cache>
+</caching>
 
 <!-- Call to action -->
-<cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+<caching vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
     @await DisplayAsync(new View("SiteCallToAction", new
     {
         sticky = false
     }))
-</cache>
+</caching>

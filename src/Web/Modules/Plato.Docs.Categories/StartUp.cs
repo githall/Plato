@@ -39,7 +39,7 @@ namespace Plato.Docs.Categories
 
         public override void ConfigureServices(IServiceCollection services)
         {
-            
+
             // Navigation provider
             services.AddScoped<INavigationProvider, AdminMenu>();
             services.AddScoped<INavigationProvider, SiteMenu>();
@@ -72,7 +72,7 @@ namespace Plato.Docs.Categories
             // Admin view providers
             services.AddScoped<IViewProviderManager<CategoryAdmin>, ViewProviderManager<CategoryAdmin>>();
             services.AddScoped<IViewProvider<CategoryAdmin>, AdminViewProvider>();
-         
+
             // Register view adapters
             services.AddScoped<IViewAdapterProvider, DocListItemViewAdapter>();
 
@@ -86,7 +86,7 @@ namespace Plato.Docs.Categories
 
             // Query adapters
             services.AddScoped<IQueryAdapterManager<Category>, QueryAdapterManager<Category>>();
-            
+
         }
 
         public override void Configure(
@@ -94,14 +94,23 @@ namespace Plato.Docs.Categories
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-            
+
             routes.MapAreaRoute(
                 name: "DocsCategoriesIndex",
                 areaName: "Plato.Docs.Categories",
-                template: "docs/categories/{opts.categoryId:int?}/{opts.alias?}/{pager.offset:int?}",
+                template: "docs/categories/{pager.offset:int?}",
+                defaults: new { controller = "Home", action = "Index" }
+            );
+
+            routes.MapAreaRoute(
+                name: "DocsCategoryDisplay",
+                areaName: "Plato.Docs.Categories",
+                template: "docs/categories/{opts.categoryId:int}/{opts.alias}/{pager.offset:int?}",
                 defaults: new { controller = "Home", action = "Index" }
             );
 
         }
+
     }
+
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Extensions;
@@ -31,7 +30,7 @@ namespace Plato.SetUp.Services
             _platoHost = platoHost;
         }
 
-        public async Task<string> SetUpAsync(SetUpContext context)
+        public async Task<string> SetUpAsync(ISetUpContext context)
         {
             var initialState = _shellSettings.State;
             try
@@ -46,16 +45,20 @@ namespace Plato.SetUp.Services
             }
         }
         
-        async Task<string> SetUpInternalAsync(SetUpContext context)
+        // ------------
+
+        async Task<string> SetUpInternalAsync(ISetUpContext context)
         {
 
-            // Set shell state to "Initializing" so that subsequent HTTP requests are responded to with "Service Unavailable" while Orchard is setting up.
+            // Set state to "Initializing" so that subsequent HTTP requests are responded to with "Service Unavailable" while setting up.
             _shellSettings.State = TenantState.Initializing;
 
             var executionId = Guid.NewGuid().ToString("n");
 
-            var shellSettings = new ShellSettings(_shellSettings.Configuration);
-            shellSettings.Location = context.SiteName.ToSafeFileName();
+            var shellSettings = new ShellSettings(_shellSettings.Configuration)
+            {
+                Location = context.SiteName.ToSafeFileName()             
+            };
 
             if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))
             {
@@ -66,7 +69,7 @@ namespace Plato.SetUp.Services
                 shellSettings.ConnectionString = context.DatabaseConnectionString;
                 shellSettings.TablePrefix = tablePrefix;
             }
-       
+
             using (var shellContext = _shellContextFactory.CreateMinimalShellContext(shellSettings))
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
@@ -104,6 +107,7 @@ namespace Plato.SetUp.Services
                     }
 
                 }
+
             }
 
             if (context.Errors.Count > 0)

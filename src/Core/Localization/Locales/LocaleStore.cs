@@ -14,14 +14,14 @@ namespace PlatoCore.Localization.Locales
 
     public class LocaleStore : ILocaleStore
     {
-   
+
         private readonly ILocaleProvider _localeProvider;
-        private readonly ICacheManager _cacheManager;
         private readonly ILogger<LocaleStore> _logger;
+        private readonly ISingletonCacheManager _cacheManager;
 
         public LocaleStore(
             ILocaleProvider localeProvider,
-            ICacheManager cacheManager,
+            ISingletonCacheManager cacheManager,
             ILogger<LocaleStore> logger)
         {
             _localeProvider = localeProvider;

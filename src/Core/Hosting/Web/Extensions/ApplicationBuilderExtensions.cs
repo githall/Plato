@@ -41,13 +41,13 @@ namespace PlatoCore.Hosting.Web.Extensions
 
             // -----------------------------
 
-            // Add the EndpointRoutingMiddleware
+            // Add the routing middle ware
             app.UseRouting();
 
-            // All middleware from here onwards know which endpoint will be invoked
+            // All middle ware from here onwards know which endpoint will be invoked
             app.UseCors();
 
-            // Execute the endpoint selected by the routing middleware
+            // Execute the endpoint selected by the routing middle ware
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapRazorPages();
@@ -57,8 +57,8 @@ namespace PlatoCore.Hosting.Web.Extensions
 
             // Add custom error handling for specific status codes
             // UseStatusCodePages should be called before any request
-            // handling middleware in the pipeline (for example,
-            // Static File middleware and MVC middleware).
+            // handling middle ware in the pipeline (for example,
+            // Static File middle ware and MVC middle ware).
             app.UseStatusCodePages(context =>
             {
                 switch (context.HttpContext.Response.StatusCode)

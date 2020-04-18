@@ -13,12 +13,22 @@ namespace PlatoCore.Cache.Abstractions
 
         public Type ForType => _type;
 
-        public CacheToken(Type type, params object[] varyBy)
+        public CacheToken(Type type, params object[] varyBy) : this(null, type, varyBy)
+        {
+        }
+
+        public CacheToken(string prefix, Type type, params object[] varyBy)
         {
 
             // This is not perfect but avoids the overhead of a real cryptographic hash
             // Get hash codes for primitive types as opposed to varyBy object array type
             var sb = new StringBuilder();
+
+            if (!string.IsNullOrEmpty(prefix))
+            {
+                sb.Append(prefix);
+            }
+            
             if (varyBy != null)
             {
                 foreach (var vary in varyBy)
@@ -30,7 +40,7 @@ namespace PlatoCore.Cache.Abstractions
                     }
                 }
             }
-          
+
             _type = type;
             _varyByHash = sb.ToString();
             _typeHashCode = _type.GetHashCode();
@@ -73,12 +83,12 @@ namespace PlatoCore.Cache.Abstractions
                 return hashCode;
             }
         }
-        
+
         public override string ToString()
         {
             return $"{_type}-{GetHashCode()}";
         }
-        
+
     }
 
 }

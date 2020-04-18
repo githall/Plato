@@ -19,16 +19,14 @@ namespace PlatoCore.Cache.Extensions
             // I.e. services.AddDistributedRedisCache(options => {});
             services.Add(ServiceDescriptor.Transient<IDistributedCache, MemoryDistributedCache>());
 
-            // Add cache implementations as singletons
-            
-            services.AddSingleton<ICacheManager, SimpleCacheManager>();
-            //services.AddSingleton<ICacheManager, CacheManager>();
             services.AddSingleton<ICacheDependency, CacheDependency>();
+            services.AddSingleton<ISingletonCacheManager, SingletonCacheManager>();            
+            services.AddScoped<ICacheManager, ShellCacheManager>();
 
             return services;
 
         }
 
-
     }
+
 }

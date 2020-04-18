@@ -50,6 +50,7 @@ using PlatoCore.Stores.Abstractions.Shell;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Features;
 using PlatoCore.Stores.Shell;
+using Microsoft.AspNetCore.Routing;
 
 namespace PlatoCore.Hosting.Web.Extensions
 {
@@ -139,7 +140,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Add security
             services.AddPlatoSecurity();
 
-            // Let the app change the default tenant behavior and set of features
+            // Let the host change the default tenant behavior and set of features
             configure?.Invoke(services);
 
             // Register the list of services to be resolved later via ShellContainerFactory
@@ -251,7 +252,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             // The captured router is used to resolve URLs for background or deferred tasks 
             // Background and deferred tasks don't have access to the current HttpContext
             // Our captured router must be a singleton so the initial configuration performed
-            // by the PlatoRouterMiddleware is persisted throughout the application lifecycle
+            // by the PlatoRouterMiddleware is persisted throughout the application life cycle
             services.AddSingleton<ICapturedRouter, CapturedRouter>();
             services.AddScoped<ICapturedRouterUrlHelper, CapturedRouterUrlHelper>();
 
@@ -259,7 +260,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             services.AddScoped<IHomeRouteManager, HomeRouteManager>();
 
             // Add default route handler (required by PlatoRouterMiddleware)
-            services.AddScoped<IPlatoRouter, PlatoRouter>();
+            services.AddSingleton<IPlatoRouter, PlatoRouter>();
 
             return services;
 

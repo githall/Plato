@@ -37,21 +37,21 @@
             <div class="cube bg-danger"></div>
         </div>
     </div>
-    <cache vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    <caching vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
         @await DisplayAsync(new View("SiteHeader", new
         {
             sticky = true
         }))
-    </cache>
+    </caching>
     <main class="d-flex flex-column body" role="main">
         @RenderBody()
     </main>
-    <cache expires-after="@TimeSpan.FromMinutes(30)">
+    <caching expires-after="@TimeSpan.FromMinutes(30)">
         @await DisplayAsync(new View("SiteFooter", new
         {
             options = new FeatureIndexOptions()
         }))
-    </cache>
+    </caching>
 
     <div class="slide-out slide-out-bottom-right" data-provide="slide-spy">
         <a href="#top" data-provide="scroll" class="btn btn-primary" data-toggle="tooltip" title="@T["Back to Top"]">

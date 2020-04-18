@@ -84,7 +84,7 @@ namespace Plato.SetUp.Controllers
                 DatabaseConnectionString = model.ConnectionString,
                 AdminUsername = model.UserName,
                 AdminEmail = model.Email,
-                AdminPassword = model.Password,
+                AdminPassword = model.Password,              
                 Errors = new Dictionary<string, string>()
             };
 
@@ -104,15 +104,17 @@ namespace Plato.SetUp.Controllers
             if (setupContext.Errors.Count > 0)
             {
 
-                if (_logger.IsEnabled(LogLevel.Error))
+                if (_logger.IsEnabled(LogLevel.Information))
                 {
                     _logger.LogInformation($"Set-up of tenant '{setupContext.SiteName}' failed with the following errors...");
                 }
-                    
+
                 foreach (var error in setupContext.Errors)
                 {
-                    if (_logger.IsEnabled(LogLevel.Error))
+                    if (_logger.IsEnabled(LogLevel.Information))
+                    {
                         _logger.LogInformation(error.Key + " " + error.Value);
+                    }                        
                     ModelState.AddModelError(error.Key, error.Value);
                 }
                 return View(model);

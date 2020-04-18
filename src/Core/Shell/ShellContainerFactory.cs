@@ -47,8 +47,8 @@ namespace PlatoCore.Shell
                 options.DatabaseProvider = settings.DatabaseProvider;
                 options.TablePrefix = settings.TablePrefix;
             });
-            
-            // Add core tennet services
+
+            // Add core tenant services
             AddCoreServices(tenantServiceCollection);
             
             // Add StartUps from modules defined in blueprint descriptor as services

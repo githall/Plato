@@ -87,6 +87,14 @@ namespace Plato.Roles
                 defaults: new { controller = "Admin", action = "Index" }
             );
 
+            // Add
+            routes.MapAreaRoute(
+                name: "RolesCreate",
+                areaName: "Plato.Roles",
+                template: "admin/roles/add",
+                defaults: new { controller = "Admin", action = "Create" }
+            );
+
             // Edit
             routes.MapAreaRoute(
                 name: "RolesEdit",

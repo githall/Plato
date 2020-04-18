@@ -28,7 +28,7 @@ namespace PlatoCore.Stores.Abstract
 
         #endregion
 
-        #region "Implemention"
+        #region "Implementation"
 
         public async Task<T> GetAsync<T>(string key) where T : class
         {
@@ -57,7 +57,7 @@ namespace PlatoCore.Stores.Abstract
                                       Key = key
                                   };
 
-            // Serilize value
+            // Serialize value
             existingSetting.Value = await value.SerializeAsync();
 
             // update setting & return updated typed settings 
