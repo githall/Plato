@@ -23,15 +23,15 @@ namespace PlatoCore.Shell
             _lock.EnterWriteLock();
             try
             {
-                // _single is set when there is only a single tenant
-                if (_single != null)
-                {
-                    _single = null;
-                }
-                else
-                {
-                    _single = settings;
-                }
+                //// _single is set when there is only a single tenant
+                //if (_single != null)
+                //{
+                //    _single = null;
+                //}
+                //else
+                //{
+                //    _single = settings;
+                //}
 
                 if (ShellHelper.DefaultShellName == settings.Name)
                 {
@@ -76,10 +76,10 @@ namespace PlatoCore.Shell
             _lock.EnterReadLock();
             try
             {
-                if (_single != null)
-                {
-                    return _single;
-                }
+                //if (_single != null)
+                //{
+                //    return _single;
+                //}
 
                 var hostAndPrefix = GetHostAndPrefix(host, appRelativePath);
                 if (!_shellsByHostAndPrefix.TryGetValue(hostAndPrefix, out var result))
