@@ -1,13 +1,14 @@
-﻿using PlatoCore.Abstractions.Extensions;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Text;
+using System.Collections.Generic;
+using PlatoCore.Abstractions.Extensions;
 
 namespace PlatoCore.Models.Shell
 {
+
     public class ShellSettings : IShellSettings
     {
-        
+
         private readonly IDictionary<string, string> _values;
 
         public ShellSettings() : this(new Dictionary<string, string>()) { }
@@ -16,26 +17,14 @@ namespace PlatoCore.Models.Shell
         {
             _values = new Dictionary<string, string>(configuration);
 
-            if (!configuration.ContainsKey("State") || !Enum.TryParse(configuration["State"], true, out _tenantState))
+            if (configuration.ContainsKey("State") )
             {
-                _tenantState = TenantState.Invalid;
+                if (!Enum.TryParse(configuration["State"], true, out TenantState state))
+                {
+                    this["State"] = TenantState.Invalid.ToString();
+                }
             }
-        }
 
-        public ShellSettings(ShellSettings settings)
-        {
-            _values = new Dictionary<string, string>(settings._values, StringComparer.OrdinalIgnoreCase);
-            Name = settings.Name;
-            RequestedUrlHost = settings.RequestedUrlHost;
-            RequestedUrlPrefix = settings.RequestedUrlPrefix;      
-            DatabaseProvider = settings.DatabaseProvider;
-            ConnectionString = settings.ConnectionString;
-            TablePrefix = settings.TablePrefix;           
-            Theme = settings.Theme;
-            State = settings.State;
-            OwnerId = settings.OwnerId;
-            CreatedDate = settings.CreatedDate;
-            ModifiedDate = settings.ModifiedDate;
         }
 
         public IDictionary<string, string> Configuration => _values;
@@ -54,22 +43,22 @@ namespace PlatoCore.Models.Shell
             set => this["Name"] = value;
         }
 
+        public string OwnerId
+        {
+            get => this["OwnerId"];
+            set => this["OwnerId"] = value;
+        }
+
         public string Location
         {
             get => this["Location"] ?? "";
             set => this["Location"] = value;
         }
 
-        public string RequestedUrlPrefix
+        public string DatabaseProvider
         {
-            get => this["RequestedUrlPrefix"];
-            set => _values["RequestedUrlPrefix"] = value;
-        }
-
-        public string RequestedUrlHost
-        {
-            get => this["RequestedUrlHost"];
-            set => this["RequestedUrlHost"] = value;
+            get => this["DatabaseProvider"];
+            set => _values["DatabaseProvider"] = value;
         }
 
         public string ConnectionString
@@ -84,10 +73,16 @@ namespace PlatoCore.Models.Shell
             set => _values["TablePrefix"] = value;
         }
 
-        public string DatabaseProvider
+        public string RequestedUrlPrefix
         {
-            get => this["DatabaseProvider"];
-            set => _values["DatabaseProvider"] = value;
+            get => this["RequestedUrlPrefix"];
+            set => _values["RequestedUrlPrefix"] = value;
+        }
+
+        public string RequestedUrlHost
+        {
+            get => this["RequestedUrlHost"];
+            set => this["RequestedUrlHost"] = value;
         }
 
         public string Theme
@@ -112,20 +107,18 @@ namespace PlatoCore.Models.Shell
             }
         }
 
-        public string OwnerId
-        {
-            get => this["OwnerId"];
-            set => _values["OwnerId"] = value;
-        }
-
-        TenantState _tenantState;
-
         public TenantState State
         {
-            get => _tenantState;
-            set
+            get
             {
-                _tenantState = value;
+                if (Enum.TryParse(this["State"], true, out TenantState state))
+                {
+                    return state;
+                }
+                return TenantState.Uninitialized;
+            }
+            set
+            {            
                 this["State"] = value.ToString();
             }
         }

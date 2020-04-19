@@ -16,22 +16,24 @@ namespace PlatoCore.Shell
                 Name = configuration["Name"],         
                 ConnectionString = configuration["ConnectionString"],
                 TablePrefix = configuration["TablePrefix"],
-                DatabaseProvider = configuration["DatabaseProvider"],
-                Theme = configuration["Theme"],
+                DatabaseProvider = configuration["DatabaseProvider"],                
                 RequestedUrlHost = configuration["RequestedUrlHost"],
-                RequestedUrlPrefix = configuration["RequestedUrlPrefix"],
-                State = Enum.TryParse(configuration["State"], true, out TenantState state)
-                    ? state
-                    : TenantState.Uninitialized,
+                RequestedUrlPrefix = configuration["RequestedUrlPrefix"],        
                 OwnerId = configuration["OwnerId"],
+                Theme = configuration["Theme"]
             };
 
-            if (DateTime.TryParse(configuration["CreatedDate"], out var createdDate)) 
+            if (Enum.TryParse(configuration["State"], true, out TenantState state))
+            {
+                settings.State = state;
+            }
+
+            if (DateTimeOffset.TryParse(configuration["CreatedDate"], out var createdDate)) 
             {
                 settings.CreatedDate = createdDate;
             }
 
-            if (DateTime.TryParse(configuration["ModifiedDate"], out var modifiedDate))
+            if (DateTimeOffset.TryParse(configuration["ModifiedDate"], out var modifiedDate))
             {
                 settings.ModifiedDate = modifiedDate;
             }

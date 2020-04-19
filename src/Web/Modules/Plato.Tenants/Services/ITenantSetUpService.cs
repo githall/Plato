@@ -11,7 +11,7 @@ namespace Plato.Tenants.Services
 
         Task<ICommandResult<TenantSetUpContext>> UpdateAsync(TenantSetUpContext context);
 
-        Task<ICommandResult<TenantSetUpContext>> UninstallAsync(TenantSetUpContext context);
+        Task<ICommandResultBase> UninstallAsync(string siteName);
 
     }
 

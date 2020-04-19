@@ -37,7 +37,7 @@
             <fieldset class="row" asp-validation-class-for="SiteName">
                 <div class="form-group col-md-12">
                     <h6>@T["Name"]</h6>
-                    <label asp-for="SiteName" class="text-muted">
+                    <label asp-for="SiteName">
                         @T["You cannot change the name for the default tenant."]
                     </label>
                     <input readonly asp-for="SiteName" class="form-control" />
@@ -49,7 +49,7 @@
         <fieldset class="row" asp-validation-class-for="OwnerId">
             <div class="form-group col-md-12">
                 <h6>@T["Owner"]</h6>
-                <label asp-for="OwnerId" class="text-muted">
+                <label asp-for="OwnerId">
                     @T["Provide an optional email address or company name to identify the tenant owner."]
                 </label>
                 <input asp-for="OwnerId" class="form-control" />

@@ -16,6 +16,7 @@ using System.Linq;
 using Plato.Tenants.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Routing;
+using Plato.Tenants.Models;
 
 namespace Plato.Tenants.Controllers
 {
@@ -241,23 +242,23 @@ namespace Plato.Tenants.Controllers
                 return NotFound();
             }
 
-            //// Attempt to delete the role
-            //var result = await _roleManager.DeleteAsync(currentRole);
-            //if (result.Succeeded)
-            //{
-            //    _alerter.Success(T["Role Deleted Successfully"]);
-            //}
-            //else
-            //{
+            // Attempt to delete the role
+            var result = await _setUpService.UninstallAsync(id);
 
-            //    _alerter.Danger(T["Could not delete the role"]);
-            //    foreach (var error in result.Errors)
-            //    {
-            //        _alerter.Danger(T[error.Description]);
-            //    }
-            //}
+            // Redirect to success
+            if (result.Succeeded)
+            {
+                _alerter.Success(T["Tenant Deleted Successfully"]);
+                return RedirectToAction(nameof(Index));
+            }         
+     
+            // Display errors
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
 
-            return RedirectToAction(nameof(Index));
+            return await Edit(id);         
 
         }
 
