@@ -80,10 +80,10 @@ namespace PlatoCore.Shell
             {
                 throw new ArgumentNullException(nameof(shellSettings.Name));
             }
-                
+
             if (_logger.IsEnabled(LogLevel.Information))
             {
-                _logger.LogInformation("Saving ShellSettings for tenant '{0}'", shellSettings.Name);
+                _logger.LogInformation("Saving shell settings for tenant '{0}'", shellSettings.Name);
             }
 
             var fileName = string.Format(SettingsFileNameFormat, "txt");
@@ -111,7 +111,7 @@ namespace PlatoCore.Shell
 
             if (_logger.IsEnabled(LogLevel.Information))
             {
-                _logger.LogInformation("Saved ShellSettings for tenant '{0}'", shellSettings.Name);
+                _logger.LogInformation("Saved shell settings for tenant '{0}'", shellSettings.Name);
             }
 
         }

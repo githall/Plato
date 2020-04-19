@@ -1,4 +1,5 @@
-﻿@model TenantIndexViewModel
+﻿@using PlatoCore.Models.Extensions
+@model TenantIndexViewModel
 @{
     var platoOpts = GetOptions<PlatoOptions>();
     var isDemo = platoOpts?.DemoMode ?? false;    
@@ -10,26 +11,46 @@
     </card-title>
     <card-body>
         @if (Model.Results != null)
-        {            
+        {
             <ul class="list-group list-group-flush list-group-hover">
                 @foreach (var tenant in Model.Results)
                 {
+                    var url = tenant.GetRequestedUrl();
                     <li class="list-group-item list-group-item-action">
                         <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="btn btn-secondary float-right">
-                            <i class="fal fa-pencil"></i>
-                            @T["Edit"]
+                            <i class="fal fa-pencil mr-1"></i>@T["Edit"]
                         </a>
-                        <h6 class="d-inline-block">
+                        <h6>
                             <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="font-weight-bold">
                                 @tenant.Name
-                            </a>                         
-                        </h6>
-                        @if (!string.IsNullOrEmpty(tenant.RequestedUrl)) 
-                        {
-                            <a href="@tenant.RequestedUrl" data-toggle="tooltip" title="@tenant.RequestedUrl" target="_blank" class="ml-2">
-                                <i class="fal fa-external-link"></i>
                             </a>
-                        }
+                        </h6>
+                        <ul class="list-inline">
+                            @if (!string.IsNullOrEmpty(url))
+                            {
+                                <li class="list-inline-item">
+                                    <a href="@url" data-toggle="tooltip" title="@url" target="_blank" class="mr-1">@T["Open"]</a>
+                                </li>
+                            }
+                            <li class="list-inline-item">
+                                @if (tenant.State == TenantState.Running)
+                                {
+                                    <span class="text-success">@T[tenant.State.ToString()]</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">@T[tenant.State.ToString()]</span>
+                                }
+                            </li>
+
+                            @if (tenant.CreatedDate != null)
+                            {
+                                <li class="list-inline-item">
+                                    <span class="text-muted">@T["created"]</span>
+                                    <date utc="@tenant.CreatedDate" />
+                                </li>
+                            }
+                        </ul>
                     </li>
                 }
             </ul>

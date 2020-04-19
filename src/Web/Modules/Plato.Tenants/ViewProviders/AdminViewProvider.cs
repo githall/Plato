@@ -1,12 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using PlatoCore.Layout.ViewProviders.Abstractions;
-using PlatoCore.Models.Roles;
-using PlatoCore.Models.Users;
-using PlatoCore.Security.Abstractions;
-using PlatoCore.Stores.Abstractions.Roles;
 using Plato.Tenants.ViewModels;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
@@ -15,6 +10,8 @@ using Plato.Tenants.Models;
 using Plato.Tenants.Services;
 using Microsoft.Extensions.Logging;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using PlatoCore.Abstractions.Extensions;
 
 namespace Plato.Tenants.ViewProviders
 {
@@ -111,11 +108,13 @@ namespace Plato.Tenants.ViewProviders
                     ConnectionString = settings.ConnectionString,
                     TablePrefix = settings.TablePrefix,
                     RequestedUrlHost = settings.RequestedUrlHost,
-                    RequestedUrlPrefix = settings.RequestedUrlPrefix,        
+                    RequestedUrlPrefix = settings.RequestedUrlPrefix,
                     UserName = userName,
                     Email = email,
                     Password = password,
                     PasswordConfirmation = password,
+                    State = settings.State,
+                    AvailableTenantStates = GetAvailableTenantStates()
                 };
             }
 
@@ -161,40 +160,36 @@ namespace Plato.Tenants.ViewProviders
                     setupContext.DatabaseTablePrefix = model.TablePrefix;
                 }
 
-                if (model.IsNewTenant)
+                // Install or update tenant
+                var result = model.IsNewTenant
+                    ? await _tenantSetUpService.InstallAsync(setupContext)
+                    : await _tenantSetUpService.UpdateAsync(setupContext);
+
+                // Report any errors
+                if (!result.Succeeded)
                 {
 
-                    // Execute set-up
-                    var result = await _tenantSetUpService.InstallAsync(setupContext);
-
-                    // Report any errors
-                    if (!result.Succeeded)
+                    if (_logger.IsEnabled(LogLevel.Information))
                     {
-
-                        if (_logger.IsEnabled(LogLevel.Information))
+                        if (model.IsNewTenant)
                         {
                             _logger.LogInformation($"Set-up of tenant '{setupContext.SiteName}' failed with the following errors...");
-                        }
-
-                        foreach (var error in result.Errors)
+                        } else
                         {
-                            if (_logger.IsEnabled(LogLevel.Information))
-                            {
-                                _logger.LogInformation(error.Code + " " + error.Description);
-                            }
-                            context.Updater.ModelState.AddModelError(error.Code, error.Description);
-                        }
+                            _logger.LogInformation($"Update of tenant '{setupContext.SiteName}' failed with the following errors...");
+                        }                        
+                    }
 
+                    foreach (var error in result.Errors)
+                    {
+                        if (_logger.IsEnabled(LogLevel.Information))
+                        {
+                            _logger.LogInformation(error.Code + " " + error.Description);
+                        }
+                        context.Updater.ModelState.AddModelError(error.Code, error.Description);
                     }
 
                 }
-                else
-                {
-
-                }
-
-             
-
 
             }
 
@@ -222,6 +217,23 @@ namespace Plato.Tenants.ViewProviders
 
             return true;
 
+        }
+
+        IEnumerable<SelectListItem> GetAvailableTenantStates()
+        {
+
+            // Build timezones 
+            var output = new List<SelectListItem>();
+            foreach (var z in Enum.GetValues(typeof(TenantState)))
+            {
+                output.Add(new SelectListItem
+                {
+                    Text = z.ToString(),
+                    Value = z.ToString()
+                });
+            }
+
+            return output;
         }
 
         #endregion

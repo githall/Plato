@@ -1,5 +1,8 @@
-﻿using PlatoCore.Security.Attributes;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PlatoCore.Models.Shell;
+using PlatoCore.Security.Attributes;
 using PlatoCore.Shell.Abstractions;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Tenants.ViewModels
@@ -39,6 +42,10 @@ namespace Plato.Tenants.ViewModels
 
         [StringLength(100), Display(Name = "site host")]
         public string RequestedUrlHost { get; set; }
+
+        public TenantState State { get; set; }
+
+        public IEnumerable<SelectListItem> AvailableTenantStates { get; set; }
 
         public bool IsNewTenant { get; set; }
 

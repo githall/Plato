@@ -1,4 +1,5 @@
-﻿using System;
+﻿using PlatoCore.Abstractions.Extensions;
+using System;
 using System.Collections.Generic;
 using System.Text;
 
@@ -120,26 +121,19 @@ namespace PlatoCore.Models.Shell
             }
         }
 
-        public string RequestedUrl
+        public DateTimeOffset? CreatedDate
         {
             get
             {
-
-                var host = RequestedUrlHost ?? string.Empty;
-                var prefix = RequestedUrlPrefix ?? string.Empty;
-
-                // Remove trailing / from host name
-                if (host.EndsWith("/"))
+                if (DateTime.TryParse(this["CreatedDate"], out var date))
                 {
-                    host = host.Substring(host.Length - 1);
+                    return date;
                 }
-
-                return !string.IsNullOrEmpty(host)
-                    ? host + prefix
-                    : "/" + prefix;
-
+                return null; 
             }
-
+            set => this["CreatedDate"] = value.HasValue 
+                ? value.Value.ToSortableDateTimePattern()
+                : string.Empty;
         }
 
     }

@@ -11,7 +11,7 @@ namespace PlatoCore.Shell
         public static ShellSettings ParseSettings(IConfigurationRoot configuration)
         {
 
-            return new ShellSettings
+            var settings = new ShellSettings
             {
                 Name = configuration["Name"],
                 RequestedUrlHost = configuration["RequestedUrlHost"],
@@ -22,8 +22,15 @@ namespace PlatoCore.Shell
                 Theme = configuration["Theme"],
                 State = Enum.TryParse(configuration["State"], true, out TenantState state)
                     ? state
-                    : TenantState.Uninitialized
+                    : TenantState.Uninitialized             
             };
+
+            if (DateTime.TryParse(configuration["CreatedDate"], out var date)) 
+            {
+                settings.CreatedDate =date;
+            }
+
+            return settings;
 
         }
 

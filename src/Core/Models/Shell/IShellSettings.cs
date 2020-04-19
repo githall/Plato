@@ -22,8 +22,6 @@ namespace PlatoCore.Models.Shell
         /// </summary>
         string RequestedUrlPrefix { get; set; }
 
-        string RequestedUrl { get; }
-
         /// <summary>
         /// Unique database table prefix for the shell.
         /// </summary>
@@ -43,11 +41,14 @@ namespace PlatoCore.Models.Shell
         /// </summary>
         TenantState State { get; set; }
 
+        DateTimeOffset? CreatedDate { get; set; }
+
         string this[string key] { get; }
 
         IEnumerable<string> Keys { get; }
 
         IDictionary<string, string> Configuration { get; }
+
     }
 
 }
