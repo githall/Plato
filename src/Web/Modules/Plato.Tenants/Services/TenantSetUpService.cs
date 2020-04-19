@@ -119,8 +119,7 @@ namespace Plato.Tenants.Services
             var result = new CommandResult<TenantSetUpContext>();
 
             var shellSettings = BuildShellSettings(context);
-            shellSettings.CreatedDate = DateTimeOffset.Now;
-
+      
             using (var shellContext = _shellContextFactory.CreateMinimalShellContext(shellSettings))
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
@@ -156,9 +155,9 @@ namespace Plato.Tenants.Services
                             return result.Failed(context.Errors.Select(e => e.Value).ToArray());                          
                         }
 
-                        var shellSettingsManager = scope.ServiceProvider.GetService<IShellSettingsManager>();                    
-                        shellSettings.State = TenantState.Running;
-                        shellSettingsManager.SaveSettings(shellSettings);
+                        //var shellSettingsManager = scope.ServiceProvider.GetService<IShellSettingsManager>();                    
+                        //shellSettings.State = TenantState.Running;
+                        //shellSettingsManager.SaveSettings(shellSettings);
 
                     }
 
@@ -171,6 +170,10 @@ namespace Plato.Tenants.Services
                 return result.Failed(context.Errors.Select(e => e.Value).ToArray());           
             }
 
+            shellSettings.CreatedDate = DateTimeOffset.Now;
+            shellSettings.State = TenantState.Running;
+            _platoHost.UpdateShellSettings(shellSettings);
+
             return result.Success(context);
 
         }
@@ -181,6 +184,8 @@ namespace Plato.Tenants.Services
             var result = new CommandResult<TenantSetUpContext>();
 
             var shellSettings = BuildShellSettings(context);
+            shellSettings.ModifiedDate = DateTimeOffset.Now;
+
             _platoHost.UpdateShellSettings(shellSettings);
 
             return Task.FromResult(result.Success(context));
@@ -217,7 +222,8 @@ namespace Plato.Tenants.Services
                 Location = context.SiteName.ToSafeFileName(),
                 RequestedUrlHost = context.RequestedUrlHost,
                 RequestedUrlPrefix = context.RequestedUrlPrefix,
-                State = TenantState.Initializing
+                State = context.State,
+                OwnerId = context.OwnerId
             };
 
             if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))
@@ -230,7 +236,9 @@ namespace Plato.Tenants.Services
                 shellSettings.TablePrefix = tablePrefix;
             }
 
-            shellSettings.State = context.State;
+            shellSettings.CreatedDate = context.CreatedDate;
+            shellSettings.ModifiedDate = context.ModifiedDate;
+
             return shellSettings;
 
         }

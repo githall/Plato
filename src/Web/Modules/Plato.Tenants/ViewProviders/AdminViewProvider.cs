@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using PlatoCore.Layout.ViewProviders.Abstractions;
@@ -9,9 +10,7 @@ using System.Collections.Generic;
 using Plato.Tenants.Models;
 using Plato.Tenants.Services;
 using Microsoft.Extensions.Logging;
-using System.Linq;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PlatoCore.Abstractions.Extensions;
 
 namespace Plato.Tenants.ViewProviders
 {
@@ -20,19 +19,15 @@ namespace Plato.Tenants.ViewProviders
 
         private readonly IShellSettingsManager _shellSettingsManager;
    
-        private readonly IAuthorizationService _authorizationService;
         private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ILogger<AdminViewProvider> _logger;
 
         public AdminViewProvider(
             IShellSettingsManager shellSettingsManager, 
-            IAuthorizationService authorizationService,
             ILogger<AdminViewProvider> logger,
             ITenantSetUpService setUpService)
         {
-
-            _shellSettingsManager = shellSettingsManager;        
-            _authorizationService = authorizationService;         
+            _shellSettingsManager = shellSettingsManager;                
             _tenantSetUpService = setUpService;
             _logger = logger;
         }
@@ -114,6 +109,9 @@ namespace Plato.Tenants.ViewProviders
                     Password = password,
                     PasswordConfirmation = password,
                     State = settings.State,
+                    OwnerId = settings.OwnerId,
+                    CreatedDate = settings.CreatedDate,
+                    ModifiedDate = settings.ModifiedDate,
                     AvailableTenantStates = GetAvailableTenantStates()
                 };
             }
@@ -153,6 +151,9 @@ namespace Plato.Tenants.ViewProviders
                     RequestedUrlHost = model.RequestedUrlHost,
                     RequestedUrlPrefix = model.RequestedUrlPrefix,
                     State = model.State,
+                    OwnerId = model.OwnerId,
+                    CreatedDate = model.IsNewTenant ? DateTimeOffset.Now : model.CreatedDate,
+                    ModifiedDate = model.IsNewTenant ? model.ModifiedDate : DateTimeOffset.Now,
                     Errors = new Dictionary<string, string>()
                 };
 

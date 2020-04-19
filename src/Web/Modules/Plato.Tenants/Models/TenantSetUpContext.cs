@@ -1,5 +1,6 @@
 ﻿using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Models.Shell;
+using System;
 
 namespace Plato.Tenants.Models
 {
@@ -8,5 +9,12 @@ namespace Plato.Tenants.Models
 
         public TenantState State { get; set; }
 
+        public string OwnerId { get; set; }
+
+        public DateTimeOffset? CreatedDate { get; set; }
+
+        public DateTimeOffset? ModifiedDate { get; set; }
+
     }
+
 }

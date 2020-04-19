@@ -42,12 +42,26 @@
                                     <span class="text-danger">@T[tenant.State.ToString()]</span>
                                 }
                             </li>
-
+                            @if (!string.IsNullOrEmpty(tenant.OwnerId))
+                            {
+                                <li class="list-inline-item">
+                                    <span title="@T["Owner"]" data-toggle="tooltip">@tenant.OwnerId</span>
+                                </li>
+                            }
                             @if (tenant.CreatedDate != null)
                             {
                                 <li class="list-inline-item">
-                                    <span class="text-muted">@T["created"]</span>
-                                    <date utc="@tenant.CreatedDate" />
+                                    <span title="@T["Created"] @tenant.CreatedDate" data-toggle="tooltip">
+                                        <date utc="@tenant.CreatedDate" />
+                                    </span>
+                                </li>
+                            }
+                            @if (tenant.ModifiedDate != null)
+                            {
+                                <li class="list-inline-item">
+                                     <span title="@T["Modified"] @tenant.ModifiedDate" data-toggle="tooltip">
+                                        <date utc="@tenant.ModifiedDate" />
+                                    </span>
                                 </li>
                             }
                         </ul>

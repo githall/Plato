@@ -2,6 +2,7 @@
 using PlatoCore.Models.Shell;
 using PlatoCore.Security.Attributes;
 using PlatoCore.Shell.Abstractions;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
@@ -46,6 +47,13 @@ namespace Plato.Tenants.ViewModels
         public TenantState State { get; set; } = TenantState.Initializing;
 
         public IEnumerable<SelectListItem> AvailableTenantStates { get; set; }
+
+        public DateTimeOffset? CreatedDate { get; set; }
+
+        public DateTimeOffset? ModifiedDate { get; set; }
+
+        [StringLength(100)]
+        public string OwnerId { get; set; }
 
         public bool IsNewTenant { get; set; }
 

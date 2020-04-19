@@ -1,11 +1,21 @@
 ﻿@model EditTenantViewModel
 
 <input type="hidden" asp-for="IsNewTenant" />
+<input type="hidden" asp-for="CreatedDate" />
+<input type="hidden" asp-for="ModifiedDate" />
 <input type="hidden" name="id" value="@Model.SiteName" />
 
 <card>
     <card-title>
-        <h6 class="card-title">@T["Tenant Details"]</h6>
+        @if (Model.IsNewTenant)
+        {
+            <h6 class="card-title">@T["Add Tenant"]</h6>
+        }
+        else
+        {
+            <h6 class="card-title">@T["Edit Tenant"]</h6>
+        }
+
     </card-title>
     <card-body>
 
@@ -15,8 +25,8 @@
         {
             <fieldset class="row" asp-validation-class-for="SiteName">
                 <div class="form-group col-md-12">
-                    <h6>@T["Site Name"]</h6>
-                    <label asp-for="SiteName">@T["What is the name of your site?"]</label>
+                    <h6>@T["Name"]</h6>
+                    <label asp-for="SiteName">@T["Provide a name for this tenant."]</label>
                     <input asp-for="SiteName" class="form-control" />
                     <span asp-validation-for="SiteName" class="text-danger"></span>
                 </div>
@@ -26,15 +36,26 @@
         {
             <fieldset class="row" asp-validation-class-for="SiteName">
                 <div class="form-group col-md-12">
-                    <h6>@T["Site Name"]</h6>
-                    <label asp-for="ConnectionString" class="text-muted">
-                        @T["You cannot change the name for the default host."]
+                    <h6>@T["Name"]</h6>
+                    <label asp-for="SiteName" class="text-muted">
+                        @T["You cannot change the name for the default tenant."]
                     </label>
                     <input readonly asp-for="SiteName" class="form-control" />
                     <span asp-validation-for="SiteName" class="text-danger"></span>
                 </div>
             </fieldset>
         }
+
+        <fieldset class="row" asp-validation-class-for="OwnerId">
+            <div class="form-group col-md-12">
+                <h6>@T["Owner"]</h6>
+                <label asp-for="OwnerId" class="text-muted">
+                    @T["Provide an optional email address or company name to identify the tenant owner."]
+                </label>
+                <input asp-for="OwnerId" class="form-control" />
+                <span asp-validation-for="OwnerId" class="text-danger"></span>
+            </div>
+        </fieldset>
 
         @if (Model.IsNewTenant)
         {
@@ -89,24 +110,43 @@
         }
         else
         {
-            <fieldset class="row" asp-validation-class-for="State">
-                <div class="form-group col-md-12">
-                    <h6>@T["Tenant state"]</h6>
-                    <label asp-for="State">
-                        @T["The state of the tenant."]
-                    </label>
-                    <select class="form-control"
-                            asp-for="State"
-                            asp-items="@Model.AvailableTenantStates"></select>
-                    <span asp-validation-for="State" class="text-danger"></span>
-                </div>
-            </fieldset>
-        
+
+            @if (!Model.IsDefault)
+            {
+                <fieldset class="row" asp-validation-class-for="State">
+                    <div class="form-group col-md-12">
+                        <h6>@T["State"]</h6>
+                        <label asp-for="State">
+                            @T["The state of the tenant. If disabled a 404 response will be returned for any requests to this tenant."]
+                        </label>
+                        <select class="form-control"
+                                asp-for="State"
+                                asp-items="@Model.AvailableTenantStates"></select>
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                </fieldset>
+            }
+            else
+            {
+                <fieldset class="row" asp-validation-class-for="State">
+                    <div class="form-group col-md-12">
+                        <h6>@T["State"]</h6>
+                        <label asp-for="State">
+                            @T["You cannot change the state of the host tenant."]
+                        </label>
+                        <select readonly disabled class="form-control"
+                                asp-for="State"
+                                asp-items="@Model.AvailableTenantStates"></select>
+                        <span asp-validation-for="State" class="text-danger"></span>
+                    </div>
+                </fieldset>
+            }
+
             <fieldset class="row" asp-validation-class-for="ConnectionString">
                 <div class="form-group col-md-12">
                     <h6>@T["Connection string"]</h6>
                     <label asp-for="ConnectionString">
-                        @T["The connection string cannot be changed once a tenant has been created."]
+                        @T["The connection string cannot be changed once the tenant has been created."]
                     </label>
                     <div class="input-group mb-2 mb-sm-0">
                         <div class="search-input-group">
@@ -139,7 +179,7 @@
         {
             <div class="form-group">
                 <h6>@T["Administrator Account"]</h6>
-                @T["The default administrator account can be used after the set up is complete to login and manage Plato."]
+                @T["The default administrator account can be used after the tenant is created to login and manage the tenant."]
             </div>
             <div class="row">
                 <div class="col-md-6">
@@ -189,7 +229,6 @@
             <input type="hidden" asp-for="PasswordConfirmation" />
         }
 
-
         <div class="form-group">
             <h6>@T["URL Settings"]</h6>
             @T["Specify a host name or prefix for this tenant."]
@@ -227,7 +266,6 @@
                 </div>
             </div>
         </div>
-
 
     </card-body>
 </card>

@@ -33,10 +33,13 @@ namespace PlatoCore.Models.Shell
             TablePrefix = settings.TablePrefix;           
             Theme = settings.Theme;
             State = settings.State;
+            OwnerId = settings.OwnerId;
+            CreatedDate = settings.CreatedDate;
+            ModifiedDate = settings.ModifiedDate;
         }
 
         public IDictionary<string, string> Configuration => _values;
-        
+
         public string this[string key]
         {
             get => _values.TryGetValue(key, out var retVal) ? retVal : null;
@@ -109,6 +112,12 @@ namespace PlatoCore.Models.Shell
             }
         }
 
+        public string OwnerId
+        {
+            get => this["OwnerId"];
+            set => _values["OwnerId"] = value;
+        }
+
         TenantState _tenantState;
 
         public TenantState State
@@ -132,6 +141,21 @@ namespace PlatoCore.Models.Shell
                 return null; 
             }
             set => this["CreatedDate"] = value.HasValue 
+                ? value.Value.ToSortableDateTimePattern()
+                : string.Empty;
+        }
+
+        public DateTimeOffset? ModifiedDate
+        {
+            get
+            {
+                if (DateTime.TryParse(this["ModifiedDate"], out var date))
+                {
+                    return date;
+                }
+                return null;
+            }
+            set => this["ModifiedDate"] = value.HasValue
                 ? value.Value.ToSortableDateTimePattern()
                 : string.Empty;
         }

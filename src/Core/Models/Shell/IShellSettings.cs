@@ -13,6 +13,13 @@ namespace PlatoCore.Models.Shell
         string ConnectionString { get; set; }
 
         /// <summary>
+        /// Unique database table prefix for the shell.
+        /// </summary>
+        string TablePrefix { get; set; }
+
+        string DatabaseProvider { get; set; }
+
+        /// <summary>
         /// For example https://site1.url.com/, https://site2.url.com/, https://site3.url.com/ etc
         /// </summary>
         string RequestedUrlHost { get; set; }
@@ -21,13 +28,11 @@ namespace PlatoCore.Models.Shell
         /// For example https://url.com/site1, https://url.com/site2, https://url.com/site3, etc
         /// </summary>
         string RequestedUrlPrefix { get; set; }
-
+     
         /// <summary>
-        /// Unique database table prefix for the shell.
+        /// An identifier for this tenant. For example an email address or primary key value. 
         /// </summary>
-        string TablePrefix { get; set; }
-        
-        string DatabaseProvider { get; set; }
+        string OwnerId { get; set; }
 
         /// <summary>
         /// The default theme for the shell.
@@ -42,6 +47,9 @@ namespace PlatoCore.Models.Shell
         TenantState State { get; set; }
 
         DateTimeOffset? CreatedDate { get; set; }
+
+
+        DateTimeOffset?ModifiedDate { get; set; }
 
         string this[string key] { get; }
 
