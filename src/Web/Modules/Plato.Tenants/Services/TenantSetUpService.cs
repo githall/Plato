@@ -187,7 +187,6 @@ namespace Plato.Tenants.Services
 
         }
 
-
         private Task<ICommandResult<TenantSetUpContext>> UninstallInternalAsync(TenantSetUpContext context)
         {
 
@@ -211,6 +210,7 @@ namespace Plato.Tenants.Services
 
         private ShellSettings BuildShellSettings(TenantSetUpContext context)
         {
+
             var shellSettings = new ShellSettings()
             {
                 Name = context.SiteName,
@@ -230,6 +230,7 @@ namespace Plato.Tenants.Services
                 shellSettings.TablePrefix = tablePrefix;
             }
 
+            shellSettings.State = context.State;
             return shellSettings;
 
         }

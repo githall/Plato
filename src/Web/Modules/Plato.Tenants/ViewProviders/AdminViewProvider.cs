@@ -152,6 +152,7 @@ namespace Plato.Tenants.ViewProviders
                     AdminPassword = model.Password,
                     RequestedUrlHost = model.RequestedUrlHost,
                     RequestedUrlPrefix = model.RequestedUrlPrefix,
+                    State = model.State,
                     Errors = new Dictionary<string, string>()
                 };
 

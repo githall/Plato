@@ -43,7 +43,7 @@ namespace Plato.Tenants.ViewModels
         [StringLength(100), Display(Name = "site host")]
         public string RequestedUrlHost { get; set; }
 
-        public TenantState State { get; set; }
+        public TenantState State { get; set; } = TenantState.Initializing;
 
         public IEnumerable<SelectListItem> AvailableTenantStates { get; set; }
 
