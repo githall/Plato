@@ -223,7 +223,7 @@ namespace Plato.Tenants.Controllers
         // Delete
         // --------------
 
-        [HttpPost]
+        [HttpPost, ValidateAntiForgeryToken]
         public async Task<IActionResult> Delete(string id)
         {
 
@@ -242,7 +242,7 @@ namespace Plato.Tenants.Controllers
                 return NotFound();
             }
 
-            // Attempt to delete the role
+            // Attempt to delete the tenant
             var result = await _setUpService.UninstallAsync(id);
 
             // Redirect to success
@@ -250,15 +250,18 @@ namespace Plato.Tenants.Controllers
             {
                 _alerter.Success(T["Tenant Deleted Successfully"]);
                 return RedirectToAction(nameof(Index));
-            }         
-     
+            }
+
             // Display errors
             foreach (var error in result.Errors)
             {
-                ModelState.AddModelError(error.Code, error.Description);
+                _alerter.Danger(T[error.Description]);
             }
 
-            return await Edit(id);         
+            return RedirectToAction(nameof(Edit), new RouteValueDictionary()
+            {
+                ["id"] = id
+            });
 
         }
 

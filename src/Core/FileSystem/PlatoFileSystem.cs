@@ -263,7 +263,30 @@ namespace PlatoCore.FileSystem
 
         public bool DeleteDirectory(string path)
         {
+
             return MakeDestinationFileNameAvailable(GetFileInfo(path));
+
+            //var directoryInfo = GetDirectoryInfo(path);            
+            //try
+            //{
+
+            //    if (directoryInfo.Exists)
+            //    {
+            //        // Note recursive = true (deletes all child directories and files)
+            //        Directory.Delete(path, true);
+            //    }
+
+            //    return true;
+
+            //}
+            //catch (Exception e)
+            //{
+            //    // We land here if the file is in use, for example. Let's move on.
+            //    _logger.LogError(e, e.Message);
+            //}
+
+            //return false;
+
         }
 
         public void CreateDirectory(string path)

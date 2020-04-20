@@ -68,7 +68,7 @@ namespace PlatoCore.Shell
 
         }
 
-        public void SaveSettings(IShellSettings shellSettings)
+        public bool SaveSettings(IShellSettings shellSettings)
         {
 
             if (shellSettings == null)
@@ -113,6 +113,25 @@ namespace PlatoCore.Shell
             {
                 _logger.LogInformation("Saved shell settings for tenant '{0}'", shellSettings.Name);
             }
+
+            return true;
+
+        }
+
+        public bool DeleteSettings(IShellSettings shellSettings)
+        {
+
+            if (shellSettings == null)
+            {
+                throw new ArgumentNullException(nameof(shellSettings));
+            }
+
+            if (string.IsNullOrEmpty(shellSettings.Location))
+            {
+                throw new ArgumentNullException(nameof(shellSettings.Location));
+            }
+
+            return _appDataFolder.DeleteDirectory(shellSettings.Location);
 
         }
 

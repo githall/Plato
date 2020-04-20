@@ -185,9 +185,10 @@ namespace Plato.Tenants.Services
                 
                 -- Start Drop Tables
 
-                DECLARE @schemaName nvarchar(100)
-                DECLARE @tableName nvarchar(400)
-                DECLARE @fullName nvarchar(500)
+                DECLARE @schemaName NVARCHAR(100)
+                DECLARE @tableName NVARCHAR(400)
+                DECLARE @procedureName NVARCHAR(400)
+                DECLARE @fullName NVARCHAR(500)
                 DECLARE MSGCURSOR CURSOR FOR
                 SELECT 
 	                schema_name(t.schema_id) as schema_name,
@@ -217,14 +218,9 @@ namespace Plato.Tenants.Services
                 DEALLOCATE MSGCURSOR
 
                 -- End Drop Tables
-
-                GO
                 
                 -- Start Drop Procedures
                
-                DECLARE @schemaName nvarchar(100)
-                DECLARE @procedureName nvarchar(400)
-                DECLARE @fullName nvarchar(500)
                 DECLARE MSGCURSOR CURSOR FOR
                 SELECT 
 	                schema_name(p.schema_id) as schema_name,
@@ -232,7 +228,7 @@ namespace Plato.Tenants.Services
                 FROM 
 	                sys.procedures p
                 WHERE 
-	                p.name like 'site16_%'
+	                p.name like '{prefix}%'
 	
                 OPEN MSGCURSOR
 
@@ -261,7 +257,7 @@ namespace Plato.Tenants.Services
         {
 
             // Our result
-            var result = new CommandResultBase();
+            var result = new CommandResultBase();     
 
             // Ensure the shell exists
             var shellSettings =GetShellByName(siteName);
@@ -269,6 +265,31 @@ namespace Plato.Tenants.Services
             {
                 return result.Failed($"A tenant with the name \"{siteName}\" could not be found!");
             }
+
+            var errors = new List<CommandError>();
+
+            // ----------------------
+            // Attempt to delete App_Data/{SiteName} folder
+            // ----------------------
+
+            try
+            {
+                _shellSettingsManager.DeleteSettings(shellSettings);
+            }
+            catch (Exception e)
+            {
+                errors.Add(new CommandError(e.Message));
+            }
+
+            // Report any errors
+            if (errors.Count > 0)
+            {
+                return result.Failed(errors.ToArray());
+            }
+
+            // ----------------------
+            // Attempt to drop all tables and stored procedures with our table prefix
+            // ----------------------
 
             // Replacements for SQL script
             var replacements = new Dictionary<string, string>()
@@ -300,16 +321,16 @@ namespace Plato.Tenants.Services
                         }
                         catch (Exception e)
                         {
-                            return result.Failed(e.Message);
+                            errors.Add(new CommandError(e.Message));
                         }
 
                     }
-
                 }
+            }            
 
-            }
-            
-            return result.Success();
+            return errors.Count > 0
+                ? result.Failed(errors.ToArray())
+                : result.Success();
 
         }
 
