@@ -37,7 +37,7 @@ namespace PlatoCore.Features
         private readonly IShellContextFactory _shellContextFactory;
         private readonly IRunningShellTable _runningShellTable;        
         private readonly ILogger<ShellFeatureManager> _logger;
-         
+
         public ShellFeatureManager(            
             IShellDescriptorManager shellDescriptorManager,
             IShellDescriptorStore shellDescriptorStore,

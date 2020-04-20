@@ -63,12 +63,12 @@ namespace Plato.Tenants.Services
                         s.TablePrefix.Equals(context.DatabaseTablePrefix, StringComparison.OrdinalIgnoreCase));
                     if (shell != null)
                     {
-                        return result.Failed($"A tenant with the same connection string and table prefix already exists!");
+                        return result.Failed($"A tenant with the same connection string and table prefix already exists! Tenant name: \"{shell.Name}\".");
                     }
 
                 }
 
-                // Configure tenant
+                // Install tenant
 
                 return await InstallInternalAsync(context);
 
@@ -87,7 +87,75 @@ namespace Plato.Tenants.Services
 
             try
             {
+
+                // Validate tenant
+
+                var shells = _shellSettingsManager.LoadSettings();
+                if (shells != null)
+                {
+
+                    var connStringExists = false;
+                    var hostExists = false;
+                    var prefixExists = false;
+                    foreach (var shell in shells)
+                    {
+                        // Not our current shell
+                        if (!shell.Name.Equals(context.SiteName, StringComparison.OrdinalIgnoreCase))
+                        {
+
+                            if (shell.ConnectionString.Equals(context.DatabaseConnectionString, StringComparison.OrdinalIgnoreCase) &&
+                                shell.TablePrefix.Equals(context.DatabaseTablePrefix, StringComparison.OrdinalIgnoreCase))
+                            {
+                                connStringExists = true;
+                            }
+
+                            if (!string.IsNullOrEmpty(shell.RequestedUrlHost))
+                            {
+                                if (shell.RequestedUrlHost.Equals(context.RequestedUrlHost, StringComparison.OrdinalIgnoreCase)) 
+                                {
+                                    hostExists = true;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(shell.RequestedUrlPrefix))
+                            {
+                                if (shell.RequestedUrlPrefix.Equals(context.RequestedUrlPrefix, StringComparison.OrdinalIgnoreCase)) 
+                                {
+                                    prefixExists = true;
+                                }
+                            }
+
+                            if (connStringExists)
+                            {
+                                return result.Failed($"A tenant with the same connection string and table prefix already exists! Tenant name: \"{shell.Name}\".");
+                            }
+
+                            // If we have a host check host and prefix 
+                            // Else just check the prefix
+                            if (hostExists)
+                            {
+                                if (hostExists && prefixExists)
+                                {
+                                    return result.Failed($"A tenant with the same host name and prefix already exists! Tenant name: \"{shell.Name}\".");
+                                }
+                            }
+                            else
+                            {
+                                if (prefixExists)
+                                {
+                                    return result.Failed($"A tenant with the same prefix already exists! Tenant name: \"{shell.Name}\".");
+                                }
+                            }
+
+                        }
+                    }
+                    
+                }
+
+                // Update tenant
+
                 return await UpdateInternalAsync(context);
+
             }
             catch (Exception ex)
             {
@@ -158,11 +226,13 @@ namespace Plato.Tenants.Services
 
             }
 
+            // Report any errors
             if (context.Errors.Count > 0)
             {
                 return result.Failed(context.Errors.Select(e => e.Value).ToArray());           
             }
 
+            // Set shell defaults
             shellSettings.CreatedDate = DateTimeOffset.Now;
             shellSettings.ModifiedDate = DateTimeOffset.Now;
             shellSettings.State = TenantState.Running;
@@ -178,7 +248,9 @@ namespace Plato.Tenants.Services
 
         private Task<ICommandResult<TenantSetUpContext>> UpdateInternalAsync(TenantSetUpContext context)
         {
+
             var result = new CommandResult<TenantSetUpContext>();
+
             var shellSettings = BuildShellSettings(context);
             shellSettings.ModifiedDate = DateTimeOffset.Now;
 
@@ -188,6 +260,7 @@ namespace Plato.Tenants.Services
                 .RecycleShell(shellSettings);
 
             return Task.FromResult(result.Success(context));
+
         }
 
         public const string Sql = @"

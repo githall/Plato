@@ -3,8 +3,10 @@ using PlatoCore.Shell.Abstractions;
 
 namespace PlatoCore.Hosting.Abstractions
 {
+
     public interface IPlatoHost
     {
+
         void Initialize();
 
         ShellContext GetOrCreateShellContext(IShellSettings settings);
@@ -18,4 +20,5 @@ namespace PlatoCore.Hosting.Abstractions
         IPlatoHost DisposeShell(IShellSettings settings);
 
     }
+
 }

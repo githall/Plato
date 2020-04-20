@@ -224,7 +224,6 @@ namespace Plato.Tenants.ViewProviders
         IEnumerable<SelectListItem> GetAvailableTenantStates()
         {
 
-            // Build timezones 
             var output = new List<SelectListItem>();
             foreach (var z in Enum.GetValues(typeof(TenantState)))
             {

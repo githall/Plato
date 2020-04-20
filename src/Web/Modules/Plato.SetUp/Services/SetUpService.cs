@@ -110,11 +110,13 @@ namespace Plato.SetUp.Services
 
             }
 
+            // Report errors
             if (context.Errors.Count > 0)
             {
                 return executionId;
             }
 
+            // Set defaults
             shellSettings.CreatedDate = DateTimeOffset.Now;
             shellSettings.ModifiedDate = DateTimeOffset.Now;
             shellSettings.State = TenantState.Running;

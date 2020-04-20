@@ -45,17 +45,23 @@
                 </div>
             </fieldset>
         }
-
-        <fieldset class="row" asp-validation-class-for="OwnerId">
-            <div class="form-group col-md-12">
-                <h6>@T["Owner"]</h6>
-                <label asp-for="OwnerId">
-                    @T["Provide an optional email address or company name to identify the tenant owner."]
-                </label>
-                <input asp-for="OwnerId" class="form-control" />
-                <span asp-validation-for="OwnerId" class="text-danger"></span>
-            </div>
-        </fieldset>
+        @if (!Model.IsDefault)
+        {
+            <fieldset class="row" asp-validation-class-for="OwnerId">
+                <div class="form-group col-md-12">
+                    <h6>@T["Owner"]</h6>
+                    <label asp-for="OwnerId">
+                        @T["Provide an optional email address or company name to identify the tenant owner."]
+                    </label>
+                    <input asp-for="OwnerId" class="form-control" />
+                    <span asp-validation-for="OwnerId" class="text-danger"></span>
+                </div>
+            </fieldset>
+        }
+        else
+        {
+            <input asp-for="OwnerId" type="hidden"/>
+        }
 
         @if (Model.IsNewTenant)
         {
@@ -63,7 +69,7 @@
             {
                 <div class="form-group">
                     <h6>@T["Database"]</h6>
-                    @T["The Microsoft SQL Server 2016 or above database to store your Plato configuration and content. You will first need to create a new database within your instance of SQL Server and then point the connection string below to this new database."]
+                    @T["The Microsoft SQL Server 2016 or above database to store your tenant configuration and content. You will first need to create a new database within your instance of SQL Server and then point the connection string below to this new database."]
                 </div>
             }
             @if (Model.ConnectionStringPreset)
@@ -127,19 +133,8 @@
                 </fieldset>
             }
             else
-            {
-                <fieldset class="row" asp-validation-class-for="State">
-                    <div class="form-group col-md-12">
-                        <h6>@T["State"]</h6>
-                        <label asp-for="State">
-                            @T["You cannot change the state of the host tenant."]
-                        </label>
-                        <select readonly disabled class="form-control"
-                                asp-for="State"
-                                asp-items="@Model.AvailableTenantStates"></select>
-                        <span asp-validation-for="State" class="text-danger"></span>
-                    </div>
-                </fieldset>
+            {              
+                <input asp-for="State" type="hidden"/>
             }
 
             <fieldset class="row" asp-validation-class-for="ConnectionString">
