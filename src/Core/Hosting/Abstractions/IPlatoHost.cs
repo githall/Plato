@@ -9,13 +9,13 @@ namespace PlatoCore.Hosting.Abstractions
 
         ShellContext GetOrCreateShellContext(IShellSettings settings);
 
-        void UpdateShellSettings(IShellSettings settings);
-
         ShellContext CreateShellContext(IShellSettings settings);
 
-        void RecycleShellContext(IShellSettings settings);
+        IPlatoHost UpdateShell(IShellSettings settings);
 
-        void DisposeShellContext(IShellSettings settings);
+        IPlatoHost RecycleShell(IShellSettings settings);
+
+        IPlatoHost DisposeShell(IShellSettings settings);
 
     }
 }

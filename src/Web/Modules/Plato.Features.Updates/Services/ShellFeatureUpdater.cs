@@ -560,7 +560,7 @@ namespace Plato.Features.Updates.Services
         {
             var httpContext = _httpContextAccessor.HttpContext;
             var shellSettings = _runningShellTable.Match(httpContext);
-            _platoHost.RecycleShellContext(shellSettings);
+            _platoHost.RecycleShell(shellSettings);
         }
 
     }

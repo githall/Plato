@@ -386,7 +386,7 @@ namespace Plato.Theming.Controllers
                 if (updatedSettings != null)
                 {
                     // Recycle shell context to ensure changes take effect
-                    _platoHost.RecycleShellContext(_shellSettings);
+                    _platoHost.RecycleShell(_shellSettings);
                 }
                 
             }

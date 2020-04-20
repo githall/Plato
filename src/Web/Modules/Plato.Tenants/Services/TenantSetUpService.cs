@@ -166,7 +166,11 @@ namespace Plato.Tenants.Services
             shellSettings.CreatedDate = DateTimeOffset.Now;
             shellSettings.ModifiedDate = DateTimeOffset.Now;
             shellSettings.State = TenantState.Running;
-            _platoHost.UpdateShellSettings(shellSettings);
+
+            // Update & recycle shell
+            _platoHost
+                .UpdateShell(shellSettings)
+                .RecycleShell(shellSettings);
 
             return result.Success(context);
 
@@ -177,7 +181,12 @@ namespace Plato.Tenants.Services
             var result = new CommandResult<TenantSetUpContext>();
             var shellSettings = BuildShellSettings(context);
             shellSettings.ModifiedDate = DateTimeOffset.Now;
-            _platoHost.UpdateShellSettings(shellSettings);
+
+            // Update & recycle shell
+            _platoHost
+                .UpdateShell(shellSettings)
+                .RecycleShell(shellSettings);
+
             return Task.FromResult(result.Success(context));
         }
 
@@ -269,12 +278,13 @@ namespace Plato.Tenants.Services
             var errors = new List<CommandError>();
 
             // ----------------------
-            // Attempt to delete App_Data/{SiteName} folder
+            // 1. Attempt to delete App_Data/{SiteName} folder
             // ----------------------
 
+            var deleted = true;
             try
             {
-                _shellSettingsManager.DeleteSettings(shellSettings);
+                deleted = _shellSettingsManager.DeleteSettings(shellSettings);
             }
             catch (Exception e)
             {
@@ -287,15 +297,15 @@ namespace Plato.Tenants.Services
                 return result.Failed(errors.ToArray());
             }
 
-            // ----------------------
-            // Attempt to drop all tables and stored procedures with our table prefix
-            // ----------------------
-
-            // Replacements for SQL script
-            var replacements = new Dictionary<string, string>()
+            // Ensure we could delete the directory
+            if (deleted == false)
             {
-                ["{prefix}"] = shellSettings.TablePrefix
-            };
+                return result.Failed($"Cannot delete tenant folder with the name \"{shellSettings.Location}\"!");
+            }
+
+            // ----------------------
+            // 2. Attempt to drop all tables and stored procedures with our table prefix
+            // ----------------------
 
             using (var shellContext = _shellContextFactory.CreateMinimalShellContext(shellSettings))
             {
@@ -317,7 +327,10 @@ namespace Plato.Tenants.Services
 
                         try
                         {
-                            await dbHelper.ExecuteScalarAsync<int>(Sql, replacements);
+                            await dbHelper.ExecuteScalarAsync<int>(Sql, new Dictionary<string, string>()
+                            {
+                                ["{prefix}"] = shellSettings.TablePrefix
+                            });
                         }
                         catch (Exception e)
                         {
@@ -326,7 +339,17 @@ namespace Plato.Tenants.Services
 
                     }
                 }
-            }            
+            }
+
+            // ----------------------
+            // 3. Dispose the tenant
+            // ----------------------
+
+            // Ensure no errors occurred
+            if (errors.Count == 0)
+            {
+                _platoHost.DisposeShell(shellSettings);
+            }
 
             return errors.Count > 0
                 ? result.Failed(errors.ToArray())

@@ -118,7 +118,11 @@ namespace Plato.SetUp.Services
             shellSettings.CreatedDate = DateTimeOffset.Now;
             shellSettings.ModifiedDate = DateTimeOffset.Now;
             shellSettings.State = TenantState.Running;
-            _platoHost.UpdateShellSettings(shellSettings);
+
+            // Update & recycle shell
+            _platoHost
+                .UpdateShell(shellSettings)
+                .RecycleShell(shellSettings);
 
             return executionId;
 

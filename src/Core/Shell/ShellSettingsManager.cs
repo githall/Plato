@@ -131,7 +131,14 @@ namespace PlatoCore.Shell
                 throw new ArgumentNullException(nameof(shellSettings.Location));
             }
 
-            return _appDataFolder.DeleteDirectory(shellSettings.Location);
+            if (_logger.IsEnabled(LogLevel.Information))
+            {
+                _logger.LogInformation("Deleting shell settings for tenant '{0}'", shellSettings.Name);
+            }
+
+            return _appDataFolder.DeleteDirectory(_appDataFolder.Combine(
+                    _optionsAccessor.Value.Location,
+                    shellSettings.Location));
 
         }
 

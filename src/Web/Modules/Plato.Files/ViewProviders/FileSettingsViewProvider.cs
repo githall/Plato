@@ -179,7 +179,7 @@ namespace Plato.Files.ViewProviders
                 if (result != null)
                 {
                     // Recycle shell context to ensure changes take effect
-                    _platoHost.RecycleShellContext(_shellSettings);
+                    _platoHost.RecycleShell(_shellSettings);
                 }
 
             }
