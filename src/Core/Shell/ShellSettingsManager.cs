@@ -37,25 +37,25 @@ namespace PlatoCore.Shell
         {
 
             var shellSettings = new List<ShellSettings>();
-            foreach (var tenant in _appDataFolder.ListDirectories(_optionsAccessor.Value.Location))
+            foreach (var directory in _appDataFolder.ListDirectories(_optionsAccessor.Value.Location))
             {
                 if (_logger.IsEnabled(LogLevel.Information))
                 {
-                    _logger.LogInformation("ShellSettings found in '{0}', attempting to load.", tenant.Name);
+                    _logger.LogInformation("ShellSettings found in '{0}', attempting to load.", directory.Name);
                 }
                 var configurationContainer =
                     new ConfigurationBuilder()
                         .SetBasePath(_appDataFolder.RootPath)
-                        .AddJsonFile(_appDataFolder.Combine(tenant.FullName, string.Format(SettingsFileNameFormat, "json")),
+                        .AddJsonFile(_appDataFolder.Combine(directory.FullName, string.Format(SettingsFileNameFormat, "json")),
                             true)
-                        .AddXmlFile(_appDataFolder.Combine(tenant.FullName, string.Format(SettingsFileNameFormat, "xml")),
+                        .AddXmlFile(_appDataFolder.Combine(directory.FullName, string.Format(SettingsFileNameFormat, "xml")),
                             true)
-                        .AddYamlFile(_appDataFolder.Combine(tenant.FullName, string.Format(SettingsFileNameFormat, "txt")),
+                        .AddYamlFile(_appDataFolder.Combine(directory.FullName, string.Format(SettingsFileNameFormat, "txt")),
                             false);
 
                 var config = configurationContainer.Build();
                 var shellSetting = ShellSettingsSerializer.ParseSettings(config);
-                shellSetting.Location = tenant.Name;
+                shellSetting.Location = directory.Name;
                 shellSettings.Add(shellSetting);
 
                 if (_logger.IsEnabled(LogLevel.Information))
@@ -80,10 +80,10 @@ namespace PlatoCore.Shell
             {
                 throw new ArgumentNullException(nameof(shellSettings.Name));
             }
-                
+
             if (_logger.IsEnabled(LogLevel.Information))
             {
-                _logger.LogInformation("Saving ShellSettings for tenant '{0}'", shellSettings.Name);
+                _logger.LogInformation("Saving shell settings for tenant '{0}'", shellSettings.Name);
             }
 
             var fileName = string.Format(SettingsFileNameFormat, "txt");
@@ -111,7 +111,7 @@ namespace PlatoCore.Shell
 
             if (_logger.IsEnabled(LogLevel.Information))
             {
-                _logger.LogInformation("Saved ShellSettings for tenant '{0}'", shellSettings.Name);
+                _logger.LogInformation("Saved shell settings for tenant '{0}'", shellSettings.Name);
             }
 
         }

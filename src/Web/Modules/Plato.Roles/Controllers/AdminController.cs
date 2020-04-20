@@ -266,7 +266,7 @@ namespace Plato.Roles.Controllers
         public async Task<IActionResult> Delete(string id)
         {
             
-            // Ensuer we have permission
+            // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, Permissions.DeleteRoles))
             {
                 return Unauthorized();

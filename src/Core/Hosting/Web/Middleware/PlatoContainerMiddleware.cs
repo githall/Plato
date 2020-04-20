@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
+using Microsoft.Net.Http.Headers;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Shell;
@@ -46,6 +47,15 @@ namespace PlatoCore.Hosting.Web.Middleware
             // Only serve the next request if the tenant has been resolved.
             if (shellSettings != null)
             {
+
+                // If the shell is disabled or invalid redirect to host 404 page
+                if (shellSettings.State == TenantState.Disabled ||
+                    shellSettings.State == TenantState.Invalid)
+                {
+                    httpContext.Response.StatusCode = StatusCodes.Status302Found;
+                    httpContext.Response.Headers.Add(HeaderNames.Location, StatusCodePagePaths.NotFound);
+                    return;
+                }
 
                 var hasDeferredTasks = false;
                 var shellContext = _platoHost.GetOrCreateShellContext(shellSettings);

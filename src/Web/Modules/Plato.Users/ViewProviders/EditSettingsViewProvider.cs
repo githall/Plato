@@ -95,7 +95,6 @@ namespace Plato.Users.ViewProviders
         }
 
         #endregion
-
       
     }
 

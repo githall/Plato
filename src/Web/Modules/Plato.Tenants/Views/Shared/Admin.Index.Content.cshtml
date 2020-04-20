@@ -1,32 +1,55 @@
-﻿@model TenantIndexViewModel
-@{
-    var platoOpts = GetOptions<PlatoOptions>();
-    var isDemo = platoOpts?.DemoMode ?? false;
-}
-
+﻿@using PlatoCore.Models.Extensions
+@model TenantIndexViewModel
 
 <card class="card card-body-flush">
     <card-title>
-        <h6 class="card-title">@T["Roles"]</h6>
+        <h6 class="card-title">@T["Tenants"]</h6>
     </card-title>
     <card-body>
         @if (Model.Results != null)
         {
             <ul class="list-group list-group-flush list-group-hover">
-                @foreach (var tenant in Model.Results)
+                @foreach (var tenant in Model.Results.OrderByDescending(t => t.ModifiedDate))
                 {
+                    var url = tenant.GetRequestedUrl();
                     <li class="list-group-item list-group-item-action">
+                        
+                        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="btn btn-secondary float-right">
+                            <i class="fal fa-pencil mr-1"></i>@T["Edit"]
+                        </a>
 
-                        <h6 class="d-inline-block">
-                            <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="font-weight-bold">
-                                @tenant.Name
-                            </a>
+                        <h6>
+                            <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="font-weight-bold">@tenant.Name</a>
+                            @if (!string.IsNullOrEmpty(url))
+                            {
+                                <a href="@url" data-toggle="tooltip" title="@url" target="_blank" class="ml-2"><i class="fal fa-external-link"></i></a>
+                            }
                         </h6>
 
-                        <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="btn btn-secondary float-right">
-                            <i class="fal fa-pencil"></i>
-                            @T["Edit"]
-                        </a>
+                        <ul class="list-inline">                            
+                            <li class="list-inline-item">
+                                @if (tenant.State == TenantState.Running)
+                                {
+                                    <span class="text-success">@T[tenant.State.ToString()]</span>
+                                }
+                                else
+                                {
+                                    <span class="text-danger">@T[tenant.State.ToString()]</span>
+                                }
+                            </li>
+                            @if (!string.IsNullOrEmpty(tenant.OwnerId))
+                            {
+                                <li class="list-inline-item">
+                                    <span title="@T["Owner"]" data-toggle="tooltip">@tenant.OwnerId</span>
+                                </li>
+                            }
+                            @if (tenant.CreatedDate != null)
+                            {
+                                <li class="list-inline-item">                                
+                                    @T["Created"] <date utc="@tenant.CreatedDate" />                                
+                                </li>
+                            }                         
+                        </ul>
 
                     </li>
                 }

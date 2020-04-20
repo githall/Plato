@@ -1,4 +1,9 @@
-﻿using PlatoCore.Security.Attributes;
+﻿using Microsoft.AspNetCore.Mvc.Rendering;
+using PlatoCore.Models.Shell;
+using PlatoCore.Security.Attributes;
+using PlatoCore.Shell.Abstractions;
+using System;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Tenants.ViewModels
@@ -39,7 +44,20 @@ namespace Plato.Tenants.ViewModels
         [StringLength(100), Display(Name = "site host")]
         public string RequestedUrlHost { get; set; }
 
+        public TenantState State { get; set; } = TenantState.Initializing;
+
+        public IEnumerable<SelectListItem> AvailableTenantStates { get; set; }
+
+        public DateTimeOffset? CreatedDate { get; set; }
+
+        public DateTimeOffset? ModifiedDate { get; set; }
+
+        [StringLength(100)]
+        public string OwnerId { get; set; }
+
         public bool IsNewTenant { get; set; }
+
+        public bool IsDefault => SiteName?.Equals(ShellHelper.DefaultShellName, System.StringComparison.OrdinalIgnoreCase) ?? false;      
 
     }
 

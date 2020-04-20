@@ -14,7 +14,7 @@ namespace Plato.SetUp.Services
     public class SetUpService :ISetUpService
     {
 
-        private const string TablePrefixSeparator = "_";
+     
 
         private readonly IShellContextFactory _shellContextFactory;
         private readonly IShellSettings _shellSettings;
@@ -63,8 +63,8 @@ namespace Plato.SetUp.Services
             if (string.IsNullOrEmpty(shellSettings.DatabaseProvider))
             {
                 var tablePrefix = context.DatabaseTablePrefix;
-                if (!tablePrefix.EndsWith(TablePrefixSeparator))
-                    tablePrefix += TablePrefixSeparator;
+                if (!tablePrefix.EndsWith(ShellHelper.TablePrefixSeparator))
+                    tablePrefix += ShellHelper.TablePrefixSeparator;
                 shellSettings.DatabaseProvider = context.DatabaseProvider;
                 shellSettings.ConnectionString = context.DatabaseConnectionString;
                 shellSettings.TablePrefix = tablePrefix;
@@ -115,6 +115,8 @@ namespace Plato.SetUp.Services
                 return executionId;
             }
 
+            shellSettings.CreatedDate = DateTimeOffset.Now;
+            shellSettings.ModifiedDate = DateTimeOffset.Now;
             shellSettings.State = TenantState.Running;
             _platoHost.UpdateShellSettings(shellSettings);
 

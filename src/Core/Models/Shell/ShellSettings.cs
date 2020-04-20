@@ -1,12 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Text;
+using System.Collections.Generic;
+using PlatoCore.Abstractions.Extensions;
 
 namespace PlatoCore.Models.Shell
 {
+
     public class ShellSettings : IShellSettings
     {
-        
+
         private readonly IDictionary<string, string> _values;
 
         public ShellSettings() : this(new Dictionary<string, string>()) { }
@@ -15,27 +17,18 @@ namespace PlatoCore.Models.Shell
         {
             _values = new Dictionary<string, string>(configuration);
 
-            if (!configuration.ContainsKey("State") || !Enum.TryParse(configuration["State"], true, out _tenantState))
+            if (configuration.ContainsKey("State") )
             {
-                _tenantState = TenantState.Invalid;
+                if (!Enum.TryParse(configuration["State"], true, out TenantState state))
+                {
+                    this["State"] = TenantState.Invalid.ToString();
+                }
             }
-        }
 
-        public ShellSettings(ShellSettings settings)
-        {
-            _values = new Dictionary<string, string>(settings._values, StringComparer.OrdinalIgnoreCase);
-            Name = settings.Name;
-            RequestedUrlHost = settings.RequestedUrlHost;
-            RequestedUrlPrefix = settings.RequestedUrlPrefix;      
-            DatabaseProvider = settings.DatabaseProvider;
-            ConnectionString = settings.ConnectionString;
-            TablePrefix = settings.TablePrefix;           
-            Theme = settings.Theme;
-            State = settings.State;
         }
 
         public IDictionary<string, string> Configuration => _values;
-        
+
         public string this[string key]
         {
             get => _values.TryGetValue(key, out var retVal) ? retVal : null;
@@ -50,22 +43,22 @@ namespace PlatoCore.Models.Shell
             set => this["Name"] = value;
         }
 
+        public string OwnerId
+        {
+            get => this["OwnerId"];
+            set => this["OwnerId"] = value;
+        }
+
         public string Location
         {
             get => this["Location"] ?? "";
             set => this["Location"] = value;
         }
 
-        public string RequestedUrlPrefix
+        public string DatabaseProvider
         {
-            get => this["RequestedUrlPrefix"];
-            set => _values["RequestedUrlPrefix"] = value;
-        }
-
-        public string RequestedUrlHost
-        {
-            get => this["RequestedUrlHost"];
-            set => this["RequestedUrlHost"] = value;
+            get => this["DatabaseProvider"];
+            set => _values["DatabaseProvider"] = value;
         }
 
         public string ConnectionString
@@ -80,10 +73,16 @@ namespace PlatoCore.Models.Shell
             set => _values["TablePrefix"] = value;
         }
 
-        public string DatabaseProvider
+        public string RequestedUrlPrefix
         {
-            get => this["DatabaseProvider"];
-            set => _values["DatabaseProvider"] = value;
+            get => this["RequestedUrlPrefix"];
+            set => _values["RequestedUrlPrefix"] = value;
+        }
+
+        public string RequestedUrlHost
+        {
+            get => this["RequestedUrlHost"];
+            set => this["RequestedUrlHost"] = value;
         }
 
         public string Theme
@@ -108,17 +107,52 @@ namespace PlatoCore.Models.Shell
             }
         }
 
-        TenantState _tenantState;
-
         public TenantState State
         {
-            get => _tenantState;
-            set
+            get
             {
-                _tenantState = value;
+                if (Enum.TryParse(this["State"], true, out TenantState state))
+                {
+                    return state;
+                }
+                return TenantState.Uninitialized;
+            }
+            set
+            {            
                 this["State"] = value.ToString();
             }
         }
+
+        public DateTimeOffset? CreatedDate
+        {
+            get
+            {
+                if (DateTime.TryParse(this["CreatedDate"], out var date))
+                {
+                    return date;
+                }
+                return null; 
+            }
+            set => this["CreatedDate"] = value.HasValue 
+                ? value.Value.ToSortableDateTimePattern()
+                : string.Empty;
+        }
+
+        public DateTimeOffset? ModifiedDate
+        {
+            get
+            {
+                if (DateTime.TryParse(this["ModifiedDate"], out var date))
+                {
+                    return date;
+                }
+                return null;
+            }
+            set => this["ModifiedDate"] = value.HasValue
+                ? value.Value.ToSortableDateTimePattern()
+                : string.Empty;
+        }
+
     }
 
 }

@@ -1,12 +1,8 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using PlatoCore.Layout.ViewProviders.Abstractions;
-using PlatoCore.Models.Roles;
-using PlatoCore.Models.Users;
-using PlatoCore.Security.Abstractions;
-using PlatoCore.Stores.Abstractions.Roles;
 using Plato.Tenants.ViewModels;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
@@ -14,7 +10,7 @@ using System.Collections.Generic;
 using Plato.Tenants.Models;
 using Plato.Tenants.Services;
 using Microsoft.Extensions.Logging;
-using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Plato.Tenants.ViewProviders
 {
@@ -23,19 +19,15 @@ namespace Plato.Tenants.ViewProviders
 
         private readonly IShellSettingsManager _shellSettingsManager;
    
-        private readonly IAuthorizationService _authorizationService;
         private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ILogger<AdminViewProvider> _logger;
 
         public AdminViewProvider(
             IShellSettingsManager shellSettingsManager, 
-            IAuthorizationService authorizationService,
             ILogger<AdminViewProvider> logger,
             ITenantSetUpService setUpService)
         {
-
-            _shellSettingsManager = shellSettingsManager;        
-            _authorizationService = authorizationService;         
+            _shellSettingsManager = shellSettingsManager;                
             _tenantSetUpService = setUpService;
             _logger = logger;
         }
@@ -44,7 +36,6 @@ namespace Plato.Tenants.ViewProviders
 
         public override Task<IViewProviderResult> BuildDisplayAsync(ShellSettings role, IViewProviderContext updater)
         {
-
 
             return Task.FromResult(
                 Views(
@@ -59,59 +50,48 @@ namespace Plato.Tenants.ViewProviders
         public override Task<IViewProviderResult> BuildIndexAsync(ShellSettings role, IViewProviderContext context)
         {
 
-            var indexViewModel = context.Controller.HttpContext.Items[typeof(TenantIndexViewModel)] as TenantIndexViewModel;
-            if (indexViewModel == null)
+            var viewModel = context.Controller.HttpContext.Items[typeof(TenantIndexViewModel)] as TenantIndexViewModel;
+            if (viewModel == null)
             {
                 throw new Exception($"A view model of type {typeof(TenantIndexViewModel).ToString()} has not been registered on the HttpContext!");
             }
 
-            indexViewModel.Results = _shellSettingsManager.LoadSettings();
+            viewModel.Results = _shellSettingsManager.LoadSettings();
 
             return Task.FromResult(Views(
-                View<TenantIndexViewModel>("Admin.Index.Header", model => indexViewModel).Zone("header"),
-                View<TenantIndexViewModel>("Admin.Index.Tools", model => indexViewModel).Zone("tools"),
-                View<TenantIndexViewModel>("Admin.Index.Content", model => indexViewModel).Zone("content")
+                View<TenantIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header"),
+                View<TenantIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools"),
+                View<TenantIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content")
             ));
 
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(ShellSettings model, IViewProviderContext updater)
+        public override Task<IViewProviderResult> BuildEditAsync(ShellSettings settings, IViewProviderContext updater)
         {
 
-            if (model == null)
+            if (settings == null)
             {
-                throw new ArgumentNullException(nameof(model));
+                throw new ArgumentNullException(nameof(settings));
             }
 
-            //// Locate the role we are editing within our default roles
-            //var defaultRole = DefaultRoles.ToList()
-            //    .FirstOrDefault(r => r.Equals(role.Name, StringComparison.OrdinalIgnoreCase));
+            // Configure defaults
+            string defaultConnectionString = "server=localhost;trusted_connection=true;database=plato",
+                userName = "admin",
+                email = "admin@admin.com",
+                password = "Pa$1n@aDyN";
 
-            //// Build model
-            //var editRoleViewModel = new EditRoleViewModel()
-            //{
-            //    Id = role.Id,
-            //    RoleName = role.Name,
-            //    Role = role,
-            //    IsNewRole = await IsNewRole(role.Id),
-            //    IsDefaultRole = defaultRole != null ? true : false,
-            //    EnabledPermissions = await GetEnabledRolePermissionsAsync(role),
-            //    CategorizedPermissions = await _permissionsManager.GetCategorizedPermissionsAsync()
-            //};
-
-            var defaultConnectionString = "";
-
+            // Build view model
             EditTenantViewModel viewModel = null;
-            if (string.IsNullOrEmpty(model.Name))
+            if (string.IsNullOrEmpty(settings.Name))
             {
                 viewModel = new EditTenantViewModel()
                 {
-                    ConnectionString = "server=localhost;trusted_connection=true;database=plato",
+                    ConnectionString = defaultConnectionString,
                     TablePrefix = "plato",
-                    UserName = "admin",
-                    Email = "admin@admin.com",
-                    Password = "admin",
-                    PasswordConfirmation = "admin",
+                    UserName = userName,
+                    Email = email,
+                    Password = password,
+                    PasswordConfirmation = password,
                     IsNewTenant = true
                 };
             }
@@ -119,11 +99,20 @@ namespace Plato.Tenants.ViewProviders
             {
                 viewModel = new EditTenantViewModel()
                 {
-                    SiteName = model.Name,
-                    ConnectionString = model.ConnectionString,
-                    TablePrefix = model.TablePrefix,
-                    RequestedUrlHost = model.RequestedUrlHost,
-                    RequestedUrlPrefix = model.RequestedUrlPrefix
+                    SiteName = settings.Name,
+                    ConnectionString = settings.ConnectionString,
+                    TablePrefix = settings.TablePrefix,
+                    RequestedUrlHost = settings.RequestedUrlHost,
+                    RequestedUrlPrefix = settings.RequestedUrlPrefix,
+                    UserName = userName,
+                    Email = email,
+                    Password = password,
+                    PasswordConfirmation = password,
+                    State = settings.State,
+                    OwnerId = settings.OwnerId,
+                    CreatedDate = settings.CreatedDate,
+                    ModifiedDate = settings.ModifiedDate,
+                    AvailableTenantStates = GetAvailableTenantStates()
                 };
             }
 
@@ -138,14 +127,14 @@ namespace Plato.Tenants.ViewProviders
 
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(ShellSettings role, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(ShellSettings settings, IViewProviderContext context)
         {
 
             var model = new EditTenantViewModel();
 
             if (!await context.Updater.TryUpdateModelAsync(model))
             {
-                return await BuildEditAsync(role, context);
+                return await BuildEditAsync(settings, context);
             }
 
             if (context.Updater.ModelState.IsValid)
@@ -161,6 +150,10 @@ namespace Plato.Tenants.ViewProviders
                     AdminPassword = model.Password,
                     RequestedUrlHost = model.RequestedUrlHost,
                     RequestedUrlPrefix = model.RequestedUrlPrefix,
+                    State = model.State,
+                    OwnerId = model.OwnerId,
+                    CreatedDate = model.IsNewTenant ? DateTimeOffset.Now : model.CreatedDate,
+                    ModifiedDate = model.IsNewTenant ? model.ModifiedDate : DateTimeOffset.Now,
                     Errors = new Dictionary<string, string>()
                 };
 
@@ -169,44 +162,40 @@ namespace Plato.Tenants.ViewProviders
                     setupContext.DatabaseTablePrefix = model.TablePrefix;
                 }
 
-                if (model.IsNewTenant)
+                // Install or update tenant
+                var result = model.IsNewTenant
+                    ? await _tenantSetUpService.InstallAsync(setupContext)
+                    : await _tenantSetUpService.UpdateAsync(setupContext);
+
+                // Report any errors
+                if (!result.Succeeded)
                 {
 
-                    // Execute set-up
-                    var result = await _tenantSetUpService.InstallAsync(setupContext);
-
-                    // Report any errors
-                    if (!result.Succeeded)
+                    if (_logger.IsEnabled(LogLevel.Information))
                     {
-
-                        if (_logger.IsEnabled(LogLevel.Information))
+                        if (model.IsNewTenant)
                         {
                             _logger.LogInformation($"Set-up of tenant '{setupContext.SiteName}' failed with the following errors...");
-                        }
-
-                        foreach (var error in result.Errors)
+                        } else
                         {
-                            if (_logger.IsEnabled(LogLevel.Information))
-                            {
-                                _logger.LogInformation(error.Code + " " + error.Description);
-                            }
-                            context.Updater.ModelState.AddModelError(error.Code, error.Description);
-                        }
+                            _logger.LogInformation($"Update of tenant '{setupContext.SiteName}' failed with the following errors...");
+                        }                        
+                    }
 
+                    foreach (var error in result.Errors)
+                    {
+                        if (_logger.IsEnabled(LogLevel.Information))
+                        {
+                            _logger.LogInformation(error.Code + " " + error.Description);
+                        }
+                        context.Updater.ModelState.AddModelError(error.Code, error.Description);
                     }
 
                 }
-                else
-                {
-
-                }
-
-             
-
 
             }
 
-            return await BuildEditAsync(role, context);
+            return await BuildEditAsync(settings, context);
 
         }
 
@@ -230,6 +219,23 @@ namespace Plato.Tenants.ViewProviders
 
             return true;
 
+        }
+
+        IEnumerable<SelectListItem> GetAvailableTenantStates()
+        {
+
+            // Build timezones 
+            var output = new List<SelectListItem>();
+            foreach (var z in Enum.GetValues(typeof(TenantState)))
+            {
+                output.Add(new SelectListItem
+                {
+                    Text = z.ToString(),
+                    Value = z.ToString()
+                });
+            }
+
+            return output;
         }
 
         #endregion

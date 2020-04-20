@@ -21,7 +21,6 @@ namespace PlatoCore.Abstractions.SetUp
 
         string AdminPassword { get; set; }
 
-
         string RequestedUrlPrefix { get; set; }
 
         string RequestedUrlHost { get; set; }

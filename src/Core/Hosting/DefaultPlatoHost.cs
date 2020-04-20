@@ -75,7 +75,7 @@ namespace PlatoCore.Hosting
             {
                 if (_logger.IsEnabled(LogLevel.Debug))
                 {
-                    _logger.LogDebug("Creating shell context for tenant {0} setup", settings.Name);
+                    _logger.LogDebug("Creating shell context for tenant {0}", settings.Name);
                 }
                 return _shellContextFactory.CreateSetupContext(settings);
             }

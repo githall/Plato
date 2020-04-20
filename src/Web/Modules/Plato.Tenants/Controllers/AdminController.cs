@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -6,19 +7,16 @@ using Microsoft.Extensions.Localization;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Navigation;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
-using PlatoCore.Security.Abstractions;
 using Plato.Tenants.ViewModels;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 using System.Linq;
-using PlatoCore.Abstractions.SetUp;
-using System.Collections.Generic;
 using Plato.Tenants.Services;
-using Plato.Tenants.Models;
 using Microsoft.Extensions.Logging;
+using Microsoft.AspNetCore.Routing;
+using Plato.Tenants.Models;
 
 namespace Plato.Tenants.Controllers
 {
@@ -26,12 +24,11 @@ namespace Plato.Tenants.Controllers
     public class AdminController : Controller, IUpdateModel
     {
 
-        private readonly IShellSettingsManager _shellSettingsManager;
-
         private readonly IViewProviderManager<ShellSettings> _viewProvider;
         private readonly IAuthorizationService _authorizationService;
-        private readonly ITenantSetUpService _setUpService;
+        private readonly IShellSettingsManager _shellSettingsManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
+        private readonly ITenantSetUpService _setUpService;
         private readonly ILogger<AdminController> _logger;
         private readonly IAlerter _alerter;
 
@@ -41,10 +38,10 @@ namespace Plato.Tenants.Controllers
 
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
-            IStringLocalizer<AdminController> stringLocalizer,
-            IShellSettingsManager shellSettingsManager,            
+            IStringLocalizer<AdminController> stringLocalizer,                     
             IViewProviderManager<ShellSettings> viewProvider,
             IAuthorizationService authorizationService,
+            IShellSettingsManager shellSettingsManager,
             IBreadCrumbManager breadCrumbManager,
             ILogger<AdminController> logger,
             ITenantSetUpService setUpService,
@@ -129,17 +126,20 @@ namespace Plato.Tenants.Controllers
             return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new ShellSettings(), this));
         }
 
-        [HttpPost, ActionName(nameof(Create))]
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Create))]
         public async Task<IActionResult> CreatePost(EditTenantViewModel model)
         {
-          
+
+            // Execute view provider
             var result = await _viewProvider.ProvideUpdateAsync(new ShellSettings(), this);
 
+            // Errors occurred in the view provider
             if (!ModelState.IsValid)
             {
                 return await Create();
             }
 
+            // Success
             _alerter.Success(T["Tenant Created Successfully!"]);
             return RedirectToAction(nameof(Index));
 
@@ -152,16 +152,26 @@ namespace Plato.Tenants.Controllers
         public async Task<IActionResult> Edit(string id)
         {
 
+            //// Ensure we have permission
+            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditRoles))
+            //{
+            //    return Unauthorized();
+            //}
+
+            // Ensure we have an id
             if (string.IsNullOrEmpty(id))
             {
                 return NotFound();
             }
 
-            //// Ensuer we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditRoles))
-            //{
-            //    return Unauthorized();
-            //}
+            // Get shell
+            var shell = GetShell(id);
+
+            // Ensure the shell exists
+            if (shell == null)
+            {
+                return NotFound();
+            }
 
             _breadCrumbManager.Configure(builder =>
             {
@@ -173,55 +183,91 @@ namespace Plato.Tenants.Controllers
                     .LocalNav()
                 ).Add(S["Edit Tenant"]);
             });
-
-
-            var shell = GetShell(id);
-            if (shell == null)
-            {
-                return NotFound();
-            }               
-
+     
             return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(shell, this));
 
         }
 
-        [HttpPost, ActionName(nameof(Edit))]
-        public async Task<IActionResult> EditPost(string name)
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Edit))]
+        public async Task<IActionResult> EditPost(string id)
         {
 
-            var shell = GetShell(name);
+            // Get shell
+            var shell = GetShell(id);
 
-            //var role = await _roleManager.FindByIdAsync(id);
-            //if (role == null)
-            //{
-            //    return NotFound();
-            //}
-
-            var result = await _viewProvider.ProvideUpdateAsync(shell, this);
-
-            if (!ModelState.IsValid)
+            // Ensure the shell exists
+            if (shell == null)
             {
-                return View(result);
+                return NotFound();
             }
 
-            _alerter.Success(T["Tenant Updated Successfully!"]);
+            // Update shell
+            var result = await _viewProvider.ProvideUpdateAsync(shell, this);
 
-            return RedirectToAction(nameof(Index));
+            // Errors occurred in the view provider
+            if (!ModelState.IsValid)
+            {
+                return await Edit(id);
+            }
+
+            // Success
+            _alerter.Success(T["Tenant Updated Successfully!"]);
+            return RedirectToAction(nameof(Edit), new RouteValueDictionary()
+            {
+                ["id"] = id
+            });      
 
         }
 
+        // --------------
+        // Delete
+        // --------------
 
-        ShellSettings GetShell(string name)
+        [HttpPost]
+        public async Task<IActionResult> Delete(string id)
         {
 
-            var shells = _shellSettingsManager.LoadSettings();
-            if (shells == null)
+            // Ensure we have permission
+            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.DeleteRoles))
+            //{
+            //    return Unauthorized();
+            //}
+
+            // Get shell
+            var shell = GetShell(id);
+
+            // Ensure the shell exists
+            if (shell == null)
             {
-                return null;
+                return NotFound();
             }
-       
-            return shells.First(s => s.Name.Equals(name, System.StringComparison.OrdinalIgnoreCase));
-            
+
+            // Attempt to delete the role
+            var result = await _setUpService.UninstallAsync(id);
+
+            // Redirect to success
+            if (result.Succeeded)
+            {
+                _alerter.Success(T["Tenant Deleted Successfully"]);
+                return RedirectToAction(nameof(Index));
+            }         
+     
+            // Display errors
+            foreach (var error in result.Errors)
+            {
+                ModelState.AddModelError(error.Code, error.Description);
+            }
+
+            return await Edit(id);         
+
+        }
+
+        // ----------------
+
+        ShellSettings GetShell(string name)
+        {      
+            return _shellSettingsManager.LoadSettings()?
+                .First(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));            
         }
 
     }
