@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tenants.ViewModels;
 using PlatoCore.Models.Shell;
@@ -14,6 +13,7 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace Plato.Tenants.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<ShellSettings>
     {
 
@@ -100,6 +100,7 @@ namespace Plato.Tenants.ViewProviders
                 viewModel = new EditTenantViewModel()
                 {
                     SiteName = settings.Name,
+                    Location = settings.Location,
                     ConnectionString = settings.ConnectionString,
                     TablePrefix = settings.TablePrefix,
                     RequestedUrlHost = settings.RequestedUrlHost,
@@ -143,6 +144,7 @@ namespace Plato.Tenants.ViewProviders
                 var setupContext = new TenantSetUpContext()
                 {
                     SiteName = model.SiteName,
+                    Location = model.Location,
                     DatabaseProvider = "SqlClient",
                     DatabaseConnectionString = model.ConnectionString,
                     AdminUsername = model.UserName,

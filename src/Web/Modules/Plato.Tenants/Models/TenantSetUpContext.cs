@@ -7,6 +7,8 @@ namespace Plato.Tenants.Models
     public class TenantSetUpContext :SetUpContext
     {
 
+        public string Location { get; set; }
+
         public TenantState State { get; set; }
 
         public string OwnerId { get; set; }

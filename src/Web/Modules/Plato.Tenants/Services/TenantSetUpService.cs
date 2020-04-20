@@ -23,7 +23,7 @@ namespace Plato.Tenants.Services
         private readonly IShellContextFactory _shellContextFactory;
         private readonly ILogger<TenantSetUpService> _logger;
         private readonly IPlatoHost _platoHost;
-        
+
         public TenantSetUpService(
             IShellSettingsManager shellSettingsManager,
             IShellContextFactory shellContextFactory,
@@ -436,7 +436,9 @@ namespace Plato.Tenants.Services
             var shellSettings = new ShellSettings()
             {
                 Name = context.SiteName,
-                Location = context.SiteName.ToSafeFileName(),
+                Location = !string.IsNullOrEmpty(context.Location) 
+                    ? context.Location 
+                    : context.SiteName.ToSafeFileName(),
                 RequestedUrlHost = context.RequestedUrlHost,
                 RequestedUrlPrefix = context.RequestedUrlPrefix,
                 State = context.State,

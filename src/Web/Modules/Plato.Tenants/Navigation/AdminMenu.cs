@@ -25,11 +25,11 @@ namespace Plato.Tenants.Navigation
                     .IconCss("fal fa-browser")
                     .Add(T["Manage"], 3, manage => manage
                         .Action("Index", "Admin", "Plato.Tenants")
-                        //.Permission(Permissions.ManageRoles)
+                        .Permission(Permissions.ManageTenants)
                         .LocalNav())
                     .Add(T["Add"], 4, create => create
                         .Action("Create", "Admin", "Plato.Tenants")
-                        //.Permission(Permissions.AddRoles)
+                        .Permission(Permissions.AddTenants)
                         .LocalNav())
                 );
 
