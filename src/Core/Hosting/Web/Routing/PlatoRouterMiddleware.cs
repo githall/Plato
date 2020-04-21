@@ -76,7 +76,7 @@ namespace PlatoCore.Hosting.Web.Routing
             }
 
             // Idea similar UsePathBaseMiddleware @ https://github.com/dotnet/aspnetcore/blob/425c196cba530b161b120a57af8f1dd513b96f67/src/Http/Http.Abstractions/src/Extensions/UsePathBaseMiddleware.cs
-            if (httpContext.Request.Path.StartsWithSegments(httpContext.Request.PathBase, out var matchedPath, out var remainingPath))
+            if (!string.IsNullOrEmpty(httpContext.Request.PathBase.ToString()))
             {          
                 try
                 {

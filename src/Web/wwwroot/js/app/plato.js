@@ -219,7 +219,7 @@ $(function (win, doc, $) {
         }
     };
 
-    /* Plato Http */
+    /* Plato HTTP */
     var platoHttp = function(config) {        
      
         if (!win.$.Plato.defaults) {
@@ -551,7 +551,7 @@ $(function (win, doc, $) {
     win.$.Plato = {
         // defaults
         defaults: {
-            debug: false,
+            debug: true,
             url: "",
             locale: "en-US",
             apiKey: "",

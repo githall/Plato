@@ -6,19 +6,19 @@ using Microsoft.Extensions.Localization;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Search.Models;
 using Plato.Search.Services;
 using Plato.Search.ViewModels;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
-namespace Plato.Tenants.Controllers
+namespace Plato.Search.Controllers
 {
 
     public class AdminController : Controller, IUpdateModel
     {
-        
+
         private readonly IViewProviderManager<SearchSettings> _viewProvider;
         private readonly IAuthorizationService _authorizationService;
         private readonly IBreadCrumbManager _breadCrumbManager;
@@ -28,7 +28,7 @@ namespace Plato.Tenants.Controllers
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
@@ -38,7 +38,7 @@ namespace Plato.Tenants.Controllers
             IFullTextCatalogManager fullTextCatalogManager,
             IAlerter alerter)
         {
-       
+
             _breadCrumbManager = breadCrumbManager;
             _authorizationService = authorizationService;
             _fullTextCatalogManager = fullTextCatalogManager;
@@ -49,42 +49,42 @@ namespace Plato.Tenants.Controllers
             S = stringLocalizer;
 
         }
-        
+
         public async Task<IActionResult> Index()
         {
-            
-            //// Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
-            //{
-            //    return Unauthorized();
-            //}
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
+            {
+                return Unauthorized();
+            }
 
             _breadCrumbManager.Configure(builder =>
             {
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Admin", "Plato.Admin")
                     .LocalNav()
-                ).Add(S["Tenants"], settings => settings
-                    .Action("Index", "Admin", "Plato.Tenants")
+                ).Add(S["Settings"], settings => settings
+                    .Action("Index", "Admin", "Plato.Settings")
                     .LocalNav()
                 ).Add(S["Search"]);
             });
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideEditAsync(new SearchSettings(), this));
+            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new SearchSettings(), this));
 
         }
-        
+
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
         public async Task<IActionResult> IndexPost(SearchSettingsViewModel viewModel)
         {
 
-            //// Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
-            //{
-            //    return Unauthorized();
-            //}
-            
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
+            {
+                return Unauthorized();
+            }
+
             // Execute view providers ProvideUpdateAsync method
             await _viewProvider.ProvideUpdateAsync(new SearchSettings(), this);
 
@@ -94,7 +94,88 @@ namespace Plato.Tenants.Controllers
             return RedirectToAction(nameof(Index));
 
         }
-      
+
+        public async Task<IActionResult> CreateCatalog()
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
+            {
+                return Unauthorized();
+            }
+
+            // Create catalog
+            var result = await _fullTextCatalogManager.CreateCatalogAsync();
+            if (result.Succeeded)
+            {
+                _alerter.Success(T["Catalog Created Successfully!"]);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    _alerter.Danger(T[error.Description]);
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        public async Task<IActionResult> DeleteCatalog()
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
+            {
+                return Unauthorized();
+            }
+
+            // Delete catalog
+            var result = await _fullTextCatalogManager.DropCatalogAsync();
+            if (result.Succeeded)
+            {
+                _alerter.Success(T["Catalog Deleted Successfully!"]);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    _alerter.Danger(T[error.Description]);
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
+        public async Task<IActionResult> RebuildCatalog()
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageSearchSettings))
+            {
+                return Unauthorized();
+            }
+
+            // Rebuild catalog
+            var result = await _fullTextCatalogManager.RebuildCatalogAsync();
+            if (result.Succeeded)
+            {
+                _alerter.Success(T["Catalog Rebuilt Successfully!"]);
+            }
+            else
+            {
+                foreach (var error in result.Errors)
+                {
+                    _alerter.Danger(T[error.Description]);
+                }
+            }
+
+            return RedirectToAction(nameof(Index));
+
+        }
+
     }
 
 }

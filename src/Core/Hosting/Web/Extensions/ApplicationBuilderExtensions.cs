@@ -45,8 +45,6 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Add the routing middle ware
             app.UseRouting();
 
-            
-
             //// All middle ware from here onwards know which endpoint will be invoked
             //app.UseCors();
 
@@ -85,16 +83,13 @@ namespace PlatoCore.Hosting.Web.Extensions
 
             // Add any IApplicationFeatureProvider 
             app.UseModularApplicationFeatureProvider();
-         
+
             // Create services container for each shell
             app.UseMiddleware<PlatoContainerMiddleware>();
-
-            //app.UseMiddleware<CleanPathBaseMiddleware>();
 
             // Create unique pipeline for each shell
             app.UseMiddleware<PlatoRouterMiddleware>();
 
-       
             return app;
 
         }
