@@ -50,11 +50,11 @@ namespace PlatoCore.Layout.ViewFeatures
                 }
             }
 
-            // Module compiled views are not served while in dev.
+            // Module compiled views are not served while in development.
             if (!_hostingEnvironment.IsDevelopment())
             {
 
-                // Retrieve mvc views feature providers but not this one.
+                // Retrieve MVC views feature providers but not this one.
                 var mvcFeatureProviders = _applicationPartManager.FeatureProviders
                     .OfType<IApplicationFeatureProvider<ViewsFeature>>()
                     .Where(p => p.GetType() != typeof(ModuleViewFeatureProvider));
@@ -85,7 +85,7 @@ namespace PlatoCore.Layout.ViewFeatures
                                 provider.PopulateFeature(applicationPart, moduleFeature);
                             }
 
-                            // Razor views are precompiled in the context of their modules, but at runtime
+                            // Razor views are pre-compiled in the context of their modules, but at runtime
                             // their paths need to be relative to the application root.                        
                             foreach (var descriptor in moduleFeature.ViewDescriptors)
                             {

@@ -90,6 +90,7 @@ namespace PlatoCore.Hosting.Web
             }
 
             return $"{request.Scheme}://{request.Host}{request.PathBase}";
+
         }
 
         public string GetRouteUrl(RouteValueDictionary routeValues)

@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Plato.Tenants.Models;
+using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.SetUp;
@@ -12,6 +11,7 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
+using Plato.Tenants.Models;
 
 namespace Plato.Tenants.Services
 {
@@ -54,7 +54,14 @@ namespace Plato.Tenants.Services
                     var shell = shells.FirstOrDefault(s => s.Name.Equals(context.SiteName, StringComparison.OrdinalIgnoreCase));
                     if (shell != null)
                     {
-                        return result.Failed($"A tenant with the name \"{shell.Name}\" already exists!");
+                        return result.Failed($"A tenant with the name \"{shell.Name}\" already exists! Consider renaming the tenant.");
+                    }
+
+                    // Ensure a unique shell location
+                    shell = shells.FirstOrDefault(s => s.Location.Equals(context.SiteName.ToSafeFileName(), StringComparison.OrdinalIgnoreCase));
+                    if (shell != null)
+                    {
+                        return result.Failed($"A tenant with the same location \"{shell.Location}\" already exists! Consider renaming the tenant.");
                     }
 
                     // Ensure a unique connection string & table prefix
@@ -93,13 +100,12 @@ namespace Plato.Tenants.Services
                 var shells = _shellSettingsManager.LoadSettings();
                 if (shells != null)
                 {
-
-                    var connStringExists = false;
-                    var hostExists = false;
-                    var prefixExists = false;
+                    bool connStringExists = false, 
+                        hostExists = false, 
+                        prefixExists = false;
                     foreach (var shell in shells)
                     {
-                        // Not our current shell
+                        // Ensure we are checking other shells
                         if (!shell.Name.Equals(context.SiteName, StringComparison.OrdinalIgnoreCase))
                         {
 
@@ -148,8 +154,7 @@ namespace Plato.Tenants.Services
                             }
 
                         }
-                    }
-                    
+                    }                    
                 }
 
                 // Update tenant

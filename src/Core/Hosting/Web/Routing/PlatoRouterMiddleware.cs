@@ -28,7 +28,7 @@ namespace PlatoCore.Hosting.Web.Routing
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext httpContext)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -37,20 +37,21 @@ namespace PlatoCore.Hosting.Web.Routing
             }
 
             // Get shell from context set via PlatoContainerMiddleware
-            var shellSettings = context.GetShellSettings();
+            var shellSettings = httpContext.GetShellSettings();
 
-            // Define a PathBase for the current request that is the RequestUrlPrefix.
             // This will allow any view to reference ~/ as the tenant's base URL.
             // Because IIS or another middle ware might have already set it, we just append the tenant prefix value.
-            //if (!String.IsNullOrEmpty(shellSettings.RequestedUrlPrefix))
-            //{
-            //    context.Request.PathBase += "/" + shellSettings.RequestedUrlPrefix;
-            //    context.Request.Path = context.Request.Path.ToString()
-            //        .Substring(context.Request.PathBase.Value.Length);
-            //}
+            if (!String.IsNullOrEmpty(shellSettings.RequestedUrlPrefix))
+            {                
+                httpContext.Request.PathBase += "/" + shellSettings.RequestedUrlPrefix;         
+                if (httpContext.Request.Path.ToString().Length > httpContext.Request.PathBase.Value.Length)
+                {
+                    httpContext.Request.Path = httpContext.Request.Path.ToString().Substring(httpContext.Request.PathBase.Value.Length);
+                }                
+            }
 
             // Do we need to rebuild the pipeline ?
-            var rebuildPipeline = context.Items["BuildPipeline"] != null;
+            var rebuildPipeline = httpContext.Items["BuildPipeline"] != null;
             lock (_pipelines)
             {
                 if (rebuildPipeline && _pipelines.ContainsKey(shellSettings.Name))
@@ -66,7 +67,7 @@ namespace PlatoCore.Hosting.Web.Routing
             {
                 if (!_pipelines.TryGetValue(shellSettings.Name, out pipeline))
                 {
-                    pipeline = BuildTenantPipeline(shellSettings, context);
+                    pipeline = BuildTenantPipeline(shellSettings, httpContext);
                     if (shellSettings.State == TenantState.Running)
                     {
                         _pipelines.Add(shellSettings.Name, pipeline);
@@ -74,7 +75,23 @@ namespace PlatoCore.Hosting.Web.Routing
                 }
             }
 
-            await pipeline.Invoke(context);
+            // Idea similar UsePathBaseMiddleware @ https://github.com/dotnet/aspnetcore/blob/425c196cba530b161b120a57af8f1dd513b96f67/src/Http/Http.Abstractions/src/Extensions/UsePathBaseMiddleware.cs
+            if (httpContext.Request.Path.StartsWithSegments(httpContext.Request.PathBase, out var matchedPath, out var remainingPath))
+            {          
+                try
+                {
+                    await pipeline(httpContext);
+                }
+                finally
+                {
+                    httpContext.Request.Path = new PathString();
+                    httpContext.Request.PathBase = new PathString();
+                }
+            }
+            else
+            {
+                await pipeline(httpContext);
+            }         
 
         }
 
@@ -94,10 +111,7 @@ namespace PlatoCore.Hosting.Web.Routing
             }
 
             // Create a default route builder using our PlatoRouter implementation 
-            var routeBuilder = new RouteBuilder(appBuilder, new RouteHandler(_next))
-            {
-                DefaultHandler = serviceProvider.GetRequiredService<IPlatoRouter>()
-            };
+            var routeBuilder = new RouteBuilder(appBuilder, serviceProvider.GetRequiredService<IPlatoRouter>());
 
             // Build prefixed route builder
             var prefixedRouteBuilder = new PrefixedRouteBuilder(
@@ -134,9 +148,8 @@ namespace PlatoCore.Hosting.Web.Routing
             // Configure captured router
             ConfigureCapturedRouter(httpContext, serviceProvider, router);
 
-            // Build & return new pipeline
-            var pipeline = appBuilder.Build();
-            return pipeline;
+            // Build & return new pipeline          
+            return appBuilder.Build();
 
         }
 
