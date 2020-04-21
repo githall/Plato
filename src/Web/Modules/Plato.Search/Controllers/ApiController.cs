@@ -18,15 +18,15 @@ using PlatoCore.Security.Abstractions;
 namespace Plato.Search.Controllers
 {
 
-    public class SearchController : BaseWebApiController
+    public class ApiController : BaseWebApiController
     {
-        
+
         private readonly ISearchSettingsStore<SearchSettings> _searchSettingsStore;
         private readonly IAuthorizationService _authorizationService;
         private readonly IEntityService<Entity> _searchService;
         private readonly IContextFacade _contextFacade;
 
-        public SearchController(
+        public ApiController(
             ISearchSettingsStore<SearchSettings> searchSettingsStore,
             IAuthorizationService authorizationService,
             IEntityService<Entity> searchService,

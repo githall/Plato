@@ -1,7 +1,5 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
@@ -54,7 +52,7 @@ namespace PlatoCore.Hosting.Web.Routing
 
             var candidates = _actionSelector.SelectCandidates(context);
             if (candidates == null || candidates.Count == 0)
-            {                
+            {
                 return Task.CompletedTask;
             }
 
@@ -64,7 +62,7 @@ namespace PlatoCore.Hosting.Web.Routing
                 if (_logger.IsEnabled(LogLevel.Error))
                 {
                     _logger.LogError($"Could not identify an action for the supplied context.");
-                }                
+                }
                 return Task.CompletedTask;
             }
 
