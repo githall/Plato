@@ -20,7 +20,7 @@ namespace PlatoCore.Hosting
         private readonly IBackgroundTaskManager _taskManager;
         private readonly IBroker _broker;
         private readonly ILogger _logger;
-        
+
         private ConcurrentDictionary<string, ShellContext> _shellContexts;
         private static readonly object SyncLock = new object();
 
@@ -63,12 +63,6 @@ namespace PlatoCore.Hosting
 
         }
 
-        public void UpdateShellSettings(IShellSettings settings)
-        {
-            _shellSettingsManager.SaveSettings(settings);
-            RecycleShellContext(settings);
-        }
-
         public ShellContext CreateShellContext(IShellSettings settings)
         {
             if (settings.State == TenantState.Uninitialized)
@@ -84,23 +78,31 @@ namespace PlatoCore.Hosting
             return _shellContextFactory.CreateShellContext(settings);
         }
 
-        public void RecycleShellContext(IShellSettings settings)
+        public IPlatoHost UpdateShell(IShellSettings settings)
+        {
+            _shellSettingsManager.SaveSettings(settings);
+            return this;
+        }
+
+        public IPlatoHost RecycleShell(IShellSettings settings)
         {
 
             if (_logger.IsEnabled(LogLevel.Debug))
             {
-                _logger.LogDebug("Recycling shell context for tenant {0}", settings.Name);
+                _logger.LogDebug("Recycling tenant {0}", settings.Name);
             }
 
             // Dispose
-            DisposeShellContext(settings);
+            DisposeShell(settings);
 
             // Recreate
             GetOrCreateShellContext(settings);
 
+            return this;
+
         }
 
-        public void DisposeShellContext(IShellSettings settings)
+        public IPlatoHost DisposeShell(IShellSettings settings)
         {
 
             // Dispose
@@ -122,9 +124,11 @@ namespace PlatoCore.Hosting
             // Plato.Internal.Hosting.Web.Routing.PlatoRouterMiddleware
             _taskManager.StopTasks();
 
+            return this;
+
         }
 
-        // Private methods
+        // ---------------------------
 
         private IDictionary<string, ShellContext> BuildCurrent()
         {

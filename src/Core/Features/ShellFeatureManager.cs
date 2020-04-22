@@ -37,7 +37,7 @@ namespace PlatoCore.Features
         private readonly IShellContextFactory _shellContextFactory;
         private readonly IRunningShellTable _runningShellTable;        
         private readonly ILogger<ShellFeatureManager> _logger;
-         
+
         public ShellFeatureManager(            
             IShellDescriptorManager shellDescriptorManager,
             IShellDescriptorStore shellDescriptorStore,
@@ -519,8 +519,8 @@ namespace PlatoCore.Features
         {
             var httpContext = _httpContextAccessor.HttpContext;
             var shellSettings = _runningShellTable.Match(httpContext);
-            _platoHost.RecycleShellContext(shellSettings);
-        }          
+            _platoHost.RecycleShell(shellSettings);
+        }
 
     }
 

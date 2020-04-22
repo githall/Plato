@@ -40,6 +40,8 @@ namespace PlatoCore.FileSystem.Abstractions
 
         bool DirectoryExists(string path);
 
+        bool DeleteDirectory(string path);
+
         string MapPath(string path);
 
     }

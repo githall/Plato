@@ -1,10 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.Extensions.DependencyInjection;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
-using Plato.Tenants.Models;
+using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.SetUp;
@@ -12,6 +11,7 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
+using Plato.Tenants.Models;
 
 namespace Plato.Tenants.Services
 {
@@ -23,7 +23,7 @@ namespace Plato.Tenants.Services
         private readonly IShellContextFactory _shellContextFactory;
         private readonly ILogger<TenantSetUpService> _logger;
         private readonly IPlatoHost _platoHost;
-        
+
         public TenantSetUpService(
             IShellSettingsManager shellSettingsManager,
             IShellContextFactory shellContextFactory,
@@ -54,7 +54,14 @@ namespace Plato.Tenants.Services
                     var shell = shells.FirstOrDefault(s => s.Name.Equals(context.SiteName, StringComparison.OrdinalIgnoreCase));
                     if (shell != null)
                     {
-                        return result.Failed($"A tenant with the name \"{shell.Name}\" already exists!");
+                        return result.Failed($"A tenant with the name \"{shell.Name}\" already exists! Consider renaming the tenant.");
+                    }
+
+                    // Ensure a unique shell location
+                    shell = shells.FirstOrDefault(s => s.Location.Equals(context.SiteName.ToSafeFileName(), StringComparison.OrdinalIgnoreCase));
+                    if (shell != null)
+                    {
+                        return result.Failed($"A tenant with the same location \"{shell.Location}\" already exists! Consider renaming the tenant.");
                     }
 
                     // Ensure a unique connection string & table prefix
@@ -63,12 +70,12 @@ namespace Plato.Tenants.Services
                         s.TablePrefix.Equals(context.DatabaseTablePrefix, StringComparison.OrdinalIgnoreCase));
                     if (shell != null)
                     {
-                        return result.Failed($"A tenant with the same connection string and table prefix already exists!");
+                        return result.Failed($"A tenant with the same connection string and table prefix already exists! Tenant name: \"{shell.Name}\".");
                     }
 
                 }
 
-                // Configure tenant
+                // Install tenant
 
                 return await InstallInternalAsync(context);
 
@@ -87,7 +94,73 @@ namespace Plato.Tenants.Services
 
             try
             {
+
+                // Validate tenant
+
+                var shells = _shellSettingsManager.LoadSettings();
+                if (shells != null)
+                {
+                    bool connStringExists = false, 
+                        hostExists = false, 
+                        prefixExists = false;
+                    foreach (var shell in shells)
+                    {
+                        // Ensure we are checking other shells
+                        if (!shell.Name.Equals(context.SiteName, StringComparison.OrdinalIgnoreCase))
+                        {
+
+                            if (shell.ConnectionString.Equals(context.DatabaseConnectionString, StringComparison.OrdinalIgnoreCase) &&
+                                shell.TablePrefix.Equals(context.DatabaseTablePrefix, StringComparison.OrdinalIgnoreCase))
+                            {
+                                connStringExists = true;
+                            }
+
+                            if (!string.IsNullOrEmpty(shell.RequestedUrlHost))
+                            {
+                                if (shell.RequestedUrlHost.Equals(context.RequestedUrlHost, StringComparison.OrdinalIgnoreCase)) 
+                                {
+                                    hostExists = true;
+                                }
+                            }
+
+                            if (!string.IsNullOrEmpty(shell.RequestedUrlPrefix))
+                            {
+                                if (shell.RequestedUrlPrefix.Equals(context.RequestedUrlPrefix, StringComparison.OrdinalIgnoreCase)) 
+                                {
+                                    prefixExists = true;
+                                }
+                            }
+
+                            if (connStringExists)
+                            {
+                                return result.Failed($"A tenant with the same connection string and table prefix already exists! Tenant name: \"{shell.Name}\".");
+                            }
+
+                            // If we have a host check host and prefix 
+                            // Else just check the prefix
+                            if (hostExists)
+                            {
+                                if (hostExists && prefixExists)
+                                {
+                                    return result.Failed($"A tenant with the same host name and prefix already exists! Tenant name: \"{shell.Name}\".");
+                                }
+                            }
+                            else
+                            {
+                                if (prefixExists)
+                                {
+                                    return result.Failed($"A tenant with the same prefix already exists! Tenant name: \"{shell.Name}\".");
+                                }
+                            }
+
+                        }
+                    }                    
+                }
+
+                // Update tenant
+
                 return await UpdateInternalAsync(context);
+
             }
             catch (Exception ex)
             {
@@ -158,15 +231,21 @@ namespace Plato.Tenants.Services
 
             }
 
+            // Report any errors
             if (context.Errors.Count > 0)
             {
                 return result.Failed(context.Errors.Select(e => e.Value).ToArray());           
             }
 
+            // Set shell defaults
             shellSettings.CreatedDate = DateTimeOffset.Now;
             shellSettings.ModifiedDate = DateTimeOffset.Now;
             shellSettings.State = TenantState.Running;
-            _platoHost.UpdateShellSettings(shellSettings);
+
+            // Update & recycle shell
+            _platoHost
+                .UpdateShell(shellSettings)
+                .RecycleShell(shellSettings);
 
             return result.Success(context);
 
@@ -174,20 +253,29 @@ namespace Plato.Tenants.Services
 
         private Task<ICommandResult<TenantSetUpContext>> UpdateInternalAsync(TenantSetUpContext context)
         {
+
             var result = new CommandResult<TenantSetUpContext>();
+
             var shellSettings = BuildShellSettings(context);
             shellSettings.ModifiedDate = DateTimeOffset.Now;
-            _platoHost.UpdateShellSettings(shellSettings);
+
+            // Update & recycle shell
+            _platoHost
+                .UpdateShell(shellSettings)
+                .RecycleShell(shellSettings);
+
             return Task.FromResult(result.Success(context));
+
         }
 
         public const string Sql = @"
                 
                 -- Start Drop Tables
 
-                DECLARE @schemaName nvarchar(100)
-                DECLARE @tableName nvarchar(400)
-                DECLARE @fullName nvarchar(500)
+                DECLARE @schemaName NVARCHAR(100)
+                DECLARE @tableName NVARCHAR(400)
+                DECLARE @procedureName NVARCHAR(400)
+                DECLARE @fullName NVARCHAR(500)
                 DECLARE MSGCURSOR CURSOR FOR
                 SELECT 
 	                schema_name(t.schema_id) as schema_name,
@@ -217,14 +305,9 @@ namespace Plato.Tenants.Services
                 DEALLOCATE MSGCURSOR
 
                 -- End Drop Tables
-
-                GO
                 
                 -- Start Drop Procedures
                
-                DECLARE @schemaName nvarchar(100)
-                DECLARE @procedureName nvarchar(400)
-                DECLARE @fullName nvarchar(500)
                 DECLARE MSGCURSOR CURSOR FOR
                 SELECT 
 	                schema_name(p.schema_id) as schema_name,
@@ -232,7 +315,7 @@ namespace Plato.Tenants.Services
                 FROM 
 	                sys.procedures p
                 WHERE 
-	                p.name like 'site16_%'
+	                p.name like '{prefix}%'
 	
                 OPEN MSGCURSOR
 
@@ -261,7 +344,7 @@ namespace Plato.Tenants.Services
         {
 
             // Our result
-            var result = new CommandResultBase();
+            var result = new CommandResultBase();     
 
             // Ensure the shell exists
             var shellSettings =GetShellByName(siteName);
@@ -270,11 +353,37 @@ namespace Plato.Tenants.Services
                 return result.Failed($"A tenant with the name \"{siteName}\" could not be found!");
             }
 
-            // Replacements for SQL script
-            var replacements = new Dictionary<string, string>()
+            var errors = new List<CommandError>();
+
+            // ----------------------
+            // 1. Attempt to delete App_Data/{SiteName} folder
+            // ----------------------
+
+            var deleted = true;
+            try
             {
-                ["{prefix}"] = shellSettings.TablePrefix
-            };
+                deleted = _shellSettingsManager.DeleteSettings(shellSettings);
+            }
+            catch (Exception e)
+            {
+                errors.Add(new CommandError(e.Message));
+            }
+
+            // Report any errors
+            if (errors.Count > 0)
+            {
+                return result.Failed(errors.ToArray());
+            }
+
+            // Ensure we could delete the directory
+            if (deleted == false)
+            {
+                return result.Failed($"Cannot delete tenant folder with the name \"{shellSettings.Location}\"!");
+            }
+
+            // ----------------------
+            // 2. Attempt to drop all tables and stored procedures with our table prefix
+            // ----------------------
 
             using (var shellContext = _shellContextFactory.CreateMinimalShellContext(shellSettings))
             {
@@ -296,20 +405,33 @@ namespace Plato.Tenants.Services
 
                         try
                         {
-                            await dbHelper.ExecuteScalarAsync<int>(Sql, replacements);
+                            await dbHelper.ExecuteScalarAsync<int>(Sql, new Dictionary<string, string>()
+                            {
+                                ["{prefix}"] = shellSettings.TablePrefix
+                            });
                         }
                         catch (Exception e)
                         {
-                            return result.Failed(e.Message);
+                            errors.Add(new CommandError(e.Message));
                         }
 
                     }
-
                 }
-
             }
-            
-            return result.Success();
+
+            // ----------------------
+            // 3. Dispose the tenant
+            // ----------------------
+
+            // Ensure no errors occurred
+            if (errors.Count == 0)
+            {
+                _platoHost.DisposeShell(shellSettings);
+            }
+
+            return errors.Count > 0
+                ? result.Failed(errors.ToArray())
+                : result.Success();
 
         }
 
@@ -319,7 +441,9 @@ namespace Plato.Tenants.Services
             var shellSettings = new ShellSettings()
             {
                 Name = context.SiteName,
-                Location = context.SiteName.ToSafeFileName(),
+                Location = !string.IsNullOrEmpty(context.Location) 
+                    ? context.Location 
+                    : context.SiteName.ToSafeFileName(),
                 RequestedUrlHost = context.RequestedUrlHost,
                 RequestedUrlPrefix = context.RequestedUrlPrefix,
                 State = context.State,

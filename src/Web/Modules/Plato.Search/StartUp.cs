@@ -119,8 +119,8 @@ namespace Plato.Search
             routes.MapAreaRoute(
                 name: "PlatoSearchWebApi",
                 areaName: "Plato.Search",
-                template: "api/{controller}/{action}/{id?}",
-                defaults: new { controller = "Search", action = "Get" }
+                template: "api/search/{action}/{id?}",
+                defaults: new { controller = "Api", action = "Get" }
             );
 
         }

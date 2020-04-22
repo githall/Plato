@@ -32,20 +32,12 @@ namespace Plato.WebApi
         public override void ConfigureServices(IServiceCollection services)
         {
 
-            // Rewrite web api configuration
-            // Removed as we require asynchronous calls and wanted to avoid GetAwaiter()
-            // Using IWebApiSettingsFactory instead
-            //services.TryAddEnumerable(ServiceDescriptor
-            //    .Transient<IConfigureOptions<WebApiOptions>, WebApiOptionsConfiguration>());
-
             // Navigation provider
             services.AddScoped<INavigationProvider, AdminMenu>();
 
-            // View providers (adds API key to admin / edit user)
+            // View providers
             services.AddScoped<IViewProviderManager<User>, ViewProviderManager<User>>();
             services.AddScoped<IViewProvider<User>, UserViewProvider>();
-
-            // Admin view providers
             services.AddScoped<IViewProviderManager<WebApiSettings>, ViewProviderManager<WebApiSettings>>();
             services.AddScoped<IViewProvider<WebApiSettings>, AdminViewProvider>();
 
@@ -64,14 +56,14 @@ namespace Plato.WebApi
             IServiceProvider serviceProvider)
         {
             
-            // Register client options middleware 
+            // Register client options middle ware 
             app.UseMiddleware<WebApiClientOptionsMiddleware>();
 
-            // Generate CSRF token for client api requests
+            // Generate CSRF token for client API requests
             var keyGenerator = app.ApplicationServices.GetService<IKeyGenerator>();
             var csrfToken = keyGenerator.GenerateKey(o => { o.MaxLength = 75; });
 
-            // Add client accessible CSRF token for web api requests
+            // Add client accessible CSRF token for web API requests
             app.Use(next => ctx =>
             {
                 // ensure the cookie does not already exist
@@ -125,7 +117,7 @@ namespace Plato.WebApi
             );
 
         }
-        
+
     }
 
 }

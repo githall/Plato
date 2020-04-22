@@ -9,7 +9,7 @@ using Plato.Search.Stores;
 
 namespace Plato.Search.Commands
 {
-    
+
     public class FullTextCatalogCommand : IFullTextCatalogCommand<SchemaFullTextCatalog>
     {
 

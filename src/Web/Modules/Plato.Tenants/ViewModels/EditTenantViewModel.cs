@@ -14,6 +14,9 @@ namespace Plato.Tenants.ViewModels
         [Required, Display(Name = "site name")]
         public string SiteName { get; set; }
 
+        [Required]
+        public string Location { get; set; }
+
         [Required, Display(Name = "connection string")]
         public string ConnectionString { get; set; }
 

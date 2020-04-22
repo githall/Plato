@@ -92,7 +92,7 @@ namespace PlatoCore.Hosting.Web.Extensions
                 internalServices.AddSingleton<IPlatoFileSystem, HostedFileSystem>();
                 internalServices.AddPlatoOptions();
                 internalServices.AddPlatoContextAccessor();
-                internalServices.AddPlatoRouting();
+              
                 internalServices.AddPlatoLocalization();
                 internalServices.AddPlatoCaching();
                 internalServices.AddPlatoText();
@@ -116,8 +116,8 @@ namespace PlatoCore.Hosting.Web.Extensions
                 internalServices.AddPlatoDrawing();
                 internalServices.AddPlatoTasks();
                 internalServices.AddPlatoSearch();               
-                internalServices.AddPlatoMvc();  
-
+                internalServices.AddPlatoMvc();
+                internalServices.AddPlatoRouting();
             });
 
         }
@@ -199,7 +199,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             // View adapters
             services.AddPlatoViewAdapters();
 
-            // Add module mvc
+            // Add module MVC
             services.AddPlatoModularMvc();
 
             // Custom view model validation
@@ -259,7 +259,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Add home route manager
             services.AddScoped<IHomeRouteManager, HomeRouteManager>();
 
-            // Add default route handler (required by PlatoRouterMiddleware)
+            // Add default router (required by PlatoRouterMiddleware)            
             services.AddSingleton<IPlatoRouter, PlatoRouter>();
 
             return services;

@@ -28,7 +28,7 @@ namespace PlatoCore.Hosting.Web.Routing
             _next = next;
         }
 
-        public async Task Invoke(HttpContext context)
+        public async Task Invoke(HttpContext httpContext)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -37,20 +37,23 @@ namespace PlatoCore.Hosting.Web.Routing
             }
 
             // Get shell from context set via PlatoContainerMiddleware
-            var shellSettings = context.GetShellSettings();
+            var shellSettings = httpContext.GetShellSettings();
 
-            // Define a PathBase for the current request that is the RequestUrlPrefix.
+            var originalPath = httpContext.Request.Path; // /site4 when running in tenant
+            var originalPathBase = httpContext.Request.PathBase; // empty when running in tenant
+
             // This will allow any view to reference ~/ as the tenant's base URL.
             // Because IIS or another middle ware might have already set it, we just append the tenant prefix value.
-            //if (!String.IsNullOrEmpty(shellSettings.RequestedUrlPrefix))
-            //{
-            //    context.Request.PathBase += "/" + shellSettings.RequestedUrlPrefix;
-            //    context.Request.Path = context.Request.Path.ToString()
-            //        .Substring(context.Request.PathBase.Value.Length);
-            //}
+            if (!String.IsNullOrEmpty(shellSettings.RequestedUrlPrefix))
+            {          
+                PathString prefix = "/" + shellSettings.RequestedUrlPrefix;
+                httpContext.Request.PathBase += prefix;
+                httpContext.Request.Path.StartsWithSegments(prefix, StringComparison.OrdinalIgnoreCase, out PathString remainingPath);
+                httpContext.Request.Path =  remainingPath;
+            }
 
             // Do we need to rebuild the pipeline ?
-            var rebuildPipeline = context.Items["BuildPipeline"] != null;
+            var rebuildPipeline = httpContext.Items["BuildPipeline"] != null;
             lock (_pipelines)
             {
                 if (rebuildPipeline && _pipelines.ContainsKey(shellSettings.Name))
@@ -66,7 +69,7 @@ namespace PlatoCore.Hosting.Web.Routing
             {
                 if (!_pipelines.TryGetValue(shellSettings.Name, out pipeline))
                 {
-                    pipeline = BuildTenantPipeline(shellSettings, context);
+                    pipeline = BuildTenantPipeline(shellSettings, httpContext);
                     if (shellSettings.State == TenantState.Running)
                     {
                         _pipelines.Add(shellSettings.Name, pipeline);
@@ -74,7 +77,7 @@ namespace PlatoCore.Hosting.Web.Routing
                 }
             }
 
-            await pipeline.Invoke(context);
+            await pipeline(httpContext);
 
         }
 
@@ -90,30 +93,27 @@ namespace PlatoCore.Hosting.Web.Routing
             var routePrefix = string.Empty;
             if (!string.IsNullOrWhiteSpace(shellSettings.RequestedUrlPrefix))
             {
-                routePrefix = shellSettings.RequestedUrlPrefix + "/";
+                //routePrefix = shellSettings.RequestedUrlPrefix + "/";
             }
 
             // Create a default route builder using our PlatoRouter implementation 
-            var routeBuilder = new RouteBuilder(appBuilder, new RouteHandler(_next))
-            {
-                DefaultHandler = serviceProvider.GetRequiredService<IPlatoRouter>()
-            };
+            var routeBuilder = new RouteBuilder(appBuilder, serviceProvider.GetRequiredService<IPlatoRouter>());
 
-            // Build prefixed route builder
-            var prefixedRouteBuilder = new PrefixedRouteBuilder(
-                routePrefix,
-                routeBuilder,
-                inlineConstraintResolver);
+            //// Build prefixed route builder
+            //var prefixedRouteBuilder = new PrefixedRouteBuilder(
+            //    routePrefix,
+            //    routeBuilder,
+            //    inlineConstraintResolver);
 
             // Configure modules
             foreach (var startup in startUps)
             {
-                startup.Configure(appBuilder, prefixedRouteBuilder, serviceProvider);
+                startup.Configure(appBuilder, routeBuilder, serviceProvider);
             }
 
             // Add the default template route to each shell 
-            prefixedRouteBuilder.Routes.Add(new Route(
-                prefixedRouteBuilder.DefaultHandler,
+            routeBuilder.Routes.Add(new Route(
+                routeBuilder.DefaultHandler,
                 "PlatoDefault",
                 "{area:exists}/{controller}/{action}/{id?}",
                 null,
@@ -123,7 +123,7 @@ namespace PlatoCore.Hosting.Web.Routing
             );
 
             // Build router
-            var router = prefixedRouteBuilder.Build();
+            var router = routeBuilder.Build();
 
             // Use router
             appBuilder.UseRouter(router);
@@ -134,9 +134,8 @@ namespace PlatoCore.Hosting.Web.Routing
             // Configure captured router
             ConfigureCapturedRouter(httpContext, serviceProvider, router);
 
-            // Build & return new pipeline
-            var pipeline = appBuilder.Build();
-            return pipeline;
+            // Build & return new pipeline          
+            return appBuilder.Build();
 
         }
 

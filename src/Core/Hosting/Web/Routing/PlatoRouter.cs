@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Diagnostics;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
@@ -9,23 +8,24 @@ using Microsoft.Extensions.Logging;
 namespace PlatoCore.Hosting.Web.Routing
 {
 
+    /// <summary>
+    /// Mimics MvcRouteHandler
+    /// https://github.com/dotnet/aspnetcore/blob/master/src/Mvc/Mvc.Core/src/Routing/MvcRouteHandler.cs
+    /// </summary>
     public class PlatoRouter : IPlatoRouter
     {
 
-        private readonly IActionInvokerFactory _actionInvokerFactory;
-        private readonly DiagnosticListener _diagnosticListener;
+        private readonly IActionInvokerFactory _actionInvokerFactory;    
         private readonly IActionSelector _actionSelector;      
         private readonly ILogger _logger;
 
         public PlatoRouter(
             IActionInvokerFactory actionInvokerFactory,
-            DiagnosticListener diagnosticListener,
             IActionSelector actionSelector,       
             ILoggerFactory loggerFactory)
-        {          
+        {
             _logger = loggerFactory.CreateLogger<PlatoRouter>();
-            _actionInvokerFactory = actionInvokerFactory;        
-            _diagnosticListener = diagnosticListener;
+            _actionInvokerFactory = actionInvokerFactory;
             _actionSelector = actionSelector;
         }
 
@@ -44,6 +44,7 @@ namespace PlatoCore.Hosting.Web.Routing
 
         public Task RouteAsync(RouteContext context)
         {
+
             if (context == null)
             {
                 throw new ArgumentNullException(nameof(context));
@@ -51,13 +52,17 @@ namespace PlatoCore.Hosting.Web.Routing
 
             var candidates = _actionSelector.SelectCandidates(context);
             if (candidates == null || candidates.Count == 0)
-            {                
+            {
                 return Task.CompletedTask;
             }
 
             var actionDescriptor = _actionSelector.SelectBestCandidate(context, candidates);
             if (actionDescriptor == null)
-            {                
+            {
+                if (_logger.IsEnabled(LogLevel.Error))
+                {
+                    _logger.LogError($"Could not identify an action for the supplied context.");
+                }
                 return Task.CompletedTask;
             }
 

@@ -8,7 +8,9 @@ namespace PlatoCore.Shell.Abstractions
 
         IEnumerable<ShellSettings> LoadSettings();
 
-        void SaveSettings(IShellSettings settings);
+        bool SaveSettings(IShellSettings settings);
+
+        bool DeleteSettings(IShellSettings settings);
 
     }
 

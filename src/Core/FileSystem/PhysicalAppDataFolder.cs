@@ -77,10 +77,16 @@ namespace PlatoCore.FileSystem
             _fileSystem.CreateDirectory(path);
         }
 
+        public bool DeleteDirectory(string path)
+        {
+            return _fileSystem.DeleteDirectory(path);
+        }
+
         public bool DirectoryExists(string path)
         {
             return _fileSystem.DirectoryExists(path);
         }
+
         public bool FileExists(string path)
         {
             return _fileSystem.FileExists(path);

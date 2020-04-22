@@ -167,8 +167,6 @@ namespace Plato.Search.Controllers
 
         }
 
-
-     
     }
 
 }

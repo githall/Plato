@@ -90,8 +90,8 @@ namespace PlatoCore.Shell
             // within Plato so we register IAuthenticationSchemeProvider again as a singletone within 
             // the tenant services after module initialization.
             // https://github.com/aspnet/HttpAbstractions/blob/master/src/Microsoft.AspNetCore.Authentication.Core/AuthenticationSchemeProvider.cs
-            tenantServiceCollection.AddSingleton<IAuthenticationSchemeProvider, AuthenticationSchemeProvider>();            
-
+            tenantServiceCollection.AddSingleton<IAuthenticationSchemeProvider, AuthenticationSchemeProvider>();
+            
             // Return our tenant service provider
             var shellServiceProvider = tenantServiceCollection.BuildServiceProvider();
             return shellServiceProvider;
@@ -101,7 +101,10 @@ namespace PlatoCore.Shell
         private void AddCoreServices(IServiceCollection tenantServiceCollection)
         {
             tenantServiceCollection.AddTransient<IShellFeatureManager, ShellFeatureManager>();
-            tenantServiceCollection.AddTransient<IShellDescriptorManager, Features.ShellDescriptorManager>();            
+            tenantServiceCollection.AddTransient<IShellDescriptorManager, Features.ShellDescriptorManager>();
+
+
+
         }
 
     }

@@ -13,6 +13,7 @@ using PlatoCore.Hosting.Web.Middleware;
 using PlatoCore.Hosting.Web.Routing;
 using PlatoCore.Modules.FileProviders;
 using PlatoCore.Hosting.Abstractions;
+using Microsoft.AspNetCore.Builder.Extensions;
 
 namespace PlatoCore.Hosting.Web.Extensions
 {
@@ -44,14 +45,14 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Add the routing middle ware
             app.UseRouting();
 
-            // All middle ware from here onwards know which endpoint will be invoked
-            app.UseCors();
+            //// All middle ware from here onwards know which endpoint will be invoked
+            //app.UseCors();
 
-            // Execute the endpoint selected by the routing middle ware
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapRazorPages();
-            });
+            //// Execute the endpoint selected by the routing middle ware
+            //app.UseEndpoints(endpoints =>
+            //{
+            //    endpoints.MapRazorPages();
+            //});
 
             // -----------------------------
 
