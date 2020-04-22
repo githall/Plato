@@ -57,7 +57,7 @@ namespace Plato.Users
             // and change telephone number operations, and for two factor authentication token generation.
             services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 
-            // Add authentication services & configure default authenticaiton scheme
+            // Add authentication services & configure default authentication scheme
             services.AddAuthentication(options =>
             {                
                 options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
@@ -89,13 +89,13 @@ namespace Plato.Users
             // Configure authentication cookie options
             services.ConfigureApplicationCookie(options =>
             {
-                options.Cookie.Name = "plato_" + _cookieSuffix.ToLower();
-                options.Cookie.Path = _tenantPrefix;
+                options.Cookie.Name = $"plato_{ _cookieSuffix.ToLower()}";
+                options.Cookie.Path = _tenantPrefix;         
                 options.LoginPath = new PathString("/Plato.Users/Account/Login/");
                 options.AccessDeniedPath = new PathString("/Plato.Users/Account/Login/");
                 options.AccessDeniedPath = options.LoginPath;
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
-                options.SlidingExpiration = true;
+                options.SlidingExpiration = true;              
             });
 
             // Configure IdentityOptions

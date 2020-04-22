@@ -1,5 +1,5 @@
 ﻿using System;
-using System.Collections.Generic;
+using System.Linq;
 using System.Text;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Users.ViewModels;
@@ -12,7 +12,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout;
-using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
@@ -24,7 +23,6 @@ using Microsoft.AspNetCore.Authentication;
 using System.Security.Claims;
 using PlatoCore.Abstractions.Settings;
 using AspNet.Security.OpenIdConnect.Primitives;
-using System.Linq;
 
 namespace Plato.Users.Controllers
 {

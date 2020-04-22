@@ -22,47 +22,47 @@
 
         <div asp-validation-summary="All"></div>
 
-        @if (!Model.IsDefault)
-        {
-            <fieldset class="row" asp-validation-class-for="SiteName">
-                <div class="form-group col-md-12">
-                    <h6>@T["Name"]</h6>
-                    <label asp-for="SiteName">@T["Provide a name for this tenant."]</label>
-                    <input asp-for="SiteName" class="form-control" />
-                    <span asp-validation-for="SiteName" class="text-danger"></span>
-                </div>
-            </fieldset>
-        }
-        else
-        {
-            <fieldset class="row" asp-validation-class-for="SiteName">
-                <div class="form-group col-md-12">
-                    <h6>@T["Name"]</h6>
-                    <label asp-for="SiteName">
-                        @T["You cannot change the name for the default tenant."]
-                    </label>
-                    <input readonly asp-for="SiteName" class="form-control" />
-                    <span asp-validation-for="SiteName" class="text-danger"></span>
-                </div>
-            </fieldset>
-        }
-        @if (!Model.IsDefault)
-        {
-            <fieldset class="row" asp-validation-class-for="OwnerId">
-                <div class="form-group col-md-12">
-                    <h6>@T["Owner"]</h6>
-                    <label asp-for="OwnerId">
-                        @T["Provide an optional email address or company name to identify the tenant owner."]
-                    </label>
-                    <input asp-for="OwnerId" class="form-control" />
-                    <span asp-validation-for="OwnerId" class="text-danger"></span>
-                </div>
-            </fieldset>
-        }
-        else
-        {
-            <input asp-for="OwnerId" type="hidden"/>
-        }
+        <div class="row">
+            <div class="col-lg-6">
+                @if (!Model.IsDefault)
+                {
+                    <fieldset class="row" asp-validation-class-for="SiteName">
+                        <div class="form-group col-md-12">
+                            <h6>@T["Name"]</h6>
+                            <label asp-for="SiteName">@T["Provide a name for this tenant."]</label>
+                            <input asp-for="SiteName" class="form-control" />
+                            <span asp-validation-for="SiteName" class="text-danger"></span>
+                        </div>
+                    </fieldset>
+                }
+                else
+                {
+                    <fieldset class="row" asp-validation-class-for="SiteName">
+                        <div class="form-group col-md-12">
+                            <h6>@T["Name"]</h6>
+                            <label asp-for="SiteName">
+                                @T["You cannot change the name for the default tenant."]
+                            </label>
+                            <input readonly asp-for="SiteName" class="form-control" />
+                            <span asp-validation-for="SiteName" class="text-danger"></span>
+                        </div>
+                    </fieldset>
+                }
+            </div>
+            <div class="col-lg-6">
+                <fieldset class="row" asp-validation-class-for="OwnerId">
+                    <div class="form-group col-md-12">
+                        <h6>@T["Owner"]</h6>
+                        <label asp-for="OwnerId">
+                            @T["Provide an optional email address or company name to identify the tenant owner."]
+                        </label>
+                        <input asp-for="OwnerId" class="form-control" />
+                        <span asp-validation-for="OwnerId" class="text-danger"></span>
+                    </div>
+                </fieldset>
+
+            </div>
+        </div> 
 
         @if (Model.IsNewTenant)
         {

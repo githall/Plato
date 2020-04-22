@@ -77,10 +77,10 @@ namespace Plato.Users.ActionFilters
             // Invalidate authentication if security stamp has changed
             var invalidSecurityStamp = await InvalidateSecurityStampAsync(context.HttpContext);
 
-            // If the user was invalidated redirect to root
+            // If the user was invalidated redirect to host or tenant root
             if (invalidIdentityName || invalidSecurityStamp)
             {
-                context.Result = new RedirectResult("/");
+                context.Result = new RedirectResult(context.HttpContext.Request.PathBase);
             }
 
         }
@@ -91,10 +91,10 @@ namespace Plato.Users.ActionFilters
         }
 
         // ----------------------
-        
+
         async Task<bool> InvalidateIdentityNameAsync(IIdentity identity)
         {
-            
+
             // Attempt to find the user by the identity.Name value
             var user = await _platoUserStore.GetByUserNameAsync(identity.Name);
 
@@ -113,8 +113,8 @@ namespace Plato.Users.ActionFilters
 
         async Task<bool> InvalidateSecurityStampAsync(HttpContext context)
         {
-            
-            // Get security stamp claim, avoiding LINQ for perf reasons
+
+            // Get security stamp claim, avoiding LINQ for performance reasons
             Claim claim = null;
             if (context.User?.Claims != null)
             {
@@ -126,8 +126,8 @@ namespace Plato.Users.ActionFilters
                         break;
                     }
                 }
-            }
-             
+            }             
+
             // Ensure we found the claim
             if (claim == null)
             {

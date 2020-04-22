@@ -509,9 +509,7 @@ namespace PlatoCore.Features
         }
 
         void RecycleShell()
-        {
-            //var httpContext = _httpContextAccessor.HttpContext;
-            //var shellSettings = _runningShellTable.Match(httpContext);
+        {  
             _platoHost.RecycleShell(_shellSettings);
         }
 

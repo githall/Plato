@@ -46,6 +46,7 @@ namespace Plato.Core
 
             // Configure site options
             services.AddSingleton<IConfigureOptions<SiteOptions>, SiteOptionsConfiguration>();
+
             
             // Configure current culture
             services.Configure<LocaleOptions>(options =>
