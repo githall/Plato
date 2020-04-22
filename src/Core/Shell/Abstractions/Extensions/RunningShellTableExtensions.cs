@@ -9,10 +9,10 @@ namespace PlatoCore.Shell.Abstractions
     {
 
         public static IShellSettings Match(
-        this IRunningShellTable table,
-        HttpContext httpContext)
+            this IRunningShellTable table,
+            HttpContext httpContext)
         {
-            // use Host header to prevent proxy alteration of the orignal request
+            // use Host header to prevent proxy alteration of the original request
             try
             {
                 var httpRequest = httpContext.Request;
@@ -22,7 +22,6 @@ namespace PlatoCore.Shell.Abstractions
                 }
 
                 var host = httpRequest.Headers["Host"].ToString();
-
                 return table.Match(host ?? string.Empty, httpRequest.Path);
             }
             catch (Exception)

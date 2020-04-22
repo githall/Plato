@@ -30,7 +30,7 @@ namespace Plato.Notifications
 
             // Feature event handler
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
-            
+
             // Repositories
             services.AddScoped<IUserNotificationsRepository<UserNotification>, UserNotificationsRepository>();
 
@@ -42,7 +42,7 @@ namespace Plato.Notifications
 
             // Replace user notification type defaults with real implementation
             services.Replace<IUserNotificationTypeDefaults, UserNotificationTypeDefaults>(ServiceLifetime.Scoped);
-    
+
             // Migrations
             services.AddSingleton<IMigrationProvider, Migrations>();
 

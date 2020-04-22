@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Plato.Questions.Follow.NotificationTypes;
 using Plato.Questions.Models;
@@ -17,7 +16,6 @@ using PlatoCore.Models.Notifications;
 using PlatoCore.Models.Users;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
-
 
 namespace Plato.Questions.Follow.Notifications
 {

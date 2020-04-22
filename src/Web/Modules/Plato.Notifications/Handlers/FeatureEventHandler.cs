@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Data.Schemas.Abstractions;
 using PlatoCore.Features.Abstractions;
@@ -91,7 +92,7 @@ namespace Plato.Notifications.Handlers
 
         public override async Task InstallingAsync(IFeatureEventContext context)
         {
-            
+
             //var schemaBuilder = context.ServiceProvider.GetRequiredService<ISchemaBuilder>();
             using (var builder = _schemaBuilder)
             {
@@ -118,7 +119,6 @@ namespace Plato.Notifications.Handlers
                 {
                     context.Errors.Add(error, $"InstallingAsync within {this.GetType().FullName}");
                 }
-         
 
             }
 
@@ -161,7 +161,7 @@ namespace Plato.Notifications.Handlers
                 {
                     context.Errors.Add(error, $"UninstallingAsync within {this.GetType().FullName}");
                 }
-             
+
             }
 
         }

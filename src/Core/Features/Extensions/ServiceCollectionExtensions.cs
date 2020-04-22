@@ -12,7 +12,7 @@ namespace PlatoCore.Features.Extensions
             this IServiceCollection services)
         {
             
-            services.TryAddScoped<IFeatureEventManager, FeatureEventManager>();
+            services.TryAddSingleton<IFeatureEventManager, FeatureEventManager>();
             services.TryAddScoped<IFeatureFacade, FeatureFacade>();
 
             return services;

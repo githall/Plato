@@ -197,22 +197,21 @@ namespace Plato.Tenants.Services
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
                 {
-                    using (var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>())
-                    {
+                    //using (var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>())
+                    //{
 
-                        // update dbContext confirmation
-                        dbContext.Configure(options =>
-                        {
-                            options.ConnectionString = shellSettings.ConnectionString;
-                            options.DatabaseProvider = shellSettings.DatabaseProvider;
-                            options.TablePrefix = shellSettings.TablePrefix;
-                        });
+                    //    // update dbContext confirmation
+                    //    dbContext.Configure(options =>
+                    //    {
+                    //        options.ConnectionString = shellSettings.ConnectionString;
+                    //        options.DatabaseProvider = shellSettings.DatabaseProvider;
+                    //        options.TablePrefix = shellSettings.TablePrefix;
+                    //    });
 
                         var hasErrors = false;
                         void ReportError(string key, string message)
                         {
                             hasErrors = true;
-                            //result.Failed(message)
                             context.Errors[key] = message;
                         }
 
@@ -225,7 +224,7 @@ namespace Plato.Tenants.Services
                             return result.Failed(context.Errors.Select(e => e.Value).ToArray());                          
                         }
 
-                    }
+                    //}
 
                 }
 
