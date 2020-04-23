@@ -6,6 +6,7 @@ using PlatoCore.Scripting.Abstractions;
 using Plato.WebApi.Services;
 using PlatoCore.Net.Abstractions;
 using Plato.WebApi.Models;
+using PlatoCore.Models.Shell;
 
 namespace Plato.WebApi.Middleware
 {
@@ -46,13 +47,14 @@ namespace Plato.WebApi.Middleware
 
             var settings = await webApiOptionsFactory.GetSettingsAsync();
             var cookieBuilder = context.RequestServices.GetRequiredService<ICookieBuilder>();
-
+        
             // Register client options for $.Plato.Http by extending $.Plato.defaults
             // i.e. $.extend($.Plato.defaults, newOptions);
 
-            var script = "$(function (win) { $.extend(win.$.Plato.defaults, { url: '{url}', apiKey: '{apiKey}', csrfCookieName: '{csrfCookieName}' }); } (window));";
+            var script = "$(function (win) { $.extend(win.$.Plato.defaults, { url: '{url}', pathBase: '{pathBase}', apiKey: '{apiKey}', csrfCookieName: '{csrfCookieName}' }); } (window));";
             script = script.Replace("{url}", settings.Url);
-            script = script.Replace("{apiKey}", settings.ApiKey);
+            script = script.Replace("{pathBase}", context.Request.PathBase);
+            script = script.Replace("{apiKey}", settings.ApiKey);            
             script = script.Replace("{csrfCookieName}", cookieBuilder.BuildKey(PlatoAntiForgeryOptions.AjaxCsrfTokenCookieName));
 
             return new ScriptBlock(script);

@@ -121,7 +121,7 @@ $(function (win, doc, $) {
             valueField: "keywords",
             config: {
                 method: "GET",
-                url: 'api/search/get?page={page}&size={pageSize}&keywords={keywords}',
+                url: win.$.Plato.defaults.pathBase + '/api/search/get?page={page}&size={pageSize}&keywords={keywords}',
                 data: {
                     sort: "LastReplyDate",
                     order: "Desc"

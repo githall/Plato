@@ -74,7 +74,7 @@ $(function (win, doc, $) {
                         allowedExtensions: app.Files.allowedExtensions,
                         maxFileSize: app.Files.maxFileSize,
                         dropZoneOptions: {
-                            url: '/api/files/post',
+                            url: win.$.Plato.defaults.pathBase + '/api/files/post',
                             fallbackClick: false,
                             autoProcessQueue: true,
                             autoDiscover: false,
@@ -322,7 +322,7 @@ $(function (win, doc, $) {
             maxFiles: 10,
             maxFileSize: 2097152, // 2mb     
             dropZoneOptions: {
-                url: '/api/files/post',
+                url: win.$.Plato.defaults.pathBase + '/api/files/post',
                 fallbackClick: false,
                 autoProcessQueue: true,
                 autoDiscover: false,

@@ -13,13 +13,13 @@ namespace PlatoCore.Reputations.Extensions
         {
             
             // User reputation provider
-            //services.TryAddScoped<IReputationsManager<Reputation>, ReputationsManager<Reputation>>();
+            services.TryAddScoped<IReputationsManager<Reputation>, ReputationsManager<Reputation>>();
 
             // User reputation awarder
-            //services.TryAddScoped<IUserReputationAwarder, UserReputationAwarder>();
+            services.TryAddScoped<IUserReputationAwarder, UserReputationAwarder>();
             
             // User reputation manager
-            //services.TryAddScoped<IUserReputationManager<UserReputation>, UserReputationManager>();
+            services.TryAddScoped<IUserReputationManager<UserReputation>, UserReputationManager>();
 
             return services;
 

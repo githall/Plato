@@ -232,13 +232,13 @@ $(function (win, doc, $) {
         if (virtualUrl.substring(0, 1) !== "/") {
             virtualUrl = "/" + virtualUrl;
         }
-
+        
         // Update to absolute URL
         if (virtualUrl.toLowerCase().indexOf("http://") === -1 &&
             virtualUrl.toLowerCase().indexOf("https://") === -1) {
-            config.url = baseUrl + virtualUrl;
+            //config.url = baseUrl + virtualUrl;
         } 
-    
+        
         // add basic authentication headers
         var apiKey = win.$.Plato.defaults.apiKey;
         if (apiKey) {
@@ -547,6 +547,7 @@ $(function (win, doc, $) {
         defaults: {
             debug: true,
             url: "",
+            prefix: "/",
             locale: "en-US",
             apiKey: "",
             csrfHeaderName: "X-Csrf-Token", // Custom CSRF header

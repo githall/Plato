@@ -111,10 +111,10 @@ namespace PlatoCore.Hosting.Web.Extensions
                 internalServices.AddPlatoDbContext();
                 internalServices.AddPlatoRepositories();
                 internalServices.AddPlatoStores();
-                internalServices.AddPlatoReputations();
+                //internalServices.AddPlatoReputations();
                 internalServices.AddPlatoBadges();
                 internalServices.AddPlatoDrawing();
-                internalServices.AddPlatoTasks();
+                //internalServices.AddPlatoTasks();
                 internalServices.AddPlatoSearch();               
                 internalServices.AddPlatoMvc();
                 internalServices.AddPlatoRouting();

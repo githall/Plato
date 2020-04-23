@@ -239,7 +239,7 @@ $(function (win, doc, $) {
                 };
 
                 app.http({
-                    url: "api/stars/star/post",
+                    url: win.$.Plato.defaults.pathBase + "/api/stars/star/post",
                     method: "POST",
                     data: JSON.stringify(params)
                 }).done(function(data) {
@@ -248,17 +248,6 @@ $(function (win, doc, $) {
 
                         // Enable button
                         $caller.starToggle("enable");
-
-                        //// Bootstrap notify
-                        //app.ui.notify({
-                        //        // options
-                        //    message: win.$.Plato.Locale.get("Star Added Successfully")
-                        //    },
-                        //    {
-                        //        width: "auto",
-                        //        type: 'success',
-                        //        delay: 2000
-                        //    });
 
                     }
 
@@ -273,7 +262,7 @@ $(function (win, doc, $) {
                 };
 
                 app.http({
-                    url: "api/stars/star/delete",
+                    url: win.$.Plato.defaults.pathBase + "/api/stars/star/delete",
                     method: "DELETE",
                     data: JSON.stringify(params)
                 }).done(function(data) {

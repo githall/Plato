@@ -290,7 +290,7 @@ $(function (win, doc, $) {
             pageSize: 5,
             config: {
                 method: "POST",
-                url: 'api/tags/search',
+                url: win.$.Plato.defaults.pathBase + '/api/tags/search',
                 data: {
                     keywords: "",
                     featureId: 0,

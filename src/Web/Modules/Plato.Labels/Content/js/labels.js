@@ -259,7 +259,7 @@ $(function (win, doc, $) {
             valueField: "keywords",
             config: {
                 method: "GET",
-                url: 'api/labels/get?pager.page={page}&pager.size={pageSize}&opts.search={keywords}',
+                url: win.$.Plato.defaults.pathBase + '/api/labels/get?pager.page={page}&pager.size={pageSize}&opts.search={keywords}',
                 data: {
                     sort: "TotalEntities",
                     order: "Desc"

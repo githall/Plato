@@ -19,6 +19,8 @@ using PlatoCore.Messaging;
 using PlatoCore.Reputations.Abstractions;
 using PlatoCore.Reputations;
 using PlatoCore.Models.Reputations;
+using PlatoCore.Tasks.Extensions;
+using PlatoCore.Reputations.Extensions;
 
 namespace PlatoCore.Shell
 {
@@ -76,7 +78,7 @@ namespace PlatoCore.Shell
             // Add default services
             moduleServiceCollection.TryAddSingleton(configuration);
             tenantServiceCollection.TryAddSingleton(configuration);
-            
+
             // Make shell settings available to the modules
             moduleServiceCollection.AddSingleton(settings);
             moduleServiceCollection.AddSingleton(blueprint.Descriptor);
@@ -106,22 +108,25 @@ namespace PlatoCore.Shell
 
         }
 
+        /// <summary>
+        /// Adds core tenant level services to the IServiceCollection.
+        /// </summary>
+        /// <param name="tenantServiceCollection"></param>
         private void AddCoreServices(IServiceCollection tenantServiceCollection)
         {
+
+            // Shell
             tenantServiceCollection.AddTransient<IShellFeatureManager, ShellFeatureManager>();
             tenantServiceCollection.AddTransient<IShellDescriptorManager, Features.ShellDescriptorManager>();
 
-            // Add a message broker for each tenant
+            // Message broker
             tenantServiceCollection.AddSingleton<IBroker, Broker>();
 
-            // User reputation provider
-            tenantServiceCollection.TryAddScoped<IReputationsManager<Reputation>, ReputationsManager<Reputation>>();
+            // Reputation
+            tenantServiceCollection.AddPlatoReputations();
 
-            // User reputation awarder
-            tenantServiceCollection.TryAddScoped<IUserReputationAwarder, UserReputationAwarder>();
-
-            // User reputation manager
-            tenantServiceCollection.TryAddScoped<IUserReputationManager<UserReputation>, UserReputationManager>();
+            // Add tasks
+            tenantServiceCollection.AddPlatoTasks();
 
         }
 

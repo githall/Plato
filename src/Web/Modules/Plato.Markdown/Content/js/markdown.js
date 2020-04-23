@@ -42,7 +42,7 @@ if (typeof window.$.Plato === "undefined") {
                     "jpeg"
                 ],
                 dropZoneOptions: {
-                    url: '/api/media/streaming/upload',
+                    url: win.$.Plato.defaults.pathBase + '/api/media/streaming/upload',
                     fallbackClick: false,
                     maxFilesize: 32, // 32mb
                     autoProcessQueue: true,
@@ -415,7 +415,7 @@ if (typeof window.$.Plato === "undefined") {
                                         // Ensure we only load the emoji the first time
                                         if (!$dropdown.data("emojiLoaded")) {
                                             plato.http({
-                                                url: "api/markdown/emoji/get",
+                                                url: win.$.Plato.defaults.pathBase + "/api/markdown/emoji/get",
                                                 method: "GET"
                                             }).done(function (response) {
                                                 if (response.statusCode === 200) {
@@ -2056,7 +2056,7 @@ if (typeof window.$.Plato === "undefined") {
                     }
 
                     plato.http({
-                        url: "api/markdown/parse/post",
+                        url: win.$.Plato.defaults.pathBase + "/api/markdown/parse/post",
                         method: "POST",
                         async: false,
                         data: JSON.stringify({
