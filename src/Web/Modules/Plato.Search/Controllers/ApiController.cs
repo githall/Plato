@@ -126,12 +126,11 @@ namespace Plato.Search.Controllers
                 {
                     Total = entities.Total
                 };
-
-                var baseUrl = await _contextFacade.GetBaseUrlAsync();
+           
                 foreach (var entity in entities.Data)
                 {
 
-                    var url = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    var url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
                         ["area"] = entity.ModuleId,
                         ["controller"] = "Home",
@@ -149,7 +148,7 @@ namespace Plato.Search.Controllers
                             DisplayName = entity.CreatedBy.DisplayName,
                             UserName = entity.CreatedBy.UserName,
                             Avatar = entity.CreatedBy.Avatar,
-                            Url = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                            Url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                             {
                                 ["area"] = "Plato.Users",
                                 ["controller"] = "Home",
@@ -164,7 +163,7 @@ namespace Plato.Search.Controllers
                             DisplayName = entity.ModifiedBy.DisplayName,
                             UserName = entity.ModifiedBy.UserName,
                             Avatar = entity.ModifiedBy.Avatar,
-                            Url = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                            Url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                             {
                                 ["area"] = "Plato.Users",
                                 ["controller"] = "Home",
@@ -179,7 +178,7 @@ namespace Plato.Search.Controllers
                             DisplayName = entity.LastReplyBy.DisplayName,
                             UserName = entity.LastReplyBy.UserName,
                             Avatar = entity.LastReplyBy.Avatar,
-                            Url = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                            Url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                             {
                                 ["area"] = "Plato.Users",
                                 ["controller"] = "Home",

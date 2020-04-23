@@ -70,11 +70,10 @@ namespace Plato.Notifications.Controllers
                     Total = userNotifications.Total
                 };
 
-                var baseUrl = await _contextFacade.GetBaseUrlAsync();
                 foreach (var userNotification in userNotifications.Data)
                 {
 
-                    var toUrl = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    var toUrl = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Users",
                         ["controller"] = "Home",
@@ -83,26 +82,14 @@ namespace Plato.Notifications.Controllers
                         ["opts.alias"] = userNotification.To.Alias
                     });
 
-                    var fromUrl = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    var fromUrl = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Users",
                         ["controller"] = "Home",
                         ["action"] = "Display",
                         ["opts.id"] = userNotification.From.Id,
                         ["opts.alias"] = userNotification.From.Alias
-                    });
-
-                    var url = userNotification.Url;
-                    if (url != null)
-                    {
-                        var noHttp = url.IndexOf("http://", StringComparison.OrdinalIgnoreCase) == -1;
-                        var noHttps = url.IndexOf("https://", StringComparison.OrdinalIgnoreCase) == -1;
-                        var relativeUrl = (noHttp && noHttps);
-                        if (relativeUrl)
-                        {
-                            url = baseUrl + url;
-                        }
-                    }
+                    });              
 
                     results.Data.Add(new UserNotificationApiResult()
                     {
@@ -125,7 +112,7 @@ namespace Plato.Notifications.Controllers
                         },
                         Title = userNotification.Title,
                         Message = userNotification.Message,
-                        Url = url,
+                        Url = userNotification.Url,
                         Date = new FriendlyDate()
                         {
                             Text = userNotification.CreatedDate.ToPrettyDate(),

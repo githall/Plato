@@ -547,7 +547,7 @@ $(function (win, doc, $) {
         defaults: {
             debug: true,
             url: "",
-            prefix: "/",
+            pathBase: "",
             locale: "en-US",
             apiKey: "",
             csrfHeaderName: "X-Csrf-Token", // Custom CSRF header
