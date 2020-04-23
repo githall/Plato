@@ -18,7 +18,7 @@ namespace PlatoCore.Hosting
         private readonly IShellContextFactory _shellContextFactory;
         private readonly IRunningShellTable _runningShellTable;
         private readonly IBackgroundTaskManager _taskManager;
-        private readonly IBroker _broker;
+        //private readonly IBroker _broker;
         private readonly ILogger _logger;
 
         private ConcurrentDictionary<string, ShellContext> _shellContexts;
@@ -29,15 +29,14 @@ namespace PlatoCore.Hosting
             IShellContextFactory shellContextFactory,
             IRunningShellTable runningShellTable,             
             IBackgroundTaskManager taskManager,
-            ILogger<DefaultPlatoHost> logger,
-            IBroker broker)
+            ILogger<DefaultPlatoHost> logger)
         {
             _shellSettingsManager = shellSettingsManager;
             _shellContextFactory = shellContextFactory;
             _runningShellTable = runningShellTable;        
             _taskManager = taskManager;
             _logger = logger;
-            _broker = broker;
+        
         }
 
         // Implementation
@@ -114,15 +113,15 @@ namespace PlatoCore.Hosting
                 context.Dispose();
             }
 
-            // Dispose all shell message broker subscriptions 
-            // These will be activated again via BuildTenantPipeline within
-            // Plato.Internal.Hosting.Web.Routing.PlatoRouterMiddleware
-            _broker?.Dispose();
+            //// Dispose all shell message broker subscriptions 
+            //// These will be activated again via BuildTenantPipeline within
+            //// Plato.Internal.Hosting.Web.Routing.PlatoRouterMiddleware
+            //_broker?.Dispose();
 
-            // Stop all shell background tasks
-            // These will be activated again via BuildTenantPipeline within
-            // Plato.Internal.Hosting.Web.Routing.PlatoRouterMiddleware
-            _taskManager.StopTasks();
+            //// Stop all shell background tasks
+            //// These will be activated again via BuildTenantPipeline within
+            //// Plato.Internal.Hosting.Web.Routing.PlatoRouterMiddleware
+            //_taskManager.StopTasks();
 
             return this;
 

@@ -14,6 +14,11 @@ using PlatoCore.Shell.Abstractions;
 using PlatoCore.Hosting.Web.Configuration;
 using Microsoft.AspNetCore.Antiforgery;
 using Microsoft.Extensions.Options;
+using PlatoCore.Messaging.Abstractions;
+using PlatoCore.Messaging;
+using PlatoCore.Reputations.Abstractions;
+using PlatoCore.Reputations;
+using PlatoCore.Models.Reputations;
 
 namespace PlatoCore.Shell
 {
@@ -104,7 +109,20 @@ namespace PlatoCore.Shell
         private void AddCoreServices(IServiceCollection tenantServiceCollection)
         {
             tenantServiceCollection.AddTransient<IShellFeatureManager, ShellFeatureManager>();
-            tenantServiceCollection.AddTransient<IShellDescriptorManager, Features.ShellDescriptorManager>();            
+            tenantServiceCollection.AddTransient<IShellDescriptorManager, Features.ShellDescriptorManager>();
+
+            // Add a message broker for each tenant
+            tenantServiceCollection.AddSingleton<IBroker, Broker>();
+
+            // User reputation provider
+            tenantServiceCollection.TryAddScoped<IReputationsManager<Reputation>, ReputationsManager<Reputation>>();
+
+            // User reputation awarder
+            tenantServiceCollection.TryAddScoped<IUserReputationAwarder, UserReputationAwarder>();
+
+            // User reputation manager
+            tenantServiceCollection.TryAddScoped<IUserReputationManager<UserReputation>, UserReputationManager>();
+
         }
 
     }

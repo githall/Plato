@@ -19,16 +19,6 @@ namespace PlatoCore.Tasks
         private ILogger<BackgroundTaskManager> _logger;
         private ISafeTimerFactory _safeTimerFactory;
 
-        public BackgroundTaskManager(
-            IEnumerable<IBackgroundTaskProvider> providers,
-            ILogger<BackgroundTaskManager> logger,
-            ISafeTimerFactory safeTimerFactory)
-        {
-            _safeTimerFactory = safeTimerFactory;
-            _providers = providers;
-            _logger = logger;
-        }
-
         public void StartTasks(IServiceProvider serviceProvider)
         {
 
