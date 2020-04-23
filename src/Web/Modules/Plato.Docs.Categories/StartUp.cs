@@ -105,7 +105,7 @@ namespace Plato.Docs.Categories
             routes.MapAreaRoute(
                 name: "DocsCategoryDisplay",
                 areaName: "Plato.Docs.Categories",
-                template: "docs/categories/{opts.categoryId:int}/{opts.alias}/{pager.offset:int?}",
+                template: "docs/category/{opts.categoryId:int}/{opts.alias}/{pager.offset:int?}",
                 defaults: new { controller = "Home", action = "Index" }
             );
 
