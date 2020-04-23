@@ -68,9 +68,6 @@ namespace Plato.Site.Demo
             services.AddScoped<ISampleEntityLabelsService, SampleEntityLabelsService>();
             services.AddScoped<ISampleEntityCategoriesService, SampleEntityCategoriesService>();
 
-            // Permissions provider
-            //services.AddScoped<IPermissionsProvider<Permission>, Permissions>();            
-
         }
 
         public override void Configure(
@@ -79,11 +76,20 @@ namespace Plato.Site.Demo
             IServiceProvider serviceProvider)
         {
 
+            // Admin
             routes.MapAreaRoute(
                 name: "PlatoSiteDemoAdmin",
                 areaName: "Plato.Site.Demo",
                 template: "admin/settings/demo",
                 defaults: new { controller = "Admin", action = "Index" }
+            );
+
+            // Login
+            routes.MapAreaRoute(
+                name: "PlatoSiteDemoLogin",
+                areaName: "Plato.Site.Demo",
+                template: "demo/login",
+                defaults: new { controller = "Home", action = "Login" }
             );
 
         }

@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.AspNetCore.Authorization;
 using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Models.Users;
 
 namespace Plato.Admin.ActionFilters
 {
@@ -16,24 +17,11 @@ namespace Plato.Admin.ActionFilters
     public class AuthorizationFilter : IModularActionFilter
     {
 
-        private readonly string _redirectRouteName;
-        private readonly RouteValueDictionary _redirectRouteValues;
-
         private readonly IAuthorizationService _authorizationService;
 
         public AuthorizationFilter(IAuthorizationService authorizationService)
         {
             _authorizationService = authorizationService;
-
-            // Unauthorized redirect
-            _redirectRouteName = "UnauthorizedPage";
-            _redirectRouteValues = new RouteValueDictionary()
-            {
-                ["area"] = "Plato.Core",
-                ["controller"] = "Home",
-                ["action"] = "Denied"
-            };
-
         }
 
         public void OnActionExecuting(ActionExecutingContext context)
@@ -48,13 +36,13 @@ namespace Plato.Admin.ActionFilters
 
         public async Task OnActionExecutingAsync(ResultExecutingContext context)
         {
-            
+
             // The controller action didn't return a view result so no need to continue execution
             if (!(context.Result is ViewResult result))
             {
                 return;
             }
-            
+
             // We need route values to check
             if (context.RouteData?.Values == null)
             {
@@ -73,17 +61,26 @@ namespace Plato.Admin.ActionFilters
             {
                 case "Admin":
 
+                    // Unauthorized redirect
+                    var redirectRouteName = "UnauthorizedPage";
+                    var redirectRouteValues = new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Core",
+                        ["controller"] = "Home",
+                        ["action"] = "Denied"
+                    };
+
                     // If we are not authenticated redirect to denied route immediately
                     if (!context.HttpContext.User.Identity.IsAuthenticated)
                     {
-                        context.Result = new RedirectToRouteResult(_redirectRouteName, _redirectRouteValues);
+                        context.Result = new RedirectToRouteResult(redirectRouteName, redirectRouteValues);
                         return; // No need to continue execution
                     }
 
                     // Else check our claims 
                     if (!await _authorizationService.AuthorizeAsync(context.HttpContext.User, StandardPermissions.AdminAccess))
                     {
-                        context.Result = new RedirectToRouteResult(_redirectRouteName, _redirectRouteValues);
+                        context.Result = new RedirectToRouteResult(redirectRouteName, redirectRouteValues);
                     }
 
                     break;

@@ -16,7 +16,7 @@ namespace PlatoCore.Layout.Alerts
     {
 
         private IList<AlertInfo> _alerts = new List<AlertInfo>();
-        private const string _cookieName = "plato_alerts";      
+        private const string _cookieName = "plato_alerts";
         private bool _deleteCookie = false;
 
         private readonly ILayoutUpdater _layoutUpdater;

@@ -70,15 +70,9 @@ $(function (win, doc, $) {
             if (win.$.Plato.defaults.url === "") {
                 platoLogger.logError("platoLocale could not be initialized as the $.Plato.defaults.url property is empty!");
                 return;
-            }
+            }     
 
-            // append a forward slash if needed
-            var baseUrl = win.$.Plato.defaults.url;
-            if (baseUrl.substring(baseUrl.length - 1, baseUrl.length) !== "/") {
-                baseUrl += "/";
-            }
-
-            var url = baseUrl + "js/app/locale/app." + win.$.Plato.defaults.locale + ".js";
+            var url = "/js/app/locale/app." + win.$.Plato.defaults.locale + ".js";
             platoLogger.logInfo("Loading locale: " + url);
             this._load(url);
 

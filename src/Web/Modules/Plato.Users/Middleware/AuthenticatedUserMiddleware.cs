@@ -8,6 +8,7 @@ using PlatoCore.Models.Users;
 namespace Plato.Users.Middleware
 {
 
+    // TODO: Move to action filter
     public class AuthenticatedUserMiddleware
     {
      
@@ -20,7 +21,7 @@ namespace Plato.Users.Middleware
 
         public async Task InvokeAsync(HttpContext context)
         {
-            
+
             // Hydrate HttpContext.Features with our user
             await HydrateHttpContextFeatureAsync(context);
 

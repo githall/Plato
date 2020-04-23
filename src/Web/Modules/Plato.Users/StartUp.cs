@@ -91,9 +91,8 @@ namespace Plato.Users
             {
                 options.Cookie.Name = $"plato_{ _cookieSuffix.ToLower()}";
                 options.Cookie.Path = _tenantPrefix;
-                options.LoginPath = new PathString("/Plato.Users/Account/Login/");
-                options.AccessDeniedPath = new PathString("/Plato.Users/Account/Login/");
-                options.AccessDeniedPath = options.LoginPath;
+                options.LoginPath = new PathString(StatusCodePagePaths.Login);
+                options.AccessDeniedPath = new PathString(StatusCodePagePaths.Unauthorized);                
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
                 options.SlidingExpiration = true;
             });
