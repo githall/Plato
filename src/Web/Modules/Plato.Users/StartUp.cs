@@ -37,12 +37,14 @@ namespace Plato.Users
     {
 
         private readonly string _cookieSuffix;
-        private readonly string _tenantPrefix;
+        private readonly string _cookiePath;
 
         public Startup(IShellSettings shellSettings)
         {
             _cookieSuffix = shellSettings.AuthCookieName;
-            _tenantPrefix = shellSettings.RequestedUrlPrefix;
+            _cookiePath = !string.IsNullOrEmpty(shellSettings.RequestedUrlPrefix)
+                ? $"/{shellSettings.RequestedUrlPrefix}"
+                : "/";
         }
 
         public override void ConfigureServices(IServiceCollection services)
@@ -90,9 +92,19 @@ namespace Plato.Users
             services.ConfigureApplicationCookie(options =>
             {
                 options.Cookie.Name = $"plato_{ _cookieSuffix.ToLower()}";
-                options.Cookie.Path = _tenantPrefix;
+                options.Cookie.Path = _cookiePath;
                 options.LoginPath = new PathString(StatusCodePagePaths.Login);
                 options.AccessDeniedPath = new PathString(StatusCodePagePaths.Unauthorized);                
+                options.ExpireTimeSpan = TimeSpan.FromDays(30);
+                options.SlidingExpiration = true;
+            });
+
+            services.ConfigureExternalCookie(options =>
+            {
+                options.Cookie.Name = $"plato_external_{ _cookieSuffix.ToLower()}";
+                options.Cookie.Path = _cookiePath;
+                options.LoginPath = new PathString(StatusCodePagePaths.Login);
+                options.AccessDeniedPath = new PathString(StatusCodePagePaths.Unauthorized);
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
                 options.SlidingExpiration = true;
             });

@@ -62,7 +62,7 @@ namespace Plato.Admin.ActionFilters
                 case "Admin":
 
                     // Unauthorized redirect
-                    var redirectRouteName = "UnauthorizedPage";
+                    const string redirectRouteName = "UnauthorizedPage";
                     var redirectRouteValues = new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Core",
