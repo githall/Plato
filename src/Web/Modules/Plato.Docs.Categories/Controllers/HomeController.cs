@@ -82,6 +82,90 @@ namespace Plato.Docs.Categories.Controllers
                 pager = new PagerOptions();
             }
 
+            // Get default options
+            var defaultViewOptions = new EntityIndexOptions();
+            var defaultPagerOptions = new PagerOptions();
+
+            // Add non default route data for pagination purposes
+            if (opts.Search != defaultViewOptions.Search)
+                this.RouteData.Values.Add("opts.search", opts.Search);
+            if (opts.Sort != defaultViewOptions.Sort)
+                this.RouteData.Values.Add("opts.sort", opts.Sort);
+            if (opts.Order != defaultViewOptions.Order)
+                this.RouteData.Values.Add("opts.order", opts.Order);
+            if (opts.Filter != defaultViewOptions.Filter)
+                this.RouteData.Values.Add("opts.filter", opts.Filter);
+            if (pager.Page != defaultPagerOptions.Page)
+                this.RouteData.Values.Add("pager.page", pager.Page);
+            if (pager.Size != defaultPagerOptions.Size)
+                this.RouteData.Values.Add("pager.size", pager.Size);
+
+            // Build view model
+            var viewModel = await GetIndexViewModelAsync(null, opts, pager);
+
+            // Add view model to context
+            HttpContext.Items[typeof(EntityIndexViewModel<Doc>)] = viewModel;
+
+            // If we have a pager.page query string value return paged results
+            if (int.TryParse(HttpContext.Request.Query["pager.page"], out var page))
+            {
+                if (page > 0 && !pager.Enabled)
+                    return View("GetDocs", viewModel);
+            }
+
+            // Return Url for authentication purposes
+            ViewData["ReturnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Docs.Categories",
+                ["controller"] = "Home",
+                ["action"] = "Index"
+                //["opts.categoryId"] = category != null ? category.Id.ToString() : string.Empty,
+                //["opts.alias"] = category != null ? category.Alias.ToString() : string.Empty
+            });
+
+            //// Build page title
+            //if (category != null)
+            //{
+            //    _pageTitleBuilder.AddSegment(S[category.Name], int.MaxValue);
+            //}
+
+            // Build breadcrumb
+            _breadCrumbManager.Configure(async builder =>
+            {
+                builder
+                    .Add(S["Home"], home => home
+                        .Action("Index", "Home", "Plato.Core")
+                        .LocalNav()
+                    ).Add(S["Docs"], docs => docs
+                        .Action("Index", "Home", "Plato.Docs")
+                        .LocalNav()
+                    ).Add(S["Categories"]);
+            });
+
+            // Return view
+            return View((LayoutViewModel) await _categoryViewProvider.ProvideIndexAsync(new Category(), this));
+
+        }
+
+        // -----------------
+        // Display 
+        // -----------------
+
+        public async Task<IActionResult> Display(EntityIndexOptions opts, PagerOptions pager)
+        {
+
+            // Build options
+            if (opts == null)
+            {
+                opts = new EntityIndexOptions();
+            }
+
+            // Build pager
+            if (pager == null)
+            {
+                pager = new PagerOptions();
+            }
+
             Category category = null;
             if (opts.CategoryId > 0)
             {
@@ -138,7 +222,7 @@ namespace Plato.Docs.Categories.Controllers
             {
                 ["area"] = "Plato.Docs.Categories",
                 ["controller"] = "Home",
-                ["action"] = "Index",
+                ["action"] = "Display",
                 ["opts.categoryId"] = category != null ? category.Id.ToString() : string.Empty,
                 ["opts.alias"] = category != null ? category.Alias.ToString() : string.Empty
             });
@@ -148,7 +232,7 @@ namespace Plato.Docs.Categories.Controllers
             {
                 _pageTitleBuilder.AddSegment(S[category.Name], int.MaxValue);
             }
-            
+
             // Build breadcrumb
             _breadCrumbManager.Configure(async builder =>
             {
@@ -180,13 +264,13 @@ namespace Plato.Docs.Categories.Controllers
                         })
                         .LocalNav()
                     );
-                    
+
                     foreach (var parent in parents)
                     {
                         if (parent.Id != category.Id)
                         {
                             builder.Add(S[parent.Name], channel => channel
-                                .Action("Index", "Home", "Plato.Docs.Categories", new RouteValueDictionary
+                                .Action("Display", "Home", "Plato.Docs.Categories", new RouteValueDictionary
                                 {
                                     ["opts.categoryId"] = parent.Id,
                                     ["opts.alias"] = parent.Alias,
@@ -200,13 +284,13 @@ namespace Plato.Docs.Categories.Controllers
                         }
 
                     }
-                    
+
                 }
 
             });
-            
+
             // Return view
-            return View((LayoutViewModel) await _categoryViewProvider.ProvideIndexAsync(category, this));
+            return View((LayoutViewModel)await _categoryViewProvider.ProvideIndexAsync(category, this));
 
         }
 

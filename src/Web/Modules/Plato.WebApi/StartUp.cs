@@ -16,6 +16,7 @@ using Plato.WebApi.Models;
 using Plato.WebApi.Navigation;
 using Plato.WebApi.Services;
 using Plato.WebApi.ViewProviders;
+using PlatoCore.Net.Abstractions;
 
 namespace Plato.WebApi
 {
@@ -66,11 +67,14 @@ namespace Plato.WebApi
             // Add client accessible CSRF token for web API requests
             app.Use(next => ctx =>
             {
+                var cookieBuilder = ctx.RequestServices.GetRequiredService<ICookieBuilder>();
+                cookieBuilder.Contextulize(ctx);
+
                 // ensure the cookie does not already exist
-                var cookie = ctx.Request.Cookies[PlatoAntiForgeryOptions.AjaxCsrfTokenCookieName];
+                var cookie = cookieBuilder.Get(PlatoAntiForgeryOptions.AjaxCsrfTokenCookieName);
                 if (cookie == null)
                 {
-                    ctx.Response.Cookies.Append(PlatoAntiForgeryOptions.AjaxCsrfTokenCookieName, csrfToken,
+                    cookieBuilder.Append(PlatoAntiForgeryOptions.AjaxCsrfTokenCookieName, csrfToken,
                         new CookieOptions() {HttpOnly = false});
                 }
                 else
@@ -78,12 +82,12 @@ namespace Plato.WebApi
                     // Delete any existing cookie
                     ctx.Response.Cookies.Delete(cookie);
                     // Create new cookie
-                    ctx.Response.Cookies.Append(PlatoAntiForgeryOptions.AjaxCsrfTokenCookieName, csrfToken,
+                    cookieBuilder.Append(PlatoAntiForgeryOptions.AjaxCsrfTokenCookieName, csrfToken,
                         new CookieOptions() {HttpOnly = false});
                 }
                 return next(ctx);
             });
-            
+
             // WebApi Settings
             routes.MapAreaRoute(
                 name: "WebApiAdmin",

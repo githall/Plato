@@ -8,6 +8,8 @@ using Plato.Entities.Stores;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Models.Shell;
+using PlatoCore.Net;
+using PlatoCore.Net.Abstractions;
 
 namespace Plato.Entities.Services
 {
@@ -18,17 +20,17 @@ namespace Plato.Entities.Services
         public const string CookieName = "plato_reads";
         private HttpContext _context;
 
-        private readonly IShellSettings _shellSettings;
         private readonly IEntityStore<TEntity> _entityStore;
-        private readonly IDbHelper _dbHelper;
+        private readonly ICookieBuilder _cookieBuilder;
+        private readonly IDbHelper _dbHelper;    
 
         public EntityViewIncrementer(
-            IEntityStore<TEntity> entityStore, 
-            IShellSettings shellSettings,
+            IEntityStore<TEntity> entityStore,         
+            ICookieBuilder cookieBuilder,
             IDbHelper dbHelper)
         {
-            _entityStore = entityStore;
-            _shellSettings = shellSettings;
+            _cookieBuilder = cookieBuilder;
+            _entityStore = entityStore;        
             _dbHelper = dbHelper;
         }
 
@@ -75,26 +77,18 @@ namespace Plato.Entities.Services
 
             values.Add(entity.Id);
 
-            var tennantPath = "/";
-            if (_shellSettings != null)
-            {
-                tennantPath += _shellSettings.RequestedUrlPrefix;
-            }
-
             // If a context is supplied use a client side cookie to track views
             // Expire the cookie every 10 minutes using a sliding expiration to
             // ensure views are updated often but not on every refresh
-            _context?.Response.Cookies.Append(
-                CookieName,
-                values.ToArray().ToDelimitedString(),
-                new CookieOptions
-                {
-                    HttpOnly = true,
-                    Path = tennantPath,
-                    Expires = DateTime.Now.AddMinutes(10)
-                });
-                
-          
+            _cookieBuilder
+                .Contextulize(_context)
+                .Append(CookieName, values.ToArray().ToDelimitedString(),
+                    new CookieOptions
+                    {
+                        HttpOnly = true,
+                        Expires = DateTime.Now.AddMinutes(10)
+                    });
+
             return entity;
 
         }

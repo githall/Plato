@@ -14,6 +14,8 @@ namespace PlatoCore.Net.Extensions
             services.TryAddScoped<IHttpMultiPartRequestHandler, HttpMultiPartRequestHandler>();
             services.TryAddScoped<IClientIpAddress, ClientIpAddress>();
             services.TryAddScoped<IHttpClient, HttpClient>();
+            services.TryAddScoped<ICookieBuilder, CookieBuilder>();
+
             return services;
 
         }

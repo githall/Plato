@@ -8,31 +8,34 @@ using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Models.Reputations;
 using PlatoCore.Models.Shell;
 using PlatoCore.Models.Users;
+using PlatoCore.Net.Abstractions;
 using PlatoCore.Reputations.Abstractions;
 using PlatoCore.Stores.Abstractions.Users;
 
 namespace Plato.Users.ActionFilters
 {
+
     public class UpdateUserLastLoginDateFilter : IModularActionFilter
     {
 
-        internal const string CookieName = "plato_active";
+        private const int _sessionLength = 20;
+        private const string _cookieName = "plato_active";
         private bool _active = false;
-        readonly string _tenantPath;
-        
+
         private readonly IUserReputationAwarder _userReputationAwarder;
         private readonly IPlatoUserStore<User> _userStore;
         private readonly IContextFacade _contextFacade;
+        private readonly ICookieBuilder _cookieBuilder;
 
         public UpdateUserLastLoginDateFilter(
             IUserReputationAwarder userReputationAwarder,
-            IShellSettings shellSettings,
-            IContextFacade contextFacade,
-            IPlatoUserStore<User> userStore)
+            IPlatoUserStore<User> userStore,
+            ICookieBuilder cookieBuilder,
+            IContextFacade contextFacade)
         {
-            _tenantPath = "/" + shellSettings.RequestedUrlPrefix;
             _userReputationAwarder = userReputationAwarder;
             _contextFacade = contextFacade;
+            _cookieBuilder = cookieBuilder;
             _userStore = userStore;
         }
 
@@ -40,7 +43,7 @@ namespace Plato.Users.ActionFilters
         {
 
             // Get tracking cookie
-            var value = Convert.ToString(context.HttpContext.Request.Cookies[CookieName]);
+            var value = _cookieBuilder.Contextulize(context.HttpContext).Get(_cookieName);
 
             // Cookie does not exist
             if (String.IsNullOrEmpty(value))
@@ -96,15 +99,16 @@ namespace Plato.Users.ActionFilters
 
                 // Set client cookie to ensure update does not
                 // occur again for as long as the cookie exists
-                context.HttpContext.Response.Cookies.Append(
-                    CookieName,
-                    true.ToString(),
-                    new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Path = _tenantPath,
-                        Expires = DateTime.Now.AddMinutes(20)
-                    });
+                _cookieBuilder
+                    .Contextulize(context.HttpContext)
+                    .Append(
+                        _cookieName,
+                        true.ToString(),
+                        new CookieOptions
+                        {
+                            HttpOnly = true,
+                            Expires = DateTime.Now.AddMinutes(_sessionLength)
+                        });
 
             }
 
