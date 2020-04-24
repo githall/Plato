@@ -225,6 +225,14 @@ namespace Plato.Articles
                 defaults: new { controller = "User", action = "Index" }
             );
 
+            // Admin Index
+            routes.MapAreaRoute(
+                name: "ArticlesAdminIndex",
+                areaName: "Plato.Articles",
+                template: "admin/articles",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
         }
     }
 }

@@ -225,6 +225,16 @@ namespace Plato.Questions
                 defaults: new { controller = "User", action = "Index" }
             );
 
+            // Admin Index
+            routes.MapAreaRoute(
+                name: "QuestionsAdminIndex",
+                areaName: "Plato.Questions",
+                template: "admin/questions",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
         }
+
     }
+
 }

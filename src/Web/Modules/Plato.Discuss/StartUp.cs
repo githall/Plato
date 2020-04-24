@@ -225,6 +225,14 @@ namespace Plato.Discuss
                 defaults: new { controller = "User", action = "Index" }
             );
 
+            // Admin Index
+            routes.MapAreaRoute(
+                name: "DiscussAdminIndex",
+                areaName: "Plato.Discuss",
+                template: "admin/discuss",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
         }
 
     }

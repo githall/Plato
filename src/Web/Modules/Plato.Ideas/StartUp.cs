@@ -225,6 +225,16 @@ namespace Plato.Ideas
                 defaults: new { controller = "User", action = "Index" }
             );
 
+            // Admin Index
+            routes.MapAreaRoute(
+                name: "IdeasAdminIndex",
+                areaName: "Plato.Ideas",
+                template: "admin/ideas",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
         }
+
     }
+
 }

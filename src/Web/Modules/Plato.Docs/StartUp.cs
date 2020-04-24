@@ -233,6 +233,14 @@ namespace Plato.Docs
                 defaults: new { controller = "User", action = "Index" }
             );
 
+            // Admin Index
+            routes.MapAreaRoute(
+                name: "DocsAdminIndex",
+                areaName: "Plato.Docs",
+                template: "admin/docs",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
         }
 
     }

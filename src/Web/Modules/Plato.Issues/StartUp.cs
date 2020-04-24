@@ -224,6 +224,14 @@ namespace Plato.Issues
                 defaults: new { controller = "User", action = "Index" }
             );
 
+            // Admin Index
+            routes.MapAreaRoute(
+                name: "IssuesAdminIndex",
+                areaName: "Plato.Issues",
+                template: "admin/issues",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
         }
 
     }
