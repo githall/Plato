@@ -23,7 +23,7 @@ namespace PlatoCore.Cache
 
         private readonly ILogger<ShellCacheManager> _logger;
         private readonly ICacheDependency _cacheDependency;      
-        private readonly IShellSettings _shellSettings;
+        //private readonly IShellSettings _shellSettings;
         private readonly IMemoryCache _memoryCache;
 
         public ShellCacheManager(
@@ -33,7 +33,7 @@ namespace PlatoCore.Cache
             IMemoryCache memoryCache)
         {
             _cacheDependency = cacheDependency;
-            _shellSettings = shellSettings;
+            //_shellSettings = shellSettings;
             _memoryCache = memoryCache;            
             _logger = logger;
         }
@@ -81,7 +81,7 @@ namespace PlatoCore.Cache
 
         public CacheToken GetOrCreateToken(Type type, params object[] varyBy)
         {
-            var cacheToken = new CacheToken(_shellSettings.Name, type, varyBy);
+            var cacheToken = new CacheToken(type, varyBy);
             if (Tokens.ContainsKey(cacheToken))
             {
                 return Tokens.FirstOrDefault(t => t.Key == cacheToken).Key;
@@ -102,7 +102,7 @@ namespace PlatoCore.Cache
 
         public void CancelTokens(Type type, params object[] varyBy)
         {
-            var cancellationToken = new CacheToken(_shellSettings.Name, type, varyBy);
+            var cancellationToken = new CacheToken(type, varyBy);
             var tokens = GetTokensForType(type);
             foreach (var token in tokens)
             {

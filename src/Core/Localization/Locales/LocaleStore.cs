@@ -17,11 +17,11 @@ namespace PlatoCore.Localization.Locales
 
         private readonly ILocaleProvider _localeProvider;
         private readonly ILogger<LocaleStore> _logger;
-        private readonly ISingletonCacheManager _cacheManager;
+        private readonly IPlatoCacheManager _cacheManager;
 
         public LocaleStore(
             ILocaleProvider localeProvider,
-            ISingletonCacheManager cacheManager,
+            IPlatoCacheManager cacheManager,
             ILogger<LocaleStore> logger)
         {
             _localeProvider = localeProvider;

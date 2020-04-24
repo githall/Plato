@@ -10,7 +10,7 @@ using PlatoCore.Cache.Abstractions;
 namespace PlatoCore.Cache
 {
 
-    public class SingletonCacheManager : ISingletonCacheManager
+    public class SingletonCacheManager : IPlatoCacheManager
     {
 
         public static ConcurrentDictionary<CacheToken, Type> Tokens { get; } =

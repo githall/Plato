@@ -7,7 +7,7 @@ namespace PlatoCore.Navigation.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddPlatoNavigation(
+        public static IServiceCollection AddShellNavigation(
             this IServiceCollection services)
         {
 

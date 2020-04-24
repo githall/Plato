@@ -1,7 +1,6 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Messaging.Abstractions;
 
-
 namespace PlatoCore.Messaging.Extensions
 {
     public static class ServiceCollectionExtensions

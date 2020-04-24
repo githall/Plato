@@ -27,7 +27,7 @@ namespace PlatoCore.Stores.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddPlatoStores(
+        public static IServiceCollection AddShellStores(
             this IServiceCollection services)
         {
 

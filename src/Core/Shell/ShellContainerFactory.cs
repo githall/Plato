@@ -1,29 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using PlatoCore.Abstractions.Extensions;
-using Microsoft.AspNetCore.Authentication;
 using PlatoCore.Abstractions;
-using PlatoCore.Data.Abstractions;
-using PlatoCore.Features;
-using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
+using PlatoCore.Shell.Extensions;
+using PlatoCore.Data.Abstractions;
 using PlatoCore.Shell.Abstractions;
-using PlatoCore.Messaging.Abstractions;
-using PlatoCore.Messaging;
-using PlatoCore.Tasks.Extensions;
-using PlatoCore.Reputations.Extensions;
-using PlatoCore.Cache.Extensions;
-using PlatoCore.Repositories.Extensions;
-using PlatoCore.Stores.Extensions;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Hosting.Web;
-using PlatoCore.Navigation.Extensions;
-using PlatoCore.Net.Extensions;
-using PlatoCore.Features.Extensions;
-using PlatoCore.Messaging.Extensions;
+using PlatoCore.Abstractions.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace PlatoCore.Shell
 {
@@ -61,9 +47,9 @@ namespace PlatoCore.Shell
                 options.TablePrefix = settings.TablePrefix;
             });
 
-            // Add core tenant services
-            AddCoreServices(tenantServiceCollection);
-            
+            // Register all tenant specific services
+            tenantServiceCollection.AddPlatoTenant();
+
             // Add StartUps from modules defined in blueprint descriptor as services
             var moduleServiceCollection = _serviceProvider.CreateChildContainer(_applicationServices);
 
@@ -108,53 +94,6 @@ namespace PlatoCore.Shell
             // Return our tenant service provider
             var shellServiceProvider = tenantServiceCollection.BuildServiceProvider();
             return shellServiceProvider;
-
-        }
-
-        /// <summary>
-        /// Adds core tenant level services to the IServiceCollection.
-        /// </summary>
-        /// <param name="tenantServiceCollection"></param>
-        private void AddCoreServices(IServiceCollection tenantServiceCollection)
-        {
-
-            // Shell
-            tenantServiceCollection.AddTransient<IShellFeatureManager, ShellFeatureManager>();
-            tenantServiceCollection.AddTransient<IShellDescriptorManager, Features.ShellDescriptorManager>();
-
-            // Http
-            tenantServiceCollection.AddShellHttp();
-
-            // Message broker
-            tenantServiceCollection.AddShellMessaging();
-
-            // Reputation
-            tenantServiceCollection.AddShellReputations();
-
-            // Add tasks
-            tenantServiceCollection.AddShellTasks();
-
-            // Caching
-            tenantServiceCollection.AddShellCaching();
-
-            // Navigation
-            tenantServiceCollection.AddPlatoNavigation();
-
-            tenantServiceCollection.AddPlatoRepositories();
-            tenantServiceCollection.AddPlatoStores();
-
-
-            tenantServiceCollection.AddScoped<IContextFacade, ContextFacade>();
-
-            // The captured router is used to resolve URLs for background or deferred tasks 
-            // Background and deferred tasks don't have access to the current HttpContext
-            // Our captured router must be a singleton so the initial configuration performed
-            // by the PlatoRouterMiddleware is persisted throughout the application life cycle
-            tenantServiceCollection.AddSingleton<ICapturedRouter, CapturedRouter>();
-            tenantServiceCollection.AddScoped<ICapturedRouterUrlHelper, CapturedRouterUrlHelper>();
-            tenantServiceCollection.AddSingleton<ICapturedHttpContext, CapturedHttpContext>();
-
-            tenantServiceCollection.AddPlatoShellFeatures();
 
         }
 
