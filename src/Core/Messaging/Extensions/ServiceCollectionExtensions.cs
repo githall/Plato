@@ -7,7 +7,7 @@ namespace PlatoCore.Messaging.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddPlatoMessaging(
+        public static IServiceCollection AddShellMessaging(
             this IServiceCollection services)
         {
 

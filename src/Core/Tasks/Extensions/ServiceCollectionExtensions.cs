@@ -7,7 +7,7 @@ namespace PlatoCore.Tasks.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddPlatoTasks(
+        public static IServiceCollection AddShellTasks(
             this IServiceCollection services)
         {
 

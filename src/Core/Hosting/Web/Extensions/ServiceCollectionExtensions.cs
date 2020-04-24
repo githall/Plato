@@ -101,16 +101,16 @@ namespace PlatoCore.Hosting.Web.Extensions
                 internalServices.AddPlatoTheming();
                 internalServices.AddPlatoViewFeature();
                 internalServices.AddPlatoViewLocalization();
-                internalServices.AddPlatoNavigation();
+                //internalServices.AddPlatoNavigation();
                 internalServices.AddPlatoAssets();
-                internalServices.AddPlatoNet();
+                //internalServices.AddPlatoNet();
                 internalServices.AddPlatoScripting();
-                internalServices.AddPlatoShellFeatures();
-                internalServices.AddPlatoMessaging();
+                //internalServices.AddPlatoShellFeatures();
+                //internalServices.AddPlatoMessaging();
                 internalServices.AddPlatoLogging();
                 internalServices.AddPlatoDbContext();
-                internalServices.AddPlatoRepositories();
-                internalServices.AddPlatoStores();
+                //internalServices.AddPlatoRepositories();
+                //internalServices.AddPlatoStores();
                 //internalServices.AddPlatoReputations();
                 internalServices.AddPlatoBadges();
                 internalServices.AddPlatoDrawing();
@@ -127,9 +127,9 @@ namespace PlatoCore.Hosting.Web.Extensions
 
             // Dummy implementations to pass .NET Core dependency injection checks
             // These are replaced for each tenant via the ShellContainerFactory
-            services.AddScoped<IShellSettings, ShellSettings>();
-            services.AddScoped<IShellDescriptorStore, ShellDescriptorStore>();
-            services.AddScoped<IShellDescriptorManager, ShellDescriptorManager>();
+            //services.AddScoped<IShellSettings, ShellSettings>();
+            //services.AddScoped<IShellDescriptorStore, ShellDescriptorStore>();
+            //services.AddScoped<IShellDescriptorManager, ShellDescriptorManager>();
 
             // Add host
             services.AddPlatoDefaultHost();
@@ -249,13 +249,6 @@ namespace PlatoCore.Hosting.Web.Extensions
         public static IServiceCollection AddPlatoRouting(this IServiceCollection services)
         {
 
-            // The captured router is used to resolve URLs for background or deferred tasks 
-            // Background and deferred tasks don't have access to the current HttpContext
-            // Our captured router must be a singleton so the initial configuration performed
-            // by the PlatoRouterMiddleware is persisted throughout the application life cycle
-            services.AddSingleton<ICapturedRouter, CapturedRouter>();
-            services.AddScoped<ICapturedRouterUrlHelper, CapturedRouterUrlHelper>();
-
             // Add home route manager
             services.AddScoped<IHomeRouteManager, HomeRouteManager>();
 
@@ -268,9 +261,7 @@ namespace PlatoCore.Hosting.Web.Extensions
 
         public static IServiceCollection AddPlatoContextAccessor(this IServiceCollection services)
         {
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddSingleton<ICapturedHttpContext, CapturedHttpContext>();
-            services.AddScoped<IContextFacade, ContextFacade>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();       
             return services;
         }
 

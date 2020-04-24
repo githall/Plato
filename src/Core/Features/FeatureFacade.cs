@@ -23,13 +23,13 @@ namespace PlatoCore.Features
             _shellFeatureStore = shellFeatureStore;
             _shellDescriptorManager = shellDescriptorManager;
         }
- 
+
         public async Task<IShellFeature> GetFeatureByIdAsync(string moduleId)
         {
             var features = await _shellFeatureStore.SelectFeatures();
             return features?.FirstOrDefault(f => f.ModuleId.Equals(moduleId, StringComparison.OrdinalIgnoreCase));
         }
-        
+
         /// <summary>
         /// Returns available feature update. 
         /// </summary>

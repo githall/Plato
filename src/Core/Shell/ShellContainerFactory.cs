@@ -11,16 +11,19 @@ using PlatoCore.Features;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
-using PlatoCore.Hosting.Web.Configuration;
-using Microsoft.AspNetCore.Antiforgery;
-using Microsoft.Extensions.Options;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Messaging;
-using PlatoCore.Reputations.Abstractions;
-using PlatoCore.Reputations;
-using PlatoCore.Models.Reputations;
 using PlatoCore.Tasks.Extensions;
 using PlatoCore.Reputations.Extensions;
+using PlatoCore.Cache.Extensions;
+using PlatoCore.Repositories.Extensions;
+using PlatoCore.Stores.Extensions;
+using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web;
+using PlatoCore.Navigation.Extensions;
+using PlatoCore.Net.Extensions;
+using PlatoCore.Features.Extensions;
+using PlatoCore.Messaging.Extensions;
 
 namespace PlatoCore.Shell
 {
@@ -119,14 +122,39 @@ namespace PlatoCore.Shell
             tenantServiceCollection.AddTransient<IShellFeatureManager, ShellFeatureManager>();
             tenantServiceCollection.AddTransient<IShellDescriptorManager, Features.ShellDescriptorManager>();
 
+            // Http
+            tenantServiceCollection.AddShellHttp();
+
             // Message broker
-            tenantServiceCollection.AddSingleton<IBroker, Broker>();
+            tenantServiceCollection.AddShellMessaging();
 
             // Reputation
-            tenantServiceCollection.AddPlatoReputations();
+            tenantServiceCollection.AddShellReputations();
 
             // Add tasks
-            tenantServiceCollection.AddPlatoTasks();
+            tenantServiceCollection.AddShellTasks();
+
+            // Caching
+            tenantServiceCollection.AddShellCaching();
+
+            // Navigation
+            tenantServiceCollection.AddPlatoNavigation();
+
+            tenantServiceCollection.AddPlatoRepositories();
+            tenantServiceCollection.AddPlatoStores();
+
+
+            tenantServiceCollection.AddScoped<IContextFacade, ContextFacade>();
+
+            // The captured router is used to resolve URLs for background or deferred tasks 
+            // Background and deferred tasks don't have access to the current HttpContext
+            // Our captured router must be a singleton so the initial configuration performed
+            // by the PlatoRouterMiddleware is persisted throughout the application life cycle
+            tenantServiceCollection.AddSingleton<ICapturedRouter, CapturedRouter>();
+            tenantServiceCollection.AddScoped<ICapturedRouterUrlHelper, CapturedRouterUrlHelper>();
+            tenantServiceCollection.AddSingleton<ICapturedHttpContext, CapturedHttpContext>();
+
+            tenantServiceCollection.AddPlatoShellFeatures();
 
         }
 

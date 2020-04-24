@@ -20,11 +20,17 @@ namespace PlatoCore.Cache.Extensions
             services.Add(ServiceDescriptor.Transient<IDistributedCache, MemoryDistributedCache>());
 
             services.AddSingleton<ICacheDependency, CacheDependency>();
-            services.AddSingleton<ISingletonCacheManager, SingletonCacheManager>();            
-            services.AddScoped<ICacheManager, ShellCacheManager>();
+            services.AddSingleton<ISingletonCacheManager, SingletonCacheManager>();                 
 
             return services;
 
+        }
+
+        public static IServiceCollection AddShellCaching(
+       this IServiceCollection services)
+        {
+            services.AddScoped<ICacheManager, ShellCacheManager>();
+            return services;
         }
 
     }

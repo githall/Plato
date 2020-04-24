@@ -28,16 +28,14 @@ namespace PlatoCore.Features
     // within DI for the features we are enabling or disabling and the events can be invoked.
 
     public class ShellFeatureManager : IShellFeatureManager
-    {
-
-        private readonly IPlatoHost _platoHost;
+    { 
         
         private readonly IShellDescriptorManager _shellDescriptorManager;
         private readonly IShellDescriptorStore _shellDescriptorStore;
         private readonly IShellContextFactory _shellContextFactory;      
         private readonly ILogger<ShellFeatureManager> _logger;
-
         private readonly IShellSettings _shellSettings;
+        private readonly IPlatoHost _platoHost;
 
         public ShellFeatureManager(            
             IShellDescriptorManager shellDescriptorManager,

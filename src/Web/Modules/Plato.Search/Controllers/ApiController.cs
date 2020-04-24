@@ -139,6 +139,16 @@ namespace Plato.Search.Controllers
                         ["opts.alias"] = entity.Alias
                     });
 
+                    if (string.IsNullOrEmpty(entity.CreatedBy.Avatar.Url))
+                    {
+                        entity.CreatedBy.Avatar.Url = _contextFacade.GetRouteUrl(entity.CreatedBy.Avatar.DefaultRoute);
+                    }
+
+                    if (string.IsNullOrEmpty(entity.ModifiedBy.Avatar.Url))
+                    {
+                        entity.ModifiedBy.Avatar.Url = _contextFacade.GetRouteUrl(entity.ModifiedBy.Avatar.DefaultRoute);
+                    }
+
                     results.Data.Add(new SearchApiResult()
                     {
                         Id = entity.Id,

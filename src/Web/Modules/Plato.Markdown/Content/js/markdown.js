@@ -1739,8 +1739,9 @@ if (typeof window.$.Plato === "undefined") {
                                         alert("An error occurred. No valid CSRF token could be obtained for the request.");
                                     }
 
+
                                     // Configure drop zone requests from Plato options
-                                    options.dropZoneOptions.url = plato.defaults.url + options.dropZoneOptions.url;
+                                    options.dropZoneOptions.url = plato.defaults.pathBase + options.dropZoneOptions.url;
 
                                     // Configure request headers
                                     options.dropZoneOptions.headers = {
@@ -1860,9 +1861,9 @@ if (typeof window.$.Plato === "undefined") {
 
                                                             // Image or file?
                                                             if (result.isImage) {
-                                                                chunk = '![' + result.name + '](/media/' + result.id + ')';
+                                                                chunk = '![' + result.name + '](' + win.$.Plato.defaults.pathBase  + '/media/' + result.id + ')';
                                                             } else {
-                                                                chunk = '[' + result.name + '](/media/' + result.id + ') - ' + result.friendlySize;
+                                                                chunk = '[' + result.name + '](' + win.$.Plato.defaults.pathBase + '/media/' + result.id + ') - ' + result.friendlySize;
                                                             }
 
                                                             // Add markdown

@@ -7,7 +7,7 @@ namespace PlatoCore.Net.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddPlatoNet(
+        public static IServiceCollection AddShellHttp(
             this IServiceCollection services)
         {
 

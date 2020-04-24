@@ -14,6 +14,7 @@ using PlatoCore.Navigation.Abstractions;
 
 namespace PlatoCore.Navigation
 {
+
     public class NavigationManager : INavigationManager
     {
 
@@ -26,18 +27,18 @@ namespace PlatoCore.Navigation
         #region "Constructor"
 
         private readonly IEnumerable<INavigationProvider> _navigationProviders;
-        private readonly ILogger _logger;
-        private readonly IShellSettings _shellSettings;
-        private readonly IUrlHelperFactory _urlHelperFactory;
         private readonly IAuthorizationService _authorizationService;
+        private readonly IUrlHelperFactory _urlHelperFactory;
+        private readonly IShellSettings _shellSettings;
+        private readonly ILogger _logger;
         private IUrlHelper _urlHelper;
 
         public NavigationManager(
             IEnumerable<INavigationProvider> navigationProviders,
-            ILogger<NavigationManager> logger,
-            IShellSettings shellSettings,
+            IAuthorizationService authorizationService,
             IUrlHelperFactory urlHelperFactory,
-            IAuthorizationService authorizationService)
+            ILogger<NavigationManager> logger,
+            IShellSettings shellSettings)
         {
             _authorizationService = authorizationService;
             _navigationProviders = navigationProviders;
