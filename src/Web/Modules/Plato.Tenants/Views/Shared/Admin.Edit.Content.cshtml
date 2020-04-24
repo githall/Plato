@@ -255,10 +255,17 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">/</span>
                         </div>
-                        <input asp-for="RequestedUrlPrefix" class="form-control" />
+                        @if (Model.IsNewTenant)
+                        {
+                            <input asp-for="RequestedUrlPrefix" class="form-control" />
+                        }
+                        else
+                        {
+                            <input readonly asp-for="RequestedUrlPrefix" class="form-control" />
+                        }
                     </div>
                     <span asp-validation-for="RequestedUrlPrefix" class="text-danger"></span>
-                    <span class="text-muted form-text small">@T["A prefix or folder name for this tenant. For example sitename or companyname. If requests contain this prefix and match the host name this tenant will be loaded. Leave blank to resolve this tenant to the root."]</span>
+                    <span class="text-muted form-text small">@T["A prefix or folder name for this tenant. For example sitename or companyname. If requests contain this prefix and match the host name this tenant will be loaded. Leave blank to resolve this tenant to the root. Please choose carefully as this cannot be changed once the tenant has been created."]</span>
                 </div>
             </div>
         </div>

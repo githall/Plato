@@ -54,13 +54,12 @@ namespace Plato.WebApi.Controllers
                 results = new PagedResults<UserApiResult>
                 {
                     Total = users.Total
-                };
-                
-                var baseUrl = await _contextFacade.GetBaseUrlAsync();
+                };                
+         
                 foreach (var user in users.Data)
                 {
 
-                    var profileUrl = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    var profileUrl = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Users",
                         ["controller"] = "Home",
