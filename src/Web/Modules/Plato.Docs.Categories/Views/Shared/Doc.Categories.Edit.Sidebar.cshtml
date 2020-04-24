@@ -48,7 +48,7 @@
                     // Update entity dropdown
                     app.http({
                         method: "GET",
-                        url: 'Plato.Docs/Home/GetDocsTree?opts.featureId=' +
+                        url: win.$.Plato.defaults.pathBase + '/Plato.Docs/Home/GetDocsTree?opts.featureId=' +
                             featureId + '&opts.categoryId=' +
                             categoryId
                     }).done(function(response) {

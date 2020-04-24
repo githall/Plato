@@ -89,7 +89,7 @@ namespace PlatoCore.Hosting.Web
                     : settings.BaseUrl;
             }
 
-            return $"{request.Scheme}://{request.Host}{request.PathBase}";
+            return $"{request.Scheme}://{request.Host}";
 
         }
 
