@@ -49,7 +49,7 @@
                         ? T["contribution"].Value
                         : T["contributions"].Value;
                     var contributionTitle = $"{user.ContributionCount} {text}";
-                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@user.Id" asp-route-opts.alias="@user.Alias"><avatar data-toggle="tooltip" title="@user.DisplayName - @contributionTitle" class="avatar avatar-sm" url="@user.Avatar.Url"/></a>
+                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@user.Id" asp-route-opts.alias="@user.Alias"><avatar data-toggle="tooltip" title="@user.DisplayName - @contributionTitle" class="avatar avatar-sm" avatar="@user.Avatar"/></a>
                 }
             </div>
         </li>

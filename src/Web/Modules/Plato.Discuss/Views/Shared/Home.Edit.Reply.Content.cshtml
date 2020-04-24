@@ -11,10 +11,9 @@
         @if (base.CurrentUser != null)
         {
             <a href="#" class="avatar-link">
-                <avatar data-toggle="tooltip" title="@base.CurrentUser.DisplayName" class="avatar" url="@base.CurrentUser.Avatar.Url" />
+                <avatar data-toggle="tooltip" title="@base.CurrentUser.DisplayName" class="avatar" avatar="@base.CurrentUser.Avatar" />
             </a>
         }
-
     </div>
     <div class="list-body reply-body">
         <card class="card mt-0">

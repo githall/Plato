@@ -68,6 +68,11 @@ namespace Plato.WebApi.Controllers
                         ["opts.alias"] = user.Alias
                     });
 
+                    if (string.IsNullOrEmpty(user.Avatar.Url))
+                    {                     
+                        user.Avatar.Url = _contextFacade.GetRouteUrl(user.Avatar.DefaultRoute);
+                    }
+
                     results.Data.Add(new UserApiResult()
                     {
                         Id = user.Id,

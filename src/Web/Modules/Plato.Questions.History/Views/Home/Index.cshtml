@@ -17,7 +17,7 @@
             <h6 class="modal-title">
                 @if (Model.History.CreatedBy != null)
                 {
-                    <avatar title="@Model.History.CreatedBy.DisplayName" class="avatar avatar-sm mr-1" url="@Model.History.CreatedBy.Avatar.Url"></avatar>
+                    <avatar title="@Model.History.CreatedBy.DisplayName" class="avatar avatar-sm mr-1" avatar="@Model.History.CreatedBy.Avatar"></avatar>
                     @Model.History.CreatedBy.DisplayName
                 }
                 @T["edited"] <date utc="@Model.History.CreatedDate"></date>

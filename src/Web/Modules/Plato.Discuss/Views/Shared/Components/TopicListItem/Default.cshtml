@@ -5,7 +5,7 @@
                                                                    
 <div asp-id="list-left" class="list-left">
     <a asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.CreatedUserId" asp-route-opts.alias="@Model.Entity.CreatedBy.Alias">
-        <avatar data-toggle="tooltip" title="@Model.Entity.CreatedBy.DisplayName" class="avatar" url="@Model.Entity.CreatedBy.Avatar.Url"/>
+        <avatar data-toggle="tooltip" title="@Model.Entity.CreatedBy.DisplayName" class="avatar" avatar="@Model.Entity.CreatedBy.Avatar"/>
     </a>
 </div>
 <div asp-id="list-body" class="list-body">
@@ -89,7 +89,7 @@
                     var replies = user.TotalReplies == 1
                         ? "reply"
                         : "replies";
-                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@user.Id" asp-route-opts.alias="@user.Alias"><avatar data-toggle="tooltip" title="@user.DisplayName - @user.TotalReplies.ToPrettyInt() @T[replies]" class="avatar avatar-sm" url="@user.Avatar.Url" /></a>
+                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@user.Id" asp-route-opts.alias="@user.Alias"><avatar data-toggle="tooltip" title="@user.DisplayName - @user.TotalReplies.ToPrettyInt() @T[replies]" class="avatar avatar-sm" avatar="@user.Avatar" /></a>
                 }
             </div>
         }

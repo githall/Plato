@@ -49,7 +49,7 @@ namespace Plato.Discuss.Votes.Navigation
                                 Entity = entity,
                                 Reply = reply,
                                 Permission = Permissions.VoteTopicReplies,
-                                ApiUrl = "api/discuss/vote/post"
+                                ApiUrl = builder.ActionContext.HttpContext.Request.PathBase + "/api/discuss/vote/post"
                             }
                         })                    
                 );

@@ -1,5 +1,6 @@
-﻿using System.Runtime.Serialization;
-
+﻿using System;
+using System.Runtime.Serialization;
+using Microsoft.AspNetCore.Routing;
 
 namespace PlatoCore.Models.Users
 {
@@ -7,40 +8,56 @@ namespace PlatoCore.Models.Users
     public class UserAvatar
     {
 
+        private readonly ISimpleUser _user;
+
         [DataMember(Name = "url")]
-        public string Url { get; }
+        public string Url { get; set; }
 
-        public bool HasAvatar { get; }
+        [IgnoreDataMember]
+        public RouteValueDictionary DefaultRoute {
+            get
+            {
+                if (_user == null)
+                {
+                    throw new ArgumentNullException(nameof(_user));
+                }
 
-        public UserAvatar()
-        {
+                return new RouteValueDictionary()
+                {
+                    ["area"] = "Plato.Users",
+                    ["controller"] = "Letter",
+                    ["action"] = "Get",
+                    ["letter"] = _user.DisplayName != null
+                        ? _user.DisplayName.ToLower().Substring(0, 1)
+                        : "-",
+                    ["color"] = _user.PhotoColor
+                };
+
+            }
         }
+
+        [IgnoreDataMember]
+        public bool HasAvatar { get; }
 
         public UserAvatar(ISimpleUser user)
         {
 
-            if (user.Id <= 0)
+            _user = user;
+
+            if (_user.Id <= 0)
             {
-                Url = "/images/photo.png";
-                return;
+                Url = "/images/photo.png";            
             }
 
             // If we have a photo Url use that
-            if (!string.IsNullOrEmpty(user.PhotoUrl))
+            if (!string.IsNullOrEmpty(_user.PhotoUrl))
             {
-                Url = user.PhotoUrl;
-                HasAvatar = true;
-                return;
+                Url = _user.PhotoUrl;             
+                HasAvatar = true;               
             }
-
-            var letter = user.DisplayName != null 
-                ? user.DisplayName.ToLower().Substring(0, 1) 
-                : "-";
-
-            // Else fallback to our letter service
-            Url = $"/u/l/{letter}/{user.PhotoColor}";
 
         }
 
     }
+
 }

@@ -6514,7 +6514,7 @@ $(function (win, doc, $) {
                         // add to stack
                         methods.callers.push($caller);
 
-                        // Add optional Css
+                        // Add optional CSS
                         methods._addCss($caller);
 
                         // Load content

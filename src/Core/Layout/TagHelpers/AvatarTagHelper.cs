@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Razor.TagHelpers;
-using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Models.Users;
 
@@ -15,28 +14,15 @@ namespace PlatoCore.Layout.TagHelpers
     public class AvatarTagHelper : TagHelper
     {
 
-        private const string AreaAttributeName = "Area";
-        private const string ControllerAttributeName = "Controller";
-        private const string ActionAttributeName = "Action";
-        private const string IdAttributeName = "Id";
+        [HtmlAttributeName("avatar")]
+        public UserAvatar Avatar { get; set; }
 
-        public const string Area = "Plato.Users";
-        public const string Controller = "Photo";
-        public const string Action = "Serve";
-        
-        public int UserId { get; set; }
-
-        [HtmlAttributeName("url")]
-        public string Url { get; set; }
-
-        public ISimpleUser User { get; set; } 
-
-        private readonly IUrlHelper _urlHelper; 
+        private readonly IUrlHelper _urlHelper;
 
         public AvatarTagHelper(                      
             IActionContextAccessor actionContextAccesor,
             IUrlHelperFactory urlHelperFactory)
-        {       
+        {
             _urlHelper = urlHelperFactory.GetUrlHelper(actionContextAccesor.ActionContext);
         }
 
@@ -48,30 +34,33 @@ namespace PlatoCore.Layout.TagHelpers
             output.Attributes.Add("role", "avatar");
 
             var img = new TagBuilder("span");
-            if (!string.IsNullOrEmpty(Url))
+
+            if (Avatar != null)
             {
-                img.Attributes.Add("style", $"background-image: url('{Url}');");
+
+                if (!string.IsNullOrEmpty(Avatar.Url))
+                {
+                    img.Attributes.Add("style", $"background-image: url('{Avatar.Url}');");
+                }
+                else
+                {
+
+                    var url = _urlHelper.RouteUrl(new UrlRouteContext
+                    {
+                        Values = Avatar.DefaultRoute
+                    });
+
+                    img.Attributes.Add("style", $"background-image: url('{url}');");
+
+                }
+
             }
             else
             {
-
-                var url = _urlHelper.RouteUrl(new UrlRouteContext
-                {
-                    Values = new RouteValueDictionary()
-                    {
-                        {AreaAttributeName, Area},
-                        {ControllerAttributeName, Controller},
-                        {ActionAttributeName, Action},
-                        {IdAttributeName, UserId}
-                    }
-                });
-
-                img.Attributes.Add("style", $"background-image: url('{url}');");
-
+                img.Attributes.Add("style", $"background-image: url('/images/photo.png');");
             }
 
             output.Content.SetHtmlContent(img.ToHtmlString());
-
             return Task.CompletedTask;
 
         }

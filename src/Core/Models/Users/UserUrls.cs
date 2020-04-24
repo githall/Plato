@@ -1,24 +1,22 @@
-﻿using System.Runtime.Serialization;
+﻿using Microsoft.AspNetCore.Routing;
 
 namespace PlatoCore.Models.Users
 {
     public class UserUrls
     {
-        
-        [DataMember(Name = "profileUrl")]
-        public string ProfileUrl { get; }
-        
-        [DataMember(Name = "getProfileUrl")]
-        public string GetProfileUrl { get; }
 
-        public UserUrls()
-        {
-        }
+        public RouteValueDictionary GetProfileRoute { get; }
 
         public UserUrls(ISimpleUser user)
-        {
-            this.ProfileUrl = $"u/{user.Id}/{user.Alias}";
-            this.GetProfileUrl = $"u/get/{user.Id}/{user.Alias}";
+        {      
+            GetProfileRoute = new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Users",
+                ["controller"] = "Home",
+                ["action"] = "GetUser",
+                ["opts.id"] = user.Id,
+                ["opts.alias"] = user.Alias
+            };
         }
 
     }

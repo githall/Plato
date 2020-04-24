@@ -127,7 +127,7 @@ $(function (win, doc, $) {
                 if ($caller.attr("data-rating-url") && $caller.attr("data-rating-url") !== "") {
                     return $caller.attr("data-rating-url");
                 }
-                return "api/ratings/rate/post";
+                return win.$.Plato.defaults.pathBase + '/api/ratings/rate/post';
             },
             getEntityId: function($caller) {
                 var entityId = 0;

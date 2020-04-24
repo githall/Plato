@@ -3,11 +3,11 @@
 <div class="list-left reply-left">
     @if (this.CurrentUser != null)
     {
-        <avatar data-toggle="tooltip" title="@this.CurrentUser.DisplayName" class="avatar" url="@this.CurrentUser.Avatar.Url" />
+        <avatar data-toggle="tooltip" title="@this.CurrentUser.DisplayName" class="avatar" avatar="@this.CurrentUser?.Avatar" />
     }
     else
     {
-        <avatar data-toggle="tooltip" title="@T["Anonymous"]" class="avatar" url="/images/photo.png" user-id="0"/>
+        <avatar data-toggle="tooltip" title="@T["Anonymous"]" class="avatar" />
     }
 </div>
 <div class="list-body reply-body">

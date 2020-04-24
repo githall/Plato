@@ -4,6 +4,10 @@
     public class SimpleUser : ISimpleUser
     {
 
+        private UserAvatar _avatar;
+        private UserUrls _urls;
+        private UserCss _css;
+
         public int Id { get; set; }
 
         public string UserName { get; set; }
@@ -28,11 +32,41 @@
 
         public bool IsBanned { get; set; }
 
-        public UserAvatar Avatar => new UserAvatar(this);
+        public UserAvatar Avatar
+        {
+            get
+            {
+                if (_avatar == null)
+                {
+                    _avatar = new UserAvatar(this);
+                }
+                return _avatar;
+            }
+        }
 
-        public UserUrls Urls => new UserUrls(this);
+        public UserUrls Urls
+        {
+            get
+            {
+                if (_urls == null)
+                {
+                    _urls = new UserUrls(this);
+                }
+                return _urls;
+            }
+        }
 
-        public UserCss Css => new UserCss(this);
+        public UserCss Css
+        {
+            get
+            {
+                if (_css == null)
+                {
+                    _css = new UserCss(this);
+                }
+                return _css;
+            }
+        }
 
         public SimpleUser()
         {

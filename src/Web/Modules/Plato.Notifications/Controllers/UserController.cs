@@ -89,7 +89,17 @@ namespace Plato.Notifications.Controllers
                         ["action"] = "Display",
                         ["opts.id"] = userNotification.From.Id,
                         ["opts.alias"] = userNotification.From.Alias
-                    });              
+                    });
+
+                    if (string.IsNullOrEmpty(userNotification.To.Avatar.Url))
+                    {
+                        userNotification.To.Avatar.Url = _contextFacade.GetRouteUrl(userNotification.To.Avatar.DefaultRoute);
+                    }
+
+                    if (string.IsNullOrEmpty(userNotification.From.Avatar.Url))
+                    {
+                        userNotification.From.Avatar.Url = _contextFacade.GetRouteUrl(userNotification.From.Avatar.DefaultRoute);
+                    }
 
                     results.Data.Add(new UserNotificationApiResult()
                     {
