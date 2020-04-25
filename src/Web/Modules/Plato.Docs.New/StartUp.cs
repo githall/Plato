@@ -1,11 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Docs.New.ViewAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.New
 {
@@ -23,18 +20,12 @@ namespace Plato.Docs.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, DocListItemViewAdapter>();
+
             //services.AddScoped<IViewAdapterProvider, DocViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, DocListViewAdapter>();            
             //services.AddScoped<IViewAdapterProvider, DocCommentListViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, DocCommentListItemViewAdapter>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

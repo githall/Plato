@@ -1,5 +1,5 @@
 ﻿using System;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace PlatoCore.Hosting.Web
 {

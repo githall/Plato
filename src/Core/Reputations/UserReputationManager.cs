@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Reputations;
 using PlatoCore.Reputations.Abstractions;

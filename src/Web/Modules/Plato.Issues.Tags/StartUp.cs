@@ -13,7 +13,6 @@ using Plato.Issues.Tags.ViewProviders;
 using PlatoCore.Badges.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
@@ -29,6 +28,7 @@ using Plato.Tags.Stores;
 using Plato.Tags.Subscribers;
 using Plato.Entities.Tags.Subscribers;
 using PlatoCore.Messaging.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Issues.Tags
 {
@@ -116,7 +116,7 @@ namespace Plato.Issues.Tags
                 template: "issues/tag/{opts.tagId:int}/{opts.alias}/{pager.offset:int?}",
                 defaults: new { controller = "Home", action = "Display" }
             );
-            
+
         }
 
     }

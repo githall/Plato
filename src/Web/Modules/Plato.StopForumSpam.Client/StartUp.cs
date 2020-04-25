@@ -1,18 +1,11 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Hosting.Abstractions;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.StopForumSpam.Client.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.StopForumSpam.Client
 {
     public class Startup : StartupBase
     {
-        
-        public Startup()
-        {
-        }
 
         public override void ConfigureServices(IServiceCollection services)
         {
@@ -21,11 +14,6 @@ namespace Plato.StopForumSpam.Client
             services.AddScoped<ISpamProxy, SpamProxy>();
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
     }
+
 }

@@ -6,7 +6,6 @@ using Plato.Issues.Models;
 using Plato.Entities.Stores;
 using Plato.Files.Stores;
 using Plato.Files.Models;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Files.Stores;
 using Plato.Entities.Files.Models;
 using PlatoCore.Layout.ViewProviders.Abstractions;
@@ -15,6 +14,7 @@ using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Users;
 using Microsoft.AspNetCore.Routing;
 using Plato.Files.Services;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.Files.ViewProviders
 {

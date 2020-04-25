@@ -1,16 +1,13 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Docs.Mentions.Notifications;
 using Plato.Docs.Mentions.NotificationTypes;
 using Plato.Docs.Mentions.Subscribers;
 using Plato.Docs.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Notifications;
 using PlatoCore.Notifications.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.Mentions
 {
@@ -44,14 +41,6 @@ namespace Plato.Docs.Mentions
             services.AddScoped<INotificationProvider<Doc>, NewEntityMentionWeb>();
             services.AddScoped<INotificationProvider<DocComment>, NewReplyMentionWeb>();
             services.AddScoped<INotificationProvider<DocComment>, NewReplyMentionEmail>();
-
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
 
         }
 

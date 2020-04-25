@@ -47,7 +47,7 @@ namespace PlatoCore.Shell
                 options.TablePrefix = settings.TablePrefix;
             });
 
-            // Register all tenant specific services
+            // Register all services that require tenant level isolation
             tenantServiceCollection.AddPlatoTenant();
 
             // Add StartUps from modules defined in blueprint descriptor as services

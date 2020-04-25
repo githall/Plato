@@ -18,7 +18,6 @@ using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
@@ -27,6 +26,7 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Net.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Controllers
 {

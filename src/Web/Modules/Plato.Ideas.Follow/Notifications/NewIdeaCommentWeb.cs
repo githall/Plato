@@ -8,9 +8,9 @@ using Plato.Ideas.Follow.NotificationTypes;
 using Plato.Ideas.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Follow.Notifications
 {
@@ -18,12 +18,10 @@ namespace Plato.Ideas.Follow.Notifications
     public class NewIdeaCommentWeb : INotificationProvider<IdeaComment>
     {
 
-
-  
         private readonly IUserNotificationsManager<UserNotification> _userNotificationManager;
         private readonly ICapturedRouterUrlHelper _capturedRouterUrlHelper;
         private readonly IEntityStore<Idea> _entityStore;
-     
+
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }

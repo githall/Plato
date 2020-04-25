@@ -6,7 +6,7 @@ using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 
 namespace Plato.Entities.Services

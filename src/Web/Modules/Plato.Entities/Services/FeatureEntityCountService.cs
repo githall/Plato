@@ -5,7 +5,7 @@ using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Entities.Services
 {

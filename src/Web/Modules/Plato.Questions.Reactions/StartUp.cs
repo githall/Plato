@@ -1,12 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Questions.Reactions.Handlers;
 using Plato.Questions.Reactions.Navigation;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Questions.Reactions.Badges;
 using Plato.Questions.Reactions.Tasks;
 using Plato.Entities.Reactions.Models;
@@ -16,6 +12,7 @@ using PlatoCore.Models.Badges;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Tasks.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Questions.Reactions
 {
@@ -52,13 +49,6 @@ namespace Plato.Questions.Reactions
             // Reaction providers
             services.AddScoped<IReactionsProvider<Reaction>, Reactions>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

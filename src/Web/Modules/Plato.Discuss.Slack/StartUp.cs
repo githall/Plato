@@ -1,12 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
-using Plato.Discuss.Models;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Discuss.Slack.Subscribers;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.Slack
 {
@@ -28,11 +24,6 @@ namespace Plato.Discuss.Slack
 
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
     }
+
 }

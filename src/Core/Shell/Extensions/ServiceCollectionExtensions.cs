@@ -3,8 +3,9 @@ using PlatoCore.Cache.Extensions;
 using PlatoCore.Features.Extensions;
 using PlatoCore.FileSystem;
 using PlatoCore.FileSystem.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Hosting.Web;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Extensions;
 using PlatoCore.Navigation.Extensions;
 using PlatoCore.Net.Extensions;
@@ -72,13 +73,13 @@ namespace PlatoCore.Shell.Extensions
             // HTTP
             services.AddShellHttp();
 
-            // Message broker
+            // Broker
             services.AddShellMessaging();
 
             // Reputation
             services.AddShellReputations();
 
-            // Add tasks
+            // Tasks
             services.AddShellTasks();
 
             // Caching

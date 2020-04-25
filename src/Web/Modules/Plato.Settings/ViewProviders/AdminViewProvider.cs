@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using PlatoCore.Abstractions.Routing;
 using PlatoCore.Abstractions.Settings;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Models.Shell;
@@ -15,6 +14,7 @@ using PlatoCore.Stores.Abstractions.Settings;
 using PlatoCore.Theming.Abstractions;
 using Plato.Settings.Models;
 using Plato.Settings.ViewModels;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Settings.ViewProviders
 {

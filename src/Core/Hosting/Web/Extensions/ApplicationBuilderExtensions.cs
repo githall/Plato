@@ -12,8 +12,9 @@ using Microsoft.Extensions.Hosting;
 using PlatoCore.Hosting.Web.Middleware;
 using PlatoCore.Hosting.Web.Routing;
 using PlatoCore.Modules.FileProviders;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using Microsoft.AspNetCore.Builder.Extensions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace PlatoCore.Hosting.Web.Extensions
 {

@@ -8,9 +8,9 @@ using Plato.Issues.Follow.NotificationTypes;
 using Plato.Issues.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.Follow.Notifications
 {

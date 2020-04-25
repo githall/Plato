@@ -5,9 +5,9 @@ using Plato.Issues.Models;
 using Plato.Entities.Stores;
 using Plato.Follows.Services;
 using Plato.Follows.Stores;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Issues.Follow.ViewProviders
 {

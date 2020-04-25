@@ -12,7 +12,6 @@ using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Abstractions.Settings;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Models.Users;
 using PlatoCore.Security.Abstractions;
@@ -22,6 +21,7 @@ using Plato.StopForumSpam.Client.Services;
 using Plato.StopForumSpam.Models;
 using Plato.StopForumSpam.Services;
 using Plato.StopForumSpam.Stores;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.StopForumSpam.Controllers
 {

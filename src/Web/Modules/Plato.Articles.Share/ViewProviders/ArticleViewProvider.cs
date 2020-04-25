@@ -2,7 +2,7 @@
 using Microsoft.AspNetCore.Routing;
 using Plato.Articles.Models;
 using Plato.Articles.Share.ViewModels;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Articles.Share.ViewProviders

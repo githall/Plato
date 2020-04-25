@@ -10,7 +10,6 @@ using Plato.Discuss.Labels.Models;
 using Plato.Discuss.Models;
 using Plato.Follows.Services;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -19,6 +18,7 @@ using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Discuss.Labels.Follow.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.Labels.Follow
 {
@@ -63,13 +63,6 @@ namespace Plato.Discuss.Labels.Follow
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
@@ -18,6 +17,7 @@ using Plato.Site.Demo.Stores;
 using Plato.Site.Demo.ViewProviders;
 using PlatoCore.Models.Users;
 using Plato.Site.Demo.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Site.Demo
 {

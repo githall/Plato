@@ -10,8 +10,10 @@ using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Demo
 {
+
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)
@@ -21,9 +23,6 @@ namespace Plato.Demo
 
         public override void ConfigureServices(IServiceCollection services)
         {
-
-
-            // tenant
 
             // Set-up event handler
             services.AddScoped<ISetUpEventHandler, SetUpEventHandler>();

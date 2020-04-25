@@ -1,18 +1,14 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Entities.Models;
 using Plato.Entities.Tags.Search;
-using Plato.Entities.Tags.Subscribers;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Entities.Tags
 {
+
     public class Startup : StartupBase
     {
         private readonly IShellSettings _shellSettings;
@@ -33,13 +29,6 @@ namespace Plato.Entities.Tags
             services.AddScoped<IFederatedQueryManager<FeatureEntityCount>, FederatedQueryManager<FeatureEntityCount>>();
             services.AddScoped<IFederatedQueryProvider<FeatureEntityCount>, FeatureEntityCountQueries<FeatureEntityCount>>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

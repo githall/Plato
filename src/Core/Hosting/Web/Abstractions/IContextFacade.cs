@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Models.Users;
 
-namespace PlatoCore.Hosting.Abstractions
+namespace PlatoCore.Hosting.Web.Abstractions
 {
     public interface IContextFacade
     {

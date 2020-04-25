@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Notifications;
@@ -20,6 +19,7 @@ using Plato.Ideas.StopForumSpam.Handlers;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Ideas.StopForumSpam.Navigation;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.StopForumSpam
 {

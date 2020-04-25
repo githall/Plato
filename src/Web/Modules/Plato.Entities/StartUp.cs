@@ -6,7 +6,6 @@ using Plato.Entities.ActionFilters;
 using Plato.Core.Models;
 using Plato.Entities.Assets;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
 using Plato.Entities.Handlers;
 using Plato.Entities.Models;
@@ -30,6 +29,7 @@ using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Entities
 {
@@ -162,5 +162,7 @@ namespace Plato.Entities
             );
 
         }
+
     }
+
 }

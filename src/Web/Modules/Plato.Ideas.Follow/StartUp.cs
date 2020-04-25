@@ -11,7 +11,6 @@ using Plato.Ideas.Follow.ViewProviders;
 using Plato.Ideas.Models;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -19,6 +18,7 @@ using PlatoCore.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Follow
 {

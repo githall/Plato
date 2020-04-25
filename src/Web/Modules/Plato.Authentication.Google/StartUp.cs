@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Hosting.Abstractions;
 using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
@@ -8,9 +7,11 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
 using Plato.Authentication.Google.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Authentication.Google
 {
+
     public class Startup : StartupBase
     {
 

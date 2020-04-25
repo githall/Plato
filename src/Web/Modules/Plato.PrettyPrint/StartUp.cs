@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Assets.Abstractions;
 using Plato.PrettyPrint.Assets;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.PrettyPrint
 {

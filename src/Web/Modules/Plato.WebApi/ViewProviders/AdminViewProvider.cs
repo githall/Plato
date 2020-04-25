@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using PlatoCore.Abstractions.Settings;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Stores.Abstractions.Settings;

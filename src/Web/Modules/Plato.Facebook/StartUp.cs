@@ -10,11 +10,11 @@ using Plato.Facebook.Navigation;
 using Plato.Facebook.Stores;
 using Plato.Facebook.ViewProviders;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Facebook
 {

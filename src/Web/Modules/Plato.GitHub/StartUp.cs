@@ -10,21 +10,17 @@ using Plato.GitHub.Navigation;
 using Plato.GitHub.Stores;
 using Plato.GitHub.ViewProviders;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.GitHub
 {
 
     public class Startup : StartupBase
     {
-
-        public Startup()
-        {
-        }
 
         public override void ConfigureServices(IServiceCollection services)
         {

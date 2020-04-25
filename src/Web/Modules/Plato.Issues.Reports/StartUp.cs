@@ -1,13 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Issues.Models;
 using Plato.Issues.Reports.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Issues.Reports
 {
@@ -25,14 +22,8 @@ namespace Plato.Issues.Reports
             // View providers
             services.AddScoped<IViewProviderManager<AdminIndex>, ViewProviderManager<AdminIndex>>();
             services.AddScoped<IViewProvider<AdminIndex>, AdminIndexViewProvider>();
-
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
     }
+
 }

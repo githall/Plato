@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Docs.Models;
 using PlatoCore.Layout.ViewProviders;
@@ -13,6 +12,7 @@ using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Docs.Files.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.Files
 {
@@ -40,7 +40,7 @@ namespace Plato.Docs.Files
             services.AddScoped<IViewProviderManager<Doc>, ViewProviderManager<Doc>>();
             services.AddScoped<IViewProvider<Doc>, DocViewProvider>();
 
-            // Permissionss
+            // Permissions
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
         }

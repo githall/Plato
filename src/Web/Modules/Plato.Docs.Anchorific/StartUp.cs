@@ -1,13 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Docs.Models;
 using Plato.Docs.Anchorific.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.Anchorific
 {
@@ -28,13 +25,6 @@ namespace Plato.Docs.Anchorific
             services.AddScoped<IViewProviderManager<Doc>, ViewProviderManager<Doc>>();
             services.AddScoped<IViewProvider<Doc>, DocViewProvider>();           
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

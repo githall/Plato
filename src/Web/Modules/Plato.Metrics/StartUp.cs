@@ -1,19 +1,15 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Data.Migrations.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ActionFilters;
-using PlatoCore.Repositories.Metrics;
 using Plato.Metrics.ActionFilters;
 using Plato.Metrics.Handlers;
 using Plato.Metrics.Models;
 using Plato.Metrics.Repositories;
 using Plato.Metrics.Services;
 using Plato.Metrics.Stores;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Metrics
 {
@@ -49,15 +45,6 @@ namespace Plato.Metrics
             // Migrations
             services.AddSingleton<IMigrationProvider, Migrations>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-
-       
         }
 
     }

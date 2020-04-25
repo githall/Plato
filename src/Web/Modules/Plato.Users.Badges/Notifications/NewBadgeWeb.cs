@@ -5,11 +5,11 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Models.Badges;
 using PlatoCore.Badges.NotificationTypes;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Users.Badges.Notifications
 {

@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ViewProviders.Abstractions;
@@ -16,10 +15,10 @@ using PlatoCore.Models.Users;
 using Plato.Users.ViewModels;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Navigation.Abstractions;
-using PlatoCore.Repositories.Users;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Users;
 using Plato.Users.Services;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Users.Controllers
 {

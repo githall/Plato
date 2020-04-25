@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
@@ -16,6 +15,7 @@ using Plato.Ideas.Labels.Navigation;
 using Plato.Ideas.Labels.Models;
 using Plato.Ideas.Labels.ViewAdapters;
 using Plato.Ideas.Labels.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Labels
 {

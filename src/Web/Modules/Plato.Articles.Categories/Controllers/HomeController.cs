@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 using Plato.Categories.Stores;
 using Plato.Articles.Categories.Models;
 using Plato.Articles.Models;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;

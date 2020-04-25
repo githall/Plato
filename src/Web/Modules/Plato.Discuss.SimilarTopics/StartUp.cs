@@ -1,13 +1,10 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Discuss.SimilarTopics.ViewProviders;
 using Plato.Discuss.Models;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.SimilarTopics
 {
@@ -29,11 +26,6 @@ namespace Plato.Discuss.SimilarTopics
             
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
     }
+
 }

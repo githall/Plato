@@ -5,12 +5,12 @@ using System.Collections.Generic;
 using PlatoCore.Abstractions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Features;
 using Plato.Labels.Models;
 using Plato.Labels.Services;
 using Plato.Site.Demo.Models;
 using Plato.Users.Services;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Site.Demo.Services
 {

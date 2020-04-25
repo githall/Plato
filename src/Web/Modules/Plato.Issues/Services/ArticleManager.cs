@@ -3,7 +3,7 @@ using Plato.Issues.Models;
 using Plato.Entities.Services;
 using PlatoCore.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.Services
 {

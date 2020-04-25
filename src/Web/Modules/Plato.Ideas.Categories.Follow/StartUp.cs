@@ -1,13 +1,9 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Ideas.Categories.Follow.Notifications;
 using Plato.Ideas.Categories.Follow.NotificationTypes;
 using Plato.Ideas.Categories.Follow.Subscribers;
 using Plato.Ideas.Categories.Follow.ViewProviders;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -19,9 +15,11 @@ using Plato.Ideas.Categories.Models;
 using PlatoCore.Security.Abstractions;
 using Plato.Ideas.Categories.Follow.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Categories.Follow
 {
+
     public class Startup : StartupBase
     {
         private readonly IShellSettings _shellSettings;
@@ -62,13 +60,6 @@ namespace Plato.Ideas.Categories.Follow
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

@@ -6,7 +6,6 @@ using Microsoft.Extensions.Options;
 using Plato.Slack.Handlers;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Slack.Stores;
 using Plato.Slack.ViewProviders;
 using Plato.Slack.Models;
@@ -17,6 +16,7 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Security.Abstractions;
 using Plato.Slack.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Slack
 {
@@ -71,5 +71,7 @@ namespace Plato.Slack
             );
 
         }
+
     }
+
 }

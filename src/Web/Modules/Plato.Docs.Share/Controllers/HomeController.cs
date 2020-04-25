@@ -6,7 +6,7 @@ using Plato.Docs.Models;
 using Plato.Docs.Share.ViewModels;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 
 namespace Plato.Docs.Share.Controllers

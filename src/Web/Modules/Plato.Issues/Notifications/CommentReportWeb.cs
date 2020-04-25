@@ -6,13 +6,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Issues.Models;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using Plato.Issues.NotificationTypes;
 using Plato.Entities;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.Notifications
 {

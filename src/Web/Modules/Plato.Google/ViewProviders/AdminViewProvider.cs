@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 using Plato.Google.Models;
 using Plato.Google.Stores;
 using Plato.Google.ViewModels;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Security.Abstractions.Encryption;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Google.ViewProviders
 {

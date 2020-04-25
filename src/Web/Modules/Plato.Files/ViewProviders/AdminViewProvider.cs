@@ -5,7 +5,7 @@ using Plato.Files.Models;
 using Plato.Files.Services;
 using Plato.Files.Stores;
 using Plato.Files.ViewModels;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Files.ViewProviders

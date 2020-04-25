@@ -3,7 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Plato.Articles.Categories.Models;
 using Plato.Articles.Categories.ViewModels;
 using Plato.Categories.ViewModels;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Shell.Abstractions;
 
 namespace Plato.Articles.Categories.ViewComponents

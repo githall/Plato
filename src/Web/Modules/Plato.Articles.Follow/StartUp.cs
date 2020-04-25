@@ -11,7 +11,6 @@ using Plato.Articles.Follow.ViewProviders;
 using Plato.Articles.Models;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -19,6 +18,7 @@ using PlatoCore.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Articles.Follow
 {
@@ -42,7 +42,7 @@ namespace Plato.Articles.Follow
             services.AddScoped<IViewProvider<Article>, ArticleViewProvider>();
             services.AddScoped<IViewProviderManager<Comment>, ViewProviderManager<Comment>>();
             services.AddScoped<IViewProvider<Comment>, CommentViewProvider>();
-            
+
             // Follow subscribers
             services.AddScoped<IBrokerSubscriber, FollowSubscriber>();
             services.AddScoped<IBrokerSubscriber, EntityReplySubscriber<Comment>>();
@@ -60,7 +60,7 @@ namespace Plato.Articles.Follow
             services.AddScoped<INotificationProvider<Article>, UpdatedArticleWeb>();
             services.AddScoped<INotificationProvider<Comment>, NewCommentEmail>();
             services.AddScoped<INotificationProvider<Comment>, NewCommentWeb>();
-        
+
             // Query adapters 
             services.AddScoped<IQueryAdapterProvider<Article>, ArticleQueryAdapter>();
 

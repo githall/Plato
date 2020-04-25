@@ -8,10 +8,10 @@ using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 using Plato.Tenants.Models;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Tenants.Services
 {

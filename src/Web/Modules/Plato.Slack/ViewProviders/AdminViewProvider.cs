@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Security.Abstractions.Encryption;
 using Plato.Slack.Models;
 using Plato.Slack.Stores;
 using Plato.Slack.ViewModels;
+using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Security.Abstractions.Encryption;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Slack.ViewProviders
 {

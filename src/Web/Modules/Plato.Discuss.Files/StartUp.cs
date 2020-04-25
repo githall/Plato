@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Discuss.Models;
 using PlatoCore.Layout.ViewProviders;
@@ -13,6 +12,7 @@ using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Discuss.Files.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.Files
 {
@@ -40,7 +40,7 @@ namespace Plato.Discuss.Files
             services.AddScoped<IViewProviderManager<Topic>, ViewProviderManager<Topic>>();
             services.AddScoped<IViewProvider<Topic>, TopicViewProvider>();
 
-            // Permissionss
+            // Permissions
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
         }

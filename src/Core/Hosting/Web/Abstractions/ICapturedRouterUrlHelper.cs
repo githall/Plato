@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 
-namespace PlatoCore.Hosting.Abstractions
+namespace PlatoCore.Hosting.Web.Abstractions
 {
     public interface ICapturedRouterUrlHelper
     {

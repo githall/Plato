@@ -6,7 +6,6 @@ using Plato.Ideas.Reactions.Handlers;
 using Plato.Ideas.Reactions.Navigation;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Ideas.Reactions.Badges;
 using Plato.Ideas.Reactions.Tasks;
 using Plato.Entities.Reactions.Models;
@@ -16,6 +15,7 @@ using PlatoCore.Models.Badges;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Tasks.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Reactions
 {

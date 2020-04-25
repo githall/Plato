@@ -10,7 +10,7 @@ using Plato.Discuss.Categories.ViewModels;
 using Plato.Discuss.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Discuss.Categories.ViewProviders

@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Notifications.Abstractions;
 using Plato.Notifications.Models;
 using Plato.Notifications.Stores;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
 using Plato.WebApi.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Notifications.Controllers
 {

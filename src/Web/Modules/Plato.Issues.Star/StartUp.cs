@@ -1,10 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -15,6 +11,7 @@ using Plato.Issues.Star.Handlers;
 using Plato.Issues.Star.QueryAdapters;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Issues.Star
 {
@@ -46,13 +43,6 @@ namespace Plato.Issues.Star
             // Query adapters 
             services.AddScoped<IQueryAdapterProvider<Issue>, IssueQueryAdapter>();
             
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

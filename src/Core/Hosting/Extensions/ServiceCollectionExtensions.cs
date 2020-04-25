@@ -5,7 +5,7 @@ namespace PlatoCore.Hosting.Extensions
 {
     public static class ServiceCollectionExtensions
     {
- 
+
         public static IServiceCollection AddPlatoDefaultHost(
             this IServiceCollection services)
         {
@@ -13,7 +13,6 @@ namespace PlatoCore.Hosting.Extensions
             services.AddSingleton<IPlatoHost>(sp => sp.GetRequiredService<DefaultPlatoHost>());
             return services;
         }
-
 
     }
 

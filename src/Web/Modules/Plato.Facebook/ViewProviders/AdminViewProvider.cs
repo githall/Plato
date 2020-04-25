@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 using Plato.Facebook.Models;
 using Plato.Facebook.Stores;
 using Plato.Facebook.ViewModels;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Abstractions.Settings;
 using Microsoft.Extensions.Options;
 using PlatoCore.Security.Abstractions.Encryption;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Facebook.ViewProviders
 {
@@ -20,7 +20,7 @@ namespace Plato.Facebook.ViewProviders
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IEncrypter _encrypter;
-        private readonly IPlatoHost _platoHost;
+        private readonly PlatoCore.Hosting.Abstractions.IPlatoHost _platoHost;
 
         private readonly PlatoOptions _platoOptions;
 

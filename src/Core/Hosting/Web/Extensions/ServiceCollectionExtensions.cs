@@ -11,26 +11,18 @@ using Microsoft.Extensions.Options;
 using PlatoCore.Data.Extensions;
 using PlatoCore.Hosting.Extensions;
 using PlatoCore.Modules.Extensions;
-using PlatoCore.Repositories.Extensions;
 using PlatoCore.Shell.Extensions;
-using PlatoCore.Stores.Extensions;
 using PlatoCore.Cache.Extensions;
-using PlatoCore.Features.Extensions;
 using PlatoCore.Layout.Extensions;
 using PlatoCore.Security.Extensions;
 using PlatoCore.Logging.Extensions;
-using PlatoCore.Messaging.Extensions;
 using PlatoCore.Assets.Extensions;
 using PlatoCore.Badges.Extensions;
 using PlatoCore.Drawing.Extensions;
 using PlatoCore.Localization.Extensions;
-using PlatoCore.Navigation.Extensions;
-using PlatoCore.Net.Extensions;
 using PlatoCore.Notifications.Extensions;
-using PlatoCore.Reputations.Extensions;
 using PlatoCore.Scripting.Extensions;
 using PlatoCore.Search.Extensions;
-using PlatoCore.Tasks.Extensions;
 using PlatoCore.Text.Extensions;
 using PlatoCore.Theming.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -39,18 +31,13 @@ using PlatoCore.Abstractions.Routing;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.FileSystem;
 using PlatoCore.FileSystem.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Hosting.Web.Configuration;
 using PlatoCore.Hosting.Web.Routing;
 using PlatoCore.Layout.LocationExpanders;
 using PlatoCore.Layout.ViewFeatures;
 using PlatoCore.Modules.FileProviders;
-using PlatoCore.Models.Shell;
-using PlatoCore.Stores.Abstractions.Shell;
-using PlatoCore.Features.Abstractions;
-using PlatoCore.Features;
-using PlatoCore.Stores.Shell;
-using Microsoft.AspNetCore.Routing;
+using PlatoCore.Hosting.Abstractions;
 
 namespace PlatoCore.Hosting.Web.Extensions
 {
@@ -85,7 +72,7 @@ namespace PlatoCore.Hosting.Web.Extensions
                 tenantServices.AddOptions();
                 tenantServices.AddLocalization(options => options.ResourcesPath = "Resources");
 
-                // Tenant services
+                // Tenant core services
                 // --------
 
                 tenantServices.AddSingleton<IPlatoHostEnvironment, WebHostEnvironment>();

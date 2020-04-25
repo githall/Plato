@@ -7,13 +7,13 @@ using Microsoft.Extensions.Localization;
 using Plato.Entities.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Search.Models;
 using Plato.Search.Stores;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Search.Controllers
 {

@@ -12,7 +12,7 @@ using Plato.Ideas.Categories.Models;
 using Plato.Ideas.Categories.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Ideas.Categories.ViewProviders

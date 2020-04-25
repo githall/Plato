@@ -2,7 +2,7 @@
 using Plato.Docs.Models;
 using Plato.Stars.Stores;
 using Plato.Stars.ViewModels;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Docs.Star.ViewProviders
@@ -15,7 +15,7 @@ namespace Plato.Docs.Star.ViewProviders
         
         private readonly IStarStore<Stars.Models.Star> _starStore;
         private readonly IContextFacade _contextFacade;
- 
+
         public DocViewProvider(
             IStarStore<Stars.Models.Star> starStore,
             IContextFacade contextFacade)

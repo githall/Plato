@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Data.Migrations.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Models.Roles;
 using PlatoCore.Models.Users;
@@ -30,6 +29,7 @@ using Plato.Users.Navigation;
 using Plato.Users.Services;
 using Plato.Users.Subscribers;
 using PlatoCore.Abstractions.Extensions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Users
 {

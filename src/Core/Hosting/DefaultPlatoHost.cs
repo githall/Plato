@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
-using PlatoCore.Tasks.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace PlatoCore.Hosting
 {

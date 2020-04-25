@@ -13,7 +13,7 @@ namespace PlatoCore.Cache.Extensions
         {
 
             // Same as services.AddMemoryCache();
-             services.Add(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
+            services.Add(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
 
             // Not implemented - Can be swapped out with real RedisCache
             // I.e. services.AddDistributedRedisCache(options => {});
@@ -23,7 +23,7 @@ namespace PlatoCore.Cache.Extensions
             services.AddSingleton<ICacheDependency, CacheDependency>();
 
             // A host level cache
-            services.AddSingleton<IPlatoCacheManager, SingletonCacheManager>();                 
+            services.AddSingleton<ICacheManager, SimpleCacheManager>();                 
 
             return services;
 
@@ -38,7 +38,7 @@ namespace PlatoCore.Cache.Extensions
             services.Add(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
 
             // Add cache manager
-            services.AddSingleton<ICacheManager, SingletonCacheManager>();
+            services.AddSingleton<ICacheManager, SimpleCacheManager>();
 
             return services;
         }

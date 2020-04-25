@@ -9,7 +9,7 @@ using Plato.Categories.Stores;
 using Plato.Discuss.Categories.Models;
 using Plato.Discuss.Models;
 using Plato.Categories.Extensions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;

@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Reports.FeatureViews.Navigation;
 using Plato.Reports.FeatureViews.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Reports.FeatureViews.Models;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Reports.FeatureViews
 {
@@ -31,7 +31,7 @@ namespace Plato.Reports.FeatureViews
             // Register report page views view providers
             services.AddScoped<IViewProviderManager<FeatureViewIndex>, ViewProviderManager<FeatureViewIndex>>();
             services.AddScoped<IViewProvider<FeatureViewIndex>, AdminViewProvider>();
-            
+
         }
 
         public override void Configure(
@@ -39,7 +39,7 @@ namespace Plato.Reports.FeatureViews
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-            
+
             // Page Views
             routes.MapAreaRoute(
                 name: "ReportsFeatureViews",

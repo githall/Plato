@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
@@ -17,6 +16,7 @@ using Plato.WebApi.Navigation;
 using Plato.WebApi.Services;
 using Plato.WebApi.ViewProviders;
 using PlatoCore.Net.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.WebApi
 {

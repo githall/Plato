@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Search.Abstractions;
@@ -15,6 +14,7 @@ using Plato.Labels.Repositories;
 using Plato.Labels.Services;
 using Plato.Labels.Stores;
 using Plato.Labels.Subscribers;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Labels
 {

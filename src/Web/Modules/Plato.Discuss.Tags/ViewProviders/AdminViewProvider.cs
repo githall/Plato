@@ -5,7 +5,7 @@ using Plato.Tags.Services;
 using Plato.Tags.ViewModels;
 using Plato.Discuss.Tags.Models;
 using Plato.Discuss.Tags.ViewModels;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Discuss.Tags.ViewProviders
 {

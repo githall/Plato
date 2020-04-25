@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Entities.Labels.Search;
 using Plato.Entities.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Entities.Labels
 {
@@ -29,13 +29,6 @@ namespace Plato.Entities.Labels
             services.AddScoped<IFederatedQueryManager<FeatureEntityCount>, FederatedQueryManager<FeatureEntityCount>>();
             services.AddScoped<IFederatedQueryProvider<FeatureEntityCount>, FeatureEntityCountQueries<FeatureEntityCount>>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

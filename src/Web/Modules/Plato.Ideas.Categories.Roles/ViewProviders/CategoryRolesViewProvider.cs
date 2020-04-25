@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Http;
 using Plato.Ideas.Categories.Models;
 using Plato.Categories.Models;
 using Plato.Categories.Services;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
 using Plato.Roles.ViewModels;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Categories.Roles.ViewProviders
 {

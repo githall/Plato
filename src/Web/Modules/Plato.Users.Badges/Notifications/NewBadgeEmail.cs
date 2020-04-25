@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions;
 using PlatoCore.Badges.NotificationTypes;
 using PlatoCore.Emails.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Localization.Abstractions.Models;
 using PlatoCore.Localization.Extensions;
@@ -16,6 +16,7 @@ using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Models.Badges;
 using PlatoCore.Models.Users;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Users.Badges.Notifications
 {

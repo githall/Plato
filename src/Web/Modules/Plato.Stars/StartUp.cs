@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Stars.Assets;
 using Plato.Stars.Handlers;
 using Plato.Stars.Models;
@@ -12,6 +11,7 @@ using Plato.Stars.Repositories;
 using Plato.Stars.Services;
 using Plato.Stars.Stores;
 using PlatoCore.Assets.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Stars
 {
@@ -36,13 +36,10 @@ namespace Plato.Stars
             // Data access
             services.AddScoped<IStarRepository<Star>, StarRepository>();
             services.AddScoped<IStarStore<Star>, StarStore>();
-            
+
             // Follow Type Manager
             services.AddScoped<IStarTypesManager, StarTypesManager>();
             
-            // Follow type providers
-            //services.AddScoped<IStarTypeProvider, DefaultStarTypes>();
-
             // Follow manager
             services.AddScoped<IStarManager<Star>, StarManager>();
             
@@ -62,5 +59,7 @@ namespace Plato.Stars
             );
 
         }
+
     }
+
 }

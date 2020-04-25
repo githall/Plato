@@ -1,17 +1,14 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Labels.Models;
 using Plato.Labels.Services;
-using Plato.Labels.Stores;
 using Plato.Labels.ViewModels;
 using Plato.WebApi.Controllers;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Labels.Controllers
 {

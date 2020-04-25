@@ -1,18 +1,15 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Docs.Drafts.Handlers;
 using Plato.Docs.Drafts.Navigation;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Docs.Drafts.ViewProviders;
 using Plato.Docs.Models;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.Drafts
 {
@@ -42,14 +39,6 @@ namespace Plato.Docs.Drafts
           
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
-
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
 
         }
 

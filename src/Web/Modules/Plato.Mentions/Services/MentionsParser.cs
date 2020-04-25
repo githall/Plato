@@ -4,14 +4,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Users;
 using PlatoCore.Text.Abstractions;
 
 namespace Plato.Mentions.Services
 {
-    
+
     public class MentionsParser : IMentionsParser
     {
 

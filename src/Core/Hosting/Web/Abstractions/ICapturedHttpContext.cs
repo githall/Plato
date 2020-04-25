@@ -1,7 +1,7 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 
-namespace PlatoCore.Hosting.Abstractions
+namespace PlatoCore.Hosting.Web.Abstractions
 {
 
     public interface ICapturedHttpContext

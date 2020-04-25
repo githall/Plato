@@ -3,7 +3,7 @@ using System.Threading.Tasks;
 using Plato.Entities.History.Models;
 using Plato.Entities.History.Stores;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 
 namespace Plato.Entities.History.Services

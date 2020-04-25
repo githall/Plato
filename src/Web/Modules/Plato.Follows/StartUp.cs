@@ -4,15 +4,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Follows.Assets;
 using Plato.Follows.Handlers;
-using Plato.Follows.Models;
 using Plato.Follows.Repositories;
 using Plato.Follows.Services;
 using Plato.Follows.Stores;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Data.Migrations.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Follows
 {
@@ -67,5 +66,7 @@ namespace Plato.Follows
             );
 
         }
+
     }
+
 }

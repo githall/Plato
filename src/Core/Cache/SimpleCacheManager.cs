@@ -10,18 +10,18 @@ using PlatoCore.Cache.Abstractions;
 namespace PlatoCore.Cache
 {
 
-    public class SingletonCacheManager : IPlatoCacheManager
+    public class SimpleCacheManager : ICacheManager
     {
 
         public static ConcurrentDictionary<CacheToken, Type> Tokens { get; } =
             new ConcurrentDictionary<CacheToken, Type>();
 
-        private readonly ILogger<ShellCacheManager> _logger;
+        private readonly ILogger<SimpleCacheManager> _logger;
         private readonly ICacheDependency _cacheDependency;
         private readonly IMemoryCache _memoryCache;
 
-        public SingletonCacheManager(
-            ILogger<ShellCacheManager> logger,
+        public SimpleCacheManager(
+            ILogger<SimpleCacheManager> logger,
             ICacheDependency cacheDependency,
             IMemoryCache memoryCache)
         {

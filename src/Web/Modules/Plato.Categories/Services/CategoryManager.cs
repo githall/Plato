@@ -5,7 +5,7 @@ using System.Threading.Tasks;
 using Plato.Categories.Models;
 using Plato.Categories.Stores;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
 using PlatoCore.Text.Abstractions;

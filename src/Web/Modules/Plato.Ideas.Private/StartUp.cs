@@ -6,13 +6,13 @@ using Plato.Ideas.Models;
 using Plato.Ideas.Private.Handlers;
 using Plato.Ideas.Private.Navigation;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Ideas.Private.ViewProviders;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Private
 {

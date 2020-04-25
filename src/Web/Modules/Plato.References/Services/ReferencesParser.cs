@@ -7,8 +7,8 @@ using Microsoft.AspNetCore.Routing;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Text.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.References.Services
 {

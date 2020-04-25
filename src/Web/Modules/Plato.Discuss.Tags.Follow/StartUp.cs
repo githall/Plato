@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Discuss.Models;
 using Plato.Discuss.Tags.Follow.Notifications;
 using Plato.Discuss.Tags.Follow.NotificationTypes;
@@ -10,7 +7,6 @@ using Plato.Discuss.Tags.Follow.Subscribers;
 using Plato.Discuss.Tags.Follow.ViewProviders;
 using Plato.Discuss.Tags.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -19,6 +15,7 @@ using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Features.Abstractions;
 using Plato.Discuss.Tags.Follow.Handlers;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.Tags.Follow
 {
@@ -66,13 +63,6 @@ namespace Plato.Discuss.Tags.Follow
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

@@ -7,10 +7,10 @@ using Plato.Ideas.Mentions.NotificationTypes;
 using Plato.Ideas.Mentions.Subscribers;
 using Plato.Ideas.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Notifications;
 using PlatoCore.Notifications.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Mentions
 {

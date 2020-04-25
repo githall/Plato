@@ -1,12 +1,12 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Rendering;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using Plato.Search.Models;
 using Plato.Search.Stores;
 using Plato.Search.ViewModels;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Search.ViewProviders
 {
@@ -15,16 +15,16 @@ namespace Plato.Search.ViewProviders
 
         private readonly ISearchSettingsStore<SearchSettings> _searchSettingsStore;
         private readonly IFullTextCatalogStore _fullTextCatalogStore;
-        private readonly IFullTextIndexStore _fullTextIndexStore;
-        private readonly IPlatoHost _platoHost;
+        private readonly IFullTextIndexStore _fullTextIndexStore;        
         private readonly IShellSettings _shellSettings;
+        private readonly IPlatoHost _platoHost;
 
         public AdminViewProvider(
             ISearchSettingsStore<SearchSettings> searchSettingsStore,
             IFullTextCatalogStore fullTextCatalogStore,
-            IFullTextIndexStore fullTextIndexStore,
-            IPlatoHost platoHost,
-            IShellSettings shellSettings)
+            IFullTextIndexStore fullTextIndexStore,            
+            IShellSettings shellSettings,
+            IPlatoHost platoHost)
         {
             _searchSettingsStore = searchSettingsStore;
             _fullTextCatalogStore = fullTextCatalogStore;

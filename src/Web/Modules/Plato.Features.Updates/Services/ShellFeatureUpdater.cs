@@ -11,11 +11,11 @@ using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Data.Migrations.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Features;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 using PlatoCore.Stores.Abstractions.Shell;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Features.Updates.Services
 {
@@ -46,7 +46,7 @@ namespace Plato.Features.Updates.Services
             IFeatureFacade featureFacade,
             IShellSettings shellSettings,
             IPlatoHost platoHost)
-        {      
+        {
             _shellDescriptorManager = shellDescriptorManager;
             _shellDescriptorStore = shellDescriptorStore;          
             _shellContextFactory = shellContextFactory;

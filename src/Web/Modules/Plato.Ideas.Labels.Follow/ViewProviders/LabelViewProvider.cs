@@ -2,9 +2,9 @@
 using Plato.Ideas.Labels.Models;
 using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Labels.Stores;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Labels.Follow.ViewProviders
 {

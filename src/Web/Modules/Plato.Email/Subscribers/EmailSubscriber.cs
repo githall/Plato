@@ -3,7 +3,7 @@ using System.Net.Mail;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
 using PlatoCore.Emails.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 
 namespace Plato.Email.Subscribers
@@ -13,10 +13,9 @@ namespace Plato.Email.Subscribers
     {
 
         private readonly IOptions<SmtpSettings> _smtpSettings;
+        private readonly ICapturedRouterUrlHelper _urlHelper;
         private readonly IContextFacade _contextFacade;
         private readonly IBroker _broker;
-        private readonly ICapturedRouterUrlHelper _urlHelper;
-
 
         public EmailSubscriber(
             IBroker broker,

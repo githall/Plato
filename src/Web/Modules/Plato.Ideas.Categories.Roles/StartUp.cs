@@ -1,19 +1,16 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Categories.Roles.Services;
 using Plato.Ideas.Categories.Models;
 using Plato.Ideas.Categories.Roles.QueryAdapters;
 using Plato.Ideas.Categories.Roles.ViewProviders;
 using Plato.Ideas.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
 using Plato.Ideas.Categories.Roles.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Categories.Roles
 {
@@ -46,11 +43,6 @@ namespace Plato.Ideas.Categories.Roles
 
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
     }
+
 }

@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
@@ -16,6 +15,7 @@ using Plato.Issues.Labels.Navigation;
 using Plato.Issues.Labels.Models;
 using Plato.Issues.Labels.ViewAdapters;
 using Plato.Issues.Labels.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Issues.Labels
 {
@@ -81,7 +81,8 @@ namespace Plato.Issues.Labels
                 defaults: new { controller = "Home", action = "Display" }
             );
 
-
         }
+
     }
+
 }

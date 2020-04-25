@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Assets.Abstractions;
@@ -13,6 +12,7 @@ using Plato.Markdown.Subscribers;
 using Plato.Markdown.ViewAdapters;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Text.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Markdown
 {
@@ -62,5 +62,7 @@ namespace Plato.Markdown
             );
 
         }
+
     }
+
 }

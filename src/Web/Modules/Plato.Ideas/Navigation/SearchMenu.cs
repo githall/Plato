@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
@@ -7,7 +6,7 @@ using Plato.Entities.Models;
 using Plato.Entities.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Ideas.Navigation
@@ -19,7 +18,10 @@ namespace Plato.Ideas.Navigation
 
         private readonly IFeatureFacade _featureFacade;
    
-        public SearchMenu(IStringLocalizer<AdminMenu> localizer, IContextFacade contextFacade, IFeatureFacade featureFacade)
+        public SearchMenu(
+            IStringLocalizer<AdminMenu> localizer,
+            IContextFacade contextFacade,
+            IFeatureFacade featureFacade)
         {
             T = localizer;
             _featureFacade = featureFacade;

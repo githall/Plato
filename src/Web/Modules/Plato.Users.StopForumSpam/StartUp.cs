@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
@@ -15,7 +14,7 @@ using Plato.Users.StopForumSpam.Notifications;
 using Plato.Users.StopForumSpam.NotificationTypes;
 using Plato.Users.StopForumSpam.ViewProviders;
 using Plato.Users.StopForumSpam.SpamOperators;
-
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Users.StopForumSpam
 {
@@ -64,13 +63,6 @@ namespace Plato.Users.StopForumSpam
             services.AddScoped<INotificationProvider<User>, NewSpamWeb>();
             services.AddScoped<INotificationProvider<User>, NewSpamEmail>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

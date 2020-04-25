@@ -7,7 +7,7 @@ using Microsoft.Extensions.Localization;
 using Plato.Issues.Categories.Follow.NotificationTypes;
 using Plato.Issues.Models;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
 

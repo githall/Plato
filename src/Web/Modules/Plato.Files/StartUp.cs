@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Files.Handlers;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Files.Repositories;
 using Plato.Files.Stores;
 using Plato.Files.Assets;
@@ -27,6 +26,7 @@ using PlatoCore.Stores.Abstractions.FederatedQueries;
 using Plato.Files.Search;
 using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Files
 {

@@ -8,9 +8,9 @@ using Plato.Entities.History.Models;
 using Plato.Entities.History.Stores;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using Plato.WebApi.Controllers;
 using Plato.WebApi.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Entities.History.Controllers
 {

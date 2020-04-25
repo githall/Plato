@@ -5,13 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Docs.History.Navigation;
 using Plato.Docs.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Entities.History.Subscribers;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Docs.History.Handlers;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.History
 {

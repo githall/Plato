@@ -7,7 +7,6 @@ using Plato.Issues.Categories.Follow.NotificationTypes;
 using Plato.Issues.Categories.Follow.Subscribers;
 using Plato.Issues.Categories.Follow.ViewProviders;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -19,6 +18,7 @@ using Plato.Issues.Categories.Models;
 using PlatoCore.Security.Abstractions;
 using Plato.Issues.Categories.Follow.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Issues.Categories.Follow
 {
@@ -62,13 +62,6 @@ namespace Plato.Issues.Categories.Follow
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

@@ -13,13 +13,13 @@ using PlatoCore.Models.Shell;
 using PlatoCore.Models.Users;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Roles;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Roles.ViewProviders;
 using Plato.Roles.Handlers;
 using Plato.Roles.Navigation;
 using Plato.Roles.Services;
 using PlatoCore.Data.Migrations.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Roles
 {

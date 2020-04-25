@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Plato.Email.Configuration;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Email.Handlers;
 using Plato.Email.Navigation;
 using Plato.Email.Repositories;
@@ -24,6 +23,7 @@ using PlatoCore.Stores.Abstractions.QueryAdapters;
 using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using PlatoCore.Data.Migrations.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Email
 {

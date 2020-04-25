@@ -15,8 +15,8 @@ using PlatoCore.Layout.ModelBinding;
 using Plato.Entities.Files.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Plato.Files.Services;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Files.Controllers
 {
@@ -238,7 +238,7 @@ namespace Plato.Ideas.Files.Controllers
                 .GetResultsAsync();
 
             // If we have results we have permission to view 
-            // at least one of the entities associted with the file
+            // at least one of the entities associated with the file
             if (entities?.Data != null)
             {
                 return true;

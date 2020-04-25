@@ -13,7 +13,6 @@ using Plato.Discuss.Tags.ViewProviders;
 using PlatoCore.Badges.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
@@ -29,6 +28,7 @@ using Plato.Tags.Services;
 using Plato.Tags.Stores;
 using Plato.Tags.Subscribers;
 using Plato.Entities.Tags.Subscribers;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.Tags
 {

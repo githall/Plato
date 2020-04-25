@@ -8,10 +8,10 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.Views.Abstractions;
 using PlatoCore.Models.Users;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace PlatoCore.Layout.Razor
 {

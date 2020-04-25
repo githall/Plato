@@ -7,10 +7,10 @@ using Plato.Questions.Mentions.NotificationTypes;
 using Plato.Questions.Mentions.Subscribers;
 using Plato.Questions.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Notifications;
 using PlatoCore.Notifications.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Questions.Mentions
 {
@@ -44,14 +44,6 @@ namespace Plato.Questions.Mentions
             services.AddScoped<INotificationProvider<Question>, NewEntityMentionWeb>();
             services.AddScoped<INotificationProvider<Answer>, NewReplyMentionWeb>();
             services.AddScoped<INotificationProvider<Answer>, NewReplyMentionEmail>();
-
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
 
         }
 

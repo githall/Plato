@@ -1,10 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Questions.Private.Navigation;
 using Plato.Questions.Models;
@@ -13,9 +9,11 @@ using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Security.Abstractions;
 using Plato.Questions.Private.Handlers;
 using Plato.Questions.Private.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Questions.Private
 {
+
     public class Startup : StartupBase
     {
         private readonly IShellSettings _shellSettings;
@@ -43,11 +41,6 @@ namespace Plato.Questions.Private
 
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
     }
+
 }

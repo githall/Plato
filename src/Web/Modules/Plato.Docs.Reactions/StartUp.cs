@@ -1,10 +1,6 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Badges.Abstractions;
 using PlatoCore.Models.Badges;
 using PlatoCore.Navigation.Abstractions;
@@ -16,6 +12,7 @@ using Plato.Docs.Reactions.Handlers;
 using Plato.Docs.Reactions.Navigation;
 using Plato.Docs.Reactions.Badges;
 using Plato.Docs.Reactions.Tasks;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.Reactions
 {
@@ -54,11 +51,6 @@ namespace Plato.Docs.Reactions
 
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
     }
+
 }

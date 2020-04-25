@@ -7,7 +7,7 @@ using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using PlatoCore.FileSystem.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout;
 using Plato.Theming.Models;
 using PlatoCore.Layout.Alerts;
@@ -19,6 +19,7 @@ using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Settings;
 using PlatoCore.Theming.Abstractions;
 using Plato.Theming.ViewModels;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Theming.Controllers
 {

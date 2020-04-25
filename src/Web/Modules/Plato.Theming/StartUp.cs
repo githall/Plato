@@ -5,7 +5,7 @@ using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
@@ -16,9 +16,11 @@ using Plato.Theming.Navigation;
 using Plato.Theming.Models;
 using Plato.Theming.Services;
 using Plato.Theming.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Theming
 {
+
     public class Startup : StartupBase
     {
         private readonly IShellSettings _shellSettings;
@@ -50,12 +52,6 @@ namespace Plato.Theming
             
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
-
     }
+
 }

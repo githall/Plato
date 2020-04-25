@@ -3,17 +3,19 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Discuss.Share.Navigation;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Discuss.Share.Handlers;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.Share
 {
+
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)
@@ -33,7 +35,7 @@ namespace Plato.Discuss.Share
 
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
-            
+
         }
 
         public override void Configure(
@@ -47,9 +49,10 @@ namespace Plato.Discuss.Share
                 areaName: "Plato.Discuss.Share",
                 template: "discuss/t/share/{opts.id}/{opts.alias}/{opts.replyId?}",
                 defaults: new { controller = "Home", action = "Index" }
-            );
-            
+            );            
 
         }
+
     }
+
 }

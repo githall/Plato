@@ -1,15 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Users;
 using Plato.Moderation.Models;
 using Plato.Moderation.Stores;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Moderation.Services
 {

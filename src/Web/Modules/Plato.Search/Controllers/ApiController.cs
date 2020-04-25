@@ -7,13 +7,13 @@ using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Search.Models;
 using Plato.Search.Stores;
 using Plato.WebApi.Controllers;
 using Plato.WebApi.Models;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Search.Controllers
 {

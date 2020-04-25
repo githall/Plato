@@ -5,12 +5,12 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Entities.Ratings.Services;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Issues.Models;
 using Plato.Issues.Votes.Handlers;
 using Plato.Issues.Votes.Navigation;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Issues.Votes
 {
@@ -55,7 +55,8 @@ namespace Plato.Issues.Votes
                 defaults: new { controller = "Vote", action = "Get" }
             );
 
-
         }
+
     }
+
 }

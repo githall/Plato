@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Plato.Articles.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Articles.Share.Navigation;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Security.Abstractions;
@@ -13,6 +12,7 @@ using Plato.Articles.Share.ViewProviders;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Articles.Share
 {
@@ -55,9 +55,10 @@ namespace Plato.Articles.Share
                 areaName: "Plato.Articles.Share",
                 template: "articles/a/share/{opts.id}/{opts.alias}/{opts.replyId?}",
                 defaults: new { controller = "Home", action = "Index" }
-            );
-            
+            );            
 
         }
+
     }
+
 }
