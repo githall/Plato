@@ -10,7 +10,7 @@ namespace Plato.Email.Handlers
     public class SetUpEventHandler : BaseSetUpEventHandler
     {
 
-        public string Version { get; } = "1.0.0";
+        public string Version { get; } = "1.0.1";
 
         // Email table
         private readonly SchemaTable _emails = new SchemaTable()

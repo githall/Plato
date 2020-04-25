@@ -1402,11 +1402,11 @@ namespace Plato.Users
                     TableName = "Users",
                     Columns = new string[]
                     {
-                    "UserName",
-                    "NormalizedUserName",
-                    "Email",
-                    "NormalizedEmail",
-                    "UserType"
+                        "UserName",
+                        "NormalizedUserName",
+                        "Email",
+                        "NormalizedEmail",
+                        "UserType"
                     }
                 });
 

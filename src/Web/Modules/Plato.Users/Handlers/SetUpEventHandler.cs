@@ -13,7 +13,6 @@ using Plato.Users.Services;
 namespace Plato.Users.Handlers
 {
 
-
     public class SetUpEventHandler : BaseSetUpEventHandler
     {
 

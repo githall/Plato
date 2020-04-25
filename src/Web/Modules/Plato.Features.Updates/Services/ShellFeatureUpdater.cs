@@ -40,7 +40,7 @@ namespace Plato.Features.Updates.Services
             IShellDescriptorManager shellDescriptorManager,
             IShellDescriptorStore shellDescriptorStore,          
             IShellContextFactory shellContextFactory,
-            IDataMigrationBuilder migrationBuilder,       
+            IDataMigrationBuilder migrationBuilder,
             IOptions<PlatoOptions> platoOptions,
             ILogger<ShellFeatureUpdater> logger,
             IFeatureFacade featureFacade,
@@ -178,8 +178,8 @@ namespace Plato.Features.Updates.Services
                     }
 
                     // If we reach this point everything went OK, Migrations applied
-                    // successfully and no errors occurred within the features update handlers
-                    // finally update the features version within the ShellFeatures table to reflect
+                    // successfully and no errors occurred within the features update handlers.
+                    // Finally update the features version within the ShellFeatures table to reflect
                     // the new version of the module we've just updated to, also update
                     // shell descriptor to reflect version changes within dictionary store
                  
