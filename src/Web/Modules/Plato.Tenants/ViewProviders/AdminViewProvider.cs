@@ -23,12 +23,12 @@ namespace Plato.Tenants.ViewProviders
         private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ILogger<AdminViewProvider> _logger;
 
-        private readonly TenantSettings _defaultTenantSettings;
+        private readonly DefaultTenantSettings _defaultTenantSettings;
 
         public AdminViewProvider(
             IShellSettingsManager shellSettingsManager, 
             ILogger<AdminViewProvider> logger,
-            IOptions<TenantSettings> tenantSetings,
+            IOptions<DefaultTenantSettings> tenantSetings,
             ITenantSetUpService setUpService)
         {
             _defaultTenantSettings = tenantSetings.Value;

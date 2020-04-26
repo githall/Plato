@@ -25,8 +25,8 @@ namespace Plato.Tenants.Controllers
     public class AdminController : Controller, IUpdateModel
     {
 
-        private readonly IViewProviderManager<Tenant> _viewProvider;
-        private readonly IViewProviderManager<TenantSettings> _settingsViewProvider;
+        private readonly IViewProviderManager<ShellSettings> _viewProvider;
+        private readonly IViewProviderManager<DefaultTenantSettings> _settingsViewProvider;
 
         private readonly IAuthorizationService _authorizationService;
         private readonly IShellSettingsManager _shellSettingsManager;
@@ -42,8 +42,8 @@ namespace Plato.Tenants.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-             IViewProviderManager<TenantSettings> settingsViewProvider,
-            IViewProviderManager<Tenant> viewProvider,
+             IViewProviderManager<DefaultTenantSettings> settingsViewProvider,
+            IViewProviderManager<ShellSettings> viewProvider,
             IAuthorizationService authorizationService,
             IShellSettingsManager shellSettingsManager,
             IBreadCrumbManager breadCrumbManager,
@@ -106,7 +106,7 @@ namespace Plato.Tenants.Controllers
             this.HttpContext.Items[typeof(TenantIndexViewModel)] = viewModel;
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new Tenant(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new ShellSettings(), this));
             
         }
 
@@ -134,7 +134,7 @@ namespace Plato.Tenants.Controllers
                 ).Add(S["Add Tenant"]);
             });
 
-            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new Tenant(), this));
+            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new ShellSettings(), this));
 
         }
 
@@ -149,7 +149,7 @@ namespace Plato.Tenants.Controllers
             }
 
             // Execute view provider
-            var result = await _viewProvider.ProvideUpdateAsync(new Tenant(), this);
+            var result = await _viewProvider.ProvideUpdateAsync(new ShellSettings(), this);
 
             // Errors occurred in the view provider
             if (!ModelState.IsValid)
@@ -202,7 +202,7 @@ namespace Plato.Tenants.Controllers
                 ).Add(S["Edit Tenant"]);
             });
 
-            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync((Tenant) shell, this));
+            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(shell, this));
 
         }
 
@@ -226,7 +226,7 @@ namespace Plato.Tenants.Controllers
             }
 
             // Update shell
-            var result = await _viewProvider.ProvideUpdateAsync((Tenant)shell, this);
+            var result = await _viewProvider.ProvideUpdateAsync(shell, this);
 
             // Errors occurred in the view provider
             if (!ModelState.IsValid)
@@ -310,7 +310,7 @@ namespace Plato.Tenants.Controllers
                 ).Add(S["Settings"]);
             });
 
-            return View((LayoutViewModel)await _settingsViewProvider.ProvideEditAsync(new TenantSettings(), this));
+            return View((LayoutViewModel)await _settingsViewProvider.ProvideEditAsync(new DefaultTenantSettings(), this));
 
         }
 
@@ -326,7 +326,7 @@ namespace Plato.Tenants.Controllers
             }
 
             // Execute view providers ProvideUpdateAsync method
-            await _settingsViewProvider.ProvideUpdateAsync(new TenantSettings(), this);
+            await _settingsViewProvider.ProvideUpdateAsync(new DefaultTenantSettings(), this);
 
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);
@@ -337,7 +337,7 @@ namespace Plato.Tenants.Controllers
 
         // ----------------
 
-        IShellSettings GetShell(string name)
+        ShellSettings GetShell(string name)
         {      
             return _shellSettingsManager.LoadSettings()?
                 .First(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));            

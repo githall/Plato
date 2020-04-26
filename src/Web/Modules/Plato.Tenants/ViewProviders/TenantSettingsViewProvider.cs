@@ -1,24 +1,24 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Layout.ViewProviders.Abstractions;
-using Plato.Tenants.ViewModels;
-using Plato.Tenants.Models;
 using Microsoft.Extensions.Logging;
-using Plato.Tenants.Stores;
-using PlatoCore.Security.Abstractions.Encryption;
-using PlatoCore.Abstractions.Settings;
 using Microsoft.Extensions.Options;
+using Plato.Tenants.Models;
+using Plato.Tenants.Stores;
+using PlatoCore.Models.Shell;
+using Plato.Tenants.ViewModels;
+using PlatoCore.Abstractions.Settings;
 using PlatoCore.Emails.Abstractions;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Models.Shell;
+using PlatoCore.Security.Abstractions.Encryption;
+using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Tenants.ViewProviders
 {
 
-    public class TenantSettingsViewProvider : ViewProviderBase<TenantSettings>
+    public class TenantSettingsViewProvider : ViewProviderBase<DefaultTenantSettings>
     {
 
-        private readonly ITenantSettingsStore<TenantSettings> _tenantSettingsStore;
+        private readonly ITenantSettingsStore<DefaultTenantSettings> _tenantSettingsStore;
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IEncrypter _encrypter;
@@ -27,7 +27,7 @@ namespace Plato.Tenants.ViewProviders
         private readonly PlatoOptions _platoOptions;
 
         public TenantSettingsViewProvider(
-            ITenantSettingsStore<TenantSettings> tenantSettingsStore,  
+            ITenantSettingsStore<DefaultTenantSettings> tenantSettingsStore,  
             IOptions<PlatoOptions> platoOptions,
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
@@ -42,17 +42,17 @@ namespace Plato.Tenants.ViewProviders
             _logger = logger;
         }
 
-        public override Task<IViewProviderResult> BuildDisplayAsync(TenantSettings settings, IViewProviderContext updater)
+        public override Task<IViewProviderResult> BuildDisplayAsync(DefaultTenantSettings settings, IViewProviderContext updater)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildIndexAsync(TenantSettings settings, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildIndexAsync(DefaultTenantSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override async Task<IViewProviderResult> BuildEditAsync(TenantSettings settings, IViewProviderContext updater)
+        public override async Task<IViewProviderResult> BuildEditAsync(DefaultTenantSettings settings, IViewProviderContext updater)
         {
 
             if (settings == null)
@@ -70,7 +70,7 @@ namespace Plato.Tenants.ViewProviders
 
         }
 
-        public override async Task<IViewProviderResult> BuildUpdateAsync(TenantSettings settings, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildUpdateAsync(DefaultTenantSettings settings, IViewProviderContext context)
         {
 
             var model = new EditTenantSettingsViewModel();
@@ -119,7 +119,7 @@ namespace Plato.Tenants.ViewProviders
                     }
                 }
 
-                settings = new TenantSettings()
+                settings = new DefaultTenantSettings()
                 {
                     ConnectionString = connectionString,
                     TablePrefix = model.TablePrefix,

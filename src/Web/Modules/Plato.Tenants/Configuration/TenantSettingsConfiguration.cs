@@ -9,15 +9,15 @@ using PlatoCore.Security.Abstractions.Encryption;
 namespace Plato.Tenants.Configuration
 {
 
-    public class TenantSettingsConfiguration : IConfigureOptions<TenantSettings>
+    public class TenantSettingsConfiguration : IConfigureOptions<DefaultTenantSettings>
     {
 
-        private readonly ITenantSettingsStore<TenantSettings> _emailSettingsStore;
+        private readonly ITenantSettingsStore<DefaultTenantSettings> _emailSettingsStore;
         private readonly ILogger<TenantSettingsConfiguration> _logger;
         private readonly IEncrypter _encrypter;
 
         public TenantSettingsConfiguration(
-            ITenantSettingsStore<TenantSettings> emailSettingsStore,            
+            ITenantSettingsStore<DefaultTenantSettings> emailSettingsStore,            
             ILogger<TenantSettingsConfiguration> logger,
             IEncrypter encrypter)
         {
@@ -26,7 +26,7 @@ namespace Plato.Tenants.Configuration
             _logger = logger;
         }
 
-        public void Configure(TenantSettings options)
+        public void Configure(DefaultTenantSettings options)
         {
 
             var settings = _emailSettingsStore

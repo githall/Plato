@@ -36,16 +36,16 @@ namespace Plato.Tenants
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
             // Stores
-            services.AddScoped<ITenantSettingsStore<TenantSettings>, TenantSettingsStore>();
+            services.AddScoped<ITenantSettingsStore<DefaultTenantSettings>, TenantSettingsStore>();
 
             // Configuration
-            services.AddTransient<IConfigureOptions<TenantSettings>, TenantSettingsConfiguration>();
+            services.AddTransient<IConfigureOptions<DefaultTenantSettings>, TenantSettingsConfiguration>();
 
             // View providers
-            services.AddScoped<IViewProviderManager<TenantSettings>, ViewProviderManager<TenantSettings>>();
-            services.AddScoped<IViewProviderManager<Tenant>, ViewProviderManager<Tenant>>();
-            services.AddScoped<IViewProvider<TenantSettings>, TenantSettingsViewProvider>();
-            services.AddScoped<IViewProvider<Tenant>, AdminViewProvider>();
+            services.AddScoped<IViewProviderManager<DefaultTenantSettings>, ViewProviderManager<DefaultTenantSettings>>();
+            services.AddScoped<IViewProviderManager<ShellSettings>, ViewProviderManager<ShellSettings>>();
+            services.AddScoped<IViewProvider<DefaultTenantSettings>, TenantSettingsViewProvider>();
+            services.AddScoped<IViewProvider<ShellSettings>, AdminViewProvider>();
 
             // Register navigation providers
             services.AddScoped<INavigationProvider, AdminMenu>();

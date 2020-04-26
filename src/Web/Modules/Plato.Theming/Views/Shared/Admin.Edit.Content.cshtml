@@ -40,9 +40,7 @@
     </card-title>
     <card-body>
         
-        <ul class="list-group list-group-flush list-group-hover">
-
-        
+        <ul class="list-group list-group-flush list-group-hover">        
 
             @if (Model.Files.Any())
             {
@@ -85,14 +83,12 @@
                     else
                     {
                         <li class="list-group-item">
-                            <textarea asp-for="FileContents" class="form-control" style="height: 300px;">@Model.FileContents</textarea>
+                            <textarea asp-for="FileContents" class="form-control" style="height: 500px;">@Model.FileContents</textarea>
                         </li>
                         <li class="list-group-item">
                             <button type="submit" class="btn btn-primary" data-role="button">
                                 @T["Save File"]
-                            </button>
-                            
-                            
+                            </button>                                                        
                             @if (Model.File?.Parent != null)
                             {
                                 <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.ThemeId" asp-route-path="@Model.File?.Parent.RelativePath" class="btn btn-sm btn-secondary">

@@ -7,7 +7,7 @@ namespace Plato.Tenants.Models
     /// <summary>
     /// Default tenant settings.
     /// </summary>
-    public class TenantSettings : Serializable
+    public class DefaultTenantSettings : Serializable
     {
 
         public string ConnectionString { get; set; } = "server=localhost;trusted_connection=true;database=plato";

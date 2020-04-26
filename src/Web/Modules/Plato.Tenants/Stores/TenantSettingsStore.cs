@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 namespace Plato.Tenants.Stores
 {
 
-    public class TenantSettingsStore : ITenantSettingsStore<TenantSettings>
+    public class TenantSettingsStore : ITenantSettingsStore<DefaultTenantSettings>
     {
         private const string SettingsKey = "TenantSettings";
 
@@ -25,14 +25,14 @@ namespace Plato.Tenants.Stores
             _logger = logger;
         }
 
-        public async Task<TenantSettings> GetAsync()
+        public async Task<DefaultTenantSettings> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType());
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _dictionaryStore.GetAsync<TenantSettings>(SettingsKey));
+                async (cacheEntry) => await _dictionaryStore.GetAsync<DefaultTenantSettings>(SettingsKey));
         }
 
-        public async Task<TenantSettings> SaveAsync(TenantSettings model)
+        public async Task<DefaultTenantSettings> SaveAsync(DefaultTenantSettings model)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -40,7 +40,7 @@ namespace Plato.Tenants.Stores
                 _logger.LogInformation("Email settings updating");
             }
 
-            var settings = await _dictionaryStore.UpdateAsync<TenantSettings>(SettingsKey, model);
+            var settings = await _dictionaryStore.UpdateAsync<DefaultTenantSettings>(SettingsKey, model);
             if (settings != null)
             {
                 _cacheManager.CancelTokens(this.GetType());
