@@ -10,6 +10,8 @@ namespace Plato.Tenants.ViewModels
         [Display(Name = "connection string")]
         public string ConnectionString { get; set; }
 
+        public SmtpSettingsViewModel SmtpSettings { get; set; } = new SmtpSettingsViewModel();
+
     }
 
 }

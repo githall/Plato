@@ -169,7 +169,7 @@ namespace Plato.Email.Controllers
 
             return @"Hi There,
 
-Congratulations outbound emails witin Plato are configured and working correctly.
+Congratulations outbound emails within Plato are configured and working correctly.
 
 You are receiving this email because you or someone used the test email button on the Plato email settings page. 
 

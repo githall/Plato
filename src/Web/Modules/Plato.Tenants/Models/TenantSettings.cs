@@ -1,4 +1,5 @@
 ﻿using PlatoCore.Abstractions;
+using PlatoCore.Emails.Abstractions;
 
 namespace Plato.Tenants.Models
 {
@@ -10,6 +11,8 @@ namespace Plato.Tenants.Models
     {
 
         public string ConnectionString { get; set; }
+
+        public SmtpSettings SmtpSettings { get; set; }
 
     }
 

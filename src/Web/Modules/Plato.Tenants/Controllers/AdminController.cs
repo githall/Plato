@@ -294,10 +294,10 @@ namespace Plato.Tenants.Controllers
         {
 
             // Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditTenants))
-            //{
-            //    return Unauthorized();
-            //}
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditSettings))
+            {
+                return Unauthorized();
+            }
 
             _breadCrumbManager.Configure(builder =>
             {
@@ -314,6 +314,26 @@ namespace Plato.Tenants.Controllers
 
         }
 
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Settings))]
+        public async Task<IActionResult> SettingsPost(EditTenantSettingsViewModel viewModel)
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditSettings))
+            {
+                return Unauthorized();
+            }
+
+            // Execute view providers ProvideUpdateAsync method
+            await _settingsViewProvider.ProvideUpdateAsync(new TenantSettings(), this);
+
+            // Add alert
+            _alerter.Success(T["Settings Updated Successfully!"]);
+
+            return RedirectToAction(nameof(Settings));
+
+        }
 
         // ----------------
 
