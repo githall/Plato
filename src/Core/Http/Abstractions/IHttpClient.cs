@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 
-namespace PlatoCore.Net.Abstractions
+namespace PlatoCore.Http.Abstractions
 {
 
     public interface IHttpClient

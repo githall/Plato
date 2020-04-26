@@ -7,7 +7,7 @@ using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Models.Reputations;
 using PlatoCore.Models.Users;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using PlatoCore.Reputations.Abstractions;
 using PlatoCore.Stores.Abstractions.Users;
 

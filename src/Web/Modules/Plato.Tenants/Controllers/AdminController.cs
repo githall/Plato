@@ -17,6 +17,7 @@ using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tenants.Services;
 using Plato.Tenants.ViewModels;
+using Plato.Tenants.Models;
 
 namespace Plato.Tenants.Controllers
 {
@@ -24,7 +25,9 @@ namespace Plato.Tenants.Controllers
     public class AdminController : Controller, IUpdateModel
     {
 
-        private readonly IViewProviderManager<ShellSettings> _viewProvider;
+        private readonly IViewProviderManager<Tenant> _viewProvider;
+        private readonly IViewProviderManager<TenantSettings> _settingsViewProvider;
+
         private readonly IAuthorizationService _authorizationService;
         private readonly IShellSettingsManager _shellSettingsManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
@@ -38,8 +41,9 @@ namespace Plato.Tenants.Controllers
 
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
-            IStringLocalizer<AdminController> stringLocalizer,                     
-            IViewProviderManager<ShellSettings> viewProvider,
+            IStringLocalizer<AdminController> stringLocalizer,
+             IViewProviderManager<TenantSettings> settingsViewProvider,
+            IViewProviderManager<Tenant> viewProvider,
             IAuthorizationService authorizationService,
             IShellSettingsManager shellSettingsManager,
             IBreadCrumbManager breadCrumbManager,
@@ -50,7 +54,8 @@ namespace Plato.Tenants.Controllers
 
             _authorizationService = authorizationService;
             _shellSettingsManager = shellSettingsManager;
-            _breadCrumbManager = breadCrumbManager;
+            _settingsViewProvider = settingsViewProvider;
+            _breadCrumbManager = breadCrumbManager;            
             _viewProvider = viewProvider;
             _setUpService = setUpService;
             _alerter = alerter;
@@ -101,7 +106,7 @@ namespace Plato.Tenants.Controllers
             this.HttpContext.Items[typeof(TenantIndexViewModel)] = viewModel;
 
             // Return view
-            return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new ShellSettings(), this));
+            return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new Tenant(), this));
             
         }
 
@@ -129,7 +134,7 @@ namespace Plato.Tenants.Controllers
                 ).Add(S["Add Tenant"]);
             });
 
-            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new ShellSettings(), this));
+            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(new Tenant(), this));
 
         }
 
@@ -144,7 +149,7 @@ namespace Plato.Tenants.Controllers
             }
 
             // Execute view provider
-            var result = await _viewProvider.ProvideUpdateAsync(new ShellSettings(), this);
+            var result = await _viewProvider.ProvideUpdateAsync(new Tenant(), this);
 
             // Errors occurred in the view provider
             if (!ModelState.IsValid)
@@ -197,7 +202,7 @@ namespace Plato.Tenants.Controllers
                 ).Add(S["Edit Tenant"]);
             });
 
-            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync(shell, this));
+            return View((LayoutViewModel)await _viewProvider.ProvideEditAsync((Tenant) shell, this));
 
         }
 
@@ -221,7 +226,7 @@ namespace Plato.Tenants.Controllers
             }
 
             // Update shell
-            var result = await _viewProvider.ProvideUpdateAsync(shell, this);
+            var result = await _viewProvider.ProvideUpdateAsync((Tenant)shell, this);
 
             // Errors occurred in the view provider
             if (!ModelState.IsValid)
@@ -281,9 +286,38 @@ namespace Plato.Tenants.Controllers
 
         }
 
+        // --------------
+        // Settings
+        // --------------
+
+        public async Task<IActionResult> Settings()
+        {
+
+            // Ensure we have permission
+            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditTenants))
+            //{
+            //    return Unauthorized();
+            //}
+
+            _breadCrumbManager.Configure(builder =>
+            {
+                builder.Add(S["Home"], home => home
+                    .Action("Index", "Admin", "Plato.Admin")
+                    .LocalNav()
+                ).Add(S["Tenants"], tenants => tenants
+                    .Action("Index", "Admin", "Plato.Tenants")
+                    .LocalNav()
+                ).Add(S["Settings"]);
+            });
+
+            return View((LayoutViewModel)await _settingsViewProvider.ProvideEditAsync(new TenantSettings(), this));
+
+        }
+
+
         // ----------------
 
-        ShellSettings GetShell(string name)
+        IShellSettings GetShell(string name)
         {      
             return _shellSettingsManager.LoadSettings()?
                 .First(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));            

@@ -29,8 +29,7 @@ namespace PlatoCore.Hosting
             _shellSettingsManager = shellSettingsManager;
             _shellContextFactory = shellContextFactory;
             _runningShellTable = runningShellTable;           
-            _logger = logger;
-        
+            _logger = logger;        
         }
 
         // Implementation
@@ -42,6 +41,7 @@ namespace PlatoCore.Hosting
 
         public ShellContext GetOrCreateShellContext(IShellSettings settings)
         {
+
             if (_shellContexts == null)
             {
                 _shellContexts = new ConcurrentDictionary<string, ShellContext>();

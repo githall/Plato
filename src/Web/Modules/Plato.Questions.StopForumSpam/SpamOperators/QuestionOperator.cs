@@ -15,7 +15,7 @@ using Plato.Questions.Models;
 using Plato.Questions.StopForumSpam.NotificationTypes;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
 namespace Plato.Questions.StopForumSpam.SpamOperators
 {

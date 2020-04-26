@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Options;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using Plato.Slack.Models;
 using System.Net.Http;
 

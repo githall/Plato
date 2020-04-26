@@ -8,9 +8,9 @@ using System.Threading.Tasks;
 using System.Web;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
-namespace PlatoCore.Net
+namespace PlatoCore.Http
 {
     
     public class HttpClient : IHttpClient

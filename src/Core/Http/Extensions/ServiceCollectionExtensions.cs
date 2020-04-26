@@ -1,8 +1,8 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
-namespace PlatoCore.Net.Extensions
+namespace PlatoCore.Http.Extensions
 {
     public static class ServiceCollectionExtensions
     {

@@ -1,9 +1,9 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
 using PlatoCore.Models.Shell;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
-namespace PlatoCore.Net
+namespace PlatoCore.Http
 {
 
     /// <summary>

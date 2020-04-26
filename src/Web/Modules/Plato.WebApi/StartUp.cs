@@ -15,7 +15,7 @@ using Plato.WebApi.Models;
 using Plato.WebApi.Navigation;
 using Plato.WebApi.Services;
 using Plato.WebApi.ViewProviders;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.WebApi

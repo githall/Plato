@@ -8,7 +8,7 @@ using PlatoCore.Hosting.Web;
 using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Extensions;
 using PlatoCore.Navigation.Extensions;
-using PlatoCore.Net.Extensions;
+using PlatoCore.Http.Extensions;
 using PlatoCore.Repositories.Extensions;
 using PlatoCore.Reputations.Extensions;
 using PlatoCore.Shell.Abstractions;

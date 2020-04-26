@@ -118,7 +118,7 @@ namespace Plato.Features.Updates.Services
             // Does the module have a Plato version defined?
             if (modulePlatoVersion != null)
             {
-                // Get current plato version
+                // Get current Plato version
                 var currentPlatoVersion = _platoOptions.Value.Version.ToVersion();
                 if (currentPlatoVersion != null)
                 {
@@ -131,7 +131,7 @@ namespace Plato.Features.Updates.Services
                 }
 
             }
-            
+
             // ------------------------------------------------------------------
             // 3. Invoke FeatureEventHandlers & database migrations
             // ------------------------------------------------------------------
@@ -199,7 +199,7 @@ namespace Plato.Features.Updates.Services
                 .Where(c => c.Value.Errors.Any())
                 .SelectMany(h => h.Value.Errors)
                 .ToList();
-            
+
             if (handlerErrors.Count > 0)
             {
                 var errors = new List<CommandError>();

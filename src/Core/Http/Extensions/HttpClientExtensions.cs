@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Text.Json;
 using System.Threading.Tasks;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
-namespace PlatoCore.Net.Extensions
+namespace PlatoCore.Http.Extensions
 {
     public static class HttpClientExtensions
     {

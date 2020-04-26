@@ -17,7 +17,7 @@ namespace Plato.Users.Handlers
     {
 
         private const string Version = "1.1.0";
-        
+
         private readonly SchemaTable _users = UserTables.Users;
         private readonly SchemaTable _userBanner = UserTables.UserBanner;
         private readonly SchemaTable _userPhoto = UserTables.UserPhoto;
@@ -49,7 +49,7 @@ namespace Plato.Users.Handlers
         public override async Task SetUp(ISetUpContext context, Action<string, string> reportError)
         {
 
-            // Build schemas
+            // Build schema
             using (var builder = _schemaBuilder)
             {
 
@@ -75,8 +75,7 @@ namespace Plato.Users.Handlers
                 foreach (var error in errors)
                 {
                     reportError(error, $"SetUp within {this.GetType().FullName} - {error}");
-                }
-                
+                }                
 
             }
 

@@ -9,7 +9,7 @@ using Plato.Media.Stores;
 using Plato.Media.ViewModels;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
 namespace Plato.Media.Controllers
 {

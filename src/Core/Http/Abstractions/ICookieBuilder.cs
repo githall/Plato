@@ -1,6 +1,6 @@
 ﻿using Microsoft.AspNetCore.Http;
 
-namespace PlatoCore.Net.Abstractions
+namespace PlatoCore.Http.Abstractions
 {
     public interface ICookieBuilder
     {

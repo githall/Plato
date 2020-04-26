@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Plato.WebApi.Models;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
 namespace Plato.WebApi.Attributes
 {

@@ -1,0 +1,27 @@
+﻿@model EditTenantSettingsViewModel
+
+<card class="card mt-4">
+    <card-title>
+        <h6 class="card-title">@T["Tenant Settings"]</h6>
+    </card-title>
+    <card-body>
+
+        <div class="row">
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="ConnectionString">
+                        <label asp-for="@Model.ConnectionString">
+                            <strong>@T["Default Connection String"]</strong>
+                            <span asp-validation-for="@Model.ConnectionString" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["This connection string will be used when creating new tenants."]</span>
+                        </label>
+                        <input placeholder="noreply@yourdomain.com" asp-for="@Model.ConnectionString" class="form-control" autofocus />
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+
+
+    </card-body>
+</card>

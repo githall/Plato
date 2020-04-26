@@ -2,7 +2,7 @@
 using PlatoCore.Abstractions;
 using System.Threading.Tasks;
 
-namespace PlatoCore.Net.Abstractions
+namespace PlatoCore.Http.Abstractions
 {
     public interface IHttpMultiPartRequestHandler
     {

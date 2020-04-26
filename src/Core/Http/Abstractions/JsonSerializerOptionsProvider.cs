@@ -1,6 +1,6 @@
 ﻿using System.Text.Json;
 
-namespace PlatoCore.Net.Abstractions
+namespace PlatoCore.Http.Abstractions
 {
     internal static class JsonSerializerOptionsProvider
     {

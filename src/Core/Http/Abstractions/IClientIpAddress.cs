@@ -1,6 +1,6 @@
 ﻿
 
-namespace PlatoCore.Net.Abstractions
+namespace PlatoCore.Http.Abstractions
 {
 
     public interface IClientIpAddress

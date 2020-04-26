@@ -26,7 +26,7 @@ using PlatoCore.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Titles;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
 namespace Plato.Docs.Controllers
 {

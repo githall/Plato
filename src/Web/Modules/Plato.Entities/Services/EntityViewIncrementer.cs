@@ -8,8 +8,8 @@ using Plato.Entities.Stores;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Net;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http;
+using PlatoCore.Http.Abstractions;
 
 namespace Plato.Entities.Services
 {

@@ -8,7 +8,7 @@ using PlatoCore.Layout;
 using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Models.Users;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using Plato.Metrics.Models;
 using Plato.Metrics.Services;
 

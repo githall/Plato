@@ -25,7 +25,7 @@ using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Titles;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using PlatoCore.Abstractions;
 
 namespace Plato.Discuss.Controllers

@@ -3,9 +3,9 @@ using System.Linq;
 using System.Net;
 using Microsoft.AspNetCore.Http;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
-namespace PlatoCore.Net
+namespace PlatoCore.Http
 {
 
     public class ClientIpAddress : IClientIpAddress

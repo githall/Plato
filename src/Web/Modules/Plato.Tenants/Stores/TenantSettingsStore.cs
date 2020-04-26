@@ -1,25 +1,23 @@
-﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Logging;
+﻿using Microsoft.Extensions.Logging;
+using Plato.Tenants.Models;
 using PlatoCore.Cache.Abstractions;
-using PlatoCore.Emails.Abstractions;
 using PlatoCore.Stores.Abstract;
+using System.Threading.Tasks;
 
-namespace Plato.Email.Stores
+namespace Plato.Tenants.Stores
 {
 
-    public class EmailSettingsStore : IEmailSettingsStore<EmailSettings>
+    public class TenantSettingsStore : ITenantSettingsStore<TenantSettings>
     {
-
-        private const string SettingsKey = "EmailSettings";
+        private const string SettingsKey = "TenantSettings";
 
         private readonly IDictionaryStore _dictionaryStore;
-        private readonly ILogger<EmailSettingsStore> _logger;
+        private readonly ILogger<TenantSettingsStore> _logger;
         private readonly ICacheManager _cacheManager;
 
-        public EmailSettingsStore(
+        public TenantSettingsStore(
             IDictionaryStore dictionaryStore,
-            ILogger<EmailSettingsStore> logger,        
+            ILogger<TenantSettingsStore> logger, 
             ICacheManager cacheManager)
         {
             _dictionaryStore = dictionaryStore;
@@ -27,14 +25,14 @@ namespace Plato.Email.Stores
             _logger = logger;
         }
 
-        public async Task<EmailSettings> GetAsync()
+        public async Task<TenantSettings> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType());
             return await _cacheManager.GetOrCreateAsync(token,
-                async (cacheEntry) => await _dictionaryStore.GetAsync<EmailSettings>(SettingsKey));
+                async (cacheEntry) => await _dictionaryStore.GetAsync<TenantSettings>(SettingsKey));
         }
 
-        public async Task<EmailSettings> SaveAsync(EmailSettings model)
+        public async Task<TenantSettings> SaveAsync(TenantSettings model)
         {
 
             if (_logger.IsEnabled(LogLevel.Information))
@@ -42,7 +40,7 @@ namespace Plato.Email.Stores
                 _logger.LogInformation("Email settings updating");
             }
 
-            var settings = await _dictionaryStore.UpdateAsync<EmailSettings>(SettingsKey, model);
+            var settings = await _dictionaryStore.UpdateAsync<TenantSettings>(SettingsKey, model);
             if (settings != null)
             {
                 _cacheManager.CancelTokens(this.GetType());

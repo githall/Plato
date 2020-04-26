@@ -13,6 +13,8 @@ using PlatoCore.Layout.ViewProviders;
 using Plato.Tenants.Services;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using Plato.Tenants.Models;
+using Plato.Tenants.Stores;
 
 namespace Plato.Tenants
 {
@@ -31,9 +33,14 @@ namespace Plato.Tenants
             // Feature installation event handler
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
+            // Stores
+            services.AddScoped<ITenantSettingsStore<TenantSettings>, TenantSettingsStore>();
+
             // View providers
-            services.AddScoped<IViewProviderManager<ShellSettings>, ViewProviderManager<ShellSettings>>();
-            services.AddScoped<IViewProvider<ShellSettings>, AdminViewProvider>();
+            services.AddScoped<IViewProviderManager<TenantSettings>, ViewProviderManager<TenantSettings>>();
+            services.AddScoped<IViewProviderManager<Tenant>, ViewProviderManager<Tenant>>();
+            services.AddScoped<IViewProvider<TenantSettings>, TenantSettingsViewProvider>();
+            services.AddScoped<IViewProvider<Tenant>, AdminViewProvider>();
 
             // Register navigation providers
             services.AddScoped<INavigationProvider, AdminMenu>();
@@ -83,6 +90,15 @@ namespace Plato.Tenants
                 template: "admin/tenants/delete/{id}",
                 defaults: new { controller = "Admin", action = "Delete" }
             );
+
+            // Settings
+            routes.MapAreaRoute(
+                name: "TenantsSettings",
+                areaName: "Plato.Tenants",
+                template: "admin/tenants/settings",
+                defaults: new { controller = "Admin", action = "Settings" }
+            );
+
         }
 
     }

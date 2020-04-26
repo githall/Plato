@@ -2,7 +2,7 @@
 using System.IO;
 using Microsoft.Net.Http.Headers;
 
-namespace PlatoCore.Net
+namespace PlatoCore.Http
 {
     public static class HttpMultiPartRequestHelper
     {

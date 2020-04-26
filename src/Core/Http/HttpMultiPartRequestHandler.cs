@@ -8,9 +8,9 @@ using Microsoft.AspNetCore.WebUtilities;
 using Microsoft.Net.Http.Headers;
 using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
-namespace PlatoCore.Net
+namespace PlatoCore.Http
 {
 
     public class HttpMultiPartRequestHandler : IHttpMultiPartRequestHandler

@@ -2,7 +2,7 @@
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using PlatoCore.Stores.Abstractions.Users;
 using Plato.StopForumSpam.Services;
 
