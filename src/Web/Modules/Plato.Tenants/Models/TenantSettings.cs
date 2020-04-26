@@ -10,9 +10,11 @@ namespace Plato.Tenants.Models
     public class TenantSettings : Serializable
     {
 
-        public string ConnectionString { get; set; }
+        public string ConnectionString { get; set; } = "server=localhost;trusted_connection=true;database=plato";
 
-        public SmtpSettings SmtpSettings { get; set; }
+        public string TablePrefix { get; set; } = "plato";
+
+        public SmtpSettings SmtpSettings { get; set; } = new SmtpSettings();
 
     }
 

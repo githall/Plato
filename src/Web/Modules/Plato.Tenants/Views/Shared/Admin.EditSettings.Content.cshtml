@@ -7,20 +7,37 @@
 
 <card class="card mt-4">
     <card-title>
-        <h6 class="card-title">@T["Database"]</h6>
+        <h6 class="card-title">@T["Database Settings"]</h6>
     </card-title>
     <card-body>
         <div class="row">
             <div class="col">
                 <fieldset>
                     <div class="form-group" asp-validation-class-for="ConnectionString">
-                        <label asp-for="@Model.ConnectionString">
-                            <strong>@T["Connection String"]</strong>
-                            <span asp-validation-for="@Model.ConnectionString" class="text-danger"></span>
-                            <br />
-                            <span class="text-muted">@T["The default connection string for new tenants."]</span>
+                        <h6>@T["Connection string"]</h6>
+                        <label asp-for="ConnectionString" class="text-muted">
+                            @T["The default connection string to use for new tenants."]
                         </label>
-                        <input placeholder="sever=localhost;uid=username;pwd=password;database=plato" asp-for="@Model.ConnectionString" class="form-control" autofocus />
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="search-input-group">
+                                <input asp-for="ConnectionString"
+                                       autocomplete="off"
+                                       data-provide="password"
+                                       class="form-control" type="text" autofocus />
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
+                                    <i class="fal fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                        <span asp-validation-for="ConnectionString" class="text-danger"></span>
+                    </div>
+                </fieldset>
+                <fieldset class="row" asp-validation-class-for="TablePrefix">
+                    <div class="form-group col-md-12">
+                        <label asp-for="TablePrefix">@T["Table Prefix"]</label>
+                        <input asp-for="TablePrefix" class="form-control" />
+                        <span asp-validation-for="TablePrefix" class="text-danger"></span>
+                        
                     </div>
                 </fieldset>
             </div>
@@ -30,7 +47,7 @@
 
 <card class="card mt-4">
     <card-title>
-        <h6 class="card-title">@T["SMTP"]</h6>
+        <h6 class="card-title">@T["Email Settings"]</h6>
     </card-title>
     <card-body>
 
@@ -44,12 +61,11 @@
                             <br />
                             <span class="text-muted">@T["Application generated emails will appear to be sent from this email address"]</span>
                         </label>
-                        <input placeholder="noreply@yourdomain.com" asp-for="@Model.SmtpSettings.DefaultFrom" class="form-control" autofocus />
+                        <input placeholder="noreply@yourdomain.com" asp-for="@Model.SmtpSettings.DefaultFrom" class="form-control" />
                     </div>
                 </fieldset>
             </div>
         </div>
-
         <div class="row">
             <div class="col">
                 <fieldset>
@@ -72,13 +88,11 @@
                             <br />
                             <span class="text-muted">@T["The port for your SMTP server."]</span>
                         </label>
-
                         <input placeholder="25" asp-for="@Model.SmtpSettings.Port" class="form-control" />
                     </div>
                 </fieldset>
             </div>
         </div>
-
         <div class="@authCss" id="smtpAuth">
             <div class="col">
                 <fieldset>
@@ -101,13 +115,21 @@
                             <span asp-validation-for="SmtpSettings.Password" class="text-danger"></span>
                             <br />
                             <span class="text-muted">@T["If authentication is required provide your password."]</span>
-                        </label>
-                        <input asp-for="SmtpSettings.Password" class="form-control" />
+                        </label>                        
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="search-input-group">
+                                <input asp-for="SmtpSettings.Password"
+                                          data-provide="password"
+                                       class="form-control" />                         
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
+                                    <i class="fal fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
                     </div>
                 </fieldset>
             </div>
         </div>
-
         <div class="row">
             <div class="col">
                 <label asp-for="SmtpSettings.RequireCredentials">
@@ -121,7 +143,6 @@
         </div>
         <div class="row">
             <div class="col">
-
                 <fieldset>
                     <div class="form-group" asp-validation-class-for="EnablePolling">
                         <label asp-for="SmtpSettings.EnableSsl">
@@ -135,7 +156,6 @@
                 </fieldset>
             </div>
         </div>
-
 
     </card-body>
 </card>

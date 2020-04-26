@@ -12,6 +12,9 @@ using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 using Plato.Tenants.Models;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Emails.Abstractions;
+using Plato.Email.Stores;
+using Microsoft.Extensions.Options;
 
 namespace Plato.Tenants.Services
 {
@@ -94,16 +97,16 @@ namespace Plato.Tenants.Services
         private readonly IShellSettingsManager _shellSettingsManager;
         private readonly IShellContextFactory _shellContextFactory;
         private readonly ILogger<TenantSetUpService> _logger;
-        private readonly IPlatoHost _platoHost;
+        private readonly IPlatoHost _platoHost; 
 
-        public TenantSetUpService(
+        public TenantSetUpService(            
             IShellSettingsManager shellSettingsManager,
-            IShellContextFactory shellContextFactory,
+            IShellContextFactory shellContextFactory,      
             ILogger<TenantSetUpService> logger,
             IPlatoHost platoHost)
         {
             _shellSettingsManager = shellSettingsManager;
-            _shellContextFactory = shellContextFactory;            
+            _shellContextFactory = shellContextFactory;        
             _platoHost = platoHost;
             _logger = logger;
         }
@@ -277,14 +280,20 @@ namespace Plato.Tenants.Services
                         context.Errors[key] = message;
                     }
 
+                    // Invoke set-up event handlers
                     var logger = scope.ServiceProvider.GetRequiredService<ILogger<TenantSetUpService>>();
                     var setupEventHandlers = scope.ServiceProvider.GetServices<ISetUpEventHandler>();
                     await setupEventHandlers.InvokeAsync(x => x.SetUp(context, ReportError), logger);
 
+                    // Return early if we encountered any errors
                     if (hasErrors)
                     {
                         return result.Failed(context.Errors.Select(e => e.Value).ToArray());                          
-                    }               
+                    }
+
+                    // Update tenant email settings
+                    var emailSettingsStore = scope.ServiceProvider.GetService<IEmailSettingsStore<EmailSettings>>();
+                    await emailSettingsStore.SaveAsync(context.EmailSettings);
 
                 }
 

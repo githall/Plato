@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using PlatoCore.Emails.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Security.Attributes;
 using PlatoCore.Shell.Abstractions;
@@ -58,6 +59,8 @@ namespace Plato.Tenants.ViewModels
         public string OwnerId { get; set; }
 
         public bool IsNewTenant { get; set; }
+
+        public SmtpSettings SmtpSettings { get; set; }
 
         public bool IsDefault => SiteName?.Equals(ShellHelper.DefaultShellName, System.StringComparison.OrdinalIgnoreCase) ?? false;      
 

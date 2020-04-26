@@ -3,7 +3,9 @@
 @if (Model.IsNewTenant)
 {
     <h4>@T["Add Tenant"]</h4>
-    <span class="text-muted">@T["Add a new tenant."]</span>
+    <span class="text-muted">    
+        @T["To ease creating new tenants you can set certain defaults via the "] <a asp-route-action="Settings">@T["settings page"].</a>   
+    </span>
 }
 else
 {

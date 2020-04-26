@@ -1,4 +1,9 @@
 ﻿@model EditTenantViewModel
+@{
+    var authCss = !Model.SmtpSettings.RequireCredentials
+        ? "row collapse"
+        : "row show";
+}
 
 <input type="hidden" asp-for="IsNewTenant" />
 <input type="hidden" asp-for="Location" />
@@ -10,13 +15,12 @@
     <card-title>
         @if (Model.IsNewTenant)
         {
-            <h6 class="card-title">@T["Add Tenant"]</h6>
+            <h6 class="card-title">@T["Add Tenant"]</h6>          
         }
         else
         {
             <h6 class="card-title">@T["Edit Tenant"]</h6>
         }
-
     </card-title>
     <card-body>
 
@@ -29,8 +33,8 @@
                     <fieldset class="row" asp-validation-class-for="SiteName">
                         <div class="form-group col-md-12">
                             <h6>@T["Name"]</h6>
-                            <label asp-for="SiteName">@T["Provide a name for this tenant."]</label>
-                            <input asp-for="SiteName" class="form-control" />
+                            <label asp-for="SiteName" class="text-muted">@T["Provide a name for this tenant."]</label>
+                            <input asp-for="SiteName" class="form-control" autofocus />
                             <span asp-validation-for="SiteName" class="text-danger"></span>
                         </div>
                     </fieldset>
@@ -40,7 +44,7 @@
                     <fieldset class="row" asp-validation-class-for="SiteName">
                         <div class="form-group col-md-12">
                             <h6>@T["Name"]</h6>
-                            <label asp-for="SiteName">
+                            <label asp-for="SiteName" class="text-muted">
                                 @T["You cannot change the name for the default tenant."]
                             </label>
                             <input readonly asp-for="SiteName" class="form-control" />
@@ -53,7 +57,7 @@
                 <fieldset class="row" asp-validation-class-for="OwnerId">
                     <div class="form-group col-md-12">
                         <h6>@T["Owner"]</h6>
-                        <label asp-for="OwnerId">
+                        <label asp-for="OwnerId" class="text-muted">
                             @T["Provide an optional email address or company name to identify the tenant owner."]
                         </label>
                         <input asp-for="OwnerId" class="form-control" />
@@ -62,7 +66,7 @@
                 </fieldset>
 
             </div>
-        </div> 
+        </div>
 
         @if (Model.IsNewTenant)
         {
@@ -134,8 +138,8 @@
                 </fieldset>
             }
             else
-            {              
-                <input asp-for="State" type="hidden"/>
+            {
+                <input asp-for="State" type="hidden" />
             }
 
             <fieldset class="row" asp-validation-class-for="ConnectionString">
@@ -267,6 +271,121 @@
                     <span asp-validation-for="RequestedUrlPrefix" class="text-danger"></span>
                     <span class="text-muted form-text small">@T["A prefix or folder name for this tenant. For example sitename or companyname. If requests contain this prefix and match the host name this tenant will be loaded. Leave blank to resolve this tenant to the root. Please choose carefully as this cannot be changed once the tenant has been created."]</span>
                 </div>
+            </div>
+        </div>
+
+    </card-body>
+</card>
+
+<card class="card mt-4">
+    <card-title>
+        <h6 class="card-title">@T["Email Settings"]</h6>   
+    </card-title>
+    <card-body>
+
+        <div class="row">
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="DefaultFrom">
+                        <label asp-for="@Model.SmtpSettings.DefaultFrom">
+                            <strong>@T["Default Sender"]</strong>
+                            <span asp-validation-for="@Model.SmtpSettings.DefaultFrom" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["Application generated emails will appear to be sent from this email address"]</span>
+                        </label>
+                        <input placeholder="noreply@yourdomain.com" asp-for="@Model.SmtpSettings.DefaultFrom" class="form-control"  />
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="Host">
+                        <label asp-for="@Model.SmtpSettings.Host">
+                            <strong>@T["Server Address"]</strong>
+                            <span asp-validation-for="@Model.SmtpSettings.Host" class="text-danger"></span><br />
+                            <span class="text-muted">@T["The host name for your SMTP server."]</span>
+                        </label>
+                        <input placeholder="smtp.domain.com" asp-for="@Model.SmtpSettings.Host" class="form-control" />
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="Port">
+                        <label asp-for="@Model.SmtpSettings.Port">
+                            <strong>@T["Server Port"]</strong>
+                            <span asp-validation-for="@Model.SmtpSettings.Port" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["The port for your SMTP server."]</span>
+                        </label>
+                        <input placeholder="25" asp-for="@Model.SmtpSettings.Port" class="form-control" />
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="@authCss" id="smtpAuth">
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="UserName">
+                        <label asp-for="@Model.SmtpSettings.UserName">
+                            <strong>@T["Username"]</strong>
+                            <span asp-validation-for="@Model.SmtpSettings.UserName" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["If authentication is required provide your username."]</span>
+                        </label>
+                        <input placeholder="email@address.com" asp-for="@Model.SmtpSettings.UserName" class="form-control" />
+                    </div>
+                </fieldset>
+            </div>
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="Password">
+                        <label asp-for="SmtpSettings.Password">
+                            <strong>@T["Password"]</strong>
+                            <span asp-validation-for="SmtpSettings.Password" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["If authentication is required provide your password."]</span>
+                        </label>
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="search-input-group">
+                                <input asp-for="SmtpSettings.Password"
+                                       data-provide="password"
+                                       class="form-control" />
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
+                                    <i class="fal fa-eye"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <label asp-for="SmtpSettings.RequireCredentials">
+                    <span class="switch switch-round mr-2">
+                        <input data-toggle="collapse" data-target="#smtpAuth" class="form-check-input" asp-for="SmtpSettings.RequireCredentials" />
+                        <span class="switch-slider"></span>
+                    </span>
+                    @T["Requires SMTP Authentication"]
+                </label>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col">
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="EnablePolling">
+                        <label asp-for="SmtpSettings.EnableSsl">
+                            <span class="switch switch-round mr-2">
+                                <input class="form-check-input" asp-for="SmtpSettings.EnableSsl" />
+                                <span class="switch-slider"></span>
+                            </span>
+                            @T["Enable TLS / SSL for SMTP Server"]
+                        </label>
+                    </div>
+                </fieldset>
             </div>
         </div>
 

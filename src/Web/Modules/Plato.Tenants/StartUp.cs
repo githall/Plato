@@ -15,6 +15,8 @@ using PlatoCore.Security.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using Plato.Tenants.Models;
 using Plato.Tenants.Stores;
+using Plato.Tenants.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Plato.Tenants
 {
@@ -35,6 +37,9 @@ namespace Plato.Tenants
 
             // Stores
             services.AddScoped<ITenantSettingsStore<TenantSettings>, TenantSettingsStore>();
+
+            // Configuration
+            services.AddTransient<IConfigureOptions<TenantSettings>, TenantSettingsConfiguration>();
 
             // View providers
             services.AddScoped<IViewProviderManager<TenantSettings>, ViewProviderManager<TenantSettings>>();

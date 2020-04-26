@@ -9,6 +9,8 @@ using PlatoCore.Security.Abstractions.Encryption;
 using PlatoCore.Abstractions.Settings;
 using Microsoft.Extensions.Options;
 using PlatoCore.Emails.Abstractions;
+using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Models.Shell;
 
 namespace Plato.Tenants.ViewProviders
 {
@@ -18,19 +20,25 @@ namespace Plato.Tenants.ViewProviders
 
         private readonly ITenantSettingsStore<TenantSettings> _tenantSettingsStore;
         private readonly ILogger<AdminViewProvider> _logger;
+        private readonly IShellSettings _shellSettings;
         private readonly IEncrypter _encrypter;
+        private readonly IPlatoHost _platoHost;
 
         private readonly PlatoOptions _platoOptions;
 
         public TenantSettingsViewProvider(
-            ITenantSettingsStore<TenantSettings> tenantSettingsStore,
+            ITenantSettingsStore<TenantSettings> tenantSettingsStore,  
             IOptions<PlatoOptions> platoOptions,
-            ILogger<AdminViewProvider> logger,            
-            IEncrypter encrypter)
+            ILogger<AdminViewProvider> logger,
+            IShellSettings shellSettings,
+            IEncrypter encrypter,
+            IPlatoHost platoHost)
         {
             _tenantSettingsStore = tenantSettingsStore;
             _platoOptions = platoOptions.Value;
+            _shellSettings = shellSettings;
             _encrypter = encrypter;
+            _platoHost = platoHost;
             _logger = logger;
         }
 
@@ -114,6 +122,7 @@ namespace Plato.Tenants.ViewProviders
                 settings = new TenantSettings()
                 {
                     ConnectionString = connectionString,
+                    TablePrefix = model.TablePrefix,
                     SmtpSettings = new SmtpSettings()
                     {
                         DefaultFrom = model.SmtpSettings.DefaultFrom,
@@ -126,7 +135,12 @@ namespace Plato.Tenants.ViewProviders
                     }
                 };
 
-                var result = await _tenantSettingsStore.SaveAsync(settings);              
+                var result = await _tenantSettingsStore.SaveAsync(settings);
+                if (result != null)
+                {
+                    // Recycle shell context to ensure changes take effect
+                    _platoHost.RecycleShell(_shellSettings);
+                }
 
             }
 
@@ -180,6 +194,7 @@ namespace Plato.Tenants.ViewProviders
                 return new EditTenantSettingsViewModel()
                 {
                     ConnectionString = connectionString,
+                    TablePrefix = settings.TablePrefix,
                     SmtpSettings = new SmtpSettingsViewModel()
                     {
                         DefaultFrom = _platoOptions.DemoMode
