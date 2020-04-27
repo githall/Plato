@@ -24,8 +24,9 @@
 
     <nav class="nav-site">
         <div class="navbar navbar-expand-lg navbar-light bg-light border-bottom">
-            <div class=" container-fluid">
-                <a asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index" class="navbar-brand">
+            <div class=" container-fluid container-fluid-1400">
+                <a asp-route-area="Plato.Core" asp-route-controller="Home" asp-route-action="Index" class="navbar-brand">                    
+                    <img src="/sites/sis/images/Construct 365.png" style="max-height:38px;" />                    
                     @siteOpts.SiteName
                 </a>
                 <div class="navbar-mobile">
@@ -91,12 +92,17 @@
                 <hr class="mb-0" />
                 <div class="row py-4">
                     <div class="col-lg-6">
-                        <p>&copy; @siteOpts.SiteName @System.DateTime.Now.Year</p>
+                        <p>
+                            <a href="https://sisn.com/" target="_blank">
+                                <img src="/sites/sis/images/logo.png" style="max-height:56px;" />
+                            </a>                            
+                        </p>                     
                     </div>
                     <div class="col-lg-6 text-lg-right">
                         <p>
-                            <a href="https://www.instantasp.co.uk/" target="_blank" class="text-muted">
-                                @T["Powered by Plato"] @platoOpts.Version @platoOpts.ReleaseType
+                            &copy; @System.DateTime.Now.Year
+                            <a href="https://sisn.com/" target="_blank">
+                                Strategic Industry Solutions, Inc.
                             </a>
                         </p>
                     </div>

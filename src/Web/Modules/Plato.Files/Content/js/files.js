@@ -373,12 +373,12 @@ $(function (win, doc, $) {
                     maxFiles = this._getMaxFiles($caller);
 
                 if (url === null) {
-                    throw new Error("An post url is required for the dropzone!");
+                    throw new Error("An post URL is required for the drop zone!");
                 }
 
                 if (!opts.init) {
 
-                    // Set dropzone max file size & max files
+                    // Set drop zone max file size & max files
                     opts.maxFilesize = Math.ceil($caller.data(dataKey).maxFileSize / (1024 * 1024));
                     opts.maxFiles = maxFiles;
 
@@ -391,8 +391,8 @@ $(function (win, doc, $) {
                         }
 
                         // Configure drop zone requests from Plato options
-                        opts.url = app.defaults.url + url;
-
+                        opts.url = url;
+                        
                         // Configure request headers
                         opts.headers = {
                             "Authorization": "Basic " + app.defaults.apiKey,

@@ -6,9 +6,6 @@
     var returnUrl = Context.Request.PathBase + Context.Request.Path;
 }
 
-
-@returnUrl
-
 <ul class="list-group list-group-flush list-group-hover">
     @{
         var features = Model.Features?.OrderBy(o => o.Descriptor.Name).ToList();

@@ -33,9 +33,13 @@ namespace PlatoCore.Cache
         public async Task<TItem> GetOrCreateAsync<TItem>(CacheToken token, Func<ICacheEntry, Task<TItem>> factory)
         {
 
-            var key = token.ToString();
+            if (token == null)
+            {
+                throw new ArgumentNullException(nameof(token));
+            }
 
             // Item does not exist in cache
+            var key = token.ToString();
             if (!_memoryCache.TryGetValue(key, out var obj))
             {
 

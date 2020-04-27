@@ -184,7 +184,7 @@ namespace PlatoCore.Stores.Users
                 throw new ArgumentOutOfRangeException(nameof(id));
             }
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ById, id);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ById, id);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByIdAsync(id);
@@ -201,7 +201,7 @@ namespace PlatoCore.Stores.Users
                 throw new ArgumentNullException(nameof(userNameNormalized));
             }
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ByUsernameNormalized, userNameNormalized);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ByUsernameNormalized, userNameNormalized);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByUserNameNormalizedAsync(userNameNormalized);
@@ -218,7 +218,7 @@ namespace PlatoCore.Stores.Users
                 throw new ArgumentNullException(nameof(userName));
             }
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ByUsername, userName);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ByUsername, userName);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByUserNameAsync(userName);
@@ -235,7 +235,7 @@ namespace PlatoCore.Stores.Users
                 throw new ArgumentNullException(nameof(email));
             }
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ByEmail, email);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ByEmail, email);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByEmailAsync(email);
@@ -252,7 +252,7 @@ namespace PlatoCore.Stores.Users
                 throw new ArgumentNullException(nameof(emailNormalized));
             }
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ByEmailNormalized, emailNormalized);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ByEmailNormalized, emailNormalized);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByEmailNormalizedAsync(emailNormalized);
@@ -268,7 +268,7 @@ namespace PlatoCore.Stores.Users
                 throw new ArgumentNullException(nameof(resetToken));
             }
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ByResetToken, resetToken);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ByResetToken, resetToken);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByResetTokenAsync(resetToken);
@@ -285,7 +285,7 @@ namespace PlatoCore.Stores.Users
                 throw new ArgumentNullException(nameof(confirmationToken));
             }
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ByConfirmationToken, confirmationToken);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ByConfirmationToken, confirmationToken);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByConfirmationTokenAsync(confirmationToken);
@@ -302,7 +302,7 @@ namespace PlatoCore.Stores.Users
                 throw new ArgumentNullException(nameof(apiKey));
             }
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ByApiKey, apiKey);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ByApiKey, apiKey);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var user = await _userRepository.SelectByApiKeyAsync(apiKey);
@@ -320,7 +320,7 @@ namespace PlatoCore.Stores.Users
         public async Task<IPagedResults<User>> SelectAsync(IDbDataParameter[] dbParams)
         {
 
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), dbParams.Select(p => p.Value).ToArray());
+            var token = _cacheManager.GetOrCreateToken(GetType(), dbParams.Select(p => p.Value).ToArray());
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
 
@@ -346,7 +346,7 @@ namespace PlatoCore.Stores.Users
 
         public async Task<User> GetPlatoBotAsync()
         {
-            var token = _cacheManager.GetOrCreateToken(this.GetType(), ByPlatoBot);
+            var token = _cacheManager.GetOrCreateToken(GetType(), ByPlatoBot);
             return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
             {
                 var results = await QueryAsync()
@@ -411,15 +411,15 @@ namespace PlatoCore.Stores.Users
         {
 
             // Expire user cache tokens
-            _cacheManager.CancelTokens(this.GetType());
-            _cacheManager.CancelTokens(this.GetType(), ById, user.Id);
-            _cacheManager.CancelTokens(this.GetType(), ByUsernameNormalized, user.NormalizedUserName);
-            _cacheManager.CancelTokens(this.GetType(), ByUsername, user.UserName);
-            _cacheManager.CancelTokens(this.GetType(), ByEmailNormalized, user.NormalizedEmail);
-            _cacheManager.CancelTokens(this.GetType(), ByEmail, user.Email);
-            _cacheManager.CancelTokens(this.GetType(), ByResetToken, user.ResetToken);
-            _cacheManager.CancelTokens(this.GetType(), ByConfirmationToken, user.ConfirmationToken);
-            _cacheManager.CancelTokens(this.GetType(), ByApiKey, user.ApiKey);
+            _cacheManager.CancelTokens(GetType());
+            _cacheManager.CancelTokens(GetType(), ById, user.Id);
+            _cacheManager.CancelTokens(GetType(), ByUsernameNormalized, user.NormalizedUserName);
+            _cacheManager.CancelTokens(GetType(), ByUsername, user.UserName);
+            _cacheManager.CancelTokens(GetType(), ByEmailNormalized, user.NormalizedEmail);
+            _cacheManager.CancelTokens(GetType(), ByEmail, user.Email);
+            _cacheManager.CancelTokens(GetType(), ByResetToken, user.ResetToken);
+            _cacheManager.CancelTokens(GetType(), ByConfirmationToken, user.ConfirmationToken);
+            _cacheManager.CancelTokens(GetType(), ByApiKey, user.ApiKey);
 
             // Expire user data cache tokens
             _cacheManager.CancelTokens(_userDataStore.GetType());
