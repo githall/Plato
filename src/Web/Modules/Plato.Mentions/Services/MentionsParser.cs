@@ -142,17 +142,17 @@ namespace Plato.Mentions.Services
 
         async Task<IEnumerable<User>> GetUsersAsync(IEnumerable<IToken> tokens)
         {
-            
+
             var usernames = GetDistinctTokenValues(tokens);
             if (usernames?.Length > 0)
             {
                 return await GetUsersByUsernamesAsync(usernames.ToArray());
             }
-            
+
             return null;
 
         }
-        
+
         async Task<IEnumerable<User>> GetUsersByUsernamesAsync(string[] usernames)
         {
             var users = new List<User>();

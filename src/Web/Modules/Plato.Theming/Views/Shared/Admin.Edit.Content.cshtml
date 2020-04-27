@@ -82,8 +82,55 @@
                     }
                     else
                     {
+                        var mode = "htmlmixed";
+                        var extension = Model.File?.Extension ?? string.Empty;                       
+                        if (extension.Equals(".css", StringComparison.OrdinalIgnoreCase))
+                        {
+                            mode = "text/css";
+                        }                                              
                         <li class="list-group-item">
-                            <textarea asp-for="FileContents" class="form-control" style="height: 500px;">@Model.FileContents</textarea>
+
+                            <link rel="stylesheet" href="/plato.theming/content/js/vendors/codemirror/lib/codemirror.css">
+                            <link rel="stylesheet" href="/plato.theming/content/js/vendors/codemirror/addon/hint/show-hint.css">
+                            <link rel="stylesheet" href="/plato.theming/content/js/vendors/codemirror/addon/fold/foldgutter.css" />
+                            <script src="/plato.theming/content/js/vendors/codemirror/lib/codemirror.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/foldcode.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/foldgutter.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/brace-fold.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/xml-fold.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/indent-fold.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/markdown-fold.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/comment-fold.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/hint/show-hint.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/hint/css-hint.js"></script>                            
+                            <script src="/plato.theming/content/js/vendors/codemirror/mode/xml/xml.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/mode/css/css.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/mode/htmlmixed/htmlmixed.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/mode/python/python.js"></script>
+                            <script src="/plato.theming/content/js/vendors/codemirror/mode/markdown/markdown.js"></script>
+
+                            <textarea asp-for="FileContents" class="form-control" style="height: 600px;">@Model.FileContents</textarea>
+
+                            <script>
+                                    window.onload = function() {
+                                        var textArea = document.getElementById("FileContents");
+                                        var myCodeMirror = CodeMirror.fromTextArea(textArea, {
+                                            mode: "@mode",                                        
+                                            lineNumbers: true,
+                                            lineWrapping: true,
+                                            extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
+                                            foldGutter: true,
+                                            gutters: ["CodeMirror-linenumbers", "CodeMirror-foldgutter"]
+                                        });
+                                    };
+                            </script>
+
+                            <style>
+                                .CodeMirror {                                 
+                                  height: 600px;
+                                }
+                            </style>
+
                         </li>
                         <li class="list-group-item">
                             <button type="submit" class="btn btn-primary" data-role="button">
@@ -101,7 +148,6 @@
                                     @T["Cancel"]
                                 </a>
                             }
-
 
                         </li>
                     }
