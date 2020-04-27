@@ -1012,7 +1012,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     .nav .user-dropdown .user-dropdown-menu-header { display: block; }
 }
 
-.nav .navbar-brand img { width: 200px; }
+a.navbar-brand img { max-height: 48px; }
 
 .navbar-nav a.nav-link .nav-text,
 .nav a.nav-link .nav-text { margin-left: 0.50rem; }

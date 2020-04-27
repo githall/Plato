@@ -114,6 +114,7 @@ namespace Plato.Email
                     {
                         options.ModuleName = ModuleId;
                         options.Version = "1.0.1";
+                        options.DropTablesBeforeCreate = true;
                         options.DropProceduresBeforeCreate = true;
                     });
 
