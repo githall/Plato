@@ -1,0 +1,74 @@
+﻿@model TourIndexViewModel
+
+@if (CurrentUser == null)
+{
+    <card>
+        <card-title>
+            <h6 class="card-title">@T["Welcome to Plato"]</h6>
+        </card-title>
+        <card-body>          
+            @T["To get started use the button below to login with the administrator username and password you provided during set-up..."]
+            <br /><br />
+            <a  asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" class="btn btn-primary">
+                @T["Login"]<i class="fal fa-arrow-right ml-2"></i>
+            </a>           
+        </card-body>
+    </card>
+}
+else
+{
+    <card>
+        <card-title>
+            <a href="#" class="btn btn-secondary float-right">
+                Finish Set-Up
+            </a>
+            <h6 class="card-title">@T["Complete Set-Up"]</h6>
+            <div class="text-muted">
+                0% complete
+            </div>
+            <div class="progress mt-3" style="height: 8px;">
+                <div class="progress-bar" role="progressbar" style="width: 19%" aria-valuemin="0" aria-valuemax="100"></div>
+            </div>
+        </card-title>
+        <card-body>
+
+            <div class="card card-body-flush">
+                <div class="card-body">
+                    @if (Model.Steps != null)
+                    {
+                        var count = 0;
+                        <div class="accordion mb-0" id="accordionExample">                      
+                        @foreach (var step in Model.Steps)
+                        {
+                            count++;
+                            var headerId = "header" + count;
+                            var collapseId = "step" + count;
+                            <div class="list-group list-group-flush">
+                                <a href="#@collapseId" data-toggle="collapse" aria-expanded="false" aria-controls="@collapseId" class="list-group-item list-group-item-action" id="@headerId">
+                                    <span class="list-left list-left-md">
+                                        <span class="img-48 text-center rounded-circle d-inline-block bg-primary text-white">
+                                            <h3 class="pt-1">@count</h3>
+                                        </span>
+                                    </span>
+                                    <span class="list-body">
+                                        <i class="fal fa-chevron-right float-right mt-3"></i>
+                                        <h6>@T[step.Title]</h6>
+                                        @T[step.Description]
+                                    </span>
+                                </a>
+                                <div id="@collapseId" class="collapse" aria-labelledby="@headerId" data-parent="#accordionExample">
+                                    <div class="p-4">
+                                        @step.Description
+                                    </div>
+                                </div>
+
+                            </div>                          
+                        }                        
+                        </div>
+                    }
+                </div>
+            </div>
+            
+        </card-body>  
+    </card>
+}

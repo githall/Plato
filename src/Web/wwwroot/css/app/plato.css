@@ -1153,7 +1153,7 @@ a.navbar-brand img { max-height: 48px; }
 
     .nav-asides > .navbar {
         width: 264px;
-        padding: 0.5rem;
+        padding: 0.5rem;     
         height: 100vh;
         overflow-y: scroll;
         -ms-overflow-style: none;
@@ -1168,9 +1168,9 @@ a.navbar-brand img { max-height: 48px; }
     }
 
     .nav-asides > .navbar::-webkit-scrollbar { background: transparent; }
-    .nav-asides > .navbar::-webkit-scrollbar-thumb:vertical { margin: 0; }
+    .nav-asides > .navbar::-webkit-scrollbar-thumb:vertical { margin: 0; border-radius:16px; }
     .nav-asides > .navbar::-webkit-scrollbar-button:start:decrement,
-    .nav-asides > .navbar::-webkit-scrollbar-button:end:increment { height: 0; display: block; }
+    .nav-asides > .navbar::-webkit-scrollbar-button:end:increment { height: 0; display: block;  }
 
     .nav-asides > .navbar .navbar-brand {  padding: 1rem 1rem;  }
     

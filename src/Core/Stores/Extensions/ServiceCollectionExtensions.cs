@@ -12,6 +12,7 @@ using PlatoCore.Stores.Abstractions.Roles;
 using PlatoCore.Stores.Abstractions.Schema;
 using PlatoCore.Stores.Abstractions.Settings;
 using PlatoCore.Stores.Abstractions.Shell;
+using PlatoCore.Stores.Abstractions.Tour;
 using PlatoCore.Stores.Abstractions.Users;
 using PlatoCore.Stores.Badges;
 using PlatoCore.Stores.Files;
@@ -20,6 +21,7 @@ using PlatoCore.Stores.Roles;
 using PlatoCore.Stores.Schema;
 using PlatoCore.Stores.Settings;
 using PlatoCore.Stores.Shell;
+using PlatoCore.Stores.Tour;
 using PlatoCore.Stores.Users;
 
 namespace PlatoCore.Stores.Extensions
@@ -44,6 +46,9 @@ namespace PlatoCore.Stores.Extensions
             // Shell features
             services.AddScoped<IShellDescriptorStore, ShellDescriptorStore>();
             services.AddScoped<IShellFeatureStore<ShellFeature>, ShellFeatureStore>();
+
+            // Tour
+            services.AddScoped<ITourDescriptorStore, TourDescriptorStore>();
 
             // Site Settings
             services.AddScoped<ISiteSettingsStore, SiteSettingsStore>();

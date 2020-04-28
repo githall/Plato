@@ -7,9 +7,9 @@
 :root {
     
     /* Default = #007bff */
-    --primary-text: red;
-    --primary-background: red;
-    --primary-border: red;
+    --primary-text: #007bff;
+    --primary-background: #007bff;
+    --primary-border: #007bff;
 
     /* Default = #ccc */
     --secondary-text: #ccc;
@@ -17,7 +17,7 @@
     --secondary-border: #ccc;
 
     /* Default = #08B735 */
-    --success-text-color: #08B735;
+    --success-text: #08B735;
     --success-background: #08B735;
     --success-border: #08B735;    
 
@@ -60,6 +60,10 @@ a:hover {
      color:var(--primary-text) !important;
 }
 
+.progress-bar {
+    background-color:var(--primary-background) !important;
+}
+
 .btn-primary {
     background-color:var(--primary-background) !important;
     border-color:var(--primary-border) !important;
@@ -70,6 +74,8 @@ a:hover {
   box-shadow: 0 0 0 0.2rem var(--primary-box-shadow) !important;
 }
 
+.dropdown-item.active,
+.dropdown-item:active,
 .list-group-item.active {
     background-color:var(--primary-background) !important;
     border-color:var(--primary-border) !important;
@@ -85,6 +91,11 @@ a:hover {
     border-color: var(--form-control-border-focus);
     box-shadow: 0 0 0 0.2rem var(--primary-box-shadow);
 }
+
+.bg-dark {
+    background-color: #350d36 !important;
+}
+
 
 /* ------------------- */
 /* Fixed Header */
@@ -502,8 +513,8 @@ a.label:hover, .label.active {
     border-top: 1px solid rgba(200, 200, 200, 0.1);
 }
 
-.nav-asides > .navbar::-webkit-scrollbar-thumb:vertical {  background-color: #888;  }
-.nav-asides > .navbar::-webkit-scrollbar-thumb:vertical:hover { background-color: #999; }
+.nav-asides > .navbar::-webkit-scrollbar-thumb:vertical { background-color: rgba(255, 255, 255, 0.25);  }
+.nav-asides > .navbar::-webkit-scrollbar-thumb:vertical:hover { background-color: rgba(255, 255, 255, 0.50); }
 
 /* ------------------- */
 /* Overflow */

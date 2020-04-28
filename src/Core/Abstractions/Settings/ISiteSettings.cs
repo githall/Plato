@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Routing;
-using PlatoCore.Abstractions.Routing;
+﻿using PlatoCore.Abstractions.Routing;
 
 namespace PlatoCore.Abstractions.Settings
 {

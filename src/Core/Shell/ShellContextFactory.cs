@@ -108,6 +108,7 @@ namespace PlatoCore.Shell
             descriptor.Modules.Add(new ShellModule { ModuleId = "Plato.Reputations" });
             descriptor.Modules.Add(new ShellModule { ModuleId = "Plato.Roles" });
             descriptor.Modules.Add(new ShellModule { ModuleId = "Plato.Settings" });
+            descriptor.Modules.Add(new ShellModule { ModuleId = "Plato.Tour" });
             descriptor.Modules.Add(new ShellModule { ModuleId = "Plato.Users", Version = "1.1.0" });
             descriptor.Modules.Add(new ShellModule { ModuleId = "Plato.Users.Badges" });
             return descriptor;

@@ -37,6 +37,9 @@ namespace PlatoCore.Cache.Extensions
             // This is critical to ensure each tenant has it's own isolated singleton instance of IMemoryCache
             services.Add(ServiceDescriptor.Singleton<IMemoryCache, MemoryCache>());
 
+            // Cache dependency
+            services.AddSingleton<ICacheDependency, CacheDependency>();
+
             // Add cache manager
             services.AddSingleton<ICacheManager, SimpleCacheManager>();
 
