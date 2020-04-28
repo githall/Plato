@@ -1,11 +1,7 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Mentions.Assets;
 using Plato.Mentions.Handlers;
@@ -14,6 +10,7 @@ using Plato.Mentions.Repositories;
 using Plato.Mentions.Services;
 using Plato.Mentions.Stores;
 using Plato.Mentions.Subscribers;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Mentions
 {
@@ -52,14 +49,6 @@ namespace Plato.Mentions
             // Register assets
             services.AddScoped<IAssetProvider, AssetProvider>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-            
         }
 
     }

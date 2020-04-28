@@ -13,7 +13,6 @@ using Plato.Entities.History.Services;
 using Plato.Entities.History.Stores;
 using Plato.Entities.Stores;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Text.Abstractions.Diff;
 using PlatoCore.Text.Abstractions.Diff.Models;
@@ -21,6 +20,7 @@ using PlatoCore.Security.Abstractions;
 using Plato.Entities.Services;
 using PlatoCore.Abstractions;
 using PlatoCore.Models.Users;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.History.Controllers
 {

@@ -1,11 +1,7 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Entities.Files.Search;
 using Plato.Entities.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using Plato.Entities.Files.Handlers;
@@ -17,6 +13,7 @@ using Plato.Files.Models;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.Files.ViewProviders;
 using PlatoCore.Layout.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Entities.Files
 {
@@ -49,13 +46,6 @@ namespace Plato.Entities.Files
             services.AddScoped<IViewProviderManager<File>, ViewProviderManager<File>>();
             services.AddScoped<IViewProvider<File>, AdminViewProvider>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

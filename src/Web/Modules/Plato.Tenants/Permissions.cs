@@ -17,7 +17,10 @@ namespace Plato.Tenants
 
         public static readonly Permission DeleteTenants =
             new Permission("DeleteTenants", "Can delete existing tenants");
-        
+
+        public static readonly Permission EditSettings =
+            new Permission("EditTenantSettings", "Can edit default tenant settings");
+
         public IEnumerable<Permission> GetPermissions()
         {
             return new[]
@@ -25,7 +28,8 @@ namespace Plato.Tenants
                 ManageTenants,
                 AddTenants,
                 EditTenants,
-                DeleteTenants                
+                DeleteTenants,
+                EditSettings
             };
         }
 
@@ -41,7 +45,8 @@ namespace Plato.Tenants
                         ManageTenants,
                         AddTenants,
                         EditTenants,
-                        DeleteTenants
+                        DeleteTenants,
+                        EditSettings
                     }
                 }
             };

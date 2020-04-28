@@ -38,7 +38,7 @@
                                         @result.Aggregate.Count.ToPrettyInt()
                                     </span>
 
-                                    <avatar data-toggle="tooltip" title="@result.Model.DisplayName" class="avatar avatar-md" url="@result.Model.Avatar.Url" />
+                                    <avatar data-toggle="tooltip" title="@result.Model.DisplayName" class="avatar avatar-md" avatar="@result.Model.Avatar" />
 
                                     <strong class="d-block mt-2 @result.Model.Css?.ToString()">@result.Model.DisplayName</strong>
 
@@ -77,7 +77,7 @@
                         </span>
                         <span class="list-body">
                             <span class="list-left">
-                                <avatar data-toggle="tooltip" title="@result.Model.DisplayName" class="avatar" url="@result.Model.Avatar.Url" />
+                                <avatar data-toggle="tooltip" title="@result.Model.DisplayName" class="avatar" avatar="@result.Model.Avatar" />
                             </span>
                             <span class="list-body">
                                

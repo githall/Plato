@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading.Tasks;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Mentions.Models;
 using Plato.Mentions.Stores;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Mentions.Services
 {
-    
+
     public class EntityMentionsManager : IEntityMentionsManager<EntityMention>
     {
 

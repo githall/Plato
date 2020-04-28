@@ -14,10 +14,11 @@ using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Abstractions.Routing;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Assets.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Localization.Abstractions.Models;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Core
 {
@@ -46,6 +47,7 @@ namespace Plato.Core
 
             // Configure site options
             services.AddSingleton<IConfigureOptions<SiteOptions>, SiteOptionsConfiguration>();
+
             
             // Configure current culture
             services.Configure<LocaleOptions>(options =>
@@ -66,7 +68,7 @@ namespace Plato.Core
             IServiceProvider serviceProvider)
         {
 
-            // Register client options middleware 
+            // Register client options middle ware 
             app.UseMiddleware<SettingsClientOptionsMiddleware>();
 
             // Routes

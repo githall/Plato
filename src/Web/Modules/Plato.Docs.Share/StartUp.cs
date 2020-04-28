@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Docs.Share.Navigation;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Docs.Share.Handlers;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.Share
 {
@@ -48,7 +48,7 @@ namespace Plato.Docs.Share
                 template: "docs/d/share/{opts.id}/{opts.alias}/{opts.replyId?}",
                 defaults: new { controller = "Home", action = "Index" }
             );
-            
+
         }
 
     }

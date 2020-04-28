@@ -5,7 +5,7 @@ using Plato.Articles.Models;
 using Plato.Entities.Stores;
 using Plato.Follows.Services;
 using Plato.Follows.Stores;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Security.Abstractions;
 

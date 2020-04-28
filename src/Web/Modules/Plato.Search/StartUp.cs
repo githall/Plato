@@ -8,7 +8,6 @@ using PlatoCore.Assets.Abstractions;
 using PlatoCore.Data.Schemas.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
@@ -23,6 +22,7 @@ using Plato.Search.ViewProviders;
 using Plato.Search.Handlers;
 using Plato.Search.Repositories;
 using Plato.Search.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Search
 {
@@ -97,7 +97,6 @@ namespace Plato.Search
         {
             
             // Search index
-
             routes.MapAreaRoute(
                 name: "PlatoSearchIndex",
                 areaName: "Plato.Search",
@@ -106,7 +105,6 @@ namespace Plato.Search
             );
             
             // Admin settings
-
             routes.MapAreaRoute(
                 name: "PlatoSearchAdmin",
                 areaName: "Plato.Search",
@@ -115,7 +113,6 @@ namespace Plato.Search
             );
 
             // Web Api
-
             routes.MapAreaRoute(
                 name: "PlatoSearchWebApi",
                 areaName: "Plato.Search",
@@ -126,4 +123,5 @@ namespace Plato.Search
         }
 
     }
+
 }

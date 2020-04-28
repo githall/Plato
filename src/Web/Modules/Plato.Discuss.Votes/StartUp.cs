@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Plato.Entities.Ratings.Services;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Discuss.Models;
 using Plato.Discuss.Votes.Navigation;
 using Plato.Discuss.Votes.Handlers;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.Votes
 {

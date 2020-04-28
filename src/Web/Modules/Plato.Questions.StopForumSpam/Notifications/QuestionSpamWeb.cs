@@ -6,10 +6,10 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Questions.Models;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using Plato.Questions.StopForumSpam.NotificationTypes;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Questions.StopForumSpam.Notifications
 {

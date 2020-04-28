@@ -240,8 +240,8 @@ $(function (win, doc, $) {
                 };
 
                 app.http({
-                    url: "api/follows/follow/post",
-                    method: "POST",
+                    url: win.$.Plato.defaults.pathBase + '/api/follows/follow/post',
+                    method: 'POST',
                     data: JSON.stringify(params)
                 }).done(function(data) {
                     if (data.statusCode === 200) {
@@ -262,8 +262,8 @@ $(function (win, doc, $) {
                 };
 
                 app.http({
-                    url: "api/follows/follow/delete",
-                    method: "DELETE",
+                    url: win.$.Plato.defaults.pathBase + '/api/follows/follow/delete',
+                    method: 'DELETE',
                     data: JSON.stringify(params)
                 }).done(function(data) {
                     if (data.statusCode === 200) {

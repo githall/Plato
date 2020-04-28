@@ -2,12 +2,10 @@
 using System.Linq;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Routing;
 using Plato.Questions.Models;
 using PlatoCore.Abstractions;
 using PlatoCore.Emails.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Localization.Abstractions.Models;
 using PlatoCore.Localization.Extensions;
@@ -16,6 +14,7 @@ using PlatoCore.Models.Users;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Questions.StopForumSpam.NotificationTypes;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Questions.StopForumSpam.Notifications
 {

@@ -3,13 +3,13 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Reports.TopPages.Navigation;
 using Plato.Reports.TopPages.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Reports.TopPages.Models;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Reports.TopPages
 {

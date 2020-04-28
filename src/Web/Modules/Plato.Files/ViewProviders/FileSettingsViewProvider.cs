@@ -7,7 +7,6 @@ using PlatoCore.Models.Shell;
 using Plato.Files.Models;
 using Plato.Files.Stores;
 using Plato.Files.ViewModels;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Roles.ViewModels;
 using PlatoCore.Stores.Roles;
 using PlatoCore.Models.Roles;
@@ -18,6 +17,7 @@ using PlatoCore.Stores.Abstractions.Roles;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Files.ViewProviders
 {

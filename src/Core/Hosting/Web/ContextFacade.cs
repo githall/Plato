@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions.Settings;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Settings;
 using PlatoCore.Stores.Abstractions.Users;
@@ -89,7 +89,7 @@ namespace PlatoCore.Hosting.Web
                     : settings.BaseUrl;
             }
 
-            return $"{request.Scheme}://{request.Host}{request.PathBase}";
+            return $"{request.Scheme}://{request.Host}";
 
         }
 

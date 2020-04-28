@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Files.Sharing.ViewProviders;
 using PlatoCore.Layout.ViewProviders;
@@ -14,6 +13,7 @@ using Plato.Files.Sharing.Repositories;
 using Plato.Files.Sharing.Models;
 using Plato.Files.Sharing.Stores;
 using Plato.Files.Sharing.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Files.Sharing
 {

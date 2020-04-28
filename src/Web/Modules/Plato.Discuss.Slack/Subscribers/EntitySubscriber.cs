@@ -4,7 +4,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Plato.Discuss.Models;
 using Plato.Entities.Extensions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Slack.Services;
 

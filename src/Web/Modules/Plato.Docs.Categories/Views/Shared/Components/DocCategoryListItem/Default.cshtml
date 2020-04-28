@@ -8,7 +8,7 @@
         : "docs";
 }
 
-<a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="@Model.Category.Id" asp-route-opts.alias="@Model.Category.Alias" class="list-group-item-action d-block p-3 text-center">
+<a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.categoryId="@Model.Category.Id" asp-route-opts.alias="@Model.Category.Alias" class="list-group-item-action d-block p-3 text-center">
     <div class="p-3">
         @if (!String.IsNullOrEmpty(Model.Category.IconCss))
         {

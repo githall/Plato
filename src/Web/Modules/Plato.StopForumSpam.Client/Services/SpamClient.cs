@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Caching.Memory;
 using PlatoCore.Cache.Abstractions;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using Plato.StopForumSpam.Client.Models;
 
 namespace Plato.StopForumSpam.Client.Services

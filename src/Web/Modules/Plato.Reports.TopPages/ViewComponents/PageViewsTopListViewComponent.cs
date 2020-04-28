@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Plato.Reports.ViewModels;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Metrics.Repositories;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Reports.TopPages.ViewComponents
 {

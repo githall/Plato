@@ -137,7 +137,7 @@ $(function (win, doc, $) {
                                         valueField: "keywords",
                                         config: {
                                             method: "GET",
-                                            url: 'api/search/get?page={page}&size={pageSize}&keywords=' +
+                                            url: win.$.Plato.defaults.pathBase + '/api/search/get?page={page}&size={pageSize}&keywords=' +
                                                 encodeURIComponent(keywords),
                                             data: {
                                                 sort: "ModifiedDate",

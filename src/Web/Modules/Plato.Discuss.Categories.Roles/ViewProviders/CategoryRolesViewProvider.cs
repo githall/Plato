@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Http;
 using Plato.Categories.Models;
 using Plato.Categories.Services;
 using Plato.Discuss.Categories.Models;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
 using Plato.Roles.ViewModels;

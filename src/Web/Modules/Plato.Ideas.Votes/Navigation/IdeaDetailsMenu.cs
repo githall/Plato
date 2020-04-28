@@ -40,7 +40,7 @@ namespace Plato.Ideas.Votes.Navigation
                         {                     
                             Entity = entity,
                             Permission = Permissions.VoteIdeas,
-                            ApiUrl = "api/ideas/vote/post"
+                            ApiUrl = builder.ActionContext.HttpContext.Request.PathBase + "/api/ideas/vote/post"
                         }
                     })
                 );

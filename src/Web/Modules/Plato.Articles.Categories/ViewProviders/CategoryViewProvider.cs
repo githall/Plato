@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Categories.Models;
 using Plato.Categories.Stores;

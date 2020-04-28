@@ -7,7 +7,7 @@ using Plato.Entities.Ratings.Models;
 using Plato.Entities.Ratings.Services;
 using Plato.Entities.Ratings.Stores;
 using Plato.Entities.Stores;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
 using Plato.Ideas.Models;

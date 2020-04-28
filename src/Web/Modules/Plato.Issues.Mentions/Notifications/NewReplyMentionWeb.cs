@@ -9,9 +9,9 @@ using Plato.Issues.Models;
 using Plato.Entities.Extensions;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.Mentions.Notifications
 {

@@ -5,9 +5,9 @@ using System.Security.Principal;
 using System.Collections.Concurrent;
 using Microsoft.AspNetCore.Authorization;
 using PlatoCore.Models.Roles;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Roles;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Roles.Services
 {

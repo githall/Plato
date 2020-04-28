@@ -1,9 +1,8 @@
-﻿using System.Collections.Concurrent;
+﻿using System.Linq;
+using System.Collections.Concurrent;
 using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
-using PlatoCore.Cache;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Models.Features;
 using PlatoCore.Models.Shell;
@@ -12,26 +11,27 @@ using PlatoCore.Stores.Abstractions.Shell;
 
 namespace PlatoCore.Stores.Shell
 {
+
     public class ShellDescriptorStore : IShellDescriptorStore
     {
 
         private const string Key = "ShellDescriptor";
 
-        private readonly IDictionaryStore _dictionaryStore;
-        private readonly ILogger<ShellDescriptorStore> _logger;
         private readonly IShellFeatureStore<ShellFeature> _shellFeatureStore;
+        private readonly ILogger<ShellDescriptorStore> _logger;
+        private readonly IDictionaryStore _dictionaryStore;
         private readonly ICacheManager _cacheManager;
 
         public ShellDescriptorStore(
             IShellFeatureStore<ShellFeature> shellFeatureStore,
-            IDictionaryStore dictionaryStore,
             ILogger<ShellDescriptorStore> logger,
+            IDictionaryStore dictionaryStore,            
             ICacheManager cacheManager)
         {
-            _dictionaryStore = dictionaryStore;
-            _logger = logger;
-            _cacheManager = cacheManager;
             _shellFeatureStore = shellFeatureStore;
+            _dictionaryStore = dictionaryStore;            
+            _cacheManager = cacheManager;
+            _logger = logger;
         }
 
         #region "Implementation"

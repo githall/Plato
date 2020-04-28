@@ -3,7 +3,6 @@ using System.Collections.Concurrent;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Features.Abstractions;
@@ -27,31 +26,27 @@ namespace PlatoCore.Features
     // within DI for the features we are enabling or disabling and the events can be invoked.
 
     public class ShellFeatureManager : IShellFeatureManager
-    {
-
-        private readonly IPlatoHost _platoHost;
+    { 
         
         private readonly IShellDescriptorManager _shellDescriptorManager;
         private readonly IShellDescriptorStore _shellDescriptorStore;
-        private readonly IHttpContextAccessor _httpContextAccessor;
-        private readonly IShellContextFactory _shellContextFactory;
-        private readonly IRunningShellTable _runningShellTable;        
+        private readonly IShellContextFactory _shellContextFactory;      
         private readonly ILogger<ShellFeatureManager> _logger;
+        private readonly IShellSettings _shellSettings;
+        private readonly IPlatoHost _platoHost;
 
         public ShellFeatureManager(            
             IShellDescriptorManager shellDescriptorManager,
             IShellDescriptorStore shellDescriptorStore,
-            IHttpContextAccessor httpContextAccessor,
-            IShellContextFactory shellContextFactory,
-            IRunningShellTable runningShellTable,             
+            IShellContextFactory shellContextFactory,         
             ILogger<ShellFeatureManager> logger,
+            IShellSettings shellSettings,
             IPlatoHost platoHost)
         {
             _shellDescriptorManager = shellDescriptorManager;
-            _shellDescriptorStore = shellDescriptorStore;
-            _httpContextAccessor = httpContextAccessor;
-            _shellContextFactory = shellContextFactory;
-            _runningShellTable = runningShellTable;
+            _shellDescriptorStore = shellDescriptorStore;      
+            _shellContextFactory = shellContextFactory;      
+            _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
         }
@@ -403,10 +398,6 @@ namespace PlatoCore.Features
             // Holds the results of all our event execution contexts
             var contexts = new ConcurrentDictionary<string, IFeatureEventContext>();
 
-            // Get setting before recycle
-            var httpContext = _httpContextAccessor.HttpContext;
-            var shellSettings = _runningShellTable.Match(httpContext);
-            
             // Build a list of all unique features we are enabling / disabling
             var uniqueFeatures = new ConcurrentDictionary<string, IShellFeature>();
             foreach (var feature in features)
@@ -438,9 +429,9 @@ namespace PlatoCore.Features
             {
                 minimumShellDescriptor.Modules.Add(new ShellModule(feature.ModuleId, feature.Version));
             }
-         
+
             // Create a new shell context with features and all dependencies we need to enable / disable
-            using (var shellContext = _shellContextFactory.CreateDescribedContext(shellSettings, minimumShellDescriptor))
+            using (var shellContext = _shellContextFactory.CreateDescribedContext(_shellSettings, minimumShellDescriptor))
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
                 {
@@ -466,7 +457,7 @@ namespace PlatoCore.Features
                             ServiceProvider = scope.ServiceProvider,
                             Logger = _logger
                         };
-                        
+
                         // Get event handler for feature we are invoking
                         var featureHandler = handlersList.FirstOrDefault(h => h.ModuleId == feature.ModuleId);
 
@@ -489,8 +480,6 @@ namespace PlatoCore.Features
 
                                     return v;
                                 });
-
-
                             }
 
                         }
@@ -504,22 +493,20 @@ namespace PlatoCore.Features
                                     $"An error occurred whilst invoking within {this.GetType().FullName}");
                             }
                         }
-                        
+
                     }
-                    
+
                 }
 
             }
-            
+
             return contexts;
 
         }
 
         void RecycleShell()
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            var shellSettings = _runningShellTable.Match(httpContext);
-            _platoHost.RecycleShell(shellSettings);
+        {  
+            _platoHost.RecycleShell(_shellSettings);
         }
 
     }

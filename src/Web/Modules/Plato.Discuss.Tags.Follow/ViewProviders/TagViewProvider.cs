@@ -2,7 +2,7 @@
 using Plato.Discuss.Tags.Models;
 using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.Stores;

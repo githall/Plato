@@ -12,7 +12,7 @@ using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
 using PlatoCore.Abstractions.Settings;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Models.Users;
 using PlatoCore.Security.Abstractions;

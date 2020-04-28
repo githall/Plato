@@ -6,7 +6,6 @@ using Microsoft.AspNetCore.Routing;
 using Plato.Ideas.Models;
 using PlatoCore.Abstractions;
 using PlatoCore.Emails.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Localization.Abstractions.Models;
 using PlatoCore.Localization.Extensions;
@@ -16,6 +15,7 @@ using Plato.Ideas.Mentions.NotificationTypes;
 using Plato.Entities.Extensions;
 using PlatoCore.Models.Users;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Mentions.Notifications
 {

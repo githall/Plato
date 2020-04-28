@@ -11,7 +11,7 @@ using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using Plato.Labels.Models;
 using Plato.Labels.Stores;
 using Plato.Labels.Services;

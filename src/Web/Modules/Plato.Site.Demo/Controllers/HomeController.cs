@@ -1,15 +1,16 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Options;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Models.Users;
 using Plato.Site.Demo.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Site.Demo.Controllers
 {
@@ -45,17 +46,27 @@ namespace Plato.Site.Demo.Controllers
             S = stringLocalizer;
 
         }
-            
-        [HttpPost, ValidateAntiForgeryToken]
+
+        [HttpPost]
         public async Task<IActionResult> Login(string returnUrl)
         {
+
+            if (string.IsNullOrEmpty(_demoOptions.AdminUserName))
+            {
+                throw new ArgumentNullException(nameof(_demoOptions.AdminUserName));
+            }
+
+            if (string.IsNullOrEmpty(_demoOptions.AdminPassword))
+            {
+                throw new ArgumentNullException(nameof(_demoOptions.AdminPassword));
+            }
 
             // Get sign in result
             var result = await _signInManager.PasswordSignInAsync(
                 _demoOptions.AdminUserName,
                 _demoOptions.AdminPassword,
-                true,
-                false);
+                isPersistent: true,
+                lockoutOnFailure: false);
 
             // Success
             if (result.Succeeded)

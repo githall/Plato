@@ -9,7 +9,7 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
@@ -26,7 +26,7 @@ using PlatoCore.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Titles;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
 namespace Plato.Docs.Controllers
 {

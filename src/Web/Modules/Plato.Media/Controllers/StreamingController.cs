@@ -9,7 +9,7 @@ using Plato.Media.Stores;
 using Plato.Media.ViewModels;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 
 namespace Plato.Media.Controllers
 {
@@ -68,12 +68,12 @@ namespace Plato.Media.Controllers
                 return base.UnauthorizedException();
             }
 
-            // Validate & process multipart request
+            // Validate & process multi-part request
             // -------------------
 
             var result = await _multiPartRequestHandler.ProcessAsync(Request);
 
-            // Return any errors parsing the multipart request
+            // Return any errors parsing the multi-part request
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)

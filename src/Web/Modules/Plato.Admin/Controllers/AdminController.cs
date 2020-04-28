@@ -42,11 +42,8 @@ namespace Plato.Admin.Controllers
 
         public async Task<IActionResult> Index()
         {
-
             _breadCrumbManager.Configure(builder => { builder.Add(S["Home"]); });
-
             return View((LayoutViewModel) await _viewProvider.ProvideIndexAsync(new AdminIndex(), this));
-
         }
 
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]

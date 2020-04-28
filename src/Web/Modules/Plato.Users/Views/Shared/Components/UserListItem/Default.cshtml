@@ -5,8 +5,8 @@
 @if (Model.EnableEdit)
 {
     <a asp-route-area="Plato.Users" asp-controller="Admin" asp-action="Edit" asp-route-id="@Model.User.Id" class="list-group-item-action d-block p-3 text-center">
-        <div class="p-3">
-            <avatar data-toggle="tooltip" title="@Model.User.DisplayName" class="avatar avatar-md" url="@Model.User.Avatar.Url" />
+        <div class="p-3">         
+            <avatar data-toggle="tooltip" title="@Model.User.DisplayName" class="avatar avatar-md" avatar="@Model.User.Avatar" />
             <h6 class="d-block mt-2 @Model.User.Css.ToString()">
                 @Model.User.DisplayName
             </h6>
@@ -25,7 +25,6 @@
                 </span>
                 <br />
                 @T["Last active "] <date utc="@Model.User.LastLoginDate"></date>
-
             </span>
         </div>
     </a>
@@ -33,7 +32,7 @@
 else
 {
     <a asp-route-area="Plato.Users" asp-controller="Home" asp-action="Display" asp-route-opts.id="@Model.User.Id" asp-route-opts.alias="@Model.User.Alias" class="list-group-item-action d-block p-3 text-center">
-        <avatar data-toggle="tooltip" title="@Model.User.DisplayName" class="avatar avatar-md" url="@Model.User.Avatar.Url" />
+        <avatar data-toggle="tooltip" title="@Model.User.DisplayName" class="avatar avatar-md" avatar="@Model.User.Avatar" />
         <h6 class="d-block mt-2 @Model.User.Css.ToString()">
             @Model.User.DisplayName
         </h6>

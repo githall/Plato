@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
@@ -13,6 +12,7 @@ using Plato.Settings.Handlers;
 using Plato.Settings.Models;
 using Plato.Settings.Navigation;
 using Plato.Settings.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Settings
 {

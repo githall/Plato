@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Categories.Stores;
 using Plato.Issues.Categories.Models;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
@@ -20,6 +19,7 @@ using Plato.Issues.Models;
 using Plato.Categories.Services;
 using Plato.Categories.Extensions;
 using Plato.Categories.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.Categories.Controllers
 {

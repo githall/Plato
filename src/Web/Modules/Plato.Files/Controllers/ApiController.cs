@@ -14,7 +14,7 @@ using Plato.WebApi.Controllers;
 using Plato.Files.Models;
 using Microsoft.AspNetCore.Mvc.Localization;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using Microsoft.AspNetCore.Authorization;
 using PlatoCore.Security.Abstractions;
 

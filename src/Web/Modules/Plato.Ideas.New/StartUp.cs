@@ -3,9 +3,9 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Ideas.New.ViewAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.New
 {
@@ -23,18 +23,12 @@ namespace Plato.Ideas.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, IdeaListItemViewAdapter>();
+
             //services.AddScoped<IViewAdapterProvider, IdeaViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, IdeaListViewAdapter>();            
             //services.AddScoped<IViewAdapterProvider, IdeaCommentListViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, IdeaCommentListItemViewAdapter>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

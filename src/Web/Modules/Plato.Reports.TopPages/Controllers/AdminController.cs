@@ -3,17 +3,16 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Stores.Abstractions.Settings;
-using Plato.Metrics.Models;
 using Plato.Reports.Models;
 using Plato.Reports.ViewModels;
 using Plato.Reports.TopPages.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Reports.TopPages.Controllers
 {

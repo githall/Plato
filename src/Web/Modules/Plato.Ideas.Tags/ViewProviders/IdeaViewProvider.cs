@@ -12,11 +12,11 @@ using Plato.Entities.Stores;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Tags.Models;
 using Plato.Tags.Services;
 using Plato.Tags.Stores;
 using Plato.Tags.ViewModels;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Tags.ViewProviders
 {

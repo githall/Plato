@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Hosting;
 using PlatoCore.Models.Shell;
 using Plato.SetUp.Services;
 using PlatoCore.Hosting.Abstractions;

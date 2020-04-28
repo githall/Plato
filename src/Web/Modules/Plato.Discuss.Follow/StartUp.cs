@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Discuss.Follow.Handlers;
 using Plato.Discuss.Follow.Notifications;
 using Plato.Discuss.Follow.NotificationTypes;
@@ -11,7 +8,6 @@ using Plato.Discuss.Follow.ViewProviders;
 using Plato.Discuss.Models;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -19,6 +15,7 @@ using PlatoCore.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.Follow
 {
@@ -66,13 +63,6 @@ namespace Plato.Discuss.Follow
 
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-      
-
-        }
     }
+
 }

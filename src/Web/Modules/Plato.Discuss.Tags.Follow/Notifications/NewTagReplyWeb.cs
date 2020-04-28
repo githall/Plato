@@ -8,7 +8,7 @@ using Plato.Discuss.Tags.Follow.NotificationTypes;
 using Plato.Discuss.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
 

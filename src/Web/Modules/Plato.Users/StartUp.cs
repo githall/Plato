@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.DependencyInjection.Extensions;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Data.Migrations.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ActionFilters;
 using PlatoCore.Models.Roles;
 using PlatoCore.Models.Users;
@@ -30,6 +29,7 @@ using Plato.Users.Navigation;
 using Plato.Users.Services;
 using Plato.Users.Subscribers;
 using PlatoCore.Abstractions.Extensions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Users
 {
@@ -37,12 +37,14 @@ namespace Plato.Users
     {
 
         private readonly string _cookieSuffix;
-        private readonly string _tenantPrefix;
+        private readonly string _cookiePath;
 
         public Startup(IShellSettings shellSettings)
         {
             _cookieSuffix = shellSettings.AuthCookieName;
-            _tenantPrefix = shellSettings.RequestedUrlPrefix;
+            _cookiePath = !string.IsNullOrEmpty(shellSettings.RequestedUrlPrefix)
+                ? $"/{shellSettings.RequestedUrlPrefix}"
+                : "/";
         }
 
         public override void ConfigureServices(IServiceCollection services)
@@ -57,7 +59,7 @@ namespace Plato.Users
             // and change telephone number operations, and for two factor authentication token generation.
             services.AddIdentity<User, Role>().AddDefaultTokenProviders();
 
-            // Add authentication services & configure default authenticaiton scheme
+            // Add authentication services & configure default authentication scheme
             services.AddAuthentication(options =>
             {                
                 options.DefaultSignOutScheme = IdentityConstants.ApplicationScheme;
@@ -89,11 +91,20 @@ namespace Plato.Users
             // Configure authentication cookie options
             services.ConfigureApplicationCookie(options =>
             {
-                options.Cookie.Name = "plato_" + _cookieSuffix.ToLower();
-                options.Cookie.Path = _tenantPrefix;
-                options.LoginPath = new PathString("/Plato.Users/Account/Login/");
-                options.AccessDeniedPath = new PathString("/Plato.Users/Account/Login/");
-                options.AccessDeniedPath = options.LoginPath;
+                options.Cookie.Name = $"plato_{ _cookieSuffix.ToLower()}";
+                options.Cookie.Path = _cookiePath;
+                options.LoginPath = new PathString(StatusCodePagePaths.Login);
+                options.AccessDeniedPath = new PathString(StatusCodePagePaths.Unauthorized);                
+                options.ExpireTimeSpan = TimeSpan.FromDays(30);
+                options.SlidingExpiration = true;
+            });
+
+            services.ConfigureExternalCookie(options =>
+            {
+                options.Cookie.Name = $"plato_external_{ _cookieSuffix.ToLower()}";
+                options.Cookie.Path = _cookiePath;
+                options.LoginPath = new PathString(StatusCodePagePaths.Login);
+                options.AccessDeniedPath = new PathString(StatusCodePagePaths.Unauthorized);
                 options.ExpireTimeSpan = TimeSpan.FromDays(30);
                 options.SlidingExpiration = true;
             });

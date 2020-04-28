@@ -3,8 +3,8 @@ using Plato.Categories.Stores;
 using Plato.Questions.Categories.Models;
 using Plato.Follows.Stores;
 using Plato.Follows.ViewModels;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Questions.Categories.Follow.ViewProviders
 {

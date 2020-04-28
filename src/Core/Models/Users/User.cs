@@ -16,6 +16,9 @@ namespace PlatoCore.Models.Users
         private readonly ConcurrentDictionary<Type, ISerializable> _metaData;
 
         private string _displayName;
+        private UserAvatar _avatar;
+        private UserUrls _urls;
+        private UserCss _css;
 
         #region "Public Properties"
 
@@ -36,12 +39,42 @@ namespace PlatoCore.Models.Users
         public string PhotoUrl { get; set; }
 
         public string PhotoColor { get; set; }
-        
-        public UserAvatar Avatar => new UserAvatar(this);
 
-        public UserUrls Urls => new UserUrls(this);
+        public UserAvatar Avatar
+        {
+            get
+            {
+                if (_avatar == null)
+                {
+                    _avatar = new UserAvatar(this);
+                }
+                return _avatar;
+            }
+        }
 
-        public UserCss Css => new UserCss(this);
+        public UserUrls Urls
+        {
+            get
+            {
+                if (_urls == null)
+                {
+                    _urls = new UserUrls(this);
+                }
+                return _urls;
+            }
+        }
+
+        public UserCss Css
+        {
+            get
+            {
+                if (_css == null)
+                {
+                    _css = new UserCss(this);
+                }
+                return _css;
+            }
+        }
 
         public string SamAccountName { get; set; }
 

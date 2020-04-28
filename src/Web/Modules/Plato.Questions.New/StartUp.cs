@@ -1,11 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using Plato.Questions.New.ViewAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Questions.New
 {
@@ -23,18 +20,12 @@ namespace Plato.Questions.New
 
             // Register view adapters        
             services.AddScoped<IViewAdapterProvider, QuestionListItemViewAdapter>();
+
             //services.AddScoped<IViewAdapterProvider, QuestionViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, QuestionListViewAdapter>();            
             //services.AddScoped<IViewAdapterProvider, QuestionAnswerListViewAdapter>();
             //services.AddScoped<IViewAdapterProvider, QuestionAnswerListItemViewAdapter>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

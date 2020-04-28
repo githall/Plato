@@ -118,8 +118,8 @@ $(function (win, doc, $) {
                 params.entityReplyId = this.getEntityReplyId($caller);
 
                 app.http({
-                    url: "api/reactions/react/post",
-                    method: "POST",
+                    url: win.$.Plato.defaults.pathBase + '/api/reactions/react/post',
+                    method: 'POST',
                     data: JSON.stringify(params)
                 }).done(function(data) {
                     // Created or deleted response

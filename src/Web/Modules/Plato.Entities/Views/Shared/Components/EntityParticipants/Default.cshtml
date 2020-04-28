@@ -22,7 +22,7 @@
                     ? "reply"
                     : "replies";
                 <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@user.Id" asp-route-opts.alias="@user.Alias" title="@user.DisplayName - @user.TotalReplies.ToPrettyInt() @T[replies]" data-toggle="tooltip" class="avatar-link my-1">
-                    <avatar class="avatar avatar-sm" url="@user.Avatar.Url" />
+                    <avatar class="avatar avatar-sm" avatar="@user.Avatar" />
                 </a>
             }
         </card-body>

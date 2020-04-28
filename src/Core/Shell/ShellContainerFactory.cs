@@ -1,16 +1,15 @@
 ﻿using System;
 using System.Linq;
-using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.Configuration;
-using Microsoft.Extensions.DependencyInjection.Extensions;
-using PlatoCore.Abstractions.Extensions;
-using Microsoft.AspNetCore.Authentication;
 using PlatoCore.Abstractions;
-using PlatoCore.Data.Abstractions;
-using PlatoCore.Features;
-using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
+using PlatoCore.Shell.Extensions;
+using PlatoCore.Data.Abstractions;
 using PlatoCore.Shell.Abstractions;
+using PlatoCore.Abstractions.Extensions;
+using Microsoft.Extensions.Configuration;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.Extensions.DependencyInjection;
+using Microsoft.Extensions.DependencyInjection.Extensions;
 
 namespace PlatoCore.Shell
 {
@@ -48,9 +47,9 @@ namespace PlatoCore.Shell
                 options.TablePrefix = settings.TablePrefix;
             });
 
-            // Add core tenant services
-            AddCoreServices(tenantServiceCollection);
-            
+            // Register all services that require tenant level isolation
+            tenantServiceCollection.AddPlatoTenant();
+
             // Add StartUps from modules defined in blueprint descriptor as services
             var moduleServiceCollection = _serviceProvider.CreateChildContainer(_applicationServices);
 
@@ -68,7 +67,7 @@ namespace PlatoCore.Shell
             // Add default services
             moduleServiceCollection.TryAddSingleton(configuration);
             tenantServiceCollection.TryAddSingleton(configuration);
-            
+
             // Make shell settings available to the modules
             moduleServiceCollection.AddSingleton(settings);
             moduleServiceCollection.AddSingleton(blueprint.Descriptor);
@@ -95,15 +94,6 @@ namespace PlatoCore.Shell
             // Return our tenant service provider
             var shellServiceProvider = tenantServiceCollection.BuildServiceProvider();
             return shellServiceProvider;
-
-        }
-
-        private void AddCoreServices(IServiceCollection tenantServiceCollection)
-        {
-            tenantServiceCollection.AddTransient<IShellFeatureManager, ShellFeatureManager>();
-            tenantServiceCollection.AddTransient<IShellDescriptorManager, Features.ShellDescriptorManager>();
-
-
 
         }
 

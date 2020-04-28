@@ -8,7 +8,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
@@ -22,9 +21,11 @@ using Plato.Users.Services;
 using Plato.Users.ViewModels;
 using PlatoCore.Security.Abstractions;
 using Microsoft.AspNetCore.Routing;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Users.Controllers
 {
+
     public class HomeController : Controller, IUpdateModel
     {
 

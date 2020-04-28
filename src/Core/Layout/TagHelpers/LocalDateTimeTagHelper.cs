@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Razor.TagHelpers;
 using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.Settings;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Localization.Abstractions;
 
 namespace PlatoCore.Layout.TagHelpers

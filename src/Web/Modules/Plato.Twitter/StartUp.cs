@@ -11,11 +11,11 @@ using Plato.Twitter.Stores;
 using Plato.Twitter.ViewProviders;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Twitter
 {

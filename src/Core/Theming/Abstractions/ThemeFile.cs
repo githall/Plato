@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System.IO;
+using System.Collections.Generic;
 
 namespace PlatoCore.Theming.Abstractions
 {
@@ -6,6 +7,8 @@ namespace PlatoCore.Theming.Abstractions
     public interface IThemeFile
     {
         string Name { get; set; }
+
+        string Extension { get; }
 
         string FullName { get; set; }
 
@@ -21,7 +24,10 @@ namespace PlatoCore.Theming.Abstractions
 
     public class ThemeFile : IThemeFile
     {
+
         public string Name { get; set; }
+
+        public string Extension => Path.GetExtension(Name);
 
         public string FullName { get; set; }
 

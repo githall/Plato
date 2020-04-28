@@ -42,7 +42,7 @@ if (typeof window.$.Plato === "undefined") {
                     "jpeg"
                 ],
                 dropZoneOptions: {
-                    url: '/api/media/streaming/upload',
+                    url: win.$.Plato.defaults.pathBase + '/api/media/streaming/upload',
                     fallbackClick: false,
                     maxFilesize: 32, // 32mb
                     autoProcessQueue: true,
@@ -415,7 +415,7 @@ if (typeof window.$.Plato === "undefined") {
                                         // Ensure we only load the emoji the first time
                                         if (!$dropdown.data("emojiLoaded")) {
                                             plato.http({
-                                                url: "api/markdown/emoji/get",
+                                                url: win.$.Plato.defaults.pathBase + "/api/markdown/emoji/get",
                                                 method: "GET"
                                             }).done(function (response) {
                                                 if (response.statusCode === 200) {
@@ -1739,8 +1739,9 @@ if (typeof window.$.Plato === "undefined") {
                                         alert("An error occurred. No valid CSRF token could be obtained for the request.");
                                     }
 
+
                                     // Configure drop zone requests from Plato options
-                                    options.dropZoneOptions.url = plato.defaults.url + options.dropZoneOptions.url;
+                                    options.dropZoneOptions.url = plato.defaults.pathBase + options.dropZoneOptions.url;
 
                                     // Configure request headers
                                     options.dropZoneOptions.headers = {
@@ -1860,9 +1861,9 @@ if (typeof window.$.Plato === "undefined") {
 
                                                             // Image or file?
                                                             if (result.isImage) {
-                                                                chunk = '![' + result.name + '](/media/' + result.id + ')';
+                                                                chunk = '![' + result.name + '](' + win.$.Plato.defaults.pathBase  + '/media/' + result.id + ')';
                                                             } else {
-                                                                chunk = '[' + result.name + '](/media/' + result.id + ') - ' + result.friendlySize;
+                                                                chunk = '[' + result.name + '](' + win.$.Plato.defaults.pathBase + '/media/' + result.id + ') - ' + result.friendlySize;
                                                             }
 
                                                             // Add markdown
@@ -2056,7 +2057,7 @@ if (typeof window.$.Plato === "undefined") {
                     }
 
                     plato.http({
-                        url: "api/markdown/parse/post",
+                        url: win.$.Plato.defaults.pathBase + "/api/markdown/parse/post",
                         method: "POST",
                         async: false,
                         data: JSON.stringify({

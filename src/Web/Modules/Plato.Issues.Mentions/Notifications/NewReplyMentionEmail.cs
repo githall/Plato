@@ -9,7 +9,6 @@ using Plato.Entities.Extensions;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
 using PlatoCore.Emails.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Localization.Abstractions.Models;
 using PlatoCore.Localization.Extensions;
@@ -17,6 +16,7 @@ using PlatoCore.Models.Notifications;
 using PlatoCore.Models.Users;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.Mentions.Notifications
 {

@@ -47,5 +47,7 @@ namespace Plato.Https
             app.UseRewriter(options);
 
         }
+
     }
+
 }

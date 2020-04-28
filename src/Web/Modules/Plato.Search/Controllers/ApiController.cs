@@ -7,13 +7,13 @@ using Plato.Entities.Services;
 using Plato.Entities.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Search.Models;
 using Plato.Search.Stores;
 using Plato.WebApi.Controllers;
 using Plato.WebApi.Models;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Search.Controllers
 {
@@ -126,12 +126,11 @@ namespace Plato.Search.Controllers
                 {
                     Total = entities.Total
                 };
-
-                var baseUrl = await _contextFacade.GetBaseUrlAsync();
+           
                 foreach (var entity in entities.Data)
                 {
 
-                    var url = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    var url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
                         ["area"] = entity.ModuleId,
                         ["controller"] = "Home",
@@ -139,6 +138,16 @@ namespace Plato.Search.Controllers
                         ["opts.id"] = entity.Id,
                         ["opts.alias"] = entity.Alias
                     });
+
+                    if (string.IsNullOrEmpty(entity.CreatedBy.Avatar.Url))
+                    {
+                        entity.CreatedBy.Avatar.Url = _contextFacade.GetRouteUrl(entity.CreatedBy.Avatar.DefaultRoute);
+                    }
+
+                    if (string.IsNullOrEmpty(entity.ModifiedBy.Avatar.Url))
+                    {
+                        entity.ModifiedBy.Avatar.Url = _contextFacade.GetRouteUrl(entity.ModifiedBy.Avatar.DefaultRoute);
+                    }
 
                     results.Data.Add(new SearchApiResult()
                     {
@@ -149,7 +158,7 @@ namespace Plato.Search.Controllers
                             DisplayName = entity.CreatedBy.DisplayName,
                             UserName = entity.CreatedBy.UserName,
                             Avatar = entity.CreatedBy.Avatar,
-                            Url = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                            Url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                             {
                                 ["area"] = "Plato.Users",
                                 ["controller"] = "Home",
@@ -164,7 +173,7 @@ namespace Plato.Search.Controllers
                             DisplayName = entity.ModifiedBy.DisplayName,
                             UserName = entity.ModifiedBy.UserName,
                             Avatar = entity.ModifiedBy.Avatar,
-                            Url = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                            Url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                             {
                                 ["area"] = "Plato.Users",
                                 ["controller"] = "Home",
@@ -179,7 +188,7 @@ namespace Plato.Search.Controllers
                             DisplayName = entity.LastReplyBy.DisplayName,
                             UserName = entity.LastReplyBy.UserName,
                             Avatar = entity.LastReplyBy.Avatar,
-                            Url = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                            Url = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                             {
                                 ["area"] = "Plato.Users",
                                 ["controller"] = "Home",

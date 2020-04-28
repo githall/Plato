@@ -1,11 +1,8 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
@@ -16,6 +13,7 @@ using Plato.Entities.ViewModels;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Titles;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Controllers
 {

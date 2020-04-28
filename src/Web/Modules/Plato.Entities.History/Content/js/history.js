@@ -78,7 +78,7 @@ $(function (win, doc, $) {
                     noResultsText: noResultsText,
                     config: {
                         method: "GET",
-                        url: 'api/history/entity/get' + params,
+                        url: win.$.Plato.defaults.pathBase + '/api/history/entity/get' + params,
                         data: {
                             sort: "CreatedDate",
                             order: 1

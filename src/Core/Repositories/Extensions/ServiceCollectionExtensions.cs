@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Models;
 using PlatoCore.Models.Abstract;
 using PlatoCore.Models.Badges;
 using PlatoCore.Models.Features;
@@ -20,7 +19,7 @@ namespace PlatoCore.Repositories.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddPlatoRepositories(
+        public static IServiceCollection AddShellRepositories(
             this IServiceCollection services)
         {
 

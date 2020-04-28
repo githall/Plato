@@ -3,10 +3,10 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Plato.Entities.Extensions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Questions.Models;
 using Plato.Slack.Services;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Questions.Slack.Subscribers
 {

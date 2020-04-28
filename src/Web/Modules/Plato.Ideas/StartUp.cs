@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Assets.Abstractions;
@@ -39,6 +38,7 @@ using PlatoCore.Reputations.Abstractions;
 using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas
 {
@@ -225,6 +225,16 @@ namespace Plato.Ideas
                 defaults: new { controller = "User", action = "Index" }
             );
 
+            // Admin Index
+            routes.MapAreaRoute(
+                name: "IdeasAdminIndex",
+                areaName: "Plato.Ideas",
+                template: "admin/ideas",
+                defaults: new { controller = "Admin", action = "Index" }
+            );
+
         }
+
     }
+
 }

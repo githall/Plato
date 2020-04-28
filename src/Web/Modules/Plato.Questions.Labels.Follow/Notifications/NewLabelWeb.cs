@@ -6,11 +6,10 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Questions.Labels.Follow.NotificationTypes;
 using Plato.Questions.Models;
-using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Questions.Labels.Follow.Notifications
 {

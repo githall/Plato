@@ -1,10 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Mvc.Rendering;
+using PlatoCore.Emails.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Security.Attributes;
 using PlatoCore.Shell.Abstractions;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Tenants.ViewModels
 {
@@ -14,7 +15,6 @@ namespace Plato.Tenants.ViewModels
         [Required, Display(Name = "site name")]
         public string SiteName { get; set; }
 
-        [Required]
         public string Location { get; set; }
 
         [Required, Display(Name = "connection string")]
@@ -59,6 +59,8 @@ namespace Plato.Tenants.ViewModels
         public string OwnerId { get; set; }
 
         public bool IsNewTenant { get; set; }
+
+        public SmtpSettings SmtpSettings { get; set; }
 
         public bool IsDefault => SiteName?.Equals(ShellHelper.DefaultShellName, System.StringComparison.OrdinalIgnoreCase) ?? false;      
 

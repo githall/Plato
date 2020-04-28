@@ -1,28 +1,26 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
 using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Users;
 using PlatoCore.Stores.Users;
 using Plato.WebApi.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.WebApi.Controllers
 {
 
     public class UsersController : BaseWebApiController
     {
-        
+
         private readonly IPlatoUserStore<User> _platoUserStore;
         private readonly IContextFacade _contextFacade;
 
         public UsersController(
-            IPlatoUserStore<User> platoUserStore,
-            IUrlHelperFactory urlHelperFactory,
+            IPlatoUserStore<User> platoUserStore,         
             IContextFacade contextFacade)
         {
             _platoUserStore = platoUserStore;
@@ -55,12 +53,11 @@ namespace Plato.WebApi.Controllers
                 {
                     Total = users.Total
                 };
-                
-                var baseUrl = await _contextFacade.GetBaseUrlAsync();
+
                 foreach (var user in users.Data)
                 {
 
-                    var profileUrl = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    var profileUrl = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Users",
                         ["controller"] = "Home",
@@ -68,6 +65,11 @@ namespace Plato.WebApi.Controllers
                         ["opts.id"] = user.Id,
                         ["opts.alias"] = user.Alias
                     });
+
+                    if (string.IsNullOrEmpty(user.Avatar.Url))
+                    {                     
+                        user.Avatar.Url = _contextFacade.GetRouteUrl(user.Avatar.DefaultRoute);
+                    }
 
                     results.Data.Add(new UserApiResult()
                     {

@@ -64,7 +64,7 @@ $(function (win, doc, $) {
                     noResultsText: app.T("No notifications at this time"),
                     config: {
                         method: "GET",
-                        url: 'api/notifications/user/get?page={page}&size={pageSize}',
+                        url: win.$.Plato.defaults.pathBase + '/api/notifications/user/get?page={page}&size={pageSize}',
                         data: {
                             sort: "CreatedDate",
                             order: "Desc"
@@ -213,7 +213,7 @@ $(function (win, doc, $) {
 
                                         app.http({
                                             method: "DELETE",
-                                            url: 'api/notifications/user/delete?id=' + id
+                                            url: win.$.Plato.defaults.pathBase + '/api/notifications/user/delete?id=' + id
                                         }).done(function(response) {
                                             if (response.statusCode === 200) {
                                                 methods.update($caller);
@@ -346,7 +346,7 @@ $(function (win, doc, $) {
                 
                 // Get the number of unread notifications and display badge if needed
                 app.http({
-                    url: "api/notifications/user/unread",
+                    url: win.$.Plato.defaults.pathBase + "/api/notifications/user/unread",
                     method: "GET"
                 }).done(function (data) {
                     if (data.statusCode === 200) {
@@ -499,7 +499,7 @@ $(function (win, doc, $) {
                 }
 
                 app.http({
-                    url: "api/notifications/user/markread",
+                    url: win.$.Plato.defaults.pathBase + "/api/notifications/user/markread",
                     method: "POSt"
                 }).done(function(data) {
                     if (data.statusCode === 200) {

@@ -9,7 +9,7 @@ using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Users;
-using PlatoCore.Net.Abstractions;
+using PlatoCore.Http.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Settings;
 using PlatoCore.Stores.Abstractions.Users;

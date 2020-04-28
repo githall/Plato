@@ -11,7 +11,7 @@
             {
                 <li class="list-group-item">
                     @T["Created by"]
-                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@Model.File.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@GetRouteUrl(Model.File.CreatedBy.Urls.GetProfileRoute)" data-popper-position="bottom">
                         @Model.File.CreatedBy.DisplayName
                     </a>
                 </li>
@@ -26,7 +26,7 @@
                 {
                     <li class="list-group-item">
                         @T["Last updated by"]
-                        <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.ModifiedUserId" asp-route-opts.alias="@Model.File.ModifiedBy.Alias" data-provide="popper" data-popper-url="@Model.File.ModifiedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+                        <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.ModifiedUserId" asp-route-opts.alias="@Model.File.ModifiedBy.Alias" data-provide="popper" data-popper-url="@GetRouteUrl(Model.File.ModifiedBy.Urls.GetProfileRoute)" data-popper-position="bottom">
                             @Model.File.ModifiedBy.DisplayName
                         </a>
                     </li>

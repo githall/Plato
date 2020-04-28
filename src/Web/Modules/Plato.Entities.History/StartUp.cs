@@ -5,13 +5,13 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Entities.History.Assets;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.History.Handlers;
 using Plato.Entities.History.Models;
 using Plato.Entities.History.Repositories;
 using Plato.Entities.History.Services;
 using Plato.Entities.History.Stores;
 using PlatoCore.Assets.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Entities.History
 {
@@ -56,5 +56,7 @@ namespace Plato.Entities.History
             );
 
         }
+
     }
+
 }

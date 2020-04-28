@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
@@ -12,6 +11,7 @@ using Plato.Users.Notifications.Assets;
 using Plato.Users.Notifications.Navigation;
 using Plato.Users.Notifications.ViewModels;
 using Plato.Users.Notifications.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Users.Notifications
 {

@@ -4,7 +4,7 @@ using Plato.Categories.Models;
 using Plato.Categories.Stores;
 using Plato.Categories.ViewModels;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 
 namespace Plato.Categories.Services

@@ -17,10 +17,10 @@ using PlatoCore.Tasks.Abstractions;
 using Plato.Entities.Extensions;
 using Plato.Entities.Stores;
 using Plato.Follows.Models;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Labels.Models;
 using Plato.Labels.Stores;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.Labels.Follow.Subscribers
 {

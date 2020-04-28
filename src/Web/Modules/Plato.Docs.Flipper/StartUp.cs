@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Docs.Flipper.Navigation;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.Flipper
 {

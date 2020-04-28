@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Hosting.Abstractions;
 using Microsoft.Extensions.Options;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Twitter;
@@ -8,6 +7,7 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
 using Plato.Authentication.Twitter.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Authentication.Twitter
 {

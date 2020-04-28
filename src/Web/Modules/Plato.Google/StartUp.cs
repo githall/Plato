@@ -10,21 +10,17 @@ using Plato.Google.Navigation;
 using Plato.Google.Stores;
 using Plato.Google.ViewProviders;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Google
 {
 
     public class Startup : StartupBase
     {
-
-        public Startup()
-        {
-        }
 
         public override void ConfigureServices(IServiceCollection services)
         {

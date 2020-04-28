@@ -16,10 +16,10 @@ using Plato.Ideas.Services;
 using Plato.Entities.Stores;
 using Plato.Ideas.Categories.ViewModels;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Categories.ViewProviders
 {
@@ -27,7 +27,7 @@ namespace Plato.Ideas.Categories.ViewProviders
     {
 
         private const string CategoryHtmlName = "category";
-        
+
         private readonly IEntityCategoryStore<EntityCategory> _entityCategoryStore;
         private readonly IEntityCategoryManager _entityCategoryManager;
         private readonly ICategoryDetailsUpdater _categoryDetailsUpdater;

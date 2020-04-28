@@ -4,12 +4,12 @@ using Microsoft.Extensions.Logging;
 using Plato.Twitter.Models;
 using Plato.Twitter.Stores;
 using Plato.Twitter.ViewModels;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
 using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Security.Abstractions.Encryption;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Twitter.ViewProviders
 {

@@ -16,7 +16,7 @@ using Plato.Discuss.Models;
 using Plato.Discuss.Services;
 using Plato.Entities.Stores;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Navigation.Abstractions;

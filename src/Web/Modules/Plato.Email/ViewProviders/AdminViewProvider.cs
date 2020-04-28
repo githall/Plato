@@ -76,7 +76,7 @@ namespace Plato.Email.ViewProviders
             {
 
                 // Encrypt the password
-                var username = model.SmtpSettings.UserName;
+          
                 var password = string.Empty;
                 if (!string.IsNullOrWhiteSpace(model.SmtpSettings.Password))
                 {
@@ -100,7 +100,7 @@ namespace Plato.Email.ViewProviders
                         DefaultFrom = model.SmtpSettings.DefaultFrom,
                         Host = model.SmtpSettings.Host,
                         Port = model.SmtpSettings.Port,
-                        UserName = username,
+                        UserName = model.SmtpSettings.UserName,
                         Password = password,
                         RequireCredentials = model.SmtpSettings.RequireCredentials,
                         EnableSsl = model.SmtpSettings.EnableSsl,
@@ -124,7 +124,9 @@ namespace Plato.Email.ViewProviders
 
         }
 
-        async Task<EmailSettingsViewModel> GetModel()
+        // ---------------
+
+        private async Task<EmailSettingsViewModel> GetModel()
         {
 
             var settings = await _emailSettingsStore.GetAsync();

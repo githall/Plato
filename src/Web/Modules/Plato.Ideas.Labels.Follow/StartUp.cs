@@ -10,7 +10,6 @@ using Plato.Ideas.Labels.Models;
 using Plato.Ideas.Models;
 using Plato.Follows.Services;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Messaging.Abstractions;
@@ -19,6 +18,7 @@ using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Ideas.Labels.Follow.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Labels.Follow
 {

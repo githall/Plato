@@ -66,19 +66,7 @@ $(function (win, doc, $) {
                 return;
             }
 
-            // We need a url
-            if (win.$.Plato.defaults.url === "") {
-                platoLogger.logError("platoLocale could not be initialized as the $.Plato.defaults.url property is empty!");
-                return;
-            }
-
-            // append a forward slash if needed
-            var baseUrl = win.$.Plato.defaults.url;
-            if (baseUrl.substring(baseUrl.length - 1, baseUrl.length) !== "/") {
-                baseUrl += "/";
-            }
-
-            var url = baseUrl + "js/app/locale/app." + win.$.Plato.defaults.locale + ".js";
+            var url = "/js/app/locale/app." + win.$.Plato.defaults.locale + ".js";
             platoLogger.logInfo("Loading locale: " + url);
             this._load(url);
 
@@ -226,25 +214,6 @@ $(function (win, doc, $) {
             throw new Error("platoHttp requires a valid $.Plato.defaults object");
         }
         
-        var baseUrl = win.$.Plato.defaults.url,
-            virtualUrl = config.url;
-   
-        // Remove forward slash suffix from base url
-        if (baseUrl.substring(baseUrl.length - 1, baseUrl.length) === "/") {
-            baseUrl = baseUrl.substring(win.$.Plato.defaults.url.length - 1);
-        }
-
-        // prefix a forward slash if non is provided for our end point
-        if (virtualUrl.substring(0, 1) !== "/") {
-            virtualUrl = "/" + virtualUrl;
-        }
-
-        // Update to absolute URL
-        if (virtualUrl.toLowerCase().indexOf("http://") === -1 &&
-            virtualUrl.toLowerCase().indexOf("https://") === -1) {
-            config.url = baseUrl + virtualUrl;
-        } 
-    
         // add basic authentication headers
         var apiKey = win.$.Plato.defaults.apiKey;
         if (apiKey) {
@@ -253,7 +222,7 @@ $(function (win, doc, $) {
                 xhr.setRequestHeader("Authorization", "Basic " + apiKey);
             };
         } else {
-            platoLogger.logInfo("No api key was supplied");
+            platoLogger.logInfo("No API key was supplied");
         }
 
         // set content type & API version
@@ -551,8 +520,8 @@ $(function (win, doc, $) {
     win.$.Plato = {
         // defaults
         defaults: {
-            debug: true,
-            url: "",
+            debug: true,         
+            pathBase: "",
             locale: "en-US",
             apiKey: "",
             csrfHeaderName: "X-Csrf-Token", // Custom CSRF header

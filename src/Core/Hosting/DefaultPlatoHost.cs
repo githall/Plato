@@ -2,11 +2,9 @@
 using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using System.Collections.Concurrent;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
-using PlatoCore.Tasks.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace PlatoCore.Hosting
 {
@@ -16,9 +14,7 @@ namespace PlatoCore.Hosting
 
         private readonly IShellSettingsManager _shellSettingsManager;
         private readonly IShellContextFactory _shellContextFactory;
-        private readonly IRunningShellTable _runningShellTable;
-        private readonly IBackgroundTaskManager _taskManager;
-        private readonly IBroker _broker;
+        private readonly IRunningShellTable _runningShellTable;   
         private readonly ILogger _logger;
 
         private ConcurrentDictionary<string, ShellContext> _shellContexts;
@@ -27,17 +23,13 @@ namespace PlatoCore.Hosting
         public DefaultPlatoHost(
             IShellSettingsManager shellSettingsManager,
             IShellContextFactory shellContextFactory,
-            IRunningShellTable runningShellTable,             
-            IBackgroundTaskManager taskManager,
-            ILogger<DefaultPlatoHost> logger,
-            IBroker broker)
+            IRunningShellTable runningShellTable,                   
+            ILogger<DefaultPlatoHost> logger)
         {
             _shellSettingsManager = shellSettingsManager;
             _shellContextFactory = shellContextFactory;
-            _runningShellTable = runningShellTable;        
-            _taskManager = taskManager;
-            _logger = logger;
-            _broker = broker;
+            _runningShellTable = runningShellTable;           
+            _logger = logger;        
         }
 
         // Implementation
@@ -49,6 +41,7 @@ namespace PlatoCore.Hosting
 
         public ShellContext GetOrCreateShellContext(IShellSettings settings)
         {
+
             if (_shellContexts == null)
             {
                 _shellContexts = new ConcurrentDictionary<string, ShellContext>();
@@ -113,16 +106,6 @@ namespace PlatoCore.Hosting
                     _shellContexts = null;
                 context.Dispose();
             }
-
-            // Dispose all shell message broker subscriptions 
-            // These will be activated again via BuildTenantPipeline within
-            // Plato.Internal.Hosting.Web.Routing.PlatoRouterMiddleware
-            _broker?.Dispose();
-
-            // Stop all shell background tasks
-            // These will be activated again via BuildTenantPipeline within
-            // Plato.Internal.Hosting.Web.Routing.PlatoRouterMiddleware
-            _taskManager.StopTasks();
 
             return this;
 

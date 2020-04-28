@@ -2,18 +2,16 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
-using Plato.Entities.Models;
 using Plato.Entities.Ratings.Assets;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Ratings.Handlers;
 using Plato.Entities.Ratings.Models;
 using Plato.Entities.Ratings.Repositories;
 using Plato.Entities.Ratings.Services;
 using Plato.Entities.Ratings.Stores;
-using PlatoCore.Messaging.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Entities.Ratings
 {
@@ -43,7 +41,7 @@ namespace Plato.Entities.Ratings
 
             // Managers
             services.AddScoped<IEntityRatingsManager<EntityRating>, EntityRatingsManager>();
-            
+
             // Register client resources
             services.AddScoped<IAssetProvider, AssetProvider>();            
 

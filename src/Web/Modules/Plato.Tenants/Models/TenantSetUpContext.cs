@@ -1,4 +1,5 @@
 ﻿using PlatoCore.Abstractions.SetUp;
+using PlatoCore.Emails.Abstractions;
 using PlatoCore.Models.Shell;
 using System;
 
@@ -16,6 +17,8 @@ namespace Plato.Tenants.Models
         public DateTimeOffset? CreatedDate { get; set; }
 
         public DateTimeOffset? ModifiedDate { get; set; }
+
+        public EmailSettings EmailSettings { get; set; }
 
     }
 

@@ -4,7 +4,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using Plato.Ideas.Labels.Models;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Features.Abstractions;
@@ -17,6 +16,7 @@ using PlatoCore.Data.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.Titles;
 using Microsoft.AspNetCore.Routing;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Labels.Controllers
 {

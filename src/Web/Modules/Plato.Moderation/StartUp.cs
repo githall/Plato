@@ -1,11 +1,7 @@
-﻿using System;
-using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
+﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Security;
 using PlatoCore.Security.Abstractions;
 using Plato.Moderation.Models;
@@ -13,6 +9,7 @@ using Plato.Moderation.Handlers;
 using Plato.Moderation.Repositories;
 using Plato.Moderation.Services;
 using Plato.Moderation.Stores;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Moderation
 {
@@ -47,13 +44,6 @@ namespace Plato.Moderation
             
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-
-        }
-
     }
+
 }

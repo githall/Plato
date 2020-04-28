@@ -3,12 +3,12 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Ideas.Share.Navigation;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Ideas.Share.Handlers;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Ideas.Share
 {
@@ -30,10 +30,10 @@ namespace Plato.Ideas.Share
             // Navigation providers
             services.AddScoped<INavigationProvider, IdeaMenu>();
             services.AddScoped<INavigationProvider, IdeaCommentMenu>();
-            
+
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
-            
+
         }
 
         public override void Configure(
@@ -48,7 +48,7 @@ namespace Plato.Ideas.Share
                 template: "ideas/i/share/{opts.id}/{opts.alias}/{opts.replyId?}",
                 defaults: new { controller = "Home", action = "Index" }
             );
-            
+
         }
 
     }

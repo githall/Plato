@@ -8,10 +8,13 @@ using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 using Plato.Tenants.Models;
+using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Emails.Abstractions;
+using Plato.Email.Stores;
+using Microsoft.Extensions.Options;
 
 namespace Plato.Tenants.Services
 {
@@ -19,19 +22,91 @@ namespace Plato.Tenants.Services
     public class TenantSetUpService : ITenantSetUpService
     {
 
+        public const string UninstallSql = @"
+                
+                -- Drop Tables
+
+                DECLARE @schemaName NVARCHAR(100)
+                DECLARE @tableName NVARCHAR(400)
+                DECLARE @procedureName NVARCHAR(400)
+                DECLARE @fullName NVARCHAR(500)
+                DECLARE MSGCURSOR CURSOR FOR
+                SELECT 
+	                schema_name(t.schema_id) as schema_name,
+	                t.name as table_name
+                FROM 
+	                sys.tables t
+                WHERE 
+	                t.name like '{prefix}%'
+	
+                OPEN MSGCURSOR
+
+                FETCH NEXT FROM MSGCURSOR
+                INTO @schemaName, @tableName
+	
+                WHILE @@FETCH_STATUS = 0
+                BEGIN
+
+	                SET @fullName = @schemaName + '.' + @tableName;
+	                EXEC('DROP TABLE ' + @fullName);
+
+	                FETCH NEXT FROM MSGCURSOR
+	                INTO @schemaName, @tableName
+	
+                END
+                -- tidy cursor
+                CLOSE MSGCURSOR
+                DEALLOCATE MSGCURSOR
+
+                -- /Drop Tables
+                
+                -- Drop Procedures
+               
+                DECLARE MSGCURSOR CURSOR FOR
+                SELECT 
+	                schema_name(p.schema_id) as schema_name,
+	                p.name as proc_name
+                FROM 
+	                sys.procedures p
+                WHERE 
+	                p.name like '{prefix}%'
+	
+                OPEN MSGCURSOR
+
+                FETCH NEXT FROM MSGCURSOR
+                INTO @schemaName, @procedureName
+	
+                WHILE @@FETCH_STATUS = 0
+                BEGIN
+
+	                SET @fullName = @schemaName + '.' + @procedureName;
+	                EXEC('DROP PROCEDURE ' + @fullName);
+
+	                FETCH NEXT FROM MSGCURSOR
+	                INTO @schemaName, @procedureName
+	
+                END
+                -- tidy cursor
+                CLOSE MSGCURSOR
+                DEALLOCATE MSGCURSOR
+                
+                -- /Drop Procedures
+
+            ";
+
         private readonly IShellSettingsManager _shellSettingsManager;
         private readonly IShellContextFactory _shellContextFactory;
         private readonly ILogger<TenantSetUpService> _logger;
-        private readonly IPlatoHost _platoHost;
+        private readonly IPlatoHost _platoHost; 
 
-        public TenantSetUpService(
+        public TenantSetUpService(            
             IShellSettingsManager shellSettingsManager,
-            IShellContextFactory shellContextFactory,
+            IShellContextFactory shellContextFactory,      
             ILogger<TenantSetUpService> logger,
             IPlatoHost platoHost)
         {
             _shellSettingsManager = shellSettingsManager;
-            _shellContextFactory = shellContextFactory;            
+            _shellContextFactory = shellContextFactory;        
             _platoHost = platoHost;
             _logger = logger;
         }
@@ -197,35 +272,28 @@ namespace Plato.Tenants.Services
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
                 {
-                    using (var dbContext = scope.ServiceProvider.GetRequiredService<IDbContext>())
+                    
+                    var hasErrors = false;
+                    void ReportError(string key, string message)
                     {
-
-                        // update dbContext confirmation
-                        dbContext.Configure(options =>
-                        {
-                            options.ConnectionString = shellSettings.ConnectionString;
-                            options.DatabaseProvider = shellSettings.DatabaseProvider;
-                            options.TablePrefix = shellSettings.TablePrefix;
-                        });
-
-                        var hasErrors = false;
-                        void ReportError(string key, string message)
-                        {
-                            hasErrors = true;
-                            //result.Failed(message)
-                            context.Errors[key] = message;
-                        }
-
-                        var logger = scope.ServiceProvider.GetRequiredService<ILogger<TenantSetUpService>>();
-                        var setupEventHandlers = scope.ServiceProvider.GetServices<ISetUpEventHandler>();
-                        await setupEventHandlers.InvokeAsync(x => x.SetUp(context, ReportError), logger);
-
-                        if (hasErrors)
-                        {
-                            return result.Failed(context.Errors.Select(e => e.Value).ToArray());                          
-                        }
-
+                        hasErrors = true;
+                        context.Errors[key] = message;
                     }
+
+                    // Invoke set-up event handlers
+                    var logger = scope.ServiceProvider.GetRequiredService<ILogger<TenantSetUpService>>();
+                    var setupEventHandlers = scope.ServiceProvider.GetServices<ISetUpEventHandler>();
+                    await setupEventHandlers.InvokeAsync(x => x.SetUp(context, ReportError), logger);
+
+                    // Return early if we encountered any errors
+                    if (hasErrors)
+                    {
+                        return result.Failed(context.Errors.Select(e => e.Value).ToArray());                          
+                    }
+
+                    // Update tenant email settings
+                    var emailSettingsStore = scope.ServiceProvider.GetService<IEmailSettingsStore<EmailSettings>>();
+                    await emailSettingsStore.SaveAsync(context.EmailSettings);
 
                 }
 
@@ -267,79 +335,7 @@ namespace Plato.Tenants.Services
             return Task.FromResult(result.Success(context));
 
         }
-
-        public const string Sql = @"
-                
-                -- Start Drop Tables
-
-                DECLARE @schemaName NVARCHAR(100)
-                DECLARE @tableName NVARCHAR(400)
-                DECLARE @procedureName NVARCHAR(400)
-                DECLARE @fullName NVARCHAR(500)
-                DECLARE MSGCURSOR CURSOR FOR
-                SELECT 
-	                schema_name(t.schema_id) as schema_name,
-	                t.name as table_name
-                FROM 
-	                sys.tables t
-                WHERE 
-	                t.name like '{prefix}%'
-	
-                OPEN MSGCURSOR
-
-                FETCH NEXT FROM MSGCURSOR
-                INTO @schemaName, @tableName
-	
-                WHILE @@FETCH_STATUS = 0
-                BEGIN
-
-	                SET @fullName = @schemaName + '.' + @tableName;
-	                EXEC('DROP TABLE ' + @fullName);
-
-	                FETCH NEXT FROM MSGCURSOR
-	                INTO @schemaName, @tableName
-	
-                END
-                -- tidy cursor
-                CLOSE MSGCURSOR
-                DEALLOCATE MSGCURSOR
-
-                -- End Drop Tables
-                
-                -- Start Drop Procedures
-               
-                DECLARE MSGCURSOR CURSOR FOR
-                SELECT 
-	                schema_name(p.schema_id) as schema_name,
-	                p.name as proc_name
-                FROM 
-	                sys.procedures p
-                WHERE 
-	                p.name like '{prefix}%'
-	
-                OPEN MSGCURSOR
-
-                FETCH NEXT FROM MSGCURSOR
-                INTO @schemaName, @procedureName
-	
-                WHILE @@FETCH_STATUS = 0
-                BEGIN
-
-	                SET @fullName = @schemaName + '.' + @procedureName;
-	                EXEC('DROP PROCEDURE ' + @fullName);
-
-	                FETCH NEXT FROM MSGCURSOR
-	                INTO @schemaName, @procedureName
-	
-                END
-                -- tidy cursor
-                CLOSE MSGCURSOR
-                DEALLOCATE MSGCURSOR
-                
-                -- End Drop Procedures
-
-            ";
-
+      
         private async Task<ICommandResultBase> UninstallInternalAsync(string siteName)
         {
 
@@ -405,7 +401,7 @@ namespace Plato.Tenants.Services
 
                         try
                         {
-                            await dbHelper.ExecuteScalarAsync<int>(Sql, new Dictionary<string, string>()
+                            await dbHelper.ExecuteScalarAsync<int>(UninstallSql, new Dictionary<string, string>()
                             {
                                 ["{prefix}"] = shellSettings.TablePrefix
                             });

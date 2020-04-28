@@ -6,15 +6,13 @@ namespace Plato.Email.ViewModels
 
     public class SmtpSettingsViewModel
     {
- 
-        [Required]
-        [StringLength(255)]
+
+        [Required, StringLength(255)]
         [DataType(DataType.EmailAddress)]
         [Display(Name = "default from")]
         public string DefaultFrom { get; set; }
         
-        [Required]
-        [StringLength(255)]
+        [Required, StringLength(255)]
         [DataType(DataType.Text)]
         [Display(Name = "host")]
         public string Host { get; set; }

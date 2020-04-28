@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewAdapters.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
@@ -23,6 +22,7 @@ using Plato.Articles.Categories.Services;
 using Plato.Categories.Subscribers;
 using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Articles.Categories
 {
@@ -102,5 +102,7 @@ namespace Plato.Articles.Categories
             );
 
         }
+
     }
+
 }

@@ -1,24 +1,19 @@
 ﻿using System;
 using System.Threading.Tasks;
-using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Stores.Abstractions.Settings;
 using Plato.WebApi.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.WebApi.Services
 {
-    
+
     public class WebApiOptionsFactory : IWebApiOptionsFactory
     {
 
-        private readonly IContextFacade _contextFacade;
-        private readonly ISiteSettingsStore _siteSettingsStore;
+        private readonly IContextFacade _contextFacade;     
 
-        public WebApiOptionsFactory(
-            IContextFacade contextFacade,
-            ISiteSettingsStore siteSettingsStore)
+        public WebApiOptionsFactory(IContextFacade contextFacade)
         {
-            _contextFacade = contextFacade;
-            _siteSettingsStore = siteSettingsStore;
+            _contextFacade = contextFacade;    
         }
 
         public async Task<WebApiOptions> GetSettingsAsync()

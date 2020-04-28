@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 using Microsoft.Extensions.Localization;
 using Microsoft.Extensions.Logging;
-using PlatoCore.FileSystem.Abstractions;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Localization.Abstractions.Models;
@@ -17,11 +16,11 @@ namespace PlatoCore.Localization.Locales
 
         private readonly ILocaleProvider _localeProvider;
         private readonly ILogger<LocaleStore> _logger;
-        private readonly ISingletonCacheManager _cacheManager;
+        private readonly ICacheManager _cacheManager;
 
         public LocaleStore(
             ILocaleProvider localeProvider,
-            ISingletonCacheManager cacheManager,
+            ICacheManager cacheManager,
             ILogger<LocaleStore> logger)
         {
             _localeProvider = localeProvider;

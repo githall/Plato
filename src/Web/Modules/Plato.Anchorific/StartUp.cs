@@ -1,7 +1,7 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Assets.Abstractions;
 using Plato.Anchorific.Assets;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Anchorific
 {

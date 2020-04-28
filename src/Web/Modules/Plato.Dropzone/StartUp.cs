@@ -1,11 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Dropzone.Assets;
 using PlatoCore.Assets.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Dropzone
 {

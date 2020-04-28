@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions;
 using PlatoCore.Emails.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Localization.Abstractions;
@@ -15,6 +14,7 @@ using PlatoCore.Localization.Extensions;
 using PlatoCore.Models.Users;
 using Plato.Users.Services;
 using Plato.Users.ViewModels;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Users.ViewProviders
 {

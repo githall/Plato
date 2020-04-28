@@ -11,26 +11,18 @@ using Microsoft.Extensions.Options;
 using PlatoCore.Data.Extensions;
 using PlatoCore.Hosting.Extensions;
 using PlatoCore.Modules.Extensions;
-using PlatoCore.Repositories.Extensions;
 using PlatoCore.Shell.Extensions;
-using PlatoCore.Stores.Extensions;
 using PlatoCore.Cache.Extensions;
-using PlatoCore.Features.Extensions;
 using PlatoCore.Layout.Extensions;
 using PlatoCore.Security.Extensions;
 using PlatoCore.Logging.Extensions;
-using PlatoCore.Messaging.Extensions;
 using PlatoCore.Assets.Extensions;
 using PlatoCore.Badges.Extensions;
 using PlatoCore.Drawing.Extensions;
 using PlatoCore.Localization.Extensions;
-using PlatoCore.Navigation.Extensions;
-using PlatoCore.Net.Extensions;
 using PlatoCore.Notifications.Extensions;
-using PlatoCore.Reputations.Extensions;
 using PlatoCore.Scripting.Extensions;
 using PlatoCore.Search.Extensions;
-using PlatoCore.Tasks.Extensions;
 using PlatoCore.Text.Extensions;
 using PlatoCore.Theming.Extensions;
 using Microsoft.AspNetCore.Mvc;
@@ -39,18 +31,13 @@ using PlatoCore.Abstractions.Routing;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.FileSystem;
 using PlatoCore.FileSystem.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Hosting.Web.Configuration;
 using PlatoCore.Hosting.Web.Routing;
 using PlatoCore.Layout.LocationExpanders;
 using PlatoCore.Layout.ViewFeatures;
 using PlatoCore.Modules.FileProviders;
-using PlatoCore.Models.Shell;
-using PlatoCore.Stores.Abstractions.Shell;
-using PlatoCore.Features.Abstractions;
-using PlatoCore.Features;
-using PlatoCore.Stores.Shell;
-using Microsoft.AspNetCore.Routing;
+using PlatoCore.Hosting.Abstractions;
 
 namespace PlatoCore.Hosting.Web.Extensions
 {
@@ -63,78 +50,63 @@ namespace PlatoCore.Hosting.Web.Extensions
             services.ConfigureShell("Sites");            
             services.AddHttpContextAccessor();     
             services.AddPlatoDataProtection();
-            services.AddPlatoHost();
+            services.AddPlatoInternal();
             return services;
         }
 
-        public static IServiceCollection AddPlatoHost(this IServiceCollection services)
+        private static IServiceCollection AddPlatoInternal(this IServiceCollection services)
         {
 
-            return services.AddHPlatoTennetHost(internalServices =>
+            return services.AddHPlatoCore(tenantServices =>
             {
 
-                // infrastructure
+                // Tenant Infrastructure
                 // --------
 
-                internalServices.AddLogging(loggingBuilder =>
+                tenantServices.AddLogging(loggingBuilder =>
                 {                    
                     loggingBuilder.AddConsole();
                     loggingBuilder.AddDebug();
                 });
 
-                internalServices.AddOptions();
-                internalServices.AddLocalization(options => options.ResourcesPath = "Resources");
+                tenantServices.AddOptions();
+                tenantServices.AddLocalization(options => options.ResourcesPath = "Resources");
 
-                // Plato
+                // Tenant core services
                 // --------
 
-                internalServices.AddSingleton<IPlatoHostEnvironment, WebHostEnvironment>();
-                internalServices.AddSingleton<IPlatoFileSystem, HostedFileSystem>();
-                internalServices.AddPlatoOptions();
-                internalServices.AddPlatoContextAccessor();
-              
-                internalServices.AddPlatoLocalization();
-                internalServices.AddPlatoCaching();
-                internalServices.AddPlatoText();
-                internalServices.AddPlatoNotifications();
-                internalServices.AddPlatoModules();
-                internalServices.AddPlatoTheming();
-                internalServices.AddPlatoViewFeature();
-                internalServices.AddPlatoViewLocalization();
-                internalServices.AddPlatoNavigation();
-                internalServices.AddPlatoAssets();
-                internalServices.AddPlatoNet();
-                internalServices.AddPlatoScripting();
-                internalServices.AddPlatoShellFeatures();
-                internalServices.AddPlatoMessaging();
-                internalServices.AddPlatoLogging();
-                internalServices.AddPlatoDbContext();
-                internalServices.AddPlatoRepositories();
-                internalServices.AddPlatoStores();
-                internalServices.AddPlatoReputations();
-                internalServices.AddPlatoBadges();
-                internalServices.AddPlatoDrawing();
-                internalServices.AddPlatoTasks();
-                internalServices.AddPlatoSearch();               
-                internalServices.AddPlatoMvc();
-                internalServices.AddPlatoRouting();
+                tenantServices.AddSingleton<IPlatoHostEnvironment, WebHostEnvironment>();
+                tenantServices.AddSingleton<IPlatoFileSystem, HostedFileSystem>();
+                tenantServices.AddPlatoOptions();
+                tenantServices.AddPlatoContextAccessor();              
+                tenantServices.AddPlatoLocalization();
+                tenantServices.AddPlatoCaching();
+                tenantServices.AddPlatoText();
+                tenantServices.AddPlatoNotifications();
+                tenantServices.AddPlatoModules();
+                tenantServices.AddPlatoTheming();
+                tenantServices.AddPlatoViewFeature();
+                tenantServices.AddPlatoViewLocalization();
+                tenantServices.AddPlatoAssets();
+                tenantServices.AddPlatoScripting();           
+                tenantServices.AddPlatoLogging();
+                tenantServices.AddPlatoDbContext();                
+                tenantServices.AddPlatoBadges();
+                tenantServices.AddPlatoDrawing();                
+                tenantServices.AddPlatoSearch();               
+                tenantServices.AddPlatoMvc();
+                tenantServices.AddPlatoRouting();
             });
 
         }
 
-        public static IServiceCollection AddHPlatoTennetHost(this IServiceCollection services, Action<IServiceCollection> configure)
+        public static IServiceCollection AddHPlatoCore(this IServiceCollection services, Action<IServiceCollection> configure)
         {
-
-            // Dummy implementations to pass .NET Core dependency injection checks
-            // These are replaced for each tenant via the ShellContainerFactory
-            services.AddScoped<IShellSettings, ShellSettings>();
-            services.AddScoped<IShellDescriptorStore, ShellDescriptorStore>();
-            services.AddScoped<IShellDescriptorManager, ShellDescriptorManager>();
 
             // Add host
             services.AddPlatoDefaultHost();
 
-            // Add shell
+            // Add default shell
             services.AddPlatoShell();
 
             // Add security
@@ -143,7 +115,7 @@ namespace PlatoCore.Hosting.Web.Extensions
             // Let the host change the default tenant behavior and set of features
             configure?.Invoke(services);
 
-            // Register the list of services to be resolved later via ShellContainerFactory
+            // Register the list of tenant services to be resolved later via ShellContainerFactory
             services.AddSingleton(_ => services);
 
             return services;
@@ -249,13 +221,6 @@ namespace PlatoCore.Hosting.Web.Extensions
         public static IServiceCollection AddPlatoRouting(this IServiceCollection services)
         {
 
-            // The captured router is used to resolve URLs for background or deferred tasks 
-            // Background and deferred tasks don't have access to the current HttpContext
-            // Our captured router must be a singleton so the initial configuration performed
-            // by the PlatoRouterMiddleware is persisted throughout the application life cycle
-            services.AddSingleton<ICapturedRouter, CapturedRouter>();
-            services.AddScoped<ICapturedRouterUrlHelper, CapturedRouterUrlHelper>();
-
             // Add home route manager
             services.AddScoped<IHomeRouteManager, HomeRouteManager>();
 
@@ -268,9 +233,7 @@ namespace PlatoCore.Hosting.Web.Extensions
 
         public static IServiceCollection AddPlatoContextAccessor(this IServiceCollection services)
         {
-            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();
-            services.AddSingleton<ICapturedHttpContext, CapturedHttpContext>();
-            services.AddScoped<IContextFacade, ContextFacade>();
+            services.AddSingleton<IActionContextAccessor, ActionContextAccessor>();       
             return services;
         }
 

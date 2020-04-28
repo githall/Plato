@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Plato.Entities.Models;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Text.Abstractions;
 

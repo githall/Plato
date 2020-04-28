@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Search.Abstractions;
 using Plato.Tags.Assets;
 using Plato.Tags.Handlers;
@@ -13,6 +12,7 @@ using Plato.Tags.Models;
 using Plato.Tags.Repositories;
 using Plato.Tags.Services;
 using Plato.Tags.Stores;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Tags
 {

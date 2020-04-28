@@ -3,9 +3,9 @@ using Microsoft.Extensions.Logging;
 using Plato.Site.Models;
 using Plato.Site.Stores;
 using Plato.Site.ViewModels;
+using PlatoCore.Models.Shell;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
-using PlatoCore.Models.Shell;
 
 namespace Plato.Site.ViewProviders
 {

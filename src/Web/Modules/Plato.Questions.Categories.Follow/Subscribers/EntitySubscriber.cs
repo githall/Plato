@@ -17,8 +17,8 @@ using PlatoCore.Tasks.Abstractions;
 using Plato.Entities.Extensions;
 using Plato.Entities.Stores;
 using Plato.Follows.Models;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Questions.Categories.Follow.Subscribers
 {

@@ -5,14 +5,14 @@
         <ul class="nav nav-pills">
             <li class="nav-item dropdown user-dropdown">
                 <a href="#" class="nav-link dropdown-toggle dropdown-toggle-no-caret" id="accountDropDown" data-toggle="dropdown" data-provide="tooltip" title="@T["Account"]">
-                    <avatar class="avatar avatar-sm" style="width: 28px; height: 28px;" url="@this.CurrentUser.Avatar.Url" />
+                    <avatar class="avatar avatar-sm" style="width: 28px; height: 28px;" avatar="@this.CurrentUser.Avatar" />
                 </a>
                 <div class="dropdown-menu dropdown-menu-right anim anim-2x anim-scale-in position-absolute" aria-labelledby="accountDropDown">
                     <div class="user-dropdown-menu-header">
                         <div class="p-3">
                             <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@this.CurrentUser.Id" asp-route-opts.alias="@this.CurrentUser.Alias" class="btn btn-sm btn-primary float-right">@T["Profile"]</a>
                             <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="EditProfile" data-toggle="tooltip" title="@T["Edit Photo"]" class="d-inline-block mr-2">
-                                <avatar class="avatar" url="@this.CurrentUser.Avatar.Url" />
+                                <avatar class="avatar" avatar="@this.CurrentUser.Avatar" />
                             </a>
                             <h6 class="d-inline-block align-middle max-w-150 text-truncate" title="@this.CurrentUser.DisplayName">@this.CurrentUser.DisplayName</h6>
                         </div>
@@ -38,12 +38,13 @@
 }
 else
 {
+    var returnUrl = Context.Request.PathBase + Context.Request.Path;
     <ul class="nav nav-pills">
-        <li class="nav-item nav-item-login">
-            <a class="nav-link" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@Context.Request.Path">@T["Login"]</a>
+        <li class="nav-item nav-item-login">       
+            <a class="nav-link" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@returnUrl">@T["Login"]</a>
         </li>
         <li class="nav-item nav-item-register">
-            <a class="nav-link" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Register" asp-route-returnUrl="@Context.Request.Path">@T["Register"]</a>
+            <a class="nav-link" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Register" asp-route-returnUrl="@returnUrl">@T["Register"]</a>
         </li>
     </ul>
 }

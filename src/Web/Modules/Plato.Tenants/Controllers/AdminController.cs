@@ -17,6 +17,7 @@ using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tenants.Services;
 using Plato.Tenants.ViewModels;
+using Plato.Tenants.Models;
 
 namespace Plato.Tenants.Controllers
 {
@@ -25,6 +26,8 @@ namespace Plato.Tenants.Controllers
     {
 
         private readonly IViewProviderManager<ShellSettings> _viewProvider;
+        private readonly IViewProviderManager<DefaultTenantSettings> _settingsViewProvider;
+
         private readonly IAuthorizationService _authorizationService;
         private readonly IShellSettingsManager _shellSettingsManager;
         private readonly IBreadCrumbManager _breadCrumbManager;
@@ -38,7 +41,8 @@ namespace Plato.Tenants.Controllers
 
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
-            IStringLocalizer<AdminController> stringLocalizer,                     
+            IStringLocalizer<AdminController> stringLocalizer,
+             IViewProviderManager<DefaultTenantSettings> settingsViewProvider,
             IViewProviderManager<ShellSettings> viewProvider,
             IAuthorizationService authorizationService,
             IShellSettingsManager shellSettingsManager,
@@ -50,7 +54,8 @@ namespace Plato.Tenants.Controllers
 
             _authorizationService = authorizationService;
             _shellSettingsManager = shellSettingsManager;
-            _breadCrumbManager = breadCrumbManager;
+            _settingsViewProvider = settingsViewProvider;
+            _breadCrumbManager = breadCrumbManager;            
             _viewProvider = viewProvider;
             _setUpService = setUpService;
             _alerter = alerter;
@@ -278,6 +283,55 @@ namespace Plato.Tenants.Controllers
             {
                 ["id"] = id
             });
+
+        }
+
+        // --------------
+        // Settings
+        // --------------
+
+        public async Task<IActionResult> Settings()
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditSettings))
+            {
+                return Unauthorized();
+            }
+
+            _breadCrumbManager.Configure(builder =>
+            {
+                builder.Add(S["Home"], home => home
+                    .Action("Index", "Admin", "Plato.Admin")
+                    .LocalNav()
+                ).Add(S["Tenants"], tenants => tenants
+                    .Action("Index", "Admin", "Plato.Tenants")
+                    .LocalNav()
+                ).Add(S["Settings"]);
+            });
+
+            return View((LayoutViewModel)await _settingsViewProvider.ProvideEditAsync(new DefaultTenantSettings(), this));
+
+        }
+
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Settings))]
+        public async Task<IActionResult> SettingsPost(EditTenantSettingsViewModel viewModel)
+        {
+
+            // Ensure we have permission
+            if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditSettings))
+            {
+                return Unauthorized();
+            }
+
+            // Execute view providers ProvideUpdateAsync method
+            await _settingsViewProvider.ProvideUpdateAsync(new DefaultTenantSettings(), this);
+
+            // Add alert
+            _alerter.Success(T["Settings Updated Successfully!"]);
+
+            return RedirectToAction(nameof(Settings));
 
         }
 

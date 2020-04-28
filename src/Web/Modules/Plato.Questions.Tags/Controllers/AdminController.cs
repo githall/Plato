@@ -4,7 +4,6 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.Extensions.Localization;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
@@ -16,6 +15,7 @@ using Plato.Questions.Tags.Models;
 using Plato.Questions.Tags.ViewModels;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Layout;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Questions.Tags.Controllers
 {

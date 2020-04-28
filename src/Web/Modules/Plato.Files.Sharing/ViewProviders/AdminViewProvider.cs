@@ -1,31 +1,19 @@
 ﻿using System.Threading.Tasks;
 using Plato.Files.Models;
-using Plato.Files.Services;
 using Plato.Files.Sharing.ViewModels;
-using Plato.Files.Stores;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Files.Sharing.ViewProviders
 {
     public class AdminViewProvider : ViewProviderBase<File>
     {
-  
-        private readonly IFileOptionsFactory _fileOptionsFactory;
-        private readonly IFileInfoStore<FileInfo> _fileInfoStore;
-        private readonly IContextFacade _contextFacade;
-        private readonly IFileStore<File> _fileStore;
 
-        public AdminViewProvider(
-            IFileOptionsFactory fileOptionsFactory,
-            IFileInfoStore<FileInfo> fileInfoStore,
-            IContextFacade contextFacade,
-            IFileStore<File> fileStore)
-        {
-            _fileOptionsFactory = fileOptionsFactory;
-            _fileInfoStore = fileInfoStore;
-            _contextFacade = contextFacade;
-            _fileStore = fileStore;
+        private readonly IContextFacade _contextFacade;   
+
+        public AdminViewProvider(IContextFacade contextFacade)
+        {   
+            _contextFacade = contextFacade;        
         }
 
         public override Task<IViewProviderResult> BuildIndexAsync(File file, IViewProviderContext context)

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Linq;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Http;
 using System.Collections.Generic;
 using System.Collections.Concurrent;
 using Microsoft.Extensions.DependencyInjection;
@@ -12,11 +11,11 @@ using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Abstractions.Settings;
 using PlatoCore.Data.Migrations.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Features;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 using PlatoCore.Stores.Abstractions.Shell;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Features.Updates.Services
 {
@@ -26,39 +25,36 @@ namespace Plato.Features.Updates.Services
 
         private readonly IShellFeatureStore<ShellFeature> _shellFeatureStore;
         private readonly IShellDescriptorManager _shellDescriptorManager;
-        private readonly IShellDescriptorStore _shellDescriptorStore;
-        private readonly IHttpContextAccessor _httpContextAccessor;
+        private readonly IShellDescriptorStore _shellDescriptorStore;        
         private readonly IShellContextFactory _shellContextFactory;
-        private readonly IDataMigrationBuilder _migrationBuilder;
-        private readonly IRunningShellTable _runningShellTable;
+        private readonly IDataMigrationBuilder _migrationBuilder;   
         private readonly IOptions<PlatoOptions> _platoOptions;
         private readonly ILogger<ShellFeatureUpdater> _logger;
         private readonly IFeatureFacade _featureFacade;
+        private readonly IShellSettings _shellSettings;
 
         private readonly IPlatoHost _platoHost;
 
         public ShellFeatureUpdater(
             IShellFeatureStore<ShellFeature> shellFeatureStore,
             IShellDescriptorManager shellDescriptorManager,
-            IShellDescriptorStore shellDescriptorStore,
-            IHttpContextAccessor httpContextAccessor,
+            IShellDescriptorStore shellDescriptorStore,          
             IShellContextFactory shellContextFactory,
             IDataMigrationBuilder migrationBuilder,
-            IRunningShellTable runningShellTable,
             IOptions<PlatoOptions> platoOptions,
             ILogger<ShellFeatureUpdater> logger,
             IFeatureFacade featureFacade,
+            IShellSettings shellSettings,
             IPlatoHost platoHost)
         {
-            _platoOptions = platoOptions;
-            _featureFacade = featureFacade;
-            _migrationBuilder = migrationBuilder;
             _shellDescriptorManager = shellDescriptorManager;
-            _shellDescriptorStore = shellDescriptorStore;
-            _shellFeatureStore = shellFeatureStore;
-            _httpContextAccessor = httpContextAccessor;
+            _shellDescriptorStore = shellDescriptorStore;          
             _shellContextFactory = shellContextFactory;
-            _runningShellTable = runningShellTable;
+            _shellFeatureStore = shellFeatureStore;    
+            _migrationBuilder = migrationBuilder;
+            _shellSettings = shellSettings;         
+            _featureFacade = featureFacade;
+            _platoOptions = platoOptions;
             _platoHost = platoHost;
             _logger = logger;
         }
@@ -122,7 +118,7 @@ namespace Plato.Features.Updates.Services
             // Does the module have a Plato version defined?
             if (modulePlatoVersion != null)
             {
-                // Get current plato version
+                // Get current Plato version
                 var currentPlatoVersion = _platoOptions.Value.Version.ToVersion();
                 if (currentPlatoVersion != null)
                 {
@@ -135,7 +131,7 @@ namespace Plato.Features.Updates.Services
                 }
 
             }
-            
+
             // ------------------------------------------------------------------
             // 3. Invoke FeatureEventHandlers & database migrations
             // ------------------------------------------------------------------
@@ -182,8 +178,8 @@ namespace Plato.Features.Updates.Services
                     }
 
                     // If we reach this point everything went OK, Migrations applied
-                    // successfully and no errors occurred within the features update handlers
-                    // finally update the features version within the ShellFeatures table to reflect
+                    // successfully and no errors occurred within the features update handlers.
+                    // Finally update the features version within the ShellFeatures table to reflect
                     // the new version of the module we've just updated to, also update
                     // shell descriptor to reflect version changes within dictionary store
                  
@@ -203,7 +199,7 @@ namespace Plato.Features.Updates.Services
                 .Where(c => c.Value.Errors.Any())
                 .SelectMany(h => h.Value.Errors)
                 .ToList();
-            
+
             if (handlerErrors.Count > 0)
             {
                 var errors = new List<CommandError>();
@@ -451,10 +447,6 @@ namespace Plato.Features.Updates.Services
             // Holds the results of all our event execution contexts
             var contexts = new ConcurrentDictionary<string, IFeatureEventContext>();
 
-            // Get setting before recycle
-            var httpContext = _httpContextAccessor.HttpContext;
-            var shellSettings = _runningShellTable.Match(httpContext);
-
             // Build a list of all unique features we are enabling / disabling
             var uniqueFeatures = new ConcurrentDictionary<string, IShellFeature>();
             foreach (var feature in features)
@@ -488,7 +480,7 @@ namespace Plato.Features.Updates.Services
             }
 
             // Create a new shell context with features and all dependencies we need to update
-            using (var shellContext = _shellContextFactory.CreateDescribedContext(shellSettings, minimumShellDescriptor))
+            using (var shellContext = _shellContextFactory.CreateDescribedContext(_shellSettings, minimumShellDescriptor))
             {
                 using (var scope = shellContext.ServiceProvider.CreateScope())
                 {
@@ -557,10 +549,8 @@ namespace Plato.Features.Updates.Services
         }
 
         void RecycleShell()
-        {
-            var httpContext = _httpContextAccessor.HttpContext;
-            var shellSettings = _runningShellTable.Match(httpContext);
-            _platoHost.RecycleShell(shellSettings);
+        {    
+            _platoHost.RecycleShell(_shellSettings);
         }
 
     }

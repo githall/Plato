@@ -1,5 +1,4 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
-using Microsoft.Extensions.DependencyInjection.Extensions;
 using PlatoCore.Features.Abstractions;
 
 namespace PlatoCore.Features.Extensions
@@ -8,12 +7,14 @@ namespace PlatoCore.Features.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddPlatoShellFeatures(
+        public static IServiceCollection AddShellFeatures(
             this IServiceCollection services)
         {
-            
-            services.TryAddScoped<IFeatureEventManager, FeatureEventManager>();
-            services.TryAddScoped<IFeatureFacade, FeatureFacade>();
+
+            services.AddTransient<IShellDescriptorManager, ShellDescriptorManager>();
+            services.AddTransient<IShellFeatureManager, ShellFeatureManager>();
+            services.AddSingleton<IFeatureEventManager, FeatureEventManager>();
+            services.AddScoped<IFeatureFacade, FeatureFacade>();
 
             return services;
 

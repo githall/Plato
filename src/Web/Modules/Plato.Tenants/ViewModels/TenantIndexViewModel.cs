@@ -1,7 +1,5 @@
 ﻿using PlatoCore.Models.Shell;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace Plato.Tenants.ViewModels
 {

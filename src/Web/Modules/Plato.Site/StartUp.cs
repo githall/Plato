@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Abstractions.Routing;
 using PlatoCore.Assets.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Site.Assets;
 using Plato.Site.Navigation;
 using PlatoCore.Navigation.Abstractions;
@@ -16,6 +15,7 @@ using Plato.Site.Stores;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Site.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Site
 {
@@ -167,7 +167,6 @@ namespace Plato.Site
                 defaults: new { controller = "OpenSource", action = "Index" }
             );
 
-
             // -----------
             // Support
             // -----------
@@ -238,5 +237,7 @@ namespace Plato.Site
             );
 
         }
+
     }
+
 }

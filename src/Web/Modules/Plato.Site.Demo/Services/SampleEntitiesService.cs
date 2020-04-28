@@ -12,8 +12,8 @@ using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Users;
 using Plato.Site.Demo.Models;
 using Microsoft.AspNetCore.Routing;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Stores;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Site.Demo.Services
 {

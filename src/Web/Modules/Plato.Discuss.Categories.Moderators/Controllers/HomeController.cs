@@ -8,7 +8,7 @@ using Microsoft.Extensions.Localization;
 using Plato.Discuss.Models;
 using Plato.Discuss.Services;
 using Plato.Entities.Stores;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Security.Abstractions;
 

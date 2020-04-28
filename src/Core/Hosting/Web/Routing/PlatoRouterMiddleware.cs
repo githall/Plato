@@ -7,9 +7,9 @@ using Microsoft.Extensions.Logging;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using PlatoCore.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Extensions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace PlatoCore.Hosting.Web.Routing
 {
@@ -90,20 +90,8 @@ namespace PlatoCore.Hosting.Web.Routing
             var inlineConstraintResolver = serviceProvider.GetService<IInlineConstraintResolver>();
             var appBuilder = new ApplicationBuilder(serviceProvider);
 
-            var routePrefix = string.Empty;
-            if (!string.IsNullOrWhiteSpace(shellSettings.RequestedUrlPrefix))
-            {
-                //routePrefix = shellSettings.RequestedUrlPrefix + "/";
-            }
-
             // Create a default route builder using our PlatoRouter implementation 
             var routeBuilder = new RouteBuilder(appBuilder, serviceProvider.GetRequiredService<IPlatoRouter>());
-
-            //// Build prefixed route builder
-            //var prefixedRouteBuilder = new PrefixedRouteBuilder(
-            //    routePrefix,
-            //    routeBuilder,
-            //    inlineConstraintResolver);
 
             // Configure modules
             foreach (var startup in startUps)

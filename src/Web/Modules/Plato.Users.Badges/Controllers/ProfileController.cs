@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
@@ -13,6 +12,7 @@ using PlatoCore.Models.Users;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Stores.Abstractions.Users;
 using Plato.Users.ViewModels;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Users.Badges.Controllers
 {

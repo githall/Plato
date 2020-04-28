@@ -15,8 +15,8 @@ using PlatoCore.Layout.ModelBinding;
 using Plato.Entities.Files.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Plato.Files.Services;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Docs.Files.Controllers
 {

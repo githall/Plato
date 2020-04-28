@@ -1,7 +1,4 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using Plato.Categories.Roles.Services;
 using PlatoCore.Features.Abstractions;
 using Plato.Questions.Categories.Models;
@@ -9,11 +6,11 @@ using Plato.Questions.Categories.Roles.QueryAdapters;
 using Plato.Questions.Categories.Roles.ViewProviders;
 using Plato.Questions.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Stores.Abstractions.QueryAdapters;
 using Plato.Questions.Categories.Roles.Handlers;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Questions.Categories.Roles
 {
@@ -46,11 +43,6 @@ namespace Plato.Questions.Categories.Roles
 
         }
 
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
-        }
     }
+
 }

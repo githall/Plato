@@ -10,6 +10,8 @@ using Plato.Tenants.Models;
 using Plato.Tenants.Services;
 using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering;
+using Microsoft.Extensions.Options;
+using PlatoCore.Emails.Abstractions;
 
 namespace Plato.Tenants.ViewProviders
 {
@@ -18,15 +20,18 @@ namespace Plato.Tenants.ViewProviders
     {
 
         private readonly IShellSettingsManager _shellSettingsManager;
-   
         private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ILogger<AdminViewProvider> _logger;
+
+        private readonly DefaultTenantSettings _defaultTenantSettings;
 
         public AdminViewProvider(
             IShellSettingsManager shellSettingsManager, 
             ILogger<AdminViewProvider> logger,
+            IOptions<DefaultTenantSettings> tenantSetings,
             ITenantSetUpService setUpService)
         {
+            _defaultTenantSettings = tenantSetings.Value;
             _shellSettingsManager = shellSettingsManager;                
             _tenantSetUpService = setUpService;
             _logger = logger;
@@ -74,50 +79,8 @@ namespace Plato.Tenants.ViewProviders
                 throw new ArgumentNullException(nameof(settings));
             }
 
-            // Configure defaults
-            string defaultConnectionString = "server=localhost;trusted_connection=true;database=plato",
-                userName = "admin",
-                email = "admin@admin.com",
-                password = "Pa$1n@aDyN";
-
             // Build view model
-            EditTenantViewModel viewModel = null;
-            if (string.IsNullOrEmpty(settings.Name))
-            {
-                viewModel = new EditTenantViewModel()
-                {
-                    ConnectionString = defaultConnectionString,
-                    TablePrefix = "plato",
-                    UserName = userName,
-                    Email = email,
-                    Password = password,
-                    PasswordConfirmation = password,
-                    IsNewTenant = true
-                };
-            }
-            else
-            {
-                viewModel = new EditTenantViewModel()
-                {
-                    SiteName = settings.Name,
-                    Location = settings.Location,
-                    ConnectionString = settings.ConnectionString,
-                    TablePrefix = settings.TablePrefix,
-                    RequestedUrlHost = settings.RequestedUrlHost,
-                    RequestedUrlPrefix = settings.RequestedUrlPrefix,
-                    UserName = userName,
-                    Email = email,
-                    Password = password,
-                    PasswordConfirmation = password,
-                    State = settings.State,
-                    OwnerId = settings.OwnerId,
-                    CreatedDate = settings.CreatedDate,
-                    ModifiedDate = settings.ModifiedDate,
-                    AvailableTenantStates = GetAvailableTenantStates()
-                };
-            }
-
-            // Return view
+            var viewModel = GetModel(settings);        
             return Task.FromResult(Views(
                 View<EditTenantViewModel>("Admin.Edit.Header", model => viewModel).Zone("header"),
                 View<EditTenantViewModel>("Admin.Edit.Meta", model => viewModel).Zone("meta"),
@@ -140,7 +103,6 @@ namespace Plato.Tenants.ViewProviders
 
             if (context.Updater.ModelState.IsValid)
             {
-
                 var setupContext = new TenantSetUpContext()
                 {
                     SiteName = model.SiteName,
@@ -156,6 +118,10 @@ namespace Plato.Tenants.ViewProviders
                     OwnerId = model.OwnerId,
                     CreatedDate = model.IsNewTenant ? DateTimeOffset.Now : model.CreatedDate,
                     ModifiedDate = model.IsNewTenant ? model.ModifiedDate : DateTimeOffset.Now,
+                    EmailSettings = new EmailSettings()
+                    {
+                        SmtpSettings = model.SmtpSettings
+                    },
                     Errors = new Dictionary<string, string>()
                 };
 
@@ -205,6 +171,65 @@ namespace Plato.Tenants.ViewProviders
 
         #region "Private Methods"
 
+        private EditTenantViewModel GetModel(ShellSettings settings)
+        {
+
+            // Configure defaults
+            string userName = "admin",
+                email = "admin@admin.com",
+                password = "Pa$1n@aDyN";
+
+            // Build view model
+            EditTenantViewModel viewModel = null;
+            if (string.IsNullOrEmpty(settings.Name))
+            {
+                viewModel = new EditTenantViewModel()
+                {
+                    ConnectionString = _defaultTenantSettings.ConnectionString,
+                    TablePrefix = _defaultTenantSettings.TablePrefix,
+                    UserName = userName,
+                    Email = email,
+                    Password = password,
+                    PasswordConfirmation = password,
+                    SmtpSettings = new SmtpSettings()
+                    {
+                        DefaultFrom = _defaultTenantSettings.SmtpSettings.DefaultFrom,
+                        Host = _defaultTenantSettings.SmtpSettings.Host,
+                        Port = _defaultTenantSettings.SmtpSettings.Port,
+                        UserName = _defaultTenantSettings.SmtpSettings.UserName,
+                        Password = _defaultTenantSettings.SmtpSettings.Password,
+                        RequireCredentials = _defaultTenantSettings.SmtpSettings.RequireCredentials,
+                        EnableSsl = _defaultTenantSettings.SmtpSettings.EnableSsl
+                    },
+                    IsNewTenant = true
+                };
+            }
+            else
+            {
+                viewModel = new EditTenantViewModel()
+                {
+                    SiteName = settings.Name,
+                    Location = settings.Location,
+                    ConnectionString = settings.ConnectionString,
+                    TablePrefix = settings.TablePrefix,
+                    RequestedUrlHost = settings.RequestedUrlHost,
+                    RequestedUrlPrefix = settings.RequestedUrlPrefix,
+                    UserName = userName,
+                    Email = email,
+                    Password = password,
+                    PasswordConfirmation = password,
+                    State = settings.State,
+                    OwnerId = settings.OwnerId,
+                    CreatedDate = settings.CreatedDate,
+                    ModifiedDate = settings.ModifiedDate,
+                    AvailableTenantStates = GetAvailableTenantStates()
+                };
+            }
+
+            return viewModel;
+
+        }
+
         private bool IsNewShell(string name)
         {
 
@@ -223,7 +248,7 @@ namespace Plato.Tenants.ViewProviders
 
         }
 
-        IEnumerable<SelectListItem> GetAvailableTenantStates()
+        private IEnumerable<SelectListItem> GetAvailableTenantStates()
         {
 
             var output = new List<SelectListItem>();

@@ -4,9 +4,9 @@ using System.Threading.Tasks;
 using PlatoCore.Abstractions;
 using Plato.Files.Stores;
 using System.Collections.Generic;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Abstractions.Extensions;
 using Microsoft.AspNetCore.Mvc.Localization;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Files.Services
 {

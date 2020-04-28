@@ -68,7 +68,7 @@
             @if (Model.File.CreatedBy != null)
             {
                 <li class="list-inline-item">
-                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@Model.File.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
+                    <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.File.CreatedUserId" asp-route-opts.alias="@Model.File.CreatedBy.Alias" data-provide="popper" data-popper-url="@GetRouteUrl(Model.File.CreatedBy.Urls.GetProfileRoute)" data-popper-position="bottom">
                         @Model.File.CreatedBy.DisplayName
                     </a>
                 </li>

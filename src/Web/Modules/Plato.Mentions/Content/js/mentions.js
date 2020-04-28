@@ -125,7 +125,7 @@ $(function (win, doc, $) {
                                             config: {
                                                 method: "GET",
                                                 url:
-                                                    'api/users/get?page={page}&size={pageSize}&keywords=' +
+                                                    win.$.Plato.defaults.pathBase + '/api/users/get?page={page}&size={pageSize}&keywords=' +
                                                         encodeURIComponent(keywords),
                                                 data: {
                                                     sort: "LastLoginDate",

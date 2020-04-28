@@ -72,7 +72,7 @@ namespace PlatoCore.Shell
 
             var blueprint = _compositionStrategy.ComposeAsync(settings, descriptor).Result;
             var serviceProvider = _shellContainerFactory.CreateContainer(settings, blueprint);
-                                    
+            
             return new ShellContext
             {
                 Settings = settings,

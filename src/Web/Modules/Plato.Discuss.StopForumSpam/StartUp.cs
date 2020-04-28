@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Notifications;
@@ -20,9 +19,11 @@ using Plato.Discuss.StopForumSpam.Handlers;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Discuss.StopForumSpam.Navigation;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Discuss.StopForumSpam
 {
+
     public class Startup : StartupBase
     {
         private readonly IShellSettings _shellSettings;
@@ -99,7 +100,7 @@ namespace Plato.Discuss.StopForumSpam
                 template: "discuss/t/spam/add/{opts.id:int}/{opts.alias}/{opts.replyId:int?}",
                 defaults: new { controller = "Home", action = "AddSpammer" }
             );
-            
+
         }
 
     }

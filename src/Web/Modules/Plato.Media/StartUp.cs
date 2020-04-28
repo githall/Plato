@@ -5,9 +5,9 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Media.Handlers;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Media.Repositories;
 using Plato.Media.Stores;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Media
 {

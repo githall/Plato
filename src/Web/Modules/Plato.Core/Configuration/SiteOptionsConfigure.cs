@@ -10,15 +10,11 @@ namespace Plato.Core.Configuration
     public class SiteOptionsConfiguration : IConfigureOptions<SiteOptions>
     {
 
-        //private readonly ISiteSettingsStore _siteSettingsStore;
         private readonly IServiceScopeFactory _serviceScopeFactory;
 
-        public SiteOptionsConfiguration(
-            IServiceScopeFactory serviceScopeFactory,
-            ISiteSettingsStore siteSettingsStore)
-        {         
+        public SiteOptionsConfiguration(IServiceScopeFactory serviceScopeFactory)
+        {
             _serviceScopeFactory = serviceScopeFactory;
-            //_siteSettingsStore = siteSettingsStore;
         }
 
         public void Configure(SiteOptions options)
@@ -27,9 +23,9 @@ namespace Plato.Core.Configuration
             using (var scope = _serviceScopeFactory.CreateScope())
             {
 
-                var shellSettingsStore = scope.ServiceProvider.GetRequiredService<ISiteSettingsStore>();
+                var siteSettingsStore = scope.ServiceProvider.GetRequiredService<ISiteSettingsStore>();
 
-                var settings = shellSettingsStore
+                var settings = siteSettingsStore
                     .GetAsync()
                     .GetAwaiter()
                     .GetResult();

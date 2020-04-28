@@ -11,9 +11,9 @@ using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
 using PlatoCore.Data.Abstractions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Models.Features;
 using Plato.Site.Demo.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Site.Demo.Services
 {

@@ -118,15 +118,7 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            valueField: "keywords",
-            config: {
-                method: "GET",
-                url: 'api/search/get?page={page}&size={pageSize}&keywords={keywords}',
-                data: {
-                    sort: "LastReplyDate",
-                    order: "Desc"
-                }
-            },
+            valueField: "keywords",           
             itemTemplate:
                 '<a class="{itemCss}" href="{url}"><div style=\"display:inline-block; width: 85%; overflow:hidden; text-overflow: ellipsis;\"><span class="avatar avatar-sm mr-2"><span style="background-image: url({createdBy.avatar.url});"></span></span>{title}</div>{relevance}</a>',
             parseItemTemplate: function(html, result) {
@@ -257,7 +249,17 @@ $(function (win, doc, $) {
                     return null;
                 }
 
-                // init autoComplete
+                $caller.data(dataKey).config = {
+                    method: "GET",
+                    url: win.$.Plato.defaults.pathBase +
+                        '/api/search/get?page={page}&size={pageSize}&keywords={keywords}',
+                    data: {
+                        sort: "LastReplyDate",
+                        order: "Desc"
+                    }
+                };
+                
+                // Init autoComplete
                 $caller.autoComplete($caller.data(dataKey), methodName);
 
             },

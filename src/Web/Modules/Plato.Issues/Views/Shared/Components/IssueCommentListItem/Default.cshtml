@@ -15,8 +15,8 @@
 
 <div asp-id="list-row" class="list-row">
     <div asp-id="list-left" class="list-left reply-left">
-        <a asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="avatar-link" data-provide="popper" data-popper-url="@Model.Reply.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">
-            <avatar class="avatar" url="@Model.Reply.CreatedBy.Avatar.Url" />
+        <a asp-id="avatar" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="avatar-link" data-provide="popper" data-popper-url="@GetRouteUrl(Model.Reply.CreatedBy.Urls.GetProfileRoute)" data-popper-position="bottom">
+            <avatar class="avatar" avatar="@Model.Reply.CreatedBy.Avatar" />
         </a>
         <navigation name="issue-comment-details"
                     model="Model.Reply"
@@ -27,7 +27,7 @@
             <card-title>
                 <div data-infinite-scroll-offset="@Model.Reply.RowOffset">
                     <div asp-id="title" class="card-title float-left">
-                        <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="@Model.Reply.CreatedBy?.Css.StaffCss" data-provide="popper" data-popper-url="@Model.Reply.CreatedBy.Urls.GetProfileUrl" data-popper-position="bottom">@Model.Reply.CreatedBy.DisplayName</a>
+                        <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Reply.CreatedUserId" asp-route-opts.alias="@Model.Reply.CreatedBy.Alias" class="@Model.Reply.CreatedBy?.Css.StaffCss" data-provide="popper" data-popper-url="@GetRouteUrl(Model.Reply.CreatedBy.Urls.GetProfileRoute)" data-popper-position="bottom">@Model.Reply.CreatedBy.DisplayName</a>
                         @T["posted "]
                         <span data-toggle="tooltip" title="@Model.Reply.CreatedDate">
                             @Model.Reply.CreatedDate.ToPrettyDate()

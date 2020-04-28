@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Issues.Models;
 using PlatoCore.Layout.ViewProviders;
@@ -13,6 +12,7 @@ using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using Plato.Issues.Files.Handlers;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Issues.Files
 {

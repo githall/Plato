@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
@@ -13,6 +12,7 @@ using Plato.Users.reCAPTCHA2.Services;
 using Plato.Users.reCAPTCHA2.Navigation;
 using Plato.Users.reCAPTCHA2.Stores;
 using Plato.Users.reCAPTCHA2.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Users.reCAPTCHA2
 {

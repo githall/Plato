@@ -11,13 +11,12 @@ using Plato.Files.Models;
 using Plato.Entities.Files.Stores;
 using Plato.Entities.Files.Models;
 using Plato.Articles.Models;
-using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
 using Plato.Entities.Files.ViewModels;
 using Microsoft.AspNetCore.Routing;
 using Plato.Files.Services;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Entities.Services;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Articles.Files.Controllers
 {

@@ -8,7 +8,7 @@ namespace PlatoCore.Reputations.Extensions
     public static class ServiceCollectionExtensions
     {
 
-        public static IServiceCollection AddPlatoReputations(
+        public static IServiceCollection AddShellReputations(
             this IServiceCollection services)
         {
             

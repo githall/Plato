@@ -15,5 +15,9 @@ Dependencies:
 	{
 		Id: "Plato.Admin",
 		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Email",
+		Version: "1.0.0"
 	}
 ]

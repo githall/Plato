@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
 using Plato.Entities.Extensions;
 using Plato.Entities.Stores;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Ideas.Models;
 using Plato.Slack.Services;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Slack.Subscribers
 {

@@ -10,9 +10,9 @@ using PlatoCore.Abstractions.SetUp;
 using PlatoCore.Data.Migrations.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Features
 {
@@ -54,5 +54,7 @@ namespace Plato.Features
             );
 
         }
+
     }
+
 }

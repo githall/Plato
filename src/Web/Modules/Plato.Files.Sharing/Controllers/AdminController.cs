@@ -10,7 +10,7 @@ using Plato.Files.Sharing.Services;
 using Plato.Files.Sharing.Stores;
 using Plato.Files.Sharing.ViewModels;
 using Plato.Files.Stores;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 

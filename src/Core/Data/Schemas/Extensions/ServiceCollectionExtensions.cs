@@ -9,13 +9,13 @@ namespace PlatoCore.Data.Schemas.Extensions
         public static IServiceCollection AddDataSchemas(
             this IServiceCollection services)
         {
-                        
+
             services.AddTransient<ISchemaManager, SchemaManager>();
             services.AddTransient<ISchemaBuilder, SchemaBuilder>();
 
             return services;
         }
 
-
     }
+
 }

@@ -1,4 +1,5 @@
 ﻿using System;
+using Newtonsoft.Json;
 using System.Collections.Generic;
 using System.Text.Encodings.Web;
 using System.Threading.Tasks;
@@ -6,8 +7,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
 using Microsoft.Extensions.Logging;
-using Newtonsoft.Json;
-using PlatoCore.Models.Shell;
+using PlatoCore.Http.Abstractions;
 
 namespace PlatoCore.Layout.Alerts
 {
@@ -15,39 +15,37 @@ namespace PlatoCore.Layout.Alerts
     public class AlertFilter : IActionFilter, IAsyncResultFilter
     {
 
-        private IList<AlertInfo> _alerts = new List<AlertInfo>();        
-        internal const string CookieName = "plato_alerts";
-        private readonly string _tenantPath;
+        private IList<AlertInfo> _alerts = new List<AlertInfo>();
+        private const string _cookieName = "plato_alerts";
         private bool _deleteCookie = false;
-        
-        readonly HtmlEncoder _htmlEncoder;
-        readonly ILayoutUpdater _layoutUpdater;
-        readonly ILogger<AlertFilter> _logger;
-        readonly IAlerter _alerter;
+
+        private readonly ILayoutUpdater _layoutUpdater;
+        private readonly ICookieBuilder _cookieBuilder;
+        private readonly ILogger<AlertFilter> _logger;
+        private readonly HtmlEncoder _htmlEncoder;
+        private readonly IAlerter _alerter;
 
         public AlertFilter(
-            IShellSettings shellSettings,
-            HtmlEncoder htmlEncoder,
-            ILogger<AlertFilter> logger,
+            ICookieBuilder cookieBuilder,
             ILayoutUpdater layoutUpdater,
+            ILogger<AlertFilter> logger,
+            HtmlEncoder htmlEncoder,
             IAlerter alerter)
         {
             _layoutUpdater = layoutUpdater;
-            _alerter = alerter;
+            _cookieBuilder = cookieBuilder;
             _htmlEncoder = htmlEncoder;
+            _alerter = alerter;       
             _logger = logger;
-            _tenantPath = "/" + shellSettings.RequestedUrlPrefix;
         }
 
         #region "Filter Implementation"
 
         public void OnActionExecuting(ActionExecutingContext context)
         {
-            
+
             // 1.
-            var json = Convert.ToString(
-                context.HttpContext.Request.Cookies[CookieName]
-            );
+            var json = _cookieBuilder.Contextulize(context.HttpContext).Get(_cookieName);
 
             if (String.IsNullOrEmpty(json))
             {
@@ -98,14 +96,15 @@ namespace PlatoCore.Layout.Alerts
             // Result is not a view, so assume a redirect and assign values to persistence
             if (!(context.Result is ViewResult) && _alerts.Count > 0)
             {
-                context.HttpContext.Response.Cookies.Append(
-                    CookieName,
-                    SerializeAlerts(_alerts),
-                    new CookieOptions
-                    {
-                        HttpOnly = true,
-                        Path = _tenantPath
-                    });
+                _cookieBuilder
+                    .Contextulize(context.HttpContext)
+                    .Append(
+                        _cookieName,
+                        SerializeAlerts(_alerts),
+                        new CookieOptions
+                        {
+                            HttpOnly = true
+                        });
             }
 
         }
@@ -224,12 +223,9 @@ namespace PlatoCore.Layout.Alerts
 
         void DeleteCookies(ResultExecutingContext context)
         {
-            context.HttpContext.Response.Cookies.Delete(
-                CookieName,
-                new CookieOptions
-                {
-                    Path = _tenantPath
-                });
+            _cookieBuilder
+                .Contextulize(context.HttpContext)
+                .Delete(_cookieName);
         }
         
         #endregion

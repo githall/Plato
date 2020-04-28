@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Issues.Models;
 using Plato.Entities.History.ViewModels;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Issues.History.Navigation
 {

@@ -5,7 +5,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Plato.Tenants.Handlers;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using Plato.Tenants.Navigation;
 using PlatoCore.Navigation.Abstractions;
 using Plato.Tenants.ViewProviders;
@@ -13,6 +12,11 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Tenants.Services;
 using PlatoCore.Security.Abstractions;
+using PlatoCore.Hosting.Abstractions;
+using Plato.Tenants.Models;
+using Plato.Tenants.Stores;
+using Plato.Tenants.Configuration;
+using Microsoft.Extensions.Options;
 
 namespace Plato.Tenants
 {
@@ -31,8 +35,16 @@ namespace Plato.Tenants
             // Feature installation event handler
             services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
 
+            // Stores
+            services.AddScoped<ITenantSettingsStore<DefaultTenantSettings>, TenantSettingsStore>();
+
+            // Configuration
+            services.AddTransient<IConfigureOptions<DefaultTenantSettings>, TenantSettingsConfiguration>();
+
             // View providers
+            services.AddScoped<IViewProviderManager<DefaultTenantSettings>, ViewProviderManager<DefaultTenantSettings>>();
             services.AddScoped<IViewProviderManager<ShellSettings>, ViewProviderManager<ShellSettings>>();
+            services.AddScoped<IViewProvider<DefaultTenantSettings>, TenantSettingsViewProvider>();
             services.AddScoped<IViewProvider<ShellSettings>, AdminViewProvider>();
 
             // Register navigation providers
@@ -83,6 +95,15 @@ namespace Plato.Tenants
                 template: "admin/tenants/delete/{id}",
                 defaults: new { controller = "Admin", action = "Delete" }
             );
+
+            // Settings
+            routes.MapAreaRoute(
+                name: "TenantsSettings",
+                areaName: "Plato.Tenants",
+                template: "admin/tenants/settings",
+                defaults: new { controller = "Admin", action = "Settings" }
+            );
+
         }
 
     }

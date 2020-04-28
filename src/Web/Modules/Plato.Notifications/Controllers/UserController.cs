@@ -4,13 +4,13 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Routing;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Notifications.Abstractions;
 using Plato.Notifications.Models;
 using Plato.Notifications.Stores;
 using Plato.WebApi.Attributes;
 using Plato.WebApi.Controllers;
 using Plato.WebApi.Models;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Notifications.Controllers
 {
@@ -70,11 +70,10 @@ namespace Plato.Notifications.Controllers
                     Total = userNotifications.Total
                 };
 
-                var baseUrl = await _contextFacade.GetBaseUrlAsync();
                 foreach (var userNotification in userNotifications.Data)
                 {
 
-                    var toUrl = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    var toUrl = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Users",
                         ["controller"] = "Home",
@@ -83,7 +82,7 @@ namespace Plato.Notifications.Controllers
                         ["opts.alias"] = userNotification.To.Alias
                     });
 
-                    var fromUrl = baseUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    var fromUrl = _contextFacade.GetRouteUrl(new RouteValueDictionary()
                     {
                         ["area"] = "Plato.Users",
                         ["controller"] = "Home",
@@ -92,16 +91,14 @@ namespace Plato.Notifications.Controllers
                         ["opts.alias"] = userNotification.From.Alias
                     });
 
-                    var url = userNotification.Url;
-                    if (url != null)
+                    if (string.IsNullOrEmpty(userNotification.To.Avatar.Url))
                     {
-                        var noHttp = url.IndexOf("http://", StringComparison.OrdinalIgnoreCase) == -1;
-                        var noHttps = url.IndexOf("https://", StringComparison.OrdinalIgnoreCase) == -1;
-                        var relativeUrl = (noHttp && noHttps);
-                        if (relativeUrl)
-                        {
-                            url = baseUrl + url;
-                        }
+                        userNotification.To.Avatar.Url = _contextFacade.GetRouteUrl(userNotification.To.Avatar.DefaultRoute);
+                    }
+
+                    if (string.IsNullOrEmpty(userNotification.From.Avatar.Url))
+                    {
+                        userNotification.From.Avatar.Url = _contextFacade.GetRouteUrl(userNotification.From.Avatar.DefaultRoute);
                     }
 
                     results.Data.Add(new UserNotificationApiResult()
@@ -125,7 +122,7 @@ namespace Plato.Notifications.Controllers
                         },
                         Title = userNotification.Title,
                         Message = userNotification.Message,
-                        Url = url,
+                        Url = userNotification.Url,
                         Date = new FriendlyDate()
                         {
                             Text = userNotification.CreatedDate.ToPrettyDate(),

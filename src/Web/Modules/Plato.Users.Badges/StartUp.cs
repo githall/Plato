@@ -3,7 +3,6 @@ using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using PlatoCore.Models.Users;
@@ -21,6 +20,7 @@ using Plato.Users.Badges.Handlers;
 using Plato.Users.Badges.Services;
 using Plato.Users.Badges.Tasks;
 using Plato.Users.Badges.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Users.Badges
 {
@@ -103,5 +103,7 @@ namespace Plato.Users.Badges
             );
 
         }
+
     }
+
 }

@@ -7,7 +7,7 @@ using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Mvc.Localization;
 using PlatoCore.Layout.TagHelperAdapters.Abstractions;
-using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Hosting.Web.Abstractions;
 using Plato.Entities.Metrics.Repositories;
 using Plato.Entities.Metrics.Extensions;
 using Plato.Entities.Extensions;

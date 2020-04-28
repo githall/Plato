@@ -4,10 +4,10 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.DependencyInjection;
 using Plato.Admin.Models;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Entities.Reports.ViewProviders;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Entities.Reports
 {
@@ -22,7 +22,6 @@ namespace Plato.Entities.Reports
 
         public override void ConfigureServices(IServiceCollection services)
         {
-
        
             // View providers
             services.AddScoped<IViewProviderManager<AdminIndex>, ViewProviderManager<AdminIndex>>();
@@ -36,5 +35,7 @@ namespace Plato.Entities.Reports
             IServiceProvider serviceProvider)
         {
         }
+
     }
+
 }

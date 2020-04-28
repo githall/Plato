@@ -5393,7 +5393,7 @@ $(function (win, doc, $) {
             valueField: "keywords",
             config: {
                 method: "GET",
-                url: 'api/users/get?page={page}&size={pageSize}&keywords={keywords}',
+                url: win.$.Plato.defaults.pathBase + '/api/users/get?page={page}&size={pageSize}&keywords={keywords}',
                 data: {
                     sort: "LastLoginDate",
                     order: "Desc"
@@ -6514,7 +6514,7 @@ $(function (win, doc, $) {
                         // add to stack
                         methods.callers.push($caller);
 
-                        // Add optional Css
+                        // Add optional CSS
                         methods._addCss($caller);
 
                         // Load content

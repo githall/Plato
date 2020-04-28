@@ -1,11 +1,8 @@
-﻿using System;
-using Microsoft.AspNetCore.Builder;
-using Microsoft.AspNetCore.Routing;
-using Microsoft.Extensions.DependencyInjection;
+﻿using Microsoft.Extensions.DependencyInjection;
 using PlatoCore.Models.Shell;
-using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Issues.Slack.Subscribers;
+using PlatoCore.Hosting.Abstractions;
 
 namespace Plato.Issues.Slack
 {
@@ -26,13 +23,6 @@ namespace Plato.Issues.Slack
             services.AddScoped<IBrokerSubscriber, EntitySubscriber>();
             services.AddScoped<IBrokerSubscriber, EntityReplySubscriber>();
 
-        }
-
-        public override void Configure(
-            IApplicationBuilder app,
-            IRouteBuilder routes,
-            IServiceProvider serviceProvider)
-        {
         }
 
     }

@@ -19,8 +19,7 @@ namespace Plato.Email.Stores
 
         public EmailSettingsStore(
             IDictionaryStore dictionaryStore,
-            ILogger<EmailSettingsStore> logger,
-            IMemoryCache memoryCache,
+            ILogger<EmailSettingsStore> logger,        
             ICacheManager cacheManager)
         {
             _dictionaryStore = dictionaryStore;

@@ -5,11 +5,6 @@ using Microsoft.Extensions.Caching.Memory;
 namespace PlatoCore.Cache.Abstractions
 {
 
-    public interface ISingletonCacheManager : ICacheManager
-    {
-
-    }
-
     public interface ICacheManager
     {
 

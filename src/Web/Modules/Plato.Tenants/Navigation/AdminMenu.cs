@@ -31,6 +31,10 @@ namespace Plato.Tenants.Navigation
                         .Action("Create", "Admin", "Plato.Tenants")
                         .Permission(Permissions.AddTenants)
                         .LocalNav())
+                    .Add(T["Settings"], 5, settings => settings
+                        .Action("Settings", "Admin", "Plato.Tenants")
+                        .Permission(Permissions.EditSettings)
+                        .LocalNav())
                 );
 
         }

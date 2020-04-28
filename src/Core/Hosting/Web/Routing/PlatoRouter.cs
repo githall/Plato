@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Infrastructure;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Logging;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace PlatoCore.Hosting.Web.Routing
 {
