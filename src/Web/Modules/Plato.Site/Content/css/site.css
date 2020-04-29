@@ -324,10 +324,6 @@ a.img-thumbnail:hover .img-caption {
     transform: rotate(90deg);
 }
 
-.accordion a[data-toggle="collapse"] {
-    color:#222;
-}
-
 .accordion .card-header {
     border:0;
 }

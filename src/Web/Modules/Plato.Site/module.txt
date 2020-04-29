@@ -2,7 +2,7 @@ Name: Plato Site
 Description: The Plato web site.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
-Category: Core
+Category: Site
 PlatoVersion: 1.1.1
 Version: 1.0.0
 Icon: /plato.site/content/images/icon.png

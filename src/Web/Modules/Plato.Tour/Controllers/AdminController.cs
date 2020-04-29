@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Localization;
@@ -15,43 +15,38 @@ using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
-using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Shell;
-using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Tour;
 
 namespace Plato.Tour.Controllers
 {
+
     public class AdminController : Controller, IUpdateModel
     {
-        
+
         private readonly IViewProviderManager<FeaturesIndexViewModel> _viewProvider;
         private readonly IShellDescriptorManager _shellDescriptorManager;
         private readonly IAuthorizationService _authorizationService;
         private readonly IShellFeatureManager _shellFeatureManager;
-        private readonly ITourDescriptorStore _tourDescriptorStore;
-        private readonly IBreadCrumbManager _breadCrumbManager;
-        private readonly IPageTitleBuilder _pageTitleBuilder;
-        private readonly IShellSettings _shellSettings;
-        private readonly IAlerter _alerter;
+        private readonly ITourDescriptorStore _tourDescriptorStore;          
+        private readonly IShellSettings _shellSettings;        
         private readonly IPlatoHost _platoHost;
+        private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
 
         public IStringLocalizer S { get; }
-        
+
         public AdminController(
             IHtmlLocalizer htmlLocalizer,
-            IStringLocalizer stringLocalizer,
-            IShellFeatureManager shellFeatureManager,
+            IStringLocalizer stringLocalizer,            
             IViewProviderManager<FeaturesIndexViewModel> viewProvider,
             IShellDescriptorManager shellDescriptorManager,
             IAuthorizationService authorizationService,
             ITourDescriptorStore tourDescriptorStore,
-            IBreadCrumbManager breadCrumbManager,
-            IPageTitleBuilder pageTitleBuilder,
+            IShellFeatureManager shellFeatureManager,                
             IShellSettings shellSettings,
             IPlatoHost platoHost,
             IAlerter alerter)
@@ -61,8 +56,6 @@ namespace Plato.Tour.Controllers
             _authorizationService = authorizationService;
             _shellFeatureManager = shellFeatureManager;
             _tourDescriptorStore = tourDescriptorStore;
-            _breadCrumbManager = breadCrumbManager;
-            _pageTitleBuilder = pageTitleBuilder;
             _shellSettings = shellSettings;
             _viewProvider = viewProvider;
             _platoHost = platoHost;
@@ -119,7 +112,7 @@ namespace Plato.Tour.Controllers
                     _alerter.Danger(T[error.Description]);
                 }
             }
-          
+
             if (!string.IsNullOrEmpty(returnUrl))
             {
                 // Redirect to returnUrl
@@ -188,9 +181,9 @@ namespace Plato.Tour.Controllers
 
         }
 
-        // -------------
+        // ------------------------
 
-        async Task<ICommandResultBase> InstallByCategoryAsync(string categoryName)
+        private async Task<ICommandResultBase> InstallByCategoryAsync(string categoryName)
         {
 
             // Our result
@@ -227,7 +220,7 @@ namespace Plato.Tour.Controllers
 
         }
 
-        async Task<ICommandResultBase> InstallByIdAsync(string id)
+        private async Task<ICommandResultBase> InstallByIdAsync(string id)
         {
             var result = new CommandResultBase();
 
@@ -251,7 +244,7 @@ namespace Plato.Tour.Controllers
 
         }
 
-        IActionResult RedirectToLocal(string returnUrl)
+        private IActionResult RedirectToLocal(string returnUrl)
         {
             if (Url.IsLocalUrl(returnUrl))
             {
