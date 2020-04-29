@@ -1,8 +1,8 @@
 ﻿using System;
-using System.Collections.Concurrent;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Concurrent;
+using System.Collections.Generic;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Features.Abstractions;
@@ -184,13 +184,20 @@ namespace PlatoCore.Features
 
                     return contexts;
                     
-                }, context =>
+                }, 
+                async context =>
                 {
 
                     // Return if feature is already enabled, no need to enable
                     if (context.Feature.IsEnabled)
                     {
                         return null;
+                    }
+
+                    // Invoke FeatureInstalled subscriptions
+                    foreach (var brokerHandler in _broker.Pub<IShellFeature>(this, "FeatureInstalled"))
+                    {
+                        context.Feature = await brokerHandler.Invoke(new Message<IShellFeature>(context.Feature, this));
                     }
 
                     var contexts = new ConcurrentDictionary<string, IFeatureEventContext>();
@@ -333,13 +340,19 @@ namespace PlatoCore.Features
                     return null;
 
                 },
-                context =>
+                async context =>
                 {
 
                     // Return if feature is already disabled - no need to disable
                     if (!context.Feature.IsEnabled)
                     {
                         return null;
+                    }
+
+                    // Invoke FeatureUninstalled subscriptions
+                    foreach (var brokerHandler in _broker.Pub<IShellFeature>(this, "FeatureUninstalled"))
+                    {
+                        context.Feature = await brokerHandler.Invoke(new Message<IShellFeature>(context.Feature, this));
                     }
 
                     var contexts = new ConcurrentDictionary<string, IFeatureEventContext>();
@@ -425,7 +438,7 @@ namespace PlatoCore.Features
         async Task<ConcurrentDictionary<string, IFeatureEventContext>> InvokeFeatureEventsAsync(
             IList<IShellFeature> features,
             Func<IFeatureEventContext, IFeatureEventHandler, Task<ConcurrentDictionary<string, IFeatureEventContext>>> handler,
-            Func<IFeatureEventContext, ConcurrentDictionary<string, IFeatureEventContext>> noHandler)
+            Func<IFeatureEventContext, Task<ConcurrentDictionary<string, IFeatureEventContext>>> noHandler)
         {
 
             // Holds the results of all our event execution contexts
@@ -497,7 +510,7 @@ namespace PlatoCore.Features
                         // Get response from responsible func
                         var handlerContexts = featureHandler != null
                             ? await handler(context, featureHandler)
-                            : noHandler(context);
+                            : await noHandler(context);
 
                         // Compile results from delegates
                         if (handlerContexts != null)

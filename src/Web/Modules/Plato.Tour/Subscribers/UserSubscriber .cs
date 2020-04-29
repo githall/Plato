@@ -1,22 +1,20 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Plato.Tour.Models;
-using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Messaging.Abstractions;
-using PlatoCore.Models.Features;
 using PlatoCore.Models.Tour;
+using PlatoCore.Models.Users;
 using PlatoCore.Stores.Abstractions.Tour;
 
 namespace Plato.Tour.Subscribers
 {
 
-    public class FeatureSubscriber : IBrokerSubscriber
+    public class UserSubscriber : IBrokerSubscriber
     {
 
         private readonly ITourDescriptorStore _tourDescriptorStore; 
         private readonly IBroker _broker;
 
-        public FeatureSubscriber(
+        public UserSubscriber(
             ITourDescriptorStore tourDescriptorStore,       
             IBroker broker)
         {
@@ -28,21 +26,21 @@ namespace Plato.Tour.Subscribers
 
         public void Subscribe()
         {
-            // Installed
-            _broker.Sub<IShellFeature>(new MessageOptions()
+            // UserUpdated
+            _broker.Sub<User>(new MessageOptions()
             {
-                Key = "FeatureInstalled"
-            }, async message => await FeatureInstalled(message.What));
+                Key = "UserUpdated"
+            }, async message => await UserUpdated(message.What));
 
         }
 
         public void Unsubscribe()
         {
-            // Installed
-            _broker.Unsub<IShellFeature>(new MessageOptions()
+            // UserUpdated
+            _broker.Unsub<User>(new MessageOptions()
             {
-                Key = "FeatureInstalled"
-            }, async message => await FeatureInstalled(message.What));
+                Key = "UserUpdated"
+            }, async message => await UserUpdated(message.What));
 
         }
 
@@ -50,35 +48,20 @@ namespace Plato.Tour.Subscribers
 
         #region "Private Methods"
 
-        async Task<IShellFeature> FeatureInstalled(IShellFeature feature)
+        async Task<User> UserUpdated(User user)
         {
 
-            if (feature == null)
+            if (user == null)
             {
-                return feature;
+                return user;
             }
 
-            TourStep stepToUpdate = null;
-
-            if (ShellDescriptors.CoreModules.Contains(feature.Descriptor.Id))
-            {
-                stepToUpdate = DefaultSteps.EnablleCoreFeature;
-            }
-
-            if (ShellDescriptors.OptionalModules.Contains(feature.Descriptor.Id))
-            {
-                stepToUpdate = DefaultSteps.EnablleOptionalFeature;
-            }
-
-            if (ShellDescriptors.SearchModules.Contains(feature.Descriptor.Id))
-            {
-                stepToUpdate = DefaultSteps.EnableSearch;
-            }
+            var stepToUpdate = DefaultSteps.UpdateProfile; ;
 
             // We need a step to update
             if (stepToUpdate == null)
             {        
-                return feature;
+                return user;
             }
 
             // Update step
@@ -93,7 +76,7 @@ namespace Plato.Tour.Subscribers
             }
 
             // Return
-            return feature;
+            return user;
 
         }
 

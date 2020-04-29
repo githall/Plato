@@ -9,12 +9,14 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Features;
 using Plato.Features.ViewModels;
+using Plato.Tour.Models;
 using PlatoCore.Abstractions;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewProviders.Abstractions;
+using PlatoCore.Models.Tour;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Tour;
@@ -76,16 +78,14 @@ namespace Plato.Tour.Controllers
 
             if (string.IsNullOrEmpty(id))
             {
-                if (string.IsNullOrEmpty(category))
-                {
-                    throw new ArgumentNullException(nameof(category));
-                }
-                else
-                {
-                    throw new ArgumentNullException(nameof(id));
-                }          
+                throw new ArgumentNullException(nameof(id));             
             }
-        
+
+            if (string.IsNullOrEmpty(category))
+            {
+                throw new ArgumentNullException(nameof(category));
+            }
+
             if (string.IsNullOrEmpty(returnUrl))
             {
                 throw new ArgumentNullException(nameof(returnUrl));
@@ -97,7 +97,7 @@ namespace Plato.Tour.Controllers
                 : await InstallByIdAsync(id);
 
             if (result.Succeeded)
-            {
+            {               
                 _alerter.Success(T[$"Features enabled successfully!"]);
             }
             else

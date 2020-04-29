@@ -30,6 +30,11 @@
             "Plato.Users.Notifications"
         };
 
+        public static string[] SearchModules = new string[]
+         {
+                "Plato.Search"
+         };
+
     }
 
 }

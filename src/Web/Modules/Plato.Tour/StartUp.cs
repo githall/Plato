@@ -4,9 +4,6 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tour.ViewProviders;
 using Plato.Core.Models;
 using PlatoCore.Layout.ViewProviders;
-using Plato.Tour.Configuration;
-using PlatoCore.Models.Tour;
-using Microsoft.Extensions.Options;
 using PlatoCore.Messaging.Abstractions;
 using Plato.Tour.Subscribers;
 
@@ -25,6 +22,7 @@ namespace Plato.Tour
 
             // Register message broker subscribers
             services.AddScoped<IBrokerSubscriber, FeatureSubscriber>();
+            services.AddScoped<IBrokerSubscriber, UserSubscriber>();
 
             // Configuration
             // services.AddTransient<IConfigureOptions<TourDescriptor>, TourDescriptorConfiguration>();

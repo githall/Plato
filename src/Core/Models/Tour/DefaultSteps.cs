@@ -1,10 +1,8 @@
-﻿using PlatoCore.Models.Tour;
-using System.Collections.Generic;
-
-namespace Plato.Tour.Models
+﻿namespace PlatoCore.Models.Tour
 {
-    public static class TourDescriptorSteps
+    public static class DefaultSteps
     {
+
         public static TourStep EnablleCoreFeature = new TourStep()
         {
             Id = "Tour.Features.Core",
@@ -47,16 +45,6 @@ namespace Plato.Tour.Models
             Id = "Tour.Features.Search",
             Title = "Enable Search",
             Description = "Enable Search"
-        };
-
-        public static IEnumerable<TourStep> Steps = new List<TourStep>()
-        {
-            EnablleCoreFeature,
-            EnablleOptionalFeature,
-            UpdateProfile,
-            GeneralSettings,
-            EmailSettings,
-            EnableSearch
         };
 
     }

@@ -2,6 +2,13 @@
 
 <card>
     <card-body>
-        @Model.Id
+        @await DisplayAsync(new View("TourFeatureList", new
+        {
+            options = new FeatureIndexOptions()
+            {
+                ModuleIds = ShellDescriptors.SearchModules,
+                HideEnabled = true
+            }
+        }))
     </card-body>
 </card>

@@ -23,13 +23,6 @@ namespace Plato.Tour.ViewProviders
         {
 
             var descriptor = await _tourDescriptorStore.GetAsync();
-            if (descriptor == null)
-            {
-                descriptor = new TourDescriptor()
-                {
-                    Steps = TourDescriptorSteps.Steps
-                };
-            }
 
             // Build view model
             var coreIndexViewModel = new TourIndexViewModel()

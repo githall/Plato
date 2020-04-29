@@ -4,6 +4,8 @@ using PlatoCore.Cache.Abstractions;
 using PlatoCore.Stores.Abstract;
 using PlatoCore.Stores.Abstractions.Tour;
 using PlatoCore.Models.Tour;
+using System;
+using System.Collections.Generic;
 
 namespace PlatoCore.Stores.Tour
 {
@@ -32,8 +34,15 @@ namespace PlatoCore.Stores.Tour
         public async Task<TourDescriptor> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType(), Key);
-            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) => 
-                await _dictionaryStore.GetAsync<TourDescriptor>(Key));
+            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
+            {
+                var descriptor = await _dictionaryStore.GetAsync<TourDescriptor>(Key);
+                if (descriptor != null)
+                {
+                    return descriptor;
+                }
+                return new DefaultTourDescriptor();
+            });
         }
 
         public async Task<TourDescriptor> SaveAsync(TourDescriptor shellDescriptor)
@@ -65,8 +74,70 @@ namespace PlatoCore.Stores.Tour
             return result;
         }
 
+        public async Task<TourStep> GetStepAsync(string id)
+        {
+
+            if (string.IsNullOrEmpty(id)) 
+            {
+                throw new ArgumentNullException(nameof(id));
+
+            }
+            
+            // Get descriptor
+            var descriptor = await GetAsync();
+
+            // Return step
+            if (descriptor.Steps != null)
+            {
+                foreach (var step in descriptor.Steps)
+                {
+                    if (id.Equals(step.Id, StringComparison.OrdinalIgnoreCase))
+                    {
+                        return step;
+                    }
+                }
+            }
+
+            return null;
+
+        }
+
+        public async Task<TourDescriptor> UpdateStepAsync(TourStep model)
+        {
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            // Get descriptor
+            var descriptor = await GetAsync();
+
+            var steps = new List<TourStep>();
+            if (descriptor.Steps != null)
+            {                
+                foreach (var step in descriptor.Steps)
+                {
+                    if (model.Id.Equals(step.Id, StringComparison.OrdinalIgnoreCase))
+                    {
+                        steps.Add(model);
+                    }
+                    else
+                    {
+                        steps.Add(step);
+                    }
+                }
+            }
+
+            descriptor.Steps = steps;
+
+            return await SaveAsync(descriptor);
+
+        }
+
+     
         #endregion
-        
+
     }
 
 }
