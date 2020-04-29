@@ -13,6 +13,7 @@ using Plato.Settings.Models;
 using Plato.Settings.Navigation;
 using Plato.Settings.ViewProviders;
 using PlatoCore.Hosting.Abstractions;
+using Plato.Settings.Services;
 
 namespace Plato.Settings
 {
@@ -42,6 +43,9 @@ namespace Plato.Settings
             
             // Register permissions provider
             services.AddScoped<IPermissionsProvider<Permission>, Permissions>();
+
+            // Site settings manager
+            services.AddScoped<ISiteSettingsManager, SiteSettingsManager>();
 
         }
 

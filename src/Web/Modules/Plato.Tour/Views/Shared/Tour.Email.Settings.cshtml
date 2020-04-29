@@ -1,9 +1,32 @@
-﻿@model TourStep
+﻿@using PlatoCore.Emails.Abstractions
+@model TourStep
+@{ 
+    var smtpSettings = GetOptions<SmtpSettings>();
+}
+    <div class="p-3">
 
-<div class="p-3">
-    @T["Take a moment to review email settings. Update the default sender for application generated emails & test emails are working."]
-    <br /><br />
-    <a asp-route-area="Plato.Email" asp-controller="Admin" asp-action="Index" class="btn btn-primary">
-        @T["Edit Email Settings"]
-    </a>
-</div>
+        @if (Model.CompletedDate.HasValue)
+        {
+            <div>
+                @T["Email settings have already been configured. You can update email settings or test emails are working using the buttons below."]
+            </div>
+            <br />
+            <a asp-route-area="Plato.Email" asp-controller="Admin" asp-action="Index" class="btn btn-primary">
+                @T["Review Email Settings"]
+            </a>
+            <button type="submit" asp-route-area="Plato.Email" asp-route-controller="Admin" asp-route-action="SendTest" class="btn btn-primary">
+                @T["Send test to"] @smtpSettings.DefaultFrom
+            </button>
+        }
+        else
+        {
+            <div>
+                @T["Take a moment to review email settings. Update the default sender for application generated emails & test emails are working."]
+            </div>
+            <br />
+            <a asp-route-area="Plato.Email" asp-controller="Admin" asp-action="Index" class="btn btn-primary">
+                @T["Edit Email Settings"]
+            </a>
+        }
+
+    </div>

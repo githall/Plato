@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
+using Plato.Email.Services;
 using Plato.Email.Stores;
 using Plato.Email.ViewModels;
 using PlatoCore.Abstractions.Settings;
@@ -16,6 +17,7 @@ namespace Plato.Email.ViewProviders
     public class AdminViewProvider : ViewProviderBase<EmailSettings>
     {
 
+        private readonly IEmailSettingsManager _emailSettingsManager;
         private readonly IEmailSettingsStore<EmailSettings> _emailSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
@@ -25,14 +27,16 @@ namespace Plato.Email.ViewProviders
         private readonly PlatoOptions _platoOptions;
 
         public AdminViewProvider(
-            IEmailSettingsStore<EmailSettings> emailSettingsStore,            
-            ILogger<AdminViewProvider> logger,            
+            IEmailSettingsStore<EmailSettings> emailSettingsStore,
+            IEmailSettingsManager emailSettingsManager,            
             IOptions<PlatoOptions> platoOptions,
+            ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
             IEncrypter encrypter,
             IPlatoHost platoHost)
-        {            
-            _emailSettingsStore = emailSettingsStore;
+        {
+            _emailSettingsManager = emailSettingsManager;
+            _emailSettingsStore = emailSettingsStore;            
             _platoOptions = platoOptions.Value;
             _shellSettings = shellSettings;
             _platoHost = platoHost;            
@@ -111,7 +115,7 @@ namespace Plato.Email.ViewProviders
                     }
                 };
 
-                var result = await _emailSettingsStore.SaveAsync(settings);
+                var result = await _emailSettingsManager.SaveAsync(settings);
                 if (result != null)
                 {
                     // Recycle shell context to ensure changes take effect

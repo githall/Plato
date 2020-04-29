@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Emails.Abstractions;

@@ -25,7 +25,7 @@
                                 {
                                     <authorize asp-permission="@enablePermission.Name">
                                         <authorize-success>
-                                            <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Enable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-primary" data-provide="loader-spy" data-loader-mode="toggle">
+                                            <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Enable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-primary" data-provide="loader-spy" data-loader-mode="prepend">
                                                 @T["Enable"]
                                             </a>
                                         </authorize-success>
@@ -35,7 +35,7 @@
                                 {
                                     <authorize asp-permission="@disablePermission.Name">
                                         <authorize-success>
-                                            <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Disable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-secondary" data-provide="loader-spy" data-loader-mode="toggle">
+                                            <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Disable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-secondary" data-provide="loader-spy" data-loader-mode="prepend">
                                                 @T["Disable"]
                                             </a>
                                         </authorize-success>

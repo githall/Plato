@@ -23,7 +23,7 @@
         {
             Id = "Tour.Update.Profile",
             Title = "Update Profile",
-            Description = "Check your happy your profile is correct."
+            Description = "Check your happy your user profile is correct."
         };
 
         public static TourStep GeneralSettings = new TourStep()

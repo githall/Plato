@@ -198,7 +198,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <button type="submit" asp-controller="Admin" asp-action="Enable" asp-route-id="@feature.ModuleId" class="btn btn-primary" data-provide="loader-spy" data-loader-mode="toggle">
+                                                    <button type="submit" asp-controller="Admin" asp-action="Enable" asp-route-id="@feature.ModuleId" class="btn btn-primary" data-provide="loader-spy" data-loader-mode="prepend">
                                                         @T["Enable"]
                                                     </button>
                                                 }
@@ -219,7 +219,7 @@
                                                 }
                                                 else
                                                 {
-                                                    <button type="submit" asp-controller="Admin" asp-action="Disable" asp-route-id="@feature.ModuleId" class="btn btn-secondary" data-provide="loader-spy" data-loader-mode="toggle">
+                                                    <button type="submit" asp-controller="Admin" asp-action="Disable" asp-route-id="@feature.ModuleId" class="btn btn-secondary" data-provide="loader-spy" data-loader-mode="prepend">
                                                         @T["Disable"]
                                                     </button>
                                                 }

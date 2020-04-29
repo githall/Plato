@@ -24,6 +24,7 @@ using PlatoCore.Stores;
 using PlatoCore.Stores.Abstractions.FederatedQueries;
 using PlatoCore.Data.Migrations.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using Plato.Email.Services;
 
 namespace Plato.Email
 {
@@ -47,6 +48,7 @@ namespace Plato.Email
             services.AddScoped<IEmailAttachmentStore<EmailAttachment>, EmailAttachmentStore>();
             services.AddScoped<IEmailSettingsStore<EmailSettings>, EmailSettingsStore>();
             services.AddScoped<IEmailStore<EmailMessage>, EmailStore>();
+            services.AddScoped<IEmailSettingsManager, EmailSettingsManager>();
 
             // View providers
             services.AddScoped<IViewProviderManager<EmailSettings>, ViewProviderManager<EmailSettings>>();
@@ -56,8 +58,8 @@ namespace Plato.Email
             services.AddTransient<IConfigureOptions<SmtpSettings>, SmtpSettingsConfiguration>();
 
             // Services
-            services.AddScoped<ISmtpService, SmtpService>();
-
+            services.AddScoped<ISmtpService, SmtpService>();    
+        
             // Email subscribers
             services.AddScoped<IBrokerSubscriber, EmailSubscriber>();
 

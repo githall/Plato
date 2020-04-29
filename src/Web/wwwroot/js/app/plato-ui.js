@@ -7122,19 +7122,25 @@ $(function (win, doc, $) {
                         if ($(this).attr("target")) {
                             return;
                         }
-                        if ($(this).attr("href").indexOf("#") >= 0) {
-                            return;
-                        }
-                     
+
+                        var href = $(this).attr("href");
+                        if (href) {
+                            if (href.indexOf("#") >= 0) {
+                                return;
+                            }
+                        }                    
+                        
                         if (mode === "fullscreen") {
                             // Show loader
                             $('[data-provide="loader"]').loader("show");
                         }
-                        else if (mode === "toggle")
-                        {
-                            $caller.addClass("disabled");
-                            $caller.attr("disabled", "true");                            
+                        else if (mode === "prepend") {
+                            $caller.addClass("disabled");                                                 
                             $caller.prepend($('<i class="fal fa-circle-notch fa-spin"></i>'));
+                        }
+                        else if (mode === "append") {
+                            $caller.addClass("disabled");                        
+                            $caller.append($('<i class="fal fa-circle-notch fa-spin"></i>'));
                         }                        
 
                     });

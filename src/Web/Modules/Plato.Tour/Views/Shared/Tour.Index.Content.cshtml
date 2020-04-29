@@ -1,4 +1,5 @@
-﻿@model TourIndexViewModel
+﻿@using  Microsoft.AspNetCore.Routing
+@model TourIndexViewModel
 @{
     var isAdmin = false;
     if (CurrentUser != null)
@@ -19,40 +20,55 @@
 
 @if (CurrentUser == null)
 {
-    <card>
-        <card-title>
-            <h6 class="card-title">@T["Welcome to Plato"]</h6>
-        </card-title>
-        <card-body>
-            @T["To get started use the button below to login with the administrator username and password you provided during set-up..."]
-            <br /><br />
-            <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" class="btn btn-primary">
-                @T["Login"]<i class="fal fa-arrow-right ml-2"></i>
-            </a>
-        </card-body>
-    </card>
+    var returnUrl = GetRouteUrl(new RouteValueDictionary()
+    {
+        ["area"] = "Plato.Admin",
+        ["controller"] = "Admin",
+        ["action"] = "Index"
+    });
+<card>
+    <card-title>
+        <h6 class="card-title">@T["Welcome to Plato"]</h6>
+    </card-title>
+    <card-body>
+        @T["To get started use the button below to login with the administrator username and password you provided during set-up..."]
+        <br /><br />
+        <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@returnUrl" class="btn btn-primary">
+            @T["Login"]<i class="fal fa-arrow-right ml-2"></i>
+        </a>
+    </card-body>
+</card>
 }
 else
 {
-    var percentComplete = Model.CompletedSteps.ToPercentageOf(Model.TotalSteps);
-    if (isAdmin)
-    {
-
-        <div class="alert alert-info">
-            <a href="#" class="btn btn-secondary float-right">
-                @T["Finish Set-Up"]
-            </a>
-            <h6>@T["Welcome to Plato"]</h6>
-            @T["Use the options below to customize & configure your Plato installation. Click the \"Finish Set-Up\" button anytime to hide the set-up wizard."]
-
-        </div>
-
-
-        <div class="progress" data-toggle="tooltip" title="@percentComplete% @T["complete"]" style="height: 8px;">
-            <div class="progress-bar" role="progressbar" style="width: @percentComplete%" aria-valuemin="0" aria-valuemax="100"></div>
-        </div>
-        <card class="card card-body-flush mt-4">
-            <card-body>
+var percentComplete = Model.CompletedSteps.ToPercentageOf(Model.TotalSteps);
+if (isAdmin)
+{
+    var returnUrl = Context.Request.PathBase + Context.Request.Path;
+    <form asp-route-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+        <div class="card card-body-flush">
+            <div class="card-header">
+                <a asp-route-area="Plato.Tour" asp-route-controller="Admin" asp-route-action="FinishSetUp" asp-route-returnUrl="@returnUrl" data-provide="dialog" data-dialog-id="shareDialog" data-dialog-css="modal-dialog modal-lg" class="btn btn-secondary float-right">
+                    @T["Finish Set-Up"]
+                </a>
+                @if (percentComplete < 100)
+                {
+                    <h6 class="card-title">@T["Set-Up Assistant"]</h6>
+                    @T["Use the options below to customize & set-up your Plato installation. Once your done click the \"Finish Set-Up\" button to hide the set-up assistant."]
+                }
+                else
+                {
+                    <h6 class="card-title text-success">
+                        <i class="fal fa-check mr-1"></i>
+                        @T["Set-Up Complete"]
+                    </h6>
+                    @T["You've completed all set-up steps. Use the \"Finish Set-Up\" button to hide the set-up assistant."]
+                }
+                <div class="progress mt-3" data-toggle="tooltip" title="@percentComplete% @T["complete"]" style="height: 8px;">
+                    <div class="progress-bar" role="progressbar" style="width: @percentComplete%" aria-valuemin="0" aria-valuemax="100"></div>
+                </div>
+            </div>
+            <div class="card-body">
 
                 @if (Model.Steps != null)
                 {
@@ -84,16 +100,17 @@ else
                                         @T[step.Description]
                                     </span>
                                 </a>
-                                <div id="@collapseId" class="collapse" aria-labelledby="@headerId" data-parent="#accordionExample">                                                                
-                                    @await DisplayAsync(new View(step.Id, step))                                                          
+                                <div id="@collapseId" class="collapse" aria-labelledby="@headerId" data-parent="#accordionExample">
+                                    @await DisplayAsync(new View(step.Id, step))
                                 </div>
                             </div>
                         }
                     </div>
                 }
 
-            </card-body>
-        </card>
-    }
+            </div>
+        </div>
+    </form>
+}
 
 }

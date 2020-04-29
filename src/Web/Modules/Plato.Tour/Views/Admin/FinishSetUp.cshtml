@@ -1,0 +1,77 @@
+﻿@model FinishSetUpViewModel
+@{
+    Layout = null;
+    var platoOpts = GetOptions<PlatoOptions>();
+}
+
+<form asp-route-action="FinishSetUp" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+    <div class="modal-header">
+        <h6 class="modal-title">@T["Finish Set-Up"]</h6>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">
+                <i class="fal fa-times"></i>
+            </span>
+        </button>
+    </div>
+    <div class="modal-body">
+        <input type="hidden" asp-for="@Model.ReturnUrl" />       
+        <p class="font-weight-bold">
+            @T["Are you sure you wish to finish set-up?"]
+        </p>
+        <p>
+            @T["This will permanently hide the set-up assistant but don't fear as you can still manage everything via the Plato dashboard at anytime. Click the \"Finish Set-Up\" button below to mark set-up as complete & permanently hhide the set-up assistant."]
+        </p>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+            @T["Cancel"]
+        </button>
+        <button type="submit" class="btn btn-primary">
+            @T["Finish Set-Up"]
+        </button>
+    </div>
+</form>
+
+<script>
+    $(function (win, doc, $) {
+        $(doc).ready(function () {
+
+            // Plato global
+            var app = win.$.Plato;
+            if (app == null) {
+                throw Error("$.Plato has not been registered!");
+            }
+
+            // modal show
+            $("#shareDialog").on('shown.bs.modal',
+                function (e) {
+
+                    $('#nav-tab a').on('click', function (e) {
+                        e.preventDefault()
+                        $(this).tab('show')
+                    });
+
+                    $(this).find("form").validate({
+                        submitHandler: function () {
+
+                            // Disable the submit button?
+                            var $form = $(form);
+                            if ($form.data("disableSubmit")) {
+                                $form.find('*[type="submit"]')
+                                    .addClass("disabled")
+                                    .attr("disabled", "disabled");
+                            }
+
+                            // Note don't call $(form).submit() as this 
+                            // internally calls the validators submitHandler again
+                            form.submit();
+
+                        }
+                    });
+
+                });
+
+        });
+
+    }(window, document, jQuery));
+</script>

@@ -1,29 +1,30 @@
 ﻿using System.Threading.Tasks;
-using Plato.Core.Models;
 using PlatoCore.Layout.ViewProviders.Abstractions;
+using Plato.Admin.Models;
 using Plato.Tour.ViewModels;
 using PlatoCore.Stores.Abstractions.Tour;
-using PlatoCore.Models.Tour;
 using Microsoft.Extensions.Options;
+using PlatoCore.Models.Tour;
 
 namespace Plato.Tour.ViewProviders
 {
-    public class HomeViewProvider : ViewProviderBase<HomeIndex>
-    {
 
+    public class AdminIndexViewProvider : ViewProviderBase<AdminIndex>
+    {
         private readonly ITourDescriptorStore _tourDescriptorStore;
-        
+
         private readonly TourOptions _tourOptions;
 
-        public HomeViewProvider(            
-            ITourDescriptorStore tourDescriptorStore,
-            IOptions<TourOptions> tourOptions)
+        public AdminIndexViewProvider(
+             ITourDescriptorStore tourDescriptorStore,
+             IOptions<TourOptions> tourOptions)
         {
             _tourDescriptorStore = tourDescriptorStore;
             _tourOptions = tourOptions.Value;
         }
 
-        public override async Task<IViewProviderResult> BuildIndexAsync(HomeIndex viewModel, IViewProviderContext context)
+        public override async Task<IViewProviderResult> BuildIndexAsync(AdminIndex viewModel,
+            IViewProviderContext context)
         {
 
             if (_tourOptions.Completed)
@@ -42,26 +43,28 @@ namespace Plato.Tour.ViewProviders
             // Build view
             return Views(
                 View<TourIndexViewModel>("Tour.Index.Content", model => coreIndexViewModel)
-                    .Zone("content")
+                    .Zone("content").Order(int.MinValue + 5)
             );
 
+
         }
 
-        public override Task<IViewProviderResult> BuildDisplayAsync(HomeIndex viewModel, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildDisplayAsync(AdminIndex viewModel, IViewProviderContext context)
+        {
+            return Task.FromResult(default(IViewProviderResult));
+        }
+        
+        public override Task<IViewProviderResult> BuildEditAsync(AdminIndex viewModel, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
 
-        public override Task<IViewProviderResult> BuildEditAsync(HomeIndex viewModel, IViewProviderContext context)
+        public override Task<IViewProviderResult> BuildUpdateAsync(AdminIndex viewModel,
+            IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-
-        public override Task<IViewProviderResult> BuildUpdateAsync(HomeIndex viewModel, IViewProviderContext context)
-        {
-            return Task.FromResult(default(IViewProviderResult)); ;
-        }
-
+        
     }
-
+    
 }

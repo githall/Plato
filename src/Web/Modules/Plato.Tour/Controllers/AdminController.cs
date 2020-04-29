@@ -9,14 +9,15 @@ using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
 using Plato.Features;
 using Plato.Features.ViewModels;
-using Plato.Tour.Models;
+using Plato.Tour.ViewModels;
 using PlatoCore.Abstractions;
 using PlatoCore.Features.Abstractions;
+using PlatoCore.Hosting.Abstractions;
 using PlatoCore.Layout.Alerts;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.Titles;
 using PlatoCore.Layout.ViewProviders.Abstractions;
-using PlatoCore.Models.Tour;
+using PlatoCore.Models.Shell;
 using PlatoCore.Navigation.Abstractions;
 using PlatoCore.Security.Abstractions;
 using PlatoCore.Stores.Abstractions.Tour;
@@ -25,15 +26,17 @@ namespace Plato.Tour.Controllers
 {
     public class AdminController : Controller, IUpdateModel
     {
-
-        private readonly ITourDescriptorStore _tourDescriptorStore;
+        
         private readonly IViewProviderManager<FeaturesIndexViewModel> _viewProvider;
         private readonly IShellDescriptorManager _shellDescriptorManager;
         private readonly IAuthorizationService _authorizationService;
         private readonly IShellFeatureManager _shellFeatureManager;
+        private readonly ITourDescriptorStore _tourDescriptorStore;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IPageTitleBuilder _pageTitleBuilder;
+        private readonly IShellSettings _shellSettings;
         private readonly IAlerter _alerter;
+        private readonly IPlatoHost _platoHost;
 
         public IHtmlLocalizer T { get; }
 
@@ -43,26 +46,35 @@ namespace Plato.Tour.Controllers
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
             IShellFeatureManager shellFeatureManager,
-            IViewProviderManager<FeaturesIndexViewModel> viewProvider, 
-            IBreadCrumbManager breadCrumbManager,
-            IAuthorizationService authorizationService,
+            IViewProviderManager<FeaturesIndexViewModel> viewProvider,
             IShellDescriptorManager shellDescriptorManager,
+            IAuthorizationService authorizationService,
             ITourDescriptorStore tourDescriptorStore,
+            IBreadCrumbManager breadCrumbManager,
             IPageTitleBuilder pageTitleBuilder,
+            IShellSettings shellSettings,
+            IPlatoHost platoHost,
             IAlerter alerter)
         {
-            _shellFeatureManager = shellFeatureManager;
-            _viewProvider = viewProvider;
-            _breadCrumbManager = breadCrumbManager;
-            _authorizationService = authorizationService;
+
             _shellDescriptorManager = shellDescriptorManager;
+            _authorizationService = authorizationService;
+            _shellFeatureManager = shellFeatureManager;
             _tourDescriptorStore = tourDescriptorStore;
-            _pageTitleBuilder = pageTitleBuilder;            
+            _breadCrumbManager = breadCrumbManager;
+            _pageTitleBuilder = pageTitleBuilder;
+            _shellSettings = shellSettings;
+            _viewProvider = viewProvider;
+            _platoHost = platoHost;
             _alerter = alerter;
 
             T = htmlLocalizer;
             S = stringLocalizer;
         }
+
+        // ------------------
+        // Enable Features
+        // ------------------
 
         public async Task<IActionResult> Enable(    
             string id,
@@ -122,6 +134,61 @@ namespace Plato.Tour.Controllers
             }
 
         }
+
+        // ------------------
+        // Finish set-up
+        // ------------------
+
+        public IActionResult FinishSetUp(string returnUrl)
+        {
+
+            // Return view
+            return View(new FinishSetUpViewModel
+            {
+                ReturnUrl = returnUrl
+            });            
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(FinishSetUp))]
+        public async Task<IActionResult> FinishSetUpPost( string returnUrl)
+        {
+
+            var descriptor = await _tourDescriptorStore.GetAsync();
+            
+            if (descriptor == null)
+            {
+                return NotFound();
+            }
+
+            descriptor.Completed = true;
+
+            var result = await _tourDescriptorStore.SaveAsync(descriptor);
+            if (result != null)
+            {
+                // Recycle shell context to ensure changes take effect
+                _platoHost.RecycleShell(_shellSettings);
+
+                // Success
+                _alerter.Success(T[$"Set-Up Finished Successfully!"]);
+
+            }
+            else
+            {
+                _alerter.Danger(T["A problem occurred ending the set-up assistant!"]);
+            }
+
+            if (!string.IsNullOrEmpty(returnUrl))
+            {
+                // Redirect to returnUrl
+                return RedirectToLocal(returnUrl);
+            }
+
+            return Redirect("~/");
+
+        }
+
+        // -------------
 
         async Task<ICommandResultBase> InstallByCategoryAsync(string categoryName)
         {
