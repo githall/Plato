@@ -1,0 +1,9 @@
+﻿@model TourStep
+
+<div class="p-3">
+    @T["Take a moment to review general settings. Name your site, choose a theme or update the apps timezone."]
+    <br /><br />
+    <a asp-route-area="Plato.Settings" asp-controller="Admin" asp-action="Index" class="btn btn-primary">
+        @T["Edit General Settings"]
+    </a>
+</div>

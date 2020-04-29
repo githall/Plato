@@ -12,6 +12,8 @@ namespace PlatoCore.Models.Tour
 
         public string Description { get; set; }
 
+        public string ViewName { get; set; }
+
         public DateTimeOffset? CompletedDate { get; set; }
 
     }

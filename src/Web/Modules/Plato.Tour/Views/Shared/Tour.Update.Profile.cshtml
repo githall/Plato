@@ -1,0 +1,10 @@
+﻿@model TourStep
+
+<div class="p-3">    
+    @T["Take a moment to review your profile. Provide a display name, a basic bio & upload a profile pic. "]
+    <br /><br />
+    <a asp-route-area="Plato.Users" asp-controller="Admin" asp-action="Edit" asp-route-id="@CurrentUser.Id" class="btn btn-primary">
+        @T["Edit Your Profile"]
+    </a>
+</div>
+

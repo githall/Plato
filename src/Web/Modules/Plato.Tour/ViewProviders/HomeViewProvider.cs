@@ -2,8 +2,9 @@
 using Plato.Core.Models;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tour.ViewModels;
-using PlatoCore.Models.Tour;
 using PlatoCore.Stores.Abstractions.Tour;
+using PlatoCore.Models.Tour;
+using Plato.Tour.Models;
 
 namespace Plato.Tour.ViewProviders
 {
@@ -22,6 +23,13 @@ namespace Plato.Tour.ViewProviders
         {
 
             var descriptor = await _tourDescriptorStore.GetAsync();
+            if (descriptor == null)
+            {
+                descriptor = new TourDescriptor()
+                {
+                    Steps = TourDescriptorSteps.Steps
+                };
+            }
 
             // Build view model
             var coreIndexViewModel = new TourIndexViewModel()

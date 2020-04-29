@@ -13,7 +13,6 @@ namespace Plato.Articles
                 new HomeRoute("Plato.Articles", "Home", "Index")
             };
         }
-
     }
 
 }

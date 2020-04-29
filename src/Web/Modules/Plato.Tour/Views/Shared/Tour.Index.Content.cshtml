@@ -1,4 +1,21 @@
 ﻿@model TourIndexViewModel
+@{
+    var isAdmin = false;
+    if (CurrentUser != null)
+    {
+        if (CurrentUser.RoleNames != null)
+        {
+            foreach (var roleName in CurrentUser.RoleNames)
+            {
+                if (roleName.Equals(DefaultRoles.Administrator, StringComparison.OrdinalIgnoreCase))
+                {
+                    isAdmin = true;
+                    break;
+                }
+            }
+        }
+    }
+}
 
 @if (CurrentUser == null)
 {
@@ -6,69 +23,77 @@
         <card-title>
             <h6 class="card-title">@T["Welcome to Plato"]</h6>
         </card-title>
-        <card-body>          
+        <card-body>
             @T["To get started use the button below to login with the administrator username and password you provided during set-up..."]
             <br /><br />
-            <a  asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" class="btn btn-primary">
+            <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" class="btn btn-primary">
                 @T["Login"]<i class="fal fa-arrow-right ml-2"></i>
-            </a>           
+            </a>
         </card-body>
     </card>
 }
 else
 {
-    <card>
-        <card-title>
-            <a href="#" class="btn btn-secondary float-right">
-                Finish Set-Up
-            </a>
-            <h6 class="card-title">@T["Complete Set-Up"]</h6>
-            <div class="text-muted">
-                0% complete
-            </div>
-            <div class="progress mt-3" style="height: 8px;">
-                <div class="progress-bar" role="progressbar" style="width: 19%" aria-valuemin="0" aria-valuemax="100"></div>
-            </div>
-        </card-title>
-        <card-body>
+    var percentComplete = Model.CompletedSteps.ToPercentageOf(Model.TotalSteps);
+    if (isAdmin)
+    {
 
-            <div class="card card-body-flush">
-                <div class="card-body">
-                    @if (Model.Steps != null)
-                    {
-                        var count = 0;
-                        <div class="accordion mb-0" id="accordionExample">                      
+        <div class="alert alert-info">
+            <a href="#" class="btn btn-secondary float-right">
+                @T["Finish Set-Up"]
+            </a>
+            <h6>@T["Welcome to Plato"]</h6>
+            @T["Use the options below to customize & configure your Plato installation. Click the \"Finish Set-Up\" button anytime to hide the set-up wizard."]
+
+        </div>
+
+
+        <div class="progress" data-toggle="tooltip" title="@percentComplete% @T["complete"]" style="height: 8px;">
+            <div class="progress-bar" role="progressbar" style="width: @percentComplete%" aria-valuemin="0" aria-valuemax="100"></div>
+        </div>
+        <card class="card card-body-flush mt-4">
+            <card-body>
+
+                @if (Model.Steps != null)
+                {
+                    var count = 0;
+                    <div class="accordion mb-0" id="accordionExample">
                         @foreach (var step in Model.Steps)
                         {
                             count++;
                             var headerId = "header" + count;
                             var collapseId = "step" + count;
+                            var css = step.CompletedDate.HasValue
+                                ? "img-48 text-center d-inline-block bg-success text-white"
+                                : "img-48 text-center d-inline-block bg-primary-25 text-white";
                             <div class="list-group list-group-flush">
                                 <a href="#@collapseId" data-toggle="collapse" aria-expanded="false" aria-controls="@collapseId" class="list-group-item list-group-item-action" id="@headerId">
                                     <span class="list-left list-left-md">
-                                        <span class="img-48 text-center rounded-circle d-inline-block bg-primary text-white">
+                                        <span class="@css">
                                             <h3 class="pt-1">@count</h3>
                                         </span>
                                     </span>
                                     <span class="list-body">
-                                        <i class="fal fa-chevron-right float-right mt-3"></i>
+                                        @if (step.CompletedDate.HasValue)
+                                        {
+                                            <span class="text-success float-right mt-2">
+                                                <i class="fal fa-check align-middle mr-2"></i>@T["Completed "]
+                                            </span>
+                                        }
                                         <h6>@T[step.Title]</h6>
                                         @T[step.Description]
                                     </span>
                                 </a>
-                                <div id="@collapseId" class="collapse" aria-labelledby="@headerId" data-parent="#accordionExample">
-                                    <div class="p-4">
-                                        @step.Description
-                                    </div>
+                                <div id="@collapseId" class="collapse" aria-labelledby="@headerId" data-parent="#accordionExample">                                                                
+                                    @await DisplayAsync(new View(step.Id, step))                                                          
                                 </div>
+                            </div>
+                        }
+                    </div>
+                }
 
-                            </div>                          
-                        }                        
-                        </div>
-                    }
-                </div>
-            </div>
-            
-        </card-body>  
-    </card>
+            </card-body>
+        </card>
+    }
+
 }

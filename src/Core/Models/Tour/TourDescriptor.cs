@@ -9,7 +9,7 @@ namespace PlatoCore.Models.Tour
 
         public bool Completed { get; set; }
 
-        public IEnumerable<TourStep> Steps { get; set; } = DefaultTourDescriptorSteps.Steps;
+        public IEnumerable<TourStep> Steps { get; set; }
 
     }
 

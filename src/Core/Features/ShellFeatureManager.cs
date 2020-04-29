@@ -7,6 +7,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using PlatoCore.Features.Abstractions;
 using PlatoCore.Hosting.Abstractions;
+using PlatoCore.Messaging.Abstractions;
 using PlatoCore.Models.Features;
 using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
@@ -34,6 +35,7 @@ namespace PlatoCore.Features
         private readonly ILogger<ShellFeatureManager> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
+        private readonly IBroker _broker;
 
         public ShellFeatureManager(            
             IShellDescriptorManager shellDescriptorManager,
@@ -41,7 +43,8 @@ namespace PlatoCore.Features
             IShellContextFactory shellContextFactory,         
             ILogger<ShellFeatureManager> logger,
             IShellSettings shellSettings,
-            IPlatoHost platoHost)
+            IPlatoHost platoHost,
+            IBroker broker)
         {
             _shellDescriptorManager = shellDescriptorManager;
             _shellDescriptorStore = shellDescriptorStore;      
@@ -49,6 +52,7 @@ namespace PlatoCore.Features
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
+            _broker = broker;
         }
 
         public async Task<IEnumerable<IFeatureEventContext>> EnableFeatureAsync(string featureId)
@@ -106,7 +110,16 @@ namespace PlatoCore.Features
 
                     try
                     {
+
+                        // Invoke FeatureInstalling subscriptions
+                        foreach (var brokerHandler in _broker.Pub<IShellFeature>(this, "FeatureInstalling"))
+                        {
+                            context.Feature = await brokerHandler.Invoke(new Message<IShellFeature>(context.Feature, this));
+                        }
+
+                        // Invoke feature event handler
                         await handler.InstallingAsync(context);
+
                         contexts.AddOrUpdate(context.Feature.ModuleId, context, (k, v) =>
                         {
                             foreach (var error in context.Errors)
@@ -140,6 +153,13 @@ namespace PlatoCore.Features
 
                         try
                         {
+
+                            // Invoke FeatureInstalled subscriptions
+                            foreach (var brokerHandler in _broker.Pub<IShellFeature>(this, "FeatureInstalled"))
+                            {
+                                context.Feature = await brokerHandler.Invoke(new Message<IShellFeature>(context.Feature, this));
+                            }
+
                             await handler.InstalledAsync(context);
                             contexts.AddOrUpdate(context.Feature.ModuleId, context, (k, v) =>
                             {
@@ -195,8 +215,7 @@ namespace PlatoCore.Features
             if (!errors.Any())
             {
                 // Update descriptor within database
-                await AddFeaturesAndSaveAsync(featureIds);
-                
+                await AddFeaturesAndSaveAsync(featureIds);                
             }
             
             // dispose current shell context
@@ -237,6 +256,13 @@ namespace PlatoCore.Features
 
                     try
                     {
+
+                        // Invoke FeatureUninstalling subscriptions
+                        foreach (var brokerHandler in _broker.Pub<IShellFeature>(this, "FeatureUninstalling"))
+                        {
+                            context.Feature = await brokerHandler.Invoke(new Message<IShellFeature>(context.Feature, this));
+                        }
+
                         await handler.UninstallingAsync(context);
                         contexts.AddOrUpdate(context.Feature.ModuleId, context, (k, v) =>
                         {
@@ -272,6 +298,13 @@ namespace PlatoCore.Features
 
                         try
                         {
+
+                            // Invoke FeatureUninstalled subscriptions
+                            foreach (var brokerHandler in _broker.Pub<IShellFeature>(this, "FeatureUninstalled"))
+                            {
+                                context.Feature = await brokerHandler.Invoke(new Message<IShellFeature>(context.Feature, this));
+                            }
+
                             await handler.UninstalledAsync(context);
                             contexts.AddOrUpdate(context.Feature.ModuleId, context, (k, v) =>
                             {

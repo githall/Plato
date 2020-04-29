@@ -32,15 +32,8 @@ namespace PlatoCore.Stores.Tour
         public async Task<TourDescriptor> GetAsync()
         {
             var token = _cacheManager.GetOrCreateToken(this.GetType(), Key);
-            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) =>
-            {
-                var descriptor = await _dictionaryStore.GetAsync<TourDescriptor>(Key);
-                if (descriptor != null)
-                {
-                    return descriptor;
-                }
-                return new TourDescriptor();
-            });
+            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) => 
+                await _dictionaryStore.GetAsync<TourDescriptor>(Key));
         }
 
         public async Task<TourDescriptor> SaveAsync(TourDescriptor shellDescriptor)

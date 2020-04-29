@@ -1,0 +1,9 @@
+﻿@model TourStep
+
+<div class="p-3">
+    @T["Take a moment to review email settings. Update the default sender for application generated emails & test emails are working."]
+    <br /><br />
+    <a asp-route-area="Plato.Email" asp-controller="Admin" asp-action="Index" class="btn btn-primary">
+        @T["Edit Email Settings"]
+    </a>
+</div>

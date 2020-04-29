@@ -10,7 +10,7 @@ using PlatoCore.Features.Abstractions;
 namespace Plato.Features.ViewComponents
 {
 
-    public class SimpleFeatureListViewComponent : ViewComponent
+    public class TourFeatureListViewComponent : ViewComponent
     {
 
         private readonly IShellDescriptorManager _shellDescriptorManager;
@@ -19,7 +19,7 @@ namespace Plato.Features.ViewComponents
 
         public IStringLocalizer S { get; }
 
-        public SimpleFeatureListViewComponent(
+        public TourFeatureListViewComponent(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
             IShellDescriptorManager shellDescriptorManager)

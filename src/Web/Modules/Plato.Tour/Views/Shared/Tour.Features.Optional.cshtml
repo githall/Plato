@@ -1,0 +1,14 @@
+﻿@model TourStep
+
+<card>
+    <card-body>
+        @await DisplayAsync(new View("TourFeatureList", new
+        {
+            options = new FeatureIndexOptions()
+            {
+                ModuleIds = ShellDescriptors.OptionalModules,
+                HideEnabled = true
+            }
+        }))
+    </card-body>
+</card>

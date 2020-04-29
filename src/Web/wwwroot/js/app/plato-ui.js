@@ -7092,7 +7092,8 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            event: "click"
+            event: "click",
+            mode: "fullscreen"
         };
 
         var methods = {
@@ -7112,7 +7113,9 @@ $(function (win, doc, $) {
 
             },
             bind: function ($caller) {
-                var event = $caller.data(dataKey).event;
+                var event = $caller.data(dataKey).event,
+                    mode = this._getMode($caller);
+
                 if (event) {
                     $caller.on(event, function () {
                         // Simply return if we have a specific target or anchor
@@ -7122,8 +7125,18 @@ $(function (win, doc, $) {
                         if ($(this).attr("href").indexOf("#") >= 0) {
                             return;
                         }
-                        // Show loader
-                        $('[data-provide="loader"]').loader("show");
+                     
+                        if (mode === "fullscreen") {
+                            // Show loader
+                            $('[data-provide="loader"]').loader("show");
+                        }
+                        else if (mode === "toggle")
+                        {
+                            $caller.addClass("disabled");
+                            $caller.attr("disabled", "true");                            
+                            $caller.prepend($('<i class="fal fa-circle-notch fa-spin"></i>'));
+                        }                        
+
                     });
                 }
             },
@@ -7132,6 +7145,9 @@ $(function (win, doc, $) {
                 if (event) {
                     $caller.off(event);
                 }
+            },
+            _getMode: function ($caller) {
+                return $caller.data("loaderMode") || $caller.data(dataKey).event;
             }
         };
 
@@ -7422,6 +7438,7 @@ $(function (win, doc, $) {
 
         /* slideSpy */
         this.find('[data-provide="slide-spy"]').slideSpy();
+
 
         // Bind scroll events
         $().scrollSpy({
