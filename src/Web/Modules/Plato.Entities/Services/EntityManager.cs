@@ -6,7 +6,6 @@ using Plato.Entities.Models;
 using Plato.Entities.Stores;
 using PlatoCore.Abstractions;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Messaging.Abstractions;
 
 namespace Plato.Entities.Services
@@ -104,7 +103,7 @@ namespace Plato.Entities.Services
                 return result.Success(entity);
             }
 
-            return result.Failed(new CommandError("An unknown error occurred whilst attempting to create an eneity"));
+            return result.Failed(new CommandError("An unknown error occurred whilst attempting to create an entity"));
 
         }
 
@@ -223,7 +222,7 @@ namespace Plato.Entities.Services
                 return result.Success(entity);
             }
 
-            return result.Failed(new CommandError("An unknown error occurred whilst attempting to create an eneity."));
+            return result.Failed(new CommandError("An unknown error occurred whilst attempting to create an entity."));
 
         }
 
