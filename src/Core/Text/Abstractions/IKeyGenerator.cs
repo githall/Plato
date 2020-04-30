@@ -29,6 +29,8 @@ namespace PlatoCore.Text.Abstractions
             '0', '1', 'I', 'O', 'i', 'o', 'Q', 'q'
         };
 
+        public bool OnlyDigits { get; set; }
+
     }
 
 }

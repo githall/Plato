@@ -1,11 +1,10 @@
-﻿@model GetStartedViewModel
+﻿@model SignUpViewModel
 @{
-    AddTitleSegment(T["Get Started"]);    
-    var platoSiteOptions = GetOptions<PlatoSiteOptions>();
+    AddTitleSegment(T["Sign Up Confirmation"]);
     Layout = "_GetStartedLayout.cshtml";
 }
 
-<form asp-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+<form asp-action="SignUpConfirmation" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
     <section class="flex-column flex-lg-row no-gutters d-flex">
         <div class="col-12 align-self-start align-self-lg-center text-center">
             <div class="my-6 mx-auto max-w-800">
@@ -17,18 +16,18 @@
                 <div class="my-4">
 
                     <h1 class="display-4 text-primary font-weight-bold">
-                        First, enter your email
+                        Check Your email
                     </h1>
 
                     <h3 class="font-weight-light my-4">
-                        One more email - a quick confirmation - then say hello to your very own product support site
+                        
                     </h3>
                     <div class="mt-4">
 
                         <div class="mt-2 w-100 max-w-500 d-inline-block">
 
                             <fieldset>
-                                <div class="form-group text-left">                                    
+                                <div class="form-group text-left">
                                     <input asp-for="Email" class="form-control form-control-lg" placeholder="@T["name@work-email.com"]" autofocus />
                                     <div class="mt-2" asp-validation-summary="All"></div>
                                 </div>
@@ -58,5 +57,5 @@
 </form>
 
 @section Scripts {
-    <script src="/plato.site/content/js/get-started/get-started.min.js"></script>
+    <script src="/plato.site/content/js/signup/signup.min.js"></script>
 }

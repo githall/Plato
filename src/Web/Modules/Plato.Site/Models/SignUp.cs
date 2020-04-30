@@ -14,6 +14,8 @@ namespace Plato.Site.Models
 
         public string CompanyName { get; set; }
 
+        public string CompanyNameAlias { get; set; }
+
         public bool EmailConfirmed { get; set; }
 
         public bool EmailUpdates { get; set; }
@@ -33,6 +35,9 @@ namespace Plato.Site.Models
 
             if (dr.ColumnIsNotNull("CompanyName"))
                 CompanyName = Convert.ToString((dr["CompanyName"]));
+
+            if (dr.ColumnIsNotNull("CompanyNameAlias"))
+                CompanyNameAlias = Convert.ToString((dr["CompanyNameAlias"]));
 
             if (dr.ColumnIsNotNull("EmailConfirmed"))
                 EmailConfirmed = Convert.ToBoolean(dr["EmailConfirmed"]);

@@ -20,6 +20,7 @@ using Plato.Site.Handlers;
 using PlatoCore.Features.Abstractions;
 using Plato.Site.Repositories;
 using Plato.Site.Services;
+using PlatoCore.Data.Migrations.Abstractions;
 
 namespace Plato.Site
 {
@@ -64,6 +65,9 @@ namespace Plato.Site
 
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();
+
+            // Migrations
+            services.AddSingleton<IMigrationProvider, Migrations>();
 
         }
 

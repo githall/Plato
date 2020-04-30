@@ -21,13 +21,13 @@ namespace Plato.Site.Stores
             _store = store;
         }
 
-        public EntityQueryParams Params { get; set; }
+        public SignUpQueryParams Params { get; set; }
 
-        public override IQuery<Models.SignUp> Select<T>(Action<T> configure)
+        public override IQuery<SignUp> Select<T>(Action<T> configure)
         {
             var defaultParams = new T();
             configure(defaultParams);
-            Params = (EntityQueryParams)Convert.ChangeType(defaultParams, typeof(EntityQueryParams));
+            Params = (SignUpQueryParams)Convert.ChangeType(defaultParams, typeof(SignUpQueryParams));
             return this;
         }
 
@@ -37,7 +37,9 @@ namespace Plato.Site.Stores
             var builder = new SignUpQueryBuilder(this);
             var populateSql = builder.BuildSqlPopulate();
             var countSql = builder.BuildSqlCount();
-            var keywords = Params.Keywords.Value ?? string.Empty;
+            var email = Params.Email.Value ?? string.Empty;
+            var companyName = Params.CompanyName.Value ?? string.Empty;
+            var companyNameAlias = Params.CompanyNameAlias.Value ?? string.Empty;
 
             return await _store.SelectAsync(new[]
             {
@@ -45,7 +47,9 @@ namespace Plato.Site.Stores
                 new DbParam("PageSize", DbType.Int32, PageSize),
                 new DbParam("SqlPopulate", DbType.String, populateSql),
                 new DbParam("SqlCount", DbType.String, countSql),
-                new DbParam("Keywords", DbType.String, keywords)
+                new DbParam("Email", DbType.String, email),
+                new DbParam("CompanyName", DbType.String, companyName),
+                new DbParam("CompanyNameAlias", DbType.String, companyNameAlias)
             });
 
         }
@@ -56,24 +60,37 @@ namespace Plato.Site.Stores
 
     #region "SignUpQueryParams"
 
-    public class EntityQueryParams
+    public class SignUpQueryParams
     {
         
         private WhereInt _id;
-        private WhereString _keywords;
-        
+        private WhereString _email;
+        private WhereString _companyName;
+        private WhereString _companyNameAlias;
+
         public WhereInt Id
         {
             get => _id ?? (_id = new WhereInt());
             set => _id = value;
         }
 
-        public WhereString Keywords
+        public WhereString Email
         {
-            get => _keywords ?? (_keywords = new WhereString());
-            set => _keywords = value;
+            get => _email ?? (_email = new WhereString());
+            set => _email = value;
         }
-        
+        public WhereString CompanyName
+        {
+            get => _companyName ?? (_companyName = new WhereString());
+            set => _companyName = value;
+        }
+
+        public WhereString CompanyNameAlias
+        {
+            get => _companyNameAlias ?? (_companyNameAlias = new WhereString());
+            set => _companyNameAlias = value;
+        }
+
     }
 
     #endregion
@@ -85,14 +102,14 @@ namespace Plato.Site.Stores
 
         #region "Constructor"
 
-        private readonly string _SignUpsTableName;
+        private readonly string _signUpsTableName;
 
         private readonly SignUpQuery _query;
 
         public SignUpQueryBuilder(SignUpQuery query)
         {
             _query = query;
-            _SignUpsTableName = GetTableNameWithPrefix("SignUp");
+            _signUpsTableName = GetTableNameWithPrefix("SignUps");
         }
 
         #endregion
@@ -140,14 +157,14 @@ namespace Plato.Site.Stores
         private string BuildPopulateSelect()
         {
             var sb = new StringBuilder();
-            sb.Append("e.*");
+            sb.Append("*");
             return sb.ToString();
         }
 
         private string BuildTables()
         {
             var sb = new StringBuilder();
-            sb.Append(_SignUpsTableName)
+            sb.Append(_signUpsTableName)
                 .Append(" e ");
             return sb.ToString();
         }
@@ -170,7 +187,31 @@ namespace Plato.Site.Stores
                     sb.Append(_query.Params.Id.Operator);
                 sb.Append(_query.Params.Id.ToSqlString("e.Id"));
             }
-            
+
+            // Email
+            if (!string.IsNullOrEmpty(_query.Params.Email.Value))
+            {
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                    sb.Append(_query.Params.Email.Operator);
+                sb.Append(_query.Params.Email.ToSqlString("Email"));
+            }
+
+            // CompanyName
+            if (!string.IsNullOrEmpty(_query.Params.CompanyName.Value))
+            {
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                    sb.Append(_query.Params.CompanyName.Operator);
+                sb.Append(_query.Params.CompanyName.ToSqlString("Email"));
+            }
+
+            // CompanyNameAlias
+            if (!string.IsNullOrEmpty(_query.Params.CompanyNameAlias.Value))
+            {
+                if (!string.IsNullOrEmpty(sb.ToString()))
+                    sb.Append(_query.Params.CompanyNameAlias.Operator);
+                sb.Append(_query.Params.CompanyNameAlias.ToSqlString("Email"));
+            }
+
             return sb.ToString();
 
         }

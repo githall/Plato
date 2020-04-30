@@ -11,7 +11,7 @@ namespace Plato.Site.Handlers
     public class FeatureEventHandler : BaseFeatureEventHandler
     {
 
-        public string Version { get; } = "1.0.0";
+        public string Version { get; } = "1.0.1";
 
 
         private readonly SchemaTable _signUps = new SchemaTable()
@@ -34,6 +34,12 @@ namespace Plato.Site.Handlers
                     new SchemaColumn()
                     {
                         Name = "CompanyName",
+                        Length = "255",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "CompanyNameAlias",
                         Length = "255",
                         DbType = DbType.String
                     },
@@ -182,14 +188,40 @@ namespace Plato.Site.Handlers
                 {
                     new SchemaColumn()
                     {
-                        Name = "Keywords",
+                        Name = "Email",
+                        DbType = DbType.String,
+                        Length = "255"
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "CompanyName",
+                        DbType = DbType.String,
+                        Length = "255"
+                    },
+                    new SchemaColumn()
+                    {
+                        Name = "CompanyNameAlias",
                         DbType = DbType.String,
                         Length = "255"
                     }
                 }));
 
+            // Indexes
+            builder.IndexBuilder.CreateIndex(new SchemaIndex()
+            {
+                TableName = _signUps.Name,
+                Columns = new string[]
+                {
+                    "Id",
+                    "Email",
+                    "CompanyName",
+                    "CompanyNameAlias"
+                }
+            });
+
+
         }
-        
+
     }
 
 }

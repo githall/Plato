@@ -86,16 +86,17 @@ namespace Plato.Site.Repositories
             return success > 0 ? true : false;
         }
 
-        public async Task<SignUp> InsertUpdateAsync(SignUp media)
+        public async Task<SignUp> InsertUpdateAsync(SignUp model)
         {
             var id = await InsertUpdateInternal(
-                media.Id,
-                media.Email,
-                media.CompanyName,
-                media.EmailConfirmed,
-                media.EmailUpdates,
-                media.SecurityToken,
-                media.CreatedDate);
+                model.Id,
+                model.Email,
+                model.CompanyName,
+                model.CompanyNameAlias,
+                model.EmailConfirmed,
+                model.EmailUpdates,
+                model.SecurityToken,
+                model.CreatedDate);
 
             if (id > 0)
                 return await SelectByIdAsync(id);
@@ -105,10 +106,10 @@ namespace Plato.Site.Repositories
 
         public async Task<SignUp> SelectByIdAsync(int id)
         {
-            SignUp media = null;
+            SignUp output = null;
             using (var context = _dbContext)
             {
-                media = await context.ExecuteReaderAsync<SignUp>(
+                output = await context.ExecuteReaderAsync<SignUp>(
                     CommandType.StoredProcedure,
                     "SelectSignUpById",
                     async reader =>
@@ -116,11 +117,11 @@ namespace Plato.Site.Repositories
                         if ((reader != null) && reader.HasRows)
                         {
                             await reader.ReadAsync();
-                            media = new SignUp();
-                            media.PopulateModel(reader);
+                            output = new SignUp();
+                            output.PopulateModel(reader);
                         }
 
-                        return media;
+                        return output;
                     }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
@@ -128,7 +129,7 @@ namespace Plato.Site.Repositories
 
             }
 
-            return media;
+            return output;
 
         }
 
@@ -140,6 +141,7 @@ namespace Plato.Site.Repositories
             int id,
             string email,
             string companyName,
+            string companyNameAlias,
             bool emailConfirmed,
             bool emailUpdates,
             string SecurityToken,
@@ -156,7 +158,8 @@ namespace Plato.Site.Repositories
                     {
                         new DbParam("Id", DbType.Int32, id),
                         new DbParam("Email", DbType.String, 255, email.ToEmptyIfNull()),
-                        new DbParam("CompanyName", DbType.String, 255, email.ToEmptyIfNull()),
+                        new DbParam("CompanyName", DbType.String, 255, companyName.ToEmptyIfNull()),
+                        new DbParam("CompanyNameAlias", DbType.String, 255, companyNameAlias.ToEmptyIfNull()),
                         new DbParam("EmailConfirmed", DbType.Boolean, emailConfirmed),
                         new DbParam("EmailUpdates", DbType.Boolean, emailUpdates),
                         new DbParam("SecurityToken", DbType.String, 8, SecurityToken.ToEmptyIfNull()),

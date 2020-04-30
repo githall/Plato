@@ -2,7 +2,7 @@
 
 namespace Plato.Site.ViewModels
 {
-    public class GetStartedViewModel
+    public class SignUpViewModel
     {
 
         [Required, DataType(DataType.EmailAddress), Display(Name = "email")]
@@ -12,4 +12,5 @@ namespace Plato.Site.ViewModels
         public bool EmailUpdates { get; set; }
 
     }
+
 }

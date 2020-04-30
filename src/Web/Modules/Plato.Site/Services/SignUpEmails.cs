@@ -1,7 +1,6 @@
 ﻿using System.Net;
 using System.Net.Mail;
 using System.Threading.Tasks;
-using Microsoft.AspNetCore.Routing;
 using Plato.Site.Models;
 using PlatoCore.Abstractions;
 using PlatoCore.Emails.Abstractions;
@@ -9,7 +8,6 @@ using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Localization.Abstractions;
 using PlatoCore.Localization.Abstractions.Models;
 using PlatoCore.Localization.Extensions;
-using PlatoCore.Models.Users;
 
 namespace Plato.Site.Services
 {

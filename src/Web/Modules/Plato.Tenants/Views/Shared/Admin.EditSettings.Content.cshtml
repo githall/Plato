@@ -16,19 +16,21 @@
                     <div class="form-group" asp-validation-class-for="ConnectionString">
                         <h6>@T["Connection string"]</h6>
                         <label asp-for="ConnectionString" class="text-muted">
-                            @T["The default connection string to use for new tenants."]
+                            @T["The default connection string to use for new tenants. For example server=localhost;trusted_connection=true;database=plato"]
                         </label>
                         <div class="input-group mb-2 mb-sm-0">
                             <div class="search-input-group">
                                 <input asp-for="ConnectionString"
                                        autocomplete="off"
                                        data-provide="password"
+                                       placeholder="server=localhost;trusted_connection=true;database=plato"
                                        class="form-control" type="text" autofocus />
                                 <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
                                     <i class="fal fa-eye"></i>
                                 </button>
                             </div>
                         </div>
+                  
                         <span asp-validation-for="ConnectionString" class="text-danger"></span>
                     </div>
                 </fieldset>
