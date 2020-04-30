@@ -76,7 +76,7 @@ namespace Plato.Tags.Repositories
                         }
 
                         return tag;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -139,7 +139,7 @@ namespace Plato.Tags.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteTagById",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -173,7 +173,7 @@ namespace Plato.Tags.Repositories
 
                         return output;
 
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("FeatureId", DbType.Int32, featureId)
                     });
@@ -201,7 +201,7 @@ namespace Plato.Tags.Repositories
                         }
 
                         return tag;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Name", DbType.String, 255, name)
                     });
@@ -230,7 +230,7 @@ namespace Plato.Tags.Repositories
                         }
 
                         return tag;
-                    }, new []
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("NameNormalized", DbType.String, 255, nameNormalized), 
                     });

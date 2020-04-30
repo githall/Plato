@@ -1,5 +1,4 @@
-﻿using Plato.Site.Models;
-using PlatoCore.Abstractions;
+﻿using PlatoCore.Abstractions;
 
 namespace Plato.Site.Services
 {

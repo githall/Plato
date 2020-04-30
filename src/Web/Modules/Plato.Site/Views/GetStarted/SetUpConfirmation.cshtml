@@ -1,4 +1,4 @@
-﻿@model SetUpViewModel
+﻿@model SetUpConfirmationViewModel
 @{
     AddTitleSegment(T["Set Up"]);    
     Layout = "_GetStartedLayout.cshtml";
@@ -18,24 +18,21 @@
                 <div class="my-4">
 
                     <h1 class="display-4 text-primary font-weight-bold">
-                        Your nearly there
+                        Your all set
                     </h1>
 
                     <h3 class="font-weight-light my-4">
-                        We just need your company name - this will be displayed within your support site; don't worry you can change this later on
+                        Your support site is ready - make a note of the address shown below - you can use this anytime to access your support site.
+
+                    </h3>
+                    <h3>
+                        @Model.Url
                     </h3>
                     <div class="mt-4">
 
                         <div class="mt-2 w-100 max-w-500 d-inline-block">
-
-                            <fieldset>
-                                <div class="form-group text-left">
-                                    <input asp-for="CompanyName" class="form-control form-control-lg" placeholder="@T["company name"]" autofocus />
-                                    <div class="mt-2" asp-validation-summary="All"></div>
-                                </div>
-                            </fieldset>
                             <div class="form-group">
-                                <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">@T["Confirm"]</button>
+                                <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">@T["Get Started"]</button>
                             </div>
                         </div>
 

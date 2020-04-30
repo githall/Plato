@@ -90,6 +90,7 @@ namespace Plato.Site.Repositories
         {
             var id = await InsertUpdateInternal(
                 model.Id,
+                model.SessionId,
                 model.Email,
                 model.CompanyName,
                 model.CompanyNameAlias,
@@ -133,12 +134,43 @@ namespace Plato.Site.Repositories
 
         }
 
+        public async Task<SignUp> SelectBySessionIdAsync(string sessionId)
+        {
+
+            SignUp output = null;
+            using (var context = _dbContext)
+            {
+                output = await context.ExecuteReaderAsync<SignUp>(
+                    CommandType.StoredProcedure,
+                    "SelectSignUpBySessionId",
+                    async reader =>
+                    {
+                        if ((reader != null) && (reader.HasRows))
+                        {
+                            await reader.ReadAsync();
+                            output = new SignUp();
+                            output.PopulateModel(reader);
+                        }
+
+                        return output;
+                    }, new IDbDataParameter[]
+                    {
+                        new DbParam("SessionId", DbType.String, 255, sessionId)
+                    });
+
+            }
+
+            return output;
+
+        }
+
         #endregion
 
         #region "Private Methods"
 
         private async Task<int> InsertUpdateInternal(
             int id,
+            string sessionId,
             string email,
             string companyName,
             string companyNameAlias,
@@ -157,6 +189,7 @@ namespace Plato.Site.Repositories
                     new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id),
+                        new DbParam("SessionId", DbType.String, 255, sessionId.ToEmptyIfNull()),
                         new DbParam("Email", DbType.String, 255, email.ToEmptyIfNull()),
                         new DbParam("CompanyName", DbType.String, 255, companyName.ToEmptyIfNull()),
                         new DbParam("CompanyNameAlias", DbType.String, 255, companyNameAlias.ToEmptyIfNull()),

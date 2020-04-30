@@ -27,6 +27,12 @@ namespace Plato.Site.Handlers
                     },
                     new SchemaColumn()
                     {
+                        Name = "SessionId",
+                        Length = "255",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
                         Name = "Email",
                         Length = "255",
                         DbType = DbType.String
@@ -132,8 +138,9 @@ namespace Plato.Site.Handlers
 
                 builder.ProcedureBuilder
                     .DropDefaultProcedures(_signUps)
-                    .DropProcedure(new SchemaProcedure("SelectSignUpPaged", StoredProcedureType.SelectByKey));
-                
+                    .DropProcedure(new SchemaProcedure("SelectSignUpPaged", StoredProcedureType.SelectByKey))
+                    .DropProcedure(new SchemaProcedure("SelectSignUpBySessionId", StoredProcedureType.SelectByKey));                 
+
                 // Log statements to execute
                 if (context.Logger.IsEnabled(LogLevel.Information))
                 {
@@ -205,6 +212,10 @@ namespace Plato.Site.Handlers
                         Length = "255"
                     }
                 }));
+
+            builder.ProcedureBuilder.CreateProcedure(new SchemaProcedure("SelectSignUpBySessionId", StoredProcedureType.SelectByKey)
+                    .ForTable(_signUps)
+                    .WithParameter(new SchemaColumn() { Name = "SessionId", DbType = DbType.String, Length = "255" }));
 
             // Indexes
             builder.IndexBuilder.CreateIndex(new SchemaIndex()

@@ -46,6 +46,12 @@ namespace Plato.Site
                     },
                     new SchemaColumn()
                     {
+                        Name = "SessionId",
+                        Length = "255",
+                        DbType = DbType.String
+                    },
+                    new SchemaColumn()
+                    {
                         Name = "Email",
                         Length = "255",
                         DbType = DbType.String
@@ -94,7 +100,7 @@ namespace Plato.Site
                 builder
                     .Configure(options =>
                     {
-                        options.ModuleName = ModuleId;
+                        options.ModuleName = ModuleId;              
                         options.Version = "1.0.1";
                     });
 
@@ -129,6 +135,10 @@ namespace Plato.Site
                             Length = "255"
                         }
                     }));
+
+                builder.ProcedureBuilder.CreateProcedure(new SchemaProcedure("SelectSignUpBySessionId", StoredProcedureType.SelectByKey)
+                    .ForTable(signUps)
+                    .WithParameter(new SchemaColumn() { Name = "SessionId", DbType = DbType.String, Length = "255" }));
 
                 // Indexes
                 builder.IndexBuilder.CreateIndex(new SchemaIndex()

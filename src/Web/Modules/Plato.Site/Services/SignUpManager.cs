@@ -12,16 +12,23 @@ namespace Plato.Site.Services
     public class SignUpManager : ISignUpManager<SignUp>
     {
 
+        private readonly ISignUpValidator _companyNameValidator;
+
         private readonly ISignUpStore<SignUp> _signUpStore;
         private readonly IKeyGenerator _keyGenerator;
+        private readonly IAliasCreator _aliasCreator;
         private readonly IBroker _broker;
 
         public SignUpManager(
+            ISignUpValidator companyNameValidator,
             ISignUpStore<SignUp> signUpStore,
             IKeyGenerator keyGenerator,
+            IAliasCreator aliasCreator,
             IBroker broker)
         {
+            _companyNameValidator = companyNameValidator;
             _keyGenerator = keyGenerator;
+            _aliasCreator = aliasCreator;
             _signUpStore = signUpStore;            
             _broker = broker;
         }
@@ -42,17 +49,30 @@ namespace Plato.Site.Services
                 throw new ArgumentOutOfRangeException(nameof(model.Email));
             }
 
-            // Create security token in one does not exist
+            // Create security token
             if (string.IsNullOrEmpty(model.SecurityToken))
             {
-                // Build simple security token
-                var token = _keyGenerator.GenerateKey(o =>
+                // Build simple security token 
+                model.SecurityToken = _keyGenerator.GenerateKey(o =>
                 {
                     o.OnlyDigits = true;
                     o.MaxLength = 6;
                 });
+            }
 
-                model.SecurityToken = token;
+            // Do we have a company name?
+            if (!string.IsNullOrEmpty(model.CompanyName))
+            {
+
+                // Validate company name
+                var validationResult = await _companyNameValidator.ValidateCompanyNameAsync(model.CompanyName);
+                if (!validationResult.Succeeded)
+                {
+                    return result.Failed(validationResult.Errors.ToString());
+                }
+
+                // Create company name alias
+                model.CompanyNameAlias = _aliasCreator.Create(model.CompanyName);
             }
 
             // Invoke SignUpCreating subscriptions
@@ -65,14 +85,34 @@ namespace Plato.Site.Services
             if (signUp != null)
             {
 
-                // Invoke SignUpCreated subscriptions
-                foreach (var handler in _broker.Pub<SignUp>(this, "SignUpCreated"))
-                {
-                    model = await handler.Invoke(new Message<SignUp>(model, this));
-                }
+                // Set unique session id, using primary key to ensure uniqueness
+                if (string.IsNullOrEmpty(signUp.SessionId))
+                {                  
 
-                // Return success
-                return result.Success(signUp);
+                    // Set sessionId
+                    signUp.SessionId = _keyGenerator.GenerateKey(o =>
+                    {
+                        o.OnlyDigits = false;
+                        o.UniqueIdentifier = signUp.Id.ToString();
+                        o.MaxLength = 150;
+                    });
+
+                    // Persist sessionId
+                    var updatedSignUp = await _signUpStore.UpdateAsync(signUp);
+                    if (updatedSignUp != null)
+                    {
+                        // Invoke SignUpCreated subscriptions
+                        foreach (var handler in _broker.Pub<SignUp>(this, "SignUpCreated"))
+                        {
+                            updatedSignUp = await handler.Invoke(new Message<SignUp>(updatedSignUp, this));
+                        }
+
+                        // Return success
+                        return result.Success(updatedSignUp);
+
+                    }
+
+                }
 
             }
 
@@ -95,7 +135,16 @@ namespace Plato.Site.Services
             {
                 throw new ArgumentOutOfRangeException(nameof(model.Email));
             }
-            
+
+
+
+
+            // Create company name alias
+            if (string.IsNullOrEmpty(model.CompanyName))
+            {
+                model.CompanyNameAlias = _aliasCreator.Create(model.CompanyName);
+            }
+
             // Invoke SignUpUpdating subscriptions
             foreach (var handler in _broker.Pub<SignUp>(this, "SignUpUpdating"))
             {

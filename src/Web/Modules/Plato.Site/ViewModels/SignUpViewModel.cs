@@ -21,9 +21,8 @@ namespace Plato.Site.ViewModels
     public class SignUpConfirmationViewModel
     {
 
-        [Required]
-        public int Id { get; set; }
-
+        [Required, StringLength(255)]
+        public string SessionId { get; set; }
 
         public string Email { get; set; }
 

@@ -70,7 +70,7 @@ namespace PlatoCore.Text
             {
 
                 // Substitute some random characters with our output 
-                // with our unique identifier ensuring we don't change the legnth
+                // with our unique identifier ensuring we don't change the length
 
                 var len = _options.UniqueIdentifier.Length;
                 var start = output.Length > len ? len : 0;

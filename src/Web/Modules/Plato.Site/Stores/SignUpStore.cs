@@ -1,4 +1,5 @@
-﻿using System.Data;
+﻿using System;
+using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
@@ -12,7 +13,8 @@ namespace Plato.Site.Stores
 
     public class SignUpStore : ISignUpStore<SignUp>
     {
-        private const string ById = "ById";
+        public const string ById = "ById";
+        public const string BySessionId = "BySessionId";
 
         private readonly ISignUpRepository<SignUp> _signUpRepository;
         private readonly IDbQueryConfiguration _dbQuery;
@@ -82,6 +84,18 @@ namespace Plato.Site.Stores
             var token = _cacheManager.GetOrCreateToken(this.GetType(), ById, id);
             return await _cacheManager.GetOrCreateAsync(token,
                 async (cacheEntry) => await _signUpRepository.SelectByIdAsync(id));
+        }
+
+        public async Task<SignUp> GetBySessionIdAsync(string sessionId)
+        {
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                throw new ArgumentNullException(nameof(sessionId));
+            }
+
+            var token = _cacheManager.GetOrCreateToken(this.GetType(), BySessionId, sessionId);
+            return await _cacheManager.GetOrCreateAsync(token, async (cacheEntry) => await _signUpRepository.SelectBySessionIdAsync(sessionId));
+
         }
 
         public IQuery<SignUp> QueryAsync()

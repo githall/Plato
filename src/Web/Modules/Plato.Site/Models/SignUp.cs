@@ -10,6 +10,8 @@ namespace Plato.Site.Models
 
         public int Id { get; set; }
 
+        public string SessionId { get; set; }
+
         public string Email { get; set; }
 
         public string CompanyName { get; set; }
@@ -29,6 +31,9 @@ namespace Plato.Site.Models
 
             if (dr.ColumnIsNotNull("id"))
                 Id = Convert.ToInt32(dr["Id"]);
+
+            if (dr.ColumnIsNotNull("SessionId"))
+                SessionId = Convert.ToString(dr["SessionId"]);
 
             if (dr.ColumnIsNotNull("Email"))
                 Email = Convert.ToString(dr["Email"]);

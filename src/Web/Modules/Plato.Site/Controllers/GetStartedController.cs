@@ -2,13 +2,10 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Options;
-using PlatoCore.Emails.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using Plato.Site.ViewModels;
 using Plato.Site.Services;
 using Plato.Site.Models;
-using PlatoCore.Text.Abstractions;
 using Microsoft.AspNetCore.Routing;
 using Plato.Site.Stores;
 
@@ -87,7 +84,7 @@ namespace Plato.Site.Controllers
                     // Redirect to sign-up confirmation
                     return RedirectToAction(nameof(SignUpConfirmation), new RouteValueDictionary()
                     {
-                        ["id"] = result.Response.Id.ToString()
+                        ["sessionId"] = result.Response.SessionId.ToString()
                     });
                 }
                 else
@@ -117,17 +114,18 @@ namespace Plato.Site.Controllers
         // Enter security token to confirm email
         // ---------------------
 
-        public async Task<IActionResult> SignUpConfirmation(int id)
+        [HttpGet, AllowAnonymous]
+        public async Task<IActionResult> SignUpConfirmation(string sessionId)
         {
 
             // Validate
-            if (id <= 0)
+            if (string.IsNullOrEmpty(sessionId))
             {
-                throw new ArgumentOutOfRangeException(nameof(id));
+                throw new ArgumentNullException(nameof(sessionId));
             }
 
             // Get the sign-up
-            var signUp = await _signUpStore.GetByIdAsync(id);
+            var signUp = await _signUpStore.GetBySessionIdAsync(sessionId);
 
             // Ensure we found the sign-up
             if (signUp == null)
@@ -137,7 +135,7 @@ namespace Plato.Site.Controllers
 
             return View(new SignUpConfirmationViewModel()
             {
-                Id = signUp.Id,
+                SessionId = signUp.SessionId,
                 Email = signUp.Email
             });
 
@@ -153,9 +151,9 @@ namespace Plato.Site.Controllers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (model.Id <= 0)
+            if (string.IsNullOrEmpty(model.SessionId))
             {
-                throw new ArgumentOutOfRangeException(nameof(model.Id));
+                throw new ArgumentNullException(nameof(model.SessionId));
             }
 
             if (string.IsNullOrEmpty(model.SecurityToken))
@@ -169,7 +167,7 @@ namespace Plato.Site.Controllers
             }
 
             // Get the sign-up
-            var signUp = await _signUpStore.GetByIdAsync(model.Id);
+            var signUp = await _signUpStore.GetBySessionIdAsync(model.SessionId);
 
             // Ensure we found the sign-up
             if (signUp == null)
@@ -184,14 +182,13 @@ namespace Plato.Site.Controllers
                 // Redirect to sign-up confirmation
                 return RedirectToAction(nameof(SetUp), new RouteValueDictionary()
                 {
-                    ["id"] = signUp.Id.ToString(),
-                    ["token"] = signUp.SecurityToken
+                    ["sessionId"] = signUp.SessionId
                 });
             }
 
             // The confirmation code is incorrect
             ViewData.ModelState.AddModelError(string.Empty, "The confirmation code is incorrect. Please try again!");
-            return await SignUpConfirmation(signUp.Id);
+            return await SignUpConfirmation(signUp.SessionId);
 
         }
 
@@ -200,22 +197,17 @@ namespace Plato.Site.Controllers
         // Ask for company name
         // ---------------------
 
-        public async Task<IActionResult> SetUp(int id, string token)
-        {
+        [HttpGet, AllowAnonymous]
+        public async Task<IActionResult> SetUp(string sessionId)
+        {       
 
-            // Validate
-            if (id <= 0)
+            if (string.IsNullOrEmpty(sessionId))
             {
-                throw new ArgumentOutOfRangeException(nameof(id));
-            }
-
-            if (string.IsNullOrEmpty(token))
-            {
-                throw new ArgumentNullException(nameof(token));
+                throw new ArgumentNullException(nameof(sessionId));
             }
 
             // Get the sign-up
-            var signUp = await _signUpStore.GetByIdAsync(id);
+            var signUp = await _signUpStore.GetBySessionIdAsync(sessionId);
 
             // Ensure we found the sign-up
             if (signUp == null)
@@ -223,21 +215,15 @@ namespace Plato.Site.Controllers
                 return NotFound();
             }
 
-            var validToken = signUp.SecurityToken.Equals(token, StringComparison.OrdinalIgnoreCase);
-            if (validToken)
-            {
-                return NotFound();
-
-            }
-
+            // Return view
             return View(new SetUpViewModel()
             {
-                Id = signUp.Id
+                SessionId = signUp.SessionId
             });
 
         }
 
-        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(SignUpConfirmation))]
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(SetUp))]
         public async Task<IActionResult> SetUpPost(SetUpViewModel model)
         {
 
@@ -247,9 +233,9 @@ namespace Plato.Site.Controllers
                 throw new ArgumentNullException(nameof(model));
             }
 
-            if (model.Id <= 0)
+            if (string.IsNullOrEmpty(model.SessionId))
             {
-                throw new ArgumentOutOfRangeException(nameof(model.Id));
+                throw new ArgumentOutOfRangeException(nameof(model.SessionId));
             }
 
             if (!ModelState.IsValid)
@@ -258,7 +244,7 @@ namespace Plato.Site.Controllers
             }
 
             // Get the sign-up
-            var signUp = await _signUpStore.GetByIdAsync(model.Id);
+            var signUp = await _signUpStore.GetBySessionIdAsync(model.SessionId);
 
             // Ensure we found the sign-up
             if (signUp == null)
@@ -266,9 +252,58 @@ namespace Plato.Site.Controllers
                 return NotFound();
             }
 
+            signUp.CompanyName = model.CompanyName;
 
-            return View();
+            var result = await _signUpManager.UpdateAsync(signUp);
 
+            if (result.Succeeded)
+            {
+
+                // --------------------
+                // Create tenant here
+                // --------------------
+
+
+                // Redirect to sign-up confirmation
+                return RedirectToAction(nameof(SetUpConfirmation), new RouteValueDictionary()
+                {
+                    ["sessionId"] = signUp.SessionId
+                });
+            }
+
+            // The company name may be invalid or some other issues occurred
+            ViewData.ModelState.AddModelError(string.Empty, "The confirmation code is incorrect. Please try again!");
+            return await SignUpConfirmation(signUp.SessionId);
+
+        }
+     
+        // ---------------------
+        // 4. SetUp Confirmation
+        // Link to Plato installation
+        // ---------------------
+
+        [HttpGet, AllowAnonymous]
+        public async Task<IActionResult> SetUpConfirmation(string sessionId)
+        {
+
+
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                throw new ArgumentOutOfRangeException(nameof(sessionId));
+            }
+
+            // Get the sign-up
+            var signUp = await _signUpStore.GetBySessionIdAsync(sessionId);
+
+            // Ensure we found the sign-up
+            if (signUp == null)
+            {
+                return NotFound();
+            }
+
+            return View(new SetUpConfirmationViewModel()
+            {
+            });
 
         }
 
