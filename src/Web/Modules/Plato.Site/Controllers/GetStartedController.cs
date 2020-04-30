@@ -1,5 +1,4 @@
-﻿using System.Net;
-using System.Net.Mail;
+﻿using System;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -37,18 +36,26 @@ namespace Plato.Site.Controllers
         [HttpGet, AllowAnonymous]
         public Task<IActionResult> Index()
         {
+
             // Return view
             return Task.FromResult((IActionResult) View());
 
         }
 
-        // ---------------------
-        // Support 
-        // ---------------------
-
-        [HttpGet, AllowAnonymous]
-        public Task<IActionResult> SupportOptions()
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
+        public Task<IActionResult> IndexPost(GetStartedViewModel model)
         {
+
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (string.IsNullOrEmpty(model.Email))
+            {
+                throw new ArgumentNullException(nameof(model.Email));
+            }
+
             // Return view
             return Task.FromResult((IActionResult)View());
 

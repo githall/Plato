@@ -1,0 +1,14 @@
+{
+  "Emails": [
+    {
+      "Id": "SignUpSecurityToken",
+      "To": "[ToEmail]",
+      "Cc": "",
+      "Bcc": "",
+      "From": "[SiteEmail]",
+      "Subject": "[SiteName] - Your token is {0}",
+      "Message": "Hi There,\n\nPlease use the token: {0}\n\n[SiteName]\n[SiteUrl]"
+    },
+   
+  ]
+}
