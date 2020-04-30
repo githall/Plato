@@ -168,7 +168,8 @@ namespace Plato.Tenants.ViewProviders
                         if (model.IsNewTenant)
                         {
                             _logger.LogInformation($"Set-up of tenant '{setupContext.SiteName}' failed with the following errors...");
-                        } else
+                        }
+                        else
                         {
                             _logger.LogInformation($"Update of tenant '{setupContext.SiteName}' failed with the following errors...");
                         }                        

@@ -11,7 +11,7 @@ namespace Plato.Site.Stores
 
     #region "SignUpQuery"
 
-    public class SignUpQuery : DefaultQuery<Models.SignUp>
+    public class SignUpQuery : DefaultQuery<SignUp>
     {
 
         private readonly IQueryableStore<SignUp> _store;
@@ -143,7 +143,7 @@ namespace Plato.Site.Stores
                 return string.Empty;
             var whereClause = BuildWhereClause();
             var sb = new StringBuilder();
-            sb.Append("SELECT COUNT(e.Id) FROM ")
+            sb.Append("SELECT COUNT(su.Id) FROM ")
                 .Append(BuildTables());
             if (!string.IsNullOrEmpty(whereClause))
                 sb.Append(" WHERE (").Append(whereClause).Append(")");
@@ -165,7 +165,7 @@ namespace Plato.Site.Stores
         {
             var sb = new StringBuilder();
             sb.Append(_signUpsTableName)
-                .Append(" e ");
+                .Append(" su ");
             return sb.ToString();
         }
 
@@ -185,7 +185,7 @@ namespace Plato.Site.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.Id.Operator);
-                sb.Append(_query.Params.Id.ToSqlString("e.Id"));
+                sb.Append(_query.Params.Id.ToSqlString("su.Id"));
             }
 
             // Email
@@ -201,7 +201,7 @@ namespace Plato.Site.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.CompanyName.Operator);
-                sb.Append(_query.Params.CompanyName.ToSqlString("Email"));
+                sb.Append(_query.Params.CompanyName.ToSqlString("CompanyName"));
             }
 
             // CompanyNameAlias
@@ -209,7 +209,7 @@ namespace Plato.Site.Stores
             {
                 if (!string.IsNullOrEmpty(sb.ToString()))
                     sb.Append(_query.Params.CompanyNameAlias.Operator);
-                sb.Append(_query.Params.CompanyNameAlias.ToSqlString("Email"));
+                sb.Append(_query.Params.CompanyNameAlias.ToSqlString("CompanyNameAlias"));
             }
 
             return sb.ToString();
@@ -225,7 +225,7 @@ namespace Plato.Site.Stores
 
             return columnName.IndexOf('.') >= 0
                 ? columnName
-                : "e." + columnName;
+                : "su." + columnName;
         }
 
         private string BuildOrderBy()

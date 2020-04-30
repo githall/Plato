@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Plato.Site.Models;
 using Plato.Site.Stores;
@@ -12,21 +13,20 @@ namespace Plato.Site.Services
     public class SignUpManager : ISignUpManager<SignUp>
     {
 
-        private readonly ISignUpValidator _companyNameValidator;
-
+        private readonly ISignUpValidator _signUpValidator;
         private readonly ISignUpStore<SignUp> _signUpStore;
         private readonly IKeyGenerator _keyGenerator;
         private readonly IAliasCreator _aliasCreator;
         private readonly IBroker _broker;
 
         public SignUpManager(
-            ISignUpValidator companyNameValidator,
+            ISignUpValidator signUpValidator,
             ISignUpStore<SignUp> signUpStore,
             IKeyGenerator keyGenerator,
             IAliasCreator aliasCreator,
             IBroker broker)
         {
-            _companyNameValidator = companyNameValidator;
+            _signUpValidator = signUpValidator;
             _keyGenerator = keyGenerator;
             _aliasCreator = aliasCreator;
             _signUpStore = signUpStore;            
@@ -46,7 +46,33 @@ namespace Plato.Site.Services
 
             if (string.IsNullOrEmpty(model.Email))
             {
-                throw new ArgumentOutOfRangeException(nameof(model.Email));
+                return result.Failed("An email address is required!");
+            }
+
+            // Do we have an email
+            if (!string.IsNullOrEmpty(model.Email))
+            {
+                // Validate email
+                var validationResult = await _signUpValidator.ValidateEmailAsync(model.Email);
+                if (!validationResult.Succeeded)
+                {
+                    return result.Failed(validationResult.Errors.ToArray());
+                }
+            }
+
+            // Do we have a company name?
+            if (!string.IsNullOrEmpty(model.CompanyName))
+            {
+
+                // Validate company name
+                var validationResult = await _signUpValidator.ValidateCompanyNameAsync(model.CompanyName);
+                if (!validationResult.Succeeded)
+                {
+                    return result.Failed(validationResult.Errors.ToArray());
+                }
+
+                // Create company name alias
+                model.CompanyNameAlias = _aliasCreator.Create(model.CompanyName);
             }
 
             // Create security token
@@ -58,21 +84,6 @@ namespace Plato.Site.Services
                     o.OnlyDigits = true;
                     o.MaxLength = 6;
                 });
-            }
-
-            // Do we have a company name?
-            if (!string.IsNullOrEmpty(model.CompanyName))
-            {
-
-                // Validate company name
-                var validationResult = await _companyNameValidator.ValidateCompanyNameAsync(model.CompanyName);
-                if (!validationResult.Succeeded)
-                {
-                    return result.Failed(validationResult.Errors.ToString());
-                }
-
-                // Create company name alias
-                model.CompanyNameAlias = _aliasCreator.Create(model.CompanyName);
             }
 
             // Invoke SignUpCreating subscriptions
@@ -118,7 +129,6 @@ namespace Plato.Site.Services
 
             return result.Failed(new CommandError("An unknown error occurred whilst attempting to create a sign-up"));
 
-
         }
 
         public async Task<ICommandResult<SignUp>> UpdateAsync(SignUp model)
@@ -133,15 +143,21 @@ namespace Plato.Site.Services
 
             if (string.IsNullOrEmpty(model.Email))
             {
-                throw new ArgumentOutOfRangeException(nameof(model.Email));
+                return result.Failed("An email address is required!");
             }
 
-
-
-
-            // Create company name alias
-            if (string.IsNullOrEmpty(model.CompanyName))
+            // Do we have a company name?
+            if (!string.IsNullOrEmpty(model.CompanyName))
             {
+
+                // Validate company name
+                var validationResult = await _signUpValidator.ValidateCompanyNameAsync(model.CompanyName);
+                if (!validationResult.Succeeded)
+                {
+                    return result.Failed(validationResult.Errors.ToArray());
+                }
+
+                // Create company name alias
                 model.CompanyNameAlias = _aliasCreator.Create(model.CompanyName);
             }
 

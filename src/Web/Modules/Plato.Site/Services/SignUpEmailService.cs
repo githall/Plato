@@ -12,7 +12,7 @@ using PlatoCore.Localization.Extensions;
 namespace Plato.Site.Services
 {
 
-    public interface ISignUpEmails
+    public interface ISignUpEmailService
     {
 
         Task<ICommandResult<EmailMessage>> SendSecurityTokenAsync(SignUp signUp);
@@ -21,14 +21,14 @@ namespace Plato.Site.Services
 
     }
 
-    public class SignUpEmails : ISignUpEmails
+    public class SignUpEmailService : ISignUpEmailService
     {
 
         private readonly IContextFacade _contextFacade;
         private readonly ILocaleStore _localeStore;
         private readonly IEmailManager _emailManager;
 
-        public SignUpEmails(
+        public SignUpEmailService(
             IContextFacade contextFacade,
             ILocaleStore localeStore,
             IEmailManager emailManager)

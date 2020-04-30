@@ -1,10 +1,11 @@
 ﻿@model SetUpConfirmationViewModel
 @{
-    AddTitleSegment(T["Set Up"]);    
+    AddTitleSegment(T["Set Up - Admin Account"]);    
     Layout = "_GetStartedLayout.cshtml";
 }
 
-<form asp-action="SetUp" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+<form asp-action="SetUpConfirmation" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">    
+    <input type="hidden" asp-for="SessionId" />
     <section class="flex-column flex-lg-row no-gutters d-flex">
         <div class="col-12 align-self-start align-self-lg-center text-center">
             <div class="my-6 mx-auto max-w-800">
@@ -18,32 +19,38 @@
                 <div class="my-4">
 
                     <h1 class="display-4 text-primary font-weight-bold">
-                        Your all set
+                        @T["Create an admin account"]
                     </h1>
 
                     <h3 class="font-weight-light my-4">
-                        Your support site is ready - make a note of the address shown below - you can use this anytime to access your support site.
+                        @T["To manage your site, create an administrator account below - keep your credentials safe as you will need these to login"]
+                    </h3>
 
-                    </h3>
-                    <h3>
-                        @Model.Url
-                    </h3>
                     <div class="mt-4">
-
                         <div class="mt-2 w-100 max-w-500 d-inline-block">
+                            <fieldset class="text-left">
+                                <div class="form-group">
+                                    <input asp-for="UserName" placeholder="@T["Username"]" class="form-control form-control-lg" autofocus />
+                                </div>
+                                <div class="form-group">
+
+                                    <input asp-for="Password" placeholder="@T["Password"]" class="form-control form-control-lg" />
+
+                                </div>
+                                <div class="form-group">
+                                    <input asp-for="ConfirmPassword" placeholder="@T["Confirm Password"]" class="form-control form-control-lg" />
+
+                                </div>
+                            </fieldset>
+                            <div class="text-left" asp-validation-summary="All"></div>
                             <div class="form-group">
-                                <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">@T["Get Started"]</button>
+                                <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">@T["Let's Go"]</button>
                             </div>
                         </div>
-
                     </div>
+
                 </div>
             </div>
         </div>
-
     </section>
 </form>
-
-@section Scripts {
-    <script src="/plato.site/content/js/signup/signup.min.js"></script>
-}

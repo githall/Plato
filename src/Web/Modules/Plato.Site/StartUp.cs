@@ -54,10 +54,11 @@ namespace Plato.Site
             // Stores
             services.AddScoped<IPlatoSiteSettingsStore<PlatoSiteSettings>, PlatoSiteSettingsStore>();
             services.AddScoped<ISignUpStore<SignUp>, SignUpStore>();
-            services.AddScoped<ISignUpManager<SignUp>, SignUpManager>();
 
-            // Emails
-            services.AddScoped<ISignUpEmails, SignUpEmails>();
+            // Services
+            services.AddScoped<ISignUpManager<SignUp>, SignUpManager>();
+            services.AddScoped<ISignUpValidator, SignUpValidator>();
+            services.AddScoped<ISignUpEmailService, SignUpEmailService>();
 
             // View providers
             services.AddScoped<IViewProviderManager<PlatoSiteSettings>, ViewProviderManager<PlatoSiteSettings>>();

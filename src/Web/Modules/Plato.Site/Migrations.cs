@@ -100,7 +100,9 @@ namespace Plato.Site
                 builder
                     .Configure(options =>
                     {
-                        options.ModuleName = ModuleId;              
+                        options.ModuleName = ModuleId;
+                        options.DropTablesBeforeCreate = true;
+                        options.DropProceduresBeforeCreate = true;
                         options.Version = "1.0.1";
                     });
 
@@ -112,7 +114,7 @@ namespace Plato.Site
 
                 builder.ProcedureBuilder
                     .CreateDefaultProcedures(signUps)
-                    .CreateProcedure(new SchemaProcedure("SelectSignUpPaged", StoredProcedureType.SelectPaged)
+                    .CreateProcedure(new SchemaProcedure("SelectSignUpsPaged", StoredProcedureType.SelectPaged)
                     .ForTable(signUps)
                     .WithParameters(new List<SchemaColumn>()
                     {

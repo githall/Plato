@@ -138,7 +138,7 @@ namespace Plato.Site.Handlers
 
                 builder.ProcedureBuilder
                     .DropDefaultProcedures(_signUps)
-                    .DropProcedure(new SchemaProcedure("SelectSignUpPaged", StoredProcedureType.SelectByKey))
+                    .DropProcedure(new SchemaProcedure("SelectSignUpsPaged", StoredProcedureType.SelectByKey))
                     .DropProcedure(new SchemaProcedure("SelectSignUpBySessionId", StoredProcedureType.SelectByKey));                 
 
                 // Log statements to execute
@@ -189,7 +189,7 @@ namespace Plato.Site.Handlers
 
             builder.ProcedureBuilder
                 .CreateDefaultProcedures(_signUps)
-                .CreateProcedure(new SchemaProcedure("SelectSignUpPaged", StoredProcedureType.SelectPaged)
+                .CreateProcedure(new SchemaProcedure("SelectSignUpsPaged", StoredProcedureType.SelectPaged)
                 .ForTable(_signUps)
                 .WithParameters(new List<SchemaColumn>()
                 {

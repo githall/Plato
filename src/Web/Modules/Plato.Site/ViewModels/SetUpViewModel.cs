@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using PlatoCore.Security.Attributes;
+using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Site.ViewModels
 {
@@ -20,7 +21,16 @@ namespace Plato.Site.ViewModels
         [Required, StringLength(255)]
         public string SessionId { get; set; }
 
-        public string Url { get; set; }
+        [Required, UserNameValidator, Display(Name = "username"), StringLength(100)]
+        public string UserName { get; set; }
+
+        [Required, PasswordValidator, StringLength(100)]
+        [DataType(DataType.Password), Display(Name = "password")]
+        public string Password { get; set; }
+
+        [Required, PasswordValidator, DataType(DataType.Password), Compare("Password")]
+        [Display(Name = "password confirmation")]
+        public string ConfirmPassword { get; set; }
 
     }
 

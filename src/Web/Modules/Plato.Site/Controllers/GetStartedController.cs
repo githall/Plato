@@ -8,6 +8,12 @@ using Plato.Site.Services;
 using Plato.Site.Models;
 using Microsoft.AspNetCore.Routing;
 using Plato.Site.Stores;
+using Plato.Tenants.Services;
+using Plato.Tenants.Models;
+using PlatoCore.Emails.Abstractions;
+using System.Collections.Generic;
+using Microsoft.Extensions.Options;
+using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Site.Controllers
 {
@@ -15,19 +21,28 @@ namespace Plato.Site.Controllers
     public class GetStartedController : Controller, IUpdateModel
     {
 
-
+        private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ISignUpManager<SignUp> _signUpManager;
         private readonly ISignUpStore<SignUp> _signUpStore;
-        private readonly ISignUpEmails _signUpEmails;        
+        private readonly ISignUpEmailService _signUpEmails;
+        private readonly IContextFacade _contextFacade;
+
+        private readonly DefaultTenantSettings _defaultTenantSettings;
 
         public GetStartedController(
+            IOptions<DefaultTenantSettings>tenantSetings,
+            ITenantSetUpService tenantSetUpService,
             ISignUpManager<SignUp> signUpManager,
             ISignUpStore<SignUp> signUpStore,          
-            ISignUpEmails signUpEmails)
+            ISignUpEmailService signUpEmails,
+            IContextFacade contextFacade)
         {
-            _signUpManager = signUpManager;            
-            _signUpEmails = signUpEmails;            
-            _signUpStore = signUpStore;
+            _defaultTenantSettings = tenantSetings.Value;
+            _tenantSetUpService = tenantSetUpService;            
+            _signUpManager = signUpManager;
+            _contextFacade = contextFacade;
+            _signUpEmails = signUpEmails;           
+            _signUpStore = signUpStore;            
         }
 
         // ---------------------
@@ -252,10 +267,13 @@ namespace Plato.Site.Controllers
                 return NotFound();
             }
 
+            // Add company name
             signUp.CompanyName = model.CompanyName;
 
+            // Persist 
             var result = await _signUpManager.UpdateAsync(signUp);
 
+            // Success?
             if (result.Succeeded)
             {
 
@@ -263,29 +281,32 @@ namespace Plato.Site.Controllers
                 // Create tenant here
                 // --------------------
 
-
                 // Redirect to sign-up confirmation
                 return RedirectToAction(nameof(SetUpConfirmation), new RouteValueDictionary()
                 {
                     ["sessionId"] = signUp.SessionId
                 });
+
             }
 
             // The company name may be invalid or some other issues occurred
-            ViewData.ModelState.AddModelError(string.Empty, "The confirmation code is incorrect. Please try again!");
-            return await SignUpConfirmation(signUp.SessionId);
+            foreach (var error in result.Errors)
+            {
+                ViewData.ModelState.AddModelError(error.Code, error.Description);
+            }
+
+            return await SetUp(signUp.SessionId);
 
         }
      
         // ---------------------
         // 4. SetUp Confirmation
-        // Link to Plato installation
+        // Ask for administrator username & password
         // ---------------------
 
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> SetUpConfirmation(string sessionId)
         {
-
 
             if (string.IsNullOrEmpty(sessionId))
             {
@@ -303,7 +324,94 @@ namespace Plato.Site.Controllers
 
             return View(new SetUpConfirmationViewModel()
             {
-            });
+                SessionId = sessionId
+            });;
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(SetUpConfirmation))]
+        public async Task<IActionResult> SetUpConffirmationPost(SetUpConfirmationViewModel model)
+        {
+
+            // Validate
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (string.IsNullOrEmpty(model.SessionId))
+            {
+                throw new ArgumentOutOfRangeException(nameof(model.SessionId));
+            }
+
+            if (string.IsNullOrEmpty(model.UserName))
+            {
+                throw new ArgumentOutOfRangeException(nameof(model.UserName));
+            }
+
+            if (string.IsNullOrEmpty(model.Password))
+            {
+                throw new ArgumentOutOfRangeException(nameof(model.Password));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Get the sign-up
+            var signUp = await _signUpStore.GetBySessionIdAsync(model.SessionId);
+
+            // Ensure we found the sign-up
+            if (signUp == null)
+            {
+                return NotFound();
+            }
+
+            // Create tenant context
+            var setupContext = new TenantSetUpContext()
+            {
+                SiteName = signUp.CompanyName,
+                Location = signUp.CompanyNameAlias,
+                DatabaseProvider = "SqlClient",
+                DatabaseConnectionString = _defaultTenantSettings.ConnectionString,
+                DatabaseTablePrefix = $"tenant{signUp.Id.ToString()}",
+                AdminUsername = model.UserName,
+                AdminEmail = signUp.Email,
+                AdminPassword = model.Password,                
+                RequestedUrlPrefix = signUp.CompanyNameAlias,                
+                OwnerId = signUp.Email,
+                CreatedDate = DateTimeOffset.Now,
+                EmailSettings = new EmailSettings()
+                {
+                    SmtpSettings = _defaultTenantSettings.SmtpSettings
+                },
+                Errors = new Dictionary<string, string>()
+            };
+
+            // Attempt to create tenant
+            var result = await _tenantSetUpService.InstallAsync(setupContext);
+
+            // Report any errors
+            if (!result.Succeeded)
+            {
+                foreach (var error in result.Errors)
+                {                
+                    ViewData.ModelState.AddModelError(error.Code, error.Description);
+                }
+                return await SetUp(signUp.SessionId);
+
+            }
+
+            // Redirect to new installation
+            var pathBase = $"/{result.Response.RequestedUrlPrefix}";
+
+            return Redirect(pathBase + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            {
+                ["area"] = "Plato.Admin",
+                ["controller"] = "Admin",
+                ["action"] = "Index"
+            }));      
 
         }
 
