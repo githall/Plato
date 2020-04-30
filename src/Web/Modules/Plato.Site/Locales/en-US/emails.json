@@ -6,9 +6,8 @@
       "Cc": "",
       "Bcc": "",
       "From": "[SiteEmail]",
-      "Subject": "[SiteName] - Your 6 digit token is {0}",
-      "Message": "Hi There,\n\nTo complete sign-up please use the 6 digit token shown below...\n\n{0}\n\n[SiteName]\n[SiteUrl]"
-    },
-   
+      "Subject": "[SiteName] - Your confirmation code is {0}",
+      "Message": "Hi There,\n\nTo complete sign-up please use the 6 digit confirmation code shown below...\n\nConfirmation Code: {0}\n\n[SiteName]\n[SiteUrl]"
+    }   
   ]
 }

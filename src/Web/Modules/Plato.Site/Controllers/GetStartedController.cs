@@ -18,25 +18,24 @@ namespace Plato.Site.Controllers
     public class GetStartedController : Controller, IUpdateModel
     {
 
-        private readonly IKeyGenerator _keyGenerator;
+
         private readonly ISignUpManager<SignUp> _signUpManager;
         private readonly ISignUpStore<SignUp> _signUpStore;
         private readonly ISignUpEmails _signUpEmails;        
 
         public GetStartedController(
             ISignUpManager<SignUp> signUpManager,
-            ISignUpStore<SignUp> signUpStore,
-            IKeyGenerator keyGenerator,
+            ISignUpStore<SignUp> signUpStore,          
             ISignUpEmails signUpEmails)
         {
             _signUpManager = signUpManager;            
-            _signUpEmails = signUpEmails;
-            _keyGenerator = keyGenerator;
+            _signUpEmails = signUpEmails;            
             _signUpStore = signUpStore;
         }
 
         // ---------------------
-        // Index 
+        // 1. SignUp
+        // Ask for email, generate security token email
         // ---------------------
 
         [HttpGet, AllowAnonymous]
@@ -52,6 +51,7 @@ namespace Plato.Site.Controllers
         public async Task<IActionResult> SignUpPost(SignUpViewModel model)
         {
 
+            // Validate
             if (model == null)
             {
                 throw new ArgumentNullException(nameof(model));
@@ -67,25 +67,18 @@ namespace Plato.Site.Controllers
                 return View(model);
             }
 
-            // Build simple security token
-            var token = _keyGenerator.GenerateKey(o =>
-            {
-                o.OnlyDigits = true;
-                o.MaxLength = 6;
-            });
-
             // Create sign-up
             var result = await _signUpManager.CreateAsync(new SignUp()
             {
                 Email = model.Email,
-                SecurityToken = token
+                EmailUpdates = model.EmailUpdates
             });
 
             // Ensure sign-up was created successfully
             if (result.Succeeded)
             {
 
-                // Send email
+                // Send security token email
                 var emailResult = await _signUpEmails.SendSecurityTokenAsync(result.Response);
 
                 // Ensure email was sent successfully
@@ -119,19 +112,165 @@ namespace Plato.Site.Controllers
 
         }
 
+        // ---------------------
+        // 2. SignUp Confirmation 
+        // Enter security token to confirm email
+        // ---------------------
+
         public async Task<IActionResult> SignUpConfirmation(int id)
         {
 
+            // Validate
             if (id <= 0)
             {
                 throw new ArgumentOutOfRangeException(nameof(id));
             }
 
+            // Get the sign-up
             var signUp = await _signUpStore.GetByIdAsync(id);
 
-            return View();
+            // Ensure we found the sign-up
+            if (signUp == null)
+            {
+                return NotFound();
+            }
+
+            return View(new SignUpConfirmationViewModel()
+            {
+                Id = signUp.Id,
+                Email = signUp.Email
+            });
+
         }
 
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(SignUpConfirmation))]
+        public async Task<IActionResult> SignUpConfirmationPost(SignUpConfirmationViewModel model)
+        {
+
+            // Validate
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (model.Id <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(model.Id));
+            }
+
+            if (string.IsNullOrEmpty(model.SecurityToken))
+            {
+                throw new ArgumentNullException(nameof(model.SecurityToken));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Get the sign-up
+            var signUp = await _signUpStore.GetByIdAsync(model.Id);
+
+            // Ensure we found the sign-up
+            if (signUp == null)
+            {
+                return NotFound();
+            }
+
+            // Validate token
+            var validToken = signUp.SecurityToken.Equals(model.SecurityToken, StringComparison.OrdinalIgnoreCase);
+            if (validToken)
+            {
+                // Redirect to sign-up confirmation
+                return RedirectToAction(nameof(SetUp), new RouteValueDictionary()
+                {
+                    ["id"] = signUp.Id.ToString(),
+                    ["token"] = signUp.SecurityToken
+                });
+            }
+
+            // The confirmation code is incorrect
+            ViewData.ModelState.AddModelError(string.Empty, "The confirmation code is incorrect. Please try again!");
+            return await SignUpConfirmation(signUp.Id);
+
+        }
+
+        // ---------------------
+        // 3. SetUp 
+        // Ask for company name
+        // ---------------------
+
+        public async Task<IActionResult> SetUp(int id, string token)
+        {
+
+            // Validate
+            if (id <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(id));
+            }
+
+            if (string.IsNullOrEmpty(token))
+            {
+                throw new ArgumentNullException(nameof(token));
+            }
+
+            // Get the sign-up
+            var signUp = await _signUpStore.GetByIdAsync(id);
+
+            // Ensure we found the sign-up
+            if (signUp == null)
+            {
+                return NotFound();
+            }
+
+            var validToken = signUp.SecurityToken.Equals(token, StringComparison.OrdinalIgnoreCase);
+            if (validToken)
+            {
+                return NotFound();
+
+            }
+
+            return View(new SetUpViewModel()
+            {
+                Id = signUp.Id
+            });
+
+        }
+
+        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(SignUpConfirmation))]
+        public async Task<IActionResult> SetUpPost(SetUpViewModel model)
+        {
+
+            // Validate
+            if (model == null)
+            {
+                throw new ArgumentNullException(nameof(model));
+            }
+
+            if (model.Id <= 0)
+            {
+                throw new ArgumentOutOfRangeException(nameof(model.Id));
+            }
+
+            if (!ModelState.IsValid)
+            {
+                return View(model);
+            }
+
+            // Get the sign-up
+            var signUp = await _signUpStore.GetByIdAsync(model.Id);
+
+            // Ensure we found the sign-up
+            if (signUp == null)
+            {
+                return NotFound();
+            }
+
+
+            return View();
+
+
+        }
 
     }
 

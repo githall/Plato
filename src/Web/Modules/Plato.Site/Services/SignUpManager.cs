@@ -4,6 +4,7 @@ using Plato.Site.Models;
 using Plato.Site.Stores;
 using PlatoCore.Abstractions;
 using PlatoCore.Messaging.Abstractions;
+using PlatoCore.Text.Abstractions;
 
 namespace Plato.Site.Services
 {
@@ -12,13 +13,16 @@ namespace Plato.Site.Services
     {
 
         private readonly ISignUpStore<SignUp> _signUpStore;
+        private readonly IKeyGenerator _keyGenerator;
         private readonly IBroker _broker;
 
         public SignUpManager(
             ISignUpStore<SignUp> signUpStore,
+            IKeyGenerator keyGenerator,
             IBroker broker)
         {
-            _signUpStore = signUpStore;
+            _keyGenerator = keyGenerator;
+            _signUpStore = signUpStore;            
             _broker = broker;
         }
 
@@ -38,24 +42,37 @@ namespace Plato.Site.Services
                 throw new ArgumentOutOfRangeException(nameof(model.Email));
             }
 
+            // Create security token in one does not exist
+            if (string.IsNullOrEmpty(model.SecurityToken))
+            {
+                // Build simple security token
+                var token = _keyGenerator.GenerateKey(o =>
+                {
+                    o.OnlyDigits = true;
+                    o.MaxLength = 6;
+                });
+
+                model.SecurityToken = token;
+            }
+
             // Invoke SignUpCreating subscriptions
             foreach (var handler in _broker.Pub<SignUp>(this, "SignUpCreating"))
             {
                 model = await handler.Invoke(new Message<SignUp>(model, this));
             }
 
-            var entity = await _signUpStore.CreateAsync(model);
-            if (entity != null)
+            var signUp = await _signUpStore.CreateAsync(model);
+            if (signUp != null)
             {
 
-                // Invoke SignUpCreating subscriptions
-                foreach (var handler in _broker.Pub<SignUp>(this, "SignUpCreating"))
+                // Invoke SignUpCreated subscriptions
+                foreach (var handler in _broker.Pub<SignUp>(this, "SignUpCreated"))
                 {
                     model = await handler.Invoke(new Message<SignUp>(model, this));
                 }
 
                 // Return success
-                return result.Success(entity);
+                return result.Success(signUp);
 
             }
 
@@ -78,15 +95,15 @@ namespace Plato.Site.Services
             {
                 throw new ArgumentOutOfRangeException(nameof(model.Email));
             }
-
+            
             // Invoke SignUpUpdating subscriptions
             foreach (var handler in _broker.Pub<SignUp>(this, "SignUpUpdating"))
             {
                 model = await handler.Invoke(new Message<SignUp>(model, this));
             }
 
-            var entity = await _signUpStore.UpdateAsync(model);
-            if (entity != null)
+            var signUp = await _signUpStore.UpdateAsync(model);
+            if (signUp != null)
             {
 
                 // Invoke SignUpUpdated subscriptions
@@ -96,7 +113,7 @@ namespace Plato.Site.Services
                 }
 
                 // Return success
-                return result.Success(entity);
+                return result.Success(signUp);
 
             }
 
