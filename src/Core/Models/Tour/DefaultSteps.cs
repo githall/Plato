@@ -23,7 +23,7 @@
         {
             Id = "Tour.Update.Profile",
             Title = "Update Profile",
-            Description = "Check your happy your user profile is correct."
+            Description = "Check your happy with your user profile."
         };
 
         public static TourStep GeneralSettings = new TourStep()
@@ -37,14 +37,14 @@
         {
             Id = "Tour.Email.Settings",
             Title = "Email Settings",
-            Description = "Customize general application settings."
+            Description = "Customize outbound email settings."
         };
 
         public static TourStep EnableSearch = new TourStep()
         {
             Id = "Tour.Features.Search",
             Title = "Enable Search",
-            Description = "Enable Search"
+            Description = "Instantly search across all your support content."
         };
 
     }

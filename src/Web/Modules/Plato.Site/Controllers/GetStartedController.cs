@@ -372,7 +372,7 @@ namespace Plato.Site.Controllers
             var setupContext = new TenantSetUpContext()
             {
                 SiteName = signUp.CompanyName,
-                Location = signUp.CompanyNameAlias,
+                Location = $"tenant{signUp.Id.ToString()}",
                 DatabaseProvider = "SqlClient",
                 DatabaseConnectionString = _defaultTenantSettings.ConnectionString,
                 DatabaseTablePrefix = $"tenant{signUp.Id.ToString()}",
@@ -406,12 +406,14 @@ namespace Plato.Site.Controllers
             // Redirect to new installation
             var pathBase = $"/{result.Response.RequestedUrlPrefix}";
 
-            return Redirect(pathBase + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            var routeUrl = _contextFacade.GetRouteUrl(new RouteValueDictionary()
             {
                 ["area"] = "Plato.Admin",
                 ["controller"] = "Admin",
                 ["action"] = "Index"
-            }));      
+            });
+
+            return Redirect(pathBase);      
 
         }
 
