@@ -14,13 +14,24 @@
             <div class="col">
                 <fieldset>
                     <div class="form-group" asp-validation-class-for="DefaultFrom">
+                        <label asp-for="HostUrl">
+                            <strong>@T["Host Url"]</strong>
+                            <span asp-validation-for="HostUrl" class="text-danger"></span>
+                            <br />
+                            <span class="text-muted">@T["The url to the Plato installation that will act as the host for tenant sign-ups. Leave blank to use this installation as the host."]</span>
+                        </label>
+                        <input placeholder="@T["https://try.domain.com/"]" asp-for="HostUrl" class="form-control" autofocus />
+                    </div>
+                </fieldset>
+                <fieldset>
+                    <div class="form-group" asp-validation-class-for="DefaultFrom">
                         <label asp-for="DemoUrl">
                             <strong>@T["Demo Url"]</strong>
                             <span asp-validation-for="DemoUrl" class="text-danger"></span>
                             <br />
                             <span class="text-muted">@T["The url to the Plato demo site"]</span>
                         </label>
-                        <input placeholder="@T["https://demos.domain.com/plato"]" asp-for="DemoUrl" class="form-control" autofocus />
+                        <input placeholder="@T["https://demos.domain.com/plato"]" asp-for="DemoUrl" class="form-control" />
                     </div>
                 </fieldset>
                 <fieldset>
@@ -31,7 +42,7 @@
                             <br />
                             <span class="text-muted">@T["The Microsoft Store URL to download Plato Desktop"]</span>
                         </label>
-                        <input placeholder="@T["https://www.microsoft.com/"]" asp-for="PlatoDesktopUrl" class="form-control" autofocus />
+                        <input placeholder="@T["https://www.microsoft.com/"]" asp-for="PlatoDesktopUrl" class="form-control" />
                     </div>
                 </fieldset>
             </div>

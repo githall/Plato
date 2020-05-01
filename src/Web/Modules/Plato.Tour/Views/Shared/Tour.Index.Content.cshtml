@@ -55,8 +55,10 @@ else
                     </a>
                     @if (percentComplete < 100)
                     {
-                        <h6 class="card-title">@T["Set-Up Assistant"]</h6>
-                        @T["Use the options below to customize & set-up your Plato installation. Once you are done click the \"Finish Set-Up\" button to hide the set-up assistant."]
+                        <h6 class="card-title d-inline-block">@T["Set-Up Assistant"]</h6> <span class="text-muted">(@percentComplete% @T["complete"])</span>
+                        <div>
+                            @T["Use the steps below to customize & set-up your site. Once you are done click the \"Finish Set-Up\" button to permanently hide this set-up assistant."]
+                        </div>
                     }
                     else
                     {
@@ -64,7 +66,7 @@ else
                             <i class="fal fa-check mr-1"></i>
                             @T["Set-Up Complete"]
                         </h6>
-                        @T["You've completed all set-up steps. Use the \"Finish Set-Up\" button to hide the set-up assistant."]
+                        @T["You've completed all initial set-up steps. Use the \"Finish Set-Up\" button to permanently hide this set-up assistant."]
                     }
                     <div class="progress mt-3" data-toggle="tooltip" title="@percentComplete% @T["complete"]" style="height: 8px;">
                         <div class="progress-bar" role="progressbar" style="width: @percentComplete%" aria-valuemin="0" aria-valuemax="100"></div>

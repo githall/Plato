@@ -18,7 +18,7 @@ using PlatoCore.Hosting.Web.Abstractions;
 namespace Plato.Site.Controllers
 {
 
-    public class GetStartedController : Controller, IUpdateModel
+    public class TryController : Controller, IUpdateModel
     {
 
         private readonly ITenantSetUpService _tenantSetUpService;
@@ -28,21 +28,24 @@ namespace Plato.Site.Controllers
         private readonly IContextFacade _contextFacade;
 
         private readonly DefaultTenantSettings _defaultTenantSettings;
+        private readonly PlatoSiteSettings _platoSiteSettings;
 
-        public GetStartedController(
-            IOptions<DefaultTenantSettings>tenantSetings,
+        public TryController(
+            IOptions<DefaultTenantSettings> tenantSetings,
+            IOptions<PlatoSiteSettings> platoSiteSettings,
             ITenantSetUpService tenantSetUpService,
             ISignUpManager<SignUp> signUpManager,
-            ISignUpStore<SignUp> signUpStore,          
+            ISignUpStore<SignUp> signUpStore,
             ISignUpEmailService signUpEmails,
             IContextFacade contextFacade)
         {
             _defaultTenantSettings = tenantSetings.Value;
-            _tenantSetUpService = tenantSetUpService;            
+            _platoSiteSettings = platoSiteSettings.Value;
+            _tenantSetUpService = tenantSetUpService;
             _signUpManager = signUpManager;
             _contextFacade = contextFacade;
-            _signUpEmails = signUpEmails;           
-            _signUpStore = signUpStore;            
+            _signUpEmails = signUpEmails;
+            _signUpStore = signUpStore;
         }
 
         // ---------------------
@@ -54,8 +57,14 @@ namespace Plato.Site.Controllers
         public Task<IActionResult> SignUp()
         {
 
+            // Redirect to tenant host if one is provided
+            if (!string.IsNullOrEmpty(_platoSiteSettings.HostUrl))
+            {
+                return Task.FromResult((IActionResult)Redirect(_platoSiteSettings.HostUrl));
+            }
+
             // Return view
-            return Task.FromResult((IActionResult) View());
+            return Task.FromResult((IActionResult)View());
 
         }
 
@@ -112,11 +121,11 @@ namespace Plato.Site.Controllers
 
             }
             else
-            {          
+            {
                 foreach (var error in result.Errors)
                 {
                     ViewData.ModelState.AddModelError(string.Empty, error.Description);
-                }              
+                }
             }
 
             // If we reach this point errors occurred
@@ -194,11 +203,18 @@ namespace Plato.Site.Controllers
             var validToken = signUp.SecurityToken.Equals(model.SecurityToken, StringComparison.OrdinalIgnoreCase);
             if (validToken)
             {
+
+                // Reset security token & mark email as confirmed 
+                signUp.SecurityToken = string.Empty;
+                signUp.EmailConfirmed = true;
+                await _signUpStore.UpdateAsync(signUp);
+
                 // Redirect to sign-up confirmation
                 return RedirectToAction(nameof(SetUp), new RouteValueDictionary()
                 {
                     ["sessionId"] = signUp.SessionId
                 });
+
             }
 
             // The confirmation code is incorrect
@@ -214,7 +230,7 @@ namespace Plato.Site.Controllers
 
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> SetUp(string sessionId)
-        {       
+        {
 
             if (string.IsNullOrEmpty(sessionId))
             {
@@ -276,17 +292,11 @@ namespace Plato.Site.Controllers
             // Success?
             if (result.Succeeded)
             {
-
-                // --------------------
-                // Create tenant here
-                // --------------------
-
                 // Redirect to sign-up confirmation
                 return RedirectToAction(nameof(SetUpConfirmation), new RouteValueDictionary()
                 {
                     ["sessionId"] = signUp.SessionId
                 });
-
             }
 
             // The company name may be invalid or some other issues occurred
@@ -298,7 +308,7 @@ namespace Plato.Site.Controllers
             return await SetUp(signUp.SessionId);
 
         }
-     
+
         // ---------------------
         // 4. SetUp Confirmation
         // Ask for administrator username & password
@@ -325,7 +335,7 @@ namespace Plato.Site.Controllers
             return View(new SetUpConfirmationViewModel()
             {
                 SessionId = sessionId
-            });;
+            });
 
         }
 
@@ -378,8 +388,8 @@ namespace Plato.Site.Controllers
                 DatabaseTablePrefix = $"tenant{signUp.Id.ToString()}",
                 AdminUsername = model.UserName,
                 AdminEmail = signUp.Email,
-                AdminPassword = model.Password,                
-                RequestedUrlPrefix = signUp.CompanyNameAlias,                
+                AdminPassword = model.Password,
+                RequestedUrlPrefix = signUp.CompanyNameAlias,
                 OwnerId = signUp.Email,
                 CreatedDate = DateTimeOffset.Now,
                 EmailSettings = new EmailSettings()
@@ -396,27 +406,65 @@ namespace Plato.Site.Controllers
             if (!result.Succeeded)
             {
                 foreach (var error in result.Errors)
-                {                
+                {
                     ViewData.ModelState.AddModelError(error.Code, error.Description);
                 }
                 return await SetUp(signUp.SessionId);
 
             }
 
-            // Redirect to new installation
-            var pathBase = $"/{result.Response.RequestedUrlPrefix}";
-
-            var routeUrl = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+            // Redirect to set-up complete
+            return RedirectToAction(nameof(SetUpComplete), new RouteValueDictionary()
             {
-                ["area"] = "Plato.Admin",
-                ["controller"] = "Admin",
-                ["action"] = "Index"
+                ["sessionId"] = signUp.SessionId
             });
-
-            return Redirect(pathBase);      
 
         }
 
+        [HttpGet, AllowAnonymous]
+        public async Task<IActionResult> SetUpComplete(string sessionId)
+        {
+
+            // Validate
+            if (string.IsNullOrEmpty(sessionId))
+            {
+                throw new ArgumentNullException(nameof(sessionId));
+            }
+
+            // Get the sign-up
+            var signUp = await _signUpStore.GetBySessionIdAsync(sessionId);
+
+            // Ensure we found the sign-up
+            if (signUp == null)
+            {
+                return NotFound();
+            }
+
+            // Get tenant host URL
+            var hostUrl = _platoSiteSettings.HostUrl;
+
+            if (string.IsNullOrEmpty(hostUrl))
+            {
+                hostUrl = await _contextFacade.GetBaseUrlAsync();
+            }
+
+            if (!string.IsNullOrEmpty(hostUrl))
+            {
+                if (hostUrl.EndsWith("/"))
+                {
+                    hostUrl = hostUrl.Substring(hostUrl.Length - 1);
+                }
+            }
+
+            // Return view
+            return View(new SetUpCompleteViewModel()
+            {
+                SessionId = signUp.SessionId,
+                Url = $"{hostUrl}/{signUp.CompanyNameAlias}"
+            });
+
+        }
+        
     }
 
 }

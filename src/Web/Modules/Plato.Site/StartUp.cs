@@ -91,15 +91,47 @@ namespace Plato.Site
             );
 
             // -----------
-            // Get Started
+            // Try
             // -----------
 
-            // Index
+            // SignUp
             routes.MapAreaRoute(
-                name: "PlatoSiteGetStarted",
+                name: "PlatoSiteSignUp",
                 areaName: "Plato.Site",
-                template: "get-started",
-                defaults: new { controller = "GetStarted", action = "Index" }
+                template: "try",
+                defaults: new { controller = "Try", action = "SignUp" }
+            );
+
+            // SignUp Confirmation
+            routes.MapAreaRoute(
+                name: "PlatoSiteSignUpConfirmation",
+                areaName: "Plato.Site",
+                template: "try/confirm/{sessionId}",
+                defaults: new { controller = "Try", action = "SignUpConfirmation" }
+            );
+
+            // SetUp
+            routes.MapAreaRoute(
+                name: "PlatoSiteSetUp",
+                areaName: "Plato.Site",
+                template: "try/company/{sessionId}",
+                defaults: new { controller = "Try", action = "SetUp" }
+            );
+
+            // SetUpConfirmation
+            routes.MapAreaRoute(
+                name: "PlatoSiteSetUpConfirmation",
+                areaName: "Plato.Site",
+                template: "try/account/{sessionId}",
+                defaults: new { controller = "Try", action = "SetUp" }
+            );
+
+            // SetUp Complete
+            routes.MapAreaRoute(
+                name: "PlatoSiteSetUpComplete",
+                areaName: "Plato.Site",
+                template: "try/complete/{sessionId}",
+                defaults: new { controller = "Try", action = "SetUpComplete" }
             );
 
             // -----------

@@ -34,4 +34,15 @@ namespace Plato.Site.ViewModels
 
     }
 
+    public class SetUpCompleteViewModel
+    {
+
+        [Required, StringLength(255)]
+        public string SessionId { get; set; }
+
+        [Required, StringLength(255)]
+        public string Url { get; set; }
+
+    }
+
 }

@@ -25,6 +25,7 @@ namespace Plato.Site.Configuration
 
             if (settings != null)
             {
+                options.HostUrl = settings.HostUrl;
                 options.DemoUrl = settings.DemoUrl;
                 options.PlatoDesktopUrl = settings.PlatoDesktopUrl;
             }

@@ -67,6 +67,7 @@ namespace Plato.Site.ViewProviders
                 // Create the model
                 settings = new PlatoSiteSettings()
                 {
+                    HostUrl = model.HostUrl,
                     DemoUrl = model.DemoUrl,
                     PlatoDesktopUrl = model.PlatoDesktopUrl
                 };
@@ -93,6 +94,7 @@ namespace Plato.Site.ViewProviders
             {
                 return new PlatoSiteSettingsViewModel()
                 {
+                    HostUrl = settings.HostUrl,
                     DemoUrl = settings.DemoUrl,
                     PlatoDesktopUrl = settings.PlatoDesktopUrl
                 };

@@ -41,7 +41,8 @@ namespace Plato.Site.Services
             var signUps = await _signUpStore.QueryAsync()
                 .Select<SignUpQueryParams>(q =>
                 {
-                    q.CompanyName.Equals(companyName);
+                    q.CompanyName.Or().Equals(companyName);
+                    q.CompanyNameAlias.Or().Equals(companyName);
                 })
                 .ToList();
 
