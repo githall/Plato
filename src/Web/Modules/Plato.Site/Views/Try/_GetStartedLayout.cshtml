@@ -24,10 +24,14 @@
     <link rel="stylesheet" href="/sites/plato/themes/plato-site/theme.css" />
     <link rel="icon" href="/favicon.ico" />
     @await RenderSectionAsync("Header", required: false)
+    <style>
+        body, html {
+            height: 100% !important;
+        }
+    </style>
 </head>
-<body>
+<body class="bg-light">
 
-    <div id="top"></div>
     <div class="page-loader" data-provide="loader">
         <div class="plato-loader position-absolute-center">
             <div class="cube"></div>
@@ -38,14 +42,10 @@
         </div>
     </div>
 
-    <main class="d-flex flex-column body" role="main">
-        @RenderBody()
-    </main>
-
-    <div class="slide-out slide-out-bottom-right" data-provide="slide-spy">
-        <a href="#top" data-provide="scroll" class="btn btn-primary" data-toggle="tooltip" title="@T["Back to Top"]">
-            <i class="fal fa-chevron-up  d-inline-block"></i>
-        </a>
+    <div class="d-flex h-100 flex-fill justify-content-center align-items-start">
+        <div class="mx-auto max-w-900 text-center my-6">
+            @RenderBody()
+        </div>
     </div>
 
     <environment names="Development">

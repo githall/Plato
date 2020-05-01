@@ -4,65 +4,51 @@
     Layout = "_GetStartedLayout.cshtml";
 }
 
-<form asp-action="SetUp" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
-    <section class="flex-column flex-lg-row no-gutters d-flex">
-        <div class="col-12 align-self-start align-self-lg-center text-center">
-            <div class="my-6 mx-auto max-w-800">
-
-                <input type="hidden" asp-for="SessionId" />
-
-                <div>
-                    <span class="plato-brand align-middle mr-2"></span><h2 class="d-inline-block align-middle text-primary">Plato</h2>
-                </div>
-
-                <div class="my-4">
-
-                    <h1 class="display-4 text-primary font-weight-bold">
-                        @T["Your ready to go"]
-                    </h1>
-
-                    <h3 class="font-weight-light my-4">
-                        @T["Your support site is set-up & ready to go – the URL for your site is shown below – use the admin account you just created to login"]
-                    </h3>
-
-                    <div class="mt-4">
-                        <div class="mt-2 w-100 max-w-500 d-inline-block">
-                            <h5>
-                                @T["Your site address"]
-                            </h5>
-                            <fieldset>
-                                <div class="form-group text-left">
-                                    <input asp-for="Url" class="form-control form-control-lg text-primary text-center border-0" style="box-shadow:none !important;" />
-                                </div>
-                            </fieldset>
-                            <div class="text-left" asp-validation-summary="All"></div>
-                            <div class="form-group">
-                                <a href="@Model.Url" target="_blank" role="button" class="btn btn-lg btn-primary btn-block">
-                                    @T["Goto Site"]
-                                </a>
-                            </div>
+<div class="card">
+    <div class="card-body">
+        <form asp-action="SetUp" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+            <input type="hidden" asp-for="SessionId" />
+            <div class="my-4">
+                <span class="plato-brand align-middle mr-3"></span><h2 class="d-inline-block m-0 align-middle text-primary">Plato</h2>
+            </div>
+            <h1 class="display-4 text-primary font-weight-bold">
+                @T["Your ready to go"]
+            </h1>
+            <h3 class="font-weight-light my-4">
+                @T["Your support site is ready to go – the URL for your site is shown below – visit your site and use the admin account you just created to login"]
+            </h3>
+            <div class="mt-4">
+                <div class="mt-2 w-100 max-w-500 d-inline-block">
+                    <h5>
+                        @T["Your support site..."]
+                    </h5>
+                    <fieldset>
+                        <div class="form-group text-left">
+                            <input asp-for="Url" class="form-control form-control-lg text-primary text-center border-0" readonly style="background-color:transparent !important; box-shadow:none !important;" />
                         </div>
+                    </fieldset>
+                    <div class="text-left" asp-validation-summary="All"></div>
+                    <div class="form-group">
+                        <a href="@Model.Url" target="_blank" role="button" class="btn btn-lg btn-primary btn-block">
+                            @T["Goto my support site"]
+                        </a>
                     </div>
-
                 </div>
             </div>
-        </div>
-
-    </section>
-</form>
+        </form>
+    </div>
+</div>
 
 @section Scripts {
-    <script>
-        $(document).ready(function () {
-
-            var $input = $("input");
-
+<script>
+    $(document).ready(function () {
+        var $input = $("input");
+        if ($input.length > 0) {
             $input.focus().select();
-
             $input.click(function () {
                 $(this).select();
             });
-
-        });
-    </script>
+        }
+    });
+</script>
 }

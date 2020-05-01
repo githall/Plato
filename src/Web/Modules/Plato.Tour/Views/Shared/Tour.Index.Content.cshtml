@@ -31,10 +31,9 @@
             <h6 class="card-title">@T["🌟 Welcome to Plato"]</h6>
         </card-title>
         <card-body>            
-            @T["To get started use the button below to login with the administrator username & password you provided during set-up."]
+            @T["To get started use the button below to login with the administrator username & password you provided during set-up. Once logged in you will be presented with the set-up assistant. The set-up assistant will walk you through a few simple steps to help you further configure & customize your new support site."]
             <br /><br />
-            @T["Once you've logged in we'll walk you through a few simple steps to help you customize your support site."]
-            <br /><br />
+     
             <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@returnUrl" class="btn btn-primary">
                 @T["Login"]<i class="fal fa-arrow-right ml-2"></i>
             </a>

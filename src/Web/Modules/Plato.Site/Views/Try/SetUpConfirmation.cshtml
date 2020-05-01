@@ -1,53 +1,41 @@
 ﻿@model SetUpConfirmationViewModel
 @{
-    AddTitleSegment(T["Set Up - Admin Account"]);    
+    AddTitleSegment(T["Set Up - Admin Account"]);
     Layout = "_GetStartedLayout.cshtml";
 }
 
-<form asp-action="SetUpConfirmation" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">    
-    <input type="hidden" asp-for="SessionId" />
-    <section class="flex-column flex-lg-row no-gutters d-flex">
-        <div class="col-12 align-self-start align-self-lg-center text-center">
-            <div class="my-6 mx-auto max-w-800">
-
-                <input type="hidden" asp-for="SessionId" />
-
-                <div>
-                    <span class="plato-brand align-middle mr-2"></span><h2 class="d-inline-block align-middle text-primary">Plato</h2>
-                </div>
-
-                <div class="my-4">
-
-                    <h1 class="display-4 text-primary font-weight-bold">
-                        @T["Create an admin account"]
-                    </h1>
-
-                    <h3 class="font-weight-light my-4">
-                        @T["To manage your site, create an administrator account below - keep these credentials safe as you will need them to login"]
-                    </h3>
-
-                    <div class="mt-4">
-                        <div class="mt-2 w-100 max-w-500 d-inline-block">
-                            <fieldset class="text-left">
-                                <div class="form-group">
-                                    <input asp-for="UserName" placeholder="@T["Username"]" class="form-control form-control-lg" autofocus />
-                                </div>
-                                <div class="form-group">
-                                    <input asp-for="Password" placeholder="@T["Password"]" class="form-control form-control-lg" />
-                                </div>
-                                <div class="form-group">
-                                    <input asp-for="ConfirmPassword" placeholder="@T["Confirm Password"]" class="form-control form-control-lg" />
-                                </div>
-                            </fieldset>
-                            <div class="text-left" asp-validation-summary="All"></div>
-                            <div class="form-group">
-                                <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">@T["Let's Go"]</button>
-                            </div>
+<div class="card">
+    <div class="card-body">
+        <form asp-action="SetUpConfirmation" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+            <input type="hidden" asp-for="SessionId" />
+            <div class="my-4">
+                <span class="plato-brand align-middle mr-3"></span><h2 class="d-inline-block m-0 align-middle text-primary">Plato</h2>
+            </div>
+            <h1 class="display-4 text-primary font-weight-bold">
+                @T["Create an admin account"]
+            </h1>
+            <h3 class="font-weight-light my-4">
+                @T["To manage your site, create an administrator account below - keep these credentials safe as you will need them to login"]
+            </h3>
+            <div class="mt-4">
+                <div class="mt-2 w-100 max-w-500 d-inline-block">
+                    <fieldset class="text-left">
+                        <div class="form-group">
+                            <input asp-for="UserName" placeholder="@T["Username"]" class="form-control form-control-lg" autofocus />
                         </div>
+                        <div class="form-group">
+                            <input asp-for="Password" placeholder="@T["Password"]" class="form-control form-control-lg" />
+                        </div>
+                        <div class="form-group">
+                            <input asp-for="ConfirmPassword" placeholder="@T["Confirm Password"]" class="form-control form-control-lg" />
+                        </div>
+                    </fieldset>
+                    <div class="text-left" asp-validation-summary="All"></div>
+                    <div class="form-group">
+                        <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">@T["Let's Go"]</button>
                     </div>
-
                 </div>
             </div>
-        </div>
-    </section>
-</form>
+        </form>
+    </div>
+</div>
