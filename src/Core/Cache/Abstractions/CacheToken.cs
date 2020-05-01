@@ -6,12 +6,10 @@ namespace PlatoCore.Cache.Abstractions
     
     public class CacheToken : IEquatable<CacheToken>
     {
-
-        private readonly Type _type;
         private readonly int _typeHashCode;
         private readonly string _varyByHash;
 
-        public Type ForType => _type;
+        public Type ForType { get; }
 
         public CacheToken(Type type, params object[] varyBy)
         {
@@ -25,15 +23,14 @@ namespace PlatoCore.Cache.Abstractions
                 {
                     if (vary != null)
                     {
-                        sb
-                            .Append(vary.ToString());
+                        sb.Append(vary.ToString());
                     }
                 }
             }
 
-            _type = type;
+            ForType = type;
             _varyByHash = sb.ToString();
-            _typeHashCode = _type.GetHashCode();
+            _typeHashCode = ForType.GetHashCode();
         }
 
         public static bool operator == (CacheToken a, CacheToken b)
@@ -67,7 +64,7 @@ namespace PlatoCore.Cache.Abstractions
         {
             unchecked
             {
-                var hashCode = (_type != null ? _type.GetHashCode() : 0);
+                var hashCode = (ForType != null ? ForType.GetHashCode() : 0);
                 hashCode = (hashCode * 397) ^ _typeHashCode;
                 hashCode = (hashCode * 397) ^ (_varyByHash != null ? _varyByHash.GetHashCode() : 0);
                 return hashCode;
@@ -76,7 +73,7 @@ namespace PlatoCore.Cache.Abstractions
 
         public override string ToString()
         {
-            return $"{_type}-{GetHashCode()}";
+            return $"{ForType}-{GetHashCode()}";
         }
 
     }

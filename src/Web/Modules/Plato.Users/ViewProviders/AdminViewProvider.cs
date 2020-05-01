@@ -23,15 +23,14 @@ namespace Plato.Users.ViewProviders
         private static string _pathToImages;
         private static string _urlToImages;
 
-        private const string BySignatureHtmlName = "Signature";
-        
+        private const string BySignatureHtmlName = "Signature";        
 
         private readonly IUserPhotoStore<UserPhoto> _userPhotoStore;
         private readonly IUserRepository<User> _userRepository;
         private readonly IPlatoUserStore<User> _userStore;
         private readonly UserManager<User> _userManager;
         private readonly ISitesFolder _sitesFolder;
-   
+
         private readonly IStringLocalizer T;
 
         public AdminViewProvider(

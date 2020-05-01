@@ -47,6 +47,11 @@ namespace Plato.Features.ViewComponents
                 });
             }
 
+            if (options.ModuleIds != null)
+            {
+                features = features.Where(f => options.ModuleIds.Contains(f.Descriptor?.Id));
+            }
+
             // Filter features by category
             if (!string.IsNullOrEmpty(options.Category))
             {
@@ -63,6 +68,7 @@ namespace Plato.Features.ViewComponents
                 Options = options,
                 Features = features
             });
+
         }
         
     }

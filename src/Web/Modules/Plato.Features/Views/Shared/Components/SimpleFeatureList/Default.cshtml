@@ -25,7 +25,7 @@
                                 {
                                     <authorize asp-permission="@enablePermission.Name">
                                         <authorize-success>
-                                            <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Enable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-primary" itemprop="UnsafeUrl">
+                                            <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Enable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-primary" data-provide="loader-spy" data-loader-mode="prepend">
                                                 @T["Enable"]
                                             </a>
                                         </authorize-success>
@@ -35,7 +35,7 @@
                                 {
                                     <authorize asp-permission="@disablePermission.Name">
                                         <authorize-success>
-                                            <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Disable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-secondary" itemprop="UnsafeUrl">
+                                            <a asp-route-area="Plato.Features" asp-route-controller="Admin" asp-route-action="Disable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-secondary" data-provide="loader-spy" data-loader-mode="prepend">
                                                 @T["Disable"]
                                             </a>
                                         </authorize-success>
@@ -44,10 +44,9 @@
                                 }
                             }
                         </div>
-
                         @if (!string.IsNullOrEmpty(feature.Descriptor.Icon))
                         {
-                            <img class="max-w-40 float-left my-3 mr-3" src="@feature.Descriptor.Icon" />
+                            <img class="max-w-40 float-left mr-3" src="@feature.Descriptor.Icon" />
                         }
                         <h6>
                             @feature.Descriptor.Name

@@ -12,9 +12,8 @@ using PlatoCore.Models.Shell;
 using PlatoCore.Shell.Abstractions;
 using Plato.Tenants.Models;
 using PlatoCore.Hosting.Abstractions;
-using PlatoCore.Emails.Abstractions;
-using Plato.Email.Stores;
-using Microsoft.Extensions.Options;
+using Plato.Email.Services;
+using PlatoCore.Messaging.Abstractions;
 
 namespace Plato.Tenants.Services
 {
@@ -291,9 +290,16 @@ namespace Plato.Tenants.Services
                         return result.Failed(context.Errors.Select(e => e.Value).ToArray());                          
                     }
 
+                    // Activate message broker subscriptions for tenant
+                    var subscribers = scope.ServiceProvider.GetServices<IBrokerSubscriber>();
+                    foreach (var subscriber in subscribers)
+                    {
+                        subscriber.Subscribe();
+                    }
+
                     // Update tenant email settings
-                    var emailSettingsStore = scope.ServiceProvider.GetService<IEmailSettingsStore<EmailSettings>>();
-                    await emailSettingsStore.SaveAsync(context.EmailSettings);
+                    var emailSettingsManager = scope.ServiceProvider.GetService<IEmailSettingsManager>();
+                    await emailSettingsManager.SaveAsync(context.EmailSettings);
 
                 }
 

@@ -8,17 +8,22 @@
     <div class="col-12 col-lg-6 align-self-start align-self-lg-center text-center">
         <div class="my-5 my-lg-0 mx-auto max-w-600">
             <canvas data-provide="logo" class="w-100"></canvas>
-            <h1 class="display-4 text-primary text-uppercase font-weight-bold">
-                Better together
+            <h1 class="display-4 text-primary font-weight-bold">
+                All-in-one support
             </h1>
             <hr class="divider border-primary my-4" />
             <h3 class="font-weight-light">
-                Plato brings users & teams together to help evolve & support software projects.
+                Plato brings your users & teams together to help you evolve & support what you do
             </h3>
             <div class="mt-4">
                 <a class="btn btn-primary btn-lg" asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Index" data-provide="loader-spy">
                     Learn More <i class="fal fa-arrow-right"></i>
-                </a>            
+                </a>
+
+                <a class="btn btn-primary btn-lg" asp-route-area="Plato.Site" asp-route-controller="GetStarted" asp-route-action="SignUp" data-provide="loader-spy">
+                    Get Started <i class="fal fa-arrow-right"></i>
+                </a>
+
             </div>
         </div>
     </div>
@@ -33,8 +38,8 @@
         <div class="row">
             <div class="col-12">
                 <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
-                <h1 class="text-uppercase text-primary font-weight-bold">
-                    Collaboration & support software
+                <h1 class="text-primary font-weight-bold">
+                    All your support - in one place
                 </h1>
                 <hr class="divider my-4">
                 <h3 class="font-weight-light">
@@ -185,12 +190,12 @@
 </section>
 
 <!-- Call to action -->
-<cacheing vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+<caching  expires-after="@TimeSpan.FromMinutes(30)">
     @await DisplayAsync(new View("SiteCallToAction", new
     {
         sticky = false
     }))
-</cacheing>
+</caching>
 
 @section Scripts {
     <script src="/plato.site/content/js/home/babylon403.min.js"></script>

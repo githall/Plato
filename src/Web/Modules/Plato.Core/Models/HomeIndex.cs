@@ -2,6 +2,6 @@
 {
     public class HomeIndex
     {
-        // A marker class for the homepage view provider
+        // A marker class for the homepage view provider        
     }
 }

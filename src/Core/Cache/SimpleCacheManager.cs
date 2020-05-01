@@ -106,7 +106,6 @@ namespace PlatoCore.Cache
                 {
                     CancelToken(token);
                 }
-
             }
         }
 

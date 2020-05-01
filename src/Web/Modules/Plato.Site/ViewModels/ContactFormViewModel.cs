@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.Text;
-using Microsoft.Extensions.Primitives;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace Plato.Site.ViewModels
 {

@@ -1,0 +1,13 @@
+{
+  "Emails": [
+    {
+      "Id": "SignUpSecurityToken",
+      "To": "[ToEmail]",
+      "Cc": "",
+      "Bcc": "",
+      "From": "[SiteEmail]",
+      "Subject": "[SiteName] - Your confirmation code is {0}",
+      "Message": "Hi There,\n\nTo complete sign-up please use the 6 digit confirmation code shown below...\n\nConfirmation Code: {0}\n\n[SiteName]\n[SiteUrl]"
+    }   
+  ]
+}

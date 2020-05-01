@@ -15,6 +15,7 @@ using PlatoCore.Theming.Abstractions;
 using Plato.Settings.Models;
 using Plato.Settings.ViewModels;
 using PlatoCore.Hosting.Abstractions;
+using Plato.Settings.Services;
 
 namespace Plato.Settings.ViewProviders
 {
@@ -22,6 +23,8 @@ namespace Plato.Settings.ViewProviders
     {
 
         private readonly ISiteSettingsStore _siteSettingsStore;
+        private readonly ISiteSettingsManager _siteSettingsManager;
+
         private readonly IHomeRouteManager _homeRouteManager;
         private readonly ITimeZoneProvider _timeZoneProvider;
         private readonly ISiteThemeLoader _themeLoader;
@@ -36,6 +39,7 @@ namespace Plato.Settings.ViewProviders
         public AdminViewProvider(
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer,
+            ISiteSettingsManager siteSettingsManager,
             ISiteSettingsStore siteSettingsStore,
             ITimeZoneProvider timeZoneProvider,
             IHomeRouteManager homeRouteManager,
@@ -44,6 +48,7 @@ namespace Plato.Settings.ViewProviders
             ISiteThemeLoader themeLoader,
             IPlatoHost platoHost)
         {
+            _siteSettingsManager = siteSettingsManager;
             _siteSettingsStore = siteSettingsStore;
             _timeZoneProvider = timeZoneProvider;
             _homeRouteManager = homeRouteManager;
@@ -123,7 +128,7 @@ namespace Plato.Settings.ViewProviders
                 }
 
                 // Update settings
-                var result = await _siteSettingsStore.SaveAsync(settings);
+                var result = await _siteSettingsManager.SaveAsync(settings);
                 if (result != null)
                 {
                     // Recycle shell context to ensure changes take effect

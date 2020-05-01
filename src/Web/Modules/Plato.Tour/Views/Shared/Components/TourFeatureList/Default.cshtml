@@ -1,0 +1,70 @@
+﻿@using Plato.Features
+@model FeaturesIndexViewModel
+@{
+    var enablePermission = Permissions.EnableFeatures;
+    var disablePermission = Permissions.DisableFeatures;
+    var returnUrl = Context.Request.PathBase + Context.Request.Path;
+}
+
+<ul class="list-group list-group-flush list-group-hover">
+    @{
+        var features = Model.Features?.OrderBy(o => o.Descriptor.Name).ToList();
+    }
+    @if (features?.Count > 0)
+    {
+        foreach (var feature in features)
+        {
+            <li class="list-group-item list-group-item-action">
+                <div class="row">
+                    <div class="col-12">
+
+                        <div class="float-right">
+                            @if (!feature.IsRequired)
+                            {
+                                @if (!feature.IsEnabled)
+                                {
+                                    <authorize asp-permission="@enablePermission.Name">
+                                        <authorize-success>
+                                            <a asp-route-area="Plato.Tour" asp-route-controller="Admin" asp-route-action="Enable" asp-route-id="@feature.ModuleId" asp-route-category="@feature.Descriptor.Category" asp-route-returnUrl="@returnUrl" class="btn btn-primary" data-provide="loader-spy" data-loader-mode="prepend">
+                                                @T["Enable"]
+                                            </a>
+                                        </authorize-success>
+                                    </authorize>
+                                }
+                                else
+                                {
+                                    <authorize asp-permission="@disablePermission.Name">
+                                        <authorize-success>
+                                            <a asp-route-area="Plato.Tour" asp-route-controller="Admin" asp-route-action="Disable" asp-route-id="@feature.ModuleId" asp-route-returnUrl="@returnUrl" class="btn btn-secondary" data-provide="loader-spy" data-loader-mode="prepend">
+                                                @T["Disable"]
+                                            </a>
+                                        </authorize-success>
+                                    </authorize>
+                                }
+                            }
+                        </div>
+                        @if (!string.IsNullOrEmpty(feature.Descriptor.Icon))
+                        {
+                            <img class="max-w-40 float-left mr-3" src="@feature.Descriptor.Icon" />
+                        }
+                        <h6>
+                            @feature.Descriptor.Name
+                        </h6>
+
+                        @if (!String.IsNullOrEmpty(feature.Descriptor.Description))
+                        {
+                            @feature.Descriptor.Description<br />
+                        }
+
+                    </div>
+                </div>
+            </li>
+        }
+    }
+    else
+    {
+        <li class="list-group-item">
+            @T["All features are already enabled."]
+        </li>
+    }
+</ul>

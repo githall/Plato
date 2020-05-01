@@ -10,6 +10,8 @@ namespace Plato.Core.Handlers
     public class SetUpEventHandler : BaseSetUpEventHandler
     {
 
+        public const string Version = "1.0.0";
+
         private readonly ISchemaBuilder _schemaBuilder;
         private readonly ISchemaManager _schemaManager;
 
@@ -134,7 +136,7 @@ namespace Plato.Core.Handlers
                     .Configure(options =>
                     {
                         options.ModuleName = "Plato.Core";
-                        options.Version = "1.0.0";
+                        options.Version = Version;
                     });
                 builder.TableBuilder.CreateTable(dictionaryTable);
 
@@ -165,7 +167,7 @@ namespace Plato.Core.Handlers
                     .Configure(options =>
                     {
                         options.ModuleName = "Plato.Core";
-                        options.Version = "1.0.0";
+                        options.Version = Version;
                     });
 
                 builder.TableBuilder.CreateTable(documentTable);

@@ -8,6 +8,7 @@
   <ItemGroup>
     <ProjectReference Include="..\..\..\Core\PlatoCore.csproj" />
     <ProjectReference Include="..\Plato.Features\Plato.Features.csproj" />
+    <ProjectReference Include="..\Plato.Tenants\Plato.Tenants.csproj" />
   </ItemGroup>
 
   <ItemGroup>

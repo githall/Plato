@@ -19,6 +19,8 @@ namespace Plato.Features.ViewModels
     public class FeatureIndexOptions
     {
 
+        public string[] ModuleIds { get; set; }
+
         public string Category { get; set; }
 
         public bool HideEnabled { get; set; }

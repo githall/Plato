@@ -12,6 +12,7 @@ using Microsoft.Extensions.Logging;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Options;
 using PlatoCore.Emails.Abstractions;
+using PlatoCore.Security.Abstractions.Encryption;
 
 namespace Plato.Tenants.ViewProviders
 {
@@ -22,18 +23,21 @@ namespace Plato.Tenants.ViewProviders
         private readonly IShellSettingsManager _shellSettingsManager;
         private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ILogger<AdminViewProvider> _logger;
+        private readonly IEncrypter _encrypter;
 
         private readonly DefaultTenantSettings _defaultTenantSettings;
 
         public AdminViewProvider(
-            IShellSettingsManager shellSettingsManager, 
-            ILogger<AdminViewProvider> logger,
             IOptions<DefaultTenantSettings> tenantSetings,
-            ITenantSetUpService setUpService)
+            IShellSettingsManager shellSettingsManager,                         
+            ILogger<AdminViewProvider> logger,
+            ITenantSetUpService setUpService,
+            IEncrypter encrypter)
         {
             _defaultTenantSettings = tenantSetings.Value;
             _shellSettingsManager = shellSettingsManager;                
             _tenantSetUpService = setUpService;
+            _encrypter = encrypter;
             _logger = logger;
         }
 
@@ -103,6 +107,26 @@ namespace Plato.Tenants.ViewProviders
 
             if (context.Updater.ModelState.IsValid)
             {
+
+                // Ensure password
+                if (model.SmtpSettings != null)
+                {
+                    if (!string.IsNullOrWhiteSpace(model.SmtpSettings.Password))
+                    {
+                        try
+                        {
+                            model.SmtpSettings.Password = _encrypter.Encrypt(model.SmtpSettings.Password);
+                        }
+                        catch (Exception e)
+                        {
+                            if (_logger.IsEnabled(LogLevel.Error))
+                            {
+                                _logger.LogError($"There was a problem encrypting the SMTP server password. {e.Message}");
+                            }
+                        }
+                    }
+                }
+
                 var setupContext = new TenantSetUpContext()
                 {
                     SiteName = model.SiteName,
@@ -144,7 +168,8 @@ namespace Plato.Tenants.ViewProviders
                         if (model.IsNewTenant)
                         {
                             _logger.LogInformation($"Set-up of tenant '{setupContext.SiteName}' failed with the following errors...");
-                        } else
+                        }
+                        else
                         {
                             _logger.LogInformation($"Update of tenant '{setupContext.SiteName}' failed with the following errors...");
                         }                        

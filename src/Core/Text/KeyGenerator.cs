@@ -38,8 +38,15 @@ namespace PlatoCore.Text
             return GenerateKeyInternal();
         }
 
+        // --------------
+
         string GenerateKeyInternal()
         {
+
+            if (_options.OnlyDigits)
+            {
+                return RandomDigits(_options.MaxLength);
+            }
 
             var sb = new StringBuilder(_options.MaxLength);
             for (var i = 0; i <= _options.Iterations; i++)
@@ -63,7 +70,7 @@ namespace PlatoCore.Text
             {
 
                 // Substitute some random characters with our output 
-                // with our unique identigier ensuring we don't change the legnth
+                // with our unique identifier ensuring we don't change the length
 
                 var len = _options.UniqueIdentifier.Length;
                 var start = output.Length > len ? len : 0;
@@ -82,13 +89,26 @@ namespace PlatoCore.Text
 
         }
 
+        string RandomDigits(int length)
+        {
+
+            var sb = new StringBuilder();
+            for (var i = 0; i < length; i++)
+            {
+                sb.Append(_rnd.Next(0, 9));
+            }
+
+            return sb.ToString();
+
+        }
+
         string RandomAlphaNumeric(int length)
         {
 
-            var sb = new System.Text.StringBuilder(length);
+            var sb = new StringBuilder(length);
             for (var i = 1; i <= length; i++)
             {
-                var charIndex = 0;
+                int charIndex;
                 do
                 {
                     charIndex = _rnd.Next(48, 123);
@@ -96,11 +116,11 @@ namespace PlatoCore.Text
                            (charIndex >= 65 && charIndex <= 90) ||
                            (charIndex >= 97 && charIndex <= 122)));
 
-                var character = System.Convert.ToChar(charIndex);
+                var character = Convert.ToChar(charIndex);
                 if (_options.SuppressCharacters != null)
                 {
                     sb.Append(_options.SuppressCharacters.Contains(character)
-                        ? System.Convert.ToChar(charIndex + 3)
+                        ? Convert.ToChar(charIndex + 3)
                         : character);
                 }
                 else

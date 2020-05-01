@@ -90,10 +90,7 @@ namespace Plato.Tenants.Controllers
                 builder.Add(S["Home"], home => home
                     .Action("Index", "Admin", "Plato.Admin")
                     .LocalNav()
-                ).Add(S["Tenants"], tenants => tenants
-                    .Action("Index", "Admin", "Plato.Tenants")
-                    .LocalNav()
-                ).Add(S["Slack"]);
+                ).Add(S["Tenants"]);
             });
 
             // Build view model

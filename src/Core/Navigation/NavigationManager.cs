@@ -308,7 +308,7 @@ namespace PlatoCore.Navigation
                 }
 
                 // Process child items
-                var oldItems = item.Items;
+                // var oldItems = item.Items;
 
                 item.Items = Authorize(item.Items, user).ToList();
             }
