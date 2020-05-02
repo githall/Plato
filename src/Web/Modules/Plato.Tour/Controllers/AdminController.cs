@@ -193,7 +193,9 @@ namespace Plato.Tour.Controllers
             var features = await _shellDescriptorManager.GetFeaturesAsync();
 
             // Get all features in feature category
-            var categoryFeatures = features?.Where(f => f.Descriptor.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase));
+            var categoryFeatures = features?
+                .Where(f => f.Descriptor.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(f => f.Descriptor.Id);
 
             var errors = new List<CommandError>();
             if (categoryFeatures != null)

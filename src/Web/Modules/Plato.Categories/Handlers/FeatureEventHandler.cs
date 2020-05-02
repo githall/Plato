@@ -589,8 +589,8 @@ namespace Plato.Categories.Handlers
                                 WHERE (
                                    ec.Id = @Id
                                 )")
-                        .ForTable(_categoryRoles)
-                        .WithParameter(_categoryRoles.PrimaryKeyColumn))
+                        .ForTable(_entityCategories)
+                        .WithParameter(_entityCategories.PrimaryKeyColumn))
 
                 .CreateProcedure(
                     new SchemaProcedure(

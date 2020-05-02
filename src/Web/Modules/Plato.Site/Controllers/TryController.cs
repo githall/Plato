@@ -246,6 +246,12 @@ namespace Plato.Site.Controllers
                 return NotFound();
             }
 
+            // Email must be confirmed
+            if (!signUp.EmailConfirmed)
+            {
+                return Unauthorized();
+            }
+
             // Return view
             return View(new SetUpViewModel()
             {
@@ -281,6 +287,12 @@ namespace Plato.Site.Controllers
             if (signUp == null)
             {
                 return NotFound();
+            }
+
+            // Email must be confirmed
+            if (!signUp.EmailConfirmed)
+            {
+                return Unauthorized();
             }
 
             // Add company name
@@ -332,6 +344,12 @@ namespace Plato.Site.Controllers
                 return NotFound();
             }
 
+            // Email must be confirmed
+            if (!signUp.EmailConfirmed)
+            {
+                return Unauthorized();
+            }
+
             return View(new SetUpConfirmationViewModel()
             {
                 SessionId = sessionId
@@ -376,6 +394,12 @@ namespace Plato.Site.Controllers
             if (signUp == null)
             {
                 return NotFound();
+            }
+
+            // Email must be confirmed
+            if (!signUp.EmailConfirmed)
+            {
+                return Unauthorized();
             }
 
             // Create tenant context
@@ -438,6 +462,12 @@ namespace Plato.Site.Controllers
             if (signUp == null)
             {
                 return NotFound();
+            }
+
+            // Email must be confirmed
+            if (!signUp.EmailConfirmed)
+            {
+                return Unauthorized();
             }
 
             // Get tenant host URL

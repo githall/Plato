@@ -7141,7 +7141,10 @@ $(function (win, doc, $) {
                         else if (mode === "append") {
                             $caller.addClass("disabled");                        
                             $caller.append($('<i class="fal fa-circle-notch fa-spin"></i>'));
-                        }                        
+                        }
+                        else if (mode === "disable") {
+                            $caller.addClass("disabled");                            
+                        }     
 
                     });
                 }

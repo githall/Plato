@@ -314,6 +314,18 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 
 .text-decoration-none { text-decoration: none !important; }
 
+
+/* ------------------------- */
+/* Backgrounds */
+/* ------------------------- */
+
+.bg-white-25 { background-color: rgba(255, 255, 255, .25) !important; }
+.bg-white-50 { background-color: rgba(255, 255, 255, .50) !important; }
+.bg-white-75 { background-color: rgba(255, 255, 255, .75) !important; }
+.bg-black-25 { background-color: rgba(0, 0, 0, .25) !important; }
+.bg-black-50 { background-color: rgba(0, 0, 0, .50) !important; }
+.bg-black-75 { background-color: rgba(0, 0, 0, .75) !important; }
+
 /* ------------------------- */
 /* Text Sizes */
 /* ------------------------- */
@@ -747,8 +759,6 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .btn-group > label > input + i.check-icon:after { vertical-align: middle; width: 20px; content: '\f00c'; opacity: 0; }
 .btn-group > label > input:checked + i.check-icon:after { opacity: 1; }
 
-
-
 /* ------------------------- */
 /* Card */
 /* ------------------------- */
@@ -758,7 +768,6 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 
 .card-body-flush .card-body { padding: 0; }
 .card-body-sm-gutter .card-body { padding: 0.5rem; }
-
 
 /* ------------------------- */
 /* VCard */
@@ -988,9 +997,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 /* Home Nav */
 /* ------------------------- */
 
-.nav-home {
-
-}
+.nav-home {}
 
 .nav-home > .nav-item {
     text-align: center;

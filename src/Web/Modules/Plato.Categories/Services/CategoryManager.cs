@@ -32,14 +32,14 @@ namespace Plato.Categories.Services
             IAliasCreator aliasCreator,
             IPlatoRoleStore roleStore,
             IBroker broker)
-        {
-            _categoryStore = categoryStore;
+        {            
             _categoryRoleStore = categoryRoleStore;
-            _roleStore = roleStore;
-            _contextFacade = contextFacade;
             _categoryDataStore = categoryDataStore;
-            _broker = broker;
+            _categoryStore = categoryStore;
+            _contextFacade = contextFacade;
             _aliasCreator = aliasCreator;
+            _roleStore = roleStore;
+            _broker = broker;
         }
 
         #region "Implementation"

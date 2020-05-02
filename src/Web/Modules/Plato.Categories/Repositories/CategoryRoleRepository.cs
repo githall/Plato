@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Data;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Plato.Categories.Models;
 using PlatoCore.Abstractions.Extensions;
@@ -77,7 +77,7 @@ namespace Plato.Categories.Repositories
                         }
 
                         return categoryRole;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -145,7 +145,7 @@ namespace Plato.Categories.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteCategoryById",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("Id", DbType.Int32, id)
                     });
@@ -180,7 +180,7 @@ namespace Plato.Categories.Repositories
                         }
 
                         return output;
-                    }, new[]
+                    }, new IDbDataParameter[]
                     {
                         new DbParam("CategoryId", DbType.Int32, categoryId)
                     });
@@ -204,7 +204,7 @@ namespace Plato.Categories.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteCategoryRolesByCategoryId",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("CategoryId", DbType.Int32, categoryId)
                     });
@@ -228,7 +228,7 @@ namespace Plato.Categories.Repositories
                 success = await context.ExecuteScalarAsync<int>(
                     CommandType.StoredProcedure,
                     "DeleteCategoryRolesByRoleIdAndCategoryId",
-                    new[]
+                    new IDbDataParameter[]
                     {
                         new DbParam("RoleId", DbType.Int32, roleId),
                         new DbParam("CategoryId", DbType.Int32, categoryId),

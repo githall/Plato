@@ -1,7 +1,7 @@
 ﻿using System.Linq;
+using System.Data;
 using System.Threading.Tasks;
 using System.Collections.Generic;
-using System.Data;
 using Microsoft.Extensions.Logging;
 using Plato.Categories.Models;
 using Plato.Categories.Repositories;
@@ -13,6 +13,7 @@ namespace Plato.Categories.Stores
 
     public class CategoryRoleStore : ICategoryRoleStore<CategoryRole>
     {
+
         private const string ByIdKey = "ById";
         private const string ByCategoryIdKey = "BycategoryId";
 
@@ -29,10 +30,10 @@ namespace Plato.Categories.Stores
         {
             _categoryRoleRepository = categoryRoleRepository;
             _cacheManager = cacheManager;
-            _logger = logger;
             _dbQuery = dbQuery;
+            _logger = logger;            
         }
-        
+
         public async Task<CategoryRole> CreateAsync(CategoryRole model)
         {
             var result = await _categoryRoleRepository.InsertUpdateAsync(model);
@@ -138,13 +139,13 @@ namespace Plato.Categories.Stores
             return success;
         }
 
-
         public void CancelTokens(CategoryRole model)
         {
             _cacheManager.CancelTokens(this.GetType());
             _cacheManager.CancelTokens(this.GetType(), ByIdKey, model.Id);
             _cacheManager.CancelTokens(this.GetType(), ByCategoryIdKey, model.CategoryId);
         }
+
     }
 
 }

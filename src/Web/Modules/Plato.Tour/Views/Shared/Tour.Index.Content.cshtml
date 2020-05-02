@@ -28,13 +28,12 @@
     });
     <card>
         <card-title>
-            <h6 class="card-title">@T["🌟 Welcome to Plato"]</h6>
+            <h6 class="card-title">@T["Welcome to Plato"]</h6>
         </card-title>
         <card-body>            
             @T["To get started use the button below to login with the administrator username & password you provided during set-up. Once logged in you will be presented with the set-up assistant. The set-up assistant will walk you through a few simple steps to help you further configure & customize your new support site."]
-            <br /><br />
-     
-            <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@returnUrl" class="btn btn-primary">
+            <br /><br />     
+            <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@returnUrl" class="btn btn-primary" data-provide="loader-spy" data-loader-mode="disable">
                 @T["Login"]<i class="fal fa-arrow-right ml-2"></i>
             </a>
         </card-body>
@@ -54,10 +53,8 @@ else
                     </a>
                     @if (percentComplete < 100)
                     {
-                        <h6 class="card-title d-inline-block">@T["Set-Up Assistant"]</h6> <span class="text-muted">(@percentComplete% @T["complete"])</span>
-                        <div>
-                            @T["Use the steps below to customize & set-up your site. Once you are done click the \"Finish Set-Up\" button to permanently hide this set-up assistant."]
-                        </div>
+                        <h6 class="card-title">@T["Set-Up Assistant"]</h6>                     
+                        @T["Use the steps below to set-up your site. Once done click the \"Finish Set-Up\" button to hide this set-up assistant."]                      
                     }
                     else
                     {
@@ -66,10 +63,7 @@ else
                             @T["Set-Up Complete"]
                         </h6>
                         @T["You've completed all initial set-up steps. Use the \"Finish Set-Up\" button to permanently hide this set-up assistant."]
-                    }
-                    <div class="progress mt-3" data-toggle="tooltip" title="@percentComplete% @T["complete"]" style="height: 8px;">
-                        <div class="progress-bar" role="progressbar" style="width: @percentComplete%" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
+                    }               
                 </div>
                 <div class="card-body">
 
@@ -98,6 +92,10 @@ else
                                                 <span class="text-success float-right mt-2">
                                                     <i class="fal fa-check align-middle mr-2"></i>@T["Completed "]
                                                 </span>
+                                            }
+                                            else
+                                            {
+                                                <i class="fal fa-arrow-right mt-2 float-right"></i>
                                             }
                                             <h6>@T[step.Title]</h6>
                                             @T[step.Description]                                    
