@@ -163,12 +163,12 @@ namespace Plato.Tour.Controllers
                 _platoHost.RecycleShell(_shellSettings);
 
                 // Success
-                _alerter.Success(T[$"Set-Up Finished Successfully!"]);
+                _alerter.Success(T[$"Setup Finished Successfully!"]);
 
             }
             else
             {
-                _alerter.Danger(T["A problem occurred ending the set-up assistant!"]);
+                _alerter.Danger(T["A problem occurred ending the setup assistant!"]);
             }
 
             if (!string.IsNullOrEmpty(returnUrl))

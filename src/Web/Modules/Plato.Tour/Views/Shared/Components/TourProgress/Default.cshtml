@@ -2,20 +2,30 @@
 @{
     var percentComplete = Model.CompletedSteps.ToPercentageOf(Model.TotalSteps);
     var stepName = string.Empty;
+    var stepNum = 0;
     foreach (var step in Model.Steps)
-    {
+    {      
+        stepNum++;
         if (!step.CompletedDate.HasValue)
-        {
+        {           
             stepName = step.Title;
             break;
         }
     }
 }
 
-<a asp-route-area="Plato.Admin" asp-route-controller="Admin" asp-route-action="Index" class="mb-3 d-block text-white text-decoration-none" data-toggle="tooltip" title="@T["Set up is"] @percentComplete% @T["complete"]">
+<a asp-route-area="Plato.Admin" asp-route-controller="Admin" asp-route-action="Index" class="mb-3 d-block text-white text-decoration-none" data-toggle="tooltip" title="@T["Setup is"] @percentComplete% @T["complete"]">
     <div>
         <i class="fal fa-arrow-right float-right text-muted"></i>
-        @stepName
+        @if (!string.IsNullOrEmpty(stepName))
+        {      
+            <span>@stepNum.</span>           
+            <span>@T[stepName]</span>
+        }
+        else
+        {
+            <span>@T["Setup is complete"]</span>            
+        }
     </div>    
     <div class="progress bg-white-25 mt-3 bg-white-25" style="height: 8px;">
         <div class="progress-bar" role="progressbar" style="width: @percentComplete%" aria-valuemin="0" aria-valuemax="100"></div>

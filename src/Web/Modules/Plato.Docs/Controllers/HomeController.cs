@@ -187,7 +187,19 @@ namespace Plato.Docs.Controllers
 
             if (!await _authorizationService.AuthorizeAsync(this.User, Permissions.PostDocs))
             {
-                return Unauthorized();
+                // Redirect to login with return URL to redirect back to our Create action
+                return Redirect(_contextFacade.GetRouteUrl(new RouteValueDictionary()
+                {
+                    ["area"] = "Plato.Users",
+                    ["controller"] = "Account",
+                    ["action"] = "Login",
+                    ["returnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Docs",
+                        ["controller"] = "Home",
+                        ["action"] = "Create"
+                    })
+                }));
             }
 
             var entity = new Doc();

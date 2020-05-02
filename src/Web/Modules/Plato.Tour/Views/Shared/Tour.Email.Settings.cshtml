@@ -12,7 +12,7 @@
         </div>
         <br />
         <a asp-route-area="Plato.Email" asp-controller="Admin" asp-action="Index" class="btn btn-primary">
-            @T["Review Email Settings"]
+            @T["Edit Email Settings"]
         </a>
         <button type="submit" asp-route-area="Plato.Email" asp-route-controller="Admin" asp-route-action="SendTest" class="btn btn-primary">
             @T["Send test to"] @smtpSettings.DefaultFrom
