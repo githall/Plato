@@ -28,11 +28,11 @@ namespace Plato.Site.Controllers
         private readonly IContextFacade _contextFacade;
 
         private readonly DefaultTenantSettings _defaultTenantSettings;
-        private readonly PlatoSiteSettings _platoSiteSettings;
+        private readonly PlatoSiteOptions _platoSiteOptions;
 
         public TryController(
             IOptions<DefaultTenantSettings> tenantSetings,
-            IOptions<PlatoSiteSettings> platoSiteSettings,
+            IOptions<PlatoSiteOptions> platoSiteOptions,
             ITenantSetUpService tenantSetUpService,
             ISignUpManager<SignUp> signUpManager,
             ISignUpStore<SignUp> signUpStore,
@@ -40,7 +40,7 @@ namespace Plato.Site.Controllers
             IContextFacade contextFacade)
         {
             _defaultTenantSettings = tenantSetings.Value;
-            _platoSiteSettings = platoSiteSettings.Value;
+            _platoSiteOptions = platoSiteOptions.Value;
             _tenantSetUpService = tenantSetUpService;
             _signUpManager = signUpManager;
             _contextFacade = contextFacade;
@@ -57,10 +57,17 @@ namespace Plato.Site.Controllers
         public Task<IActionResult> SignUp()
         {
 
-            // Redirect to tenant host if one is provided
-            if (!string.IsNullOrEmpty(_platoSiteSettings.HostUrl))
+            // Do we have a tenant host?
+            if (!string.IsNullOrEmpty(_platoSiteOptions.HostUrl))
             {
-                return Task.FromResult((IActionResult)Redirect(_platoSiteSettings.HostUrl));
+                // Redirect to this page on the tenant host if one is provided
+                var postUrl = _platoSiteOptions.HostUrl + _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                {
+                    ["area"] = "Plato.Site",
+                    ["controller"] = "Try",
+                    ["action"] = "SignUp"
+                });
+                return Task.FromResult((IActionResult)Redirect(postUrl));
             }
 
             // Return view
@@ -68,7 +75,7 @@ namespace Plato.Site.Controllers
 
         }
 
-        [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(SignUp))]
+        [HttpPost, ActionName(nameof(SignUp))]
         public async Task<IActionResult> SignUpPost(SignUpViewModel model)
         {
 
@@ -471,7 +478,7 @@ namespace Plato.Site.Controllers
             }
 
             // Get tenant host URL
-            var hostUrl = _platoSiteSettings.HostUrl;
+            var hostUrl = _platoSiteOptions.HostUrl;
 
             if (string.IsNullOrEmpty(hostUrl))
             {

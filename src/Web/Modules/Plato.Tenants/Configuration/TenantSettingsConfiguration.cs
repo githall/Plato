@@ -3,7 +3,6 @@ using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using Plato.Tenants.Models;
 using Plato.Tenants.Stores;
-using PlatoCore.Emails.Abstractions;
 using PlatoCore.Security.Abstractions.Encryption;
 
 namespace Plato.Tenants.Configuration

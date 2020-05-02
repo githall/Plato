@@ -11,13 +11,16 @@
             <h1 class="text-primary font-weight-bold">
                 All-in-one product support
             </h1>            
-            <h3 class="font-weight-light mt-4">
+            <h3 class="font-weight-light mt-3">
                 Articles, discussions, docs, files, ideas, issues, questions & more. Everything you need to help you evolve & support your products
             </h3>
-            <div class="mt-4">            
-                <a class="btn btn-primary btn-lg" asp-route-area="Plato.Site" asp-route-controller="Pricing" asp-route-action="Index" data-provide="loader-spy">
-                    Start your 7 day FREE trial<i class="fal fa-arrow-right ml-2"></i>
-                </a>
+            <div class="mt-4">
+                <caching expires-after="@TimeSpan.FromMinutes(30)">
+                    @await DisplayAsync(new View("SiteSignUpForm", new
+                    {
+                        sticky = false
+                    }))
+                </caching>
             </div>
         </div>
     </div>

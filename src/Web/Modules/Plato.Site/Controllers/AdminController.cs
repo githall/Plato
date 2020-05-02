@@ -17,8 +17,7 @@ namespace Plato.Site.Controllers
     public class AdminController : Controller, IUpdateModel
     {
     
-        private readonly IViewProviderManager<PlatoSiteSettings> _viewProvider;
-        private readonly IAuthorizationService _authorizationService;        
+        private readonly IViewProviderManager<PlatoSiteSettings> _viewProvider; 
         private readonly IBreadCrumbManager _breadCrumbManager;
 
         private readonly IAlerter _alerter;
@@ -30,14 +29,12 @@ namespace Plato.Site.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-            IViewProviderManager<PlatoSiteSettings> viewProvider,            
-            IAuthorizationService authorizationService,
+            IViewProviderManager<PlatoSiteSettings> viewProvider,                  
             IBreadCrumbManager breadCrumbManager,
             IAlerter alerter)
         {
-            
-            _authorizationService = authorizationService;            
-            _breadCrumbManager = breadCrumbManager;            
+
+            _breadCrumbManager = breadCrumbManager;
             _viewProvider = viewProvider;            
             _alerter = alerter;
 
@@ -49,12 +46,6 @@ namespace Plato.Site.Controllers
         public async Task<IActionResult> Index()
         {
 
-            // Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditTwitterSettings))
-            //{
-            //    return Unauthorized();
-            //}
-            
             _breadCrumbManager.Configure(builder =>
             {
                 builder.Add(S["Home"], home => home
@@ -75,19 +66,13 @@ namespace Plato.Site.Controllers
         public async Task<IActionResult> IndexPost(PlatoSiteSettingsViewModel viewModel)
         {
 
-            // Ensure we have permission
-            //if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditTwitterSettings))
-            //{
-            //    return Unauthorized();
-            //}
-
             // Execute view providers ProvideUpdateAsync method
             await _viewProvider.ProvideUpdateAsync(new PlatoSiteSettings(), this);
 
             // Add alert
             _alerter.Success(T["Settings Updated Successfully!"]);
 
-            // Reidrect to success
+            // Redirect to success
             return RedirectToAction(nameof(Index));
             
         }

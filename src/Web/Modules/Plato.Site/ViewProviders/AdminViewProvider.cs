@@ -12,7 +12,7 @@ namespace Plato.Site.ViewProviders
     public class AdminViewProvider : ViewProviderBase<PlatoSiteSettings>
     {
 
-        private readonly IPlatoSiteSettingsStore<PlatoSiteSettings> _demoSettingsStore;        
+        private readonly IPlatoSiteSettingsStore<PlatoSiteSettings> _platoSiteSettingsStore;        
         private readonly ILogger<AdminViewProvider> _logger;
         private readonly IShellSettings _shellSettings;
         private readonly IPlatoHost _platoHost;
@@ -22,13 +22,13 @@ namespace Plato.Site.ViewProviders
             ILogger<AdminViewProvider> logger,
             IShellSettings shellSettings,
             IPlatoHost platoHost)
-        {            
-            _demoSettingsStore = demoSettingsStore;
+        {
+            _platoSiteSettingsStore = demoSettingsStore;
             _shellSettings = shellSettings;
             _platoHost = platoHost;
             _logger = logger;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(PlatoSiteSettings settings, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
@@ -73,7 +73,7 @@ namespace Plato.Site.ViewProviders
                 };
 
                 // Persist the settings
-                var result = await _demoSettingsStore.SaveAsync(settings);
+                var result = await _platoSiteSettingsStore.SaveAsync(settings);
                 if (result != null)
                 {
                     // Recycle shell context to ensure changes take effect
@@ -89,7 +89,7 @@ namespace Plato.Site.ViewProviders
         async Task<PlatoSiteSettingsViewModel> GetModel()
         {
 
-            var settings = await _demoSettingsStore.GetAsync();
+            var settings = await _platoSiteSettingsStore.GetAsync();
             if (settings != null)
             {
                 return new PlatoSiteSettingsViewModel()

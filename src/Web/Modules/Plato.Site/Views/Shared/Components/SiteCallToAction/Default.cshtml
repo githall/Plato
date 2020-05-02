@@ -1,34 +1,24 @@
-﻿@model SignUpViewModel
-
+﻿
 <section class="page" style="background: url(/plato.site/content/images/bg29.png) bottom left no-repeat;">
     <div class="container">
         <div class="p-5 text-center bg-white">
             <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
             <h1 class="font-weight-bold text-primary">
-                Start your free trial
+                Start your 7 day free trial
             </h1>
-            <h3 class="font-weight-light my-3 max-w-800 w-100 mx-auto">
-                Sign-up takes about 2 minutes. Provide your email, company name & admin login then instantly access your new support site
-            </h3>
-            <form asp-route-controller="Try" asp-route-action="SignUp" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
-           
+            <div class="my-3 max-w-800 w-100 mx-auto">
+                <h3 class="font-weight-light">
+                    Sign-up takes about 2 minutes - provide your email, company name & admin login then instantly access your new support site
+                </h3>
                 <div class="mt-4">
-                    <div class="mt-2 w-100 max-w-500 d-inline-block">
-                        <fieldset>
-                            <div class="form-group text-left">
-                                <input asp-for="Email" class="form-control form-control-lg" placeholder="@T["name@work-email.com"]" />
-                                <div class="mt-2" asp-validation-summary="All"></div>
-                            </div>
-                         
-                        </fieldset>
-                        <div class="form-group mb-0">
-                            <button type="submit" role="button" class="btn btn-lg btn-primary btn-block">@T["Let's Go"]</button>
-                        </div>
-                    </div>
+                    <caching expires-after="@TimeSpan.FromMinutes(30)">
+                        @await DisplayAsync(new View("SiteSignUpForm", new
+                        {
+                            sticky = false
+                        }))
+                    </caching>
                 </div>
-            </form>
-
-
+            </div>
         </div>
     </div>
 </section>
