@@ -1,6 +1,5 @@
 ﻿using System;
 using Microsoft.AspNetCore.Http;
-using PlatoCore.Shell.Abstractions;
 using PlatoCore.Models.Shell;
 
 namespace PlatoCore.Shell.Abstractions
@@ -12,6 +11,7 @@ namespace PlatoCore.Shell.Abstractions
             this IRunningShellTable table,
             HttpContext httpContext)
         {
+
             // use Host header to prevent proxy alteration of the original request
             try
             {
@@ -29,7 +29,9 @@ namespace PlatoCore.Shell.Abstractions
                 // can happen on cloud service for an unknown reason
                 return null;
             }
+
         }
 
     }
+
 }
