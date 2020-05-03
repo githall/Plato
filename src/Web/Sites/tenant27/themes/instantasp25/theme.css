@@ -7,9 +7,9 @@
 :root {
     
     /* Default = #007bff */
-    --primary-text: green;
-    --primary-background: green;
-    --primary-border: green;
+    --primary-text: #333;
+    --primary-background: #333;
+    --primary-border: #333;
 
     /* Default = #ccc */
     --secondary-text: #ccc;

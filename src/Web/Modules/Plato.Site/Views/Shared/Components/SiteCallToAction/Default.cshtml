@@ -4,19 +4,21 @@
         <div class="p-5 text-center bg-white">
             <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
             <h1 class="font-weight-bold text-primary">
-                Start your 7 day free trial
+                @T["Start your 7 day free trial"]
             </h1>
             <div class="my-3 max-w-800 w-100 mx-auto">
                 <h3 class="font-weight-light">
                     Sign-up takes about 2 minutes - provide your email, company name & admin login then instantly access your new support site
                 </h3>
                 <div class="mt-4">
-                    <caching expires-after="@TimeSpan.FromMinutes(30)">
-                        @await DisplayAsync(new View("SiteSignUpForm", new
-                        {
-                            sticky = false
-                        }))
-                    </caching>
+                    <div class="max-w-600 w-100 mx-auto">
+                        <caching expires-after="@TimeSpan.FromMinutes(30)">
+                            @await DisplayAsync(new View("SiteSignUpForm", new
+                            {
+                                sticky = false
+                            }))
+                        </caching>
+                    </div>
                 </div>
             </div>
         </div>
