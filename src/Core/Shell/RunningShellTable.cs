@@ -35,18 +35,11 @@ namespace PlatoCore.Shell
                 // Set default shell
                 if (ShellHelper.DefaultShellName.Equals(settings.Name, StringComparison.OrdinalIgnoreCase))
                 {
+                    _default = settings;
                     if (_logger.IsEnabled(LogLevel.Information))
                     {
-                        _logger.LogInformation($"The default tenant is located at \"\\App_Data\\Sites\\{settings.Location}\".");
-                    }
-                    _default = settings;
-                }
-                else
-                {
-                    if (_logger.IsEnabled(LogLevel.Error))
-                    {
-                        _logger.LogError($"No default tenant could be found. Ensure a tenant with the name \"{ShellHelper.DefaultShellName}\" exists within the \"\\App_Data\\Sites\\\" folder.");
-                    }
+                        _logger.LogInformation($"A default tenant with the name \"{_default.Name}\" was found and is located at \"\\App_Data\\Sites\\{_default.Location}\".");
+                    }                
                 }
 
                 var hostAndPrefix = GetHostAndPrefix(settings);
