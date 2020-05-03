@@ -2,6 +2,7 @@
 @{
     var editPermission = Plato.Theming.Permissions.EditThemes;
     var deletePermission = Plato.Theming.Permissions.EditThemes;
+        var platoOpts = GetOptions<PlatoOptions>();
 }
 
 <card class="card card-body-flush">
@@ -36,9 +37,18 @@
                                 <authorize asp-permission="@deletePermission.Name">
                                     <authorize-success>
                                         <div class="dropdown-divider"></div>
-                                        <button type="submit" asp-controller="Admin" asp-route-action="Delete" asp-route-id="@theme.Id" data-provide="confirm" class="dropdown-item dropdown-item-danger">
-                                            @T["Delete Theme"]
-                                        </button>
+                                        @if (platoOpts.DemoMode)
+                                        {
+                                            <div data-toggle="tooltip" title="@T["This option is disabled within the demo"]" class="disabled dropdown-item dropdown-item-danger">
+                                                @T["Delete Theme"]
+                                            </div>
+                                        }
+                                        else
+                                        {
+                                            <button type="submit" asp-controller="Admin" asp-route-action="Delete" asp-route-id="@theme.Id" data-provide="confirm" class="dropdown-item dropdown-item-danger">
+                                                @T["Delete Theme"]
+                                            </button>
+                                        }
                                     </authorize-success>
                                 </authorize>
                             </div>

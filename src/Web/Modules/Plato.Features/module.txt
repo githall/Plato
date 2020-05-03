@@ -3,7 +3,7 @@ Description: Provides functionality to allow site administrators to enable or di
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Core
-PlatoVersion: 1.1.1
+PlatoVersion: 2.0.0
 Version: 1.0.1
 Icon: /plato.features/content/images/icon.png
 Dependencies: 

@@ -18,6 +18,7 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tenants.Services;
 using Plato.Tenants.ViewModels;
 using Plato.Tenants.Models;
+using System.Net;
 
 namespace Plato.Tenants.Controllers
 {
@@ -180,7 +181,7 @@ namespace Plato.Tenants.Controllers
             }
 
             // Get shell
-            var shell = GetShell(id);
+            var shell = GetShell(WebUtility.UrlDecode(id));
 
             // Ensure the shell exists
             if (shell == null)
@@ -214,7 +215,7 @@ namespace Plato.Tenants.Controllers
             }
 
             // Get shell
-            var shell = GetShell(id);
+            var shell = GetShell(WebUtility.UrlDecode(id));
 
             // Ensure the shell exists
             if (shell == null)
@@ -252,7 +253,7 @@ namespace Plato.Tenants.Controllers
             }
 
             // Get shell
-            var shell = GetShell(id);
+            var shell = GetShell(WebUtility.UrlDecode(id));
 
             // Ensure the shell exists
             if (shell == null)
@@ -336,8 +337,13 @@ namespace Plato.Tenants.Controllers
 
         ShellSettings GetShell(string name)
         {      
-            return _shellSettingsManager.LoadSettings()?
+            var shell = _shellSettingsManager.LoadSettings()?
                 .First(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));            
+            if (shell == null)
+            {
+                throw new Exception($"Could not locate a shell with the name {name}.");
+            }
+            return shell;
         }
 
     }

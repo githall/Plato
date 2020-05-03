@@ -5,7 +5,9 @@ namespace PlatoCore.Models.Extensions
     public static class ShellSettingsExtensions
     {
 
-        public static string GetRequestedUrl(this IShellSettings settings)
+        public static string GetRequestedUrl(
+            this IShellSettings settings,
+            string scheme)
         {
 
             var host = settings.RequestedUrlHost ?? string.Empty;
@@ -18,7 +20,7 @@ namespace PlatoCore.Models.Extensions
             }
 
             return !string.IsNullOrEmpty(host)
-                ? host + prefix
+                ? $"{scheme}://{host}{prefix}"
                 : "/" + prefix;
 
         }

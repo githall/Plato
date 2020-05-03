@@ -1,9 +1,22 @@
 ﻿@model EditTenantViewModel
-
-@if (!Model.IsNewTenant && !Model.IsDefault)
-{
-    <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.SiteName.ToString()" data-provide="confirm" class="btn btn-danger btn-sm" itemprop="UnsafeUrl">
-        <i class="fal fa-trash mr-2"></i>@T["Delete Tenant"]
-    </button>
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
 }
 
+@if (platoOpts.DemoMode)
+{
+    <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+        <a href="#" class="btn btn-danger disabled">
+            <i class="fal fa-trash mr-2"></i>@T["Delete Tenant"]
+        </a>
+    </span>
+}
+else
+{
+    @if (!Model.IsNewTenant && !Model.IsDefault)
+    {
+        <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.SiteName.ToString()" data-provide="confirm" class="btn btn-danger btn-sm" itemprop="UnsafeUrl">
+            <i class="fal fa-trash mr-2"></i>@T["Delete Tenant"]
+        </button>
+    }
+}

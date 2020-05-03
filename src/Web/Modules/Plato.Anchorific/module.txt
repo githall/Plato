@@ -3,6 +3,6 @@ Description: Generates anchored headings and a table of contents from headings w
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: User Interface
-PlatoVersion: 1.1.1
+PlatoVersion: 2.0.0
 Version: 1.0.0
 Icon: /plato.anchorific/content/images/icon.png

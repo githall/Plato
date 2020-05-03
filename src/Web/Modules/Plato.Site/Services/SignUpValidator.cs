@@ -8,6 +8,7 @@ using Plato.Site.Stores;
 using PlatoCore.Abstractions;
 using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Text.Abstractions;
+using PlatoCore.Abstractions.Extensions;
 
 namespace Plato.Site.Services
 {
@@ -51,7 +52,25 @@ namespace Plato.Site.Services
             // We always need a company name
             if (string.IsNullOrEmpty(companyName))
             {
-                return result.Failed("A company name is required");
+                return result.Failed("A company name is required!");
+            }
+
+            // Validate characters
+            var valid = true;
+            foreach (var c in companyName)
+            {
+                // Not a letter, digit or space
+                if (!c.IsLetterDigitOrSpace())
+                {
+                    valid = false;
+                    break;
+                }
+            }
+
+            // Only allow letters digits and spaces
+            if (valid == false)
+            {
+                return result.Failed("The company name contains invalid characters. Only letters, numbers and spaces are allowed!");
             }
 
             // Create the company name alias to compare with our blacklist

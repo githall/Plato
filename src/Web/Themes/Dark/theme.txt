@@ -1,5 +1,5 @@
 Name: Dark
 Version: 1.0.0
-PlatoVersion: 1.1.1
+PlatoVersion: 2.0.0
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
