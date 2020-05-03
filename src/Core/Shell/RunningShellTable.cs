@@ -18,12 +18,10 @@ namespace PlatoCore.Shell
 
         private readonly ILogger<RunningShellTable> _logger;
 
-
         public RunningShellTable(ILogger<RunningShellTable> logger)
         {
             _logger = logger;
         }
-
 
         public void Add(IShellSettings settings)
         {

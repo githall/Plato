@@ -14,7 +14,7 @@ namespace Plato.Site.Services
 
     public class SignUpValidator : ISignUpValidator
     {
-     
+
         private readonly IActionDescriptorCollectionProvider _provider;        
         private readonly ISignUpStore<SignUp> _signUpStore;
         private readonly IContextFacade _contextFacade;
@@ -46,6 +46,7 @@ namespace Plato.Site.Services
         {
 
             var result = new CommandResultBase();
+            var error = "The company name is invalid or is already in use. Please try a different company name.";
 
             // We always need a company name
             if (string.IsNullOrEmpty(companyName))
@@ -59,7 +60,7 @@ namespace Plato.Site.Services
             // We need an alias
             if (string.IsNullOrEmpty(companyNameAlias))
             {
-                return result.Failed("The company name is invalid or is already in use. Please try a different company name.");
+                return result.Failed(error);
             }
 
             // Does the company name appear in the blacklist?
@@ -68,11 +69,11 @@ namespace Plato.Site.Services
             {
                 if (item.Equals(companyName, StringComparison.OrdinalIgnoreCase))
                 {
-                    return result.Failed("The company name is invalid or is already in use. Please try a different company name.");
+                    return result.Failed(error);
                 }
                 if (item.Equals(companyNameAlias, StringComparison.OrdinalIgnoreCase))
                 {
-                    return result.Failed("The company name is invalid or is already in use. Please try a different company name.");
+                    return result.Failed(error);
                 }
             }
 
@@ -92,7 +93,7 @@ namespace Plato.Site.Services
 
             if (signUps?.Data != null)
             {
-                return result.Failed("The company name is invalid or is already in use. Please try a different company name.");
+                return result.Failed(error);
             }
 
             return result.Success();
