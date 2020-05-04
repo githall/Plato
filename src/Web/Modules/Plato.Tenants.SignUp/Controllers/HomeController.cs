@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Mvc;
 using PlatoCore.Layout.ModelBinding;
 using Plato.Tenants.SignUp.ViewModels;
 using Plato.Tenants.SignUp.Services;
-using Plato.Tenants.SignUp.Models;
 using Microsoft.AspNetCore.Routing;
 using Plato.Tenants.SignUp.Stores;
 using Plato.Tenants.Services;
@@ -22,20 +21,19 @@ namespace Plato.Tenants.SignUp.Controllers
     public class HomeController : Controller, IUpdateModel
     {
 
-        private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ISignUpManager<Models.SignUp> _signUpManager;
         private readonly ISignUpStore<Models.SignUp> _signUpStore;
+        private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ISignUpEmailService _signUpEmails;
         private readonly IContextFacade _contextFacade;  
 
-        private readonly DefaultTenantSettings _defaultTenantSettings;
-   
+        private readonly DefaultTenantSettings _defaultTenantSettings;   
 
         public HomeController(            
-            IOptions<DefaultTenantSettings> tenantSetings,               
-            ITenantSetUpService tenantSetUpService,
+            IOptions<DefaultTenantSettings> tenantSetings,
             ISignUpManager<Models.SignUp> signUpManager,
             ISignUpStore<Models.SignUp> signUpStore,
+            ITenantSetUpService tenantSetUpService,
             ISignUpEmailService signUpEmails,
             IContextFacade contextFacade)
         {
@@ -353,7 +351,7 @@ namespace Plato.Tenants.SignUp.Controllers
 
         // ---------------------
         // 4. SetUp Confirmation
-        // Ask for administrator username & password
+        // Ask for administrator user name & password
         // ---------------------
 
         [HttpGet, AllowAnonymous]
@@ -431,6 +429,12 @@ namespace Plato.Tenants.SignUp.Controllers
             {
                 return Unauthorized();
             }
+
+            // Set sign-up email address as default sender for tenant emails
+            if (_defaultTenantSettings.SmtpSettings != null)
+            {
+                _defaultTenantSettings.SmtpSettings.DefaultFrom = signUp.Email;
+            }            
 
             // Create tenant context
             var setupContext = new TenantSetUpContext()

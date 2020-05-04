@@ -16,11 +16,6 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Site.ViewProviders;
 using PlatoCore.Hosting.Abstractions;
-using Plato.Site.Handlers;
-using PlatoCore.Features.Abstractions;
-using Plato.Site.Repositories;
-using Plato.Site.Services;
-using PlatoCore.Data.Migrations.Abstractions;
 
 namespace Plato.Site
 {
@@ -35,7 +30,6 @@ namespace Plato.Site
 
         public override void ConfigureServices(IServiceCollection services)
         {
-
         
             // Register assets
             services.AddScoped<IAssetProvider, AssetProvider>();
@@ -55,9 +49,6 @@ namespace Plato.Site
 
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();
-
-            // Migrations
-            //services.AddSingleton<IMigrationProvider, Migrations>();
 
         }
 
