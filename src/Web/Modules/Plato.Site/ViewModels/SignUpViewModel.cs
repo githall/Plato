@@ -11,25 +11,20 @@ namespace Plato.Site.ViewModels
 
         public bool EmailUpdates { get; set; }
 
-
-   
-
-
     }
 
+    //public class SignUpConfirmationViewModel
+    //{
 
-    public class SignUpConfirmationViewModel
-    {
+    //    [Required, StringLength(255)]
+    //    public string SessionId { get; set; }
 
-        [Required, StringLength(255)]
-        public string SessionId { get; set; }
+    //    public string Email { get; set; }
 
-        public string Email { get; set; }
+    //    [Required, DataType(DataType.Text), Display(Name = "confirmation code")]
+    //    [StringLength(6, MinimumLength = 6)]
+    //    public string SecurityToken { get; set; }
 
-        [Required, DataType(DataType.Text), Display(Name = "confirmation code")]
-        [StringLength(6, MinimumLength = 6)]
-        public string SecurityToken { get; set; }
-
-    }
+    //}
 
 }

@@ -13,16 +13,16 @@
         <div class="row">
             <div class="col">
                 <fieldset>
-                    <div class="form-group" asp-validation-class-for="DefaultFrom">
+                    <div class="form-group" asp-validation-class-for="HostUrl">
                         <label asp-for="HostUrl">
                             <strong>@T["Host Url"]</strong>
                             <span asp-validation-for="HostUrl" class="text-danger"></span>
                             <br />
-                            <span class="text-muted">@T["The url to the Plato installation that will act as the host for tenant sign-ups. Leave blank to use this installation as the host."]</span>
+                            <span class="text-muted">@T["The url to the Plato installation that will act as the host for new tenant sign-ups. Leave blank to use this installation as the host."]</span>
                         </label>
                         <input placeholder="@T["https://try.domain.com/"]" asp-for="HostUrl" class="form-control" autofocus />
                     </div>
-                </fieldset>
+                </fieldset>            
                 <fieldset>
                     <div class="form-group" asp-validation-class-for="DefaultFrom">
                         <label asp-for="DemoUrl">

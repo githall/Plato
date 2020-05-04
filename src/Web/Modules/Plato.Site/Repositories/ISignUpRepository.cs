@@ -4,11 +4,11 @@ using System.Threading.Tasks;
 namespace Plato.Site.Repositories
 {
 
-    public interface ISignUpRepository<T> : IRepository<T> where T : class
-    {
+    //public interface ISignUpRepository<T> : IRepository<T> where T : class
+    //{
 
-        Task<T> SelectBySessionIdAsync(string sessionId);
+    //    Task<T> SelectBySessionIdAsync(string sessionId);
 
-    }
+    //}
 
 }

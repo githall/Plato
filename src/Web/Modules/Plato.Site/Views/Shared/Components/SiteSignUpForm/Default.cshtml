@@ -3,15 +3,15 @@
 @{
     var platoSiteOptions = GetOptions<PlatoSiteOptions>();
     var hostUrl = platoSiteOptions.HostUrl;
-    var postUrl = hostUrl + GetRouteUrl(new RouteValueDictionary()
+    var signUpUrl = hostUrl + GetRouteUrl(new RouteValueDictionary()
     {
-        ["area"] = "Plato.Site",
-        ["controller"] = "Try",
-        ["action"] = "SignUp"
+        ["area"] = "Plato.Tenants.SignUp",
+        ["controller"] = "Home",
+        ["action"] = "Index"
     });
 }
 
-<form action="@postUrl" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+<form action="@signUpUrl" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
     <input asp-for="Email" class="form-control form-control-lg" placeholder="@T["name@work-email.com"]" />
     <button type="submit" role="button" class="btn btn-lg btn-primary btn-block mt-2">@T["Start your 7 day free trial"]</button>
 </form>

@@ -44,19 +44,19 @@
             return c >= 'A' && c <= 'Z';
         }
 
+        public static bool IsSpace(this char c)
+        {
+            return c == ' ';
+        }
+
         public static bool IsLetterOrDigit(this char c)
         {
-            return IsUpper(c) || IsLower(c) || IsDigit(c);
+            return c.IsUpper() || c.IsLower() || c.IsDigit();
         }
 
         public static bool IsLetterDigitOrSpace(this char c)
         {
-            return IsUpper(c) || IsLower(c) || IsDigit(c) || IsSpace(c);
-        }
-
-        public static bool IsSpace(this char c)
-        {
-            return c == ' ';
+            return c.IsLetterOrDigit() || c.IsSpace();
         }
 
     }

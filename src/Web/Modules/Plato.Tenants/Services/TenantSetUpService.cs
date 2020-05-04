@@ -113,6 +113,11 @@ namespace Plato.Tenants.Services
         public async Task<ICommandResult<TenantSetUpContext>> InstallAsync(TenantSetUpContext context)
         {
 
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
+
             var result = new CommandResult<TenantSetUpContext>();
 
             try
@@ -163,6 +168,11 @@ namespace Plato.Tenants.Services
 
         public async Task<ICommandResult<TenantSetUpContext>> UpdateAsync(TenantSetUpContext context)
         {
+
+            if (context == null)
+            {
+                throw new ArgumentNullException(nameof(context));
+            }
 
             var result = new CommandResult<TenantSetUpContext>();
 
@@ -243,13 +253,18 @@ namespace Plato.Tenants.Services
 
         }
 
-        public async Task<ICommandResultBase> UninstallAsync(string siteName)
+        public async Task<ICommandResultBase> UninstallAsync(IShellSettings shellSettings)
         {
+
+            if (shellSettings == null)
+            {
+                throw new ArgumentNullException(nameof(shellSettings));
+            }
 
             var result = new CommandResultBase();
             try
             {          
-                return await UninstallInternalAsync(siteName);
+                return await UninstallInternalAsync(shellSettings);
             }
             catch (Exception ex)
             {
@@ -261,7 +276,7 @@ namespace Plato.Tenants.Services
         // --------------------------
 
         private async Task<ICommandResult<TenantSetUpContext>> InstallInternalAsync(TenantSetUpContext context)
-        {
+        {       
 
             var result = new CommandResult<TenantSetUpContext>();
 
@@ -342,18 +357,11 @@ namespace Plato.Tenants.Services
 
         }
       
-        private async Task<ICommandResultBase> UninstallInternalAsync(string siteName)
+        private async Task<ICommandResultBase> UninstallInternalAsync(IShellSettings shellSettings)
         {
 
             // Our result
             var result = new CommandResultBase();     
-
-            // Ensure the shell exists
-            var shellSettings =GetShellByName(siteName);
-            if (shellSettings == null)
-            {
-                return result.Failed($"A tenant with the name \"{siteName}\" could not be found!");
-            }
 
             var errors = new List<CommandError>();
 
@@ -466,21 +474,6 @@ namespace Plato.Tenants.Services
             shellSettings.ModifiedDate = context.ModifiedDate;
 
             return shellSettings;
-
-        }
-
-        private ShellSettings GetShellByName(string name)
-        {
-            var shells = _shellSettingsManager.LoadSettings();
-            if (shells != null)
-            {                
-                var shell = shells.FirstOrDefault(s => s.Name.Equals(name, StringComparison.OrdinalIgnoreCase));
-                if (shell != null)
-                {
-                    return shell;
-                }
-            }
-            return null;
 
         }
 

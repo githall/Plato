@@ -10,7 +10,8 @@ namespace Plato.Site
         {
             return new[]
             {
-                new HomeRoute("Plato.Site", "Home", "Index")
+                new HomeRoute("Plato.Site", "Home", "Index"),
+                new HomeRoute("Plato.Site", "Try", "SignUp")
             };
         }
 

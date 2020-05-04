@@ -36,9 +36,7 @@ namespace Plato.Site
         public override void ConfigureServices(IServiceCollection services)
         {
 
-            // Feature installation event handler
-            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
-
+        
             // Register assets
             services.AddScoped<IAssetProvider, AssetProvider>();
 
@@ -48,17 +46,8 @@ namespace Plato.Site
             // Configuration
             services.AddTransient<IConfigureOptions<PlatoSiteOptions>, PlatoSiteOptionsConfiguration>();
 
-            // Repositories
-            services.AddScoped<ISignUpRepository<SignUp>, SignUpRepository>();
-
             // Stores
             services.AddScoped<IPlatoSiteSettingsStore<PlatoSiteSettings>, PlatoSiteSettingsStore>();
-            services.AddScoped<ISignUpStore<SignUp>, SignUpStore>();
-
-            // Services
-            services.AddScoped<ISignUpManager<SignUp>, SignUpManager>();
-            services.AddScoped<ISignUpValidator, SignUpValidator>();
-            services.AddScoped<ISignUpEmailService, SignUpEmailService>();
 
             // View providers
             services.AddScoped<IViewProviderManager<PlatoSiteSettings>, ViewProviderManager<PlatoSiteSettings>>();
@@ -68,7 +57,7 @@ namespace Plato.Site
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();
 
             // Migrations
-            services.AddSingleton<IMigrationProvider, Migrations>();
+            //services.AddSingleton<IMigrationProvider, Migrations>();
 
         }
 
@@ -89,51 +78,7 @@ namespace Plato.Site
                 template: "about",
                 defaults: new { controller = "Home", action = "About" }
             );
-
-            // -----------
-            // Try
-            // -----------
-
-            // SignUp
-            routes.MapAreaRoute(
-                name: "PlatoSiteSignUp",
-                areaName: "Plato.Site",
-                template: "try",
-                defaults: new { controller = "Try", action = "SignUp" }
-            );
-
-            // SignUp Confirmation
-            routes.MapAreaRoute(
-                name: "PlatoSiteSignUpConfirmation",
-                areaName: "Plato.Site",
-                template: "try/confirm/{sessionId}",
-                defaults: new { controller = "Try", action = "SignUpConfirmation" }
-            );
-
-            // SetUp
-            routes.MapAreaRoute(
-                name: "PlatoSiteSetUp",
-                areaName: "Plato.Site",
-                template: "try/company/{sessionId}",
-                defaults: new { controller = "Try", action = "SetUp" }
-            );
-
-            // SetUpConfirmation
-            routes.MapAreaRoute(
-                name: "PlatoSiteSetUpConfirmation",
-                areaName: "Plato.Site",
-                template: "try/account/{sessionId}",
-                defaults: new { controller = "Try", action = "SetUp" }
-            );
-
-            // SetUp Complete
-            routes.MapAreaRoute(
-                name: "PlatoSiteSetUpComplete",
-                areaName: "Plato.Site",
-                template: "try/complete/{sessionId}",
-                defaults: new { controller = "Try", action = "SetUpComplete" }
-            );
-
+        
             // -----------
             // Features
             // -----------

@@ -3,8 +3,8 @@
 namespace Plato.Site.Services
 {
 
-    public interface ISignUpManager<TModel> : ICommandManager<TModel> where TModel : class
-    {
-    }
+    //public interface ISignUpManager<TModel> : ICommandManager<TModel> where TModel : class
+    //{
+    //}
 
 }

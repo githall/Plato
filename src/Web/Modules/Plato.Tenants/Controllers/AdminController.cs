@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Net;
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
@@ -18,7 +19,7 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Tenants.Services;
 using Plato.Tenants.ViewModels;
 using Plato.Tenants.Models;
-using System.Net;
+using PlatoCore.Models.Extensions;
 
 namespace Plato.Tenants.Controllers
 {
@@ -34,6 +35,7 @@ namespace Plato.Tenants.Controllers
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly ITenantSetUpService _setUpService;
         private readonly ILogger<AdminController> _logger;
+        private readonly IShellSettings _shellSettings;
         private readonly IAlerter _alerter;
 
         public IHtmlLocalizer T { get; }
@@ -43,22 +45,24 @@ namespace Plato.Tenants.Controllers
         public AdminController(
             IHtmlLocalizer<AdminController> htmlLocalizer,
             IStringLocalizer<AdminController> stringLocalizer,
-             IViewProviderManager<DefaultTenantSettings> settingsViewProvider,
+            IViewProviderManager<DefaultTenantSettings> settingsViewProvider,
             IViewProviderManager<ShellSettings> viewProvider,
             IAuthorizationService authorizationService,
             IShellSettingsManager shellSettingsManager,
             IBreadCrumbManager breadCrumbManager,
-            ILogger<AdminController> logger,
             ITenantSetUpService setUpService,
+            ILogger<AdminController> logger,            
+            IShellSettings shellSettings,
             IAlerter alerter)
         {
 
             _authorizationService = authorizationService;
             _shellSettingsManager = shellSettingsManager;
             _settingsViewProvider = settingsViewProvider;
-            _breadCrumbManager = breadCrumbManager;            
+            _breadCrumbManager = breadCrumbManager;
+            _shellSettings = shellSettings;
             _viewProvider = viewProvider;
-            _setUpService = setUpService;
+            _setUpService = setUpService;            
             _alerter = alerter;
             _logger = logger;
 
@@ -76,6 +80,12 @@ namespace Plato.Tenants.Controllers
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, Permissions.ManageTenants))
+            {
+                return Unauthorized();
+            }
+
+            // Ensure host
+            if (!_shellSettings.IsDefaultShell())
             {
                 return Unauthorized();
             }
@@ -121,6 +131,12 @@ namespace Plato.Tenants.Controllers
                 return Unauthorized();
             }
 
+            // Ensure host
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
+
             _breadCrumbManager.Configure(builder =>
             {
                 builder.Add(S["Home"], home => home
@@ -142,6 +158,12 @@ namespace Plato.Tenants.Controllers
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, Permissions.AddTenants))
+            {
+                return Unauthorized();
+            }
+
+            // Ensure host
+            if (!_shellSettings.IsDefaultShell())
             {
                 return Unauthorized();
             }
@@ -170,6 +192,12 @@ namespace Plato.Tenants.Controllers
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditTenants))
+            {
+                return Unauthorized();
+            }
+
+            // Ensure host
+            if (!_shellSettings.IsDefaultShell())
             {
                 return Unauthorized();
             }
@@ -214,6 +242,12 @@ namespace Plato.Tenants.Controllers
                 return Unauthorized();
             }
 
+            // Ensure host
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
+
             // Get shell
             var shell = GetShell(WebUtility.UrlDecode(id));
 
@@ -252,6 +286,12 @@ namespace Plato.Tenants.Controllers
                 return Unauthorized();
             }
 
+            // Ensure host
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
+
             // Get shell
             var shell = GetShell(WebUtility.UrlDecode(id));
 
@@ -261,8 +301,8 @@ namespace Plato.Tenants.Controllers
                 return NotFound();
             }
 
-            // Attempt to delete the tenant
-            var result = await _setUpService.UninstallAsync(id);
+            // Attempt to delete the shell
+            var result = await _setUpService.UninstallAsync(shell);
 
             // Redirect to success
             if (result.Succeeded)
@@ -293,6 +333,12 @@ namespace Plato.Tenants.Controllers
 
             // Ensure we have permission
             if (!await _authorizationService.AuthorizeAsync(User, Permissions.EditSettings))
+            {
+                return Unauthorized();
+            }
+
+            // Ensure host
+            if (!_shellSettings.IsDefaultShell())
             {
                 return Unauthorized();
             }

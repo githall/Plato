@@ -1,5 +1,16 @@
-﻿@{
+﻿@using Microsoft.AspNetCore.Routing
+@{
     AddTitleSegment(T["Pricing"]);
+}
+@{
+    var platoSiteOptions = GetOptions<PlatoSiteOptions>();
+    var hostUrl = platoSiteOptions.HostUrl;
+    var signUpUrl = hostUrl + GetRouteUrl(new RouteValueDictionary()
+    {
+        ["area"] = "Plato.Tenants.SignUp",
+        ["controller"] = "Home",
+        ["action"] = "Index"
+    });
 }
 
 <!-- Jumbotron -->
@@ -73,7 +84,7 @@
                                 <div>
                                     USD per month / cancel anytime
                                 </div>
-                                <a asp-route-area="Plato.Site" asp-route-controller="Try" asp-route-action="SignUp" class="btn btn-block btn-lg btn-primary mt-4">
+                                <a href="@signUpUrl" class="btn btn-block btn-lg btn-primary mt-4">
                                     @T["Start your 7 day free trial"]
                                 </a>
 
@@ -106,7 +117,7 @@
                                 <div>
                                     USD per month / cancel anytime
                                 </div>
-                                <a asp-route-area="Plato.Site" asp-route-controller="Try" asp-route-action="SignUp" class="btn btn-block btn-lg btn-danger mt-4">
+                                <a href="@signUpUrl" class="btn btn-block btn-lg btn-danger mt-4">
                                     @T["Start your 7 day free trial"]
                                 </a>
                             </div>
@@ -145,63 +156,63 @@
                         </div>
                     </div>
                 </div>
-         
+
             </div>
         </div>
 
         @*<div class="page">
-            <div class="container">
-                <div class="row">
-                    <div class="col-12 text-center">
-                        <h3 class="text-primary font-weight-bold text-uppercase">All fully managed plans include</h3>
+                <div class="container">
+                    <div class="row">
+                        <div class="col-12 text-center">
+                            <h3 class="text-primary font-weight-bold text-uppercase">All fully managed plans include</h3>
+                        </div>
+                    </div>
+                    <div class="row justify-content-center pt-4 cols-row">
+                        <div class="px-3">
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Professional hosting within Azure
+                            </div>
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Assistance with theming & branding
+                            </div>
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Unlimited number of users
+                            </div>
+                        </div>
+                        <div class="px-3">
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Automated updates
+                            </div>
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Automated scaling
+                            </div>
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Automated backups
+                            </div>
+                        </div>
+                        <div class="px-3">
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Unlimited email support
+                            </div>
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Unlimited phone support
+                            </div>
+                            <div class="pb-2 pl-1">
+                                <i class="fal fa-check text-primary mr-2"></i>
+                                Unlimited remote support
+                            </div>
+                        </div>
                     </div>
                 </div>
-                <div class="row justify-content-center pt-4 cols-row">
-                    <div class="px-3">
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Professional hosting within Azure
-                        </div>
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Assistance with theming & branding
-                        </div>
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Unlimited number of users
-                        </div>
-                    </div>
-                    <div class="px-3">
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Automated updates
-                        </div>
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Automated scaling
-                        </div>
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Automated backups
-                        </div>
-                    </div>
-                    <div class="px-3">
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Unlimited email support
-                        </div>
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Unlimited phone support
-                        </div>
-                        <div class="pb-2 pl-1">
-                            <i class="fal fa-check text-primary mr-2"></i>
-                            Unlimited remote support
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>*@
+            </div>*@
 
         <!-- Hosted Features -->
         <div class="page">
@@ -720,7 +731,7 @@
 
 @section Scripts {
     <script>
-        $(function (win, $) {            
+        $(function (win, $) {
             $('a[href="' + win.location.hash + '"]').trigger('click');
         }(window, jQuery));
     </script>

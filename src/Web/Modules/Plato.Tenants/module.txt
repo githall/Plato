@@ -1,11 +1,11 @@
 Name: Plato Tenants
-Description: Adds the ability to manage multiple tenants within Plato.
+Description: Adds multi-tenancy support & the ability to manage multiple isolated tenants via the Plato host dashboard.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
-Category: Core
+Category: Multi-tenancy
 PlatoVersion: 2.0.0
 Version: 1.0.0
-Icon: /Plato.Tenants/content/images/icon.png
+Icon: /plato.tenants/content/images/icon.png
 Dependencies: 
 [
 	{

@@ -1,0 +1,23 @@
+Name: Plato Tenant SignUp
+Description: Simple tenant sign-up for the Plato web site.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Multi-tenancy
+PlatoVersion: 2.0.0
+Version: 1.0.0
+Icon: /plato.tenants.signup/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.WebAPI",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Admin",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Tenants",
+		Version: "1.0.0"
+	}
+]

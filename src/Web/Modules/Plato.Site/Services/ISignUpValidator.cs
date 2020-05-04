@@ -3,13 +3,13 @@ using PlatoCore.Abstractions;
 
 namespace Plato.Site.Services
 {
-    public interface ISignUpValidator
-    {
+    //public interface ISignUpValidator
+    //{
 
-        Task<ICommandResultBase> ValidateEmailAsync(string email);
+    //    Task<ICommandResultBase> ValidateEmailAsync(string email);
 
-        Task<ICommandResultBase> ValidateCompanyNameAsync(string companyName);
+    //    Task<ICommandResultBase> ValidateCompanyNameAsync(string companyName);
 
-    }
+    //}
 
 }

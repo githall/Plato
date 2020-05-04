@@ -1,9 +1,16 @@
-﻿using PlatoCore.Models.Shell;
+﻿using System;
+using PlatoCore.Models.Shell;
+using PlatoCore.Shell.Abstractions;
 
 namespace PlatoCore.Models.Extensions
 {
     public static class ShellSettingsExtensions
     {
+
+        public static bool IsDefaultShell(this IShellSettings settings)
+        {
+            return ShellHelper.DefaultShellName.Equals(settings.Name, StringComparison.OrdinalIgnoreCase);
+        }
 
         public static string GetRequestedUrl(
             this IShellSettings settings,
