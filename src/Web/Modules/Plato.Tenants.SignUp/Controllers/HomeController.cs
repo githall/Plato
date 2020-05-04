@@ -14,6 +14,8 @@ using System.Collections.Generic;
 using Microsoft.Extensions.Options;
 using PlatoCore.Hosting.Web.Abstractions;
 using Microsoft.AspNetCore.Http;
+using PlatoCore.Models.Shell;
+using PlatoCore.Models.Extensions;
 
 namespace Plato.Tenants.SignUp.Controllers
 {
@@ -25,7 +27,8 @@ namespace Plato.Tenants.SignUp.Controllers
         private readonly ISignUpStore<Models.SignUp> _signUpStore;
         private readonly ITenantSetUpService _tenantSetUpService;
         private readonly ISignUpEmailService _signUpEmails;
-        private readonly IContextFacade _contextFacade;  
+        private readonly IContextFacade _contextFacade;
+        private readonly IShellSettings _shellSettings;
 
         private readonly DefaultTenantSettings _defaultTenantSettings;   
 
@@ -35,14 +38,16 @@ namespace Plato.Tenants.SignUp.Controllers
             ISignUpStore<Models.SignUp> signUpStore,
             ITenantSetUpService tenantSetUpService,
             ISignUpEmailService signUpEmails,
-            IContextFacade contextFacade)
+            IContextFacade contextFacade,
+            IShellSettings shellSettings)
         {
             _defaultTenantSettings = tenantSetings.Value;                
             _tenantSetUpService = tenantSetUpService;            
             _signUpManager = signUpManager;
             _contextFacade = contextFacade;
+            _shellSettings = shellSettings;
             _signUpEmails = signUpEmails;
-            _signUpStore = signUpStore;
+            _signUpStore = signUpStore;            
         }
 
         // ---------------------
@@ -53,6 +58,13 @@ namespace Plato.Tenants.SignUp.Controllers
         [HttpGet, AllowAnonymous]
         public Task<IActionResult> Index()
         {
+
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Task.FromResult((IActionResult)Unauthorized());
+            }
+
             // Return view
             return Task.FromResult((IActionResult)View());
 
@@ -61,6 +73,12 @@ namespace Plato.Tenants.SignUp.Controllers
         [HttpPost, ActionName(nameof(Index))]
         public async Task<IActionResult> IndexPost(SignUpViewModel model)
         {
+
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
 
             // We are intentionally not using cross site request forgery protection
             // for this POST request, we need to allow trusted 3rd party sites to post here
@@ -170,6 +188,12 @@ namespace Plato.Tenants.SignUp.Controllers
         public async Task<IActionResult> IndexConfirmation(string sessionId)
         {
 
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
+
             // Validate
             if (string.IsNullOrEmpty(sessionId))
             {
@@ -196,6 +220,12 @@ namespace Plato.Tenants.SignUp.Controllers
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(IndexConfirmation))]
         public async Task<IActionResult> IndexConfirmationPost(SignUpConfirmationViewModel model)
         {
+
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
 
             // Validate
             if (model == null)
@@ -260,6 +290,12 @@ namespace Plato.Tenants.SignUp.Controllers
         public async Task<IActionResult> SetUp(string sessionId)
         {
 
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
+
             if (string.IsNullOrEmpty(sessionId))
             {
                 throw new ArgumentNullException(nameof(sessionId));
@@ -291,6 +327,12 @@ namespace Plato.Tenants.SignUp.Controllers
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(SetUp))]
         public async Task<IActionResult> SetUpPost(SetUpViewModel model)
         {
+
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
 
             // Validate
             if (model == null)
@@ -358,6 +400,12 @@ namespace Plato.Tenants.SignUp.Controllers
         public async Task<IActionResult> SetUpConfirmation(string sessionId)
         {
 
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
+
             if (string.IsNullOrEmpty(sessionId))
             {
                 throw new ArgumentOutOfRangeException(nameof(sessionId));
@@ -388,6 +436,12 @@ namespace Plato.Tenants.SignUp.Controllers
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(SetUpConfirmation))]
         public async Task<IActionResult> SetUpConffirmationPost(SetUpConfirmationViewModel model)
         {
+
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
 
             // Validate
             if (model == null)
@@ -479,9 +533,19 @@ namespace Plato.Tenants.SignUp.Controllers
 
         }
 
+        // ---------------------
+        // 5. Setup Complete
+        // ---------------------
+
         [HttpGet, AllowAnonymous]
         public async Task<IActionResult> SetUpComplete(string sessionId)
         {
+
+            // Ensure default shell, We cannot sign-up from tenants
+            if (!_shellSettings.IsDefaultShell())
+            {
+                return Unauthorized();
+            }
 
             // Validate
             if (string.IsNullOrEmpty(sessionId))
@@ -522,7 +586,7 @@ namespace Plato.Tenants.SignUp.Controllers
             });
 
         }
-        
+
     }
 
 }

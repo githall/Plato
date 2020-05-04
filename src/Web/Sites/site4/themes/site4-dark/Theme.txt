@@ -1,5 +1,0 @@
-Name: site4-dark
-Version: 1.0.0
-PlatoVersion: 2.0.0
-Author: InstantASP
-WebSite: https://www.instantasp.co.uk/
