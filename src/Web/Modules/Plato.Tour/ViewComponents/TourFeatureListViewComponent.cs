@@ -7,7 +7,7 @@ using Microsoft.Extensions.Localization;
 using Plato.Features.ViewModels;
 using PlatoCore.Features.Abstractions;
 
-namespace Plato.Features.ViewComponents
+namespace Plato.Tour.ViewComponents
 {
 
     public class TourFeatureListViewComponent : ViewComponent

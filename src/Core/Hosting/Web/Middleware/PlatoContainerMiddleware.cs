@@ -38,8 +38,8 @@ namespace PlatoCore.Hosting.Web.Middleware
             // Ensure all tenants are loaded and available.
             _platoHost.Initialize();
 
-            // Get ShellSettings for current tenant
-            var shellSettings = _runningShellTable.Match(httpContext);
+            // Attempt to match the request to a specific tenant
+            var shellSettings = _runningShellTable.Match(httpContext, _logger);
 
             // Register shell settings on current context
             httpContext.SetShellSettings(shellSettings);

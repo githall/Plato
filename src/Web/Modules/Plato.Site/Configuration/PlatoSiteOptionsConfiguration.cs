@@ -10,7 +10,8 @@ namespace Plato.Site.Configuration
 
         private readonly IPlatoSiteSettingsStore<PlatoSiteSettings> _platoSiteSettingsStore;                
 
-        public PlatoSiteOptionsConfiguration(IPlatoSiteSettingsStore<PlatoSiteSettings> platoSiteSettingsStore)
+        public PlatoSiteOptionsConfiguration(
+            IPlatoSiteSettingsStore<PlatoSiteSettings> platoSiteSettingsStore)
         {
             _platoSiteSettingsStore = platoSiteSettingsStore;
         }
@@ -25,12 +26,10 @@ namespace Plato.Site.Configuration
 
             if (settings != null)
             {
+                options.HostUrl = settings.HostUrl;
                 options.DemoUrl = settings.DemoUrl;
                 options.PlatoDesktopUrl = settings.PlatoDesktopUrl;
             }
-
-
-            
         }
 
     }

@@ -10,6 +10,8 @@ using Plato.Tour.Subscribers;
 using Plato.Admin.Models;
 using PlatoCore.Models.Tour;
 using Plato.Tour.Configuration;
+using PlatoCore.Navigation.Abstractions;
+using Plato.Tour.Navigation;
 
 namespace Plato.Tour
 {
@@ -37,6 +39,8 @@ namespace Plato.Tour
             // Configuration
             services.AddTransient<IConfigureOptions<TourOptions>, TourOptionsConfiguration>();
 
+            // Register navigation provider
+            services.AddScoped<INavigationProvider, AdminMenu>();
         }
 
     }

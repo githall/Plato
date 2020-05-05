@@ -398,7 +398,6 @@ namespace Plato.Entities.Stores
             _entityLabelsTableName = GetTableNameWithPrefix("EntityLabels");
             _entityTagsTableName = GetTableNameWithPrefix("EntityTags");
             _categoryRolesTableName = GetTableNameWithPrefix("CategoryRoles");
-
         }
 
         #endregion

@@ -1,5 +1,0 @@
-Name: site3-default
-Version: 1.0.0
-PlatoVersion: 1.1.1
-Author: InstantASP
-WebSite: https://www.instantasp.co.uk/

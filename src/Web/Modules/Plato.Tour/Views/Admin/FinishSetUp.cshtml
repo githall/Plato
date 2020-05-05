@@ -6,7 +6,7 @@
 
 <form asp-route-action="FinishSetUp" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
     <div class="modal-header">
-        <h6 class="modal-title">@T["Finish Set-Up"]</h6>
+        <h6 class="modal-title">@T["Finish Setup"]</h6>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
             <span aria-hidden="true">
                 <i class="fal fa-times"></i>
@@ -16,10 +16,12 @@
     <div class="modal-body">
         <input type="hidden" asp-for="@Model.ReturnUrl" />       
         <p class="font-weight-bold">
-            @T["Are you sure you wish to finish set-up?"]
+            @T["Are you sure you want to finish setup?"]
         </p>
         <p>
-            @T["This will permanently hide the set-up assistant but don't fear as you can still manage everything via the Plato dashboard at any time. Click the \"Finish Set-Up\" button below to mark set-up as complete & permanently hide the set-up assistant."]
+            @T["This will permanently hide the setup assistant. Before finishing setup double check steps 1 and 2 to ensure you have enabled all core & optional features important to you. Once you finish setup you can still enable features & manage everything else via the Plato dashboard at any time."]
+            <br /><br />
+            @T["Click the \"Finish Setup\" button below to permanently hide the setup assistant..."]            
         </p>
     </div>
     <div class="modal-footer">
@@ -27,7 +29,7 @@
             @T["Cancel"]
         </button>
         <button type="submit" class="btn btn-primary">
-            <i class="fal fa-check mr-2"></i>@T["Finish Set-Up"]
+            @T["Finish Setup"]
         </button>
     </div>
 </form>

@@ -1,13 +1,22 @@
 ﻿using System;
 using Microsoft.Extensions.Localization;
+using PlatoCore.Models.Extensions;
+using PlatoCore.Models.Shell;
 using PlatoCore.Navigation.Abstractions;
+using PlatoCore.Shell.Abstractions;
 
 namespace Plato.Tenants.Navigation
 {
     public class AdminMenu : INavigationProvider
     {
-        public AdminMenu(IStringLocalizer<AdminMenu> localizer)
+
+        private readonly IShellSettings _shellSettings;
+
+        public AdminMenu
+            (IStringLocalizer<AdminMenu> localizer,
+            IShellSettings shellSettings)
         {
+            _shellSettings = shellSettings;
             T = localizer;
         }
 
@@ -15,7 +24,14 @@ namespace Plato.Tenants.Navigation
 
         public void BuildNavigation(string name, INavigationBuilder builder)
         {
+
             if (!String.Equals(name, "admin", StringComparison.OrdinalIgnoreCase))
+            {
+                return;
+            }
+
+            // Ensure host
+            if (!_shellSettings.IsDefaultShell())
             {
                 return;
             }

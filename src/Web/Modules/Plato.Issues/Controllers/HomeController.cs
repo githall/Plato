@@ -185,10 +185,22 @@ namespace Plato.Issues.Controllers
 
         public async Task<IActionResult> Create(int channel)
         {
-
+            
             if (!await _authorizationService.AuthorizeAsync(this.User, channel, Permissions.PostIssues))
             {
-                return Unauthorized();
+                // Redirect to login with return URL to redirect back to our Create action
+                return Redirect(_contextFacade.GetRouteUrl(new RouteValueDictionary()
+                {
+                    ["area"] = "Plato.Users",
+                    ["controller"] = "Account",
+                    ["action"] = "Login",
+                    ["returnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Issues",
+                        ["controller"] = "Home",
+                        ["action"] = "Create"
+                    })
+                }));
             }
 
             var entity = new Issue();
@@ -974,7 +986,7 @@ namespace Plato.Issues.Controllers
 
             if (offset == 0)
             {
-                // Could not locate offset, fallback by redirecting to entity
+                // Could not locate offset, fall-back by redirecting to entity
                 return Redirect(_contextFacade.GetRouteUrl(new RouteValueDictionary()
                 {
                     ["area"] = "Plato.Issues",

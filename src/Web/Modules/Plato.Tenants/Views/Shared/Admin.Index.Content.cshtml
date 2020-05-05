@@ -11,7 +11,7 @@
             <ul class="list-group list-group-flush list-group-hover">
                 @foreach (var tenant in Model.Results.OrderByDescending(t => t.ModifiedDate))
                 {
-                    var url = tenant.GetRequestedUrl();
+                    var url = tenant.GetRequestedUrl(Context.Request.Scheme);
                     <li class="list-group-item list-group-item-action">
                         
                         <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="btn btn-secondary float-right">
@@ -22,7 +22,11 @@
                             <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@tenant.Name" class="font-weight-bold">@tenant.Name</a>
                             @if (!string.IsNullOrEmpty(url))
                             {
-                                <a href="@url" data-toggle="tooltip" title="@url" target="_blank" class="ml-2"><i class="fal fa-external-link"></i></a>
+                                if (!url.Equals("/", StringComparison.OrdinalIgnoreCase))
+                                {
+                                    <a href="@url" data-toggle="tooltip" title="@T["Open site in new window"]" target="_blank" class="text-muted ml-2">@url</a>
+                                }
+
                             }
                         </h6>
 

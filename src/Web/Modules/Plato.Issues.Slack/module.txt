@@ -3,7 +3,7 @@ Description: Get notified via Slack when new issues or replies to issues are pos
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Issues
-PlatoVersion: 1.1.1
+PlatoVersion: 2.0.0
 Version: 1.0.0
 Icon: /plato.issues.slack/content/images/icon.png
 Dependencies: 

@@ -36,12 +36,12 @@
     <assets section="Body" />
     <scripts section="Body" />
 
-    <cacheing vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
+    <caching vary-by-user="true" expires-after="@TimeSpan.FromMinutes(30)">
         @await DisplayAsync(new View("SiteHeader", new
         {
             sticky = false
         }))
-    </cacheing>
+    </caching>
 
         <!-- Plato Nav  -->
         <nav class="nav-site">
@@ -154,13 +154,13 @@
             @RenderBody()
         </div>
 
-        <cacheing expires-after="@TimeSpan.FromMinutes(30)">
+        <caching expires-after="@TimeSpan.FromMinutes(30)">
             <footer>
                 @await DisplayAsync(new View("SiteFooterMinimal", new
                 {
                 }))
             </footer>
-        </cacheing>
+        </caching>
 
   
     <assets section="Footer" />

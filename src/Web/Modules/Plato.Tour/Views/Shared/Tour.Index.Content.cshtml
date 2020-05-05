@@ -28,14 +28,14 @@
     });
     <card>
         <card-title>
-            <h6 class="card-title">@T["🌟 Welcome to Plato"]</h6>
+            <h6 class="card-title">@T["Welcome to Plato"]</h6>
         </card-title>
-        <card-body>            
-            @T["To get started use the button below to login with the administrator username & password you provided during set-up."]
+        <card-body>
+            @T["To get started use the button below to login with the administrator username & password you provided during setup. Once logged in you will be presented with the setup assistant. The setup assistant will walk you through a few simple steps to help you further configure & customize your new support site."]
             <br /><br />
-            @T["Once you've logged in we'll walk you through a few simple steps to help you customize your support site."]
+            @T["For support please visit the Plato"] <a href="https://plato.instantasp.co.uk/support" target="_blank">support site</a> @T["to browse documentation, ask questions, suggest features or report issues. We will always assist with questions or issues posted within our support site. We hope you enjoy using Plato and find it useful for your business."]
             <br /><br />
-            <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@returnUrl" class="btn btn-primary">
+            <a asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@returnUrl" class="btn btn-primary" data-provide="loader-spy" data-loader-mode="disable">
                 @T["Login"]<i class="fal fa-arrow-right ml-2"></i>
             </a>
         </card-body>
@@ -50,25 +50,25 @@ else
         <form asp-route-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
             <div class="card card-body-flush">
                 <div class="card-header">
-                    <a asp-route-area="Plato.Tour" asp-route-controller="Admin" asp-route-action="FinishSetUp" asp-route-returnUrl="@returnUrl" data-provide="dialog" data-dialog-id="shareDialog" data-dialog-css="modal-dialog modal-lg" class="btn btn-secondary float-right">
-                        @T["Finish Set-Up"]
-                    </a>
                     @if (percentComplete < 100)
                     {
-                        <h6 class="card-title">@T["Set-Up Assistant"]</h6>
-                        @T["Use the options below to customize & set-up your Plato installation. Once you are done click the \"Finish Set-Up\" button to hide the set-up assistant."]
+                        <a asp-route-area="Plato.Tour" asp-route-controller="Admin" asp-route-action="FinishSetUp" asp-route-returnUrl="@returnUrl" data-provide="dialog" data-dialog-id="shareDialog" data-dialog-css="modal-dialog modal-lg" class="btn btn-secondary float-right">
+                            @T["Finish Setup"]
+                        </a>
+                        <h6 class="card-title">@T["Let's get you started"]</h6>
+                        @T["Click the steps below to setup your site. Once done click the \"Finish Setup\" button to hide this setup assistant."]
                     }
                     else
                     {
+                        <a asp-route-area="Plato.Tour" asp-route-controller="Admin" asp-route-action="FinishSetUp" asp-route-returnUrl="@returnUrl" data-provide="dialog" data-dialog-id="shareDialog" data-dialog-css="modal-dialog modal-lg" class="btn btn-primary float-right">
+                            @T["Finish Setup"]
+                        </a>
                         <h6 class="card-title text-success">
                             <i class="fal fa-check mr-1"></i>
-                            @T["Set-Up Complete"]
+                            @T["Setup is complete"]
                         </h6>
-                        @T["You've completed all set-up steps. Use the \"Finish Set-Up\" button to hide the set-up assistant."]
+                        @T["You've completed all initial setup steps. Use the \"Finish Setup\" button to permanently hide this setup assistant."]
                     }
-                    <div class="progress mt-3" data-toggle="tooltip" title="@percentComplete% @T["complete"]" style="height: 8px;">
-                        <div class="progress-bar" role="progressbar" style="width: @percentComplete%" aria-valuemin="0" aria-valuemax="100"></div>
-                    </div>
                 </div>
                 <div class="card-body">
 
@@ -97,6 +97,10 @@ else
                                                 <span class="text-success float-right mt-2">
                                                     <i class="fal fa-check align-middle mr-2"></i>@T["Completed "]
                                                 </span>
+                                            }
+                                            else
+                                            {
+                                                <i class="fal fa-arrow-right mt-2 float-right"></i>
                                             }
                                             <h6>@T[step.Title]</h6>
                                             @T[step.Description]                                    

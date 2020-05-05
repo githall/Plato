@@ -163,12 +163,12 @@ namespace Plato.Tour.Controllers
                 _platoHost.RecycleShell(_shellSettings);
 
                 // Success
-                _alerter.Success(T[$"Set-Up Finished Successfully!"]);
+                _alerter.Success(T[$"Setup Finished Successfully!"]);
 
             }
             else
             {
-                _alerter.Danger(T["A problem occurred ending the set-up assistant!"]);
+                _alerter.Danger(T["A problem occurred ending the setup assistant!"]);
             }
 
             if (!string.IsNullOrEmpty(returnUrl))
@@ -193,7 +193,9 @@ namespace Plato.Tour.Controllers
             var features = await _shellDescriptorManager.GetFeaturesAsync();
 
             // Get all features in feature category
-            var categoryFeatures = features?.Where(f => f.Descriptor.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase));
+            var categoryFeatures = features?
+                .Where(f => f.Descriptor.Category.Equals(categoryName, StringComparison.OrdinalIgnoreCase))
+                .OrderBy(f => f.Descriptor.Id);
 
             var errors = new List<CommandError>();
             if (categoryFeatures != null)

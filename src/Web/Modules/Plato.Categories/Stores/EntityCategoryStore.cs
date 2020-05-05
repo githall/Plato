@@ -20,15 +20,15 @@ namespace Plato.Categories.Stores
         private const string ByEntityIdAndCategoryId = "ByEntityIdAndCategoryId";
 
         private readonly IEntityCategoryRepository<EntityCategory> _entityCategoryRepository;
-        private readonly ILogger<CategoryRoleStore> _logger;
+        private readonly ILogger<EntityCategoryStore> _logger;
         private readonly IDbQueryConfiguration _dbQuery;
         private readonly ICacheManager _cacheManager;
 
         public EntityCategoryStore(
             IEntityCategoryRepository<EntityCategory> entityCategoryRepository,
-            ICacheManager cacheManager,
-            ILogger<CategoryRoleStore> logger,
-            IDbQueryConfiguration dbQuery)
+            ILogger<EntityCategoryStore> logger,
+            IDbQueryConfiguration dbQuery,
+            ICacheManager cacheManager)
         {
             _entityCategoryRepository = entityCategoryRepository;
             _cacheManager = cacheManager;
@@ -185,6 +185,7 @@ namespace Plato.Categories.Stores
         {
             _cacheManager.CancelTokens(this.GetType());
         }
+
     }
 
 }

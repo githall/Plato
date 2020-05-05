@@ -95,7 +95,6 @@ namespace Plato.Categories.Stores
         {
             _query = query;
             _categoryRolesTableName = GetTableNameWithPrefix("Categories");
-
         }
 
         #endregion

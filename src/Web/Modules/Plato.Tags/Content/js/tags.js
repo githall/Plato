@@ -56,7 +56,7 @@ $(function (win, doc, $) {
                 var maxItems = methods.getMaxItems($caller),
                     featureId = methods.getFeatureId($caller);
 
-                // init tagIt
+                // Init tagIt
                 $caller.tagIt($.extend({
                         maxItems: maxItems,
                         itemTemplate:
@@ -194,7 +194,6 @@ $(function (win, doc, $) {
                     defaults,
                     options));
 
-
             },
             getInput: function($caller) {
                 return $caller.find(".tagit-list-item-input").find("input");
@@ -290,7 +289,7 @@ $(function (win, doc, $) {
             pageSize: 5,
             config: {
                 method: "POST",
-                url: win.$.Plato.defaults.pathBase + '/api/tags/search',
+                url: '/api/tags/search',
                 data: {
                     keywords: "",
                     featureId: 0,
@@ -359,6 +358,9 @@ $(function (win, doc, $) {
                     return null;
                 }
 
+                // Set URL ensuring pathBase is supplied
+                $caller.data(dataKey).config.url = win.$.Plato.defaults.pathBase + '/api/tags/search'
+              
                 // A feature id can be set on the auto complete input 
                 // element to restrict results by a specific feature
                 if ($caller.data("featureId")) {

@@ -135,7 +135,6 @@ namespace PlatoCore.Stores.Tour
 
         }
 
-     
         #endregion
 
     }

@@ -162,7 +162,7 @@ $(function (win, doc, $) {
                     },
                     onHide: function ($input) {
                         // autoComplete will hide it's target if no input is provided
-                        // Override this behaviour to ensure the auto complete target
+                        // Override this behavior to ensure the auto complete target
                         // is always visible even if the search input is empty
                         $input
                             .autoComplete("show")
@@ -259,7 +259,7 @@ $(function (win, doc, $) {
             valueField: "keywords",
             config: {
                 method: "GET",
-                url: win.$.Plato.defaults.pathBase + '/api/labels/get?pager.page={page}&pager.size={pageSize}&opts.search={keywords}',
+                url: '/api/labels/get?pager.page={page}&pager.size={pageSize}&opts.search={keywords}',
                 data: {
                     sort: "TotalEntities",
                     order: "Desc"
@@ -325,7 +325,11 @@ $(function (win, doc, $) {
                 if (func) {
                     return func(this);
                 }
-                // init autoComplete
+
+                // Ensure we append pathBase to the API URL
+                $caller.data(dataKey).config.url = win.$.Plato.defaults.pathBase + '/api/labels/get?pager.page={page}&pager.size={pageSize}&opts.search={keywords}',
+
+                // Initialize autoComplete
                 $caller.autoComplete($caller.data(dataKey), methodName);
 
             }

@@ -46,7 +46,7 @@
                 @if (this.CurrentUser != null)
                 {
                     <ul class="nav float-left">
-                        <li class="nav-item dropdown">
+                        <li class="nav-item dropdown user-dropdown">
                             <form asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="LogOff" method="post">
                                 <a class="nav-link" href="#" title="@T["Account"]" data-toggle="dropdown" data-display="static">
                                     <avatar class="avatar avatar-sm" avatar="@this.CurrentUser.Avatar" />
@@ -57,13 +57,17 @@
                                     <a class="dropdown-item" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="EditSignature">@T["Signature"]</a>
                                     <a class="dropdown-item" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="EditSettings">@T["Settings"]</a>
                                     <div class="dropdown-divider"></div>
+                                    <a class="dropdown-item" href="https://plato.instantasp.co.uk/support" target="_blank"><i class="fal fa-external-link float-right"></i>@T["Get Help"]</a>
+                                    <a class="dropdown-item" href="https://plato.instantasp.co.uk/issues/new" target="_blank"><i class="fal fa-external-link float-right"></i>@T["Report an issue"]</a>
+                                    <a class="dropdown-item" href="https://plato.instantasp.co.uk/ideas/new" target="_blank"><i class="fal fa-external-link float-right"></i>@T["Suggest a feature"]</a>
+                                    <a class="dropdown-item" href="https://plato.instantasp.co.uk/questions/new" target="_blank"><i class="fal fa-external-link float-right"></i>@T["Ask a question"]</a>
+                                    <div class="dropdown-divider"></div>
                                     <button type="submit" class="btn dropdown-item">@T["Log off"]</button>
                                 </div>
                             </form>
                         </li>
                     </ul>
                 }
-
             </div>
             <div class="collapse navbar-collapse flex-column" id="navbar-collapse" role="navigation">
                 <navigation name="admin"
@@ -104,6 +108,11 @@
                                         <a class="dropdown-item" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="EditAccount">@T["Account"]</a>
                                         <a class="dropdown-item" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="EditSignature">@T["Signature"]</a>
                                         <a class="dropdown-item" asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="EditSettings">@T["Settings"]</a>
+                                        <div class="dropdown-divider"></div>
+                                        <a class="dropdown-item" href="https://plato.instantasp.co.uk/support" target="_blank"><i class="fal fa-external-link float-right"></i>@T["Get Help"]</a>
+                                        <a class="dropdown-item" href="https://plato.instantasp.co.uk/issues/new" target="_blank"><i class="fal fa-external-link float-right"></i>@T["Report an issue"]</a>
+                                        <a class="dropdown-item" href="https://plato.instantasp.co.uk/ideas/new" target="_blank"><i class="fal fa-external-link float-right"></i>@T["Suggest a feature"]</a>
+                                        <a class="dropdown-item" href="https://plato.instantasp.co.uk/questions/new" target="_blank"><i class="fal fa-external-link float-right"></i>@T["Ask a question"]</a>
                                         <div class="dropdown-divider"></div>
                                         <button type="submit" class="btn dropdown-item">@T["Log off"]</button>
                                     </div>

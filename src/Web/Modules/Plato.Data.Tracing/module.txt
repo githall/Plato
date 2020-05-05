@@ -3,6 +3,6 @@ Description: Displays timings for all database queries executed on every Plato p
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Performance
-PlatoVersion: 1.1.1
+PlatoVersion: 2.0.0
 Version: 1.0.0
 Icon: /plato.data.tracing/content/images/icon.png

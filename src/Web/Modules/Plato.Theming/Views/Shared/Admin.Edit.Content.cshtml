@@ -1,11 +1,14 @@
 ﻿@model EditThemeViewModel
+@{
+    var platoOpts = GetOptions<PlatoOptions>();
+}
 
 <input type="hidden" asp-for="ThemeId" />
 <input type="hidden" asp-for="Path" />
 
 <card class="card card-body-flush">
     <card-title>
-        
+
         @if (Model.File?.Parent != null)
         {
             <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.ThemeId" asp-route-path="@Model.File?.Parent.RelativePath" class="btn btn-sm btn-secondary mr-2" data-provide="tooltip" title="@T["Parent Directory"]">
@@ -39,8 +42,8 @@
         </h6>
     </card-title>
     <card-body>
-        
-        <ul class="list-group list-group-flush list-group-hover">        
+
+        <ul class="list-group list-group-flush list-group-hover">
 
             @if (Model.Files.Any())
             {
@@ -83,11 +86,11 @@
                     else
                     {
                         var mode = "htmlmixed";
-                        var extension = Model.File?.Extension ?? string.Empty;                       
+                        var extension = Model.File?.Extension ?? string.Empty;
                         if (extension.Equals(".css", StringComparison.OrdinalIgnoreCase))
                         {
                             mode = "text/css";
-                        }                                              
+                        }
                         <li class="list-group-item">
 
                             <link rel="stylesheet" href="/plato.theming/content/js/vendors/codemirror/lib/codemirror.css">
@@ -102,7 +105,7 @@
                             <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/markdown-fold.js"></script>
                             <script src="/plato.theming/content/js/vendors/codemirror/addon/fold/comment-fold.js"></script>
                             <script src="/plato.theming/content/js/vendors/codemirror/addon/hint/show-hint.js"></script>
-                            <script src="/plato.theming/content/js/vendors/codemirror/addon/hint/css-hint.js"></script>                            
+                            <script src="/plato.theming/content/js/vendors/codemirror/addon/hint/css-hint.js"></script>
                             <script src="/plato.theming/content/js/vendors/codemirror/mode/xml/xml.js"></script>
                             <script src="/plato.theming/content/js/vendors/codemirror/mode/css/css.js"></script>
                             <script src="/plato.theming/content/js/vendors/codemirror/mode/htmlmixed/htmlmixed.js"></script>
@@ -115,7 +118,7 @@
                                     window.onload = function() {
                                         var textArea = document.getElementById("FileContents");
                                         var myCodeMirror = CodeMirror.fromTextArea(textArea, {
-                                            mode: "@mode",                                        
+                                            mode: "@mode",
                                             lineNumbers: true,
                                             lineWrapping: true,
                                             extraKeys: {"Ctrl-Q": function(cm){ cm.foldCode(cm.getCursor()); }},
@@ -126,16 +129,28 @@
                             </script>
 
                             <style>
-                                .CodeMirror {                                 
-                                  height: 600px;
+                                .CodeMirror {
+                                    height: 600px;
                                 }
                             </style>
 
                         </li>
                         <li class="list-group-item">
-                            <button type="submit" class="btn btn-primary" data-role="button">
-                                @T["Save File"]
-                            </button>                                                        
+
+                            @if (platoOpts.DemoMode)
+                            {
+                                <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
+                                    <a href="#" class="btn btn-primary disabled">
+                                        @T["Save File"]
+                                    </a>
+                                </span>
+                            }
+                            else
+                            {
+                                <button type="submit" class="btn btn-primary" data-role="button">
+                                    @T["Save File"]
+                                </button>
+                            }
                             @if (Model.File?.Parent != null)
                             {
                                 <a asp-route-controller="Admin" asp-route-action="Edit" asp-route-id="@Model.ThemeId" asp-route-path="@Model.File?.Parent.RelativePath" class="btn btn-sm btn-secondary">
@@ -151,15 +166,15 @@
 
                         </li>
                     }
-               
+
 
                 }
-                 else
-                 {
-                     <li class="list-group-item">
-                         @T["No files found"]
-                     </li>
-                 }
+                else
+                {
+                    <li class="list-group-item">
+                        @T["No files found"]
+                    </li>
+                }
             }
         </ul>
 

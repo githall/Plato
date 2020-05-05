@@ -3,7 +3,7 @@ Description: Adds tagging capabilities for entities to Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Entities
-PlatoVersion: 1.1.1
+PlatoVersion: 2.0.0
 Version: 1.0.0
 Icon: /plato.entities.tags/content/images/icon.png
 Dependencies: 

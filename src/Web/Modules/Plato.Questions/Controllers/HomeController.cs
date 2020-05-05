@@ -187,7 +187,19 @@ namespace Plato.Questions.Controllers
 
             if (!await _authorizationService.AuthorizeAsync(this.User, channel, Permissions.PostQuestions))
             {
-                return Unauthorized();
+                // Redirect to login with return URL to redirect back to our Create action
+                return Redirect(_contextFacade.GetRouteUrl(new RouteValueDictionary()
+                {
+                    ["area"] = "Plato.Users",
+                    ["controller"] = "Account",
+                    ["action"] = "Login",
+                    ["returnUrl"] = _contextFacade.GetRouteUrl(new RouteValueDictionary()
+                    {
+                        ["area"] = "Plato.Questions",
+                        ["controller"] = "Home",
+                        ["action"] = "Create"
+                    })
+                }));
             }
 
             var entity = new Question();

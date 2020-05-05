@@ -3,7 +3,7 @@ Description: Adds core StopForumSpam settings & services into Plato.
 Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Spam
-PlatoVersion: 1.1.1
+PlatoVersion: 2.0.0
 Version: 1.0.0
 Icon: /plato.stopforumspam/content/images/icon.png
 Dependencies: 

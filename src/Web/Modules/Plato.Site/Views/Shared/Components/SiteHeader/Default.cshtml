@@ -1,20 +1,28 @@
-﻿@model SiteHeaderViewModel
+﻿@using Microsoft.AspNetCore.Routing
+@model SiteHeaderViewModel
 @{
     var platoSiteOptions = GetOptions<PlatoSiteOptions>();
     var css = "site-nav";
     var containerCss = "container";
+    var hostUrl = platoSiteOptions.HostUrl;
     if (Model.Sticky)
     {
         css = "site-nav site-nav-fixed";
-    }
+    }    
+    var signUpUrl = hostUrl + GetRouteUrl(new RouteValueDictionary()
+    {
+        ["area"] = "Plato.Tenants.SignUp",
+        ["controller"] = "Home",
+        ["action"] = "Index"
+    });
 }
 
 <nav class="@css">
     <div class="nav-site">
         <div class="navbar navbar-expand-lg navbar-light bg-white border-bottom border-light">
             <div class="@containerCss">
-                <a class="navbar-brand" asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Index" data-provide="loader-spy">                        
-                    <span class="plato-brand align-middle mr-2"></span> 
+                <a class="navbar-brand" asp-route-area="Plato.Site" asp-route-controller="Home" asp-route-action="Index" data-provide="loader-spy">
+                    <span class="plato-brand align-middle mr-2"></span>
                     <span class="d-inline-block align-middle text-primary">Plato</span>
                 </a>
                 <div class="navbar-mobile">
@@ -65,7 +73,7 @@
                             <div class="nav-item">
                                 <a class="nav-link text-nowrap font-weight-bold" asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Index" data-provide="loader-spy" data-toggle="nav-dropdown" data-target="#product-menu" aria-expanded="false">
                                     Features <i class="fal fa-chevron-down nav-dropdown-toggle"></i>
-                                </a>                             
+                                </a>
                             </div>
                             <div class="nav-item">
                                 <a class="nav-link font-weight-bold" href="@platoSiteOptions.DemoUrl" data-provide="loader-spy" target="_blank">
@@ -135,8 +143,7 @@
                             <ul class="nav nav-pills">
                                 <li class="nav-item">
                                     <a class="btn btn-primary" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@Context.Request.Path" data-provide="loader-spy">@T["Login"]</a>
-                                </li>
-                                   
+                                </li>                              
                             </ul>
                         }
                     </div>
@@ -146,7 +153,7 @@
         <div id="product-menu" class="nav-dropdown-menu">
             <div class="container-fluid container-fluid-1400">
                 <div class="row">
-                    <div class="col-lg-8 text-center">                                            
+                    <div class="col-lg-8 text-center">
                         <h5>All-in-one collaboration & support software</h5>
                         <hr />
                         <div class="mt-9">
@@ -264,8 +271,8 @@
                             </div>
                             <div class="row">
                                 <div class="col-12 pt-4 text-center">
-                                    <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Modules" data-provide="loader-spy" class="btn btn-primary">
-                                        Browse all 100+ modules
+                                    <a href="@signUpUrl" data-provide="loader-spy" class="btn btn-primary">
+                                        @T["Start your 7 day free trial"]<i class="fal fa-arrow-right ml-2"></i>
                                     </a>
                                 </div>
                             </div>
@@ -282,7 +289,7 @@
                         </a>
                         <a asp-route-area="Plato.Site" asp-route-controller="Plato" asp-route-action="Desktop" data-provide="loader-spy" class="nav-dropdown-item">
                             Plato Desktop
-                        </a>                      
+                        </a>
                         <a href="https://github.com/InstantASP/plato" data-provide="loader-spy" class="nav-dropdown-item" target="_blank">
                             Plato on GitHub<i class="fal fa-external-link ml-2"></i>
                         </a>

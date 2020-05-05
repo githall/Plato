@@ -1,11 +1,20 @@
-﻿using PlatoCore.Models.Shell;
+﻿using System;
+using PlatoCore.Models.Shell;
+using PlatoCore.Shell.Abstractions;
 
 namespace PlatoCore.Models.Extensions
 {
     public static class ShellSettingsExtensions
     {
 
-        public static string GetRequestedUrl(this IShellSettings settings)
+        public static bool IsDefaultShell(this IShellSettings settings)
+        {
+            return ShellHelper.DefaultShellName.Equals(settings.Name, StringComparison.OrdinalIgnoreCase);
+        }
+
+        public static string GetRequestedUrl(
+            this IShellSettings settings,
+            string scheme)
         {
 
             var host = settings.RequestedUrlHost ?? string.Empty;
@@ -18,7 +27,7 @@ namespace PlatoCore.Models.Extensions
             }
 
             return !string.IsNullOrEmpty(host)
-                ? host + prefix
+                ? $"{scheme}://{host}{prefix}"
                 : "/" + prefix;
 
         }

@@ -5,9 +5,13 @@ namespace Plato.Site.ViewModels
     public class PlatoSiteSettingsViewModel
     {
 
-        [Required, StringLength(255), DataType(DataType.Url)]
+        [StringLength(255)]
+        public string HostUrl { get; set; }
+
+        [StringLength(255)]
         public string DemoUrl { get; set; }
 
+        [StringLength(255)]
         public string PlatoDesktopUrl { get; set; }
 
     }

@@ -16,11 +16,6 @@ using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ViewProviders;
 using Plato.Site.ViewProviders;
 using PlatoCore.Hosting.Abstractions;
-using Plato.Site.Handlers;
-using PlatoCore.Features.Abstractions;
-using Plato.Site.Repositories;
-using Plato.Site.Services;
-using PlatoCore.Data.Migrations.Abstractions;
 
 namespace Plato.Site
 {
@@ -35,10 +30,7 @@ namespace Plato.Site
 
         public override void ConfigureServices(IServiceCollection services)
         {
-
-            // Feature installation event handler
-            services.AddScoped<IFeatureEventHandler, FeatureEventHandler>();
-
+        
             // Register assets
             services.AddScoped<IAssetProvider, AssetProvider>();
 
@@ -48,17 +40,8 @@ namespace Plato.Site
             // Configuration
             services.AddTransient<IConfigureOptions<PlatoSiteOptions>, PlatoSiteOptionsConfiguration>();
 
-            // Repositories
-            services.AddScoped<ISignUpRepository<SignUp>, SignUpRepository>();
-
             // Stores
             services.AddScoped<IPlatoSiteSettingsStore<PlatoSiteSettings>, PlatoSiteSettingsStore>();
-            services.AddScoped<ISignUpStore<SignUp>, SignUpStore>();
-
-            // Services
-            services.AddScoped<ISignUpManager<SignUp>, SignUpManager>();
-            services.AddScoped<ISignUpValidator, SignUpValidator>();
-            services.AddScoped<ISignUpEmailService, SignUpEmailService>();
 
             // View providers
             services.AddScoped<IViewProviderManager<PlatoSiteSettings>, ViewProviderManager<PlatoSiteSettings>>();
@@ -66,9 +49,6 @@ namespace Plato.Site
 
             // Homepage route providers
             services.AddSingleton<IHomeRouteProvider, HomeRoutes>();
-
-            // Migrations
-            services.AddSingleton<IMigrationProvider, Migrations>();
 
         }
 
@@ -89,19 +69,7 @@ namespace Plato.Site
                 template: "about",
                 defaults: new { controller = "Home", action = "About" }
             );
-
-            // -----------
-            // Get Started
-            // -----------
-
-            // Index
-            routes.MapAreaRoute(
-                name: "PlatoSiteGetStarted",
-                areaName: "Plato.Site",
-                template: "get-started",
-                defaults: new { controller = "GetStarted", action = "Index" }
-            );
-
+        
             // -----------
             // Features
             // -----------

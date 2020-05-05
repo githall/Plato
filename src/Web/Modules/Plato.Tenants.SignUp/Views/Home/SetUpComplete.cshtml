@@ -1,0 +1,57 @@
+﻿@model SetUpCompleteViewModel
+@{
+    AddTitleSegment(T["Set Up - Complete"]);
+    Layout = "_GetStartedLayout.cshtml";
+}
+
+<div class="card">
+    <div class="card-body">
+        <form asp-action="SetUp" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+            <input type="hidden" asp-for="SessionId" />
+            <div class="my-4">
+                <span class="plato-brand align-middle mr-3"></span><h2 class="d-inline-block m-0 align-middle text-primary">Plato</h2>
+            </div>
+            <div class="mt-4 text-muted text-uppercase">
+                @T["All Done"]
+            </div>
+            <h1 class="display-4 text-primary font-weight-bold">
+                @T["Tada - your ready to go"]
+            </h1>
+            <h3 class="font-weight-light my-4">
+                @T["Your new support site is ready – the URL is shown below – visit your site and login using the admin account you just created to get started"]
+            </h3>
+            <div class="mt-4">
+                <div class="mt-2 w-100 max-w-500 d-inline-block">
+                    <h5>
+                        @T["Your new support site is located at..."]
+                    </h5>
+                    <fieldset>
+                        <div class="form-group text-left">
+                            <input asp-for="Url" class="form-control form-control-lg text-primary text-center border-0" readonly style="background-color:transparent !important; box-shadow:none !important;" />
+                        </div>
+                    </fieldset>
+                    <div class="text-left" asp-validation-summary="All"></div>
+                    <div class="form-group">
+                        <a href="@Model.Url" target="_blank" role="button" class="btn btn-lg btn-primary btn-block">
+                            @T["Open my new support site"]
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+<script>
+    $(document).ready(function () {
+        var $input = $("input");
+        if ($input.length > 0) {
+            $input.focus().select();
+            $input.click(function () {
+                $(this).select();
+            });
+        }
+    });
+</script>
+}

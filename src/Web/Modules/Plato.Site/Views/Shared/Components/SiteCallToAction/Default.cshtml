@@ -1,15 +1,26 @@
 ﻿
-
 <section class="page" style="background: url(/plato.site/content/images/bg29.png) bottom left no-repeat;">
     <div class="container">
         <div class="p-5 text-center bg-white">
             <img src="~/plato.site/content/images/logo.png" alt="Plato Logo" title="Plato Logo" class="max-w-100 mb-4" />
-            <h1 class="font-weight-light text-primary">
-                Ready to evolve & support your software                
+            <h1 class="font-weight-bold text-primary">
+                @T["Create your support site"]
             </h1>
-            <a class="btn btn-primary btn-lg mt-4" asp-route-area="Plato.Site" asp-route-controller="Pricing" asp-route-action="Index" data-provide="loader-spy">
-                Goto Pricing <i class="fal fa-arrow-right"></i>
-            </a>
+            <div class="my-3 max-w-800 w-100 mx-auto">
+                <h3 class="font-weight-light">
+                    @T["Sign-up takes about 2 minutes - provide your email, company name & admin login then instantly access your new support site"]
+                </h3>
+                <div class="mt-4">
+                    <div class="max-w-600 w-100 mx-auto">
+                        <caching expires-after="@TimeSpan.FromMinutes(30)">
+                            @await DisplayAsync(new View("SiteSignUpForm", new
+                            {
+                                sticky = false
+                            }))
+                        </caching>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 </section>

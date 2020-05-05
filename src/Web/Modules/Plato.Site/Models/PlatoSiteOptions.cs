@@ -3,9 +3,11 @@
     public class PlatoSiteOptions
     {
 
-        public string DemoUrl { get; set; } = "#";
+        public string HostUrl { get; set; } = string.Empty;
 
-        public string PlatoDesktopUrl { get; set; } = "#";
+        public string DemoUrl { get; set; } = string.Empty;
+
+        public string PlatoDesktopUrl { get; set; } = string.Empty;
 
     }
 

@@ -4,7 +4,7 @@ Author: InstantASP
 WebSite: https://www.instantasp.co.uk/
 Category: Users
 Version: 1.0.0
-PlatoVersion: 1.1.1
+PlatoVersion: 2.0.0
 Icon: /plato.users.social/content/images/icon.png
 Dependencies: 
 [

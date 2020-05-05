@@ -3,6 +3,8 @@
     var authCss = !Model.SmtpSettings?.RequireCredentials ?? false
         ? "row collapse"
         : "row show";
+    var platoOpts = GetOptions<PlatoOptions>();
+    var isDemo = platoOpts?.DemoMode ?? false;
 }
 
 <input type="hidden" asp-for="IsNewTenant" />
@@ -142,37 +144,41 @@
                 <input asp-for="State" type="hidden" />
             }
 
-            <fieldset class="row" asp-validation-class-for="ConnectionString">
-                <div class="form-group col-md-12">
-                    <h6>@T["Connection string"]</h6>
-                    <label asp-for="ConnectionString">
-                        @T["The connection string cannot be changed once the tenant has been created."]
-                    </label>
-                    <div class="input-group mb-2 mb-sm-0">
-                        <div class="search-input-group">
-                            <input asp-for="ConnectionString"
-                                   readonly
-                                   autocomplete="off"
-                                   data-provide="password"
-                                   class="form-control" type="text" required />
-                            <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
-                                <i class="fal fa-eye"></i>
-                            </button>
+            if (!isDemo)
+            {
+                <fieldset class="row" asp-validation-class-for="ConnectionString">
+                    <div class="form-group col-md-12">
+                        <h6>@T["Connection string"]</h6>
+                        <label asp-for="ConnectionString">
+                            @T["The connection string cannot be changed once the tenant has been created."]
+                        </label>
+                        <div class="input-group mb-2 mb-sm-0">
+                            <div class="search-input-group">
+                                <input asp-for="ConnectionString"
+                                       readonly
+                                       autocomplete="off"
+                                       data-provide="password"
+                                       class="form-control" type="text" required />
+                                <button type="button" class="btn btn-secondary" data-toggle="tooltip" title="@T["Toggle Visibility"]" role="button">
+                                    <i class="fal fa-eye"></i>
+                                </button>
+                            </div>
                         </div>
+                        <span asp-validation-for="ConnectionString" class="text-danger"></span>
                     </div>
-                    <span asp-validation-for="ConnectionString" class="text-danger"></span>
-                </div>
-            </fieldset>
-            <fieldset class="row" asp-validation-class-for="TablePrefix">
-                <div class="form-group col-md-12">
-                    <h6>@T["Table Prefix"]</h6>
-                    <label asp-for="TablePrefix">
-                        @T["The table prefix cannot be changed once the tenant has been created."]
-                    </label>
-                    <input readonly asp-for="TablePrefix" class="form-control" />
-                    <span asp-validation-for="TablePrefix" class="text-danger"></span>
-                </div>
-            </fieldset>
+                </fieldset>
+                <fieldset class="row" asp-validation-class-for="TablePrefix">
+                    <div class="form-group col-md-12">
+                        <h6>@T["Table Prefix"]</h6>
+                        <label asp-for="TablePrefix">
+                            @T["The table prefix cannot be changed once the tenant has been created."]
+                        </label>
+                        <input readonly asp-for="TablePrefix" class="form-control" />
+                        <span asp-validation-for="TablePrefix" class="text-danger"></span>
+                    </div>
+                </fieldset>
+            }
+
         }
 
         @if (Model.IsNewTenant)
@@ -245,9 +251,8 @@
                         </div>
                         <input asp-for="RequestedUrlHost" class="form-control" />
                     </div>
-
                     <span asp-validation-for="RequestedUrlHost" class="text-danger"></span>
-                    <span class="text-muted form-text small">@T["For example https://www.domain.com or https://sub.domain.com. Leave blank to resolve to the default host name. If requests contain this host name this tenant will be loaded."]</span>
+                    <span class="text-muted form-text small">@T["For example www.domain.com or sub.domain.com. Leave blank to resolve to the default host name. If requests contain this host name this tenant will be loaded."]</span>
                 </div>
             </div>
             <div class="col-lg-6">
@@ -259,17 +264,10 @@
                         <div class="input-group-prepend">
                             <span class="input-group-text" id="basic-addon1">/</span>
                         </div>
-                        @if (Model.IsNewTenant)
-                        {
-                            <input asp-for="RequestedUrlPrefix" class="form-control" />
-                        }
-                        else
-                        {
-                            <input readonly asp-for="RequestedUrlPrefix" class="form-control" />
-                        }
+                        <input asp-for="RequestedUrlPrefix" class="form-control" />
                     </div>
                     <span asp-validation-for="RequestedUrlPrefix" class="text-danger"></span>
-                    <span class="text-muted form-text small">@T["A prefix or folder name for this tenant. For example sitename or companyname. If requests contain this prefix and match the host name this tenant will be loaded. Leave blank to resolve this tenant to the root. Please choose carefully as this cannot be changed once the tenant has been created."]</span>
+                    <span class="text-muted form-text small">@T["A prefix or folder name for this tenant. For example sitename or companyname. If requests contain this prefix and match the host name this tenant will be loaded. Leave blank to resolve this tenant to the host."]</span>
                 </div>
             </div>
         </div>

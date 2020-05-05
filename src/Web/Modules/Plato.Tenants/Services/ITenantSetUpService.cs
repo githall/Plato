@@ -1,5 +1,6 @@
 ﻿using Plato.Tenants.Models;
 using PlatoCore.Abstractions;
+using PlatoCore.Models.Shell;
 using System.Threading.Tasks;
 
 namespace Plato.Tenants.Services
@@ -11,7 +12,7 @@ namespace Plato.Tenants.Services
 
         Task<ICommandResult<TenantSetUpContext>> UpdateAsync(TenantSetUpContext context);
 
-        Task<ICommandResultBase> UninstallAsync(string siteName);
+        Task<ICommandResultBase> UninstallAsync(IShellSettings shellSettings);
 
     }
 
