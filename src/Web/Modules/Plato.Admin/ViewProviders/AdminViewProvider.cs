@@ -1,27 +1,18 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Microsoft.AspNetCore.Mvc.Rendering;
+﻿using System.Threading.Tasks;
 using Plato.Admin.Models;
 using Plato.Admin.ViewModels;
-using PlatoCore.Features.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Admin.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<AdminIndex>
     {
-   
-        public AdminViewProvider()
-        {
-            
-        }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(AdminIndex viewModel, IViewProviderContext context)
         {
 
             var adminViewModel = new AdminViewModel();
-
             return Task.FromResult(Views(
                 View<AdminViewModel>("Admin.Index.Header", model => adminViewModel).Zone("header").Order(1),
                 View<AdminViewModel>("Admin.Index.Tools", model => adminViewModel).Zone("tools").Order(1),
@@ -44,9 +35,6 @@ namespace Plato.Admin.ViewProviders
         {
             return await BuildEditAsync(viewModel, context);
         }
-
-
-      
 
     }
 

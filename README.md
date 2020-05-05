@@ -5,7 +5,9 @@
 
 Welcome to the official repository for Plato.
 
-Plato is the only fully integrated platform designed to help software teams connect & stay engaged with users to gather feedback, provide support & deliver better software. Plato offers everything needed to provide a simple, branded support & community site for software projects. 
+ Plato is the only fully integrated platform designed to help businesses connect & stay engaged with users to gather feedback, provide support & deliver better products. Plato offers everything needed to provide a simple, branded product support site. 
+ 
+ A 7 day free trial of Plato is available and sign-up takes above 2 minutes. To get started visit the Plato web site @ https://plato.instantasp.co.uk/ 
 
 Plato can be used to...
 
