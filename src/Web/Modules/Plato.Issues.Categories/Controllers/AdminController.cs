@@ -532,7 +532,6 @@ namespace Plato.Issues.Categories.Controllers
                 {
                     _alerter.Danger(T[error.Description]);
                 }
-
             }
 
             return RedirectToAction(nameof(Index));
@@ -541,7 +540,7 @@ namespace Plato.Issues.Categories.Controllers
 
         // ---------
 
-        async Task<IShellFeature> GetCurrentFeature()
+        private async Task<IShellFeature> GetCurrentFeature()
         {
             var featureId = "Plato.Issues.Categories";
             var feature = await _featureFacade.GetFeatureByIdAsync(featureId);
@@ -551,7 +550,7 @@ namespace Plato.Issues.Categories.Controllers
             }
             return feature;
         }
-        
+
     }
 
 }

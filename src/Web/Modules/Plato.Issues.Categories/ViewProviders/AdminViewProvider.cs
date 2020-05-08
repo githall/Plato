@@ -1,7 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.Extensions.Localization;
 using Plato.Categories.Models;
@@ -12,38 +12,34 @@ using Plato.Issues.Categories.Models;
 using Plato.Issues.Categories.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Issues.Categories.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<CategoryAdmin>
-    {
-        
-        private readonly IContextFacade _contextFacade;
-        private readonly ICategoryStore<Category> _categoryStore;
+    {        
+
         private readonly ICategoryManager<Category> _categoryManager;
+        private readonly ICategoryStore<Category> _categoryStore;
         private readonly IFeatureFacade _featureFacade;
 
         public IStringLocalizer S { get; }
 
-
         public AdminViewProvider(
             IStringLocalizer stringLocalizer,
-            IContextFacade contextFacade,
-            ICategoryStore<Category> categoryStore,
             ICategoryManager<Category> categoryManager,
+            ICategoryStore<Category> categoryStore,
             IFeatureFacade featureFacade)
         {
-            _contextFacade = contextFacade;
-            _categoryStore = categoryStore;
+
             _categoryManager = categoryManager;
+            _featureFacade = featureFacade;
+            _categoryStore = categoryStore;            
 
             S = stringLocalizer;
-            _featureFacade = featureFacade;
-        }
 
-        #region "Implementation"
+        }
 
         public override async Task<IViewProviderResult> BuildIndexAsync(CategoryAdmin categoryBase, IViewProviderContext updater)
         {
@@ -163,12 +159,10 @@ namespace Plato.Issues.Categories.ViewProviders
             return await BuildEditAsync(categoryBase, context);
             
         }
+    
+        // ------------
 
-        #endregion
-
-        #region "Private Methods"
-
-        async Task<IEnumerable<SelectListItem>> GetAvailableCategoriesAsync()
+        private async Task<IEnumerable<SelectListItem>> GetAvailableCategoriesAsync()
         {
 
             var output = new List<SelectListItem>
@@ -200,7 +194,7 @@ namespace Plato.Issues.Categories.ViewProviders
 
         }
 
-        IList<SelectListItem> RecurseCategories(
+        private IList<SelectListItem> RecurseCategories(
             IEnumerable<ICategory> input,
             IList<SelectListItem> output = null,
             int id = 0)
@@ -233,8 +227,7 @@ namespace Plato.Issues.Categories.ViewProviders
             return output;
 
         }
-        
-        #endregion
 
     }
+
 }

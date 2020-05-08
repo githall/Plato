@@ -86,7 +86,11 @@ namespace Plato.Categories.Services
 
         public Task<IPagedResults<TModel>> GetResultsAsync()
         {
-            return GetResultsAsync(new CategoryIndexOptions(), new PagerOptions());
+            return GetResultsAsync(new CategoryIndexOptions(), new PagerOptions()
+            {
+                CountTotal = false,
+                Size = int.MaxValue
+            });
         }
 
         public async Task<IPagedResults<TModel>> GetResultsAsync(CategoryIndexOptions options, PagerOptions pager)
