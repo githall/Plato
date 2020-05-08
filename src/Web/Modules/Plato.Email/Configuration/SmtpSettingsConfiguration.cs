@@ -48,6 +48,10 @@ namespace Plato.Email.Configuration
                 options.RequireCredentials = smtpSettings.RequireCredentials;
                 options.UseDefaultCredentials = smtpSettings.UseDefaultCredentials;
                 options.UserName = smtpSettings.UserName;
+                options.BatchSize = smtpSettings.BatchSize;
+                options.SendAttempts = smtpSettings.SendAttempts;
+                options.PollingInterval = smtpSettings.PollingInterval;
+                options.EnablePolling = smtpSettings.EnablePolling;
 
                 // Decrypt the password
                 if (!String.IsNullOrWhiteSpace(smtpSettings.Password))

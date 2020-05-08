@@ -31,18 +31,32 @@ namespace Plato.Categories.Services
 
         }
 
+        /// <summary>
+        /// Optionally configure additional query options.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
         public ICategoryService<TModel> ConfigureDb(Action<IQueryOptions> configure)
         {
             _configureDb = configure;
             return this;
         }
 
+        /// <summary>
+        /// Optionally configure query parameters to be used by GetResultAsync or GetResultsAsync.
+        /// </summary>
+        /// <param name="configure"></param>
+        /// <returns></returns>
         public ICategoryService<TModel> ConfigureQuery(Action<CategoryQueryParams> configure)
         {
             _configureParams = configure;
             return this;
         }
 
+        /// <summary>
+        /// Return a single category for the configured query.
+        /// </summary>
+        /// <returns></returns>
         public async Task<TModel> GetResultAsync()
         {
 
@@ -84,6 +98,10 @@ namespace Plato.Categories.Services
 
         }
 
+        /// <summary>
+        /// Returns all possible categories for the configured query.
+        /// </summary>
+        /// <returns></returns>
         public Task<IPagedResults<TModel>> GetResultsAsync()
         {
             return GetResultsAsync(new CategoryIndexOptions(), new PagerOptions()
@@ -93,6 +111,12 @@ namespace Plato.Categories.Services
             });
         }
 
+        /// <summary>
+        /// Return a paged set of results based on the supplied options & pager parameters plus the configured query if available. 
+        /// </summary>
+        /// <param name="options"></param>
+        /// <param name="pager"></param>
+        /// <returns></returns>
         public async Task<IPagedResults<TModel>> GetResultsAsync(CategoryIndexOptions options, PagerOptions pager)
         {
 

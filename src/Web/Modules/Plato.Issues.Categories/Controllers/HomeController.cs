@@ -207,7 +207,10 @@ namespace Plato.Issues.Categories.Controllers
         // ---------------
 
         // Use the category service to get the category to 
-        // ensure query adapters are enforced
+        // ensure query adapters are invoked, query adapters
+        // are used to implement role based security so using the 
+        // category service to retrieve the category is critical
+        // to check the user has the necessary roles to access the category
         private async Task<ICategory> GetCategoryAsync(int categoryId)
         {
 
