@@ -4,11 +4,11 @@
     AddTitleSegment(T["New Article"]);
 }
 
-<form asp-controller="Home" asp-action="Create" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+<form asp-action="Create" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
     <layout model="Model" />
 </form>
 
-<div class="layout">
+@*<div class="layout">
     <div class="layout-header">
         <div class="layout-header-content">
             @if (Model.Alerts != null)
@@ -113,4 +113,4 @@
             </div>
         }
     </div>
-</div>
+</div>*@

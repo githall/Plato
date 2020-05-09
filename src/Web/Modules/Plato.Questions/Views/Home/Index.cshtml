@@ -3,7 +3,11 @@
     AddTitleSegment(T["Questions"]);
 }
 
-<div class="layout">
+<form asp-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+    <layout model="Model" />
+</form>
+
+@*<div class="layout">
     <div class="layout-header layout-header-sticky">
         <div class="layout-header-content">
             @if (Model.Alerts != null)
@@ -74,4 +78,4 @@
             </div>
         }
     </div>
-</div>
+</div>*@
