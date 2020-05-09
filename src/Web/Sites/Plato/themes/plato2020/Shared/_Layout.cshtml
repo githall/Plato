@@ -72,6 +72,7 @@
 
     <div class="plato-body">
         <div class="container-fluid container-fluid-1400 pt-2">
+
             @if (platoOpts.DemoMode)
             {
                 <div class="mt-3">
@@ -80,13 +81,9 @@
                     </div>
                 </div>
             }
-            @if (!RouteEquals("Plato.Core", "Home", "Index"))
-            {
-                <nav aria-label="breadcrumb" class="mt-3">
-                    <breadcrumb class="breadcrumb p-0 m-0 bg-transparent col-12" />
-                </nav>
-            }
+        
             @RenderBody()
+
             <footer>
                 <hr class="mb-0" />
                 <div class="row py-4">
@@ -102,6 +99,7 @@
                     </div>
                 </div>
             </footer>
+
         </div>
     </div>
 

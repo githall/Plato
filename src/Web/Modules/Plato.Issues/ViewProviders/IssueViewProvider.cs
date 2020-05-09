@@ -63,16 +63,16 @@ namespace Plato.Issues.ViewProviders
 
             return Views(
                 View<Issue>("Home.Display.Header", model => issue).Zone("header"),
-                View<Issue>("Home.Display.Tools", model => issue).Zone("tools"),
-                View<Issue>("Home.Display.Sidebar", model => issue).Zone("sidebar"),
+                View<Issue>("Home.Display.Tools", model => issue).Zone("tools"),                
                 View<EntityViewModel<Issue, Comment>>("Home.Display.Content", model => viewModel).Zone("content"),
+                View<Issue>("Home.Display.Sidebar", model => issue).Zone("content-right"),
                 View<EditEntityReplyViewModel>("Home.Display.Footer", model => new EditEntityReplyViewModel()
                 {
                     EntityId = issue.Id,
                     EditorHtmlName = EditorHtmlName
-                }).Zone("footer"),
+                }).Zone("resizable-content"),
                 View<EntityViewModel<Issue, Comment>>("Home.Display.Actions", model => viewModel)
-                    .Zone("actions")
+                    .Zone("resizable-footer-right")
                     .Order(int.MaxValue)
             );
 
@@ -106,7 +106,7 @@ namespace Plato.Issues.ViewProviders
             return Task.FromResult(Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("Footer")
+                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("content-footer-right")
             ));
 
         }

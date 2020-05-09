@@ -1,20 +1,22 @@
 ﻿@model LayoutOptions
 @{
-    var centerPanel = "col-lg-12 layout-content";
+    var centerPanel = "col-lg-12";
     if (Model.Zones.SideBar != null && Model.Zones.Asides != null)
     {
-        centerPanel = "col-lg-6 layout-content";
+        centerPanel = "col-lg-6";
     }
     else if (Model.Zones.SideBar != null || Model.Zones.Asides != null)
     {
-        centerPanel = "col-lg-9 layout-content";
+        centerPanel = "col-lg-9";
     }
 }
 
 <div class="layout">
+
     <nav aria-label="breadcrumb" class="@Model.BreadCrumbCss">
         <breadcrumb class="breadcrumb p-0 m-0 bg-transparent col-12" />
     </nav>
+
     <div class="@Model.HeaderCss">
         <div class="layout-header-content">
             @if (Model.Zones.Alerts != null)
@@ -43,33 +45,32 @@
             }
         </div>
     </div>
+
     <div class="layout-body">
         <div class="row gutter-sm">
+
             @if (Model.Zones.SideBar != null)
             {
-                <div class="@Model.ContentLeftCss">
-                    <div class="d-block layout-sidebar-content navbar-expand-lg">
+                <div class="@Model.ContentLeftCss  col-lg-3">
+                    <div class="layout-sidebar-content navbar-expand-lg">
                         <div class="navbar-toggler">
-                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed btn-block" style="z-index:10; left: 12px; bottom: 24px; max-width: 42px;" data-toggle="modal" data-target="#asides">
+                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed btn-block" style="z-index:10; left: 12px; bottom: 24px; max-width: 42px;" data-toggle="modal" data-target="#contentLeftAsides">
                                 <i class="fal fa-bars"></i>
                             </a>
                         </div>
                         <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
-                            <card class="card">
-                                <card-body class="card-body p-2">
-                                    @if (Model.Zones.SideBar != null)
-                                    {
-                                        <view model="@Model.Zones.SideBar"></view>
-                                    }
-                                </card-body>
-                            </card>
+                            @if (Model.Zones.SideBar != null)
+                            {
+                                <view model="@Model.Zones.SideBar"></view>
+                            }
                         </div>
                     </div>
                 </div>
             }
+
             @if (Model.Zones.Content != null)
             {
-                <div class="@centerPanel">
+                <div class="layout-content @centerPanel">
                     <div>
                         <view model="@Model.Zones.Content"></view>
                     </div>
@@ -98,7 +99,7 @@
             }
             @if (Model.Zones.Asides != null)
             {
-                <div class="@Model.ContentRightCss">
+                <div class="@Model.ContentRightCss col-lg-3">
                     <div class="layout-asides-content">
                         <view model="@Model.Zones.Asides"></view>
                     </div>
@@ -106,6 +107,7 @@
             }
         </div>
     </div>
+
     <div class="layout-footer">
         @if (Model.Zones.Actions != null)
         {
@@ -120,9 +122,8 @@
             </div>
         }
     </div>
+
 </div>
-
-
 
 <div class="resizable resizable-bottom resizable-hidden" data-provide="resizeable">
     <div class="resizable-bar">
@@ -130,25 +131,25 @@
     </div>
     <div class="resizable-container overflow-auto">
 
-            @if (Model.Zones.ResizableHeaderLeft != null || Model.Zones.ResizableHeaderRight != null)
-            {
-                <div class="resizable-header">
-                    @if (Model.Zones.ResizableHeaderRight != null)
-                    {
-                        <div class="float-right">
-                            <view model="@Model.Zones.ResizableHeaderRight" />
-                        </div>
-                    }
-                    @if (Model.Zones.ResizableHeaderLeft != null)
-                    {
-                        <div class="float-left">
-                            <view model="@Model.Zones.ResizableHeaderLeft" />
-                        </div>
-                    }
-                </div>
-            }
+        @if (Model.Zones.ResizableHeaderLeft != null || Model.Zones.ResizableHeaderRight != null)
+        {
+            <div class="resizable-header">
+                @if (Model.Zones.ResizableHeaderRight != null)
+                {
+                    <div class="float-right">
+                        <view model="@Model.Zones.ResizableHeaderRight" />
+                    </div>
+                }
+                @if (Model.Zones.ResizableHeaderLeft != null)
+                {
+                    <div class="float-left">
+                        <view model="@Model.Zones.ResizableHeaderLeft" />
+                    </div>
+                }
+            </div>
+        }
 
-                @*<h6 class="d-inline-block text-uppercase">@T["Your Feedback"]</h6>
+        @*<h6 class="d-inline-block text-uppercase">@T["Your Feedback"]</h6>
                 <ul class="nav navbar">
                     <li class="nav-item">
                         <a href="#" data-toggle="tooltip" title="@T["Close / Minimize"]" class="nav-link text-muted resizable-close"><i class="fal fa-fw fa-times"></i></a>
@@ -156,37 +157,62 @@
                 </ul>
             </div>*@
 
-            @if (Model.Zones.ResizableContent != null)
-            {
-                <div class="resizable-body">
-                    <view model="@Model.Zones.ResizableContent"></view>
-                </div>
-            }
+        @if (Model.Zones.ResizableContent != null)
+        {
+            <div class="resizable-body">
+                <view model="@Model.Zones.ResizableContent"></view>
+            </div>
+        }
 
-            @if (Model.Zones.ResizableFooterLeft != null || Model.Zones.ResizableFooterRight != null)
-            {
-                <div class="resizable-footer">
-                    <card>
-                        <card-body>
+        @if (Model.Zones.ResizableFooterLeft != null || Model.Zones.ResizableFooterRight != null)
+        {
+            <div class="resizable-footer">
+                <card>
+                    <card-body>
 
-                            @if (Model.Zones.ResizableFooterRight != null)
-                            {
-                                <div class="float-right">
-                                    <view model="@Model.Zones.ResizableFooterRight" />
-                                </div>
-                            }
+                        @if (Model.Zones.ResizableFooterRight != null)
+                        {
+                            <div class="float-right">
+                                <view model="@Model.Zones.ResizableFooterRight" />
+                            </div>
+                        }
 
-                            @if (Model.Zones.ResizableFooterLeft != null)
-                            {
-                                <div class="float-left">
-                                    <view model="@Model.Zones.ResizableFooterLeft" />
-                                </div>
-                            }
+                        @if (Model.Zones.ResizableFooterLeft != null)
+                        {
+                            <div class="float-left">
+                                <view model="@Model.Zones.ResizableFooterLeft" />
+                            </div>
+                        }
 
-                        </card-body>
-                    </card>
-                </div>
-            }
+                    </card-body>
+                </card>
+            </div>
+        }
 
-        </div>
+    </div>
 </div>
+
+
+@if (Model.Zones.SideBar != null)
+{
+    <div class="modal fade" id="contentLeftAsides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
+        <div class="modal-dialog modal-left" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="searchHelpTitle">
+                        @T["Browse"]
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body overflow-auto">
+                    <view model="@Model.Zones.SideBar"></view>               
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}

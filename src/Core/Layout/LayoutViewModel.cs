@@ -12,9 +12,9 @@ namespace PlatoCore.Layout
 
         public string HeaderCss { get; set; } = "layout-header layout-header-sticky";
 
-        public string ContentLeftCss { get; set; } = "col-lg-3 layout-sidebar";
+        public string ContentLeftCss { get; set; } = "layout-sidebar";
 
-        public string ContentRightCss { get; set; } = "col-lg-3 layout-sidebar";
+        public string ContentRightCss { get; set; } = "layout-asides";
 
         public LayoutViewModel Zones { get; set; }
 

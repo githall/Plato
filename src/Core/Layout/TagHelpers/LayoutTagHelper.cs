@@ -17,6 +17,13 @@ namespace PlatoCore.Layout.TagHelpers
         [HtmlAttributeName("name")]
         public string Name { get; set; } = "_PlatoLayout";
 
+
+        [HtmlAttributeName("content-left-css")]
+        public string ContentLeftCss { get; set; }
+
+        [HtmlAttributeName("content-right-css")]
+        public string ContentRightCss { get; set; }
+
         [HtmlAttributeName("model")]
         public LayoutViewModel Model { get; set; }
 
@@ -89,6 +96,16 @@ namespace PlatoCore.Layout.TagHelpers
                 Zones = Model
             };
 
+            if (!string.IsNullOrEmpty(ContentLeftCss))
+            {
+                model.ContentLeftCss = ContentLeftCss;
+            }
+
+            if (!string.IsNullOrEmpty(ContentRightCss))
+            {
+                model.ContentRightCss = ContentRightCss;
+            }
+            
             var builder = new HtmlContentBuilder();
             try
             {

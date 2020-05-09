@@ -27,7 +27,7 @@ namespace Plato.Issues.Tags.ViewProviders
             _tagStore = tagStore;
         }
 
-        #region "Imlementation"
+        #region "Implementation"
         
         public override Task<IViewProviderResult> BuildIndexAsync(Tag tag, IViewProviderContext context)
         {
@@ -90,7 +90,7 @@ namespace Plato.Issues.Tags.ViewProviders
                     model.SelectedTagId = tag?.Id ?? 0;
                     model.Tags = tags?.Data;
                     return model;
-                }).Zone("sidebar").Order(1)
+                }).Zone("content-right").Order(1)
             );
             
         }
