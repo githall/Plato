@@ -85,7 +85,7 @@ namespace Plato.Discuss.Tags.ViewProviders
                 {
                     model.Tags = tags?.Data;
                     return model;
-                }).Zone("sidebar").Order(4)
+                }).Zone("content-right").Order(4)
             );
 
         }

@@ -90,7 +90,6 @@ namespace Plato.Discuss.Follow.ViewProviders
                 return await BuildIndexAsync(new Topic(), context);
             }
 
-
             var isFollowing = false;
             var followType = FollowTypes.Topic;
             var user = await _contextFacade.GetAuthenticatedUserAsync();
@@ -125,7 +124,7 @@ namespace Plato.Discuss.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Follow.Permissions.FollowTopics;
                     return model;
-                }).Zone("sidebar").Order(20)
+                }).Zone("content-right").Order(20)
             );
 
         }

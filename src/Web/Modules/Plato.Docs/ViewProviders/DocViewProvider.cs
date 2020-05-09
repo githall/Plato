@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Plato.Docs.Models;
-using Plato.Docs.Services;
 using Plato.Entities.Services;
 using Plato.Entities.Stores;
 using Plato.Entities.ViewModels;
@@ -70,16 +69,16 @@ namespace Plato.Docs.ViewProviders
 
             return Views(
                 View<Doc>("Home.Display.Header", model => doc).Zone("header"),
-                View<Doc>("Home.Display.Tools", model => doc).Zone("tools"),
-                View<Doc>("Home.Display.Sidebar", model => doc).Zone("sidebar"),
+                View<Doc>("Home.Display.Tools", model => doc).Zone("tools"),                
                 View<EntityViewModel<Doc, DocComment>>("Home.Display.Content", model => viewModel).Zone("content"),
+                View<Doc>("Home.Display.Sidebar", model => doc).Zone("content-left"),
                 View<EditEntityReplyViewModel>("Home.Display.Footer", model => new EditEntityReplyViewModel()
                 {
                     EntityId = doc.Id,
                     EditorHtmlName = EditorHtmlName
-                }).Zone("footer").Order(int.MinValue),
+                }).Zone("resizable-content").Order(int.MinValue),
                 View<EntityViewModel<Doc, DocComment>>("Home.Display.Actions", model => viewModel)
-                    .Zone("actions")
+                    .Zone("resizable-footer-right")
                     .Order(int.MaxValue)
             );
 
@@ -134,8 +133,8 @@ namespace Plato.Docs.ViewProviders
             return Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EntityDropDownViewModel>("Home.Edit.Sidebar", model => entityDropDownViewModel).Zone("sidebar").Order(7),
-                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("Footer")
+                View<EntityDropDownViewModel>("Home.Edit.Sidebar", model => entityDropDownViewModel).Zone("content-right").Order(7),
+                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("content-footer-right").Order(int.MaxValue)
             );
 
         }

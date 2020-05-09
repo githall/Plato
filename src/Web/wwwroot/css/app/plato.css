@@ -1373,6 +1373,7 @@ a.navbar-brand img { max-height: 48px; }
 /* ------------------------- */
 
 .layout,
+.layout-breadcrumb,
 .layout-header,
 .layout-header-sticky,
 .layout-alerts,
@@ -1463,8 +1464,8 @@ a.navbar-brand img { max-height: 48px; }
     transition: all 0.20s ease-in;
 }
 
-.layout-content .card,
-.layout-sidebar .card { margin-bottom: 1.25rem; }
+.layout .card,
+.resizable .card { margin-bottom: 1.25rem; }
 
 .layout-content .accordion,
 .layout-sidebar .accordion  { margin-bottom: 1.25rem; }
@@ -1801,8 +1802,13 @@ a.navbar-brand img { max-height: 48px; }
     display: inline-block;
 }
 
-.resizable-body {
-    padding: 1.25rem;
+.resizable-body,
+.resizable-footer {
+    padding: 1.25rem 1.25rem 0 1.25rem;
+}
+
+.resizable-footer {
+    padding-top: 0;
 }
 
 /* ------------------------- */

@@ -1,0 +1,193 @@
+﻿@model LayoutOptions
+@{
+    var headerCss = "layout-header layout-header-sticky";
+  
+    var centerPanel = "col-lg-12 layout-content";
+
+    if (Model.Views.SideBar != null && Model.Views.Asides != null)
+    {
+        centerPanel = "col-lg-6 layout-content";
+    }
+    else if (Model.Views.SideBar != null || Model.Views.Asides != null)
+    {
+        centerPanel = "col-lg-9 layout-content";
+    }
+}
+
+<div class="layout">
+    <nav aria-label="breadcrumb" class="@Model.BreadCrumbCss">
+        <breadcrumb class="breadcrumb p-0 m-0 bg-transparent col-12" />
+    </nav>
+    <div class="@Model.HeaderCss">
+        <div class="layout-header-content">
+            @if (Model.Views.Alerts != null)
+            {
+                <div class="layout-alerts">
+                    <view model="@Model.Views.Alerts"></view>
+                </div>
+            }
+            @if (Model.Views.Tools != null)
+            {
+                <div class="float-right layout-tools">
+                    <view model="@Model.Views.Tools" />
+                </div>
+            }
+            @if (Model.Views.Header != null)
+            {
+                <div class="layout-header-item">
+                    <view model="@Model.Views.Header" />
+                </div>
+            }
+            @if (Model.Views.Meta != null)
+            {
+                <div class="layout-meta">
+                    <view model="@Model.Views.Meta"></view>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="layout-body">
+        <div class="row gutter-sm">
+            @if (Model.Views.SideBar != null)
+            {
+                <div class="@Model.ContentLeftCss">
+                    <div class="d-block layout-sidebar-content navbar-expand-lg">
+                        <div class="navbar-toggler">
+                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed btn-block" style="z-index:10; left: 12px; bottom: 24px; max-width: 42px;" data-toggle="modal" data-target="#asides">
+                                <i class="fal fa-bars"></i>
+                            </a>
+                        </div>
+                        <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
+                            <card class="card">
+                                <card-body class="card-body p-2">
+                                    @if (Model.Views.SideBar != null)
+                                    {
+                                        <view model="@Model.Views.SideBar"></view>
+                                    }
+                                </card-body>
+                            </card>
+                        </div>
+                    </div>
+                </div>
+            }
+            @if (Model.Views.Content != null)
+            {
+                <div class="@centerPanel">
+                    <div>
+                        <view model="@Model.Views.Content"></view>
+                    </div>
+                    @if (Model.Views.ContentFooterLeft != null || Model.Views.ContentFooterRight != null)
+                    {
+                        <div class="layout-content-footer">
+                            <card>
+                                <card-body>
+                                    @if (Model.Views.ContentFooterLeft != null)
+                                    {
+                                        <div class="layout-actions">
+                                            <view model="@Model.Views.ContentFooterLeft" />
+                                        </div>
+                                    }
+                                    @if (Model.Views.ContentFooterRight != null)
+                                    {
+                                        <div class="layout-footer-item">
+                                            <view model="@Model.Views.ContentFooterRight"></view>
+                                        </div>
+                                    }
+                                </card-body>
+                            </card>
+                        </div>
+                    }
+                </div>
+            }
+            @if (Model.Views.Asides != null)
+            {
+                <div class="@Model.ContentRightCss">
+                    <div class="layout-asides-content">
+                        <view model="@Model.Views.Asides"></view>
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="layout-footer">
+        @if (Model.Views.Actions != null)
+        {
+            <div class="float-right layout-actions">
+                <view model="@Model.Views.Actions" />
+            </div>
+        }
+        @if (Model.Views.Footer != null)
+        {
+            <div class="layout-footer-item">
+                <view model="@Model.Views.Footer"></view>
+            </div>
+        }
+    </div>
+</div>
+
+<div class="resizable resizable-bottom resizable-hidden" data-provide="resizeable">
+    <div class="resizable-bar">
+        <i class="fal fa-bars"></i>
+    </div>
+    <div class="resizable-container overflow-auto">
+
+            @if (Model.Views.ResizableHeaderLeft != null || Model.Views.ResizableHeaderRight != null)
+            {
+                <div class="resizable-header">
+                    @if (Model.Views.ResizableHeaderRight != null)
+                    {
+                        <div class="float-right">
+                            <view model="@Model.Views.ResizableHeaderRight" />
+                        </div>
+                    }
+                    @if (Model.Views.ResizableHeaderLeft != null)
+                    {
+                        <div class="float-left">
+                            <view model="@Model.Views.ResizableHeaderLeft" />
+                        </div>
+                    }
+                </div>
+            }
+
+                @*<h6 class="d-inline-block text-uppercase">@T["Your Feedback"]</h6>
+                <ul class="nav navbar">
+                    <li class="nav-item">
+                        <a href="#" data-toggle="tooltip" title="@T["Close / Minimize"]" class="nav-link text-muted resizable-close"><i class="fal fa-fw fa-times"></i></a>
+                    </li>
+                </ul>
+            </div>*@
+
+            @if (Model.Views.ResizableContent != null)
+            {
+                <div class="resizable-body">
+                    <view model="@Model.Views.ResizableContent"></view>
+                </div>
+            }
+
+            @if (Model.Views.ResizableFooterLeft != null || Model.Views.ResizableFooterRight != null)
+            {
+                <div class="resizable-footer">
+                    <card>
+                        <card-body>
+
+                            @if (Model.Views.ResizableFooterRight != null)
+                            {
+                                <div class="float-right">
+                                    <view model="@Model.Views.ResizableFooterRight" />
+                                </div>
+                            }
+
+                            @if (Model.Views.ResizableFooterLeft != null)
+                            {
+                                <div class="float-left">
+                                    <view model="@Model.Views.ResizableFooterLeft" />
+                                </div>
+                            }
+
+                        </card-body>
+                    </card>
+                </div>
+            }
+
+        </div>
+</div>

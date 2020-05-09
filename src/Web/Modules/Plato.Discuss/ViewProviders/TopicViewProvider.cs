@@ -59,16 +59,16 @@ namespace Plato.Discuss.ViewProviders
 
             return Views(
                 View<Topic>("Home.Display.Header", model => topic).Zone("header"),
-                View<Topic>("Home.Display.Tools", model => topic).Zone("tools"),
-                View<Topic>("Home.Display.Sidebar", model => topic).Zone("sidebar").Order(int.MinValue + 10),
+                View<Topic>("Home.Display.Tools", model => topic).Zone("tools"),                
                 View<EntityViewModel<Topic, Reply>>("Home.Display.Content", model => viewModel).Zone("content"),
+                View<Topic>("Home.Display.Sidebar", model => topic).Zone("content-right").Order(int.MinValue + 10),
                 View<EditEntityReplyViewModel>("Home.Display.Footer", model => new EditEntityReplyViewModel()
                 {
                     EntityId = topic.Id,
                     EditorHtmlName = EditorHtmlName
-                }).Zone("footer").Order(int.MinValue),
+                }).Zone("resizable-content").Order(int.MinValue),
                 View<EntityViewModel<Topic, Reply>>("Home.Display.Actions", model => viewModel)
-                    .Zone("actions")
+                    .Zone("resizable-footer-right")
                     .Order(int.MaxValue)
             );
 
@@ -89,7 +89,7 @@ namespace Plato.Discuss.ViewProviders
                     }
                 }
             }
-          
+
             var viewModel = new EditEntityViewModel()
             {
                 Id = topic.Id,
@@ -98,11 +98,11 @@ namespace Plato.Discuss.ViewProviders
                 EditorHtmlName = EditorHtmlName,
                 Alias = topic.Alias
             };
-     
+
             return Task.FromResult(Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("Footer")
+                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("content-footer-right")
             ));
 
         }

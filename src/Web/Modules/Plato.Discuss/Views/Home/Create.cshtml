@@ -5,7 +5,10 @@
 }
 
 <form asp-controller="Home" asp-action="Create" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
-    <div class="layout">
+    <layout model="Model" />
+</form>
+
+    @*<div class="layout">
         <div class="layout-header">
             <div class="layout-header-content">
                 @if (Model.Alerts != null)
@@ -110,5 +113,4 @@
                 </div>
             }
         </div>
-    </div>
-</form>
+    </div>*@

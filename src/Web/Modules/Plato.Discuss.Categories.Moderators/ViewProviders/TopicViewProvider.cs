@@ -64,7 +64,7 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
                 {
                     model.Moderators = users?.Data ?? null;
                     return model;
-                }).Zone("sidebar").Order(100)
+                }).Zone("content-right").Order(100)
             );
             
         }

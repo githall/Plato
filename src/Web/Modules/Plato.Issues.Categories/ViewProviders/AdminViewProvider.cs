@@ -105,13 +105,14 @@ namespace Plato.Issues.Categories.ViewProviders
                     AvailableChannels = await GetAvailableCategoriesAsync()
                 };
             }
-            
+
             return Views(
                 View<EditCategoryViewModel>("Admin.Edit.Header", model => editCategoryViewModel).Zone("header").Order(1),
                 View<EditCategoryViewModel>("Admin.Edit.Content", model => editCategoryViewModel).Zone("content").Order(1),
                 View<EditCategoryViewModel>("Admin.Edit.Actions", model => editCategoryViewModel).Zone("actions").Order(1),
                 View<EditCategoryViewModel>("Admin.Edit.Footer", model => editCategoryViewModel).Zone("footer").Order(1)
             );
+
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(CategoryAdmin categoryBase, IViewProviderContext context)
@@ -159,7 +160,7 @@ namespace Plato.Issues.Categories.ViewProviders
             return await BuildEditAsync(categoryBase, context);
             
         }
-    
+
         // ------------
 
         private async Task<IEnumerable<SelectListItem>> GetAvailableCategoriesAsync()

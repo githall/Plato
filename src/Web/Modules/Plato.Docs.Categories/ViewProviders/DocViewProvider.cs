@@ -211,6 +211,7 @@ namespace Plato.Docs.Categories.ViewProviders
             {
                 parents = await _categoryStore.GetParentsByIdAsync(doc.CategoryId);
             }
+
             _breadCrumbManager.Configure(builder =>
             {
 
@@ -273,7 +274,9 @@ namespace Plato.Docs.Categories.ViewProviders
             };
 
             return Views(
-                View<CategoryDropDownViewModel>("Doc.Categories.Edit.Sidebar", model => viewModel).Zone("sidebar").Order(5)
+                View<CategoryDropDownViewModel>("Doc.Categories.Edit.Sidebar", model => viewModel)
+                .Zone("content-right")
+                .Order(5)
             );
 
         }

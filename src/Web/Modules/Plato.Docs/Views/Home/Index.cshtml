@@ -3,7 +3,11 @@
     AddTitleSegment(T["Docs"]);
 }
 
-<div class="layout">
+<form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+    <layout model="Model" />
+</form>
+
+@*<div class="layout">
     <div class="layout-header layout-header-sticky">
         <div class="layout-header-content">
             @if (Model.Alerts != null)
@@ -87,7 +91,7 @@
             </div>
         }
     </div>
-</div>
+</div>*@
 
 <div class="modal fade" id="asides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
     <div class="modal-dialog modal-left" role="document">

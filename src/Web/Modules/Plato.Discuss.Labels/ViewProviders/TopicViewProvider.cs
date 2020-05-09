@@ -65,7 +65,7 @@ namespace Plato.Discuss.Labels.ViewProviders
         
         public override async Task<IViewProviderResult> BuildIndexAsync(Topic viewModel, IViewProviderContext updater)
         {
-            
+
             // Get top 10 labels
             var labels = await _labelStore.QueryAsync()
                 .Take(1, 10, false)
@@ -80,9 +80,9 @@ namespace Plato.Discuss.Labels.ViewProviders
                 {
                     model.Labels = labels?.Data;
                     return model;
-                }).Zone("sidebar").Order(2)
+                }).Zone("content-right").Order(2)
             );
-            
+
         }
 
         public override async Task<IViewProviderResult> BuildDisplayAsync(Topic viewModel, IViewProviderContext updater)
@@ -103,7 +103,7 @@ namespace Plato.Discuss.Labels.ViewProviders
                 {
                     model.Labels = labels?.Data;
                     return model;
-                }).Zone("sidebar").Order(3)
+                }).Zone("content-right").Order(3)
             );
 
         }
@@ -123,7 +123,7 @@ namespace Plato.Discuss.Labels.ViewProviders
                 var labels = await GetEntityLabelsByEntityIdAsync(topic.Id);
                 selectedLabels = labels?.Select(l => l.LabelId).ToList();
             }
-            
+
             var viewModel = new LabelDropDownViewModel()
             {
                 Options = new LabelIndexOptions()
@@ -133,10 +133,10 @@ namespace Plato.Discuss.Labels.ViewProviders
                 HtmlName = LabelHtmlName,
                 SelectedLabels = selectedLabels?.ToArray()
             };
-            
+
             return Views(
                 View<LabelDropDownViewModel>("Topic.Labels.Edit.Sidebar", model => viewModel)
-                .Zone("sidebar").Order(15)
+                .Zone("content-right").Order(15)
             );
 
         }

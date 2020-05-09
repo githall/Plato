@@ -30,14 +30,44 @@ namespace PlatoCore.Layout
                 Header = GetPositionedViews(LayoutZones.HeaderZoneName),
                 Tools = GetPositionedViews(LayoutZones.ToolsZoneName),
                 Meta = GetPositionedViews(LayoutZones.MetaZoneName),
+
                 Content = GetPositionedViews(LayoutZones.ContentZoneName),
-                SideBar = GetPositionedViews(LayoutZones.SideBarZoneName),
+
+                ContentFooterLeft = GetPositionedViews(LayoutZones.ContentFooterLeftZoneName),
+                ContentFooterRight = GetPositionedViews(LayoutZones.ContentFooterRightZoneName),
+
+                ResizableHeaderLeft = GetPositionedViews(LayoutZones.ResizableHeaderLeft),
+                ResizableHeaderRight = GetPositionedViews(LayoutZones.ResizableHeaderRight),
+                ResizableContent = GetPositionedViews(LayoutZones.ResizableContent),
+                ResizableFooterLeft = GetPositionedViews(LayoutZones.ResizableFooterLeft),
+                ResizableFooterRight = GetPositionedViews(LayoutZones.ResizableFooterRight),
+
+                SideBar = GetPositionedViews(new string[] { LayoutZones.SideBarZoneName, LayoutZones.ContentLeftZoneName }),                
                 Footer = GetPositionedViews(LayoutZones.FooterZoneName),
                 Actions = GetPositionedViews(LayoutZones.ActionsZoneName),
-                Asides = GetPositionedViews(LayoutZones.AsidesZoneName),
+                Asides = GetPositionedViews(new string[] { LayoutZones.AsidesZoneName, LayoutZones.ContentRightZoneName }),
                 Alerts = GetPositionedViews(LayoutZones.AlertsZoneName),
+
             };
 
+        }
+
+        IEnumerable<ILayoutZoneView> GetPositionedViews(string[] zoneNames)
+        {
+            List<ILayoutZoneView> output = null;
+            foreach (var zoneName in zoneNames)
+            {
+                var results = GetPositionedViews(zoneName);
+                if (results != null)
+                {
+                    if (output == null)
+                    {
+                        output = new List<ILayoutZoneView>();
+                    }
+                    output.AddRange(results);
+                }                
+            }
+            return output;
         }
 
         IEnumerable<ILayoutZoneView> GetPositionedViews(string zoneName)
