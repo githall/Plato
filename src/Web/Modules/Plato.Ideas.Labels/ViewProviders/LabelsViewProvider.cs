@@ -83,7 +83,7 @@ namespace Plato.Ideas.Labels.ViewProviders
                     model.SelectedLabelId = label?.Id ?? 0;
                     model.Labels = labels?.Data;
                     return model;
-                }).Zone("sidebar").Order(1)
+                }).Zone("content-right").Order(1)
             );
             
         }

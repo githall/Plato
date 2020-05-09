@@ -86,7 +86,7 @@ namespace Plato.Ideas.Tags.ViewProviders
                 {
                     model.Tags = tags?.Data;
                     return model;
-                }).Zone("sidebar").Order(4)
+                }).Zone("content-right").Order(4)
             );
 
         }
@@ -106,7 +106,7 @@ namespace Plato.Ideas.Tags.ViewProviders
                     HtmlName = TagsHtmlName,
                     FeatureId = feature?.Id ?? 0,
                     Permission = Permissions.PostIdeaCommentTags
-                }).Zone("footer")
+                }).Zone("resizable-content")
                     .Order(int.MaxValue)
             );
 

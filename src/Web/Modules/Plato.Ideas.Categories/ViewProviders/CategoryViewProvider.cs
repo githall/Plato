@@ -68,7 +68,7 @@ namespace Plato.Ideas.Categories.ViewProviders
                 View<CategoryBase>("Home.Index.Header", model => existingCategory).Zone("header").Order(1),
                 View<CategoryBase>("Home.Index.Tools", model => existingCategory).Zone("tools").Order(1),
                 View<CategoryIndexViewModel>("Home.Index.Content", model => indexViewModel).Zone("content").Order(1),
-                View<CategoryIndexViewModel>("Ideas.Categories.Sidebar", model => indexViewModel).Zone("sidebar").Order(1)
+                View<CategoryIndexViewModel>("Ideas.Categories.Sidebar", model => indexViewModel).Zone("content-right").Order(1)
             );
 
         }

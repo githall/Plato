@@ -4,7 +4,11 @@
     AddTitleSegment(T["Edit Comment"]);
 }
 
-<form asp-controller="Home" asp-action="EditReply" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+<form asp-action="EditReply" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+    <layout model="Model" />
+</form>
+
+@*<form asp-controller="Home" asp-action="EditReply" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
     <div class="layout">
         <div class="layout-header">
             <div class="layout-header-content">
@@ -113,4 +117,4 @@
             }
         </div>
     </div>
-</form>
+</form>*@
