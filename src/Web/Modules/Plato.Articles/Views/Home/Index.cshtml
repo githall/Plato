@@ -3,7 +3,11 @@
     AddTitleSegment(T["Articles"]);
 }
 
-<div class="layout">
+<form asp-controller="Home" asp-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+    <layout model="Model" />
+</form>
+
+@*<div class="layout">
     <div class="layout-header layout-header-sticky">
         <div class="layout-header-content">
             @if (Model.Alerts != null)
@@ -53,11 +57,11 @@
         else
         {
             @if (Model.Content != null)
-             {
-                 <div class="layout-content">
-                     <view model="@Model.Content"></view>
-                 </div>
-             }
+                {
+                    <div class="layout-content">
+                        <view model="@Model.Content"></view>
+                    </div>
+                }
         }
     </div>
     <div class="layout-footer">
@@ -74,4 +78,4 @@
             </div>
         }
     </div>
-</div>
+</div>*@

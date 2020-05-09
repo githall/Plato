@@ -106,7 +106,7 @@ namespace Plato.Discuss.Tags.ViewProviders
                     HtmlName = TagsHtmlName,
                     FeatureId = feature?.Id ?? 0,
                     Permission = Permissions.PostReplyTags
-                }).Zone("footer")
+                }).Zone("resizable-content")
                     .Order(int.MaxValue)
             );
 

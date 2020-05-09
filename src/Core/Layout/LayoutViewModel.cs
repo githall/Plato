@@ -16,7 +16,7 @@ namespace PlatoCore.Layout
 
         public string ContentRightCss { get; set; } = "col-lg-3 layout-sidebar";
 
-        public LayoutViewModel Views { get; set; }
+        public LayoutViewModel Zones { get; set; }
 
     }
 

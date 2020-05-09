@@ -15,10 +15,9 @@ namespace Plato.Discuss.Tags.ViewProviders
 {
     public class TagViewProvider : ViewProviderBase<Tag>
     {
+
         private readonly IFeatureFacade _featureFacade;
         private readonly ITagStore<Tag> _tagStore;
-
-    
 
         public TagViewProvider(
             ITagStore<Tag> tagStore,
@@ -27,9 +26,9 @@ namespace Plato.Discuss.Tags.ViewProviders
             _tagStore = tagStore;
             _featureFacade = featureFacade;
         }
-        
-        #region "Imlementation"
-        
+
+        #region "Implementation"
+
         public override Task<IViewProviderResult> BuildIndexAsync(Tag tag, IViewProviderContext context)
         {
 
@@ -70,7 +69,7 @@ namespace Plato.Discuss.Tags.ViewProviders
             {
                 return default(IViewProviderResult);
             }
-            
+
             // Get all tags for feature
             var tags = await _tagStore.QueryAsync()
                 .Take(20, false)
@@ -91,9 +90,9 @@ namespace Plato.Discuss.Tags.ViewProviders
                     model.SelectedTagId = tag?.Id ?? 0;
                     model.Tags = tags?.Data;
                     return model;
-                }).Zone("sidebar").Order(1)
+                }).Zone("content-right").Order(1)
             );
-            
+
         }
 
         public override Task<IViewProviderResult> BuildEditAsync(Tag tag, IViewProviderContext context)
@@ -105,7 +104,7 @@ namespace Plato.Discuss.Tags.ViewProviders
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
         #endregion
 
     }

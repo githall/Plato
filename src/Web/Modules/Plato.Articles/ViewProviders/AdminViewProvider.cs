@@ -1,12 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Plato.Articles.Models;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Articles.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<AdminIndex>
     {
 
@@ -18,12 +16,12 @@ namespace Plato.Articles.ViewProviders
                 View<AdminIndex>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
         }
-        
+
         public override Task<IViewProviderResult> BuildDisplayAsync(AdminIndex viewModel, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
         public override Task<IViewProviderResult> BuildEditAsync(AdminIndex viewModel, IViewProviderContext context)
         {
             return Task.FromResult(default(IViewProviderResult));

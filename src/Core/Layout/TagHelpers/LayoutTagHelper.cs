@@ -86,7 +86,7 @@ namespace PlatoCore.Layout.TagHelpers
 
             var model = new LayoutOptions()
             {
-                Views = Model
+                Zones = Model
             };
 
             var builder = new HtmlContentBuilder();

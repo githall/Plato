@@ -698,24 +698,17 @@ a.label:hover, .label.active {
 .dropzone.dz-drag-hover .dz-message { border-color:#aaa; }
 
 
-
-
 .layout {background:yellow; }
-
-.layout-breadcrumb { background:gray; }
-
-
+.layout-breadcrumb { background:#aaa; }
 .layout-header{background:orange; }
 .layout-alerts { background:red; }
 .layout-tools { background:blue; }
-
-
 .layout-meta{background:purple; }
 
 .layout-body,
 .layout-content {background:pink; }
-
 .layout-sidebar {background:green; }
+
 .layout-footer {background:purple; }
 .layout-actions,
 .layout-asides {}
