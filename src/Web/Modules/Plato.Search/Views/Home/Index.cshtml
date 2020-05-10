@@ -3,7 +3,11 @@
     AddTitleSegment(T["Search"]);
 }
 
-<form asp-route-action="Index" method="get" role="form">
+<form asp-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+    <layout model="Model" />
+</form>
+
+@*<form asp-route-action="Index" method="get" role="form">
     <div class="layout">
         <div class="layout-header layout-header-sticky">
             <div class="layout-header-content">
@@ -78,4 +82,4 @@
             }
         </div>
     </div>
-</form>
+</form>*@
