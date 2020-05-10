@@ -15,7 +15,7 @@ namespace Plato.Admin.ViewProviders
             var adminViewModel = new AdminViewModel();
             return Task.FromResult(Views(
                 View<AdminViewModel>("Admin.Index.Header", model => adminViewModel).Zone("header").Order(1),
-                View<AdminViewModel>("Admin.Index.Tools", model => adminViewModel).Zone("tools").Order(1),
+                View<AdminViewModel>("Admin.Index.Tools", model => adminViewModel).Zone("header-right").Order(1),
                 View<AdminViewModel>("Admin.Index.Content", model => adminViewModel).Zone("content").Order(1)
             ));
             

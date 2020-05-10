@@ -39,7 +39,7 @@ namespace Plato.WebApi.ViewProviders
             var viewModel = await GetModel();
             return Views(
                 View<WebApiSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
-                View<WebApiSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools").Order(1),
+                View<WebApiSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<WebApiSettingsViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1)
             );
         }

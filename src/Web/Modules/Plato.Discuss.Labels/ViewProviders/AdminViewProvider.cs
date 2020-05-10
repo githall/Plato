@@ -35,7 +35,7 @@ namespace Plato.Discuss.Labels.ViewProviders
 
             return Task.FromResult(Views(
                 View<LabelIndexViewModel<Label>>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<LabelIndexViewModel<Label>>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<LabelIndexViewModel<Label>>("Admin.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<LabelIndexViewModel<Label>>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
 

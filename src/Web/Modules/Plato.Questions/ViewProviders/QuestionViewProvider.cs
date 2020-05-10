@@ -46,7 +46,7 @@ namespace Plato.Questions.ViewProviders
 
             return Task.FromResult(Views(
                 View<EntityIndexViewModel<Question>>("Home.Index.Header", model => viewModel).Zone("header"),
-                View<EntityIndexViewModel<Question>>("Home.Index.Tools", model => viewModel).Zone("tools"),
+                View<EntityIndexViewModel<Question>>("Home.Index.Tools", model => viewModel).Zone("header-right"),
                 View<EntityIndexViewModel<Question>>("Home.Index.Content", model => viewModel).Zone("content")
             ));
 
@@ -68,16 +68,16 @@ namespace Plato.Questions.ViewProviders
 
             return Views(
                 View<Question>("Home.Display.Header", model => question).Zone("header"),
-                View<Question>("Home.Display.Tools", model => question).Zone("tools"),                
+                View<Question>("Home.Display.Tools", model => question).Zone("header-right"),                
                 View<EntityViewModel<Question, Answer>>("Home.Display.Content", model => viewModel).Zone("content"),
                 View<Question>("Home.Display.Sidebar", model => question).Zone("content-right"),
                 View<EditEntityReplyViewModel>("Home.Display.Footer", model => new EditEntityReplyViewModel()
                 {
                     EntityId = question.Id,
                     EditorHtmlName = EditorHtmlName
-                }).Zone("resizable-content"),
+                }).Zone("resize-content"),
                 View<EntityViewModel<Question, Answer>>("Home.Display.Actions", model => viewModel)
-                    .Zone("resizable-footer-right")
+                    .Zone("resize-actions-right")
                     .Order(int.MaxValue)
 
             );

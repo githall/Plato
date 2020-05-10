@@ -47,7 +47,7 @@ namespace Plato.Users.ViewProviders
             return Task.FromResult(
                 Views(
                     View<UserIndexViewModel>("Home.Index.Header", model => viewModel).Zone("header"),
-                    View<UserIndexViewModel>("Home.Index.Tools", model => viewModel).Zone("tools"),
+                    View<UserIndexViewModel>("Home.Index.Tools", model => viewModel).Zone("header-right"),
                     View<UserIndexViewModel>("Home.Index.Content", model => viewModel).Zone("content")
                 ));
 
@@ -64,7 +64,7 @@ namespace Plato.Users.ViewProviders
 
             return Views(
                 View<User>("Home.Display.Header", model => user).Zone("header"),
-                View<User>("Home.Display.Tools", model => user).Zone("tools"),
+                View<User>("Home.Display.Tools", model => user).Zone("header-right"),
                 View<User>("Home.Display.Content", model => user).Zone("content").Order(int.MinValue + 100),
                 View<User>("Home.Display.Sidebar", model => user).Zone("content-left")                
             );

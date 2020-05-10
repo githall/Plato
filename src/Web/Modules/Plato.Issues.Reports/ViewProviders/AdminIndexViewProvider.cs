@@ -41,7 +41,7 @@ namespace Plato.Issues.Reports.ViewProviders
             };
 
             return Views(
-                View<ReportOptions>("Reports.Admin.Index.Tools", model => reportIndexViewModel).Zone("tools")
+                View<ReportOptions>("Reports.Admin.Index.Tools", model => reportIndexViewModel).Zone("header-right")
                     .Order(int.MinValue),
                 View<ReportOptions>("Reports.Issues.AdminIndex", model => reportIndexViewModel).Zone("content").Order(1)
                     .Order(1)

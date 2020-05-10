@@ -106,7 +106,7 @@ namespace Plato.Articles.Tags.ViewProviders
                     HtmlName = TagsHtmlName,
                     FeatureId = feature?.Id ?? 0,
                     Permission = Permissions.PostArticleCommentTags
-                }).Zone("resizable-content")
+                }).Zone("resize-content")
                     .Order(int.MaxValue)
             );
 

@@ -64,7 +64,7 @@ namespace Plato.Questions.Categories.ViewProviders
 
             return Views(
                 View<CategoryBase>("Admin.Index.Header", model => categoryBase).Zone("header").Order(1),
-                View<CategoryIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<CategoryIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<CategoryIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             );
 

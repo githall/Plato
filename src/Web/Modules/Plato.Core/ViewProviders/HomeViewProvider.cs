@@ -31,14 +31,14 @@ namespace Plato.Core.ViewProviders
             {
                 return Task.FromResult(Views(
                     View<HomeIndex>("Home.Index.Header", model => viewModel).Zone("header"),
-                    View<HomeIndex>("Home.Index.Tools", model => viewModel).Zone("tools"),
+                    View<HomeIndex>("Home.Index.Tools", model => viewModel).Zone("header-right"),
                     View<HomeIndex>("Home.Index.Content", model => viewModel).Zone("content")
                 ));
             }
 
             return Task.FromResult(Views(
                 View<HomeIndex>("Home.Index.Header", model => viewModel).Zone("header"),
-                View<HomeIndex>("Home.Index.Tools", model => viewModel).Zone("tools")
+                View<HomeIndex>("Home.Index.Tools", model => viewModel).Zone("header-right")
             ));
 
         }

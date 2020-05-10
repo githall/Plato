@@ -18,7 +18,7 @@ namespace Plato.Features.ViewProviders
         {
             return Task.FromResult(Views(
                 View<FeaturesIndexViewModel>("Admin.Index.Header", model => indexViewModel).Zone("header"),
-                View<FeaturesIndexViewModel>("Admin.Index.Tools", model => indexViewModel).Zone("tools"),
+                View<FeaturesIndexViewModel>("Admin.Index.Tools", model => indexViewModel).Zone("header-right"),
                 View<FeaturesIndexViewModel>("Admin.Index.Content", model => indexViewModel).Zone("content")
             ));
         }

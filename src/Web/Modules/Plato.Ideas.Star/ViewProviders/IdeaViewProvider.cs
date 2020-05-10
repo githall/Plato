@@ -61,7 +61,7 @@ namespace Plato.Ideas.Star.ViewProviders
                     model.TotalStars = entity.TotalStars;
                     model.Permission = Permissions.StarIdeas;
                     return model;
-                }).Zone("tools").Order(-5)
+                }).Zone("header-right").Order(-5)
             );
 
         }

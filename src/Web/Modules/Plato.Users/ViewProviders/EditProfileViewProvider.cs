@@ -71,7 +71,7 @@ namespace Plato.Users.ViewProviders
             return Views(
                 View<User>("Home.Edit.Header", model => user).Zone("header"),
                 View<User>("Home.Edit.Sidebar", model => user).Zone("content-left"),
-                View<User>("Home.Edit.Tools", model => user).Zone("tools"),
+                View<User>("Home.Edit.Tools", model => user).Zone("header-right"),
                 View<EditProfileViewModel>("Home.EditProfile.Content", model => viewModel).Zone("content"),
                 View<EditProfileViewModel>("Home.EditProfile.ContentRight", model => viewModel).Zone("content-right"),
                 View<User>("Home.Edit.Footer", model => user).Zone("actions-right")

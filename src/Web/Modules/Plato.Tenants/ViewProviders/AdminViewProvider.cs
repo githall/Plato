@@ -45,15 +45,7 @@ namespace Plato.Tenants.ViewProviders
 
         public override Task<IViewProviderResult> BuildDisplayAsync(ShellSettings role, IViewProviderContext updater)
         {
-
-            return Task.FromResult(
-                Views(
-                    View<ShellSettings>("Admin.Display.Header", model => role).Zone("header"),
-                    View<ShellSettings>("Admin.Display.Meta", model => role).Zone("meta"),
-                    View<ShellSettings>("Admin.Display.Content", model => role).Zone("content"),
-                    View<ShellSettings>("Admin.Display.Footer", model => role).Zone("footer")
-                ));
-
+            return Task.FromResult(default(IViewProviderResult));
         }
 
         public override Task<IViewProviderResult> BuildIndexAsync(ShellSettings role, IViewProviderContext context)
@@ -69,7 +61,7 @@ namespace Plato.Tenants.ViewProviders
 
             return Task.FromResult(Views(
                 View<TenantIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header"),
-                View<TenantIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools"),
+                View<TenantIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("header-right"),
                 View<TenantIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content")
             ));
 
@@ -86,8 +78,7 @@ namespace Plato.Tenants.ViewProviders
             // Build view model
             var viewModel = GetModel(settings);        
             return Task.FromResult(Views(
-                View<EditTenantViewModel>("Admin.Edit.Header", model => viewModel).Zone("header"),
-                View<EditTenantViewModel>("Admin.Edit.Meta", model => viewModel).Zone("meta"),
+                View<EditTenantViewModel>("Admin.Edit.Header", model => viewModel).Zone("header"),                
                 View<EditTenantViewModel>("Admin.Edit.Content", model => viewModel).Zone("content"),
                 View<EditTenantViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer"),
                 View<EditTenantViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions")

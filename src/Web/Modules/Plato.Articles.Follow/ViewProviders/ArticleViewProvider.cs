@@ -107,7 +107,7 @@ namespace Plato.Articles.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Permissions.FollowArticles;
                     return model;
-                }).Zone("tools").Order(-4)
+                }).Zone("header-right").Order(-4)
             );
 
         }
@@ -145,14 +145,7 @@ namespace Plato.Articles.Follow.ViewProviders
                 }
             }
 
-            return Views(
-                  View<EditFooterViewModel>("Article.Follow.Edit.Footer", model =>
-                  {
-                      model.IsNewEntity = entity.Id == 0 ? true : false;
-                      model.NotifyHtmlName = NotifyHtmlName;
-                      model.Permission = Permissions.SendArticleFollows;
-                      return model;
-                  }).Zone("actions"),
+            return Views(                 
                 View<FollowViewModel>("Follow.Edit.Sidebar", model =>
                 {
                     model.FollowType = followType;
@@ -161,7 +154,14 @@ namespace Plato.Articles.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Permissions.FollowArticles;
                     return model;
-                }).Zone("content-right").Order(20)
+                }).Zone("content-right").Order(20),
+                 View<EditFooterViewModel>("Article.Follow.Edit.Footer", model =>
+                 {
+                     model.IsNewEntity = entity.Id == 0 ? true : false;
+                     model.NotifyHtmlName = NotifyHtmlName;
+                     model.Permission = Permissions.SendArticleFollows;
+                     return model;
+                 }).Zone("actions")
             );
 
         }

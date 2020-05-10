@@ -10,7 +10,7 @@ namespace PlatoCore.Layout
 
         public string ContentLeftCss { get; set; } = "layout-sidebar";
 
-        public string ContentRightCss { get; set; } = "layout-asides";
+        public string ContentRightCss { get; set; } = "layout-sidebar";
 
         public LayoutViewModel Zones { get; set; }
 
@@ -19,11 +19,13 @@ namespace PlatoCore.Layout
     public class LayoutViewModel : CombinedViewProviderResult
     {
 
+        public IEnumerable<ILayoutZoneView> Alerts { get; set; }
+
         public IEnumerable<ILayoutZoneView> Header { get; set; }
 
-        public IEnumerable<ILayoutZoneView> Tools { get; set; }
+        public IEnumerable<ILayoutZoneView> HeaderRight { get; set; }
 
-        public IEnumerable<ILayoutZoneView> Meta { get; set; }
+        public IEnumerable<ILayoutZoneView> ContentLeft { get; set; }
 
         public IEnumerable<ILayoutZoneView> Content { get; set; }
 
@@ -31,25 +33,21 @@ namespace PlatoCore.Layout
 
         public IEnumerable<ILayoutZoneView> ActionsRight { get; set; }
 
-        public IEnumerable<ILayoutZoneView> ResizableHeaderLeft { get; set; }
-
-        public IEnumerable<ILayoutZoneView> ResizableHeaderRight { get; set; }
-
-        public IEnumerable<ILayoutZoneView> ResizableContent { get; set; }
-
-        public IEnumerable<ILayoutZoneView> ResizableFooterLeft { get; set; }
-
-        public IEnumerable<ILayoutZoneView> ResizableFooterRight { get; set; }
-
-        public IEnumerable<ILayoutZoneView> ContentLeft { get; set; }
-
         public IEnumerable<ILayoutZoneView> ContentRight { get; set; }
 
         public IEnumerable<ILayoutZoneView> Footer { get; set; }
 
         public IEnumerable<ILayoutZoneView> FooterRight { get; set; }
 
-        public IEnumerable<ILayoutZoneView> Alerts { get; set; }
+        public IEnumerable<ILayoutZoneView> ResizeHeader { get; set; }
+
+        public IEnumerable<ILayoutZoneView> ResizeHeaderRight { get; set; }
+
+        public IEnumerable<ILayoutZoneView> ResizeContent { get; set; }
+
+        public IEnumerable<ILayoutZoneView> ResizeActions { get; set; }
+
+        public IEnumerable<ILayoutZoneView> ResizeActionsRight { get; set; }
 
         public LayoutViewModel(params IViewProviderResult[] results) : base(results)
         {

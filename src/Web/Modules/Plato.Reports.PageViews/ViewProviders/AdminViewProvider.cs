@@ -26,7 +26,7 @@ namespace Plato.Reports.PageViews.ViewProviders
 
             return Task.FromResult(Views(
                 View<ReportIndexViewModel<Metric>>("Admin.Index.Header", model => indexViewModel).Zone("header").Order(1),
-                View<ReportOptions>("Reports.Admin.Index.Tools", model => indexViewModel.Options).Zone("tools").Order(1),
+                View<ReportOptions>("Reports.Admin.Index.Tools", model => indexViewModel.Options).Zone("header-right").Order(1),
                 View<ReportIndexViewModel<Metric>>("Admin.Index.Content", model => indexViewModel).Zone("content").Order(1)
             ));
         }

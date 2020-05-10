@@ -12,7 +12,7 @@ namespace Plato.Search.ViewProviders
 
             return Task.FromResult(Views(
                 View<HomeIndex>("Core.Search.Index.Tools", model => viewModel)
-                    .Zone("tools").Order(int.MinValue)
+                    .Zone("header-right").Order(int.MinValue)
             ));
 
         }

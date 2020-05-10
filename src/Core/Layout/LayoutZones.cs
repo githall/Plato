@@ -4,14 +4,16 @@ namespace PlatoCore.Layout
     public class LayoutZones
     {
 
-        public const string Header = "header";
-        public const string ToolsZoneName = "tools";
-        public const string MetaZoneName = "meta";
-        public const string AlertsZoneName = "alerts";
+        // Alerts
+        public const string Alerts = "alerts";
 
-        // Content
-        public const string Content = "content";
+        // Header
+        public const string Header = "header";
+        public const string HeaderRight = "header-right";
+
+        // Content        
         public const string ContentLeft = "content-left";
+        public const string Content = "content";
         public const string ContentRight = "content-right";
 
         // Actions
@@ -22,29 +24,30 @@ namespace PlatoCore.Layout
         public const string Footer = "footer";
         public const string FooterRight = "footer-right";
 
-        // Resizable 
-        public const string ResizableHeaderLeft = "resizable-header-left";
-        public const string ResizableHeaderRight = "resizable-header-right";
-        public const string ResizableContent = "resizable-content";
-        public const string ResizableFooterLeft = "resizable-footer-left";
-        public const string ResizableFooterRight = "resizable-footer-right";
+        // Resize
+        public const string ResizeHeader = "resize-header";
+        public const string ResizeHeaderRight = "resize-header-right";
+        public const string ResizeContent = "resize-content";
+        public const string ResizeActions = "resize-actions";
+        public const string ResizeActionsRight = "resize-actions-right";
 
         public static string[] SupportedZones => new string[]
         {
+            Alerts,
             Header,
-            ToolsZoneName,
-            MetaZoneName,
+            HeaderRight,     
             Content,
             ContentLeft,
             ContentRight,
             Actions,
-            ActionsRight,
-            ResizableContent,
-            ResizableFooterLeft,
-            ResizableFooterRight,
+            ActionsRight,     
             Footer,
-            FooterRight,          
-            AlertsZoneName
+            FooterRight,
+            ResizeHeader,
+            ResizeHeaderRight,
+            ResizeContent,
+            ResizeActions,
+            ResizeActionsRight
         };
 
     }

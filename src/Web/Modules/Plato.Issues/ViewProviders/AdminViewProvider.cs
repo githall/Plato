@@ -14,7 +14,7 @@ namespace Plato.Issues.ViewProviders
         {
             return Task.FromResult(Views(
                 View<AdminIndex>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<AdminIndex>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<AdminIndex>("Admin.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<AdminIndex>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
         }

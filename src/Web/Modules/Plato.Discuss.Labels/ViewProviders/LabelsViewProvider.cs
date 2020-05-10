@@ -33,7 +33,7 @@ namespace Plato.Discuss.Labels.ViewProviders
 
             return Task.FromResult(Views(
                 View<LabelIndexViewModel<Label>>("Home.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<LabelIndexViewModel<Label>>("Home.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<LabelIndexViewModel<Label>>("Home.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<LabelIndexViewModel<Label>>("Home.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
 
@@ -70,7 +70,7 @@ namespace Plato.Discuss.Labels.ViewProviders
 
             return Views(
                 View<Label>("Home.Display.Header", model => label).Zone("header").Order(1),
-                View<Label>("Home.Display.Tools", model => label).Zone("tools").Order(1),
+                View<Label>("Home.Display.Tools", model => label).Zone("header-right").Order(1),
                 View<EntityIndexViewModel<Topic>>("Home.Display.Content", model => indexViewModel).Zone("content").Order(1),
                 View<LabelsViewModel<Label>>("Topic.Labels.Index.Sidebar", model =>
                 {

@@ -51,7 +51,7 @@ namespace Plato.StopForumSpam.ViewProviders
 
             return Views(
                 View<SpamSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
-                View<SpamSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools").Order(1),
+                View<SpamSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<SpamSettingsViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1)
             );
 

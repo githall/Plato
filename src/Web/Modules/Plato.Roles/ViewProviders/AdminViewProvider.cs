@@ -26,36 +26,28 @@ namespace Plato.Roles.ViewProviders
         private readonly RoleManager<Role> _roleManager;
         private readonly UserManager<User> _userManager;
         private readonly IPlatoRoleStore _platoRoleStore;
-        
+
         public AdminViewProvider(
-            UserManager<User> userManager,
+            IDummyClaimsPrincipalFactory<User> claimsPrincipalFactory,
+            IPermissionsManager<Permission> permissionsManager,
+            IAuthorizationService authorizationService,            
             IPlatoRoleStore platoRoleStore,
             RoleManager<Role> roleManager,
-            IPermissionsManager<Permission> permissionsManager, 
-            IAuthorizationService authorizationService,
-            IDummyClaimsPrincipalFactory<User> claimsPrincipalFactory)
+            UserManager<User> userManager)
         {
-            _userManager = userManager;
+            _claimsPrincipalFactory = claimsPrincipalFactory;
+            _authorizationService = authorizationService;
+            _permissionsManager = permissionsManager;            
             _platoRoleStore = platoRoleStore;
             _roleManager = roleManager;
-            _permissionsManager = permissionsManager;
-            _authorizationService = authorizationService;
-            _claimsPrincipalFactory = claimsPrincipalFactory;
+            _userManager = userManager;
         }
 
         #region "Implementation"
 
         public override Task<IViewProviderResult> BuildDisplayAsync(Role role, IViewProviderContext updater)
         {
-
-            return Task.FromResult(
-                Views(
-                    View<Role>("Admin.Display.Header", model => role).Zone("header"),
-                    View<Role>("Admin.Display.Meta", model => role).Zone("meta"),
-                    View<Role>("Admin.Display.Content", model => role).Zone("content"),
-                    View<Role>("Admin.Display.Footer", model => role).Zone("footer")
-                ));
-
+            return Task.FromResult(default(IViewProviderResult));
         }
 
         public override async Task<IViewProviderResult> BuildIndexAsync(Role role, IViewProviderContext context)
@@ -73,7 +65,7 @@ namespace Plato.Roles.ViewProviders
 
             return Views(
                 View<RolesIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header"),
-                View<RolesIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools"),
+                View<RolesIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("header-right"),
                 View<RolesIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content")
             );
 
@@ -100,8 +92,7 @@ namespace Plato.Roles.ViewProviders
 
             // Return view
             return Views(
-                View<EditRoleViewModel>("Admin.Edit.Header", model => editRoleViewModel).Zone("header"),
-                View<EditRoleViewModel>("Admin.Edit.Meta", model => editRoleViewModel).Zone("meta"),
+                View<EditRoleViewModel>("Admin.Edit.Header", model => editRoleViewModel).Zone("header"),                
                 View<EditRoleViewModel>("Admin.Edit.Content", model => editRoleViewModel).Zone("content"),
                 View<EditRoleViewModel>("Admin.Edit.Footer", model => editRoleViewModel).Zone("footer"),
                 View<EditRoleViewModel>("Admin.Edit.Actions", model => editRoleViewModel).Zone("actions")
@@ -214,8 +205,9 @@ namespace Plato.Roles.ViewProviders
             return result;
 
         }
-        
+
         #endregion
 
     }
+
 }

@@ -27,26 +27,26 @@ namespace PlatoCore.Layout
             // Return composed model
             return new LayoutViewModel()
             {
-                Header = GetPositionedViews(LayoutZones.Header),
-                Tools = GetPositionedViews(LayoutZones.ToolsZoneName),
-                Meta = GetPositionedViews(LayoutZones.MetaZoneName),
 
+                Alerts = GetPositionedViews(LayoutZones.Alerts),
+                Header = GetPositionedViews(LayoutZones.Header),
+                HeaderRight = GetPositionedViews(LayoutZones.HeaderRight),
+
+                ContentLeft = GetPositionedViews(LayoutZones.ContentLeft),
                 Content = GetPositionedViews(LayoutZones.Content),
+                ContentRight = GetPositionedViews(LayoutZones.ContentRight),
 
                 Actions = GetPositionedViews(LayoutZones.Actions),
                 ActionsRight = GetPositionedViews(LayoutZones.ActionsRight),
 
-                ResizableHeaderLeft = GetPositionedViews(LayoutZones.ResizableHeaderLeft),
-                ResizableHeaderRight = GetPositionedViews(LayoutZones.ResizableHeaderRight),
-                ResizableContent = GetPositionedViews(LayoutZones.ResizableContent),
-                ResizableFooterLeft = GetPositionedViews(LayoutZones.ResizableFooterLeft),
-                ResizableFooterRight = GetPositionedViews(LayoutZones.ResizableFooterRight),
-
-                ContentLeft = GetPositionedViews(LayoutZones.ContentLeft),                
                 Footer = GetPositionedViews(LayoutZones.Footer),
                 FooterRight = GetPositionedViews(LayoutZones.FooterRight),
-                ContentRight = GetPositionedViews(LayoutZones.ContentRight),
-                Alerts = GetPositionedViews(LayoutZones.AlertsZoneName),
+
+                ResizeHeader = GetPositionedViews(LayoutZones.ResizeHeader),
+                ResizeHeaderRight = GetPositionedViews(LayoutZones.ResizeHeaderRight),
+                ResizeContent = GetPositionedViews(LayoutZones.ResizeContent),
+                ResizeActions = GetPositionedViews(LayoutZones.ResizeActions),
+                ResizeActionsRight = GetPositionedViews(LayoutZones.ResizeActionsRight)
 
             };
 

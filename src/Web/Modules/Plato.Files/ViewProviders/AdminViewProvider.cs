@@ -44,7 +44,7 @@ namespace Plato.Files.ViewProviders
 
             return Task.FromResult(Views(
                 View<FileIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<FileIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<FileIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<FileIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
 
