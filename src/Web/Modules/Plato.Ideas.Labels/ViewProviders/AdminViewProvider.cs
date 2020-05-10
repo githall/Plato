@@ -8,27 +8,28 @@ using Plato.Ideas.Labels.ViewModels;
 
 namespace Plato.Ideas.Labels.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<LabelAdmin>
     {
- 
+
         private readonly ILabelManager<Label> _labelManager;
-      
+
         public AdminViewProvider(
             ILabelManager<Label> labelManager)
         {
             _labelManager = labelManager;
         }
-        
+
         public override Task<IViewProviderResult> BuildIndexAsync(LabelAdmin label, IViewProviderContext context)
         {
-     
+
             // Get index view model from context
             var viewModel = context.Controller.HttpContext.Items[typeof(LabelIndexViewModel<Label>)] as LabelIndexViewModel<Label>;
             if (viewModel == null)
             {
                 throw new Exception($"A view model of type {typeof(LabelIndexViewModel<Label>).ToString()} has not been registered on the HttpContext!");
             }
-            
+
             return Task.FromResult(Views(
                 View<LabelIndexViewModel<Label>>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
                 View<LabelIndexViewModel<Label>>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
@@ -40,7 +41,6 @@ namespace Plato.Ideas.Labels.ViewProviders
         public override Task<IViewProviderResult> BuildDisplayAsync(LabelAdmin label, IViewProviderContext updater)
         {
             return Task.FromResult(default(IViewProviderResult));
-
         }
         
         public override Task<IViewProviderResult> BuildEditAsync(LabelAdmin label, IViewProviderContext updater)
@@ -68,10 +68,11 @@ namespace Plato.Ideas.Labels.ViewProviders
             
             return Task.FromResult(Views(
                 View<EditLabelViewModel>("Admin.Edit.Header", model => editLabelViewModel).Zone("header").Order(1),
-                View<EditLabelViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),
-                View<EditLabelViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("actions").Order(1),
-                View<EditLabelViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("footer").Order(1)
+                View<EditLabelViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),                
+                View<EditLabelViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("content-footer-left").Order(1),
+                View<EditLabelViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("content-footer-right").Order(1)
             ));
+
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(LabelAdmin label, IViewProviderContext context)
@@ -115,9 +116,9 @@ namespace Plato.Ideas.Labels.ViewProviders
             }
 
             return await BuildEditAsync(label, context);
-            
+
         }
-        
+
     }
 
 }

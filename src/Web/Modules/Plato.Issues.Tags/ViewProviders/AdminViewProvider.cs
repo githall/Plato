@@ -8,15 +8,15 @@ using Plato.Issues.Tags.ViewModels;
 
 namespace Plato.Issues.Tags.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<TagAdmin>
     {
 
         private readonly ITagManager<Tag> _tagManager;
-   
+
         public AdminViewProvider(
             ITagManager<Tag> tagManager)
-        {
-  
+        {  
             _tagManager = tagManager;
         }
 
@@ -41,7 +41,6 @@ namespace Plato.Issues.Tags.ViewProviders
         public override Task<IViewProviderResult> BuildDisplayAsync(TagAdmin tag, IViewProviderContext updater)
         {
             return Task.FromResult(default(IViewProviderResult));
-
         }
 
         public override Task<IViewProviderResult> BuildEditAsync(TagAdmin tag, IViewProviderContext updater)
@@ -67,10 +66,11 @@ namespace Plato.Issues.Tags.ViewProviders
 
             return Task.FromResult(Views(
                 View<EditTagViewModel>("Admin.Edit.Header", model => editLabelViewModel).Zone("header").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("actions").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("footer").Order(1)
+                View<EditTagViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),                
+                View<EditTagViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("content-footer-left").Order(1),
+                View<EditTagViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("content-footer-right").Order(1)
             ));
+
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(TagAdmin tag, IViewProviderContext context)
@@ -85,7 +85,6 @@ namespace Plato.Issues.Tags.ViewProviders
             {
                 return await BuildEditAsync(tag, context);
             }
-
 
             var model = new EditTagViewModel();
 
@@ -114,7 +113,7 @@ namespace Plato.Issues.Tags.ViewProviders
             }
 
             return await BuildEditAsync(tag, context);
-            
+
         }
 
     }

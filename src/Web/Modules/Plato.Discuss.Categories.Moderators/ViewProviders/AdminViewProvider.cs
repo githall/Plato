@@ -9,8 +9,6 @@ using Microsoft.Extensions.Localization;
 using Newtonsoft.Json;
 using Plato.Discuss.Categories.Moderators.ViewModels;
 using PlatoCore.Abstractions.Extensions;
-using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Models.Users;
@@ -23,39 +21,35 @@ using Plato.WebApi.Models;
 
 namespace Plato.Discuss.Categories.Moderators.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<Moderator>
     {
 
-        private readonly IContextFacade _contextFacade;
         private readonly IPermissionsManager<ModeratorPermission> _permissionsManager;
         private readonly IAuthorizationService _authorizationService;
         private readonly IModeratorStore<Moderator> _moderatorStore;
         private readonly IPlatoUserStore<User> _userStore;
         private readonly HttpRequest _request;
-        private readonly IFeatureFacade _featureFacade;
-
 
         private readonly IStringLocalizer T;
 
         public AdminViewProvider(
-            IContextFacade contextFacade,
+            IStringLocalizer<AdminViewProvider> stringLocalizer,            
             IPermissionsManager<ModeratorPermission> permissionsManager,
             IAuthorizationService authorizationService,
             IHttpContextAccessor httpContextAccessor,
             IModeratorStore<Moderator> moderatorStore, 
-            IPlatoUserStore<User> userStore,
-            IStringLocalizer<AdminViewProvider> stringLocalizer,
-            IFeatureFacade featureFacade)
+            IPlatoUserStore<User> userStore)
         {
-            _contextFacade = contextFacade;
+
+            _request = httpContextAccessor.HttpContext.Request;
             _permissionsManager = permissionsManager;
             _authorizationService = authorizationService;
             _moderatorStore = moderatorStore;
-            _userStore = userStore;
-            _featureFacade = featureFacade;
-            _request = httpContextAccessor.HttpContext.Request;
+            _userStore = userStore;            
 
             T = stringLocalizer;
+
         }
 
         #region "Implementation"
@@ -117,12 +111,13 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
 
             return Views(
                 View<EditModeratorViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
-                View<EditModeratorViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1),
-                View<EditModeratorViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions").Order(1),
-                View<EditModeratorViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer").Order(1)
+                View<EditModeratorViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1),                
+                View<EditModeratorViewModel>("Admin.Edit.Footer", model => viewModel).Zone("content-footer-left").Order(1),
+                View<EditModeratorViewModel>("Admin.Edit.Actions", model => viewModel).Zone("content-footer-right").Order(1)
             );
+
         }
-        
+
         public override async Task<bool> ValidateModelAsync(Moderator moderator, IUpdateModel updater)
         {
             var valid = await updater.TryUpdateModelAsync(new EditModeratorViewModel()
@@ -150,16 +145,16 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
             }
 
         }
-        
+
         public override async Task<IViewProviderResult> BuildUpdateAsync(Moderator model, IViewProviderContext context)
         {
-            
+
             var moderator = await _moderatorStore.GetByIdAsync(model.Id);
             if (moderator == null)
             {
                 return await BuildIndexAsync(model, context);
             }
-          
+
             // Validate model
             if (await ValidateModelAsync(model, context.Updater))
             {
@@ -168,9 +163,8 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
                 await _moderatorStore.UpdateAsync(moderator);
                 
             }
-      
-            return await BuildEditAsync(moderator, context);
 
+            return await BuildEditAsync(moderator, context);
 
         }
 
@@ -280,7 +274,6 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
         
         #endregion
 
-    }
-    
+    }    
 
 }

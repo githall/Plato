@@ -108,9 +108,9 @@ namespace Plato.Issues.Categories.ViewProviders
 
             return Views(
                 View<EditCategoryViewModel>("Admin.Edit.Header", model => editCategoryViewModel).Zone("header").Order(1),
-                View<EditCategoryViewModel>("Admin.Edit.Content", model => editCategoryViewModel).Zone("content").Order(1),
-                View<EditCategoryViewModel>("Admin.Edit.Actions", model => editCategoryViewModel).Zone("actions").Order(1),
-                View<EditCategoryViewModel>("Admin.Edit.Footer", model => editCategoryViewModel).Zone("footer").Order(1)
+                View<EditCategoryViewModel>("Admin.Edit.Content", model => editCategoryViewModel).Zone("content").Order(1),                
+                View<EditCategoryViewModel>("Admin.Edit.Footer", model => editCategoryViewModel).Zone("content-footer-left").Order(1),
+                View<EditCategoryViewModel>("Admin.Edit.Actions", model => editCategoryViewModel).Zone("content-footer-right").Order(1)
             );
 
         }
