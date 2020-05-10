@@ -104,12 +104,12 @@ namespace Plato.Articles.Categories.ViewProviders
                     AvailableChannels = await GetAvailableCategories()
                 };
             }
-            
+
             return Views(
                 View<EditChannelViewModel>("Admin.Edit.Header", model => editChannelViewModel).Zone("header").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Content", model => editChannelViewModel).Zone("content").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Actions", model => editChannelViewModel).Zone("actions").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Footer", model => editChannelViewModel).Zone("footer").Order(1)
+                View<EditChannelViewModel>("Admin.Edit.Content", model => editChannelViewModel).Zone("content").Order(1),                
+                View<EditChannelViewModel>("Admin.Edit.Footer", model => editChannelViewModel).Zone("content-footer-left").Order(1),
+                View<EditChannelViewModel>("Admin.Edit.Actions", model => editChannelViewModel).Zone("content-footer-right").Order(1)
             );
         }
 

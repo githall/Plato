@@ -8,10 +8,6 @@ namespace PlatoCore.Layout
     public class LayoutOptions
     {
 
-        public string BreadCrumbCss { get; set; } = "layout-breadcrumb mt-3";
-
-        public string HeaderCss { get; set; } = "layout-header layout-header-sticky";
-
         public string ContentLeftCss { get; set; } = "layout-sidebar";
 
         public string ContentRightCss { get; set; } = "layout-asides";

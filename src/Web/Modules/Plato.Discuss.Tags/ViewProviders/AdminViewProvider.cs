@@ -9,9 +9,10 @@ using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Discuss.Tags.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<TagAdmin>
     {
-        
+
         private readonly ITagManager<Tag> _tagManager;
         private readonly IContextFacade _contextFacade;
 
@@ -70,10 +71,11 @@ namespace Plato.Discuss.Tags.ViewProviders
 
             return Task.FromResult(Views(
                 View<EditTagViewModel>("Admin.Edit.Header", model => editLabelViewModel).Zone("header").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("actions").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("footer").Order(1)
+                View<EditTagViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),                
+                View<EditTagViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("content-footer-left").Order(1),
+                View<EditTagViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("content-footer-right").Order(1)
             ));
+
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(TagAdmin tag, IViewProviderContext context)
@@ -123,7 +125,7 @@ namespace Plato.Discuss.Tags.ViewProviders
             }
 
             return await BuildEditAsync(tag, context);
-            
+
         }
 
     }

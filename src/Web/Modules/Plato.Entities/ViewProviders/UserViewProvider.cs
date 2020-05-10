@@ -13,17 +13,17 @@ namespace Plato.Entities.ViewProviders
     public class UserViewProvider : ViewProviderBase<EntityUserIndex>
     {
 
-        private readonly IFeatureEntityCountService _featureEntityCountService;        
-        private readonly IPlatoUserStore<User> _platoUserStore;  
+        private readonly IFeatureEntityCountService _featureEntityCountService;
+        private readonly IPlatoUserStore<User> _platoUserStore;
 
-        public UserViewProvider(                        
+        public UserViewProvider(
             IFeatureEntityCountService featureEntityCountService,
             IPlatoUserStore<User> platoUserStore)
         {
             _featureEntityCountService = featureEntityCountService;
-            _platoUserStore = platoUserStore;            
+            _platoUserStore = platoUserStore;
         }
-        
+
         public override async Task<IViewProviderResult> BuildDisplayAsync(EntityUserIndex userIndex, IViewProviderContext context)
         {
 
@@ -63,11 +63,11 @@ namespace Plato.Entities.ViewProviders
                 IndexViewModel = indexViewModel,
                 Counts = featureEntityMetrics
             };
-            
+
             return Views(
                 View<UserDisplayViewModel>("User.Index.Header", model => userDisplayViewModel).Zone("header"),
                 View<UserDisplayViewModel<Entity>>("User.Index.Content", model => userDisplayViewModel).Zone("content"),
-                View< UserDisplayViewModel>("User.Entities.Display.Sidebar", model => userDisplayViewModel).Zone("sidebar")
+                View< UserDisplayViewModel>("User.Entities.Display.Sidebar", model => userDisplayViewModel).Zone("content-right")
             );
 
         }
