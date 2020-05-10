@@ -67,10 +67,10 @@ namespace Plato.Users.ViewProviders
 
             return Views(
                 View<User>("Home.Edit.Header", model => user).Zone("header"),
-                View<User>("Home.Edit.Sidebar", model => user).Zone("sidebar"),
+                View<User>("Home.Edit.Sidebar", model => user).Zone("content-left"),
                 View<User>("Home.Edit.Tools", model => user).Zone("tools"),
                 View<EditSignatureViewModel>("Home.EditSignature.Content", model => viewModel).Zone("content"),
-                View<User>("Home.Edit.Footer", model => user).Zone("footer")
+                View<User>("Home.Edit.Footer", model => user).Zone("content-footer-right")
             );
 
         }
@@ -115,7 +115,6 @@ namespace Plato.Users.ViewProviders
 
         #endregion
 
-      
     }
 
 }

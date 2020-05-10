@@ -54,7 +54,7 @@
                 <div class="@Model.ContentLeftCss  col-lg-3">
                     <div class="layout-sidebar-content navbar-expand-lg">
                         <div class="navbar-toggler">
-                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed btn-block" style="z-index:10; left: 12px; bottom: 24px; max-width: 42px;" data-toggle="modal" data-target="#contentLeftAsides">
+                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-left active img-48" style="z-index:10;" data-toggle="modal" data-target="#contentLeftAsides">
                                 <i class="fal fa-bars"></i>
                             </a>
                         </div>
@@ -97,14 +97,38 @@
                     }
                 </div>
             }
-            @if (Model.Zones.Asides != null)
+
+            @*@if (Model.Zones.Asides != null)
             {
                 <div class="@Model.ContentRightCss col-lg-3">
                     <div class="layout-asides-content">
                         <view model="@Model.Zones.Asides"></view>
                     </div>
                 </div>
+            }*@
+
+            @if (Model.Zones.Asides != null)
+            {
+                <div class="@Model.ContentRightCss col-lg-3">
+                    <div class="layout-asides-content navbar-expand-lg">
+                        <div class="navbar-toggler">
+                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-right active img-48" style="z-index:10;" data-toggle="modal" data-target="#contentRightAsides">
+                                <i class="fal fa-bars"></i>
+                            </a>
+                        </div>
+                        <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
+                            @if (Model.Zones.Asides != null)
+                            {
+                                <view model="@Model.Zones.Asides"></view>
+                            }
+                        </div>
+                    </div>
+                </div>
             }
+
+
+
+
         </div>
     </div>
 
@@ -192,7 +216,6 @@
     </div>
 </div>
 
-
 @if (Model.Zones.SideBar != null)
 {
     <div class="modal fade" id="contentLeftAsides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
@@ -207,7 +230,31 @@
                     </button>
                 </div>
                 <div class="modal-body overflow-auto">
-                    <view model="@Model.Zones.SideBar"></view>               
+                    <view model="@Model.Zones.SideBar"></view>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@if (Model.Zones.Asides != null)
+{
+    <div class="modal fade" id="contentRightAsides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
+        <div class="modal-dialog modal-right" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h6 class="modal-title" id="searchHelpTitle">
+                        @T["Browse"]
+                    </h6>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body overflow-auto">
+                    <view model="@Model.Zones.Asides"></view>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

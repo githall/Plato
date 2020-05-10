@@ -1436,6 +1436,7 @@ a.navbar-brand img { max-height: 48px; }
 
     /* Ensure collapse is visible by default for desktops */
     .layout-sidebar .navbar-collapse { display: block !important; }
+    .layout-asides .navbar-collapse { display: block !important; }
 
 }
 

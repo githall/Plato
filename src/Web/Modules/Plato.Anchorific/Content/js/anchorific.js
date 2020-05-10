@@ -49,12 +49,7 @@ if (typeof window.$.Plato === "undefined") {
             bind: function ($caller) {
 
                 this.headers = $caller.find($caller.data(dataKey).headers);
-                this.previous = 0;
-
-                if (this.headers.length !== 0) {
-                    this.first = parseInt(this.headers.prop('nodeName').substring(1), null);
-                }
-
+                
                 // Build contents
                 this.build($caller);
 
@@ -66,32 +61,47 @@ if (typeof window.$.Plato === "undefined") {
             },
             build: function ($caller) {
 
-                var self = this,
-                    obj,
-                    navSelector = $caller.data(dataKey).navigation,
-                    $nav = $(navSelector),
-                    navigations = function () { };
-                
+                var self = this,             
+                    selector = $caller.data(dataKey).navigation,
+                    $nav = $(selector);
+
+                $nav.data(dataKey, {
+                    first: 0,
+                    previous: 0
+                });
+
+                if (self.headers.length !== 0) {
+                    $nav.data(dataKey).first = parseInt(self.headers.prop('nodeName').substring(1), null);
+                }
+
                 // Ensure we have navigation                
-                if ($nav.length > 0) {                    
-                    if (this.headers.length > 0) {
-                        $nav.empty().append('<ul />');
-                        self.previous = $nav.find('ul').last();
-                        navigations = function ($el, obj) {
-                            return self.navigations($el, obj);
-                        };
-                    } else {                
-                        $nav.empty().text($caller.data(dataKey).emptyText);
-                    }
+                if ($nav.length > 0) {        
+                    $nav.each(function () {
+                        if (self.headers.length > 0) {
+
+                            // Add a list
+                            $(this).empty().append('<ul />');
+
+                            // Set list as starting point
+                            $(this).data(dataKey).previous = $(this).find('ul').last();
+
+                            // Build navigation & anchors
+                            for (var i = 0; i < self.headers.length; i++) {                                
+                                self.navigations($caller, self.headers.eq(i));
+                            }
+
+                        } else {
+                            $(this).empty().text($caller.data(dataKey).emptyText);
+                        }
+                    });
+                  
                 }
 
                 // Build navigation & anchors
-                for (var i = 0; i < self.headers.length; i++) {
-                    obj = self.headers.eq(i);
-                    navigations($caller, obj);
-                    self.anchor($caller, obj);
-                }          
-                
+                for (var i = 0; i < self.headers.length; i++) {                           
+                    self.anchor($caller, self.headers.eq(i));
+                }
+
             },
             navigations: function ($caller, obj) {
 
@@ -141,21 +151,28 @@ if (typeof window.$.Plato === "undefined") {
             subheadings: function ($caller, which, a) {
 
                 var self = this,
-                    navSelector = $caller.data(dataKey).navigation,
-                    ul = $(navSelector).find('ul'),
-                    li = $(navSelector).find('li');
+                    selector = $caller.data(dataKey).navigation,
+                    $nav = $(selector);
 
-                if (which === self.first) {
-                    self.previous.append(a);
-                } else if (which > self.first) {
-                    li.last().append('<ul />');
-                    // can't use cache ul; need to find ul once more
-                    $(navSelector).find('ul').last().append(a);
-                    self.previous = a.parent();
-                } else {
-                    $('li[data-tag=' + which + ']').last().parent().append(a);
-                    self.previous = a.parent();
-                }
+                $nav.each(function () {
+
+                    var ul = $(this).find('ul'),
+                        li = $(this).find('li');
+
+                    if (which === $(this).data(dataKey).first) {
+                        $(this).data(dataKey).previous.append(a);
+                    } else if (which > $(this).data(dataKey).first) {
+                        li.last().append('<ul />');
+                        // can't use cache ul; need to find ul once more
+                        ul.last().append(a);
+                        $(this).data(dataKey).previous = a.parent();
+                    } else {
+                        ul.find('li[data-tag=' + which + ']').last().parent().append(a);
+                        $(this).data(dataKey).previous = a.parent();
+                    }
+
+                });
+            
 
             },
             name: function (obj) {
