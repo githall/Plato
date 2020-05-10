@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Threading.Tasks;
-using System.Collections.Generic;
 using Microsoft.AspNetCore.Html;
 using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.AspNetCore.Mvc.ViewFeatures;
 using Microsoft.AspNetCore.Razor.TagHelpers;
 using PlatoCore.Layout.Views.Abstractions;
+using PlatoCore.Theming.Abstractions;
 
 namespace PlatoCore.Layout.TagHelpers
 {
@@ -15,14 +15,7 @@ namespace PlatoCore.Layout.TagHelpers
     {
 
         [HtmlAttributeName("name")]
-        public string Name { get; set; } = "_PlatoLayout";
-
-
-        [HtmlAttributeName("content-left-css")]
-        public string ContentLeftCss { get; set; }
-
-        [HtmlAttributeName("content-right-css")]
-        public string ContentRightCss { get; set; }
+        public string Name { get; set; }
 
         [HtmlAttributeName("model")]
         public LayoutViewModel Model { get; set; }
@@ -31,13 +24,16 @@ namespace PlatoCore.Layout.TagHelpers
         public ViewContext ViewContext { get; set; }
         
         private IViewDisplayHelper _viewDisplayHelper;
-
-   
+        
         private readonly IViewHelperFactory _viewHelperFactory;
-      
-        public LayoutTagHelper(IViewHelperFactory viewHelperFactory)
+        private readonly IThemeSelector _themeSelector;
+
+        public LayoutTagHelper(
+            IViewHelperFactory viewHelperFactory,
+            IThemeSelector themeSelector)
         {
             _viewHelperFactory = viewHelperFactory;
+            _themeSelector = themeSelector;
         }
 
         public override async Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
@@ -78,7 +74,9 @@ namespace PlatoCore.Layout.TagHelpers
 
         }
 
-        void EnsureViewHelper()
+        // --------------
+
+        private void EnsureViewHelper()
         {
             if (_viewDisplayHelper == null)
             {
@@ -86,7 +84,7 @@ namespace PlatoCore.Layout.TagHelpers
             }
         }
 
-        async Task<IHtmlContent> Build()
+        private async Task<IHtmlContent> Build()
         {
 
             EnsureViewHelper();
@@ -96,21 +94,10 @@ namespace PlatoCore.Layout.TagHelpers
                 Zones = Model
             };
 
-            if (!string.IsNullOrEmpty(ContentLeftCss))
-            {
-                model.ContentLeftCss = ContentLeftCss;
-            }
-
-            if (!string.IsNullOrEmpty(ContentRightCss))
-            {
-                model.ContentRightCss = ContentRightCss;
-            }
-            
             var builder = new HtmlContentBuilder();
             try
             {
-                var result = await _viewDisplayHelper.DisplayAsync(new View(Name, model));
-                builder.AppendHtml(result);
+                builder.AppendHtml(await _viewDisplayHelper.DisplayAsync(new View(GetZoneLayoutPath(), model)));
             }
             catch
             {
@@ -118,6 +105,26 @@ namespace PlatoCore.Layout.TagHelpers
             }          
 
             return builder;
+
+        }
+
+        private string GetZoneLayoutPath()
+        {       
+
+            // If we have an explicit layout use it
+            if (!string.IsNullOrEmpty(Name))
+            {
+                return $"~/{_themeSelector.GetThemePath()}/Shared/{Name}.cshtml";
+            }
+
+            // Else fall back to our default layouts
+            switch (ViewContext.RouteData.Values["controller"].ToString())
+            {
+                case "Admin":
+                    return $"~/{_themeSelector.GetThemePath()}/Shared/_AdminZoneLayout.cshtml";                  
+                default:
+                    return $"~/{_themeSelector.GetThemePath()}/Shared/_ZoneLayout.cshtml";               
+            }
 
         }
 

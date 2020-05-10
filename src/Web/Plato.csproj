@@ -57,6 +57,8 @@
     <_moduleFiles Include="$(MSBuildProjectDirectory)/Modules/**/Bin/Release/**;$(MSBuildProjectDirectory)/Modules/**/Content/**;$(MSBuildProjectDirectory)/Modules/**/Locales/**;$(MSBuildProjectDirectory)/Modules/**/module.*;" />
     <_themeFiles Include="$(MSBuildProjectDirectory)/Themes/**/*" />
     <_siteFiles Include="$(MSBuildProjectDirectory)/Sites/**/*" />
+    <_themeFiles Remove="Themes\Default\Shared\_AdminZoneLayout.cshtml" />
+    <_themeFiles Remove="Themes\Default\Shared\_ZoneLayout.cshtml" />
 
     <DotNetPublishFiles Include="@(_moduleFiles)">
       <DestinationRelativePath>Modules/%(RecursiveDir)%(Filename)%(Extension)</DestinationRelativePath>
