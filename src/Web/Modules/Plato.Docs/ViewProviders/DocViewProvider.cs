@@ -48,7 +48,7 @@ namespace Plato.Docs.ViewProviders
                 View<EntityIndexViewModel<Doc>>("Home.Index.Header", model => viewModel).Zone("header"),
                 View<EntityIndexViewModel<Doc>>("Home.Index.Tools", model => viewModel).Zone("tools"),
                 View<EntityIndexViewModel<Doc>>("Home.Index.Content", model => viewModel).Zone("content"),
-                View<EntityIndexViewModel<Doc>>("Home.Index.Sidebar", model => viewModel).Zone("sidebar")
+                View<EntityIndexViewModel<Doc>>("Home.Index.Sidebar", model => viewModel).Zone("content-left")
             ));
 
         }
@@ -134,7 +134,7 @@ namespace Plato.Docs.ViewProviders
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
                 View<EntityDropDownViewModel>("Home.Edit.Sidebar", model => entityDropDownViewModel).Zone("content-right").Order(7),
-                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("content-footer-right").Order(int.MaxValue)
+                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("actions-right").Order(int.MaxValue)
             );
 
         }

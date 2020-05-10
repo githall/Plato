@@ -69,8 +69,8 @@ namespace Plato.Questions.Labels.ViewProviders
             return Task.FromResult(Views(
                 View<EditLabelViewModel>("Admin.Edit.Header", model => editLabelViewModel).Zone("header").Order(1),
                 View<EditLabelViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),                
-                View<EditLabelViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("content-footer-left").Order(1),
-                View<EditLabelViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("content-footer-right").Order(1)
+                View<EditLabelViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("actions").Order(1),
+                View<EditLabelViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("actions-right").Order(1)
             ));
 
         }

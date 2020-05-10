@@ -112,8 +112,8 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
             return Views(
                 View<EditModeratorViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
                 View<EditModeratorViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1),                
-                View<EditModeratorViewModel>("Admin.Edit.Footer", model => viewModel).Zone("content-footer-left").Order(1),
-                View<EditModeratorViewModel>("Admin.Edit.Actions", model => viewModel).Zone("content-footer-right").Order(1)
+                View<EditModeratorViewModel>("Admin.Edit.Footer", model => viewModel).Zone("actions").Order(1),
+                View<EditModeratorViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions-right").Order(1)
             );
 
         }

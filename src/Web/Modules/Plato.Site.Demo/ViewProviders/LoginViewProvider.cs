@@ -43,7 +43,7 @@ namespace Plato.Site.Demo.ViewProviders
             };
 
             return Task.FromResult(Views(                
-                View<DemoSettingsViewModel>("Demo.Login.Sidebar", model => loginViewModel).Zone("sidebar")                
+                View<DemoSettingsViewModel>("Demo.Login.Sidebar", model => loginViewModel).Zone("content-right")                
             ));
 
         }

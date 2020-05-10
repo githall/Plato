@@ -1,11 +1,11 @@
 ﻿@model LayoutOptions
 @{
     var centerPanel = "col-lg-12";
-    if (Model.Zones.SideBar != null && Model.Zones.Asides != null)
+    if (Model.Zones.ContentLeft != null && Model.Zones.ContentRight != null)
     {
         centerPanel = "col-lg-6";
     }
-    else if (Model.Zones.SideBar != null || Model.Zones.Asides != null)
+    else if (Model.Zones.ContentLeft != null || Model.Zones.ContentRight != null)
     {
         centerPanel = "col-lg-9";
     }
@@ -49,7 +49,7 @@
     <div class="layout-body">
         <div class="row gutter-sm">
 
-            @if (Model.Zones.SideBar != null)
+            @if (Model.Zones.ContentLeft != null)
             {
                 <div class="@Model.ContentLeftCss  col-lg-3">
                     <div class="layout-sidebar-content navbar-expand-lg">
@@ -59,9 +59,9 @@
                             </a>
                         </div>
                         <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
-                            @if (Model.Zones.SideBar != null)
+                            @if (Model.Zones.ContentLeft != null)
                             {
-                                <view model="@Model.Zones.SideBar"></view>
+                                <view model="@Model.Zones.ContentLeft"></view>
                             }
                         </div>
                     </div>
@@ -70,30 +70,24 @@
 
             @if (Model.Zones.Content != null)
             {
-                <div class="layout-content @centerPanel">
-                    <div>
-                        <view model="@Model.Zones.Content"></view>
-                    </div>
-                    @if (Model.Zones.ContentFooterLeft != null || Model.Zones.ContentFooterRight != null)
-                    {
-                        <div class="layout-content-footer">
-                            <card>
+                <div class="layout-content @centerPanel">            
+                    <view model="@Model.Zones.Content"></view>              
+                    @if (Model.Zones.Actions != null || Model.Zones.ActionsRight != null)
+                    {             
+                        <card>
                                 <card-body>
-                                    @if (Model.Zones.ContentFooterRight != null)
+                                    @if (Model.Zones.ActionsRight != null)
                                     {
-                                        <div class="layout-footer-item float-right">
-                                            <view model="@Model.Zones.ContentFooterRight"></view>
+                                        <div class="float-right">
+                                            <view model="@Model.Zones.ActionsRight"></view>
                                         </div>
                                     }
-                                    @if (Model.Zones.ContentFooterLeft != null)
-                                    {
-                                        <div class="layout-actions">
-                                            <view model="@Model.Zones.ContentFooterLeft" />
-                                        </div>
+                                    @if (Model.Zones.Actions != null)
+                                    {                                      
+                                        <view model="@Model.Zones.Actions" />                                      
                                     }
                                 </card-body>
-                            </card>
-                        </div>
+                            </card>                    
                     }
                 </div>
             }
@@ -107,7 +101,7 @@
                 </div>
             }*@
 
-            @if (Model.Zones.Asides != null)
+            @if (Model.Zones.ContentRight != null)
             {
                 <div class="@Model.ContentRightCss col-lg-3">
                     <div class="layout-asides-content navbar-expand-lg">
@@ -117,9 +111,9 @@
                             </a>
                         </div>
                         <div class="navbar-collapse collapse" id="sidebar-collapse" role="navigation">
-                            @if (Model.Zones.Asides != null)
+                            @if (Model.Zones.ContentRight != null)
                             {
-                                <view model="@Model.Zones.Asides"></view>
+                                <view model="@Model.Zones.ContentRight"></view>
                             }
                         </div>
                     </div>
@@ -133,10 +127,10 @@
     </div>
 
     <div class="layout-footer">
-        @if (Model.Zones.Actions != null)
+        @if (Model.Zones.FooterRight != null)
         {
             <div class="float-right layout-actions">
-                <view model="@Model.Zones.Actions" />
+                <view model="@Model.Zones.FooterRight" />
             </div>
         }
         @if (Model.Zones.Footer != null)
@@ -216,7 +210,7 @@
     </div>
 </div>
 
-@if (Model.Zones.SideBar != null)
+@if (Model.Zones.ContentLeft != null)
 {
     <div class="modal fade" id="contentLeftAsides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
         <div class="modal-dialog modal-left" role="document">
@@ -230,7 +224,7 @@
                     </button>
                 </div>
                 <div class="modal-body overflow-auto">
-                    <view model="@Model.Zones.SideBar"></view>
+                    <view model="@Model.Zones.ContentLeft"></view>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
@@ -240,7 +234,7 @@
     </div>
 }
 
-@if (Model.Zones.Asides != null)
+@if (Model.Zones.ContentRight != null)
 {
     <div class="modal fade" id="contentRightAsides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
         <div class="modal-dialog modal-right" role="document">
@@ -254,7 +248,7 @@
                     </button>
                 </div>
                 <div class="modal-body overflow-auto">
-                    <view model="@Model.Zones.Asides"></view>
+                    <view model="@Model.Zones.ContentRight"></view>
                 </div>
                 <div class="modal-footer">
                     <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

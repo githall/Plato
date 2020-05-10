@@ -92,7 +92,7 @@ namespace Plato.Docs.Categories.ViewProviders
 
             return Views(
                 View<CategoryIndexViewModel>("Doc.Categories.Index.Content", model => categoryIndexViewModel).Zone("content").Order(1),
-                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("sidebar").Order(int.MinValue + 10)
+                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("content-left").Order(int.MinValue + 10)
             );
             
         }
@@ -188,7 +188,7 @@ namespace Plato.Docs.Categories.ViewProviders
             };
             
             return Views(
-                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("sidebar").Order(int.MinValue + 10)
+                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("content-left").Order(int.MinValue + 10)
             );
 
         }

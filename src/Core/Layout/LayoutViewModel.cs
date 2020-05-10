@@ -27,9 +27,9 @@ namespace PlatoCore.Layout
 
         public IEnumerable<ILayoutZoneView> Content { get; set; }
 
-        public IEnumerable<ILayoutZoneView> ContentFooterLeft { get; set; }
+        public IEnumerable<ILayoutZoneView> Actions { get; set; }
 
-        public IEnumerable<ILayoutZoneView> ContentFooterRight { get; set; }
+        public IEnumerable<ILayoutZoneView> ActionsRight { get; set; }
 
         public IEnumerable<ILayoutZoneView> ResizableHeaderLeft { get; set; }
 
@@ -41,14 +41,14 @@ namespace PlatoCore.Layout
 
         public IEnumerable<ILayoutZoneView> ResizableFooterRight { get; set; }
 
-        public IEnumerable<ILayoutZoneView> SideBar { get; set; }
+        public IEnumerable<ILayoutZoneView> ContentLeft { get; set; }
 
-        public IEnumerable<ILayoutZoneView> Asides { get; set; }
+        public IEnumerable<ILayoutZoneView> ContentRight { get; set; }
 
         public IEnumerable<ILayoutZoneView> Footer { get; set; }
 
-        public IEnumerable<ILayoutZoneView> Actions { get; set; }
- 
+        public IEnumerable<ILayoutZoneView> FooterRight { get; set; }
+
         public IEnumerable<ILayoutZoneView> Alerts { get; set; }
 
         public LayoutViewModel(params IViewProviderResult[] results) : base(results)

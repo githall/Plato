@@ -33,7 +33,7 @@ namespace Plato.Authentication.Google.ViewProviders
 
             return Task.FromResult(Views(                
                 View<GoogleLoginViewModel>("Google.Login.Sidebar", model => new GoogleLoginViewModel())
-                    .Zone("sidebar")
+                    .Zone("content-right")
                     .Order(int.MinValue + 100)                
             ));
 

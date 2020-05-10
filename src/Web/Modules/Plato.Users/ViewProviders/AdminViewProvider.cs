@@ -160,9 +160,9 @@ namespace Plato.Users.ViewProviders
                     View<EditUserViewModel>("Admin.Edit.Header", model => viewModel).Zone("header"),
                     View<EditUserViewModel>("Admin.Edit.Meta", model => viewModel).Zone("meta"),
                     View<EditUserViewModel>("Admin.Edit.Content", model => viewModel).Zone("content"),
-                    View<EditUserViewModel>("Admin.Edit.Sidebar", model => viewModel).Zone("sidebar"),
-                    View<EditUserViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer"),
-                    View<EditUserViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions")
+                    View<EditUserViewModel>("Admin.Edit.Sidebar", model => viewModel).Zone("content-right"),
+                    View<EditUserViewModel>("Admin.Edit.Footer", model => viewModel).Zone("actions"),
+                    View<EditUserViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions-right")
                 );
 
         }

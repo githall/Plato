@@ -90,7 +90,7 @@ namespace Plato.Docs.Tags.ViewProviders
                     model.SelectedTagId = tag?.Id ?? 0;
                     model.Tags = tags?.Data;
                     return model;
-                }).Zone("sidebar").Order(1)
+                }).Zone("content-right").Order(1)
             );
             
         }

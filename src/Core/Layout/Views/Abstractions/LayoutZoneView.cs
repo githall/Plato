@@ -12,13 +12,13 @@ namespace PlatoCore.Layout.Views.Abstractions
 
         public LayoutZoneView()
         {
-            _zone = LayoutZones.ContentZoneName;
+            _zone = LayoutZones.Content;
             _order = 1;
         }
 
         public LayoutZoneView(string viewName, object model) : base(viewName, model)
         {
-            _zone = LayoutZones.ContentZoneName;
+            _zone = LayoutZones.Content;
             _order = 1;
         }
 

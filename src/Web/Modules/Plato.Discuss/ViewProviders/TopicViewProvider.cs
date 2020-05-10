@@ -102,7 +102,7 @@ namespace Plato.Discuss.ViewProviders
             return Task.FromResult(Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("content-footer-right")
+                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("actions-right")
             ));
 
         }

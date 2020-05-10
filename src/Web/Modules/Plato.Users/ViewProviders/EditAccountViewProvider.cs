@@ -54,7 +54,7 @@ namespace Plato.Users.ViewProviders
                 View<User>("Home.Edit.Sidebar", model => user).Zone("content-left"),
                 View<User>("Home.Edit.Tools", model => user).Zone("tools"),
                 View<EditAccountViewModel>("Home.EditAccount.Content", model => viewModel).Zone("content"),
-                View<User>("Home.Edit.Footer", model => user).Zone("content-footer-right")
+                View<User>("Home.Edit.Footer", model => user).Zone("actions-right")
             );
 
         }

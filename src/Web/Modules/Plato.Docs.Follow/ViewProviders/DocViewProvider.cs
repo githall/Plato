@@ -151,7 +151,7 @@ namespace Plato.Docs.Follow.ViewProviders
                       model.NotifyHtmlName = NotifyHtmlName;
                       model.Permission = Permissions.SendDocFollows;
                       return model;
-                  }).Zone("content-footer-left"),
+                  }).Zone("actions"),
                 View<FollowViewModel>("Follow.Edit.Sidebar", model =>
                 {
                     model.FollowType = followType;

@@ -27,14 +27,14 @@ namespace PlatoCore.Layout
             // Return composed model
             return new LayoutViewModel()
             {
-                Header = GetPositionedViews(LayoutZones.HeaderZoneName),
+                Header = GetPositionedViews(LayoutZones.Header),
                 Tools = GetPositionedViews(LayoutZones.ToolsZoneName),
                 Meta = GetPositionedViews(LayoutZones.MetaZoneName),
 
-                Content = GetPositionedViews(LayoutZones.ContentZoneName),
+                Content = GetPositionedViews(LayoutZones.Content),
 
-                ContentFooterLeft = GetPositionedViews(LayoutZones.ContentFooterLeftZoneName),
-                ContentFooterRight = GetPositionedViews(LayoutZones.ContentFooterRightZoneName),
+                Actions = GetPositionedViews(LayoutZones.Actions),
+                ActionsRight = GetPositionedViews(LayoutZones.ActionsRight),
 
                 ResizableHeaderLeft = GetPositionedViews(LayoutZones.ResizableHeaderLeft),
                 ResizableHeaderRight = GetPositionedViews(LayoutZones.ResizableHeaderRight),
@@ -42,10 +42,10 @@ namespace PlatoCore.Layout
                 ResizableFooterLeft = GetPositionedViews(LayoutZones.ResizableFooterLeft),
                 ResizableFooterRight = GetPositionedViews(LayoutZones.ResizableFooterRight),
 
-                SideBar = GetPositionedViews(new string[] { LayoutZones.SideBarZoneName, LayoutZones.ContentLeftZoneName }),                
-                Footer = GetPositionedViews(LayoutZones.FooterZoneName),
-                Actions = GetPositionedViews(LayoutZones.ActionsZoneName),
-                Asides = GetPositionedViews(new string[] { LayoutZones.AsidesZoneName, LayoutZones.ContentRightZoneName }),
+                ContentLeft = GetPositionedViews(LayoutZones.ContentLeft),                
+                Footer = GetPositionedViews(LayoutZones.Footer),
+                FooterRight = GetPositionedViews(LayoutZones.FooterRight),
+                ContentRight = GetPositionedViews(LayoutZones.ContentRight),
                 Alerts = GetPositionedViews(LayoutZones.AlertsZoneName),
 
             };
