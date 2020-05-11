@@ -65,6 +65,17 @@ if (typeof window.$.Plato === "undefined") {
                     selector = $caller.data(dataKey).navigation,
                     $nav = $(selector);
 
+                // Build the anchors
+                for (var i = 0; i < this.headers.length; i++) {
+                    self.anchor($caller, this.headers.eq(i));
+                }
+
+                // No need to build the navigation
+                if ($nav.length === 0) {
+                    return;
+                }
+
+                // Track navigation
                 $nav.data(dataKey, {
                     first: 0,
                     previous: 0
@@ -75,32 +86,20 @@ if (typeof window.$.Plato === "undefined") {
                 }
 
                 // Ensure we have navigation                
-                if ($nav.length > 0) {        
-                    $nav.each(function () {
-                        if (self.headers.length > 0) {
-
-                            // Add a list
-                            $(this).empty().append('<ul />');
-
-                            // Set list as starting point
-                            $(this).data(dataKey).previous = $(this).find('ul').last();
-
-                            // Build navigation & anchors
-                            for (var i = 0; i < self.headers.length; i++) {                                
-                                self.navigations($caller, self.headers.eq(i));
-                            }
-
-                        } else {
-                            $(this).empty().text($caller.data(dataKey).emptyText);
+                $nav.each(function () {
+                    if (self.headers.length > 0) {
+                        // Add a list
+                        $(this).empty().append('<ul />');
+                        // Set list as starting point
+                        $(this).data(dataKey).previous = $(this).find('ul').last();
+                        // Build navigation & anchors
+                        for (var i = 0; i < self.headers.length; i++) {                                
+                            self.navigations($caller, self.headers.eq(i));
                         }
-                    });
-                  
-                }
-
-                // Build navigation & anchors
-                for (var i = 0; i < self.headers.length; i++) {                           
-                    self.anchor($caller, self.headers.eq(i));
-                }
+                    } else {
+                        $(this).empty().text($caller.data(dataKey).emptyText);
+                    }
+                });                             
 
             },
             navigations: function ($caller, obj) {

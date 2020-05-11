@@ -7814,15 +7814,10 @@ $(function (win, doc, $) {
         };
 
         // CSS selectors for various layout elements
-        var selectors = {
-            body: ".layout-body",
+        var selectors = {            
             content: ".layout-content",
             footer: ".layout-footer",
-            stickyHeader: ".layout-header-sticky",
-            stickySideBar: ".layout-sidebar-sticky",
-            stickySideBarContent: ".layout-sidebar-content",
-            stickyAsides: ".layout-asides-sticky",
-            stickyAsidesContent: ".layout-asides-content"
+            stickyHeader: ".layout-header-sticky"
         };
 
         var methods = {
@@ -7843,26 +7838,15 @@ $(function (win, doc, $) {
             bind: function ($caller) {
 
                 // Layout elements
-                var $stickyHeader = $caller.find(selectors.stickyHeader),
-                    $stickySidebar = $caller.find(selectors.stickySideBar),
-                    $stickySidebarContent = $stickySidebar.find(selectors.stickySideBarContent),
-                    $stickyAsides = $caller.find(selectors.stickyAsides),
-                    $stickyAsidesContent = $caller.find(selectors.stickyAsidesContent),
-                    $body = $caller.find(selectors.body),
-                    $content = $caller.find(selectors.content),
-                    $footer = $caller.find(selectors.footer);
+                var $stickyHeader = $caller.find(selectors.stickyHeader);
 
                 // Layout options
                 var sidebarOffsetTop = 0,
-                    stickyHeaders = $caller.data(dataKey).stickyHeaders,
-                    stickySidebars = $caller.data(dataKey).stickySidebars,
-                    stickyAsides = $caller.data(dataKey).stickyAsides;
+                    stickyHeaders = $caller.data(dataKey).stickyHeaders;
 
                 // If we don't find our sticky elements disable flags
                 if ($stickyHeader.length === 0) { stickyHeaders = false; }
-                if ($stickySidebar.length === 0) { stickySidebars = false; }
-                if ($stickyAsides.length === 0) { stickyAsides = false; }
-
+                
                 // Apply sticky headers
                 if (stickyHeaders) {
 
@@ -7893,120 +7877,7 @@ $(function (win, doc, $) {
                     });
 
                 }
-
-                // Apply sticky sidebar
-                if (stickySidebars) {
-
-                    // Accommodate for the static content
-                    // being smaller than the fixed content
-                    if ($content.length > 0) {
-                        // Ensure sidebar is greater than our content
-                        if ($stickySidebar.height() >= $content.height()) {
-                            $content.css({ "minHeight": $body.height() });
-                        }
-                    }
-
-                    // Apply sticky to sidebars
-                    $stickySidebar.sticky({
-                        offset: sidebarOffsetTop,
-                        onScroll: function ($this) {
-                            var top = Math.floor($footer.offset().top),
-                                scrollTop = Math.floor($(win).scrollTop() + $(win).height());
-                            if (scrollTop > top) {
-                                $stickySidebarContent.css({
-                                    "bottom": scrollTop - top
-                                });
-                            } else {
-                                $stickySidebarContent.css({
-                                    "bottom": 0
-                                });
-                            }
-                        },
-                        onUpdate: function ($this) {
-                            if ($this.hasClass("fixed")) {
-                                // Setup content when container becomes fixed
-                                $stickySidebarContent.css({
-                                    "top": sidebarOffsetTop,
-                                    "width": $this.width()
-                                });
-                                // Apply overflow CSS
-                                if (!$stickySidebarContent.hasClass("overflow-auto")) {
-                                    $stickySidebarContent.addClass("overflow-auto");
-                                }
-                            } else {
-                                // Reset
-                                $stickySidebarContent.css({
-                                    "top": "auto",
-                                    "width": "auto"
-                                });
-                                // Remove overflow CSS
-                                if ($stickySidebarContent.hasClass("overflow-auto")) {
-                                    $stickySidebarContent.removeClass("overflow-auto");
-                                }
-                            }
-
-                        }
-                    });
-
-                }
-
-                // Apply sticky asides
-                if (stickyAsides) {
-
-                    // Accommodate for the static content
-                    // being smaller than the fixed content
-                    if ($content.length > 0) {
-                        // Ensure sidebar is greater than our content
-                        if ($stickyAsides.height() >= $content.height()) {
-                            $content.css({ "minHeight": $body.height() });
-                        }
-                    }
-
-                    // Apply sticky asides?
-                    $stickyAsides.sticky({
-                        offset: sidebarOffsetTop,
-                        onScroll: function ($this) {
-                            var top = Math.floor($footer.offset().top),
-                                scrollTop = Math.floor($(win).scrollTop() + $(win).height());
-                            if (scrollTop > top) {
-                                $stickyAsidesContent.css({
-                                    "bottom": scrollTop - top
-                                });
-                            } else {
-                                $stickyAsidesContent.css({
-                                    "bottom": 0
-                                });
-                            }
-                        },
-                        onUpdate: function ($this) {
-                            if ($this.hasClass("fixed")) {
-                                // Setup content when container becomes fixed
-                                $stickyAsidesContent.css({
-                                    "overflowY": "auto",
-                                    "top": sidebarOffsetTop,
-                                    "width": $this.width()
-                                });
-                                // Apply overflow CSS
-                                if (!$stickyAsidesContent.hasClass("overflow-auto")) {
-                                    $stickyAsidesContent.addClass("overflow-auto");
-                                }
-                            } else {
-                                // Reset
-                                $stickyAsidesContent.css({
-                                    "overflowY": "visible",
-                                    "top": "auto",
-                                    "width": "auto"
-                                });
-                                // Remove overflow CSS
-                                if ($stickyAsidesContent.hasClass("overflow-auto")) {
-                                    $stickyAsidesContent.removeClass("overflow-auto");
-                                }
-                            }
-                        }
-                    });
-
-                }
-
+                
                 this._detectAndScrollToAnchor($caller);
 
             },
@@ -8202,7 +8073,7 @@ $(function (win, doc, $) {
 
     }();
 
-    /* Register Plugins */
+    /* Register plug-ins */
     $.fn.extend({
         replySpy: replySpy.init,
         navSite: navSite.init,
@@ -8222,8 +8093,7 @@ $(function (win, doc, $) {
         /* layout */
         this.find(".layout").layout({
             stickyHeaders: opts.layout.stickyHeaders,
-            stickySidebars: opts.layout.stickySidebars,
-            stickyAsides: opts.layout.stickyAsides
+            stickySideBars: opts.layout.stickySideBars
         });
 
         /* replySpy */
@@ -8302,7 +8172,7 @@ $(function (win, doc, $) {
 
     app.ready(function () {
 
-        // Accomodate for custom "formaction" attributes added
+        // Accommodate for custom "formaction" attributes added
         // when using multiple submit elements within a single form
         // For example...
         // <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">

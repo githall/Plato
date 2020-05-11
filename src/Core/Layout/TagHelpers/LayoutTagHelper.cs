@@ -89,15 +89,10 @@ namespace PlatoCore.Layout.TagHelpers
 
             EnsureViewHelper();
 
-            var model = new LayoutOptions()
-            {
-                Zones = Model
-            };
-
             var builder = new HtmlContentBuilder();
             try
             {
-                builder.AppendHtml(await _viewDisplayHelper.DisplayAsync(new View(GetZoneLayoutPath(), model)));
+                builder.AppendHtml(await _viewDisplayHelper.DisplayAsync(new View(GetZoneLayoutPath(), Model)));
             }
             catch
             {

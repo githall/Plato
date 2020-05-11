@@ -19,6 +19,198 @@ $(function (win, doc, $) {
 
     // --------
 
+    /* stickySideBars */
+    var stickySideBars = function () {
+
+        var dataKey = "stickySideBars",
+            dataIdKey = dataKey + "Id";
+
+        // Default options
+        var defaults = {
+            stickyHeaders: true,
+            stickySideBars: true            
+        };
+
+        // CSS selectors for various layout elements
+        var selectors = {
+            header: ".layout-header",
+            body: ".layout-body",
+            content: ".layout-content",
+            sideBar: ".layout-sidebar-sticky",            
+            sideBarContent: ".layout-sidebar-content",
+            footer: ".layout-footer"
+        };
+
+        var methods = {
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName]) {
+                        return this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
+                this.bind($caller);
+
+            },
+            bind: function ($caller) {
+
+                // Layout elements
+                var $header = $caller.find(selectors.header),
+                    $body = $caller.find(selectors.body),
+                    $content = $caller.find(selectors.content),
+                    $sideBar = $caller.find(selectors.sideBar),
+                    $sideBarContent = $sideBar.find(selectors.sideBarContent),                                        
+                    $footer = $caller.find(selectors.footer);
+
+                // Layout options
+                var sidebarOffsetTop = 0,
+                    stickyHeaders = $caller.data(dataKey).stickyHeaders,
+                    stickySideBars = $caller.data(dataKey).stickySideBars;
+
+                // If we don't find our sticky elements disable flags
+                if ($header.length === 0) { stickyHeaders = false; }
+                if ($sideBar.length === 0) { stickySideBars = false; }
+                
+                // Apply sticky headers
+                if (stickyHeaders) {
+
+                    // Default offset for sticky sidebars
+                    sidebarOffsetTop = $header.outerHeight();
+
+                    // Important: Set initial height of header
+                    // This ensures other calculations are correct
+                    $header.css({
+                        "height": sidebarOffsetTop
+                    });
+                    
+                }
+
+                // Apply sticky sidebar
+                if (stickySideBars) {
+
+                    // Accommodate for the static content
+                    // being smaller than the fixed content
+                    if ($content.length > 0) {
+                        // Ensure sidebar is greater than our content
+                        if ($sideBar.height() >= $content.height()) {
+                            $content.css({ "minHeight": $body.height() });
+                        }
+                    }
+
+                    // Apply sticky to sidebars
+                    $sideBar.sticky({
+                        offset: sidebarOffsetTop,
+                        onScroll: function ($this) {
+                            var top = Math.floor($footer.offset().top),
+                                scrollTop = Math.floor($(win).scrollTop() + $(win).height());
+                            if (scrollTop > top) {
+                                $sideBarContent.css({
+                                    "bottom": scrollTop - top
+                                });
+                            } else {
+                                $sideBarContent.css({
+                                    "bottom": 0
+                                });
+                            }
+                        },
+                        onUpdate: function ($this) {
+                            if ($this.hasClass("fixed")) {
+                                // Setup content when container becomes fixed
+                                $sideBarContent.css({
+                                    "top": sidebarOffsetTop,
+                                    "width": $this.width()
+                                });
+                                // Apply overflow CSS
+                                if (!$sideBarContent.hasClass("overflow-auto")) {
+                                    $sideBarContent.addClass("overflow-auto");
+                                }
+                            } else {
+                                // Reset
+                                $sideBarContent.css({
+                                    "top": "auto",
+                                    "width": "auto"
+                                });
+                                // Remove overflow CSS
+                                if ($sideBarContent.hasClass("overflow-auto")) {
+                                    $sideBarContent.removeClass("overflow-auto");
+                                }
+                            }
+
+                        }
+                    });
+
+                }
+
+            },
+            unbind: function ($caller) {
+                $().sticky("unbind");
+            }
+        };
+
+        return {
+            init: function () {
+
+                var options = {},
+                    methodName = null,
+                    func = null;
+                for (var i = 0; i < arguments.length; ++i) {
+                    var a = arguments[i];
+                    switch (a.constructor) {
+                        case Object:
+                            $.extend(options, a);
+                            break;
+                        case String:
+                            methodName = a;
+                            break;
+                        case Function:
+                            func = a;
+                            break;
+                    }
+                }
+
+                if (this.length > 0) {
+                    // $(selector).stickySideBars()
+                    return this.each(function () {
+                        if (!$(this).data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $(this).data(dataIdKey, id);
+                            $(this).data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
+                        }
+                        return methods.init($(this), methodName, func);
+                    });
+                } else {
+                    // $().stickySideBars()
+                    var $caller = $(".layout");
+                    if ($caller.length > 0) {
+                        if (!$caller.data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $caller.data(dataIdKey, id);
+                            $caller.data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
+                        }
+                        return methods.init($caller, methodName, func);
+                    }
+                }
+
+            }
+        };
+
+    }();
+
+    /* Register plug-ins */
+    $.fn.extend({       
+        stickySideBars: stickySideBars.init
+    });
+
+    // --------
+
     var docs = {
         init: function () {
             app.logger.logInfo(featureId + " initializing");
@@ -31,9 +223,18 @@ $(function (win, doc, $) {
 
     // --------
 
-    // app ready
+    // Ready
     app.ready(function () {
+
+        // Initialize docs
         docs.init();
+
+        // Initialize sticky sidebars
+        $(".layout").stickySideBars({
+            stickyHeaders: app.defaults.layout.stickyHeaders,
+            stickySideBars: app.defaults.layout.stickySideBars
+        });
+
     });
     
     // infinite scroll load

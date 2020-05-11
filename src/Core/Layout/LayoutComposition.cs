@@ -32,6 +32,9 @@ namespace PlatoCore.Layout
                 Header = GetPositionedViews(LayoutZones.Header),
                 HeaderRight = GetPositionedViews(LayoutZones.HeaderRight),
 
+                Tools = GetPositionedViews(LayoutZones.Tools),
+                ToolsRight = GetPositionedViews(LayoutZones.ToolsRight),
+
                 ContentLeft = GetPositionedViews(LayoutZones.ContentLeft),
                 Content = GetPositionedViews(LayoutZones.Content),
                 ContentRight = GetPositionedViews(LayoutZones.ContentRight),

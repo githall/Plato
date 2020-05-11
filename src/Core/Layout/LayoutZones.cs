@@ -11,6 +11,10 @@ namespace PlatoCore.Layout
         public const string Header = "header";
         public const string HeaderRight = "header-right";
 
+        // Tools
+        public const string Tools = "tools";
+        public const string ToolsRight = "tools-right";
+
         // Content        
         public const string ContentLeft = "content-left";
         public const string Content = "content";
@@ -35,7 +39,9 @@ namespace PlatoCore.Layout
         {
             Alerts,
             Header,
-            HeaderRight,     
+            HeaderRight,
+            Tools,
+            ToolsRight,
             Content,
             ContentLeft,
             ContentRight,

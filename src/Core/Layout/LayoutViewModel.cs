@@ -5,17 +5,6 @@ using PlatoCore.Layout.Views.Abstractions;
 namespace PlatoCore.Layout
 {
 
-    public class LayoutOptions
-    {
-
-        public string ContentLeftCss { get; set; } = "layout-sidebar";
-
-        public string ContentRightCss { get; set; } = "layout-sidebar";
-
-        public LayoutViewModel Zones { get; set; }
-
-    }
-
     public class LayoutViewModel : CombinedViewProviderResult
     {
 
@@ -26,6 +15,10 @@ namespace PlatoCore.Layout
         public IEnumerable<ILayoutZoneView> HeaderRight { get; set; }
 
         public IEnumerable<ILayoutZoneView> ContentLeft { get; set; }
+
+        public IEnumerable<ILayoutZoneView> Tools { get; set; }
+
+        public IEnumerable<ILayoutZoneView> ToolsRight { get; set; }
 
         public IEnumerable<ILayoutZoneView> Content { get; set; }
 
