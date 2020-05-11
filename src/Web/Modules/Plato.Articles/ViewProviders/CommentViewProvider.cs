@@ -15,10 +15,10 @@ namespace Plato.Articles.ViewProviders
     {
 
         private const string EditorHtmlName = "message";
-        
+
         private readonly IEntityReplyStore<Comment> _replyStore;
         private readonly IPostManager<Comment> _replyManager;
- 
+
         private readonly IStringLocalizer T;
 
         private readonly HttpRequest _request;
@@ -35,8 +35,7 @@ namespace Plato.Articles.ViewProviders
             _request = httpContextAccessor.HttpContext.Request;
 
             T = stringLocalize;
-        }
-        
+        }        
 
         public override Task<IViewProviderResult> BuildDisplayAsync(Comment model, IViewProviderContext updater)
         {
@@ -75,9 +74,8 @@ namespace Plato.Articles.ViewProviders
             return Task.FromResult(Views(
                 View<EditEntityReplyViewModel>("Home.Edit.Reply.Header", model => viewModel).Zone("header"),
                 View<EditEntityReplyViewModel>("Home.Edit.Reply.Content", model => viewModel).Zone("content"),
-                View<EditEntityReplyViewModel>("Home.Edit.Reply.Footer", model => viewModel).Zone("Footer")
+                View<EditEntityReplyViewModel>("Home.Edit.Reply.Footer", model => viewModel).Zone("actions-right")
             ));
-
 
         }
 

@@ -72,7 +72,7 @@ namespace Plato.Issues.ViewProviders
                     EditorHtmlName = EditorHtmlName
                 }).Zone("resize-content"),
                 View<EntityViewModel<Issue, Comment>>("Home.Display.Actions", model => viewModel)
-                    .Zone("resize-asides-right")
+                    .Zone("resize-actions-right")
                     .Order(int.MaxValue)
             );
 
