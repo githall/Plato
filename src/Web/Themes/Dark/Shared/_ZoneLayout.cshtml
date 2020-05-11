@@ -11,6 +11,11 @@
     }
 }
 
+@if (Model.LayoutBefore != null)
+{
+    <view model="@Model.LayoutBefore"></view>
+}
+
 <div class="layout">
     <div class="layout-header layout-header-sticky">
         <div class="layout-header-content">
@@ -38,7 +43,7 @@
         <div class="row gutter-sm">
             @if (Model.ContentLeft != null)
             {
-                <div class="layout-sidebar col-lg-3">
+                <div class="layout-sidebar layout-sidebar-sticky col-lg-3">
                     <div class="layout-sidebar-content navbar-expand-lg">
                         <div class="navbar-toggler">
                             <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-left active img-48" style="z-index:10;" data-toggle="modal" data-target="#contentLeftAsides">
@@ -57,6 +62,19 @@
             @if (Model.Content != null)
             {
                 <div class="layout-content @centerCss">
+                    @if (Model.Tools != null || Model.ToolsRight != null)
+                    {
+                        if (Model.ToolsRight != null)
+                        {
+                            <div class="float-right">
+                                <view model="@Model.ToolsRight"></view>
+                            </div>
+                        }
+                        @if (Model.Tools != null)
+                        {
+                            <view model="@Model.Tools" />
+                        }
+                    }
                     <view model="@Model.Content"></view>
                     @if (Model.Actions != null || Model.ActionsRight != null)
                     {
@@ -79,7 +97,7 @@
             }
             @if (Model.ContentRight != null)
             {
-                <div class="layout-sidebar col-lg-3">
+                <div class="layout-sidebar layout-sidebar-sticky col-lg-3">
                     <div class="layout-sidebar-content navbar-expand-lg">
                         <div class="navbar-toggler">
                             <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-right active img-48" style="z-index:10;" data-toggle="modal" data-target="#contentRightAsides">
@@ -100,24 +118,27 @@
     <div class="layout-footer">
         @if (Model.FooterRight != null)
         {
-            <div class="float-right layout-actions">
+            <div class="float-right layout-footer-right">
                 <view model="@Model.FooterRight" />
             </div>
         }
         @if (Model.Footer != null)
         {
-            <div class="layout-footer-item">
-                <view model="@Model.Footer"></view>
-            </div>
+            <view model="@Model.Footer"></view>
         }
     </div>
 </div>
 
+@if (Model.LayoutAfter != null)
+{
+    <view model="@Model.LayoutAfter"></view>
+}
+
 @if (Model.ResizeHeader != null ||
- Model.ResizeHeaderRight != null ||
- Model.ResizeContent != null ||
- Model.ResizeActions != null ||
- Model.ResizeActionsRight != null)
+Model.ResizeHeaderRight != null ||
+Model.ResizeContent != null ||
+Model.ResizeActions != null ||
+Model.ResizeActionsRight != null)
 {
     <div class="resizable resizable-bottom resizable-hidden" data-provide="resizeable">
         <div class="resizable-bar">

@@ -73,13 +73,13 @@ namespace Plato.Users.Notifications.ViewProviders
                 CategorizedNotificationTypes = _notificationTypeManager.GetCategorizedNotificationTypes(roleNames),
                 EnabledNotificationTypes = _userNotificationTypeDefaults.GetUserNotificationTypesWithDefaults(user)
             };
-            
+
             return Views(
-                View<User>("Home.Edit.Header", model => user).Zone("header"),
-                View<User>("Home.Edit.Sidebar", model => user).Zone("content-left"),
+                View<User>("Home.Edit.Header", model => user).Zone("header"),                
                 View<User>("Home.Edit.Tools", model => user).Zone("header-right"),
+                View<User>("Home.Edit.Sidebar", model => user).Zone("content-left"),
                 View<EditNotificationsViewModel>("Home.Edit.Content", model => editNotificationsViewModel).Zone("content"),
-                View<User>("Home.Edit.Footer", model => user).Zone("footer")
+                View<User>("Home.Edit.Footer", model => user).Zone("actions")
             );
 
         }
@@ -108,7 +108,7 @@ namespace Plato.Users.Notifications.ViewProviders
             }
 
             // The notification type won't appear within request.Form.Keys
-            // if the checkbox is not checked. If the notification type does
+            // if the check box is not checked. If the notification type does
             // not exist within our request.Form.Keys collection ensures
             // it's still added but disabled by default
             foreach (var notificationType in _notificationTypeManager.GetNotificationTypes(user.RoleNames))

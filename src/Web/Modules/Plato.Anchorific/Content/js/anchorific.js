@@ -27,11 +27,11 @@ if (typeof window.$.Plato === "undefined") {
             spy: true, // scroll spy enabled
             position: 'append', // position of anchor icon relative to the header
             spyOffset: $().layout("getHeaderHeight") || !0, // specify heading offset for spy scrolling          
-            onClick: function ($caller, $header, $link) {},
+            onClick: function ($caller, $header, $link) { },
             emptyText: "No sections found!"
         };
 
-        var methods = {            
+        var methods = {
             init: function ($caller, methodName, func) {
 
                 if (methodName) {
@@ -49,7 +49,12 @@ if (typeof window.$.Plato === "undefined") {
             bind: function ($caller) {
 
                 this.headers = $caller.find($caller.data(dataKey).headers);
-                
+                this.previous = 0;
+
+                if (this.headers.length !== 0) {
+                    this.first = parseInt(this.headers.prop('nodeName').substring(1), null);
+                }
+
                 // Build contents
                 this.build($caller);
 
@@ -61,48 +66,39 @@ if (typeof window.$.Plato === "undefined") {
             },
             build: function ($caller) {
 
-                var self = this,             
-                    selector = $caller.data(dataKey).navigation,
-                    $nav = $(selector);
-
-                // Build the anchors
-                for (var i = 0; i < this.headers.length; i++) {
-                    self.anchor($caller, this.headers.eq(i));
-                }
-
-                // No need to build the navigation
-                if ($nav.length === 0) {
-                    return;
-                }
-
-                // Track navigation
-                $nav.data(dataKey, {
-                    first: 0,
-                    previous: 0
-                });
-
-                if (self.headers.length !== 0) {
-                    $nav.data(dataKey).first = parseInt(self.headers.prop('nodeName').substring(1), null);
-                }
+                var self = this,
+                    obj,
+                    navSelector = $caller.data(dataKey).navigation,
+                    $navs = $(navSelector),
+                    navigations = function () { };
 
                 // Ensure we have navigation                
-                $nav.each(function () {
-                    if (self.headers.length > 0) {
-                        // Add a list
-                        $(this).empty().append('<ul />');
-                        // Set list as starting point
-                        $(this).data(dataKey).previous = $(this).find('ul').last();
-                        // Build navigation & anchors
-                        for (var i = 0; i < self.headers.length; i++) {                                
-                            self.navigations($caller, self.headers.eq(i));
-                        }
+                if ($navs.length > 0) {
+                    if (this.headers.length > 0) {      
+                        $navs.empty().append('<ul />');
+                        navigations = function ($el, $nav, obj) {
+                            return self.navigations($el, $nav, obj);
+                        };
                     } else {
-                        $(this).empty().text($caller.data(dataKey).emptyText);
+                        $nav.empty().text($caller.data(dataKey).emptyText);
                     }
-                });                             
+                }
+
+                // Build navigation & anchors
+                for (var i = 0; i < self.headers.length; i++) {
+                    obj = self.headers.eq(i);
+
+                    for (var x = 0; x < $navs.length; x++) {   
+                        var $nav = $($navs[x]);                       
+                        self.previous = $nav.find('ul').last();
+                        navigations($caller, $nav, obj);
+                    }
+
+                    self.anchor($caller, obj);
+                }
 
             },
-            navigations: function ($caller, obj) {
+            navigations: function ($caller, $nav, obj) {
 
                 var self = this,
                     link,
@@ -121,15 +117,15 @@ if (typeof window.$.Plato === "undefined") {
                 link.click(function (e) {
                     // Prevent defaults
                     e.preventDefault();
-                    e.stopPropagation();               
+                    e.stopPropagation();
                     var href = $(this).attr("href"),
                         $header = $caller.find(href);
-                    if ($header.length > 0) {                                            
+                    if ($header.length > 0) {
                         // Scroll to header for anchor                        
                         $().scrollTo({
                             offset: -$caller.data(dataKey).spyOffset,
                             target: $header,
-                            onComplete: function () {}
+                            onComplete: function () { }
                         }, "go");
                         if ($caller.data(dataKey).onClick) {
                             $caller.data(dataKey).onClick($caller, $header, $(this));
@@ -142,36 +138,29 @@ if (typeof window.$.Plato === "undefined") {
                 which = parseInt(obj.prop('nodeName').substring(1), null);
                 list.attr('data-tag', which);
 
-                self.subheadings($caller, which, list);
+                self.subheadings($caller, $nav, which, list);
 
                 self.first = which;
 
             },
-            subheadings: function ($caller, which, a) {
+            subheadings: function ($caller, $nav, which, a) {
 
                 var self = this,
-                    selector = $caller.data(dataKey).navigation,
-                    $nav = $(selector);
+                    
+                    ul = $nav.find('ul'),
+                    li = $nav.find('li');
 
-                $nav.each(function () {
-
-                    var ul = $(this).find('ul'),
-                        li = $(this).find('li');
-
-                    if (which === $(this).data(dataKey).first) {
-                        $(this).data(dataKey).previous.append(a);
-                    } else if (which > $(this).data(dataKey).first) {
-                        li.last().append('<ul />');
-                        // can't use cache ul; need to find ul once more
-                        ul.last().append(a);
-                        $(this).data(dataKey).previous = a.parent();
-                    } else {
-                        ul.find('li[data-tag=' + which + ']').last().parent().append(a);
-                        $(this).data(dataKey).previous = a.parent();
-                    }
-
-                });
-            
+                if (which === self.first) {
+                    self.previous.append(a);
+                } else if (which > self.first) {
+                    li.last().append('<ul />');
+                    // can't use cache ul; need to find ul once more
+                    $($nav).find('ul').last().append(a);
+                    self.previous = a.parent();
+                } else {
+                    $('li[data-tag=' + which + ']').last().parent().append(a);
+                    self.previous = a.parent();
+                }
 
             },
             name: function (obj) {
@@ -269,7 +258,7 @@ if (typeof window.$.Plato === "undefined") {
                     set();
                 });
 
-            }           
+            }
         };
 
         return {
@@ -277,7 +266,7 @@ if (typeof window.$.Plato === "undefined") {
 
                 var options = {},
                     methodName = null,
-                    func = null;          
+                    func = null;
                 for (var i = 0; i < arguments.length; ++i) {
                     var a = arguments[i];
                     switch (a.constructor) {
@@ -286,7 +275,7 @@ if (typeof window.$.Plato === "undefined") {
                             break;
                         case String:
                             methodName = a;
-                            break;                     
+                            break;
                         case Function:
                             func = a;
                             break;
@@ -360,12 +349,12 @@ if (typeof window.$.Plato === "undefined") {
             if (!$target) {
                 return;
             }
-            
+
             // Get canonical url or use current url if not available
             var hash = "",
                 $canonical = $('link[rel="canonical"]'),
                 url = $canonical.length > 0
-                    ? $canonical.attr('href') 
+                    ? $canonical.attr('href')
                     : win.location.href.split("#")[0];
 
             // Build new anchor from targeted header using the header id
@@ -384,7 +373,7 @@ if (typeof window.$.Plato === "undefined") {
         };
 
         // Ensure infiniteScroll is available
-        if ($('[data-provide="infiniteScroll"]').length > 0) {            
+        if ($('[data-provide="infiniteScroll"]').length > 0) {
             if ($().infiniteScroll) {
                 // Update state if anchor was clicked after infiniteScrolls scrollEnd event
                 $().infiniteScroll("scrollEnd", function () {
@@ -398,11 +387,11 @@ if (typeof window.$.Plato === "undefined") {
                     updateState();
                 }
             });
-        }      
+        }
 
         // Activate anchorific when previewing within markdown editor
         if ($().markdown) {
-            $().markdown("preview", function ($elem) {            
+            $().markdown("preview", function ($elem) {
                 $elem.anchorific(opts);
             });
         }

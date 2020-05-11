@@ -108,8 +108,6 @@ a:hover {
 /* Navigation  */
 /* ------------------- */
 
-.nav-site { border-color: rgba(0, 0, 0, 0.15); }
-
 .nav-site > .navbar-light .navbar-nav .nav-pills .show > .nav-link,
 .nav-site > .navbar-light .navbar-nav .nav-pills .active > .nav-link,
 .nav-site > .navbar-light .navbar-nav .nav-pills .nav-link.show,

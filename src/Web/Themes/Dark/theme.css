@@ -10,7 +10,6 @@
 /* Navigation  */
 /* ------------------- */
 
-.nav-site { border-color: rgba(255, 255, 255, 0.10); }
 
 .nav-site .nav .search-input-group > .btn {
     color: #666 !important;
@@ -364,6 +363,7 @@ a.label.active {
 /* Admin Nav */
 /* ------------------- */
 
+.navbar-dark,
 .navbar-dark .navbar-nav .show > .nav-link,
 .navbar-dark .navbar-nav .active > .nav-link,
 .navbar-dark .navbar-nav .nav-link.show,
@@ -2699,23 +2699,23 @@ a.bg-dark:hover, a.bg-dark:focus, button.bg-dark:hover, button.bg-dark:focus {
 }
 
 .border {
-    border: 1px solid #dee2e6 !important
+    border: 1px solid #333 !important
 }
 
 .border-top {
-    border-top: 1px solid #dee2e6 !important
+    border-top: 1px solid #333 !important
 }
 
 .border-right {
-    border-right: 1px solid #dee2e6 !important
+    border-right: 1px solid #333 !important
 }
 
 .border-bottom {
-    border-bottom: 1px solid #dee2e6 !important
+    border-bottom: 1px solid #333 !important
 }
 
 .border-left {
-    border-left: 1px solid #dee2e6 !important
+    border-left: 1px solid #333 !important
 }
 
 .border-primary {

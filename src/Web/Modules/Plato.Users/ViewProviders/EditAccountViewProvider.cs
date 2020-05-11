@@ -54,7 +54,7 @@ namespace Plato.Users.ViewProviders
                 View<User>("Home.Edit.Sidebar", model => user).Zone("content-left"),
                 View<User>("Home.Edit.Tools", model => user).Zone("header-right"),
                 View<EditAccountViewModel>("Home.EditAccount.Content", model => viewModel).Zone("content"),
-                View<User>("Home.Edit.Footer", model => user).Zone("actions-right")
+                View<User>("Home.Edit.Footer", model => user).Zone("actions")
             );
 
         }
@@ -81,35 +81,6 @@ namespace Plato.Users.ViewProviders
             if (!await context.Updater.TryUpdateModelAsync(model))
             {
                 return await BuildEditAsync(userProfile, context);
-            }
-
-            if (context.Updater.ModelState.IsValid)
-            {
-
-                //// Has the username changed?
-                //if (model.UserName != null && !model.UserName.Equals(user.UserName, StringComparison.OrdinalIgnoreCase))
-                //{
-                //    // SetUserNameAsync internally sets a new SecurityStamp
-                //    // which will invalidate the authentication cookie
-                //    // This will force the user to be logged out
-                //    await _userManager.SetUserNameAsync(user, model.UserName);
-                //}
-                
-                //// Has the email address changed?
-                //if (model.Email != null && !model.Email.Equals(user.Email, StringComparison.OrdinalIgnoreCase))
-                //{
-                //    // Only call SetEmailAsync if the email address changes
-                //    // SetEmailAsync internally sets EmailConfirmed to "false"
-                //    await _userManager.SetEmailAsync(user, model.Email);
-                //}
-
-                //// Update user
-                //var result = await _platoUserManager.UpdateAsync(user);
-                //foreach (var error in result.Errors)
-                //{
-                //    context.Updater.ModelState.AddModelError(string.Empty, error.Description);
-                //}
-
             }
 
             return await BuildEditAsync(userProfile, context);
