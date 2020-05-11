@@ -11,6 +11,11 @@
     }
 }
 
+@if (Model.LayoutBefore != null)
+{
+    <view model="@Model.LayoutBefore"></view>
+}
+
 <div class="layout">
     <div class="layout-header">
         <div class="layout-header-content">
@@ -58,7 +63,7 @@
             {
                 <div class="layout-content @centerCss">
                     @if (Model.Tools != null || Model.ToolsRight != null)
-                    {                  
+                    {
                         if (Model.ToolsRight != null)
                         {
                             <div class="float-right">
@@ -68,7 +73,7 @@
                         @if (Model.Tools != null)
                         {
                             <view model="@Model.Tools" />
-                        }                        
+                        }
                     }
                     <view model="@Model.Content"></view>
                     @if (Model.Actions != null || Model.ActionsRight != null)
@@ -126,11 +131,16 @@
     </div>
 </div>
 
+@if (Model.LayoutAfter != null)
+{
+    <view model="@Model.LayoutAfter"></view>
+}
+
 @if (Model.ResizeHeader != null ||
-  Model.ResizeHeaderRight != null ||
-  Model.ResizeContent != null ||
-  Model.ResizeActions != null ||
-  Model.ResizeActionsRight != null)
+Model.ResizeHeaderRight != null ||
+Model.ResizeContent != null ||
+Model.ResizeActions != null ||
+Model.ResizeActionsRight != null)
 {
     <div class="resizable resizable-bottom resizable-hidden" data-provide="resizeable">
         <div class="resizable-bar">

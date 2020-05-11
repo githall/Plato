@@ -8,6 +8,8 @@ namespace PlatoCore.Layout
     public class LayoutViewModel : CombinedViewProviderResult
     {
 
+        public IEnumerable<ILayoutZoneView> LayoutBefore { get; set; }
+
         public IEnumerable<ILayoutZoneView> Alerts { get; set; }
 
         public IEnumerable<ILayoutZoneView> Header { get; set; }
@@ -31,6 +33,8 @@ namespace PlatoCore.Layout
         public IEnumerable<ILayoutZoneView> Footer { get; set; }
 
         public IEnumerable<ILayoutZoneView> FooterRight { get; set; }
+
+        public IEnumerable<ILayoutZoneView> LayoutAfter { get; set; }
 
         public IEnumerable<ILayoutZoneView> ResizeHeader { get; set; }
 

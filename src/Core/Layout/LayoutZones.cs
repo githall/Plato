@@ -4,6 +4,10 @@ namespace PlatoCore.Layout
     public class LayoutZones
     {
 
+        // Before and after layout
+        public const string LayoutBefore = "layout-before";
+        public const string LayoutAfter = "layout-after";
+
         // Alerts
         public const string Alerts = "alerts";
 
@@ -53,7 +57,9 @@ namespace PlatoCore.Layout
             ResizeHeaderRight,
             ResizeContent,
             ResizeActions,
-            ResizeActionsRight
+            ResizeActionsRight,
+            LayoutBefore,
+            LayoutAfter
         };
 
     }
