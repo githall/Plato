@@ -58,9 +58,14 @@ namespace PlatoCore.Abstractions.Extensions
             return input.DayDifference(date.Value.DateTime);
         }
 
-        public static string ToSortableDateTimePattern(this DateTimeOffset input)
+        public static string ToSortableDateTimePattern(this DateTimeOffset input, System.Globalization.CultureInfo culture = null)
         {
-            return input.ToString(System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.SortableDateTimePattern);
+            if (culture == null)
+            {
+                // https://docs.microsoft.com/en-us/dotnet/api/system.globalization.cultureinfo.invariantculture?view=netcore-3.1
+                culture = System.Globalization.CultureInfo.InvariantCulture;
+            }
+            return input.ToString(culture.DateTimeFormat.SortableDateTimePattern);
         }
 
         public static DateTimeOffset Floor(this DateTimeOffset d)

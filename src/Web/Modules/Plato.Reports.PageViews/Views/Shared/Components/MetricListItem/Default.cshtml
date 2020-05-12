@@ -20,8 +20,10 @@
                 @Model.Metric.Title
             </a>
         </h6>
-        <div class="text-muted">
-            @Model.Metric.Url
+        <div title="@Model.Metric.Url" class="text-muted">
+            <div class="text-truncate">
+                @Model.Metric.Url
+            </div>
         </div>
     }
     else

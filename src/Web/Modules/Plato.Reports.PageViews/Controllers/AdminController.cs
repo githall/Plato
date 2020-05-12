@@ -12,12 +12,14 @@ using Plato.Metrics.Models;
 using Plato.Reports.ViewModels;
 using Plato.Reports.PageViews.Models;
 using PlatoCore.Hosting.Web.Abstractions;
+using PlatoCore.Abstractions.Extensions;
 
 namespace Plato.Reports.PageViews.Controllers
 {
+
     public class AdminController : Controller, IUpdateModel
     {
-        
+
         private readonly IViewProviderManager<PageViewIndex> _pageViewsViewProvider;
         private readonly IBreadCrumbManager _breadCrumbManager;
         private readonly IContextFacade _contextFacade;
@@ -37,18 +39,17 @@ namespace Plato.Reports.PageViews.Controllers
             IFeatureFacade featureFacade,
             IAlerter alerter)
         {
-            
+
             _pageViewsViewProvider = pageViewsViewProvider;
             _breadCrumbManager = breadCrumbManager;
             _featureFacade = featureFacade;
             _contextFacade = contextFacade;
             _alerter = alerter;
-            
+
             T = htmlLocalizer;
             S = stringLocalizer;
 
         }
-
 
         public async Task<IActionResult> Index(ReportOptions opts, PagerOptions pager)
         {
@@ -64,26 +65,26 @@ namespace Plato.Reports.PageViews.Controllers
             {
                 pager = new PagerOptions();
             }
-            
+
             // Get default options
             var defaultViewOptions = new ReportOptions();
             var defaultPagerOptions = new PagerOptions();
 
             // Add non default route data for pagination purposes
             if (opts.Start != defaultViewOptions.Start)
-                this.RouteData.Values.Add("opts.start", opts.Start);
+                AddRouteValue("opts.start", opts.Start);
             if (opts.End != defaultViewOptions.End)
-                this.RouteData.Values.Add("opts.end", opts.End);
+                AddRouteValue("opts.end", opts.End);
             if (opts.Search != defaultViewOptions.Search)
-                this.RouteData.Values.Add("opts.search", opts.Search);
+                AddRouteValue("opts.search", opts.Search);
             if (opts.Sort != defaultViewOptions.Sort)
-                this.RouteData.Values.Add("opts.sort", opts.Sort);
+                AddRouteValue("opts.sort", opts.Sort);
             if (opts.Order != defaultViewOptions.Order)
-                this.RouteData.Values.Add("opts.order", opts.Order);
+                AddRouteValue("opts.order", opts.Order);
             if (pager.Page != defaultPagerOptions.Page)
-                this.RouteData.Values.Add("pager.page", pager.Page);
+                AddRouteValue("pager.page", pager.Page);
             if (pager.Size != defaultPagerOptions.Size)
-                this.RouteData.Values.Add("pager.size", pager.Size);
+                AddRouteValue("pager.size", pager.Size);
 
             // Build view model
             var viewModel = await GetIndexViewModelAsync(opts, pager);
@@ -91,7 +92,7 @@ namespace Plato.Reports.PageViews.Controllers
             // Add view model to context
             HttpContext.Items[typeof(ReportIndexViewModel<Metric>)] = viewModel;
 
-            // If we have a pager.page querystring value return paged view
+            // If we have a pager.page query string value return paged view
             if (int.TryParse(HttpContext.Request.Query["pager.page"], out var page))
             {
                 if (page > 0)
@@ -118,12 +119,31 @@ namespace Plato.Reports.PageViews.Controllers
         }
         
         [HttpPost, ValidateAntiForgeryToken, ActionName(nameof(Index))]
-        public async Task<IActionResult> IndexPost(ReportOptions opts)
+        public async Task<IActionResult> IndexPost(ReportOptions opts, PagerOptions pager)
         {
+
+            // Default options
+            if (opts == null)
+            {
+                opts = new ReportOptions();
+            }
+
+            // Default pager
+            if (pager == null)
+            {
+                pager = new PagerOptions();
+            }
+
+            // Build view model
+            var viewModel = await GetIndexViewModelAsync(opts, pager);
+
+            // Add view model to context
+            HttpContext.Items[typeof(ReportIndexViewModel<Metric>)] = viewModel;
 
             // Execute view providers
             await _pageViewsViewProvider.ProvideUpdateAsync(new PageViewIndex(), this);
 
+            // May have been invalidated by a view provider
             if (!ModelState.IsValid)
             {
 
@@ -148,7 +168,15 @@ namespace Plato.Reports.PageViews.Controllers
 
         // ----------------------
 
-        async Task<ReportIndexViewModel<Metric>> GetIndexViewModelAsync(ReportOptions options, PagerOptions pager)
+        private void AddRouteValue(string key, object value)
+        {
+            if (!RouteData.Values.ContainsKey(key))
+            {
+                RouteData.Values.Add(key, value);
+            }
+        }
+
+        private async Task<ReportIndexViewModel<Metric>> GetIndexViewModelAsync(ReportOptions options, PagerOptions pager)
         {
 
             // Get current feature
@@ -160,9 +188,9 @@ namespace Plato.Reports.PageViews.Controllers
                 options.FeatureId = feature.Id;
             }
 
-            // Set pager call back Url
+            // Set pager call back URL
             pager.Url = _contextFacade.GetRouteUrl(pager.Route(RouteData));
-            
+
             // Return updated model
             return new ReportIndexViewModel<Metric>()
             {
@@ -171,7 +199,7 @@ namespace Plato.Reports.PageViews.Controllers
             };
 
         }
-        
+
     }
 
 }
