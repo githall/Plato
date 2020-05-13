@@ -1380,7 +1380,6 @@ a.navbar-brand img { max-height: 48px; }
 .layout-body,
 .layout-content,
 .layout-sidebar,
-.layout-sidebar-sticky,
 .layout-footer,
 .layout-footer-item,
 .layout-actions,
@@ -1400,20 +1399,21 @@ a.navbar-brand img { max-height: 48px; }
     via JavaScript upon the initial load before the header actually becomes "fixed" */
 
 .layout-header  { padding-bottom: 1rem; }
-.layout-header-content { 
+
+.layout-header .layout-header-container { 
     padding: 1rem 0;
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
 
 /* To be removed once all HR elements have been removed from layout-header-content */
-.layout-header .layout-header-content hr { display: none; }
+.layout-header .layout-header-container hr { display: none; }
 
 /* Only apply fixed layout for screen sizes above 992px */
 @media (min-width: 992px) {
     
     /* When the header becomes fixed, fix content */
-    .layout-header.fixed > .layout-header-content {
+    .layout-header.fixed > .layout-header-container {
         position: fixed;
         top: 0;
         z-index: 5;
@@ -1421,7 +1421,8 @@ a.navbar-brand img { max-height: 48px; }
     }
     
     /* When the sidebar becomes fixed, fix content */
-    .layout-sidebar.fixed > .layout-sidebar-content {
+    .layout-content-left.fixed > .layout-content-left-container,
+    .layout-content-right.fixed > .layout-content-right-container {
         position: fixed;
         display: flex;
         -webkit-box-orient: vertical !important;
@@ -1431,7 +1432,8 @@ a.navbar-brand img { max-height: 48px; }
     }
 
     /* Ensure collapse is visible by default for desktops */
-    .layout-sidebar .navbar-collapse { display: block !important; }
+    .layout-content-left .navbar-collapse,
+    .layout-content-right .navbar-collapse { display: block !important; }
 
 }
 

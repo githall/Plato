@@ -96,13 +96,15 @@ a:hover {
     background-color: #350d36 !important;
 }
 
-
 /* ------------------- */
 /* Fixed Header */
 /* ------------------- */
 
-.layout-header.fixed > .layout-header-content { background-color: white; }
-.layout-header-content { border-color:  rgba(127, 127, 127, 0.3); }
+.layout-header.fixed > .layout-header-container,
+.layout-content-left.fixed > .layout-content-left-container,
+.layout-content-right.fixed > .layout-content-right-container { background-color: white; }
+
+.layout-header-container { border-color:  rgba(127, 127, 127, 0.3); }
 
 /* ------------------- */
 /* Navigation  */
@@ -137,7 +139,7 @@ a:hover {
 }
 
 .nav-site > .navbar-dark .search-input-group .form-control:-ms-input-placeholder,
-.nav-site > .navbar-dark .search-input-group .form-control::-ms-input-placeholder   {
+.nav-site > .navbar-dark .search-input-group .form-control::-ms-input-placeholder {
     color: #aaa;
 }
 
