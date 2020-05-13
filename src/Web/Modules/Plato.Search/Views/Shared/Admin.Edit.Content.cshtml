@@ -110,8 +110,8 @@
 
 }
 
-<card class="card mt-4">
-    <card-footer>
+<card>
+    <card-body>
         @if (isDemo)
         {
             <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
@@ -124,5 +124,5 @@
         {
             <button class="btn btn-primary" type="submit">@T["Save"]</button>
         }
-    </card-footer>
+    </card-body>
 </card>
