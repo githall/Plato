@@ -3,13 +3,12 @@
 /* Fixed Header & Sidebar */
 /* ------------------- */
 
-.layout-header.fixed > .layout-header-content { background-color: #0a0a0a; }
-.layout-header-content { border-color: rgba(75, 75, 75, 0.5); }
+.layout-header.fixed > .layout-header-container { background-color: #0a0a0a; }
+.layout-header-container { border-color: rgba(75, 75, 75, 0.5); }
 
 /* ------------------- */
 /* Navigation  */
 /* ------------------- */
-
 
 .nav-site .nav .search-input-group > .btn {
     color: #666 !important;

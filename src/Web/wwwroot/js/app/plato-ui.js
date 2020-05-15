@@ -7847,10 +7847,12 @@ $(function (win, doc, $) {
                     stickyContentLeft = $(".layout-content-left-sticky").length > 0 ? true : false,
                     stickyContentRight = $(".layout-content-right-sticky").length > 0 ? true : false;
 
+                console.log(stickyHeaders);
+
                 // Double check to ensure stickies are allowed via global options
                 if (stickyHeaders) { stickyHeaders = $caller.data(dataKey).stickyHeaders; }
-                if (stickyContentLeft) { stickyHeaders = $caller.data(dataKey).stickySideBars; }
-                if (stickyContentRight) { stickyHeaders = $caller.data(dataKey).stickySideBars; }
+                if (stickyContentLeft) { stickyContentLeft = $caller.data(dataKey).stickySideBars; }
+                if (stickyContentRight) { stickyContentRight = $caller.data(dataKey).stickySideBars; }
 
                 // No elements to make sticky
                 if (!stickyHeaders && !stickyContentLeft && !stickyContentRight) {
@@ -7867,7 +7869,8 @@ $(function (win, doc, $) {
                     $contentRightContainer = $contentRight.find(selectors.contentRightContainer),
                     $footer = $caller.find(selectors.footer);
 
-            
+
+                console.log(stickyHeaders);
               
                 // Apply sticky headers
                 if (stickyHeaders) {

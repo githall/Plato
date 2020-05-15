@@ -17,8 +17,8 @@
 }
 
 <div class="layout">
-    <div class="layout-header layout-header-sticky">
-        <div class="layout-header-content">
+    <div class="layout-header">
+        <div class="layout-header-container">
             @if (Model.Alerts != null)
             {
                 <div class="layout-alerts">
@@ -43,8 +43,8 @@
         <div class="row gutter-sm">
             @if (Model.ContentLeft != null)
             {
-                <div class="layout-sidebar layout-sidebar-sticky col-lg-3">
-                    <div class="layout-sidebar-content navbar-expand-lg">
+                <div class="layout-content-left col-lg-3">
+                    <div class="layout-content-left-container navbar-expand-lg">
                         <div class="navbar-toggler">
                             <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-left active img-48" style="z-index:10;" data-toggle="modal" data-target="#contentLeftAsides">
                                 <i class="fal fa-bars"></i>
@@ -97,8 +97,8 @@
             }
             @if (Model.ContentRight != null)
             {
-                <div class="layout-sidebar layout-sidebar-sticky col-lg-3">
-                    <div class="layout-sidebar-content navbar-expand-lg">
+                <div class="layout-content-right col-lg-3">
+                    <div class="layout-content-right-container navbar-expand-lg">
                         <div class="navbar-toggler">
                             <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-right active img-48" style="z-index:10;" data-toggle="modal" data-target="#contentRightAsides">
                                 <i class="fal fa-bars"></i>
