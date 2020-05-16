@@ -1318,15 +1318,15 @@ a.navbar-brand img { max-height: 48px; }
 }
 
 .asides {
-  position: fixed;
-  top: 0;
-  right: 0;
-  bottom: 0;
-  left: 0;
-  z-index: 1050;
-  display: none;
-  overflow: hidden;
-  outline: 0;
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    visibility: hidden;
+    overflow: hidden;
+    outline: 0;
 }
 
 .asides>.asides-left {
@@ -1352,7 +1352,7 @@ a.navbar-brand img { max-height: 48px; }
 }
 
 .asides.show {
-    display:block !important;
+    visibility: visible;
 }
 
 .asides.show .asides-bottom,
@@ -1365,25 +1365,33 @@ a.navbar-brand img { max-height: 48px; }
 }
 
 .asides-open .asides {
-  overflow-x: hidden;
-  overflow-y: auto;
+    overflow-x: hidden;
+    overflow-y: auto;
 }
 
 .asides-dialog {
-   position: fixed !important;
+    position: fixed !important;
     z-index: 1055;
     bottom: 0;
     top: 0;
     width: 100%;
+    height: 100%;
 }
 
 .asides.fade .asides-dialog {
-  transition: -webkit-transform 0.3s ease-out;
-  transition: transform 0.3s ease-out;
-  transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
-  -webkit-transform: translate(0, -25%);
-  transform: translate(0, -25%);
+    transition: -webkit-transform 0.3s ease-out;
+    transition: transform 0.3s ease-out;
+    transition: transform 0.3s ease-out, -webkit-transform 0.3s ease-out;
+    -webkit-transform: translate(0, -25%);
+    transform: translate(0, -25%);
 }
+
+.asides .asides-dialog {
+    -webkit-transition: -webkit-transform .4s cubic-bezier(.25, .8, .25, 1);
+    -moz-transition: -moz-transform .4s cubic-bezier(.25, .8, .25, 1);
+    -o-transition: -o-transform .4s cubic-bezier(.25, .8, .25, 1);
+}
+
 
 @media screen and (prefers-reduced-motion: reduce) {
   .asides.fade .asides-dialog {
@@ -1416,14 +1424,16 @@ a.navbar-brand img { max-height: 48px; }
   right: 0;
   bottom: 0;
   left: 0;
-  display:none;
+  visibility:hidden;
   z-index: 1040;
   background-color: #000;
+  opacity: 0;
+  transition: all 0.50s ease-out;
 }
 
 .asides-backdrop.show {
   opacity: 0.5;
-  display:block;
+  visibility:visible;
 }
 
 .asides-header {
@@ -1445,26 +1455,31 @@ a.navbar-brand img { max-height: 48px; }
 }
 
 .asides-title {
-  margin-bottom: 0;
-  line-height: 1.5;
+    margin-bottom: 0;
+    line-height: 1.5;
 }
 
 .asides-body {
-  position: relative;
-  -ms-flex: 1 1 auto;
-  flex: 1 1 auto;
-  padding: 1rem;
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
 }
 
 .asides-footer {
-  display: -ms-flexbox;
-  display: flex;
-  -ms-flex-align: center;
-  align-items: center;
-  -ms-flex-pack: end;
-  justify-content: flex-end;
-  padding: 1rem;
-  border-top: 1px solid #e9ecef;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    padding: 1rem;
+    border-top: 1px solid #e9ecef;
+}
+
+.asides-right .asides-footer {
+    -ms-flex-pack: end;
+    justify-content: flex-end;
 }
 
 .asides-footer > :not(:first-child) {
@@ -1485,39 +1500,15 @@ a.navbar-brand img { max-height: 48px; }
 
 /* for desktops / larger screen restrict to specific widths */
 @media (min-width: 992px) {
-    .asides > .asides-dialog {
-        max-width: 25%;
-    }
+    .asides > .asides-dialog { max-width: 25%; }
     .asides > .asides-2x { max-width: 50%; }
     .asides > .asides-3x { max-width: 75%; }
     .asides > .asides-4x { max-width: 100%; }
 }
 
-.asides .asides-dialog {
-    -webkit-transition: -webkit-transform .4s cubic-bezier(.25, .8, .25, 1);
-    -moz-transition: -moz-transform .4s cubic-bezier(.25, .8, .25, 1);
-    -o-transition: -o-transform .4s cubic-bezier(.25, .8, .25, 1);
-}
-
 @media (min-width: 576px) {
-  .asides-dialog {
-    max-width: 500px;
-    margin: 1.75rem auto;
-  }
-  .asides-dialog-centered {
-    min-height: calc(100% - (1.75rem * 2));
-  }
-  .asides-sm {
-    max-width: 300px;
-  }
+  .asides-dialog { max-width: 50%; } 
 }
-
-@media (min-width: 992px) {
-  .asides-lg {
-    max-width: 800px;
-  }
-}
-
 
 /* ------------------------- */
 /* Lists */
@@ -1583,14 +1574,18 @@ a.navbar-brand img { max-height: 48px; }
 .layout-alerts,
 .layout-body,
 .layout-content-tools,
-layout-content-tools-right,
+.layout-content-tools-right,
 .layout-content,
 .layout-content-left,
 .layout-content-right,
-layout-content-actions,
-layout-content-actions-right,
+.layout-content-actions,
+.layout-content-actions-right,
 .layout-footer,
 .layout-footer-right {}
+
+.layout-content {
+    transition: all 0.3s ease-out;
+}
 
 /* Ensure right aligned content does not wrap */
 .layout-header .layout-header-right,
@@ -1645,56 +1640,10 @@ layout-content-actions-right,
         flex-direction: column !important;
     }
 
-    /* --------------------------- */
-    /* Ensure content asides modal dialogs are reset for screen sizes above 992px */
-    /* TODO: Replace with dedicated asides below */
-    /* --------------------------- */
-
-    .layout-content-left .modal.fade,
-    .layout-content-right .modal.fade {
-        opacity: 1 !important;
-    }
-
-    .layout-content-left .modal,
-    .layout-content-left .modal-content,
-    .layout-content-left .modal-body,
-    .layout-content-right .modal,
-    .layout-content-right .modal-content,
-    .layout-content-right .modal-body {
-        position:inherit !important;
-        display:block !important;
-        overflow:visible !important;
-        border: 0 !important;
-        padding: 0 !important;
-    }
-
-    .layout-content-left .modal-header,
-    .layout-content-left .modal-footer,
-    .layout-content-right .modal-header,
-    .layout-content-right .modal-footer {
-        display:none;
-    }
-
-    .layout-content-left .modal > .modal-left,
-    .layout-content-right .modal > .modal-right {
-        position:inherit !important;     
-        max-width: 100% !important;
-        -webkit-transform: none !important;
-    }
-
-    .layout-content-right .modal-content {
-        display: block !important;
-    }
-
     
     /* --------------------------- */
     /* Ensure content asides modal dialogs are reset for screen sizes above 992px */
     /* --------------------------- */
-
-    .layout-content-left .asides.fade,
-    .layout-content-right .asides.fade {
-        opacity: 1 !important;
-    }
 
     .layout-content-left .asides,
     .layout-content-left .asides-content,
@@ -1703,10 +1652,11 @@ layout-content-actions-right,
     .layout-content-right .asides-content,
     .layout-content-right .asides-body {
         position:inherit !important;
-        display:block !important;
+        visibility:visible !important;
         overflow:visible !important;
         border: 0 !important;
         padding: 0 !important;
+        opacity: 1 !important;
     }
 
     .layout-content-left .asides-header,

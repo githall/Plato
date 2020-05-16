@@ -7368,13 +7368,19 @@ $(function (win, doc, $) {
 
                 $caller.on("click", function (e) {
                     e.preventDefault();
+
                     var $target = methods._getTarget($(this));
+
                     if (!$target.data("eventsBound")) {
+
                         $target.data("eventsBound", true);                  
+
                         $target.find('[data-dismiss="asides"]').on("click", function () {
                             methods.hide($caller);
                         });
+                      
                     }
+
                     if ($target.hasClass("show")) {
                         methods.hide($(this));
                     } else {
@@ -7385,7 +7391,10 @@ $(function (win, doc, $) {
             },
             show: function ($caller) {
                 var $target = methods._getTarget($caller);
-                if (!$target.hasClass("show")) {
+                if (!$("body").hasClass("asides-open")) {
+                    $("body").addClass("asides-open");
+                }        
+                if (!$target.hasClass("show")) {                              
                     methods._showBackdrop($caller);
                     $target.addClass("show");
                 }
@@ -7396,9 +7405,13 @@ $(function (win, doc, $) {
                     methods._hideBackdrop($caller);
                     $target.removeClass("show");
                 }
+                if ($("body").hasClass("asides-open")) {
+                    $("body").removeClass("asides-open");
+                }        
             },
             _showBackdrop: function ($caller) {
                 var $backdrop = methods._getBackdrop($caller);
+                console.log($backdrop.length);
                 if ($backdrop.length > 0) {
                     if (!$backdrop.hasClass("show")) {
                         $backdrop.addClass("show");
@@ -7414,11 +7427,7 @@ $(function (win, doc, $) {
                 }
             },
             unbind: function ($caller) {
-                var $btn = methods._getButton($caller),
-                    event = $caller.data(dataKey).event;
-                if ($btn) {
-                    $btn.off(event);
-                }
+                $caller.off("click");
             },
             _getTarget: function ($caller) {
 
@@ -7432,19 +7441,15 @@ $(function (win, doc, $) {
 
             },
             _getBackdrop: function ($caller) {
-
-                var $backdrop = $(".asides-backdrop");
-
-                if ($backdrop.length === 0) {
-
-                    $backdrop = $("<div>", {
-                        id: "asides-backdrop"
-                    });
-                    $backdrop.addClass("asides-backdrop");
-                    $("body").append($backdrop);
+                var $backdrop = $(".asides-backdrop"),
+                    $target = methods._getTarget($caller);
+                if (!$target.next().hasClass("asides-backdrop")) {
+                    $backdrop = $("<div>");
+                    $backdrop.addClass("asides-backdrop");                         
+                    $target.after($backdrop);                  
+                    return $backdrop;
                 }
-
-                return $backdrop;
+                return $target.next();
             }
         };
 
@@ -8187,12 +8192,12 @@ $(function (win, doc, $) {
 
                 this._detectAndScrollToAnchor($caller);
 
-            },
+            },      
             unbind: function ($caller) {
                 $().sticky("unbind");
             },
             getHeaderHeight: function ($caller) {
-                var $el = $caller.find(selectors.stickyHeader);
+                var $el = $caller.find(selectors.header);
                 return $el.length > 0 ? $el.outerHeight() : 0;
             },
             _detectAndScrollToAnchor: function ($caller) {
