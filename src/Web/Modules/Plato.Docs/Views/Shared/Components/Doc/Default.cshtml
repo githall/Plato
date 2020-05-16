@@ -75,29 +75,27 @@
                 </div>                
                 @if (Model.Entity.ChildEntities != null)
                 {
-                    <div asp-id="see-also" cass="row p-3">
-                        <div class="col-12">
-                            <h5>@T["See also"]</h5>
-                            <ul>
-                                @foreach (var child in Model.Entity.ChildEntities)
+                    <section asp-id="see-also" class="p-3 pt-0">                      
+                        <h5>@T["See also"]</h5>
+                        <ul>
+                            @foreach (var child in Model.Entity.ChildEntities)
+                            {
+                                var popperUrl = GetRouteUrl(new RouteValueDictionary()
                                 {
-                                    var popperUrl = GetRouteUrl(new RouteValueDictionary()
-                                    {
-                                        ["area"] = "Plato.Entities",
-                                        ["controller"] = "Home",
-                                        ["action"] = "GetEntity",
-                                        ["opts.id"] = child.Id,
-                                        ["opts.alias"] = child.Alias
-                                    });
-                                    <li>
-                                        <a asp-route-area="Plato.Docs" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@child.Id" asp-route-opts.alias="@child.Alias" data-provide="popper" data-popper-url="@popperUrl">
-                                            @child.Title
-                                        </a>
-                                    </li>
-                                }
-                            </ul>
-                        </div>
-                    </div>
+                                    ["area"] = "Plato.Entities",
+                                    ["controller"] = "Home",
+                                    ["action"] = "GetEntity",
+                                    ["opts.id"] = child.Id,
+                                    ["opts.alias"] = child.Alias
+                                });
+                                <li>
+                                    <a asp-route-area="Plato.Docs" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@child.Id" asp-route-opts.alias="@child.Alias" data-provide="popper" data-popper-url="@popperUrl">
+                                        @child.Title
+                                    </a>
+                                </li>
+                            }
+                        </ul>                     
+                    </section>
                 }              
                 <navigation name="doc-footer"
                             model="Model.Entity"

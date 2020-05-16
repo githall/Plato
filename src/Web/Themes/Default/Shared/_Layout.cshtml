@@ -3,7 +3,7 @@
     var platoOpts = GetOptions<PlatoOptions>();
 }
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -74,9 +74,9 @@
     <main class="container-fluid container-fluid-1400 pt-2">
         @if (platoOpts.DemoMode)
         {
-            <div class="p-3 mt-3 border border-danger text-danger text-center">
+            <section class="p-3 mt-3 border border-danger text-danger text-center">
                 @T["This is a demo. Please kick the tires but note data may be periodically deleted and some features may be disabled. Enjoy"]
-            </div>
+            </section>
         }
         @if (!RouteEquals("Plato.Core", "Home", "Index"))
         {

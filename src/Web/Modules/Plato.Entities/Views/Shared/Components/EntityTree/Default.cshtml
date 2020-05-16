@@ -113,11 +113,18 @@
                             .Append("/>");
                     }
 
-                    sb.Append("<label for=\"")
-                        .Append(checkId)
-                        .Append("\">");
+                    if (Model.EnableCheckBoxes)
+                    {
+                        sb.Append("<label for=\"")
+                           .Append(checkId)
+                           .Append("\">");
+                    }
+                    else
+                    {
+                        sb.Append("<label>");
+                    }
 
-                    if (@Model.EnableCheckBoxes)
+                    if (Model.EnableCheckBoxes)
                     {
                         sb.Append("<i class=\"fal mr-2 check-icon\"></i>");
                     }
@@ -135,7 +142,9 @@
                         sb.Append("</a>");
                     }
 
+                 
                     sb.Append("</label>");
+                
 
                     sb.Append("</div>");
 

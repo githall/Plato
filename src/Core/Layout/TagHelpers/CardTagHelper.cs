@@ -31,7 +31,10 @@ namespace PlatoCore.Layout.TagHelpers
             output.TagName = "div";
             if (Enabled)
             {
-                output.Attributes.Add("class", $"card card-{Type.ToString().ToLower()}");
+                if (!output.Attributes.ContainsName("class"))
+                {
+                    output.Attributes.Add("class", $"card card-{Type.ToString().ToLower()}");
+                }                
             }
 
             // title

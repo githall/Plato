@@ -1372,16 +1372,25 @@ a.navbar-brand img { max-height: 48px; }
 
 .layout,
 .layout-header,
+.layout-header-right,
 .layout-alerts,
 .layout-body,
+.layout-content-tools,
+layout-content-tools-right,
 .layout-content,
 .layout-content-left,
 .layout-content-right,
+layout-content-actions,
+layout-content-actions-right,
 .layout-footer,
 .layout-footer-right {}
 
-/* Ensure content aligned right does not wrap */
-.layout-header .layout-header-right {
+/* Ensure right aligned content does not wrap */
+.layout-header .layout-header-right,
+.layout-content-tools .layout-content-tools-right,
+.layout-content-actions .layout-content-actions-right,
+.layout-footer .layout-footer-right {
+    float:right;
     display: flex;
     flex-flow: nowrap;
     flex-direction: row;
