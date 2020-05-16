@@ -1191,7 +1191,7 @@ a.navbar-brand img { max-height: 48px; }
         max-width: calc(100vw - 264px);
     }
     
-    /* Accomodate for asides when positioning alerts */
+    /* Accommodate for asides when positioning alerts */
     .nav-asides .main-container .layout-header .alert {
         margin-left: 132px;
     }
@@ -1371,35 +1371,29 @@ a.navbar-brand img { max-height: 48px; }
 /* ------------------------- */
 
 .layout,
-.layout-breadcrumb,
 .layout-header,
-.layout-header-sticky,
 .layout-alerts,
-.layout-header-item,
-.layout-meta,
 .layout-body,
 .layout-content,
-.layout-sidebar,
+.layout-content-left,
+.layout-content-right,
 .layout-footer,
-.layout-footer-item,
-.layout-actions,
-.layout-asides,
-.layout-asides-sticky {}
+.layout-footer-right {}
 
+/* Ensure content aligned right does not wrap */
 .layout-header .layout-header-right {
     display: flex;
     flex-flow: nowrap;
     flex-direction: row;
 }
 
-/* Sticky Header & Sidebar */
+/* Sticky Header & Sidebars */
 
 /* Ensure the header has paddings and margins applied. 
     This ensures we can correctly calculate the "fixed" header height
     via JavaScript upon the initial load before the header actually becomes "fixed" */
 
 .layout-header  { padding-bottom: 1rem; }
-
 .layout-header .layout-header-container { 
     padding: 1rem 0;
     border-bottom-width: 1px;
@@ -1409,9 +1403,13 @@ a.navbar-brand img { max-height: 48px; }
 /* To be removed once all HR elements have been removed from layout-header-content */
 .layout-header .layout-header-container hr { display: none; }
 
-/* Only apply fixed layout for screen sizes above 992px */
+
 @media (min-width: 992px) {
-    
+
+    /* --------------------------- */
+    /* Only apply fixed layout for screen sizes above 992px */
+    /* --------------------------- */
+
     /* When the header becomes fixed, fix content */
     .layout-header.fixed > .layout-header-container {
         position: fixed;
@@ -1420,7 +1418,7 @@ a.navbar-brand img { max-height: 48px; }
         white-space: nowrap;
     }
     
-    /* When the sidebar becomes fixed, fix content */
+    /* When the sidebars becomes fixed, fix content */
     .layout-content-left.fixed > .layout-content-left-container,
     .layout-content-right.fixed > .layout-content-right-container {
         position: fixed;
@@ -1431,9 +1429,45 @@ a.navbar-brand img { max-height: 48px; }
         flex-direction: column !important;
     }
 
-    /* Ensure collapse is visible by default for desktops */
-    .layout-content-left .navbar-collapse,
-    .layout-content-right .navbar-collapse { display: block !important; }
+    /* --------------------------- */
+    /* Ensure content asides modal dialogs are reset for screen sizes above 992px */
+    /* --------------------------- */
+
+    .layout-content-left .modal.fade,
+    .layout-content-right .modal.fade {
+        opacity: 1 !important;
+    }
+
+    .layout-content-left .modal,
+    .layout-content-left .modal-content,
+    .layout-content-left .modal-body,
+    .layout-content-right .modal,
+    .layout-content-right .modal-content,
+    .layout-content-right .modal-body {
+        position:inherit !important;
+        display:block !important;
+        overflow:visible !important;
+        border: 0 !important;
+        padding: 0 !important;
+    }
+
+    .layout-content-left .modal-header,
+    .layout-content-left .modal-footer,
+    .layout-content-right .modal-header,
+    .layout-content-right .modal-footer {
+        display:none;
+    }
+
+    .layout-content-left .modal > .modal-left,
+    .layout-content-right .modal > .modal-right {
+        position:inherit !important;     
+        max-width: 100% !important;
+        -webkit-transform: none !important;
+    }
+
+    .layout-content-right .modal-content {
+        display: block !important;
+    }
 
 }
 

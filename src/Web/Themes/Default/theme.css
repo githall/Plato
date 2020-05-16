@@ -97,13 +97,14 @@ a:hover {
 }
 
 /* ------------------- */
-/* Fixed Header */
+/* Fixed Layout */
 /* ------------------- */
 
 .layout-header.fixed > .layout-header-container,
+.layout-content-left,
 .layout-content-left.fixed > .layout-content-left-container,
+.layout-content-right,
 .layout-content-right.fixed > .layout-content-right-container { background-color: white; }
-
 .layout-header-container { border-color:  rgba(127, 127, 127, 0.3); }
 
 /* ------------------- */
