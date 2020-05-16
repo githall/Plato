@@ -7336,7 +7336,179 @@ $(function (win, doc, $) {
 
     }();
 
-    /* Register Plugins */
+
+    /* asides */
+    var asides = function () {
+
+        var dataKey = "asides",
+            dataIdKey = dataKey + "Id";
+
+        var defaults = {
+            target: "#asides"
+        };
+
+        var methods = {
+            timer: null,
+            init: function ($caller, methodName, func) {
+
+                if (methodName) {
+                    if (this[methodName]) {
+                        return this[methodName].apply(this, [$caller, func]);
+                    } else {
+                        alert(methodName + " is not a valid method!");
+                    }
+                    return;
+                }
+
+                // Bind events
+                this.bind($caller);
+
+            },
+            bind: function ($caller) {
+
+                $caller.on("click", function (e) {
+                    e.preventDefault();
+                    var $target = methods._getTarget($(this));
+                    if (!$target.data("eventsBound")) {
+                        $target.data("eventsBound", true);                  
+                        $target.find('[data-dismiss="asides"]').on("click", function () {
+                            methods.hide($caller);
+                        });
+                    }
+                    if ($target.hasClass("show")) {
+                        methods.hide($(this));
+                    } else {
+                        methods.show($(this));
+                    }                 
+                });
+
+            },
+            show: function ($caller) {
+                var $target = methods._getTarget($caller);
+                if (!$target.hasClass("show")) {
+                    methods._showBackdrop($caller);
+                    $target.addClass("show");
+                }
+            },
+            hide: function ($caller) {
+                var $target = methods._getTarget($caller);
+                if ($target.hasClass("show")) {
+                    methods._hideBackdrop($caller);
+                    $target.removeClass("show");
+                }
+            },
+            _showBackdrop: function ($caller) {
+                var $backdrop = methods._getBackdrop($caller);
+                if ($backdrop.length > 0) {
+                    if (!$backdrop.hasClass("show")) {
+                        $backdrop.addClass("show");
+                    }      
+                }              
+            },
+            _hideBackdrop: function ($caller) {
+                var $backdrop = methods._getBackdrop($caller);
+                if ($backdrop.length > 0) {
+                    if ($backdrop.hasClass("show")) {
+                        $backdrop.removeClass("show");
+                    }
+                }
+            },
+            unbind: function ($caller) {
+                var $btn = methods._getButton($caller),
+                    event = $caller.data(dataKey).event;
+                if ($btn) {
+                    $btn.off(event);
+                }
+            },
+            _getTarget: function ($caller) {
+
+                var selector = $caller.data("target") || $caller.data(dataKey).target,
+                    $target = $(selector);
+             
+                if ($target.length === 0) {
+                    throw Error("The asides selector \'" + selector + "\' could not be found!");
+                }
+                return $target;
+
+            },
+            _getBackdrop: function ($caller) {
+
+                var $backdrop = $(".asides-backdrop");
+
+                if ($backdrop.length === 0) {
+
+                    $backdrop = $("<div>", {
+                        id: "asides-backdrop"
+                    });
+                    $backdrop.addClass("asides-backdrop");
+                    $("body").append($backdrop);
+                }
+
+                return $backdrop;
+            }
+        };
+
+        return {
+            init: function () {
+
+                var options = {},
+                    methodName = null,
+                    func = null;
+                for (var i = 0; i < arguments.length; ++i) {
+                    var a = arguments[i];
+                    if (a) {
+                        switch (a.constructor) {
+                            case Object:
+                                $.extend(options, a);
+                                break;
+                            case String:
+                                methodName = a;
+                                break;
+                            case Function:
+                                func = a;
+                                break;
+                        }
+                    }
+                }
+
+                if (this.length > 0) {
+                    // $(selector).asides()
+                    return this.each(function () {
+                        if (!$(this).data(dataIdKey)) {
+                            var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                            $(this).data(dataIdKey, id);
+                            $(this).data(dataKey, $.extend({}, defaults, options));
+                        } else {
+                            $(this).data(dataKey, $.extend({}, $(this).data(dataKey), options));
+                        }
+                        return methods.init($(this), methodName, func);
+                    });
+                } else {
+                    // $().asides()
+                    var $callers = $('[data-provide="asides"]');
+                    if ($callers.length > 0) {
+                        $callers.each(function () {
+                            var $caller = $(this);
+                            if (!$caller.data(dataIdKey)) {
+                                var id = dataKey + parseInt(Math.random() * 100) + new Date().getTime();
+                                $caller.data(dataIdKey, id);
+                                $caller.data(dataKey, $.extend({}, defaults, options));
+                            } else {
+                                $caller.data(dataKey, $.extend({}, $caller.data(dataKey), options));
+                            }
+                            return methods.init($caller, methodName, func);
+                        });
+                    }
+                }
+
+            }
+        };
+
+    }();
+
+
+
+    /* Register plug-ins */
     $.fn.extend({
         httpContent: httpContent.init,   
         dialog: dialog.init,
@@ -7369,7 +7541,8 @@ $(function (win, doc, $) {
         password: password.init,
         loader: loader.init,
         loaderSpy: loaderSpy.init,
-        slideSpy: slideSpy.init
+        slideSpy: slideSpy.init,
+        asides: asides.init
     });
 
     // ---------------------------
@@ -7393,7 +7566,7 @@ $(function (win, doc, $) {
         /* pagedList */
         this.find('[data-provide="paged-list"]').pagedList();
 
-        /* select dropdown */
+        /* select drop down */
         this.find('[data-provide="select-dropdown"]').selectDropdown();
 
         /* treeView */
@@ -7448,6 +7621,8 @@ $(function (win, doc, $) {
         /* slideSpy */
         this.find('[data-provide="slide-spy"]').slideSpy();
 
+        /* asides */
+        this.find('[data-provide="asides"]').asides();
 
         // Bind scroll events
         $().scrollSpy({

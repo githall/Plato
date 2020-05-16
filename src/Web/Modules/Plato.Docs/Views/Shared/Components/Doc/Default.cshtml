@@ -70,9 +70,9 @@
                             child-ul-inner-css-class="min-w-200 max-h-250 overflow-auto" />
             </card-title>
             <card-body class="card-body-flush">
-                <div asp-id="body" class="markdown-body entity-body doc-body p-3" data-provide="markdownBody">
+                <article asp-id="body" class="markdown-body entity-body doc-body p-3" data-provide="markdownBody">
                     @Html.Raw(@Model.Entity.Html)
-                </div>                
+                </article>                
                 @if (Model.Entity.ChildEntities != null)
                 {
                     <section asp-id="see-also" class="p-3 pt-0">                      
