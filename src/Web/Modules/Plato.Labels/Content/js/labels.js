@@ -59,10 +59,10 @@ $(function (win, doc, $) {
                     ? parseInt($caller.data("maxItems"))
                     : $caller.data(dataKey).maxItems;
                
-                // init select dropdown
+                // initialize select drop down
                 $caller.selectDropdown($.extend({
                     itemTemplate:
-                        '<li class="list-group-item select-dropdown-item"><span class="btn btn-sm label font-weight-bold" style="background-color: {backColor}; color: {foreColor};">{name}</span><a href="#" class="btn btn-secondary float-right select-dropdown-delete" data-toggle="tooltip" title="Delete"><i class="fal fa-times"></i></a></li>',
+                        '<li class="list-group-item select-dropdown-item"><span class="btn btn-sm label font-weight-bold" style="background-color: {backColor}; color: {foreColor};">{name}</span><a href="#" class="btn btn-secondary float-right select-dropdown-delete" title="Delete"><i class="fal fa-times"></i></a></li>',
                     parseItemTemplate: function (html, result) {
 
                         if (result.id) {
@@ -135,7 +135,7 @@ $(function (win, doc, $) {
                     defaults,
                     options));
 
-                // init auto complete
+                // initialize auto complete
                 methods.getInput($caller).labelAutoComplete($.extend({
                     itemTemplate:
                         '<input type="checkbox" value="{id}" id="label-{id}"/><label for="label-{id}" class="{itemCss}"><i class="fal mr-2 check-icon"></i><span class="btn btn-sm label font-weight-bold" style="background-color: {backColor}; color: {foreColor}">{name}</span><span title="Occurrences" data-toggle="tooltip" class="float-right btn btn-sm btn-secondary">{totalEntities.text}</span></label>',

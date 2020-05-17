@@ -67,8 +67,9 @@ $(function (win, doc, $) {
             }
 
             var url = "/js/app/locale/app." + win.$.Plato.defaults.locale + ".js";
-            platoLogger.logInfo("Loading locale: " + url);
+            platoLogger.logInfo("Starting to load locale: " + url);
             this._load(url);
+            platoLogger.logInfo("Finished loading locale: " + url);
 
         },
         get: function (key) {
@@ -520,7 +521,7 @@ $(function (win, doc, $) {
     win.$.Plato = {
         // defaults
         defaults: {
-            debug: false,         
+            debug: true,         
             pathBase: "",
             locale: "en-US",
             apiKey: "",
@@ -593,10 +594,10 @@ $(function (win, doc, $) {
         // Write options to the console
         app.logger.logInfo("$.Plato:\n" + JSON.stringify(app.defaults, null, "     "));
 
-        // init UI
+        // Initialize UI
         app.ui.init();
 
-        // init Locales
+        // Initialize Locales
         app.locale.init();
 
     });

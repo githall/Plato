@@ -90,6 +90,11 @@
         padding: 0 !important;
         opacity: 1 !important;
     }
+    
+    .layout-content-left .asides + .asides-backdrop,
+    .layout-content-right .asides + .asides-backdrop {
+        visibility:hidden;
+    }
 
     .layout-content-left .asides-header,
     .layout-content-left .asides-footer,

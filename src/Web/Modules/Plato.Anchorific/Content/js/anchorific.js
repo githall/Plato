@@ -350,7 +350,7 @@ if (typeof window.$.Plato === "undefined") {
                 return;
             }
 
-            // Get canonical url or use current url if not available
+            // Get canonical URL or use current URL if not available
             var hash = "",
                 $canonical = $('link[rel="canonical"]'),
                 url = $canonical.length > 0
@@ -362,7 +362,7 @@ if (typeof window.$.Plato === "undefined") {
                 hash = "#" + $target.attr("id");
             }
 
-            // Replace url state
+            // Replace URL state
             if (url && url !== "") {
                 win.history.replaceState(win.history.state || {}, doc.title, url + hash);
             }
