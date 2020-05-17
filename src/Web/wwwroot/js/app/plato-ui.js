@@ -322,12 +322,14 @@ $(function (win, doc, $) {
                         $content.empty();
                         if (response !== "") {
                             $content.html(response);
-                            // Enable tooltips within loaded content
+                            // Enable tool tips within loaded content
                             app.ui.initToolTips($content);
                             // confirm
                             $content.find('[data-provide="confirm"]').confirm();
                             // markdown body
                             $content.find('[data-provide="markdownBody"]').markdownBody();
+                            // popper                           
+                            $content.find('[data-provide="popper"]').popper();
                         }
                     }
 
@@ -5459,9 +5461,6 @@ $(function (win, doc, $) {
                     $caller.autoLinkImages();
                 }
 
-                /* popper */
-                $caller.find('[data-provide="popper"]').popper();
-
             },
             unbind: function ($caller) {
 
@@ -5473,10 +5472,7 @@ $(function (win, doc, $) {
                 /* autoLinkImages */
                 if ($caller.data(dataKey).autoLinkImages) {
                     $caller.autoLinkImages("unbind");
-                }
-
-                /* popper */
-                $caller.find('[data-provide="popper"]').popper("unbind");
+                }               
 
             }
         };
@@ -6629,7 +6625,7 @@ $(function (win, doc, $) {
                 }
 
                 // Store the original position so this can be reset when the popper is hidden
-                var position = methods._getPosition($caller);
+                var position = this._getPosition($caller);
                 if (!$caller.data("popperOriginalPosition")) {
                     $caller.data("popperOriginalPosition", position);
                 }
@@ -6781,7 +6777,7 @@ $(function (win, doc, $) {
                             }
                         }
 
-                        // Init tooltips within loaded content
+                        // Init tool tips within loaded content
                         app.ui.initToolTips($popper);
 
                         // Callback 
@@ -6841,7 +6837,7 @@ $(function (win, doc, $) {
                     css = $caller.data("popperCss") || $caller.data(dataKey).css,
                     position = methods._getPosition($caller);
 
-                // Custom Css
+                // Custom CSS
                 if (css) {
                     if (!$popper.hasClass(css)) {
                         $popper.addClass(css);
@@ -7782,20 +7778,11 @@ $(function (win, doc, $) {
 
     $.fn.platoUI = function (opts) {
 
-        var e = null, i = null;
-
         /* httpContent */
         this.find('[data-provide="http-content"]').httpContent();
 
         /* dialogSpy */
-        //this.find('[data-provide="dialog"]').dialogSpy();
-
-        e = document.querySelectorAll('[data-provide="dialog"]');
-        for (i in e) {
-            if (e.hasOwnProperty(i)) {
-                $(e[i]).dialogSpy();
-            }
-        }
+        this.find('[data-provide="dialog"]').dialogSpy();
 
         /* scrollTo */
         this.find('[data-provide="scroll"]').scrollTo();
@@ -7834,10 +7821,7 @@ $(function (win, doc, $) {
         this.find('[data-provide="autoTargetBlank"]').autoTargetBlank();
 
         /* autoLinkImages */
-        this.find('[data-provide="autoLinkImages"]').autoLinkImages();
-
-        /* markdownBody */
-        this.find('[data-provide="markdownBody"]').markdownBody();
+        this.find('[data-provide="autoLinkImages"]').autoLinkImages();        
 
         /* infiniteScroll */
         /* Initialized via $().layout so we can set the ScrollSpacing correctly */
@@ -7845,16 +7829,6 @@ $(function (win, doc, $) {
 
         /* resizeable */
         this.find('[data-provide="resizeable"]').resizeable();
-
-        /* popper */
-        //this.find('[data-provide="popper"]').popper();
-
-        e = document.querySelectorAll('[data-provide="popper"]');
-        for (i in e) {
-            if (e.hasOwnProperty(i)) {
-                $(e[i]).popper();
-            }
-        }
 
         /* password */
         this.find('[data-provide="password"]').password();
@@ -7869,14 +7843,7 @@ $(function (win, doc, $) {
         this.find('[data-provide="slide-spy"]').slideSpy();
 
         /* asides */
-        this.find('[data-provide="asides"]').asides();
-
-        // Bind scroll events
-        $().scrollSpy({
-            onScrollStart: function () {
-                $().popper("hideAll");
-            }
-        });
+        this.find('[data-provide="asides"]').asides();    
 
         // Activate plug-ins used within infiniteScroll load
         $().infiniteScroll("ready", function ($ele) {
@@ -7887,11 +7854,11 @@ $(function (win, doc, $) {
             /* markdownBody */
             $ele.find('[data-provide="markdownBody"]').markdownBody();
 
+            /* popper */
+            $ele.find('[data-provide="popper"]').popper();
+
             /* dialogSpy */
             $ele.find('[data-provide="dialog"]').dialogSpy();
-
-            /* replySpy */
-            $ele.replySpy("bind");
 
         });
 
@@ -7905,6 +7872,24 @@ $(function (win, doc, $) {
   
         // Initialize Plato UI
         $("body").platoUI();
+
+    });
+
+    // Deferred until window load for performance
+    app.load(function () {
+
+        /* markdownBody */
+        $('[data-provide="markdownBody"]').markdownBody();
+
+        /* popper */
+        $('[data-provide="popper"]').popper();
+
+        // Bind scroll events
+        $().scrollSpy({
+            onScrollStart: function () {               
+                $().popper("hideAll");
+            }
+        });
 
     });
 
@@ -8251,14 +8236,14 @@ $(function (win, doc, $) {
 
         // CSS selectors for various layout elements
         var selectors = {            
-            header: ".layout-header",
-            body: ".layout-body",
-            content: ".layout-content",
-            contentLeft: ".layout-content-left",
-            contentLeftContainer: ".layout-content-left-container",
-            contentRight: ".layout-content-right",
-            contentRightContainer: ".layout-content-right-container",
-            footer: ".layout-footer"
+            header: "#layout-header",
+            body: "#layout-body",
+            content: "#layout-content",
+            contentLeft: "#layout-content-left",
+            contentLeftContainer: "#layout-content-left-container",
+            contentRight: "#layout-content-right",
+            contentRightContainer: "#layout-content-right-container",
+            footer: "#layout-footer"
         };
 
         var methods = {
@@ -8455,7 +8440,7 @@ $(function (win, doc, $) {
                 }
 
                 // Initialize infinateScroll
-                //this._detectAndScrollToAnchor($caller);
+                this._detectAndScrollToAnchor($caller);
 
             },      
             unbind: function ($caller) {
@@ -8731,6 +8716,12 @@ $(function (win, doc, $) {
                     opts.alerts.autoCloseDelay * 1000);
             }
         }
+
+        // Activate plug-ins used within infiniteScroll load
+        $().infiniteScroll("ready", function ($ele) {
+            /* replySpy */
+            $ele.replySpy("bind");
+        });
 
     };
 
