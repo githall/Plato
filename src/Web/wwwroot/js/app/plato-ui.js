@@ -8042,9 +8042,9 @@ $(function (win, doc, $) {
                     $body = $caller.find(selectors.body),
                     $content = $caller.find(selectors.content),
                     $contentLeft = $caller.find(selectors.contentLeft),
-                    $contentLeftContainer = $contentLeft.find(selectors.contentLeftContainer),
+                    $contentLeftContainer = $caller.find(selectors.contentLeftContainer),
                     $contentRight = $caller.find(selectors.contentRight),
-                    $contentRightContainer = $contentRight.find(selectors.contentRightContainer),
+                    $contentRightContainer = $caller.find(selectors.contentRightContainer),
                     $footer = $caller.find(selectors.footer);
 
                 // Apply sticky headers
@@ -8107,7 +8107,7 @@ $(function (win, doc, $) {
                             }
                         },
                         onUpdate: function ($this) {
-                            if ($this.hasClass("fixed")) {
+                            if ($this.hasClass("fixed")) {                           
                                 // Setup content when container becomes fixed
                                 $contentLeftContainer.css({
                                     "top": sidebarOffsetTop,
@@ -8163,12 +8163,12 @@ $(function (win, doc, $) {
                             }
                         },
                         onUpdate: function ($this) {
-                            if ($this.hasClass("fixed")) {
+                            if ($this.hasClass("fixed")) {                                
                                 // Setup content when container becomes fixed
                                 $contentRightContainer.css({
                                     "top": sidebarOffsetTop,
                                     "width": $this.width()
-                                });
+                                });                                
                                 // Apply overflow CSS
                                 if ($contentRightContainer.hasClass("overflow-auto")) {
                                     $contentRightContainer.addClass("overflow-auto");

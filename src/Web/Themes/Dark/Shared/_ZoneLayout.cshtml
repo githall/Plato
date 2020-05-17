@@ -13,7 +13,9 @@
 
 @if (Model.LayoutBefore != null)
 {
-    <view model="@Model.LayoutBefore"></view>
+    <div class="layout-before">
+        <view model="Model.LayoutBefore"></view>
+    </div>
 }
 
 <div class="layout">
@@ -22,154 +24,154 @@
             @if (Model.Alerts != null)
             {
                 <div class="layout-alerts">
-                    <view model="@Model.Alerts"></view>
+                    <view model="Model.Alerts"></view>
                 </div>
             }
             @if (Model.HeaderRight != null)
             {
-                <div class="layout-header-right float-right">
-                    <view model="@Model.HeaderRight" />
+                <div class="layout-header-right">
+                    <view model="Model.HeaderRight" />
                 </div>
             }
             @if (Model.Header != null)
             {
                 <div class="layout-header-item">
-                    <view model="@Model.Header" />
+                    <view model="Model.Header" />
                 </div>
             }
         </div>
     </div>
-    <div class="layout-body">
-        <div class="row gutter-sm">
-            @if (Model.ContentLeft != null)
-            {
-                <div class="layout-content-left col-lg-3">
-                    <div class="layout-content-left-container navbar-expand-lg">
-                        <div class="navbar-toggler">
-                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-left active img-48" style="z-index:10;" data-toggle="modal" data-target="#contentLeftAsides">
-                                <i class="fal fa-bars"></i>
-                            </a>
-                        </div>
-                        <div role="navigation">
-                            @if (Model.ContentLeft != null)
-                            {
-                                <div class="modal fade" id="contentLeftAsides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-left" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title" id="searchHelpTitle">
-                                                    @T["Browse"]
-                                                </h6>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body overflow-auto">
-                                                <view model="Model.ContentLeft"></view>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
+    <div class="layout-body row gutter-sm">
+
+        @if (Model.ContentLeft != null)
+        {
+            <div class="layout-content-left col-lg-3">
+                <div class="layout-content-left-container navbar-expand-lg">
+                    <div class="navbar-toggler">
+                        <a href="#" data-toggle="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-left active img-48" style="z-index:10;" data-provide="asides" data-target="#contentLeftAsides">
+                            <i class="fal fa-bars"></i>
+                        </a>
+                    </div>
+                    <div role="navigation">
+                        <div class="asides fade" id="contentLeftAsides" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="asides-dialog asides-left" role="document">
+                                <div class="asides-content">
+                                    <div class="asides-header">
+                                        <h6 class="asides-title" id="searchHelpTitle">
+                                            @T["Browse"]
+                                        </h6>
+                                        <button type="button" class="close" data-dismiss="asides" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="asides-body overflow-auto">
+                                        <view model="Model.ContentLeft"></view>
+                                    </div>
+                                    <div class="asides-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="asides">Close</button>
                                     </div>
                                 </div>
-                            }
+                            </div>
                         </div>
                     </div>
                 </div>
-            }
-            @if (Model.Content != null)
-            {
-                <div class="layout-content @centerCss">
-                    @if (Model.Tools != null || Model.ToolsRight != null)
-                    {
-                        if (Model.ToolsRight != null)
+            </div>
+        }
+        @if (Model.Content != null)
+        {
+            <div class="layout-content @centerCss">
+                @if (Model.Tools != null || Model.ToolsRight != null)
+                {
+                    <section role="toolbar" class="layout-content-tools">
+                        @if (Model.ToolsRight != null)
                         {
-                            <div class="float-right">
-                                <view model="@Model.ToolsRight"></view>
+                            <div class="layout-content-tools-right">
+                                <view model="Model.ToolsRight"></view>
                             </div>
                         }
                         @if (Model.Tools != null)
                         {
-                            <view model="@Model.Tools" />
+                            <view model="Model.Tools" />
                         }
-                    }
-                    <view model="@Model.Content"></view>
-                    @if (Model.Actions != null || Model.ActionsRight != null)
-                    {
-                        <card>
+                    </section>
+                }
+                <view model="Model.Content"></view>
+                @if (Model.Actions != null || Model.ActionsRight != null)
+                {
+                    <section role="toolbar" class=" layout-content-actions">
+                        <card class="card">
                             <card-body>
                                 @if (Model.ActionsRight != null)
                                 {
-                                    <div class="float-right">
-                                        <view model="@Model.ActionsRight"></view>
+                                    <div class="layout-content-actions-right">
+                                        <view model="Model.ActionsRight"></view>
                                     </div>
                                 }
                                 @if (Model.Actions != null)
                                 {
-                                    <view model="@Model.Actions" />
+                                    <view model="Model.Actions" />
                                 }
                             </card-body>
                         </card>
-                    }
-                </div>
-            }
-            @if (Model.ContentRight != null)
-            {
-                <div class="layout-content-right col-lg-3">
-                    <div class="layout-content-right-container navbar-expand-lg">
-                        <div class="navbar-toggler">
-                            <a href="#" data-provide="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-right active img-48" style="z-index:10;" data-toggle="modal" data-target="#contentRightAsides">
-                                <i class="fal fa-bars"></i>
-                            </a>
-                        </div>
-                        <div role="navigation">
-                            @if (Model.ContentRight != null)
-                            {
-                                <div class="modal fade" id="contentRightAsides" tabindex="-1" role="dialog" aria-labelledby="asidesTitle" aria-hidden="true">
-                                    <div class="modal-dialog modal-right" role="document">
-                                        <div class="modal-content">
-                                            <div class="modal-header">
-                                                <h6 class="modal-title" id="searchHelpTitle">
-                                                    @T["Browse"]
-                                                </h6>
-                                                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                    <span aria-hidden="true">&times;</span>
-                                                </button>
-                                            </div>
-                                            <div class="modal-body overflow-auto">
-                                                <view model="Model.ContentRight"></view>
-                                            </div>
-                                            <div class="modal-footer">
-                                                <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
-                                            </div>
-                                        </div>
+                    </section>
+                }
+            </div>
+        }
+        @if (Model.ContentRight != null)
+        {
+            <div class="layout-content-right col-lg-3">
+                <div class="layout-content-right-container navbar-expand-lg">
+                    <div class="navbar-toggler">
+                        <a href="#" data-toggle="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-right active img-48" style="z-index:10;" data-provide="asides" data-target="#contentRightAsides">
+                            <i class="fal fa-bars"></i>
+                        </a>
+                    </div>
+                    <div role="navigation">
+                        <div class="asides fade" id="contentRightAsides" tabindex="-1" role="dialog" aria-hidden="true">
+                            <div class="asides-dialog asides-right" role="document">
+                                <div class="asides-content">
+                                    <div class="asides-header">
+                                        <h6 class="asides-title" id="searchHelpTitle">
+                                            @T["Browse"]
+                                        </h6>
+                                        <button type="button" class="close" data-dismiss="asides" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="asides-body overflow-auto">
+                                        <view model="Model.ContentRight"></view>
+                                    </div>
+                                    <div class="asides-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="asides">Close</button>
                                     </div>
                                 </div>
-                            }
+                            </div>
                         </div>
                     </div>
                 </div>
-            }
-        </div>
+            </div>
+        }
+
     </div>
     <div class="layout-footer">
         @if (Model.FooterRight != null)
         {
-            <div class="float-right layout-footer-right">
-                <view model="@Model.FooterRight" />
+            <div class="layout-footer-right">
+                <view model="Model.FooterRight" />
             </div>
         }
         @if (Model.Footer != null)
         {
-            <view model="@Model.Footer"></view>
+            <view model="Model.Footer"></view>
         }
     </div>
 </div>
 
 @if (Model.LayoutAfter != null)
 {
-    <view model="@Model.LayoutAfter"></view>
+    <div class="layout-after">
+        <view model="Model.LayoutAfter"></view>
+    </div>
 }
 
 @if (Model.ResizeHeader != null ||
@@ -190,14 +192,12 @@ Model.ResizeActionsRight != null)
                     @if (Model.ResizeHeaderRight != null)
                     {
                         <div class="float-right">
-                            <view model="@Model.ResizeHeaderRight" />
+                            <view model="Model.ResizeHeaderRight" />
                         </div>
                     }
                     @if (Model.ResizeHeader != null)
                     {
-                        <div class="float-left">
-                            <view model="@Model.ResizeHeader" />
-                        </div>
+                        <view model="Model.ResizeHeader" />
                     }
                 </div>
             }
@@ -213,7 +213,7 @@ Model.ResizeActionsRight != null)
             @if (Model.ResizeContent != null)
             {
                 <div class="resizable-body">
-                    <view model="@Model.ResizeContent"></view>
+                    <view model="Model.ResizeContent"></view>
                 </div>
             }
 
@@ -225,14 +225,13 @@ Model.ResizeActionsRight != null)
                             @if (Model.ResizeActionsRight != null)
                             {
                                 <div class="float-right">
-                                    <view model="@Model.ResizeActionsRight" />
+                                    <view model="Model.ResizeActionsRight" />
                                 </div>
                             }
-
                             @if (Model.ResizeActions != null)
                             {
                                 <div class="float-left">
-                                    <view model="@Model.ResizeActions" />
+                                    <view model="Model.ResizeActions" />
                                 </div>
                             }
                         </card-body>
