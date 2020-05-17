@@ -78,7 +78,7 @@ namespace Plato.Discuss.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Permissions.FollowTopics;
                     return model;
-                }).Zone("tools").Order(-4)
+                }).Zone("header-right").Order(-4)
             );
 
         }
@@ -89,7 +89,6 @@ namespace Plato.Discuss.Follow.ViewProviders
             {
                 return await BuildIndexAsync(new Topic(), context);
             }
-
 
             var isFollowing = false;
             var followType = FollowTypes.Topic;
@@ -125,7 +124,7 @@ namespace Plato.Discuss.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Follow.Permissions.FollowTopics;
                     return model;
-                }).Zone("sidebar").Order(20)
+                }).Zone("content-right").Order(20)
             );
 
         }

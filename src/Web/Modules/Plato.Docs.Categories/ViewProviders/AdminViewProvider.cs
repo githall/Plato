@@ -12,35 +12,33 @@ using Plato.Docs.Categories.Models;
 using Plato.Docs.Categories.ViewModels;
 using PlatoCore.Abstractions.Extensions;
 using PlatoCore.Features.Abstractions;
-using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Docs.Categories.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<CategoryAdmin>
-    {
-        
-        private readonly IContextFacade _contextFacade;
+    {        
+
         private readonly ICategoryStore<Category> _categoryStore;
         private readonly ICategoryManager<Category> _categoryManager;
         private readonly IFeatureFacade _featureFacade;
 
         public IStringLocalizer S { get; }
 
-
         public AdminViewProvider(
             IStringLocalizer stringLocalizer,
-            IContextFacade contextFacade,
-            ICategoryStore<Category> categoryStore,
             ICategoryManager<Category> categoryManager,
+            ICategoryStore<Category> categoryStore,            
             IFeatureFacade featureFacade)
         {
-            _contextFacade = contextFacade;
+
+            _categoryManager = categoryManager; 
             _categoryStore = categoryStore;
-            _categoryManager = categoryManager;
+            _featureFacade = featureFacade;            
 
             S = stringLocalizer;
-            _featureFacade = featureFacade;
+            
         }
 
         #region "Implementation"
@@ -65,7 +63,7 @@ namespace Plato.Docs.Categories.ViewProviders
 
             return Views(
                 View<CategoryBase>("Admin.Index.Header", model => categoryBase).Zone("header").Order(1),
-                View<CategoryIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<CategoryIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<CategoryIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             );
 
@@ -109,13 +107,14 @@ namespace Plato.Docs.Categories.ViewProviders
                     AvailableChannels = await GetAvailableCategories()
                 };
             }
-            
+
             return Views(
                 View<EditChannelViewModel>("Admin.Edit.Header", model => editChannelViewModel).Zone("header").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Content", model => editChannelViewModel).Zone("content").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Actions", model => editChannelViewModel).Zone("actions").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Footer", model => editChannelViewModel).Zone("footer").Order(1)
+                View<EditChannelViewModel>("Admin.Edit.Content", model => editChannelViewModel).Zone("content").Order(1),                
+                View<EditChannelViewModel>("Admin.Edit.Footer", model => editChannelViewModel).Zone("actions").Order(1),
+                View<EditChannelViewModel>("Admin.Edit.Actions", model => editChannelViewModel).Zone("actions-right").Order(1)
             );
+
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(CategoryAdmin categoryBase, IViewProviderContext context)
@@ -233,7 +232,7 @@ namespace Plato.Docs.Categories.ViewProviders
             return Task.FromResult(output);
 
         }
-        
+
         #endregion
 
     }

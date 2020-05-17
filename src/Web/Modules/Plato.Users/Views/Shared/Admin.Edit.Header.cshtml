@@ -2,11 +2,18 @@
 @if (Model.IsNewUser)
 {
     <h4>@T["Add User"]</h4>
+    <div class="text-muted">
+        @T["Create a new user account."]
+    </div>
 }
 else
 {
     <h4 class="d-inline-block">
         @T["Edit User"] @Model.DisplayName
     </h4>
-  
+    <div class="text-muted">
+        @T["Joined "] <date utc="@Model.CreatedDate"></date>,
+        @T["Seen:"] <date utc="@Model.LastLoginDate"></date>
+    </div>
 }
+<hr />

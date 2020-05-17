@@ -14,6 +14,7 @@ namespace PlatoCore.Layout.TagHelpers
     public class ViewTagHelper : TagHelper
     {
 
+
         public dynamic Model { get; set; }
 
         [ViewContext] // inform razor to inject

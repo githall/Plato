@@ -94,10 +94,11 @@ namespace Plato.Docs.Labels.ViewProviders
                 HtmlName = LabelHtmlName,
                 SelectedLabels = selectedLabels?.ToArray()
             };
-            
+
             return Views(
-                View<LabelDropDownViewModel>("Doc.Labels.Edit.Sidebar", model => viewModel).Zone("sidebar")
-                    .Order(15)
+                View<LabelDropDownViewModel>("Doc.Labels.Edit.Sidebar", model => viewModel)
+                .Zone("content-right")
+                .Order(15)
             );
 
         }

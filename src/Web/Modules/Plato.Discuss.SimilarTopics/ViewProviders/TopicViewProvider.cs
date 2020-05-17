@@ -2,7 +2,6 @@
 using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Plato.Discuss.Models;
 using Plato.Discuss.SimilarTopics.ViewModels;
 using Plato.Entities.Services;
@@ -153,7 +152,8 @@ namespace Plato.Discuss.SimilarTopics.ViewProviders
 
             // Return view
             return Views(
-                View<SimilarEntitiesViewModel>("Topic.Similar.Display.Sidebar", model => similarEntitiesViewModel).Zone("sidebar").Order(6)
+                View<SimilarEntitiesViewModel>("Topic.Similar.Display.Sidebar", model => similarEntitiesViewModel)
+                    .Zone("content-right").Order(6)
             );
 
         }

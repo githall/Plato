@@ -94,7 +94,7 @@ namespace Plato.Files.ViewProviders
 
             return Views(
                 View<FileSettingsViewModel>("Admin.Settings.Header", model => viewModel).Zone("header").Order(1),
-                View<FileSettingsViewModel>("Admin.Settings.Tools", model => viewModel).Zone("tools").Order(1),
+                View<FileSettingsViewModel>("Admin.Settings.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<FileSettingsViewModel>("Admin.Settings.Content", model => viewModel).Zone("content").Order(1)
             );
 
@@ -144,7 +144,7 @@ namespace Plato.Files.ViewProviders
             // Build view
             return Views(
                 View<EditFileSettingsViewModel>("Admin.EditSettings.Header", model => viewModel).Zone("header").Order(1),
-                View<EditFileSettingsViewModel>("Admin.EditSettings.Tools", model => viewModel).Zone("tools").Order(1),
+                View<EditFileSettingsViewModel>("Admin.EditSettings.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<EditFileSettingsViewModel>("Admin.EditSettings.Content", model => viewModel).Zone("content").Order(1)
             );
 

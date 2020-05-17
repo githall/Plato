@@ -46,7 +46,7 @@ namespace Plato.Files.Sharing.ViewProviders
             };
 
             return Views(                
-                View<ShareFileDialogViewModel>("Admin.ShareFile.Sidebar", model => viewModel).Zone("sidebar").Order(10)                
+                View<ShareFileDialogViewModel>("Admin.ShareFile.Sidebar", model => viewModel).Zone("content-right").Order(10)                
             );
 
         }

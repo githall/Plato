@@ -53,7 +53,7 @@ namespace Plato.Theming.ViewProviders
 
             return Task.FromResult(Views(
                 View<ThemingIndexViewModel>("Admin.Index.Header", viewModel => indexViewModel).Zone("header"),
-                View<ThemingIndexViewModel>("Admin.Index.Tools", viewModel => indexViewModel).Zone("tools"),
+                View<ThemingIndexViewModel>("Admin.Index.Tools", viewModel => indexViewModel).Zone("header-right"),
                 View<ThemingIndexViewModel>("Admin.Index.Content", viewModel => indexViewModel).Zone("content")
             ));
             

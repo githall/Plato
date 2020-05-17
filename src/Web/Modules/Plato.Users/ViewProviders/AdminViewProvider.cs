@@ -72,7 +72,7 @@ namespace Plato.Users.ViewProviders
             return Task.FromResult(
                 Views(
                     View<UserIndexViewModel>("Admin.Index.Header", model => viewModel).Zone("header"),
-                    View<UserIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools"),
+                    View<UserIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("header-right"),
                     View<UserIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content")
                 ));
 
@@ -83,8 +83,7 @@ namespace Plato.Users.ViewProviders
 
             return Task.FromResult(
                 Views(
-                    View<User>("Admin.Display.Header", model => user).Zone("header"),
-                    View<User>("Admin.Display.Meta", model => user).Zone("meta"),
+                    View<User>("Admin.Display.Header", model => user).Zone("header"),                    
                     View<User>("Admin.Display.Content", model => user).Zone("content"),
                     View<User>("Admin.Display.Footer", model => user).Zone("footer")
                 ));
@@ -157,12 +156,11 @@ namespace Plato.Users.ViewProviders
             };
 
             return Views(
-                    View<EditUserViewModel>("Admin.Edit.Header", model => viewModel).Zone("header"),
-                    View<EditUserViewModel>("Admin.Edit.Meta", model => viewModel).Zone("meta"),
+                    View<EditUserViewModel>("Admin.Edit.Header", model => viewModel).Zone("header"),                    
                     View<EditUserViewModel>("Admin.Edit.Content", model => viewModel).Zone("content"),
-                    View<EditUserViewModel>("Admin.Edit.Sidebar", model => viewModel).Zone("sidebar"),
-                    View<EditUserViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer"),
-                    View<EditUserViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions")
+                    View<EditUserViewModel>("Admin.Edit.Sidebar", model => viewModel).Zone("content-right"),
+                    View<EditUserViewModel>("Admin.Edit.Footer", model => viewModel).Zone("actions"),
+                    View<EditUserViewModel>("Admin.Edit.Actions", model => viewModel).Zone("actions-right")
                 );
 
         }

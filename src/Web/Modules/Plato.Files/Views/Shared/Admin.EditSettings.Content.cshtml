@@ -53,8 +53,8 @@
     </card-body>
 </card>
 
-<card class="card mt-4">
-    <card-footer>
+<card>
+    <card-body>
         @if (platoOpts.DemoMode)
         {
             <span class="d-inline-block disabled" data-toggle="tooltip" title="@T["This option is disabled within the demo"]">
@@ -68,7 +68,7 @@
             <button class="btn btn-primary" type="submit">@T["Save"]</button>
         }
         <a class="btn btn-secondary" asp-route-action="Settings">@T["Cancel"]</a>
-    </card-footer>
+    </card-body>
 </card>
 
 <div class="modal fade" id="selectExtensionModal" role="dialog" aria-hidden="true">

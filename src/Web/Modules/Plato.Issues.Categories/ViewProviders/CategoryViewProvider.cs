@@ -66,9 +66,9 @@ namespace Plato.Issues.Categories.ViewProviders
 
             return Views(
                 View<CategoryBase>("Home.Index.Header", model => existingCategory).Zone("header").Order(1),
-                View<CategoryBase>("Home.Index.Tools", model => existingCategory).Zone("tools").Order(1),
+                View<CategoryBase>("Home.Index.Tools", model => existingCategory).Zone("header-right").Order(1),
                 View<CategoryIndexViewModel>("Home.Index.Content", model => indexViewModel).Zone("content").Order(1),
-                View<CategoryIndexViewModel>("Issues.Categories.Sidebar", model => indexViewModel).Zone("sidebar").Order(1)
+                View<CategoryIndexViewModel>("Issues.Categories.Sidebar", model => indexViewModel).Zone("content-right").Order(1)
             );
 
         }

@@ -46,7 +46,7 @@ namespace Plato.Users.Badges.ViewProviders
             
             return Views(
                 View<UserBadgesIndexViewModel>("Profile.Index.Header", model => viewModel).Zone("header"),
-                View<UserBadgesIndexViewModel>("Profile.Index.Tools", model => viewModel).Zone("tools"),
+                View<UserBadgesIndexViewModel>("Profile.Index.Tools", model => viewModel).Zone("header-right"),
                 View<UserBadgesIndexViewModel>("Profile.Index.Content", model => viewModel).Zone("content")
             );
 

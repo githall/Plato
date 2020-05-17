@@ -75,7 +75,7 @@ namespace Plato.Questions.ViewProviders
             return Task.FromResult(Views(
                 View<EditEntityReplyViewModel>("Home.Edit.Reply.Header", model => viewModel).Zone("header"),
                 View<EditEntityReplyViewModel>("Home.Edit.Reply.Content", model => viewModel).Zone("content"),
-                View<EditEntityReplyViewModel>("Home.Edit.Reply.Footer", model => viewModel).Zone("Footer")
+                View<EditEntityReplyViewModel>("Home.Edit.Reply.Footer", model => viewModel).Zone("actions-right")
             ));
 
         }

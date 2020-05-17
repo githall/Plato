@@ -33,7 +33,7 @@ namespace Plato.Authentication.Twitter.ViewProviders
 
             return Task.FromResult(Views(                
                 View<TwitterLoginViewModel>("Twitter.Login.Sidebar", model => new TwitterLoginViewModel())
-                    .Zone("sidebar")
+                    .Zone("content-right")
                     .Order(int.MinValue + 102)                
             ));
 

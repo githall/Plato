@@ -6,7 +6,7 @@
 
 @if (hasUsername && hasPassword)
 {
-    <form asp-area="Plato.Site.Demo" asp-controller="Home" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" enctype="multipart/form-data" data-disable-submit="true" role="form">
+    <form asp-area="Plato.Site.Demo" asp-controller="Home" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" enctype="multipart/form-data" data-disable-submit="true">
         <h6 class="font-weight-bold">
             @T["Demo Login"]
         </h6>

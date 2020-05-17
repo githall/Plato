@@ -15,10 +15,9 @@ namespace Plato.Discuss.Tags.ViewProviders
 {
     public class TagViewProvider : ViewProviderBase<Tag>
     {
+
         private readonly IFeatureFacade _featureFacade;
         private readonly ITagStore<Tag> _tagStore;
-
-    
 
         public TagViewProvider(
             ITagStore<Tag> tagStore,
@@ -27,9 +26,9 @@ namespace Plato.Discuss.Tags.ViewProviders
             _tagStore = tagStore;
             _featureFacade = featureFacade;
         }
-        
-        #region "Imlementation"
-        
+
+        #region "Implementation"
+
         public override Task<IViewProviderResult> BuildIndexAsync(Tag tag, IViewProviderContext context)
         {
 
@@ -42,7 +41,7 @@ namespace Plato.Discuss.Tags.ViewProviders
 
             return Task.FromResult(Views(
                 View<TagIndexViewModel<Tag>>("Home.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<TagIndexViewModel<Tag>>("Home.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<TagIndexViewModel<Tag>>("Home.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<TagIndexViewModel<Tag>>("Home.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
 
@@ -70,7 +69,7 @@ namespace Plato.Discuss.Tags.ViewProviders
             {
                 return default(IViewProviderResult);
             }
-            
+
             // Get all tags for feature
             var tags = await _tagStore.QueryAsync()
                 .Take(20, false)
@@ -84,16 +83,16 @@ namespace Plato.Discuss.Tags.ViewProviders
             // Build view
             return Views(
                 View<TagBase>("Home.Display.Header", model => tag).Zone("header").Order(1),
-                View<TagBase>("Home.Display.Tools", model => tag).Zone("tools").Order(1),
+                View<TagBase>("Home.Display.Tools", model => tag).Zone("header-right").Order(1),
                 View<TagDisplayViewModel>("Home.Display.Content", model => indexViewModel).Zone("content").Order(1),
                 View<TagsViewModel<Tag>>("Topic.Tags.Index.Sidebar", model =>
                 {
                     model.SelectedTagId = tag?.Id ?? 0;
                     model.Tags = tags?.Data;
                     return model;
-                }).Zone("sidebar").Order(1)
+                }).Zone("content-right").Order(1)
             );
-            
+
         }
 
         public override Task<IViewProviderResult> BuildEditAsync(Tag tag, IViewProviderContext context)
@@ -105,7 +104,7 @@ namespace Plato.Discuss.Tags.ViewProviders
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
         #endregion
 
     }

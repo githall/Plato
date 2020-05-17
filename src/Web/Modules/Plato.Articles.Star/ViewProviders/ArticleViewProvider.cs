@@ -59,7 +59,7 @@ namespace Plato.Articles.Star.ViewProviders
                     model.TotalStars = entity.TotalStars;
                     model.Permission = Permissions.StarArticles;
                     return model;
-                }).Zone("tools").Order(-5)
+                }).Zone("header-right").Order(-5)
             );
 
         }

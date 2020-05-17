@@ -44,12 +44,12 @@ namespace Plato.Ideas.Files.ViewProviders
             IContextFacade contextFacade)
         {
             _request = httpContextAccessor.HttpContext.Request;
-            _entityFileStore = entityFileStore;          
-            _fileStore = fileStore;
+            _entityFileStore = entityFileStore;
             _contextFacade = contextFacade;
             _featureFacade = featureFacade;
             _guidBuilder = guidBuilder;
             _entityStore = entityStore;
+            _fileStore = fileStore;
         }
 
         public override Task<IViewProviderResult> BuildIndexAsync(Idea entity, IViewProviderContext updater)
@@ -136,7 +136,7 @@ namespace Plato.Ideas.Files.ViewProviders
                     };
 
                     return model;
-                }).Zone("sidebar").Order(10)
+                }).Zone("content-right").Order(10)
             );
 
         }

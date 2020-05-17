@@ -78,7 +78,7 @@ namespace Plato.Settings.ViewProviders
             var viewModel = await GetModel();
             return Views(
                 View<SiteSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header"),
-                View<SiteSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools"),
+                View<SiteSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("header-right"),
                 View<SiteSettingsViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1),
                 View<SiteSettingsViewModel>("Admin.Edit.Footer", model => viewModel).Zone("footer")
             );

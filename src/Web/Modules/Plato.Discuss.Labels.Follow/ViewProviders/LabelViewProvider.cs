@@ -59,7 +59,7 @@ namespace Plato.Discuss.Labels.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = Permissions.FollowDiscussLabels;
                     return model;
-                }).Zone("tools").Order(-4)
+                }).Zone("header-right").Order(-4)
             );
 
         }

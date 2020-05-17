@@ -526,7 +526,7 @@ $(function (win, doc, $) {
             apiKey: "",
             csrfHeaderName: "X-Csrf-Token", // Custom CSRF header
             csrfCookieName: "", // CSRF cookie name
-            bsToolTipEnabled: true, // UI tooltips
+            bsToolTipEnabled: true, // UI tool tips
             bsToolTipAlternativeSelector: "[data-provide='tooltip']",
             bsToolTipSelector: "[data-toggle='tooltip']",
             avatarUploadSelector: "[data-upload='avatar']",
@@ -536,8 +536,7 @@ $(function (win, doc, $) {
             },
             layout: {
                 stickyHeaders: true,
-                stickySidebars: true,
-                stickyAsides: true
+                stickySideBars: true
             },
             validation: {
                 scrollToErrors: true

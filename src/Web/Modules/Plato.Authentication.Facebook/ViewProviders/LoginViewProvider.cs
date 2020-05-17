@@ -33,7 +33,7 @@ namespace Plato.Authentication.Facebook.ViewProviders
 
             return Task.FromResult(Views(                
                 View<FacebookLoginViewModel>("Facebook.Login.Sidebar", model => new FacebookLoginViewModel())
-                    .Zone("sidebar")
+                    .Zone("content-right")
                     .Order(int.MinValue + 101)                
             ));
 

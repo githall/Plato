@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Identity;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using PlatoCore.Models.Users;
@@ -67,10 +66,10 @@ namespace Plato.Users.ViewProviders
 
             return Views(
                 View<User>("Home.Edit.Header", model => user).Zone("header"),
-                View<User>("Home.Edit.Sidebar", model => user).Zone("sidebar"),
-                View<User>("Home.Edit.Tools", model => user).Zone("tools"),
+                View<User>("Home.Edit.Sidebar", model => user).Zone("content-left"),
+                View<User>("Home.Edit.Tools", model => user).Zone("header-right"),
                 View<EditSignatureViewModel>("Home.EditSignature.Content", model => viewModel).Zone("content"),
-                View<User>("Home.Edit.Footer", model => user).Zone("footer")
+                View<User>("Home.Edit.Footer", model => user).Zone("actions")
             );
 
         }
@@ -95,27 +94,12 @@ namespace Plato.Users.ViewProviders
                 return await BuildEditAsync(viewModel, context);
             }
 
-            if (context.Updater.ModelState.IsValid)
-            {
-
-                //user.Signature = model.Signature;
-             
-                //// Update user
-                //var result = await _platoUserManager.UpdateAsync(user);
-                //foreach (var error in result.Errors)
-                //{
-                //    context.Updater.ModelState.AddModelError(string.Empty, error.Description);
-                //}
-
-            }
-
             return await BuildEditAsync(viewModel, context);
 
         }
 
         #endregion
 
-      
     }
 
 }

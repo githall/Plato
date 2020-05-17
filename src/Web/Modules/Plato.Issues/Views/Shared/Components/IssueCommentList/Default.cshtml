@@ -48,7 +48,7 @@
     @if (!Model.Entity.IsHidden() && !Model.Entity.IsLocked)
     {
 
-        <div asp-id="participate" class="my-4">
+        <div asp-id="participate">
             <card>
                 <card-body>
                     <div class="text-muted">
@@ -85,7 +85,7 @@ else
 {
     @if (!Model.Entity.IsHidden() && !Model.Entity.IsLocked)
     {
-        <div asp-id="participate" class="my-4">
+        <div asp-id="participate">
             <card>
                 <card-body>
                     <div class="text-muted">
@@ -121,7 +121,7 @@ else
 
 @if (Model.Pager.Enabled)
 {
-    <div asp-id="pager" class="mt-4">
+    <div asp-id="pager">
         <pager model="@Model.Pager"></pager>
     </div>
 }

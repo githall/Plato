@@ -77,9 +77,9 @@ namespace Plato.Articles.Labels.ViewProviders
                 {
                     model.Labels = labels?.Data;
                     return model;
-                }).Zone("sidebar").Order(2)
+                }).Zone("content-right").Order(2)
             );
-            
+
         }
 
         public override async Task<IViewProviderResult> BuildDisplayAsync(Article viewModel, IViewProviderContext updater)
@@ -100,7 +100,7 @@ namespace Plato.Articles.Labels.ViewProviders
                 {
                     model.Labels = labels?.Data;
                     return model;
-                }).Zone("sidebar").Order(3)
+                }).Zone("content-right").Order(3)
             );
 
         }
@@ -132,7 +132,8 @@ namespace Plato.Articles.Labels.ViewProviders
             };
             
             return Views(
-                View<LabelDropDownViewModel>("Article.Labels.Edit.Sidebar", model => viewModel).Zone("sidebar")
+                View<LabelDropDownViewModel>("Article.Labels.Edit.Sidebar", model => viewModel)
+                    .Zone("content-right")
                     .Order(15)
             );
 

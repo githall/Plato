@@ -59,7 +59,7 @@ namespace Plato.Email.ViewProviders
             var viewModel = await GetModel();
             return Views(
                 View<EmailSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
-                View<EmailSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools").Order(1),
+                View<EmailSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<EmailSettingsViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1)
             );
         }

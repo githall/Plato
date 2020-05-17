@@ -88,7 +88,8 @@ namespace Plato.Questions.Categories.ViewProviders
             };
 
             return Views(
-                View<CategoryIndexViewModel>("Questions.Categories.Sidebar", model => categoryIndexViewModel).Zone("sidebar")
+                View<CategoryIndexViewModel>("Questions.Categories.Sidebar", model => categoryIndexViewModel)
+                    .Zone("content-right")
                     .Order(1)
             );
 
@@ -227,7 +228,7 @@ namespace Plato.Questions.Categories.ViewProviders
 
             return Views(
                 View<CategoryDropDownViewModel>("Questions.Categories.Edit.Sidebar", model => viewModel)
-                .Zone("sidebar").Order(5)
+                .Zone("content-right").Order(5)
             );
 
         }

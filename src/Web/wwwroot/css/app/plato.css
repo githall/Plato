@@ -1025,8 +1025,6 @@ a.navbar-brand img { max-height: 48px; }
 .nav a.nav-link .nav-text { margin-left: 0.50rem; }
 .nav a.text-hidden .nav-text { display: none;  }
 
-.nav-site { border: 0; }
-
 .nav-site .collapsing { overflow: hidden; }
 
 .nav-site > .navbar { width: 100%; }
@@ -1127,7 +1125,7 @@ a.navbar-brand img { max-height: 48px; }
 /* Admin Nav */
 /* ------------------------- */
 
-.nav-asides .navbar-collapse .navbar-nav { margin: 1rem 0; }
+.nav-asides > .navbar .navbar-collapse .navbar-nav { margin: 1rem 0; }
 .nav-asides > .navbar .nav-link { padding: 0.5rem 1rem; border-radius: 0.20rem; }
 .nav-asides > .navbar .nav-link i { margin-right: 0.50rem; }
 .nav-asides > .navbar hr { margin: 0.5rem 0 1rem 0; display: none; }
@@ -1147,7 +1145,7 @@ a.navbar-brand img { max-height: 48px; }
         margin: 0;
     }
 
-    .nav-asides .navbar-expand-lg .navbar-collapse {
+    .nav-asides .navbar .navbar-expand-lg .navbar-collapse {
         display: flex !important;
         flex-basis: auto;
     }
@@ -1193,7 +1191,7 @@ a.navbar-brand img { max-height: 48px; }
         max-width: calc(100vw - 264px);
     }
     
-    /* Accomodate for asides when positioning alerts */
+    /* Accommodate for asides when positioning alerts */
     .nav-asides .main-container .layout-header .alert {
         margin-left: 132px;
     }
@@ -1231,9 +1229,8 @@ a.navbar-brand img { max-height: 48px; }
 }
 
 /* ------------------------- */
-/* Asides style modal */
+/* Bootstrap modal as style modal */
 /* ------------------------- */
-
 
 .modal>.modal-left {
     left: 0;
@@ -1295,11 +1292,8 @@ a.navbar-brand img { max-height: 48px; }
     .modal > .modal-4x { max-width: 100%; }
 }
 
-
-
 .modal .modal-left,
 .modal .modal-right {
-
     -webkit-transition: -webkit-transform .4s cubic-bezier(.25, .8, .25, 1);
     -moz-transition: -moz-transform .4s cubic-bezier(.25, .8, .25, 1);
     -o-transition: -o-transform .4s cubic-bezier(.25, .8, .25, 1);
@@ -1312,6 +1306,201 @@ a.navbar-brand img { max-height: 48px; }
     -webkit-transform: translate3d(0,0,0) !important;
     -ms-transform: translate3d(0,0,0) !important;
     transform: translate3d(0,0,0) !important;
+}
+
+
+/* ------------------------- */
+/* Asides */
+/* ------------------------- */
+
+.asides-open {
+  overflow: hidden;
+}
+
+.asides {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 1050;
+    visibility: hidden;
+    overflow: hidden;
+    outline: 0;
+}
+
+.asides>.asides-left {
+    left: 0;
+    right: auto;
+    -webkit-transform: translate3d(-100%,0,0) !important;
+    -ms-transform: translate3d(-100%,0,0) !important;
+    transform: translate3d(-100%,0,0) !important;
+    -o-transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+    -webkit-transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+    transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+}
+
+.asides>.asides-right {
+    left: auto;
+    right: 0;
+    -webkit-transform: translate3d(100%,0,0) !important;
+    -ms-transform: translate3d(100%,0,0) !important;
+    transform: translate3d(100%,0,0) !important;
+    -o-transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+    -webkit-transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+    transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+}
+
+.asides.show {
+    visibility: visible;
+}
+
+.asides.show .asides-bottom,
+.asides.show .asides-left,
+.asides.show .asides-right, 
+.asides.show .asides-top {
+    -webkit-transform: translate3d(0,0,0) !important;
+    -ms-transform: translate3d(0,0,0) !important;
+    transform: translate3d(0,0,0) !important;
+}
+
+.asides-open .asides {
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+
+.asides-dialog {
+    position: fixed !important;
+    z-index: 1055;
+    bottom: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+}
+
+.asides .asides-dialog {
+    -webkit-transition: -webkit-transform .4s cubic-bezier(.25, .8, .25, 1);
+    -moz-transition: -moz-transform .4s cubic-bezier(.25, .8, .25, 1);
+    -o-transition: -o-transform .4s cubic-bezier(.25, .8, .25, 1);
+}
+
+
+@media screen and (prefers-reduced-motion: reduce) {
+  .asides.fade .asides-dialog {
+    transition: none;
+  }
+}
+
+.asides.show .asides-dialog {
+    -webkit-transform: translate(0, 0);
+    transform: translate(0, 0);
+}
+
+.asides-content {
+    position: relative;
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-direction: column;
+    flex-direction: column;
+    width: 100%;
+    height: 100%;
+    pointer-events: auto;
+    background-clip: padding-box; 
+    outline: 0;
+}
+
+.asides-backdrop {
+    position: fixed;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    left: 0;
+    visibility:hidden;
+    z-index: 1040;
+    background-color: #000;
+    opacity: 0;
+    transition: all 0.50s ease-out;
+}
+
+.asides-backdrop.show {
+    opacity: 0.5;
+    visibility:visible;
+}
+
+.asides-header {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: start;
+    align-items: flex-start;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: 1rem;
+    border:0;
+    border-bottom-width:1px;
+    border-style:solid;
+}
+
+.asides-header .close {
+  padding: 1rem;
+  margin: -1rem -1rem -1rem auto;
+}
+
+.asides-title {
+    margin-bottom: 0;
+    line-height: 1.5;
+}
+
+.asides-body {
+    position: relative;
+    -ms-flex: 1 1 auto;
+    flex: 1 1 auto;
+    padding: 1rem;
+}
+
+.asides-footer {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: start;
+    justify-content: flex-start;
+    padding: 1rem;
+    border:0;
+    border-top-width:1px;
+    border-style:solid;
+}
+
+.asides-right .asides-footer {
+    -ms-flex-pack: end;
+    justify-content: flex-end;
+}
+
+.asides-footer > :not(:first-child) {
+  margin-left: .25rem;
+}
+
+.asides-footer > :not(:last-child) {
+  margin-right: .25rem;
+}
+
+.asides-scrollbar-measure {
+  position: absolute;
+  top: -9999px;
+  width: 50px;
+  height: 50px;
+  overflow: scroll;
+}
+
+/* for desktops / larger screen restrict to specific widths */
+@media (min-width: 992px) {
+    .asides > .asides-dialog { max-width: 25%; }
+    .asides > .asides-2x { max-width: 50%; }
+    .asides > .asides-3x { max-width: 75%; }
+    .asides > .asides-4x { max-width: 100%; }
+}
+
+@media (min-width: 576px) {
+  .asides-dialog { max-width: 50%; } 
 }
 
 /* ------------------------- */
@@ -1367,111 +1556,6 @@ a.navbar-brand img { max-height: 48px; }
 .select-dropdown { max-height: 200px; overflow: auto; }
 .select-dropdown input + label {  cursor: pointer; }
 .select-dropdown-preview i.check-icon { display: none; }
-
-/* ------------------------- */
-/* Plato Layout */
-/* ------------------------- */
-
-.layout,
-.layout-header,
-.layout-header-sticky,
-.layout-alerts,
-.layout-tools,
-.layout-header-item,
-.layout-meta,
-.layout-body,
-.layout-content,
-.layout-sidebar,
-.layout-sidebar-sticky,
-.layout-footer,
-.layout-footer-item,
-.layout-actions,
-.layout-asides,
-.layout-asides-sticky {}
-
-.layout-tools  {    
-    display: flex;
-    flex-flow: nowrap;
-    flex-direction: row;
-}
-
-/* Sticky Header & Sidebar */
-
-/* Ensure the header has paddings and margins applied. 
-    This ensures we can correctly calculate the "fixed" header height
-    via JavaScript upon the initial load before the header actually becomes "fixed" */
-
-.layout-header  { padding-bottom: 1rem; }
-.layout-header-content { 
-    padding: 1rem 0;
-    border-bottom-width: 1px;
-    border-bottom-style: solid;
-}
-
-/* To be removed once all HR elements have been removed from layout-header-content */
-.layout-header .layout-header-content hr { display: none; }
-
-/* Only apply fixed layout for screen sizes above 992px */
-@media (min-width: 992px) {
-    
-    /* When the header becomes fixed, fix content */
-    .layout-header.fixed > .layout-header-content {
-        position: fixed;
-        top: 0;
-        z-index: 5;
-        white-space: nowrap;
-    }
-    
-    /* When the sidebar becomes fixed, fix content */
-    .layout-sidebar.fixed > .layout-sidebar-content,
-    .layout-asides.fixed > .layout-asides-content {
-        position: fixed;
-        display: flex;
-        -webkit-box-orient: vertical !important;
-        -webkit-box-direction: normal !important;
-        -ms-flex-direction: column !important;
-        flex-direction: column !important;
-    }
-
-    /* Ensure collapse is visible by default for desktops */
-    .layout-sidebar .navbar-collapse { display: block !important; }
-
-}
-
-/* Header Alerts */
-.layout-header .alert {
-    position: fixed;
-    left: 50%;
-    z-index: 999;
-    margin-top: -6px;
-    visibility: hidden;
-    opacity: 0;
-    transform: translate(-50%, 0);
-}
-
-.layout-header .alert-visible {
-    visibility: visible;
-    margin-top: 0;
-    opacity: 1;
-    transition: all 0.20s ease-out;
-}
-
-.layout-header .alert-hidden {
-    visibility: hidden;
-    margin-top: -12px;
-    opacity: 0;
-    transition: all 0.20s ease-in;
-}
-
-.layout-content .card,
-.layout-sidebar .card { margin-bottom: 1.25rem; }
-
-.layout-content .accordion,
-.layout-sidebar .accordion  { margin-bottom: 1.25rem; }
-
-.layout-content .accordion .card,
-.layout-sidebar .accordion .card { margin-bottom: 0; }
-
 /* ------------------------- */
 /* Accordion */
 /* ------------------------- */
@@ -1801,8 +1885,13 @@ a.navbar-brand img { max-height: 48px; }
     display: inline-block;
 }
 
-.resizable-body {
-    padding: 1.25rem;
+.resizable-body,
+.resizable-footer {
+    padding: 1.25rem 1.25rem 0 1.25rem;
+}
+
+.resizable-footer {
+    padding-top: 0;
 }
 
 /* ------------------------- */

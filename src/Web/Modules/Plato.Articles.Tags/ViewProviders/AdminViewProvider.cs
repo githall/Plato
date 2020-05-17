@@ -8,15 +8,15 @@ using Plato.Articles.Tags.ViewModels;
 
 namespace Plato.Articles.Tags.ViewProviders
 {
+
     public class AdminViewProvider : ViewProviderBase<TagAdmin>
     {
 
         private readonly ITagManager<Tag> _tagManager;
-   
+
         public AdminViewProvider(
             ITagManager<Tag> tagManager)
-        {
-  
+        {  
             _tagManager = tagManager;
         }
 
@@ -32,7 +32,7 @@ namespace Plato.Articles.Tags.ViewProviders
 
             return Task.FromResult(Views(
                 View<TagIndexViewModel<Tag>>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<TagIndexViewModel<Tag>>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<TagIndexViewModel<Tag>>("Admin.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<TagIndexViewModel<Tag>>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
 
@@ -41,7 +41,6 @@ namespace Plato.Articles.Tags.ViewProviders
         public override Task<IViewProviderResult> BuildDisplayAsync(TagAdmin tag, IViewProviderContext updater)
         {
             return Task.FromResult(default(IViewProviderResult));
-
         }
 
         public override Task<IViewProviderResult> BuildEditAsync(TagAdmin tag, IViewProviderContext updater)
@@ -67,10 +66,11 @@ namespace Plato.Articles.Tags.ViewProviders
 
             return Task.FromResult(Views(
                 View<EditTagViewModel>("Admin.Edit.Header", model => editLabelViewModel).Zone("header").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("actions").Order(1),
-                View<EditTagViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("footer").Order(1)
+                View<EditTagViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),                
+                View<EditTagViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("actions").Order(1),
+                View<EditTagViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("actions-right").Order(1)
             ));
+
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(TagAdmin tag, IViewProviderContext context)
@@ -85,7 +85,6 @@ namespace Plato.Articles.Tags.ViewProviders
             {
                 return await BuildEditAsync(tag, context);
             }
-
 
             var model = new EditTagViewModel();
 
@@ -114,7 +113,7 @@ namespace Plato.Articles.Tags.ViewProviders
             }
 
             return await BuildEditAsync(tag, context);
-            
+
         }
 
     }

@@ -71,7 +71,7 @@
                             <div class="col-md-3 text-right">
                                 <authorize asp-permission="@enablePermission.Name">
                                     <authorize-success>
-                                        <button type="submit" asp-controller="Admin" asp-action="Update" asp-route-id="@feature.ModuleId" class="btn btn-primary" itemprop="UnsafeUrl">
+                                        <button type="submit" asp-controller="Admin" asp-action="Update" asp-route-id="@feature.ModuleId" class="btn btn-primary">
                                             @T["Update"]
                                         </button>
                                     </authorize-success>

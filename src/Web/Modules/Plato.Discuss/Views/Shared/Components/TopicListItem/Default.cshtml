@@ -103,7 +103,7 @@
             </div>
         }
 
-        <date utc="@Model.Entity.CreatedDate" itemprop="createdDate" data-toggle="tooltip" class="@Model.Entity.CreatedBy?.Css.StaffCss" />
+        <date utc="@Model.Entity.CreatedDate" data-toggle="tooltip" class="@Model.Entity.CreatedBy?.Css.StaffCss" />
         @if (@Model.Category != null)
         {
             <span>@T["In"]</span>

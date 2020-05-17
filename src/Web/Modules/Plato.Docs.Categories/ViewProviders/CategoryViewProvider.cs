@@ -77,10 +77,10 @@ namespace Plato.Docs.Categories.ViewProviders
 
             return Views(
                 View<CategoryBase>("Home.Index.Header", model => existingCategory).Zone("header").Order(1),
-                View<CategoryBase>("Home.Index.Tools", model => existingCategory).Zone("tools").Order(1),
+                View<CategoryBase>("Home.Index.Tools", model => existingCategory).Zone("header-right").Order(1),
                 View<CategoryIndexViewModel>("Home.Index.Content", model => categoryIndexViewModel).Zone("content").Order(1),
-                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("sidebar").Order(int.MinValue + 10),
-                View<CategoryIndexViewModel>("Home.Index.Sidebar", model => categoryIndexViewModel).Zone("sidebar")
+                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("content-left").Order(int.MinValue + 10),
+                View<CategoryIndexViewModel>("Home.Index.Sidebar", model => categoryIndexViewModel).Zone("content-left")
             );
 
         }

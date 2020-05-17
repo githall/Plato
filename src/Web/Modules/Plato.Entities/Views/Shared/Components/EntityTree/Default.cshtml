@@ -72,6 +72,7 @@
                     sb.Append("<div class=\"tree-left\">");
                     if (entity.Value.Children.Any())
                     {
+
                         for (var x = 0; x < entity.Value.Depth; x++)
                         {
                             sb.Append("<div class=\"toggler\"><i class=\"fal\"></i></div>");
@@ -81,13 +82,16 @@
                             .Append("\" data-toggle=\"tree\" href=\"#\">");
                         sb.Append("<i class=\"fal fa-chevron-right\"></i>");
                         sb.Append("</a>");
+
                     }
                     else
                     {
+
                         for (var x = 0; x < entity.Value.Depth; x++)
                         {
                             sb.Append("<div class=\"toggler\"><i class=\"fal\"></i></div>");
                         }
+
                     }
 
                     sb.Append("</div>");
@@ -109,11 +113,18 @@
                             .Append("/>");
                     }
 
-                    sb.Append("<label for=\"")
-                        .Append(checkId)
-                        .Append("\">");
+                    if (Model.EnableCheckBoxes)
+                    {
+                        sb.Append("<label for=\"")
+                           .Append(checkId)
+                           .Append("\">");
+                    }
+                    else
+                    {
+                        sb.Append("<label>");
+                    }
 
-                    if (@Model.EnableCheckBoxes)
+                    if (Model.EnableCheckBoxes)
                     {
                         sb.Append("<i class=\"fal mr-2 check-icon\"></i>");
                     }
@@ -131,7 +142,9 @@
                         sb.Append("</a>");
                     }
 
+                 
                     sb.Append("</label>");
+                
 
                     sb.Append("</div>");
 

@@ -26,11 +26,10 @@
     </a>
     <div class="dropdown-menu w-100 anim anim-2x anim-scale-in" aria-labelledby="allCategoriesDropdown">
         <div class="max-h-300 overflow-auto">
-            <div class="list-group list-group-flush list-group-hover">
-                
+            <div class="list-group list-group-flush list-group-hover">                
                 @if (parentCategory != null)
                 {
-                    <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="@parentCategory.Id" asp-route-opts.alias="@parentCategory.Alias" title="@parentCategory.Description" class="list-group-item list-group-item-action">
+                    <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.categoryId="@parentCategory.Id" asp-route-opts.alias="@parentCategory.Alias" title="@parentCategory.Description" class="list-group-item list-group-item-action">
                         <i class="fal fa-level-up mr-2"></i> @parentCategory.Name
                     </a>
                 }
@@ -41,16 +40,14 @@
                         <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="" asp-route-opts.alias="" title="@T["All Categories"]" class="list-group-item list-group-item-action">
                             <i class="fal fa-level-up mr-2"></i> @T[allText]
                         </a>
-                    }
-           
+                    }           
                 }
-
                 @if (childCategories != null && childCategories.Any())
                 {
                     @foreach (var category in childCategories)
                      {
                          var css = category.Id == Model.Options.CategoryId ? "list-group-item list-group-item-action active" : "list-group-item list-group-item-action";                         
-                         <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Index" asp-route-opts.categoryId="@category.Id" asp-route-opts.alias="@category.Alias" title="@category.Description" class="@css">
+                         <a asp-route-area="Plato.Docs.Categories" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.categoryId="@category.Id" asp-route-opts.alias="@category.Alias" title="@category.Description" class="@css">
                              @category.Name
                          </a>
                      }
@@ -58,12 +55,10 @@
                 else
                 {
                     <div class="list-group-item">
-                        @T["No categories found"]
+                        @T["No child categories!"]
                     </div>
                 }
-
-            </div>
-            
+            </div>            
         </div>
     </div>
 </div>

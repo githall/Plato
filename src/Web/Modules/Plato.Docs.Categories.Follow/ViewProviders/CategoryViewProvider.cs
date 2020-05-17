@@ -85,7 +85,7 @@ namespace Plato.Docs.Categories.Follow.ViewProviders
                     model.IsFollowing = isFollowing;
                     model.Permission = permission;
                     return model;
-                }).Zone("tools").Order(-4)
+                }).Zone("header-right").Order(-4)
             );
 
 

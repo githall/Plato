@@ -41,7 +41,7 @@ namespace Plato.Articles.Share.ViewProviders
 
             return Views(
                 View<ShareViewModel>("Article.Share.Display.Sidebar", model => viewModel)
-                    .Zone("sidebar")
+                    .Zone("content-right")
                     .Order(int.MaxValue - 100)
             );
 

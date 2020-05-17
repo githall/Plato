@@ -82,7 +82,7 @@ namespace Plato.Entities.Files.ViewProviders
             // Return view
             return Views(                
                 View<FileEntitiesViewModel>("Admin.Edit.FileEntities", model => viewModel)
-                    .Zone("sidebar").Order(5)
+                    .Zone("content-right").Order(5)
             );
 
         }

@@ -12,9 +12,8 @@ namespace PlatoCore.Layout.Theming
         {
 
             // Compute layout based on controller type
-            var themeSelector = Context.RequestServices.GetService<IThemeSelector>();
-            var controllerName = ViewContext.RouteData.Values["controller"].ToString();
-            switch (controllerName)
+            var themeSelector = Context.RequestServices.GetService<IThemeSelector>();    
+            switch (ViewContext.RouteData.Values["controller"].ToString())
             {
                 case "Admin":
                     Layout = $"~/{themeSelector.GetThemePath()}/Shared/_AdminLayout.cshtml";

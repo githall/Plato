@@ -96,8 +96,13 @@ namespace PlatoCore.Abstractions.Extensions
             return date.Subtract(input).Days;
         }
 
-        public static string ToSortableDateTimePattern(this DateTime input)
+        public static string ToSortableDateTimePattern(this DateTime input, System.Globalization.CultureInfo culture = null)
         {
+            if (culture == null)
+            {
+                // https://docs.microsoft.com/en-us/dotnet/api/system.globalization.cultureinfo.invariantculture?view=netcore-3.1
+                culture = System.Globalization.CultureInfo.InvariantCulture;
+            }
             return input.ToString(System.Globalization.CultureInfo.CurrentCulture.DateTimeFormat.SortableDateTimePattern);
         }
 

@@ -1,6 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Routing;
 using Microsoft.Extensions.Localization;
@@ -23,7 +21,6 @@ namespace Plato.Questions.Categories.ViewProviders
         public IStringLocalizer T;
 
         public IStringLocalizer S { get; }
-
 
         public AnswerViewProvider(
             IStringLocalizer<AnswerViewProvider> stringLocalizer,
@@ -123,5 +120,7 @@ namespace Plato.Questions.Categories.ViewProviders
         {
             return Task.FromResult(default(IViewProviderResult));
         }
+
     }
+
 }

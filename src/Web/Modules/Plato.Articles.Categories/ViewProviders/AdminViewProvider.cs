@@ -60,7 +60,7 @@ namespace Plato.Articles.Categories.ViewProviders
             
             return Views(
                 View<CategoryBase>("Admin.Index.Header", model => categoryAdminBase).Zone("header").Order(1),
-                View<CategoryIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<CategoryIndexViewModel>("Admin.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<CategoryIndexViewModel>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             );
 
@@ -104,12 +104,12 @@ namespace Plato.Articles.Categories.ViewProviders
                     AvailableChannels = await GetAvailableCategories()
                 };
             }
-            
+
             return Views(
                 View<EditChannelViewModel>("Admin.Edit.Header", model => editChannelViewModel).Zone("header").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Content", model => editChannelViewModel).Zone("content").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Actions", model => editChannelViewModel).Zone("actions").Order(1),
-                View<EditChannelViewModel>("Admin.Edit.Footer", model => editChannelViewModel).Zone("footer").Order(1)
+                View<EditChannelViewModel>("Admin.Edit.Content", model => editChannelViewModel).Zone("content").Order(1),                
+                View<EditChannelViewModel>("Admin.Edit.Footer", model => editChannelViewModel).Zone("actions").Order(1),
+                View<EditChannelViewModel>("Admin.Edit.Actions", model => editChannelViewModel).Zone("actions-right").Order(1)
             );
         }
 

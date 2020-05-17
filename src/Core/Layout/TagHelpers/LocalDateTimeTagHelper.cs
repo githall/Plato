@@ -69,8 +69,16 @@ namespace PlatoCore.Layout.TagHelpers
 
             output.TagName = "span";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.Attributes.Add("title", formattedDateTime);
-            output.Attributes.Add("data-toggle", "tooltip");
+
+            if (!output.Attributes.ContainsName("title"))
+            {
+                output.Attributes.Add("title", formattedDateTime);
+            }
+
+            if (!output.Attributes.ContainsName("data-toggle"))
+            {
+                output.Attributes.Add("data-toggle", "tooltip");
+            }        
 
             output.Content.SetHtmlContent(Pretty
                 ? builder.AppendHtml(utcDateTime.DateTime.ToPrettyDate(dateTimeFormat))

@@ -92,7 +92,7 @@ namespace Plato.Docs.Categories.ViewProviders
 
             return Views(
                 View<CategoryIndexViewModel>("Doc.Categories.Index.Content", model => categoryIndexViewModel).Zone("content").Order(1),
-                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("sidebar").Order(int.MinValue + 10)
+                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("content-left").Order(int.MinValue + 10)
             );
             
         }
@@ -188,7 +188,7 @@ namespace Plato.Docs.Categories.ViewProviders
             };
             
             return Views(
-                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("sidebar").Order(int.MinValue + 10)
+                View<CategoryIndexViewModel>("Doc.Categories.Index.Sidebar", model => categoryIndexViewModel).Zone("content-left").Order(int.MinValue + 10)
             );
 
         }
@@ -211,6 +211,7 @@ namespace Plato.Docs.Categories.ViewProviders
             {
                 parents = await _categoryStore.GetParentsByIdAsync(doc.CategoryId);
             }
+
             _breadCrumbManager.Configure(builder =>
             {
 
@@ -273,7 +274,9 @@ namespace Plato.Docs.Categories.ViewProviders
             };
 
             return Views(
-                View<CategoryDropDownViewModel>("Doc.Categories.Edit.Sidebar", model => viewModel).Zone("sidebar").Order(5)
+                View<CategoryDropDownViewModel>("Doc.Categories.Edit.Sidebar", model => viewModel)
+                .Zone("content-right")
+                .Order(5)
             );
 
         }

@@ -6,7 +6,6 @@ using System.Threading.Tasks;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 using PlatoCore.Abstractions;
-using PlatoCore.Emails.Abstractions;
 
 namespace PlatoCore.Emails.Abstractions
 {
@@ -16,7 +15,7 @@ namespace PlatoCore.Emails.Abstractions
 
         private readonly SmtpSettings _smtpSettings;
         private readonly ILogger<SmtpService> _logger;
-        
+
         public SmtpService(
             IOptions<SmtpSettings> smtpSettings, 
             ILogger<SmtpService> logger)
@@ -120,7 +119,7 @@ namespace PlatoCore.Emails.Abstractions
         }
 
         #endregion
-        
+
     }
 
 }

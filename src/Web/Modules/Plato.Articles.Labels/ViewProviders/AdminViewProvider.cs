@@ -28,10 +28,10 @@ namespace Plato.Articles.Labels.ViewProviders
             {
                 throw new Exception($"A view model of type {typeof(LabelIndexViewModel<Label>).ToString()} has not been registered on the HttpContext!");
             }
-            
+
             return Task.FromResult(Views(
                 View<LabelIndexViewModel<Label>>("Admin.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<LabelIndexViewModel<Label>>("Admin.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<LabelIndexViewModel<Label>>("Admin.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<LabelIndexViewModel<Label>>("Admin.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
 
@@ -65,13 +65,14 @@ namespace Plato.Articles.Labels.ViewProviders
                     BackColor = label.BackColor
                 };
             }
-            
+
             return Task.FromResult(Views(
                 View<EditLabelViewModel>("Admin.Edit.Header", model => editLabelViewModel).Zone("header").Order(1),
-                View<EditLabelViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),
-                View<EditLabelViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("actions").Order(1),
-                View<EditLabelViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("footer").Order(1)
+                View<EditLabelViewModel>("Admin.Edit.Content", model => editLabelViewModel).Zone("content").Order(1),                
+                View<EditLabelViewModel>("Admin.Edit.Footer", model => editLabelViewModel).Zone("actions").Order(1),
+                View<EditLabelViewModel>("Admin.Edit.Actions", model => editLabelViewModel).Zone("actions-right").Order(1)
             ));
+
         }
 
         public override async Task<IViewProviderResult> BuildUpdateAsync(LabelAdmin label, IViewProviderContext context)

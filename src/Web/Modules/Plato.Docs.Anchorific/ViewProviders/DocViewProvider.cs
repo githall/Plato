@@ -29,7 +29,8 @@ namespace Plato.Docs.Anchorific.ViewProviders
             var viewModel = new AnchorificViewModel();
 
             return Views(
-                View<AnchorificViewModel>("Doc.Anchorific.Asides", model => viewModel).Zone("asides").Order(-4)
+                View<AnchorificViewModel>("Doc.Anchorific.Asides", model => viewModel)
+                .Zone("content-right").Order(-4)
             );
 
         }

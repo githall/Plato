@@ -54,7 +54,7 @@ namespace Plato.Users.StopForumSpam.ViewProviders
 
             // Build view
             return Views(
-                View<StopForumSpamViewModel>("Admin.Edit.StopForumSpam.Sidebar", model => viewModel).Zone("sidebar")
+                View<StopForumSpamViewModel>("Admin.Edit.StopForumSpam.Sidebar", model => viewModel).Zone("content-right")
                     .Order(int.MinValue)
             );
             

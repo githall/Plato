@@ -39,7 +39,7 @@ namespace Plato.Ideas.ViewProviders
 
             return Task.FromResult(Views(
                 View<EntityIndexViewModel<Idea>>("Home.Index.Header", model => viewModel).Zone("header"),
-                View<EntityIndexViewModel<Idea>>("Home.Index.Tools", model => viewModel).Zone("tools"),
+                View<EntityIndexViewModel<Idea>>("Home.Index.Tools", model => viewModel).Zone("header-right"),
                 View<EntityIndexViewModel<Idea>>("Home.Index.Content", model => viewModel).Zone("content")
             ));
 
@@ -61,16 +61,17 @@ namespace Plato.Ideas.ViewProviders
 
             return Views(
                 View<Idea>("Home.Display.Header", model => idea).Zone("header"),
-                View<Idea>("Home.Display.Tools", model => idea).Zone("tools"),
-                View<Idea>("Home.Display.Sidebar", model => idea).Zone("sidebar"),
+                View<Idea>("Home.Display.Tools", model => idea).Zone("header-right"),
+                
                 View<EntityViewModel<Idea, IdeaComment>>("Home.Display.Content", model => viewModel).Zone("content"),
+                View<Idea>("Home.Display.Sidebar", model => idea).Zone("content-right"),
                 View<EditEntityReplyViewModel>("Home.Display.Footer", model => new EditEntityReplyViewModel()
                 {
                     EntityId = idea.Id,
                     EditorHtmlName = EditorHtmlName
-                }).Zone("footer"),
+                }).Zone("resize-content"),
                 View<EntityViewModel<Idea, IdeaComment>>("Home.Display.Actions", model => viewModel)
-                    .Zone("actions")
+                    .Zone("resize-actions-right")
                     .Order(int.MaxValue)
 
             );
@@ -105,7 +106,7 @@ namespace Plato.Ideas.ViewProviders
             return Task.FromResult(Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("Footer")
+                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("actions-right")
             ));
 
         }

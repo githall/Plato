@@ -70,10 +70,11 @@ namespace Plato.Users.ViewProviders
             
             return Views(
                 View<User>("Home.Edit.Header", model => user).Zone("header"),
-                View<User>("Home.Edit.Sidebar", model => user).Zone("sidebar"),
-                View<User>("Home.Edit.Tools", model => user).Zone("tools"),
+                View<User>("Home.Edit.Sidebar", model => user).Zone("content-left"),
+                View<User>("Home.Edit.Tools", model => user).Zone("header-right"),
                 View<EditProfileViewModel>("Home.EditProfile.Content", model => viewModel).Zone("content"),
-                View<User>("Home.Edit.Footer", model => user).Zone("footer")
+                View<EditProfileViewModel>("Home.EditProfile.ContentRight", model => viewModel).Zone("content-right"),
+                View<User>("Home.Edit.Footer", model => user).Zone("actions")
             );
 
         }
@@ -107,19 +108,6 @@ namespace Plato.Users.ViewProviders
             if (context.Updater.ModelState.IsValid)
             {
 
-                // Update user 
-                //user.DisplayName = model.DisplayName.Trim();
-                //user.Biography = model.Biography;
-                //user.Location = model.Location;
-                //user.Url = model.Url;
-
-                // Example of how to store on custom user data object
-                //var data = user.GetOrCreate<UserDetail>();
-                //data.Profile.Location = model.Location;
-                //data.Profile.Bio = model.Bio;
-                //data.Profile.Url = model.Url;
-                //user.AddOrUpdate<UserDetail>(data);
-
                 // Update user avatar
 
                 if (model.AvatarFile != null)
@@ -129,13 +117,6 @@ namespace Plato.Users.ViewProviders
 
                 await _userManager.UpdateAsync(user);
                 
-                //// Update user
-                //var result = await _platoUserManager.UpdateAsync(user);
-                //foreach (var error in result.Errors)
-                //{
-                //    context.Updater.ModelState.AddModelError(string.Empty, error.Description);
-                //}
-
             }
 
             return await BuildEditAsync(userProfile, context);

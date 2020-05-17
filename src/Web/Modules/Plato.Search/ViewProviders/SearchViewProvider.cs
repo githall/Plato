@@ -22,9 +22,9 @@ namespace Plato.Search.ViewProviders
 
             return Task.FromResult(Views(
                 View<EntityIndexViewModel<Entity>>("Home.Index.Header", model => viewModel).Zone("header"),
-                View<EntityIndexViewModel<Entity>>("Home.Index.Tools", model => viewModel).Zone("tools"),
-                View<EntityIndexViewModel<Entity>>("Home.Index.Sidebar", model => viewModel).Zone("sidebar").Order(3),
-                View<EntityIndexViewModel<Entity>>("Home.Index.Content", model => viewModel).Zone("content")
+                View<EntityIndexViewModel<Entity>>("Home.Index.Tools", model => viewModel).Zone("header-right"),                
+                View<EntityIndexViewModel<Entity>>("Home.Index.Content", model => viewModel).Zone("content"),
+                View<EntityIndexViewModel<Entity>>("Home.Index.Sidebar", model => viewModel).Zone("content-right").Order(3)
             ));
 
         }

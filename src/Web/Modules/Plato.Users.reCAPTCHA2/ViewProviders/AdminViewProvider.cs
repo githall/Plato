@@ -41,7 +41,7 @@ namespace Plato.Users.reCAPTCHA2.ViewProviders
 
             return Task.FromResult(Views(
                 View<ReCaptchaSettingsViewModel>("Admin.Edit.Header", model => recaptchaSettingsViewModel).Zone("header").Order(1),
-                View<ReCaptchaSettingsViewModel>("Admin.Edit.Tools", model => recaptchaSettingsViewModel).Zone("tools").Order(1),
+                View<ReCaptchaSettingsViewModel>("Admin.Edit.Tools", model => recaptchaSettingsViewModel).Zone("header-right").Order(1),
                 View<ReCaptchaSettingsViewModel>("Admin.Edit.Content", model => recaptchaSettingsViewModel).Zone("content").Order(1)
             ));
 

@@ -55,7 +55,7 @@ namespace Plato.Facebook.ViewProviders
             var viewModel = await GetModel();
             return Views(
                 View<FacebookSettingsViewModel>("Admin.Edit.Header", model => viewModel).Zone("header").Order(1),
-                View<FacebookSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("tools").Order(1),
+                View<FacebookSettingsViewModel>("Admin.Edit.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<FacebookSettingsViewModel>("Admin.Edit.Content", model => viewModel).Zone("content").Order(1)
             );
         }

@@ -18,7 +18,7 @@ namespace Plato.Features.Updates.ViewProviders
         {
             return Task.FromResult(Views(
                 View<FeatureUpdatesViewModel>("Admin.Index.Header", model => viewModel).Zone("header"),
-                View<FeatureUpdatesViewModel>("Admin.Index.Tools", model => viewModel).Zone("tools"),
+                View<FeatureUpdatesViewModel>("Admin.Index.Tools", model => viewModel).Zone("header-right"),
                 View<FeatureUpdatesViewModel>("Admin.Index.Content", model => viewModel).Zone("content")
             ));
         }

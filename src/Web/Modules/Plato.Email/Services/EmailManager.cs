@@ -130,7 +130,7 @@ namespace PlatoCore.Emails.Abstractions
             }
 
             return result.Failed(sendResult.Errors.ToArray());
-            
+
         }
 
     }

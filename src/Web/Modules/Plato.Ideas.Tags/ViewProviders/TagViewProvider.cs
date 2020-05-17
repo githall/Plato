@@ -41,7 +41,7 @@ namespace Plato.Ideas.Tags.ViewProviders
 
             return Task.FromResult(Views(
                 View<TagIndexViewModel<Tag>>("Home.Index.Header", model => viewModel).Zone("header").Order(1),
-                View<TagIndexViewModel<Tag>>("Home.Index.Tools", model => viewModel).Zone("tools").Order(1),
+                View<TagIndexViewModel<Tag>>("Home.Index.Tools", model => viewModel).Zone("header-right").Order(1),
                 View<TagIndexViewModel<Tag>>("Home.Index.Content", model => viewModel).Zone("content").Order(1)
             ));
 
@@ -83,14 +83,14 @@ namespace Plato.Ideas.Tags.ViewProviders
             // Build view
             return Views(
                 View<TagBase>("Home.Display.Header", model => tag).Zone("header").Order(1),
-                View<TagBase>("Home.Display.Tools", model => tag).Zone("tools").Order(1),
+                View<TagBase>("Home.Display.Tools", model => tag).Zone("header-right").Order(1),
                 View<TagDisplayViewModel>("Home.Display.Content", model => indexViewModel).Zone("content").Order(1),
                 View<TagsViewModel<Tag>>("Idea.Tags.Index.Sidebar", model =>
                 {
                     model.SelectedTagId = tag?.Id ?? 0;
                     model.Tags = tags?.Data;
                     return model;
-                }).Zone("sidebar").Order(1)
+                }).Zone("content-right").Order(1)
             );
             
         }

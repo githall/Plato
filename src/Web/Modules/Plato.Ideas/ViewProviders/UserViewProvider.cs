@@ -77,7 +77,7 @@ namespace Plato.Ideas.ViewProviders
             return Views(
                 View<UserDisplayViewModel>("User.Index.Header", model => userDisplayViewModel).Zone("header"),
                 View<UserDisplayViewModel<Idea>>("User.Index.Content", model => userDisplayViewModel).Zone("content"),
-                View<UserDisplayViewModel>("User.Entities.Display.Sidebar", model => userDisplayViewModel).Zone("sidebar")
+                View<UserDisplayViewModel>("User.Entities.Display.Sidebar", model => userDisplayViewModel).Zone("content-right")
             );
             
         }

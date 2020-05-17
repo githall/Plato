@@ -31,8 +31,9 @@ $(function (win, doc, $) {
 
     // --------
 
-    // app ready
+    // Ready
     app.ready(function () {
+        // Initialize docs
         docs.init();
     });
     

@@ -1,16 +1,162 @@
 
+
+/* ------------------- */
+/* Layout */
+/* ------------------- */
+
+.layout,
+.layout-header,
+.layout-header-right,
+.layout-alerts,
+.layout-body,
+.layout-content-tools,
+.layout-content-tools-right,
+.layout-content,
+.layout-content-left,
+.layout-content-right,
+.layout-content-actions,
+.layout-content-actions-right,
+.layout-footer,
+.layout-footer-right {}
+
+.layout-content {
+    transition: all 0.3s ease-out;
+}
+
+/* Ensure right aligned content does not wrap */
+.layout-header .layout-header-right,
+.layout-content-tools .layout-content-tools-right,
+.layout-content-actions .layout-content-actions-right,
+.layout-footer .layout-footer-right {
+    float:right;
+    display: flex;
+    flex-flow: nowrap;
+    flex-direction: row;
+}
+
+/* Sticky Header & Sidebars */
+
+/* Ensure the header has paddings and margins applied. 
+    This ensures we can correctly calculate the "fixed" header height
+    via JavaScript upon the initial load before the header actually becomes "fixed" */
+
+.layout-header  { padding-bottom: 1rem; }
+.layout-header .layout-header-container { 
+    padding: 1rem 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+/* To be removed once all HR elements have been removed from layout-header-content */
+.layout-header .layout-header-container hr { display: none; }
+
+@media (min-width: 992px) {
+    
+    /* Only apply fixed layout for screen sizes above 992px */
+    /* ------------------- */
+
+    /* When the header becomes fixed, fix content */
+    .layout-header.fixed > .layout-header-container {
+        position: fixed;
+        top: 0;
+        z-index: 5;
+        white-space: nowrap;
+    }
+    
+    /* When the sidebars becomes fixed, fix content */
+    .layout-content-left.fixed > .layout-content-left-container,
+    .layout-content-right.fixed > .layout-content-right-container {
+        position: fixed;
+        display: flex;
+        -webkit-box-orient: vertical !important;
+        -webkit-box-direction: normal !important;
+        -ms-flex-direction: column !important;
+        flex-direction: column !important;
+    }    
+    
+    /* Ensure asides are reset for screen sizes above 992px */
+    /* ------------------- */
+
+    .layout-content-left .asides,
+    .layout-content-left .asides-content,
+    .layout-content-left .asides-body,
+    .layout-content-right .asides,
+    .layout-content-right .asides-content,
+    .layout-content-right .asides-body {
+        position:inherit !important;
+        visibility:visible !important;
+        overflow:visible !important;
+        border: 0 !important;
+        padding: 0 !important;
+        opacity: 1 !important;
+    }
+
+    .layout-content-left .asides-header,
+    .layout-content-left .asides-footer,
+    .layout-content-right .asides-header,
+    .layout-content-right .asides-footer {
+        display:none;
+    }
+
+    .layout-content-left .asides > .asides-left,
+    .layout-content-right .asides > .asides-right {
+        position:inherit !important;     
+        max-width: 100% !important;
+        -webkit-transform: none !important;
+    }
+
+    .layout-content-right .asides-content {
+        display: block !important;
+    }
+
+}
+
+/* Header Alerts */
+.layout-header .alert {
+    position: fixed;
+    left: 50%;
+    z-index: 999;
+    margin-top: -6px;
+    visibility: hidden;
+    opacity: 0;
+    transform: translate(-50%, 0);
+}
+
+.layout-header .alert-visible {
+    visibility: visible;
+    margin-top: 0;
+    opacity: 1;
+    transition: all 0.20s ease-out;
+}
+
+.layout-header .alert-hidden {
+    visibility: hidden;
+    margin-top: -12px;
+    opacity: 0;
+    transition: all 0.20s ease-in;
+}
+
+.layout .card,
+.resizable .card { margin-bottom: 1.25rem; }
+
+.layout-content .accordion,
+.layout-sidebar .accordion { margin-bottom: 1.25rem; }
+.layout-content .accordion .card,
+.layout-sidebar .accordion .card { margin-bottom: 0; }
+
 /* ------------------- */
 /* Fixed Header & Sidebar */
 /* ------------------- */
 
-.layout-header.fixed > .layout-header-content { background-color: #0a0a0a; }
-.layout-header-content { border-color: rgba(75, 75, 75, 0.5); }
+.asides-content,
+.layout-header.fixed > .layout-header-container { background-color: #0a0a0a; }
+.asides-header,
+.asides-footer,
+.layout-header-container { border-color: rgba(75, 75, 75, 0.5); }
 
 /* ------------------- */
 /* Navigation  */
 /* ------------------- */
-
-.nav-site { border-color: rgba(255, 255, 255, 0.10); }
 
 .nav-site .nav .search-input-group > .btn {
     color: #666 !important;
@@ -364,6 +510,7 @@ a.label.active {
 /* Admin Nav */
 /* ------------------- */
 
+.navbar-dark,
 .navbar-dark .navbar-nav .show > .nav-link,
 .navbar-dark .navbar-nav .active > .nav-link,
 .navbar-dark .navbar-nav .nav-link.show,
@@ -2699,23 +2846,23 @@ a.bg-dark:hover, a.bg-dark:focus, button.bg-dark:hover, button.bg-dark:focus {
 }
 
 .border {
-    border: 1px solid #dee2e6 !important
+    border: 1px solid #333 !important
 }
 
 .border-top {
-    border-top: 1px solid #dee2e6 !important
+    border-top: 1px solid #333 !important
 }
 
 .border-right {
-    border-right: 1px solid #dee2e6 !important
+    border-right: 1px solid #333 !important
 }
 
 .border-bottom {
-    border-bottom: 1px solid #dee2e6 !important
+    border-bottom: 1px solid #333 !important
 }
 
 .border-left {
-    border-left: 1px solid #dee2e6 !important
+    border-left: 1px solid #333 !important
 }
 
 .border-primary {

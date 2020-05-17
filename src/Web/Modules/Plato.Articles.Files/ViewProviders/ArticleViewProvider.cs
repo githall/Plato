@@ -136,7 +136,7 @@ namespace Plato.Articles.Files.ViewProviders
                     };
 
                     return model;
-                }).Zone("sidebar").Order(10)
+                }).Zone("content-right").Order(10)
             );
 
         }

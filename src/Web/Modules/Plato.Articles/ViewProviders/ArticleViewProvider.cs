@@ -39,7 +39,7 @@ namespace Plato.Articles.ViewProviders
 
             return Task.FromResult(Views(
                 View<EntityIndexViewModel<Article>>("Home.Index.Header", model => viewModel).Zone("header"),
-                View<EntityIndexViewModel<Article>>("Home.Index.Tools", model => viewModel).Zone("tools"),
+                View<EntityIndexViewModel<Article>>("Home.Index.Tools", model => viewModel).Zone("header-right"),
                 View<EntityIndexViewModel<Article>>("Home.Index.Content", model => viewModel).Zone("content")
             ));
 
@@ -61,16 +61,16 @@ namespace Plato.Articles.ViewProviders
 
             return Views(
                 View<Article>("Home.Display.Header", model => article).Zone("header"),
-                View<Article>("Home.Display.Tools", model => article).Zone("tools"),
-                View<Article>("Home.Display.Sidebar", model => article).Zone("sidebar"),
+                View<Article>("Home.Display.Tools", model => article).Zone("header-right"),
+                View<Article>("Home.Display.Sidebar", model => article).Zone("content-right"),
                 View<EntityViewModel<Article, Comment>>("Home.Display.Content", model => viewModel).Zone("content"),
                 View<EditEntityReplyViewModel>("Home.Display.Footer", model => new EditEntityReplyViewModel()
                 {
                     EntityId = article.Id,
                     EditorHtmlName = EditorHtmlName
-                }).Zone("footer"),
+                }).Zone("resize-content"),
                 View<EntityViewModel<Article, Comment>>("Home.Display.Actions", model => viewModel)
-                    .Zone("actions")
+                    .Zone("resize-actions-right")
                     .Order(int.MaxValue)
             );
 
@@ -91,7 +91,7 @@ namespace Plato.Articles.ViewProviders
                     }
                 }
             }
-          
+
             var viewModel = new EditEntityViewModel()
             {
                 Id = article.Id,
@@ -100,15 +100,15 @@ namespace Plato.Articles.ViewProviders
                 EditorHtmlName = EditorHtmlName,
                 Alias = article.Alias
             };
-     
+
             return Task.FromResult(Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("Footer")
+                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("actions-right")
             ));
 
         }
-        
+
         public override async Task<bool> ValidateModelAsync(Article article, IUpdateModel updater)
         {
             return await updater.TryUpdateModelAsync(new EditEntityViewModel
@@ -137,7 +137,7 @@ namespace Plato.Articles.ViewProviders
             }
 
         }
-        
+
         public override async Task<IViewProviderResult> BuildUpdateAsync(Article article, IViewProviderContext context)
         {
             return await BuildEditAsync(article, context);

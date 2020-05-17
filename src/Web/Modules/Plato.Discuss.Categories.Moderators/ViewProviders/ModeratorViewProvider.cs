@@ -45,7 +45,6 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
         public override Task<IViewProviderResult> BuildIndexAsync(Moderator moderator, IViewProviderContext updater)
         {
             return Task.FromResult(default(IViewProviderResult));
-
         }
 
         public override Task<IViewProviderResult> BuildDisplayAsync(Moderator moderator, IViewProviderContext updater)
@@ -65,7 +64,8 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
             };
 
             return Views(
-                View<CategoryInputOptions>("Moderation.Channels.Edit.Content", model => viewModel).Zone("sidebar").Order(1)
+                View<CategoryInputOptions>("Moderation.Channels.Edit.Content", model => viewModel)
+                .Zone("content-right").Order(1)
             );
 
         }
@@ -172,7 +172,6 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
 
         #region "Private Methods"
 
-
         IList<ModeratorClaim> GetPostedClaims()
         {
             // Build a list of claims to add or update
@@ -221,7 +220,7 @@ namespace Plato.Discuss.Categories.Moderators.ViewProviders
             return channelsToAdd;
         }
 
-        async Task<IEnumerable<ICategory>> GetCategories()
+        private async Task<IEnumerable<ICategory>> GetCategories()
         {
             // Get feature
             var featureId = "Plato.Discuss.Categories";

@@ -1,5 +1,6 @@
 ﻿@model EditEntityReplyViewModel
 
+
 <div class="list-left reply-left">
     @if (this.CurrentUser != null)
     {
@@ -12,22 +13,22 @@
 </div>
 <div class="list-body reply-body">
 
-        <card>
-            <card-body>
+    <card>
+        <card-body>
 
-                <input type="hidden" asp-for="EntityId" />
+            <input type="hidden" asp-for="EntityId" />
 
-                @await DisplayAsync(new View("Editor", new
-                {
-                    value = string.Empty,
-                    placeHolderText = T["How can we improve this doc?"],
-                    htmlName = @Model.EditorHtmlName,
-                    autoFocus = false
-                }))
+            @await DisplayAsync(new View("Editor", new
+            {
+                value = string.Empty,
+                placeHolderText = T["How can we improve this doc?"],
+                htmlName = @Model.EditorHtmlName,
+                autoFocus = false
+            }))
 
-            </card-body>
-        </card>
-    
+        </card-body>
+    </card>
+
 
 </div>
 

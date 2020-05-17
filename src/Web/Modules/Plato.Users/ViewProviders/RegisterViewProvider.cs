@@ -52,8 +52,8 @@ namespace Plato.Users.ViewProviders
             return Task.FromResult(Views(
                 View<RegisterViewModel>("Register.Index.Header", model => viewModel).Zone("header"),
                 View<RegisterViewModel>("Register.Index.Content", model => viewModel).Zone("content"),
-                View<RegisterViewModel>("Register.Index.Sidebar", model => viewModel).Zone("sidebar"),
-                View<RegisterViewModel>("Register.Index.Footer", model => viewModel).Zone("footer")
+                View<RegisterViewModel>("Register.Index.Sidebar", model => viewModel).Zone("content-right"),
+                View<RegisterViewModel>("Register.Index.Footer", model => viewModel).Zone("actions")
             ));
 
         }

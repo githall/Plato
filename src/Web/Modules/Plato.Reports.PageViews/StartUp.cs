@@ -15,6 +15,7 @@ namespace Plato.Reports.PageViews
 {
     public class Startup : StartupBase
     {
+
         private readonly IShellSettings _shellSettings;
 
         public Startup(IShellSettings shellSettings)
@@ -39,7 +40,7 @@ namespace Plato.Reports.PageViews
             IRouteBuilder routes,
             IServiceProvider serviceProvider)
         {
-            
+
             // Page Views
             routes.MapAreaRoute(
                 name: "ReportsPageViews",
@@ -47,7 +48,7 @@ namespace Plato.Reports.PageViews
                 template: "admin/reports/page-views/{pager.offset:int?}",
                 defaults: new { controller = "Admin", action = "Index" }
             );
-            
+
         }
 
     }

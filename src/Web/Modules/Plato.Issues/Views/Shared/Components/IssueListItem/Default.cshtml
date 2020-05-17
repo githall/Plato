@@ -95,7 +95,7 @@
                 {
                     <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.Entity.CreatedUserId" asp-route-opts.alias="@Model.Entity.CreatedBy.Alias" class="@Model.Entity.CreatedBy?.Css.StaffCss">@Model.Entity.CreatedBy.DisplayName</a>
                 }
-                <date utc="@Model.Entity.CreatedDate" itemprop="createdDate" data-toggle="tooltip" />
+                <date utc="@Model.Entity.CreatedDate" />
                 @if (@Model.Category != null)
                 {
                     <span>@T["in"]</span>

@@ -30,7 +30,7 @@
     </h4>
     <ul class="list-inline p-0 m-0">
         <li class="list-inline-item">
-            <date utc="@Model.CreatedDate" itemprop="createdDate" data-toggle="tooltip" />
+            <date utc="@Model.CreatedDate" />
             @T["by"]
             <a asp-route-area="Plato.Users" asp-route-controller="Home" asp-route-action="Display" asp-route-opts.id="@Model.CreatedUserId" asp-route-opts.alias="@Model.CreatedBy.Alias" data-provide="popper" data-popper-url="@GetRouteUrl(Model.CreatedBy.Urls.GetProfileRoute)" data-popper-position="bottom">@Model.CreatedBy.DisplayName</a>
         </li>

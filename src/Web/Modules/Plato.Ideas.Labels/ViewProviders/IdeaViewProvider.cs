@@ -77,7 +77,7 @@ namespace Plato.Ideas.Labels.ViewProviders
                 {
                     model.Labels = labels?.Data;
                     return model;
-                }).Zone("sidebar").Order(2)
+                }).Zone("content-right").Order(2)
             );
             
         }
@@ -100,7 +100,7 @@ namespace Plato.Ideas.Labels.ViewProviders
                 {
                     model.Labels = labels?.Data;
                     return model;
-                }).Zone("sidebar").Order(3)
+                }).Zone("content-right").Order(3)
             );
 
         }
@@ -133,7 +133,7 @@ namespace Plato.Ideas.Labels.ViewProviders
             
             return Views(
                 View<LabelDropDownViewModel>("Idea.Labels.Edit.Sidebar", model => viewModel)
-                .Zone("sidebar").Order(15)
+                .Zone("content-right").Order(15)
             );
 
         }

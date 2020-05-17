@@ -28,10 +28,9 @@ namespace PlatoCore.Layout.TagHelpers
 
         public override Task ProcessAsync(TagHelperContext context, TagHelperOutput output)
         {
-            
+
             output.TagName = "span";
             output.TagMode = TagMode.StartTagAndEndTag;
-            output.Attributes.Add("role", "avatar");
 
             var img = new TagBuilder("span");
 

@@ -15,7 +15,7 @@ namespace Plato.Discuss.TopParticipants.ViewProviders
         public override Task<IViewProviderResult> BuildDisplayAsync(Topic entity, IViewProviderContext context)
         {
             return Task.FromResult(Views(
-                View<Topic>("Topic.Participants.Display.Sidebar", model => entity).Zone("sidebar").Order(5)
+                View<Topic>("Topic.Participants.Display.Sidebar", model => entity).Zone("content-right").Order(5)
             ));
         }
         

@@ -2,8 +2,6 @@
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using Plato.Issues.Models;
-using Plato.Issues.Services;
-using Plato.Entities.Stores;
 using PlatoCore.Layout.ModelBinding;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 using Plato.Entities.ViewModels;
@@ -12,17 +10,16 @@ using Plato.Entities.Services;
 
 namespace Plato.Issues.ViewProviders
 {
+
     public class IssueViewProvider : ViewProviderBase<Issue>
     {
 
         private const string EditorHtmlName = "message";
 
         private readonly IEntityViewIncrementer<Issue> _viewIncrementer;
-        
         private readonly HttpRequest _request;
-        
-        public IssueViewProvider(
 
+        public IssueViewProvider(
             IEntityViewIncrementer<Issue> viewIncrementer,
             IHttpContextAccessor httpContextAccessor)
         {
@@ -41,7 +38,7 @@ namespace Plato.Issues.ViewProviders
 
             return Task.FromResult(Views(
                 View<EntityIndexViewModel<Issue>>("Home.Index.Header", model => viewModel).Zone("header"),
-                View<EntityIndexViewModel<Issue>>("Home.Index.Tools", model => viewModel).Zone("tools"),
+                View<EntityIndexViewModel<Issue>>("Home.Index.Tools", model => viewModel).Zone("header-right"),
                 View<EntityIndexViewModel<Issue>>("Home.Index.Content", model => viewModel).Zone("content")
             ));
 
@@ -63,21 +60,21 @@ namespace Plato.Issues.ViewProviders
 
             return Views(
                 View<Issue>("Home.Display.Header", model => issue).Zone("header"),
-                View<Issue>("Home.Display.Tools", model => issue).Zone("tools"),
-                View<Issue>("Home.Display.Sidebar", model => issue).Zone("sidebar"),
+                View<Issue>("Home.Display.Tools", model => issue).Zone("header-right"),                
                 View<EntityViewModel<Issue, Comment>>("Home.Display.Content", model => viewModel).Zone("content"),
+                View<Issue>("Home.Display.Sidebar", model => issue).Zone("content-right"),
                 View<EditEntityReplyViewModel>("Home.Display.Footer", model => new EditEntityReplyViewModel()
                 {
                     EntityId = issue.Id,
                     EditorHtmlName = EditorHtmlName
-                }).Zone("footer"),
+                }).Zone("resize-content"),
                 View<EntityViewModel<Issue, Comment>>("Home.Display.Actions", model => viewModel)
-                    .Zone("actions")
+                    .Zone("resize-actions-right")
                     .Order(int.MaxValue)
             );
 
         }
-        
+
         public override Task<IViewProviderResult> BuildEditAsync(Issue issue, IViewProviderContext updater)
         {
 
@@ -93,7 +90,7 @@ namespace Plato.Issues.ViewProviders
                     }
                 }
             }
-          
+
             var viewModel = new EditEntityViewModel()
             {
                 Id = issue.Id,
@@ -102,15 +99,15 @@ namespace Plato.Issues.ViewProviders
                 EditorHtmlName = EditorHtmlName,
                 Alias = issue.Alias
             };
-     
+
             return Task.FromResult(Views(
                 View<EditEntityViewModel>("Home.Edit.Header", model => viewModel).Zone("header"),
                 View<EditEntityViewModel>("Home.Edit.Content", model => viewModel).Zone("content"),
-                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("Footer")
+                View<EditEntityViewModel>("Home.Edit.Footer", model => viewModel).Zone("actions-right")
             ));
 
         }
-        
+
         public override async Task<bool> ValidateModelAsync(Issue issue, IUpdateModel updater)
         {
             return await updater.TryUpdateModelAsync(new EditEntityViewModel
@@ -139,7 +136,7 @@ namespace Plato.Issues.ViewProviders
             }
 
         }
-        
+
         public override async Task<IViewProviderResult> BuildUpdateAsync(Issue issue, IViewProviderContext context)
         {
             return await BuildEditAsync(issue, context);

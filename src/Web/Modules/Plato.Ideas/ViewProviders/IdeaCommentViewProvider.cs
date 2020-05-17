@@ -23,20 +23,20 @@ namespace Plato.Ideas.ViewProviders
 
         private readonly HttpRequest _request;
 
-        public IdeaCommentViewProvider(
-            IHttpContextAccessor httpContextAccessor,
+        public IdeaCommentViewProvider(         
             IStringLocalizer<IdeaViewProvider> stringLocalize,
+            IHttpContextAccessor httpContextAccessor,
             IPostManager<IdeaComment> replyManager, 
             IEntityReplyStore<IdeaComment> replyStore)
         {
 
-            _replyManager = replyManager;
-            _replyStore = replyStore;
             _request = httpContextAccessor.HttpContext.Request;
+            _replyManager = replyManager;
+            _replyStore = replyStore;            
 
             T = stringLocalize;
-        }
-        
+
+        }        
 
         public override Task<IViewProviderResult> BuildDisplayAsync(IdeaComment model, IViewProviderContext updater)
         {
@@ -75,7 +75,7 @@ namespace Plato.Ideas.ViewProviders
             return Task.FromResult(Views(
                 View<EditEntityReplyViewModel>("Home.Edit.Reply.Header", model => viewModel).Zone("header"),
                 View<EditEntityReplyViewModel>("Home.Edit.Reply.Content", model => viewModel).Zone("content"),
-                View<EditEntityReplyViewModel>("Home.Edit.Reply.Footer", model => viewModel).Zone("Footer")
+                View<EditEntityReplyViewModel>("Home.Edit.Reply.Footer", model => viewModel).Zone("actions-right")
             ));
 
         }

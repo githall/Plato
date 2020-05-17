@@ -47,7 +47,7 @@ else
     if (isAdmin)
     {
         var returnUrl = Context.Request.PathBase + Context.Request.Path;
-        <form asp-route-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true" role="form">
+        <form asp-route-action="Index" method="post" enctype="multipart/form-data" data-disable-submit="true">
             <div class="card card-body-flush">
                 <div class="card-header">
                     @if (percentComplete < 100)
