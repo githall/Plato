@@ -70,6 +70,9 @@
                             child-ul-inner-css-class="min-w-200 max-h-250 overflow-auto" />
             </card-title>
             <card-body class="card-body-flush">
+                <header class="doc-header p-3">
+                    <h2 class="doc-title">@Model.Entity.Title</h2>
+                </header>
                 <article asp-id="body" class="markdown-body entity-body doc-body p-3" data-provide="markdownBody">
                     @Html.Raw(@Model.Entity.Html)
                 </article>                
