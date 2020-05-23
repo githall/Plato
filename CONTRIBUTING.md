@@ -26,6 +26,16 @@ Please try to indicate the type of commit by using one of the following prefixes
 - DOC: A documentation change
 - TYPO: A text change / fix
 
+## General Guidance
+
+Code should be clean, easy to read by humans and easy to reason about, improve & maintain now and in the future. Code should be loosely coupled and have clear separation of concerns.  
+
+## Minimize Dependencies
+
+Whenever possible build on top of established primitives & avoid dependencies on 3rd party libraries or frameworks that are likely to evolve quickly or become obsolete in several years. 
+
+We don’t want to be fighting a framework to bend to our will nor do we want to be forced to make sweeping changes to the code to support an updated dependency. 
+
 ## C# Coding Conventions
 
 - Use the default Resharper guidelines for code styling
@@ -52,6 +62,7 @@ Please try to indicate the type of commit by using one of the following prefixes
 - Never use document.write
 - Avoid using window.alert, window.confifm
 - Ensure console.log messages are removed
+- Avoid using class names or element ids within HTML mark-up to initialize client side JavaScript, instead use data attributes that are less likely to change. 
 
 **Statement Rules**
 
@@ -165,17 +176,16 @@ For CSS fewer than 80 characters in length you should include this on a single l
 - Always ensure "data-" is prefixed for HTML 5 data attributes
 - Avoid using the style attribute on HTML elements, CSS classes should be used to control elemrnt styling
 - Avoid 2 or more elements on the same page the same id
-- Avoid using CSS class names or HTML element ids to initialize client side JavaScript. 
 
 ## Naming Conventions
 
 Always use the same naming convention for all your code. 
 
-## Design Patterns
+##  SOLID principals
 
-When developing functionality or refactoring code please always consider the SOLID principals and try to follow existing established design patterns. Code should be clean, easy to read by humans and easy to reason about with minimal side effects. 
+When developing functionality or refactoring code please always consider the SOLID principals and try to follow existing established design patterns. 
 
-The **SOLID** principals are:-
+The SOLID principals are:-
 
 - **Single-responsibility** - A class should have one and only one reason to change, meaning that a class should have only one job.
 - **Open-closed** - Objects should be open for extension but closed for modification.
