@@ -32,9 +32,9 @@ Code should be clean, easy to read by humans and easy to reason about, improve &
 
 ## Minimize Dependencies
 
-Whenever possible build on top of established primitives & avoid dependencies on 3rd party libraries or frameworks that are likely to evolve quickly or become obsolete in several years. 
+Whenever possible build on top of established existing primitives & avoid dependencies on 3rd party libraries or frameworks that are likely to evolve quickly or become obsolete overtime. 
 
-We don’t want to be fighting a framework to bend to our will nor do we want to be forced to make sweeping changes to the code to support an updated dependency. 
+We don’t want to be fighting a framework to bend to our will nor do we want to be forced to make sweeping changes to the code to support an updated or obsolete dependency. 
 
 ## C# Coding Conventions
 
@@ -44,8 +44,8 @@ We don’t want to be fighting a framework to bend to our will nor do we want to
 - Avoid using this when accessing class variables, e.g. this.fieldName
 - Ensure your folder structure matches your .NET namespacing strcuture
 - Do not use protected fields - create a private field and a protected property instead
-- Use allman style brackets for C# & JavaScript code
-- Use tabs not spaces if possible :)
+- Use allman style brackets
+- Use tabs not spaces
 - When documenting code, please use the standard .NET convention of XML documentation comments
 - Line Length < 80 - For readability, avoid lines longer than 80 characters
 - Always use tabs, not spaces for indentation of code blocks.
@@ -57,6 +57,7 @@ We don’t want to be fighting a framework to bend to our will nor do we want to
 - Use anonymous functions to encapulate scope
 - Always put spaces around operators ( = + - * / ), and after commas
 - Line Length < 80 - For readability, avoid lines longer than 80 characters
+- Use "the one true brace style" (1TBS) for JavaScript code
 - Always declare variables at the top of the current scope
 - Hyphens are not allowed in JavaScript names.
 - Never use document.write
@@ -171,15 +172,70 @@ For CSS fewer than 80 characters in length you should include this on a single l
 
 ## HTML Coding Conventions
 
-- Avoid include JavaScript and CSS
+- Avoid inline JavaScript or CSS within HTML mark-up (all JavaScript and CSS should be within external files)
 - Always use camelCase for HTML element ids
-- Always ensure "data-" is prefixed for HTML 5 data attributes
+- Always ensure the "data"  prefix is present for HTML 5 data attributes, data-provide="hello" is good whilst provide="hello" is bad
 - Avoid using the style attribute on HTML elements, CSS classes should be used to control elemrnt styling
 - Avoid 2 or more elements on the same page the same id
+- Validate all HTML mark-up against the W3C Markup Validation Service (https://validator.w3.org/)
+- Whenever possible add support for Accessible Rich Internet Applications or ARIA attributes (https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)
+
 
 ## Naming Conventions
 
 Always use the same naming convention for all your code. 
+
+## Automated Testing
+
+There are numerous benefits to writing unit tests; they help with regression, provide documentation, and facilitate good design. 
+
+Whenever possible code should be accompanied by separate unit tests using a standardized unit testing framework. 
+
+Characteristics of a good unit test...
+
+- **Fast.** It is not uncommon for mature projects to have thousands of unit tests. Unit tests should take very little time to run. Milliseconds.
+- **Isolated.** Unit tests are standalone, can be run in isolation, and have no dependencies on any outside factors such as a file system or database.
+- **Repeatable.** Running a unit test should be consistent with its results, that is, it always returns the same result if you do not change anything in between runs.
+- **Self-Checking.** The test should be able to automatically detect if it passed or failed without any human interaction.
+- **Timely.** A unit test should not take a disproportionately long time to write compared to the code being tested. If you find testing the code taking a large amount of time compared to writing the code, consider a design that is more testable.
+
+**Naming your tests**
+
+The name of your test should consist of three parts:
+
+- The name of the method being tested.
+- The scenario under which it's being tested.
+- The expected behavior when the scenario is invoked.
+
+**Bad**
+
+```
+[Fact]
+public void Test_Single()
+{
+    var stringCalculator = new StringCalculator();
+
+    var actual = stringCalculator.Add("0");
+
+    Assert.Equal(0, actual);
+}
+```
+
+**Better (but not perfect)**
+
+```
+[Fact]
+public void Add_SingleNumber_ReturnsSameNumber()
+{
+    var stringCalculator = new StringCalculator();
+
+    var actual = stringCalculator.Add("0");
+
+    Assert.Equal(0, actual);
+}
+```
+
+For further guidance on writting good unit tests please see https://docs.microsoft.com/en-us/dotnet/core/testing/unit-testing-best-practices
 
 ##  SOLID principals
 
@@ -193,7 +249,9 @@ The SOLID principals are:-
 - **Interface segregation** - A client should never be forced to implement an interface that it doesn't use or clients shouldn't be forced to depend on methods they do not use.
 - **Dependency Inversion** - Object should depend on abstractions (interfaces) and not concreate implementations.
 
-## Common Design Patterns
+## Design Patterns
+
+Whenever possible attempt to leverage an existing known design pattern to improve the code. Common design patterns are detailed below.
 
 **Adapter**
 

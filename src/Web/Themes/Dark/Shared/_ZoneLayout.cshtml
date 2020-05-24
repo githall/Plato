@@ -13,13 +13,13 @@
 
 @if (Model.LayoutBefore != null)
 {
-    <div class="layout-before">
+    <div id="layout-before" class="layout-before">
         <view model="Model.LayoutBefore"></view>
     </div>
 }
 
-<div class="layout">
-    <div class="layout-header">
+<div id="layout" class="layout">
+    <div id="layout-header" class="layout-header">
         <div class="layout-header-container">
             @if (Model.Alerts != null)
             {
@@ -41,11 +41,11 @@
             }
         </div>
     </div>
-    <div class="layout-body row gutter-sm">
+    <div id="layout-body" class="layout-body row gutter-sm">
         @if (Model.ContentLeft != null)
         {
-            <div class="layout-content-left col-lg-3">
-                <div class="layout-content-left-container">
+            <div id="layout-content-left" class="layout-content-left col-lg-3">
+                <div id="layout-content-left-container" class="layout-content-left-container">
                     <a href="#" data-toggle="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-left active img-48 d-lg-none" style="z-index:10;" data-provide="asides" data-target="#contentLeftAsides">
                         <i class="fal fa-bars"></i>
                     </a>
@@ -75,7 +75,7 @@
         }
         @if (Model.Content != null)
         {
-            <div class="layout-content @centerCss">
+            <div id="layout-content" class="layout-content @centerCss">
                 @if (Model.Tools != null || Model.ToolsRight != null)
                 {
                     <section role="toolbar" class="layout-content-tools">
@@ -94,7 +94,7 @@
                 <view model="Model.Content"></view>
                 @if (Model.Actions != null || Model.ActionsRight != null)
                 {
-                    <section role="toolbar" class=" layout-content-actions">
+                    <section role="toolbar" id="layout-content-actions" class=" layout-content-actions">
                         <card class="card">
                             <card-body>
                                 @if (Model.ActionsRight != null)
@@ -115,8 +115,8 @@
         }
         @if (Model.ContentRight != null)
         {
-            <div class="layout-content-right col-lg-3">
-                <div class="layout-content-right-container">
+            <div id="layout-content-right" class="layout-content-right col-lg-3">
+                <div id="layout-content-right-container" class="layout-content-right-container">
                     <a href="#" data-toggle="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-right active img-48 d-lg-none" style="z-index:10;" data-provide="asides" data-target="#contentRightAsides">
                         <i class="fal fa-bars"></i>
                     </a>
@@ -143,9 +143,8 @@
                 </div>
             </div>
         }
-
     </div>
-    <div class="layout-footer">
+    <div id="layout-footer" class="layout-footer">
         @if (Model.FooterRight != null)
         {
             <div class="layout-footer-right">
@@ -161,7 +160,7 @@
 
 @if (Model.LayoutAfter != null)
 {
-    <div class="layout-after">
+    <div id="layout-after" class="layout-after">
         <view model="Model.LayoutAfter"></view>
     </div>
 }

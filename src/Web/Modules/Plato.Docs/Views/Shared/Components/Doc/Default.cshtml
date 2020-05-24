@@ -14,7 +14,7 @@
                 model="Model.Entity"
                 class="list-left list-inline p-0" />
     <div class="list-body reply-body">
-        <card>
+        <card class="card doc-card">
             <card-title>
                 <ul class="list-inline float-left p-0 m-0">
                     <li class="list-inline-item">
@@ -72,6 +72,7 @@
             <card-body class="card-body-flush">
                 <header class="doc-header p-3">
                     <h2 class="doc-title">@Model.Entity.Title</h2>
+                    <hr />
                 </header>
                 <article asp-id="body" class="markdown-body entity-body doc-body p-3" data-provide="markdownBody">
                     @Html.Raw(@Model.Entity.Html)
