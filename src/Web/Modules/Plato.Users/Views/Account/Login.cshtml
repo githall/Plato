@@ -3,7 +3,13 @@
     AddTitleSegment(T["Login"]);
 }
 
-<div class="layout">
+
+<form asp-action="Login" method="post" enctype="multipart/form-data" data-disable-submit="true">
+    <layout model="Model" />
+</form>
+
+
+@*<div class="layout">
     <div class="layout-header layout-header-sticky">
         <div class="layout-header-content">
             @if (Model.Alerts != null)
@@ -23,7 +29,7 @@
                 <div class="layout-header-item">
                     <view model="@Model.Header" />
                 </div>
-            }         
+            }
         </div>
     </div>
     <div class="layout-body">
@@ -91,4 +97,4 @@
         }
     </div>
 
-</div>
+</div>*@

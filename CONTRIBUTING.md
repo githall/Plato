@@ -6,7 +6,7 @@ high quality, we request that contributions adhere to the following guidelines.
 - Try to include descriptive commit messages, even if you squash them before sending a pull request. Good commit messages are important. They tell others why you did the changes you did, not just right here and now, but months or years from now.
 - Commit messages should be clear, concise and provide a reasonable summary to give an indication of what was changed and why.
 - Avoid committing several unrelated changes in one go. It makes merging difficult, and also makes it harder to determine which change is the culprit if a bug crops up.
-- If you aren't sure how something works or want to solicit input from other Plato developers before making a change, you can create an issue with the discussion tag or post your quesitons to https://plato.instantasp.co.uk/questions.
+- If you aren't sure how something works or want to solicit input from other developers before making a change, you can create an issue with the discussion tag or post your quesitons to https://plato.instantasp.co.uk/questions.
 - Please include relevant unit tests / specs along with your changes, if appropriate.
 
 ## Commit Messages
@@ -52,22 +52,25 @@ We don’t want to be fighting a framework to bend to our will nor do we want to
 
 ## JavaScript Coding Conventions
  
+- Ensure ReSharper is enabled to catch obvious JavaScript issues
 - Use camelCase for all property and method names
 -  Always use tabs, not spaces for indentation of code blocks.
 - Use anonymous functions to encapulate scope
 - Always put spaces around operators ( = + - * / ), and after commas
 - Line Length < 80 - For readability, avoid lines longer than 80 characters
 - Use "the one true brace style" (1TBS) for JavaScript code
-- Always declare variables at the top of the current scope
+- Due to hoisting always declare variables at the top of the current scope
+- Ensure variables are not declared multiple times in the same scope, this is common if you have multiple for loops and the interator variable is declared multiple times i.e. for (var i = 0; ... )
 - Hyphens are not allowed in JavaScript names.
-- Never use document.write
+- Production JavaScript should always be minified
 - Avoid using window.alert, window.confifm
-- Ensure console.log messages are removed
+- Ensure console.log messages are removed from production code
 - Avoid using class names or element ids within HTML mark-up to initialize client side JavaScript, instead use data attributes that are less likely to change. 
+- Never use document.write and avoid building the DOM via JavaScript, HTML should always be constructed on the server and sent to the client for display
 
 **Statement Rules**
 
-- Always end a simple statement with a semicolon. 
+- Always end a simple JavaScript statement with a semicolon. 
 
 For example
 
@@ -82,7 +85,7 @@ var person = {
 };
 ```
 
-General rules for complex (compound) statements:
+General rules for complex (compound) JavaScript statements:
 
 - Put the opening bracket at the end of the first line.
 - Use one space before the opening bracket.
@@ -103,29 +106,95 @@ for (i = 0; i < 5; i++) {
 
 ## CSS Coding Conventions
 
-- Always use lower case CSS class names seperated with a hypen. For example "header-right", "header-body-content" are good whilst "headerRight", "HeaderBodyContent" are bad. 
+- Always use lower case CSS class names seperated with a hypen. For example "header-right", "header-body-content" are good whilst "headerRight", "HeaderBodyContent" are bad - above all be consistent. 
+- Keep all CSS organized, ensure related CSS is grouped together and named in a similar fashion.
 - Use vendor specific prefixes whenever possible
+- Production CSS should always be minified
+- Avoid using CSS pre-processors (Sass, Scss, LESS)
+- Avoid using !important to override CSS properties and instead use a more specific CSS selector
 - Line Length < 80 - For readability, avoid lines longer than 80 characters.
 
-**Shorthand**
+**Reuse**
 
-Whenever possible avoid using short hand. Short hand can make it hard to reason about the CSS. 
+Avoid adding CSS just to style a single element and instead consider if this could be broken into smaller more generic CSS classes that could be reused throughout the HTML in other areas.
+
+For example consider the following HTML & CSS...
+
+```
+<div class="myelement"></div>
+```
+
+```
+.myelement { 
+    background:red; 
+    color: white;
+    overflow: hidden; 
+    max-height: 600px;
+} 
+```
+
+This could be made much more generic & reuable like so...
+
+```
+<div class="bg-red text-white overflow-hidden max-h-600"></div>
+```
+
+```
+.bg-red { background:red; }
+.text-white { color: white; }
+.overflow-hidden { overflow: hidden; }
+.max-h-600 { max-height: 600px; }
+```
+
+Whilst this may result in more verbose HTML class attributes this approach promotes reuse, speeds up development and keep the CSS size down to a minimum. This is a similar pattern to that used by Bootstrap & other popular front-end CSS frameworks.
+
+**Combine CSS class names**
+
+Whenever possible combine class names that share common styles. 
+
+For example...
 
 **Good CSS**
 
 ```
-.body {
-    font-family: Arial;
-    font-size: 100%;
-    font-weight:bold
-}
+.el1,
+.el2 { margin-top: 12px; } 
 ```
 
 **Bad CSS**
 
 ```
-.body {
-    font: bold 100% Arial;
+.el1 { margin-top: 12px; } 
+.el2 { margin-top: 12px; } 
+```
+
+**CSS Shorthand**
+
+One feature of CSS is the ability to use shorthand properties and values. Most properties and values have acceptable shorthand alternatives. To keep CSS files small whenever possible you should use CSS shorthand to reduce the overall size of the final CSS. 
+
+For example...
+
+**Good CSS**
+
+```
+body { font: bold 100% Arial; }
+.element { margin: 12px 24px; }
+```
+
+**Bad CSS**
+
+```
+body {
+    font-family: Arial;
+    font-size: 100%;
+    font-weight:bold
+}
+
+.element {
+    margin-top: 12px;
+    margin-bottom: 12px;
+    margin-left: 24px;
+    margin-right: 24px;
 }
 ```
 
@@ -149,7 +218,7 @@ For CSS fewer than 80 characters in length you should include this on a single l
 
 **Complex CSS-**
 
-- Separate multiple classes that use the same CSS onto new lines
+- Combine CSS class names & separate multiple classes that share the same CSS onto new lines
 - Put the opening bracket at the end of the first line.
 - Use one space before the opening bracket.
 - Put the closing bracket on a new line, without leading spaces.
@@ -172,18 +241,42 @@ For CSS fewer than 80 characters in length you should include this on a single l
 
 ## HTML Coding Conventions
 
-- Avoid inline JavaScript or CSS within HTML mark-up (all JavaScript and CSS should be within external files)
+All HTML should be well-formed and W3C validated HTML 5.
+
+- Use proper document structure
+- Try to minimize complex nesting 
+- Declare the correct HTML 5 doctype
+- Always close tags
+- Always use lower case for HTML elements
+- Use alt attribute with images
+- Use title attribute whenever possible
+- Place external style sheets within the &lt;head&gt; tag
+- Place external JavaScript just above the closing &lt;/body&gt; tag
+- Avoid adding external JavaScript in the  &lt;head&gt; tag
+- Avoid inline &lt;script&gt; tags - alays use external JS
+- Avoid inline &lt;style&gt; tags - always use external CSS
+- Avoid inline styling. Avoid using the style attribute on HTML elements, external CSS classes should be used to control elemrnt styling
 - Always use camelCase for HTML element ids
-- Always ensure the "data"  prefix is present for HTML 5 data attributes, data-provide="hello" is good whilst provide="hello" is bad
-- Avoid using the style attribute on HTML elements, CSS classes should be used to control elemrnt styling
-- Avoid 2 or more elements on the same page the same id
+- Always ensure the "data" prefix is present for all HTML 5 data attributes, data-provide="hello" is good whilst provide="hello" is bad
+- Avoid 2 or more elements on the same page with the same id
 - Validate all HTML mark-up against the W3C Markup Validation Service (https://validator.w3.org/)
 - Whenever possible add support for Accessible Rich Internet Applications or ARIA attributes (https://developer.mozilla.org/en-US/docs/Web/Accessibility/ARIA)
 
+**HTML Semantics**
+
+Semantic elements = elements with a meaning.
+
+Use semantically correct HTML to represent elements. A semantic element clearly describes its meaning to both the browser and the developer. 
+
+Examples of non-semantic elements include &lt;div&gt; and &lt;span&gt; - these elements tell us nothing about the content.
+
+Examples of semantic elements include &lt;h1&gt;, &lt;p&gt;, &lt;form&gt;, &lt;table&gt;,, &lt;header&gt;, &lt;footer&gt;, &lt;main&gt;, &lt;article&gt; etc - these elements more clearly describe the content contained within them.
+
+For further information please refer to https://www.w3schools.com/html/html5_semantic_elements.asp
 
 ## Naming Conventions
 
-Always use the same naming convention for all your code. 
+Always use a consistent naming convention for all your code. 
 
 ## Automated Testing
 
@@ -239,7 +332,7 @@ For further guidance on writting good unit tests please see https://docs.microso
 
 ##  SOLID principals
 
-When developing functionality or refactoring code please always consider the SOLID principals and try to follow existing established design patterns. 
+When developing functionality or refactoring code please always consider the SOLID principals and try to follow these principals and existing well known design patterns. 
 
 The SOLID principals are:-
 
@@ -249,9 +342,9 @@ The SOLID principals are:-
 - **Interface segregation** - A client should never be forced to implement an interface that it doesn't use or clients shouldn't be forced to depend on methods they do not use.
 - **Dependency Inversion** - Object should depend on abstractions (interfaces) and not concreate implementations.
 
-## Design Patterns
+## Common Design Patterns
 
-Whenever possible attempt to leverage an existing known design pattern to improve the code. Common design patterns are detailed below.
+Whenever possible attempt to leverage an existing known design pattern. Common design patterns are detailed below.
 
 **Adapter**
 
@@ -309,6 +402,10 @@ Avoid null references by providing a default object.
 
 The Observer pattern is one of the most popular patterns, and it has many variants. Assume you have a table in a spreadsheet. That data can be displayed in table form, but also in form of some graph or histogram. If the underlying data changes, not only the table view has to change, but you also expect the histogram to change. To communicate these changes you can use the Observer pattern: the underlying data is the observable and the table view as well as the histogram view are observers that observe the observable. 
 
+**Provider**
+
+The provider model is a design pattern formulated by Microsoft to allow an application to choose from one of multiple implementations or "condiments" in the application configuration, for example, to provide access to different data stores to retrieve login information, or to use different storage methodologies such as a database, binary to disk, XML, etc. The implementations to use are provided at run-time.
+
 **Proxy**
 
 The idea behind the Proxy pattern is that we have some complex object and we need to make it simpler. One typical application is an object that exists on another machine, but you want to give the impression as if the user is dealing with a local object. Another application is when an object would take a long time to create (like loading a large image/video), but the actual object may never be needed. In this case a proxy represents the object until it is needed.
@@ -337,19 +434,20 @@ Represent an operation to be performed on the elements of an object structure. V
 
 **Asynchronous Code**
 
-For unpredictable operations always use asynchronous coding patterns. For example when accessing the file system or connecting to the database. 
+For unpredictable operations always use asynchronous coding patterns. For example when accessing the file system,  connecting to a database or making a HTTP request. 
 
 **Lock**
 
 One thread puts a "lock" on a resource, preventing other threads from accessing or modifying it
 
-**Double-checked locking**
+**Double-check locking**
 
 Reduce the overhead of acquiring a lock by first testing the locking criterion (the 'lock hint') in an unsafe manner; only if that succeeds does the actual lock proceed. Can be unsafe when implemented in some language/hardware combinations. It can therefore sometimes be considered an anti-pattern.
 
 **Read-write lock**
 
 Allows concurrent read access to an object but requires exclusive access for write operations.
+
 **Monitor object**
 
 An object whose methods are subject to mutual exclusion, thus preventing multiple objects from erroneously trying to use it at the same time.
@@ -364,13 +462,20 @@ Reusing design patterns helps to prevent subtle issues that can cause major prob
 
 In addition to this, patterns allow developers to communicate using well-known, well understood names for software interactions.
 
-To achieve flexibility, design patterns usually introduce additional levels of indirection, which in some cases may complicate the resulting designs but ultimately lead to more flexible, maintainable code. 
+To achieve flexibility, design patterns usually introduce additional levels of indirection, which in some cases may complicate the resulting designs but ultimately lead to more malleable & maintainable code. 
 
-## Unacceptable API Changes
+## Interfaces vs Abstract Base Classes
 
-The following types of API changes will generally not be accepted:
+If an interface is likely to evolve overtime and is used in many areas of the code, consider providing an abstract base class that implements the interface that other classes can derive from to also implement the interface. This makes the code less brittle and allows us to evolve interfaces overtime with minimal impact. 
+
+## General unacceptable changes
+
+The following types of changes will generally not be accepted or will requir more review:-
 
 - Any modification to a commonly used public interface
+- Any modification to a commonly used base class
 - Changing any public method signature or removing any public members
 - Renaming public classes or members
 - Changing an access modifier from public to private / internal / protected
+
+
