@@ -53,7 +53,7 @@ namespace Plato.Users.ViewProviders
                 View<RegisterViewModel>("Register.Index.Header", model => viewModel).Zone("header"),
                 View<RegisterViewModel>("Register.Index.Content", model => viewModel).Zone("content"),
                 View<RegisterViewModel>("Register.Index.Sidebar", model => viewModel).Zone("content-right"),
-                View<RegisterViewModel>("Register.Index.Footer", model => viewModel).Zone("actions")
+                View<RegisterViewModel>("Register.Index.Footer", model => viewModel).Zone("content").Order(int.MaxValue)
             ));
 
         }

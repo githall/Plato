@@ -8309,7 +8309,7 @@ $(function (win, doc, $) {
                     });
 
                     // Apply sticky headers
-                    $header.sticky({
+                    $header.sticky({                        
                         onUpdate: function ($this) {
                             if ($this.hasClass("fixed")) {
                                 // Ensure width matches container when element becomes fixed
