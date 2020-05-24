@@ -5,15 +5,19 @@
 }
 
 @if (hasUsername && hasPassword)
-{
-    <form asp-area="Plato.Site.Demo" asp-controller="Home" asp-action="Login" asp-route-returnurl="@ViewData["ReturnUrl"]" method="post" class="form-horizontal" enctype="multipart/form-data" data-disable-submit="true">
-        <h6 class="font-weight-bold">
-            @T["Demo Login"]
-        </h6>
-        <p>
-            @T["Use the button below to login using the demo administrator account and visit the Plato administrator dashboard. Once logged in you can fully explore Plato using the demo administrator account. Click \"Login to Dashboard\" to fully explore..."]
-        </p>
-        <button type="submit" class="btn btn-lg btn-secondary btn-block" role="button">@T["Login to Dashboard"]</button>
-    </form>
+{    
+    <h6 class="font-weight-bold">
+        @T["Demo Login"]
+    </h6>
+    <p>
+        @T["Use the button below to login using the demo administrator account and visit the Plato administrator dashboard. Once logged in you can fully explore Plato using the demo administrator account. Click \"Login to Dashboard\" to fully explore..."]
+    </p>
+    <button type="submit" 
+            data-validation="disabled"
+            asp-area="Plato.Site.Demo" 
+            asp-controller="Home" 
+            asp-action="Login" 
+            asp-route-returnurl="@ViewData["ReturnUrl"]"
+            class="btn btn-lg btn-secondary btn-block" role="button">@T["Login to Dashboard"]</button> 
 }
 

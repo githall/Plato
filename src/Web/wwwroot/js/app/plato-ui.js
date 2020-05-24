@@ -8747,26 +8747,44 @@ $(function (win, doc, $) {
 
     app.ready(function () {
 
-        // Accommodate for custom "formaction" attributes added
-        // when using multiple submit elements within a single form
-        // For example...
-        // <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">
-        //      <i class="fal fa-trash"></i>      
-        // </button>
-        // Produces the following HTML...
-        // <button type="submit" formaction="/action">
-        //      <i class="fal fa-trash"></i>
-        //      Delete
-        // </button>
+        // Click handler for all submit buttons
         $('*[type="submit"]').click(function () {
+
+            var $form = $(this).closest("form");
+
+            // Accommodate for custom "data-validation" attributes that 
+            // disables unobtrusive validation for the entire form
+            // For example...
+            // <button type="submit" data-validation="disabled">
+            //      <i class="fal fa-trash"></i>
+            //      Submit
+            // </button>
+            var validate = $(this).data("validation");         
+            if (validate === "disabled") {               
+                if ($form.length > 0) {
+                    $form.validate().settings.ignore = "*";
+                }                
+            }
+
+            // Accommodate for custom "formaction" attributes added
+            // when using multiple submit elements within a single form
+            // For example...
+            // <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">
+            //      <i class="fal fa-trash"></i>      
+            // </button>
+            // Produces the following HTML...
+            // <button type="submit" formaction="/action">
+            //      <i class="fal fa-trash"></i>
+            //      Delete
+            // </button>
             var action = $(this).attr("formaction");
-            if (action) {
-                var $form = $(this).closest("form");
+            if (action) {            
                 if ($form.length > 0) {
                     $form[0].action = action;
                 }
             }
-        });
+
+        }); // end submit click handler
 
     });
 
