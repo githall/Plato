@@ -1,21 +1,157 @@
 ﻿
-.home-page-tiles .font-weight-bold {
-    color: #007bff;
-    text-transform: uppercase;
-    font-size: 100%;
-}
-
-.home-page-tiles a.list-group-item-action:hover .font-weight-bold {
-    color: white;
-}
-
 /* ------------------- */
-/* Fixed Header & Sidebar */
+/* Layout */
 /* ------------------- */
 
-.layout-sidebar.fixed > .layout-sidebar-content,
-.layout-header.fixed > .layout-header-content { background-color: white; }
-.layout-header-content { border-color: #eee;}
+.layout,
+.layout-header,
+.layout-header-right,
+.layout-alerts,
+.layout-body,
+.layout-content-tools,
+.layout-content-tools-right,
+.layout-content,
+.layout-content-left,
+.layout-content-right,
+.layout-content-actions,
+.layout-content-actions-right,
+.layout-footer,
+.layout-footer-right {}
+
+/* Ensure right aligned content does not wrap */
+.layout-header .layout-header-right,
+.layout-content-tools .layout-content-tools-right,
+.layout-content-actions .layout-content-actions-right,
+.layout-footer .layout-footer-right {
+    float:right;
+    display: flex;
+    flex-flow: nowrap;
+    flex-direction: row;
+}
+
+/* Sticky Header & Sidebars */
+
+/* Ensure the header has paddings and margins applied. 
+    This ensures we can correctly calculate the "fixed" header height
+    via JavaScript upon the initial load before the header actually becomes "fixed" */
+
+.layout-header  { padding-bottom: 1rem; }
+.layout-header .layout-header-container { 
+    padding: 1rem 0;
+    border-bottom-width: 1px;
+    border-bottom-style: solid;
+}
+
+/* To be removed once all HR elements have been removed from layout-header-container */
+.layout-header .layout-header-container hr { display: none; }
+
+@media (min-width: 992px) {
+    
+    /* Only apply fixed layout for screen sizes above 992px */
+    /* ------------------- */
+
+    /* When the header becomes fixed, fix content */
+    .layout-header.fixed > .layout-header-container {
+        position: fixed;
+        top: 0;
+        z-index: 5;
+        white-space: nowrap;
+    }
+    
+    /* When the sidebars becomes fixed, fix content */
+    .layout-content-left.fixed > .layout-content-left-container,
+    .layout-content-right.fixed > .layout-content-right-container {
+        position: fixed;
+        display: flex;
+        -webkit-box-orient: vertical !important;
+        -webkit-box-direction: normal !important;
+        -ms-flex-direction: column !important;
+        flex-direction: column !important;
+    }    
+    
+    /* Ensure asides are reset for screen sizes above 992px */
+    /* ------------------- */
+
+    .layout-content-left .asides,
+    .layout-content-left .asides-content,
+    .layout-content-left .asides-body,
+    .layout-content-right .asides,
+    .layout-content-right .asides-content,
+    .layout-content-right .asides-body {
+        position:initial !important;
+        visibility:visible !important;
+        overflow:visible !important;
+        border: 0 !important;
+        padding: 0 !important;
+        opacity: 1 !important;
+    }
+
+    .layout-content-left .asides + .asides-backdrop,
+    .layout-content-right .asides + .asides-backdrop {
+        visibility:hidden;
+    }
+
+    .layout-content-left .asides-header,
+    .layout-content-left .asides-footer,
+    .layout-content-right .asides-header,
+    .layout-content-right .asides-footer {
+        display:none;
+    }
+
+    .layout-content-left .asides > .asides-left,
+    .layout-content-right .asides > .asides-right {
+        position:inherit !important;     
+        max-width: 100% !important;
+        -webkit-transform: none !important;
+    }
+
+}
+
+/* Header Alerts */
+.layout-header .alert {
+    position: fixed;
+    left: 50%;
+    z-index: 999;
+    margin-top: -6px;
+    visibility: hidden;
+    opacity: 0;
+    transform: translate(-50%, 0);
+}
+
+.layout-header .alert-visible {
+    visibility: visible;
+    margin-top: 0;
+    opacity: 1;
+    transition: all 0.20s ease-out;
+}
+
+.layout-header .alert-hidden {
+    visibility: hidden;
+    margin-top: -12px;
+    opacity: 0;
+    transition: all 0.20s ease-in;
+}
+
+.layout .card,
+.resizable .card { margin-bottom: 1.25rem; }
+
+.layout-content .accordion,
+.layout-sidebar .accordion { margin-bottom: 1.25rem; }
+.layout-content .accordion .card,
+.layout-sidebar .accordion .card { margin-bottom: 0; }
+
+/* ------------------- */
+/* Layout Colors */
+/* ------------------- */
+
+.asides-content,
+.layout-header.fixed > .layout-header-container,
+.layout-content-left.fixed > .layout-content-left-container,
+.layout-content-right.fixed > .layout-content-right-container { background-color: white; }
+
+.asides-header,
+.asides-footer,
+.layout-header-container { border-color:  rgba(127, 127, 127, 0.3); }
 
 /* ------------------- */
 /* Navigation  */
@@ -600,10 +736,37 @@ a.label:hover, .label.active {
 .dropzone.dz-drag-hover .dz-message { border-color:#aaa; }
 
 /* ------------------------- */
+/* Docs */
+/* ------------------------- */
+
+.doc-header { display: none; padding-bottom: 0 !important; }
+.doc-header hr { margin: 2rem 0 0 0; }
+.doc-header .doc-title { margin-bottom:0; }
+
+/* ------------------------- */
 /* Custom Site Css */
 /* ------------------------- */
 
-.core-layout .layout-header,
-.core-layout .layout-tools {
-    display: none;
+.home-page-tiles .font-weight-bold {
+    color: #007bff;
+    text-transform: uppercase;
+    font-size: 100%;
+}
+
+.home-page-tiles a.list-group-item-action:hover .font-weight-bold {
+    color: white;
+}
+
+.core-index .layout-header { display:none; }
+
+@media (min-width: 992px)
+{
+    .account-login .col-lg-9,
+    .account-login .col-lg-3,
+    .account-register .col-lg-9,
+    .account-register .col-lg-3 {
+        width: 50%;
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
 }

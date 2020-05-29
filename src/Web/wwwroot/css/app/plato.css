@@ -1308,14 +1308,9 @@ a.navbar-brand img { max-height: 48px; }
     transform: translate3d(0,0,0) !important;
 }
 
-
 /* ------------------------- */
 /* Asides */
 /* ------------------------- */
-
-.asides-open {
-  overflow: hidden;
-}
 
 .asides {
     position: fixed;
@@ -1329,7 +1324,7 @@ a.navbar-brand img { max-height: 48px; }
     outline: 0;
 }
 
-.asides>.asides-left {
+.asides > .asides-left {
     left: 0;
     right: auto;
     -webkit-transform: translate3d(-100%,0,0) !important;
@@ -1340,7 +1335,7 @@ a.navbar-brand img { max-height: 48px; }
     transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
 }
 
-.asides>.asides-right {
+.asides > .asides-right {
     left: auto;
     right: 0;
     -webkit-transform: translate3d(100%,0,0) !important;
@@ -1384,7 +1379,6 @@ a.navbar-brand img { max-height: 48px; }
     -o-transition: -o-transform .4s cubic-bezier(.25, .8, .25, 1);
 }
 
-
 @media screen and (prefers-reduced-motion: reduce) {
   .asides.fade .asides-dialog {
     transition: none;
@@ -1419,7 +1413,7 @@ a.navbar-brand img { max-height: 48px; }
     z-index: 1040;
     background-color: #000;
     opacity: 0;
-    transition: all 0.50s ease-out;
+    transition: opacity 0.50s ease-out;
 }
 
 .asides-backdrop.show {
@@ -1441,8 +1435,8 @@ a.navbar-brand img { max-height: 48px; }
 }
 
 .asides-header .close {
-  padding: 1rem;
-  margin: -1rem -1rem -1rem auto;
+    padding: 1rem;
+    margin: -1rem -1rem -1rem auto;
 }
 
 .asides-title {
@@ -1476,19 +1470,11 @@ a.navbar-brand img { max-height: 48px; }
 }
 
 .asides-footer > :not(:first-child) {
-  margin-left: .25rem;
+    margin-left: .25rem;
 }
 
 .asides-footer > :not(:last-child) {
-  margin-right: .25rem;
-}
-
-.asides-scrollbar-measure {
-  position: absolute;
-  top: -9999px;
-  width: 50px;
-  height: 50px;
-  overflow: scroll;
+    margin-right: .25rem;
 }
 
 /* for desktops / larger screen restrict to specific widths */

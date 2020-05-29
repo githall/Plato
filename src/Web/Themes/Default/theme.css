@@ -135,6 +135,11 @@
         opacity: 1 !important;
     }
 
+    .layout-content-left .asides + .asides-backdrop,
+    .layout-content-right .asides + .asides-backdrop {
+        visibility:hidden;
+    }
+
     .layout-content-left .asides-header,
     .layout-content-left .asides-footer,
     .layout-content-right .asides-header,
@@ -827,7 +832,7 @@ a.label:hover, .label.active {
 /* Focus */
 .md-editor.active {
     border-color: var(--form-control-border-focus);
-    box-shadow: 0 0 0 0.2rem  var(--primary-box-shadow);
+    box-shadow: 0 0 0 0.2rem var(--primary-box-shadow);
 }
 
 /* Style text area and preview */
@@ -841,3 +846,9 @@ a.label:hover, .label.active {
 /* Drop files over .dz-message */
 .dropzone.dz-drag-hover { background:#eee; }
 .dropzone.dz-drag-hover .dz-message { border-color:#aaa; }
+
+/* Docs */
+
+.doc-header { display: none; padding-bottom: 0 !important; }
+.doc-header hr { margin: 2rem 0 0 0; }
+.doc-header .doc-title { margin-bottom:0; }

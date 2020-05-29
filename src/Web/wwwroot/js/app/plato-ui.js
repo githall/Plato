@@ -35,8 +35,8 @@ $(function (win, doc, $) {
             dataIdKey = dataKey + "Id";
 
         var defaults = {
-            url: null, // the url to load
-            defer: false, // boolean to indicate if the URL is loaded immediately, if true the url is not loaded upon load
+            url: null, // the URL to load
+            defer: false, // boolean to indicate if the URL is loaded immediately, if true the URL is not loaded upon load
             enableLoader: true, // boolean to indicate if the loader template will be added to the content area for every request
             loaderTemplate: '<p class="text-center my-3"><i class="fal fa-spinner fa-spin"></i></p>', // a handlebars style template for auto complete list items
             onLoad: function ($el) {}
@@ -44,6 +44,9 @@ $(function (win, doc, $) {
 
         var methods = {
             init: function ($caller, methodName, func) {
+
+                // Log
+                app.logger.logInfo("httpContent");
 
                 if (func) {
                     return func(this);
@@ -57,7 +60,11 @@ $(function (win, doc, $) {
                     return null;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo("httpContent");
 
             },
             bind: function ($caller) {
@@ -248,6 +255,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -257,14 +267,16 @@ $(function (win, doc, $) {
                     return;
                 }
 
-                methods.bind($caller);
+                // Bind
+                this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
-
                 var $dialog = methods.getOrCreate($caller);
                 $dialog.modal();
-
             },
             show: function ($caller) {
 
@@ -310,12 +322,14 @@ $(function (win, doc, $) {
                         $content.empty();
                         if (response !== "") {
                             $content.html(response);
-                            // Enable tooltips within loaded content
+                            // Enable tool tips within loaded content
                             app.ui.initToolTips($content);
                             // confirm
                             $content.find('[data-provide="confirm"]').confirm();
                             // markdown body
                             $content.find('[data-provide="markdownBody"]').markdownBody();
+                            // popper                           
+                            $content.find('[data-provide="popper"]').popper();
                         }
                     }
 
@@ -473,6 +487,7 @@ $(function (win, doc, $) {
                     return methods.init($caller, methodName, func);
                 }
 
+
             }
         };
 
@@ -489,6 +504,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -498,29 +516,38 @@ $(function (win, doc, $) {
                     return;
                 }
 
-                methods.bind($caller);
+                // Bind
+                this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
 
-                $caller.bind("click",
-                    function (e) {
+                if (!$caller.data("eventBound")) {
 
-                        e.preventDefault();
-                        e.stopPropagation();
+                    $caller.on("click",
+                        function (e) {
 
-                        $().dialog({
-                            id: $(this).data("dialogId") || "dialogSpy",
-                            body: {
-                                url: $(this).attr("href")
+                            e.preventDefault();
+                            e.stopPropagation();
+
+                            $().dialog({
+                                id: $(this).data("dialogId") || "dialogSpy",
+                                body: {
+                                    url: $(this).attr("href")
+                                },
+                                css: {
+                                    modal: methods.getModalCss($(this)),
+                                    dialog: methods.getDialogCss($(this))
+                                }
                             },
-                            css: {
-                                modal: methods.getModalCss($(this)),
-                                dialog: methods.getDialogCss($(this))
-                            }
-                        },
-                            "show");
-                    });
+                                "show");
+                        });
+
+                    $caller.data("eventBound", true);
+                }               
 
             },
             getModalCss: function ($caller) {
@@ -623,6 +650,9 @@ $(function (win, doc, $) {
 
         var methods = {
             init: function ($caller, methodName, func) {
+          
+                // Log
+                app.logger.logInfo(dataKey);
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -633,7 +663,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
-                methods.bind($caller);
+                // Bind
+                this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -766,6 +800,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -791,6 +828,9 @@ $(function (win, doc, $) {
 
                 // Bind events
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -967,6 +1007,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -977,7 +1020,10 @@ $(function (win, doc, $) {
                 }
 
                 // Bind events
-                methods.bind($caller);
+                this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -1430,6 +1476,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -1439,8 +1488,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
-                // bind events
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -1656,6 +1708,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -1665,14 +1720,17 @@ $(function (win, doc, $) {
                     return;
                 }
 
-                // disable browser autocomplete if not already disabled
+                // disable browser auto complete if not already disabled
                 var attr = $caller.attr("autocomplete");
                 if (typeof attr === typeof undefined || attr === false) {
                     $caller.attr("autocomplete", "off");
                 }
 
-                // bind events
-                methods.bind($caller);
+                // Bind
+                this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -2060,6 +2118,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -2069,7 +2130,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -2206,6 +2271,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -2215,7 +2283,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -2334,6 +2406,9 @@ $(function (win, doc, $) {
             _scrolling: false,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -2350,6 +2425,9 @@ $(function (win, doc, $) {
 
                 // Bind events
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -2428,7 +2506,6 @@ $(function (win, doc, $) {
                 return "scroll." + this._getNamespace($caller);
             },
             _getNamespace: function ($caller) {
-                //return "scrollSpy";
                 return $caller.data(dataKey).namespace || "scrollSpy";
             },
             _storeEvents: function ($caller) {
@@ -2540,6 +2617,9 @@ $(function (win, doc, $) {
             _resizing: false,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -2556,6 +2636,9 @@ $(function (win, doc, $) {
 
                 // Bind events
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -2710,6 +2793,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -2719,12 +2805,23 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
 
-                $caller.on("mouseleave", function (e) {
+                if ($caller.data("eventsBound")) {
+                    return;
+                }
+
+                $caller.on("mouseenter", function (e) {
+                    // we've moved back in, cancel timer
+                    methods.stopTimer();
+                }).on("mouseleave", function (e) {
 
                     var target = e.target,
                         related = e.relatedTarget,
@@ -2766,12 +2863,9 @@ $(function (win, doc, $) {
                         }
                         return false;
                     }
-                });
+                });               
 
-                $caller.on("mouseenter", function (e) {
-                    // we've moved back in, cancel timer
-                    methods.stopTimer();
-                });
+                $caller.data("eventsBound", true);
 
             },
             unbind: function ($caller) {
@@ -2878,9 +2972,12 @@ $(function (win, doc, $) {
             _loadedPages: [], // keep track of which pages have been loaded
             events: {
                 ready: [], // functions to execute when dom is updated
-                scrollEnd: [] // funcitons to execute when 
+                scrollEnd: [] // functions to execute when 
             },
             init: function ($caller, methodName, func) {
+
+                // Log
+                app.logger.logInfo(dataKey + " : " + methodName);
 
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
@@ -2928,11 +3025,13 @@ $(function (win, doc, $) {
                 // Bind events
                 this.bind($caller);
 
+                // Log
+                app.logger.logInfo(dataKey);
+
             },
             bind: function ($caller) {
 
-                var hash = win.location.hash,
-                    scrollSpacing = $caller.data(dataKey).scrollSpacing;
+                var scrollSpacing = $caller.data(dataKey).scrollSpacing;
 
                 // Scroll to any selected offset, wait until we complete
                 // scrolling before binding our scrollSpy events
@@ -2946,8 +3045,8 @@ $(function (win, doc, $) {
                             offset: -scrollSpacing,
                             target: $marker,
                             onComplete: function () {
-                                // Apply css to deactivate selected offset css (set server side)
-                                // Css can be applied directly to marker or a child of the marker
+                                // Apply CSS to deactivate selected offset CSS (set server side)
+                                // CSS can be applied directly to marker or a child of the marker
                                 if ($highlight.hasClass(defaults.css.active)) {
                                     $highlight
                                         .removeClass(defaults.css.active)
@@ -2987,7 +3086,7 @@ $(function (win, doc, $) {
                     onScrollEnd: function (e) {
 
                         // Perform these checks at the end of scrolling to prevent
-                        // navigation throttling caused via to many calles to 
+                        // navigation throttling caused via to many callers to 
                         // win.history.replaceState within $(win).scroll(function() {});
 
                         // Get the very first offset marker
@@ -3597,6 +3696,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -3606,7 +3708,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -3819,6 +3925,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -3842,6 +3951,9 @@ $(function (win, doc, $) {
                         this.update($caller);
                     }
                 }
+
+                // Log
+                app.logger.logInfo(dataKey);
 
                 return null;
 
@@ -4358,6 +4470,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -4368,7 +4483,7 @@ $(function (win, doc, $) {
                 }
 
                 // Bind events
-                methods.bind($caller);
+                this.bind($caller);
 
                 // Initialize state from store JSON
                 var $store = this.getStore($caller);
@@ -4379,12 +4494,15 @@ $(function (win, doc, $) {
                     }
                 }
 
+                // Log
+                app.logger.logInfo(dataKey);
+
             },
             bind: function ($caller) {
 
                 var $dropdown = $caller.find(".dropdown-menu");
 
-                // On dropdown shown 
+                // On drop down shown 
                 $caller.on('shown.bs.dropdown',
                     function () {
                         if ($caller.data(dataKey).onShow) {
@@ -4392,7 +4510,7 @@ $(function (win, doc, $) {
                         }
                     });
 
-                // On checkbox or radiobutton change within dropdown 
+                // On check box or radio button change within drop down 
                 $dropdown.on('change',
                     'input[type="radio"], input[type="checkbox"]',
                     function (e) {
@@ -4613,6 +4731,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -4622,7 +4743,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -4758,6 +4883,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -4767,7 +4895,11 @@ $(function (win, doc, $) {
                     return null;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -5033,6 +5165,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5042,7 +5177,11 @@ $(function (win, doc, $) {
                     return null;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -5159,6 +5298,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5168,7 +5310,11 @@ $(function (win, doc, $) {
                     return null;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -5284,6 +5430,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5293,7 +5442,11 @@ $(function (win, doc, $) {
                     return null;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -5308,9 +5461,6 @@ $(function (win, doc, $) {
                     $caller.autoLinkImages();
                 }
 
-                /* popper */
-                $caller.find('[data-provide="popper"]').popper();
-
             },
             unbind: function ($caller) {
 
@@ -5322,10 +5472,7 @@ $(function (win, doc, $) {
                 /* autoLinkImages */
                 if ($caller.data(dataKey).autoLinkImages) {
                     $caller.autoLinkImages("unbind");
-                }
-
-                /* popper */
-                $caller.find('[data-provide="popper"]').popper("unbind");
+                }               
 
             }
         };
@@ -5449,6 +5596,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5460,6 +5610,9 @@ $(function (win, doc, $) {
 
                 // init autoComplete
                 $caller.autoComplete($caller.data(dataKey), methodName);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             show: function ($caller) {
@@ -5533,6 +5686,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5542,7 +5698,11 @@ $(function (win, doc, $) {
                     return null;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -5730,6 +5890,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5744,6 +5907,10 @@ $(function (win, doc, $) {
                 for (var i = 0; i < keys.length; i++) {
                     $caller.data(dataKey).internalKeys.push(keys[i]);
                 }
+
+                // Log
+                app.logger.logInfo(dataKey);
+
             },
             bind: function ($caller) {
 
@@ -5911,6 +6078,10 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
+
                 if (methodName) {
                     if (this[methodName] !== null && typeof this[methodName] !== "undefined") {
                         return this[methodName].apply(this, [$caller, func]);
@@ -5920,7 +6091,12 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
+
             },
             bind: function ($caller) {
 
@@ -6051,6 +6227,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -6060,7 +6239,12 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
+
 
             },
             bind: function ($caller) {
@@ -6428,6 +6612,9 @@ $(function (win, doc, $) {
             callers: [], // array of all active callers
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -6438,12 +6625,16 @@ $(function (win, doc, $) {
                 }
 
                 // Store the original position so this can be reset when the popper is hidden
-                var position = methods._getPosition($caller);
+                var position = this._getPosition($caller);
                 if (!$caller.data("popperOriginalPosition")) {
                     $caller.data("popperOriginalPosition", position);
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -6586,7 +6777,7 @@ $(function (win, doc, $) {
                             }
                         }
 
-                        // Init tooltips within loaded content
+                        // Init tool tips within loaded content
                         app.ui.initToolTips($popper);
 
                         // Callback 
@@ -6646,7 +6837,7 @@ $(function (win, doc, $) {
                     css = $caller.data("popperCss") || $caller.data(dataKey).css,
                     position = methods._getPosition($caller);
 
-                // Custom Css
+                // Custom CSS
                 if (css) {
                     if (!$popper.hasClass(css)) {
                         $popper.addClass(css);
@@ -6883,6 +7074,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -6897,6 +7091,9 @@ $(function (win, doc, $) {
 
                 // Bind events
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -7003,6 +7200,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -7012,7 +7212,12 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
+
 
             },
             show: function ($caller) {
@@ -7100,6 +7305,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -7109,7 +7317,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -7232,6 +7444,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -7241,7 +7456,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -7336,7 +7555,6 @@ $(function (win, doc, $) {
 
     }();
 
-
     /* asides */
     var asides = function () {
 
@@ -7351,6 +7569,9 @@ $(function (win, doc, $) {
             timer: null,
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -7360,8 +7581,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
-                // Bind events
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -7511,8 +7735,6 @@ $(function (win, doc, $) {
 
     }();
 
-
-
     /* Register plug-ins */
     $.fn.extend({
         httpContent: httpContent.init,   
@@ -7599,10 +7821,7 @@ $(function (win, doc, $) {
         this.find('[data-provide="autoTargetBlank"]').autoTargetBlank();
 
         /* autoLinkImages */
-        this.find('[data-provide="autoLinkImages"]').autoLinkImages();
-
-        /* markdownBody */
-        this.find('[data-provide="markdownBody"]').markdownBody();
+        this.find('[data-provide="autoLinkImages"]').autoLinkImages();        
 
         /* infiniteScroll */
         /* Initialized via $().layout so we can set the ScrollSpacing correctly */
@@ -7610,9 +7829,6 @@ $(function (win, doc, $) {
 
         /* resizeable */
         this.find('[data-provide="resizeable"]').resizeable();
-
-        /* popper */
-        this.find('[data-provide="popper"]').popper();
 
         /* password */
         this.find('[data-provide="password"]').password();
@@ -7627,25 +7843,7 @@ $(function (win, doc, $) {
         this.find('[data-provide="slide-spy"]').slideSpy();
 
         /* asides */
-        this.find('[data-provide="asides"]').asides();
-
-        // Bind scroll events
-        $().scrollSpy({
-            onScrollStart: function () {
-                $().popper("hideAll");
-            }
-        });
-
-    };
-
-    // --------------
-    // ready
-    // --------------
-
-    app.ready(function () {
-
-        // Init plato UI
-        $("body").platoUI();
+        this.find('[data-provide="asides"]').asides();    
 
         // Activate plug-ins used within infiniteScroll load
         $().infiniteScroll("ready", function ($ele) {
@@ -7656,12 +7854,41 @@ $(function (win, doc, $) {
             /* markdownBody */
             $ele.find('[data-provide="markdownBody"]').markdownBody();
 
+            /* popper */
+            $ele.find('[data-provide="popper"]').popper();
+
             /* dialogSpy */
             $ele.find('[data-provide="dialog"]').dialogSpy();
 
-            /* replySpy */
-            $ele.replySpy("bind");
+        });
 
+    };
+
+    // --------------
+    // ready
+    // --------------
+
+    app.ready(function () {
+  
+        // Initialize Plato UI
+        $("body").platoUI();
+
+    });
+
+    // Deferred until window load for performance
+    app.load(function () {
+
+        /* markdownBody */
+        $('[data-provide="markdownBody"]').markdownBody();
+
+        /* popper */
+        $('[data-provide="popper"]').popper();
+
+        // Bind scroll events
+        $().scrollSpy({
+            onScrollStart: function () {               
+                $().popper("hideAll");
+            }
         });
 
     });
@@ -7698,6 +7925,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -7707,7 +7937,12 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
+
             },
             bind: function ($caller) {
 
@@ -7869,6 +8104,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -7878,15 +8116,19 @@ $(function (win, doc, $) {
                     return;
                 }
 
-
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
+
             },
             bind: function ($caller) {
 
-                // Disable bootstrap tooltips within .nav-site dependent on screen size 
+                // Disable bootstrap tool tips within .nav-site dependent on screen size 
 
                 var entered = false,
-                    breakpoint = 992, // tooltips will be disabled at this width and below
+                    breakpoint = 992, // tool tips will be disabled at this width and below
                     $nav = $caller.find(defaults.collapsedNavSelector);
 
                 if ($nav.length === 0) {
@@ -7994,18 +8236,21 @@ $(function (win, doc, $) {
 
         // CSS selectors for various layout elements
         var selectors = {            
-            header: ".layout-header",
-            body: ".layout-body",
-            content: ".layout-content",
-            contentLeft: ".layout-content-left",
-            contentLeftContainer: ".layout-content-left-container",
-            contentRight: ".layout-content-right",
-            contentRightContainer: ".layout-content-right-container",
-            footer: ".layout-footer"
+            header: "#layout-header",
+            body: "#layout-body",
+            content: "#layout-content",
+            contentLeft: "#layout-content-left",
+            contentLeftContainer: "#layout-content-left-container",
+            contentRight: "#layout-content-right",
+            contentRightContainer: "#layout-content-right-container",
+            footer: "#layout-footer"
         };
 
         var methods = {
             init: function ($caller, methodName, func) {
+
+                // Log
+                app.logger.logInfo(dataKey);
 
                 if (methodName) {
                     if (this[methodName]) {
@@ -8016,7 +8261,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -8042,9 +8291,9 @@ $(function (win, doc, $) {
                     $body = $caller.find(selectors.body),
                     $content = $caller.find(selectors.content),
                     $contentLeft = $caller.find(selectors.contentLeft),
-                    $contentLeftContainer = $caller.find(selectors.contentLeftContainer),
+                    $contentLeftContainer = $contentLeft.find(selectors.contentLeftContainer),
                     $contentRight = $caller.find(selectors.contentRight),
-                    $contentRightContainer = $caller.find(selectors.contentRightContainer),
+                    $contentRightContainer = $contentRight.find(selectors.contentRightContainer),
                     $footer = $caller.find(selectors.footer);
 
                 // Apply sticky headers
@@ -8060,7 +8309,7 @@ $(function (win, doc, $) {
                     });
 
                     // Apply sticky headers
-                    $header.sticky({
+                    $header.sticky({                        
                         onUpdate: function ($this) {
                             if ($this.hasClass("fixed")) {
                                 // Ensure width matches container when element becomes fixed
@@ -8190,6 +8439,7 @@ $(function (win, doc, $) {
 
                 }
 
+                // Initialize infinateScroll
                 this._detectAndScrollToAnchor($caller);
 
             },      
@@ -8295,6 +8545,9 @@ $(function (win, doc, $) {
         var methods = {
             init: function ($caller, methodName, func) {
 
+                // Log
+                app.logger.logInfo(dataKey);
+
                 if (methodName) {
                     if (this[methodName]) {
                         return this[methodName].apply(this, [$caller, func]);
@@ -8304,7 +8557,11 @@ $(function (win, doc, $) {
                     return;
                 }
 
+                // Bind
                 this.bind($caller);
+
+                // Log
+                app.logger.logInfo(dataKey);
 
             },
             bind: function ($caller) {
@@ -8394,11 +8651,11 @@ $(function (win, doc, $) {
     });
 
     // ---------------------------
-    // Initialize app plug-ins
+    // Initialize application specific plug-ins
     // ----------------------------
 
     $.fn.appUI = function (opts) {
-
+    
         /* navigation */
         this.find(".nav-site").navSite();
 
@@ -8460,6 +8717,12 @@ $(function (win, doc, $) {
             }
         }
 
+        // Activate plug-ins used within infiniteScroll load
+        $().infiniteScroll("ready", function ($ele) {
+            /* replySpy */
+            $ele.replySpy("bind");
+        });
+
     };
 
     // --------------
@@ -8484,26 +8747,44 @@ $(function (win, doc, $) {
 
     app.ready(function () {
 
-        // Accommodate for custom "formaction" attributes added
-        // when using multiple submit elements within a single form
-        // For example...
-        // <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">
-        //      <i class="fal fa-trash"></i>      
-        // </button>
-        // Produces the following HTML...
-        // <button type="submit" formaction="/action">
-        //      <i class="fal fa-trash"></i>
-        //      Delete
-        // </button>
+        // Click handler for all submit buttons
         $('*[type="submit"]').click(function () {
+
+            var $form = $(this).closest("form");
+
+            // Accommodate for custom "data-validation" attributes that 
+            // disables unobtrusive validation for the entire form
+            // For example...
+            // <button type="submit" data-validation="disabled">
+            //      <i class="fal fa-trash"></i>
+            //      Submit
+            // </button>
+            var validate = $(this).data("validation");         
+            if (validate === "disabled") {               
+                if ($form.length > 0) {
+                    $form.validate().settings.ignore = "*";
+                }                
+            }
+
+            // Accommodate for custom "formaction" attributes added
+            // when using multiple submit elements within a single form
+            // For example...
+            // <button type="submit" asp-controller="Admin" asp-action="Delete" asp-route-id="@Model.Id.ToString()" data-provide="confirm" class="btn btn-danger btn-sm">
+            //      <i class="fal fa-trash"></i>      
+            // </button>
+            // Produces the following HTML...
+            // <button type="submit" formaction="/action">
+            //      <i class="fal fa-trash"></i>
+            //      Delete
+            // </button>
             var action = $(this).attr("formaction");
-            if (action) {
-                var $form = $(this).closest("form");
+            if (action) {            
                 if ($form.length > 0) {
                     $form[0].action = action;
                 }
             }
-        });
+
+        }); // end submit click handler
 
     });
 

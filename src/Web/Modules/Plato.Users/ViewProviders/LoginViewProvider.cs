@@ -22,10 +22,8 @@ namespace Plato.Users.ViewProviders
             IHtmlLocalizer htmlLocalizer,
             IStringLocalizer stringLocalizer)
         {
-     
             T = htmlLocalizer;
             S = stringLocalizer;
-
         }
 
         #region "Implementation"
@@ -44,7 +42,7 @@ namespace Plato.Users.ViewProviders
                 View<LoginViewModel>("Login.Index.Header", model => loginViewModel).Zone("header"),
                 View<LoginViewModel>("Login.Index.Content", model => loginViewModel).Zone("content"),
                 View<LoginViewModel>("Login.Index.Sidebar", model => loginViewModel).Zone("content-right"),
-                View<LoginViewModel>("Login.Index.Footer", model => loginViewModel).Zone("actions")
+                View<LoginViewModel>("Login.Index.Footer", model => loginViewModel).Zone("content").Order(int.MaxValue)
             ));
 
         }

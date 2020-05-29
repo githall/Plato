@@ -83,12 +83,17 @@
     .layout-content-right .asides,
     .layout-content-right .asides-content,
     .layout-content-right .asides-body {
-        position:inherit !important;
+        position:initial !important;
         visibility:visible !important;
         overflow:visible !important;
         border: 0 !important;
         padding: 0 !important;
         opacity: 1 !important;
+    }
+
+    .layout-content-left .asides + .asides-backdrop,
+    .layout-content-right .asides + .asides-backdrop {
+        visibility:hidden;
     }
 
     .layout-content-left .asides-header,
@@ -103,10 +108,6 @@
         position:inherit !important;     
         max-width: 100% !important;
         -webkit-transform: none !important;
-    }
-
-    .layout-content-right .asides-content {
-        display: block !important;
     }
 
 }
@@ -145,11 +146,16 @@
 .layout-sidebar .accordion .card { margin-bottom: 0; }
 
 /* ------------------- */
-/* Fixed Header & Sidebar */
+/* Layout Colors */
 /* ------------------- */
 
 .asides-content,
-.layout-header.fixed > .layout-header-container { background-color: #0a0a0a; }
+.layout-header.fixed > .layout-header-container,
+.layout-content-left,
+.layout-content-left.fixed > .layout-content-left-container,
+.layout-content-right,
+.layout-content-right.fixed > .layout-content-right-container { background-color: #0a0a0a; }
+
 .asides-header,
 .asides-footer,
 .layout-header-container { border-color: rgba(75, 75, 75, 0.5); }
@@ -385,7 +391,6 @@ a.label.active {
     background-color: #2A9FD6 !important;
 }
 
-
 .table-hover tbody tr:hover,
 .list-group-hover .list-group-item-action:not(.active):hover,
 .list-group-hover .list-group-item-action:not(.active):hover .text-muted,
@@ -410,7 +415,7 @@ a.label.active {
 }
 
 /* ------------------- */
-/* Dropdowns */
+/* Drop downs */
 /* ------------------- */
 
 .dropdown-item:hover,
@@ -729,6 +734,23 @@ a.label.active {
 /* Drop files over .dz-message */
 .dropzone.dz-drag-hover { background:#222; }
 .dropzone.dz-drag-hover .dz-message { border-color:#444; }
+
+/* ------------------- */
+/* Anchorific */
+/* ------------------- */
+
+.anchorific li.active > a {   
+    color:#2387b7 !important;
+    border-left-color:#2387b7 !important;
+}
+
+/* ------------------- */
+/* Docs */
+/* ------------------- */
+
+.doc-header { display: none; padding-bottom: 0 !important; }
+.doc-header hr { margin: 2rem 0 0 0; }
+.doc-header .doc-title { margin-bottom:0; }
 
 /* ------------------- */
 /*  Bootswatch v4.3.1 overrides */

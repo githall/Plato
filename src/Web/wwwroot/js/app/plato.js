@@ -67,8 +67,9 @@ $(function (win, doc, $) {
             }
 
             var url = "/js/app/locale/app." + win.$.Plato.defaults.locale + ".js";
-            platoLogger.logInfo("Loading locale: " + url);
+            platoLogger.logInfo("Starting to load locale: " + url);
             this._load(url);
+            platoLogger.logInfo("Finished loading locale: " + url);
 
         },
         get: function (key) {
@@ -561,8 +562,12 @@ $(function (win, doc, $) {
             return key;
         },
         readyMethods: [],
+        loadMethods: [],
         ready: function(func) {
             this.readyMethods.push(func);
+        },
+        load: function (func) {
+            this.loadMethods.push(func);
         },
         // facade access - ensures we can easily implement 
         // new objects or extend existing objects 
@@ -593,20 +598,31 @@ $(function (win, doc, $) {
         // Write options to the console
         app.logger.logInfo("$.Plato:\n" + JSON.stringify(app.defaults, null, "     "));
 
-        // init UI
+        // Initialize UI
         app.ui.init();
 
-        // init Locales
+        // Initialize Locales
         app.locale.init();
 
     });
 
-    // Register an offline service worker for better PWA support
-    // Delay registration until everything has loaded to improve first visit perf
+    // Register an off-line service worker for better PWA support
+    // Delay registration until everything has loaded to improve first visit performance
     $(win).on("load", function () {        
+
+        // Service worker
         if ('serviceWorker' in win.navigator) {
             win.navigator.serviceWorker.register('/service-worker.js');
-        }     
+        }
+
+        // Our main global object
+        var app = win.$.Plato;
+
+        // Invoke load methods
+        for (var i = 0; i < app.loadMethods.length; i++) {
+            app.loadMethods[i]();
+        }
+
     });    
 
 }(window, document, jQuery));

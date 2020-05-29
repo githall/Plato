@@ -69,15 +69,16 @@ if (typeof window.$.Plato === "undefined") {
                 var self = this,
                     obj,
                     navSelector = $caller.data(dataKey).navigation,
-                    $navs = $(navSelector),
+                    $nav = $(navSelector),
                     navigations = function () { };
 
                 // Ensure we have navigation                
-                if ($navs.length > 0) {
-                    if (this.headers.length > 0) {      
-                        $navs.empty().append('<ul />');
-                        navigations = function ($el, $nav, obj) {
-                            return self.navigations($el, $nav, obj);
+                if ($nav.length > 0) {
+                    if (this.headers.length > 0) {
+                        $nav.empty().append('<ul />');
+                        self.previous = $nav.find('ul').last();
+                        navigations = function ($el, obj) {
+                            return self.navigations($el, obj);
                         };
                     } else {
                         $nav.empty().text($caller.data(dataKey).emptyText);
@@ -87,18 +88,12 @@ if (typeof window.$.Plato === "undefined") {
                 // Build navigation & anchors
                 for (var i = 0; i < self.headers.length; i++) {
                     obj = self.headers.eq(i);
-
-                    for (var x = 0; x < $navs.length; x++) {   
-                        var $nav = $($navs[x]);                       
-                        self.previous = $nav.find('ul').last();
-                        navigations($caller, $nav, obj);
-                    }
-
+                    navigations($caller, obj);
                     self.anchor($caller, obj);
                 }
 
             },
-            navigations: function ($caller, $nav, obj) {
+            navigations: function ($caller, obj) {
 
                 var self = this,
                     link,
@@ -138,24 +133,24 @@ if (typeof window.$.Plato === "undefined") {
                 which = parseInt(obj.prop('nodeName').substring(1), null);
                 list.attr('data-tag', which);
 
-                self.subheadings($caller, $nav, which, list);
+                self.subheadings($caller, which, list);
 
                 self.first = which;
 
             },
-            subheadings: function ($caller, $nav, which, a) {
+            subheadings: function ($caller, which, a) {
 
                 var self = this,
-                    
-                    ul = $nav.find('ul'),
-                    li = $nav.find('li');
+                    navSelector = $caller.data(dataKey).navigation,
+                    ul = $(navSelector).find('ul'),
+                    li = $(navSelector).find('li');
 
                 if (which === self.first) {
                     self.previous.append(a);
                 } else if (which > self.first) {
                     li.last().append('<ul />');
                     // can't use cache ul; need to find ul once more
-                    $($nav).find('ul').last().append(a);
+                    $(navSelector).find('ul').last().append(a);
                     self.previous = a.parent();
                 } else {
                     $('li[data-tag=' + which + ']').last().parent().append(a);

@@ -38,20 +38,30 @@ a.anchor {
     list-style-type: none;
     display: block;
     padding:0;
-    margin-left: 0.25rem;
 }
+
 
 .anchorific ul li a {
     display: inline-block; 
 }
 
 .anchorific li > a {
+    color:#6c757d;
     border-left: 2px;
     border-left-style: solid;
     border-left-color: transparent;
-    padding: 0.25rem 0 0.25rem 0.25rem;
+    padding-top: 0.25rem;
+    padding-bottom: 0.25rem;
+    padding-left: 1rem;
 }
 
-.anchorific li.active > a {    
+.anchorific li ul a { padding-left: 1.55rem; }
+.anchorific li ul li ul a { padding-left: 2rem; }
+.anchorific li ul li ul li ul a { padding-left: 2.5rem; }
+.anchorific li ul li ul li ul li ul a { padding-left: 3rem; }
+.anchorific li ul li ul li ul li ul li ul a { padding-left: 3.5rem; }
+
+.anchorific li.active > a {   
+    color:#007BFF;
     border-left-color:#007BFF;
 }
