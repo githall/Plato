@@ -8290,40 +8290,24 @@ $(function (win, doc, $) {
                 var $header = $caller.find(selectors.header),
                     $body = $caller.find(selectors.body),
                     $content = $caller.find(selectors.content),
-                    $contentLeft = $caller.find(selectors.contentLeft),
-                    $contentLeftContainer = $contentLeft.find(selectors.contentLeftContainer),
-                    $contentRight = $caller.find(selectors.contentRight),
-                    $contentRightContainer = $contentRight.find(selectors.contentRightContainer),
+                    $contentLeft = $caller.find(selectors.contentLeft),                    
+                    $contentRight = $caller.find(selectors.contentRight),                    
                     $footer = $caller.find(selectors.footer);
 
                 // Apply sticky headers
                 if (stickyHeaders) {
 
                     // Default offset for sticky sidebars
-                    sidebarOffsetTop = $header.outerHeight();
+                    sidebarOffsetTop = Math.floor($header.outerHeight());
 
                     // Important: Set initial height of header
                     // This ensures other calculations are correct
-                    $header.css({
-                        "height": sidebarOffsetTop
-                    });
+                    //$header.css({
+                    //    "height": sidebarOffsetTop
+                    //});
 
                     // Apply sticky headers
-                    $header.sticky({                        
-                        onUpdate: function ($this) {
-                            if ($this.hasClass("fixed")) {
-                                // Ensure width matches container when element becomes fixed
-                                $this.find(".layout-header-container").css({
-                                    "width": $this.width()
-                                });
-                            } else {
-                                // Reset width
-                                $this.find(".layout-header-container").css({
-                                    "width": "auto"
-                                });
-                            }
-                        }
-                    });
+                    $header.sticky();
 
                 }
 
@@ -8346,34 +8330,27 @@ $(function (win, doc, $) {
                             var top = Math.floor($footer.offset().top),
                                 scrollTop = Math.floor($(win).scrollTop() + $(win).height());
                             if (scrollTop > top) {
-                                $contentLeftContainer.css({
+                                $contentLeft.css({
                                     "bottom": scrollTop - top
                                 });
                             } else {
-                                $contentLeftContainer.css({
+                                $contentLeft.css({
                                     "bottom": 0
                                 });
                             }
                         },
                         onUpdate: function ($this) {
-                            if ($this.hasClass("fixed")) {                           
-                                // Setup content when container becomes fixed
-                                $contentLeftContainer.css({
-                                    "top": sidebarOffsetTop
-                                });
-                                // Apply overflow CSS
-                                if (!$contentLeftContainer.hasClass("overflow-auto")) {
-                                    $contentLeftContainer.addClass("overflow-auto");
-                                }
+                            if ($this.hasClass("fixed")) {                                                           
+                                $this.css({
+                                    "top": sidebarOffsetTop,
+                                    "max-height": $(win).height() - sidebarOffsetTop
+                                });                              
                             } else {
                                 // Reset
-                                $contentLeftContainer.css({
-                                    "top": "auto"
-                                });
-                                // Remove overflow CSS
-                                if ($contentLeftContainer.hasClass("overflow-auto")) {
-                                    $contentLeftContainer.removeClass("overflow-auto");
-                                }
+                                $this.css({
+                                    "top": "auto",
+                                    "max-height": "auto"
+                                });                             
                             }
 
                         }
@@ -8400,11 +8377,11 @@ $(function (win, doc, $) {
                             var top = Math.floor($footer.offset().top),
                                 scrollTop = Math.floor($(win).scrollTop() + $(win).height());
                             if (scrollTop > top) {
-                                $contentRightContainer.css({
+                                $contentRight.css({
                                     "bottom": scrollTop - top
                                 });
                             } else {
-                                $contentRightContainer.css({
+                                $contentRight.css({
                                     "bottom": 0
                                 });
                             }
@@ -8412,22 +8389,16 @@ $(function (win, doc, $) {
                         onUpdate: function ($this) {
                             if ($this.hasClass("fixed")) {                                
                                 // Setup content when container becomes fixed
-                                $contentRightContainer.css({
-                                    "top": sidebarOffsetTop
-                                });
-                                // Apply overflow CSS
-                                if ($contentRightContainer.hasClass("overflow-auto")) {
-                                    $contentRightContainer.addClass("overflow-auto");
-                                }
+                                $this.css({
+                                    "top": sidebarOffsetTop,
+                                    "max-height": $(win).height() - sidebarOffsetTop
+                                });                             
                             } else {
                                 // Reset
-                                $contentRightContainer.css({
-                                    "top": "auto"
-                                });
-                                // Remove overflow CSS
-                                if ($contentRightContainer.hasClass("overflow-auto")) {
-                                    $contentRightContainer.removeClass("overflow-auto");
-                                }
+                                $this.css({
+                                    "top": "auto",
+                                    "max-height": "auto"
+                                });                              
                             }
 
                         }

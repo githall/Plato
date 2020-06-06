@@ -44,7 +44,7 @@
     <div id="layout-body" class="layout-body row gutter-sm">        
             @if (Model.ContentLeft != null)
             {
-                <div id="layout-content-left" class="layout-content-left col-lg-3">
+                <div id="layout-content-left" class="layout-content-left overflow-auto col-lg-3">
                     <div id="layout-content-left-container" class="layout-content-left-container">                        
                         <a href="#" data-toggle="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-left active img-48 d-lg-none" style="z-index:10;" data-provide="asides" data-target="#contentLeftAsides">
                             <i class="fal fa-bars"></i>
@@ -115,7 +115,7 @@
             }
             @if (Model.ContentRight != null)
             {
-                <div id="layout-content-right" class="layout-content-right col-lg-3">
+                <div id="layout-content-right" class="layout-content-right overflow-auto col-lg-3">
                     <div id="layout-content-right-container" class="layout-content-right-container">                       
                         <a href="#" data-toggle="tooltip" title="@T["Navigation"]" class="btn btn-primary position-fixed slide-out-bottom-right active img-48 d-lg-none" style="z-index:10;" data-provide="asides" data-target="#contentRightAsides">
                             <i class="fal fa-bars"></i>
