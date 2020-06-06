@@ -7845,6 +7845,19 @@ $(function (win, doc, $) {
         /* asides */
         this.find('[data-provide="asides"]').asides();    
 
+        /* markdownBody */
+        this.find('[data-provide="markdownBody"]').markdownBody();
+
+        /* popper */
+        this.find('[data-provide="popper"]').popper();
+
+        // Bind scroll events
+        $().scrollSpy({
+            onScrollStart: function () {
+                $().popper("hideAll");
+            }
+        });
+
         // Activate plug-ins used within infiniteScroll load
         $().infiniteScroll("ready", function ($ele) {
 
@@ -7877,19 +7890,6 @@ $(function (win, doc, $) {
 
     // Deferred until window load for performance
     app.load(function () {
-
-        /* markdownBody */
-        $('[data-provide="markdownBody"]').markdownBody();
-
-        /* popper */
-        $('[data-provide="popper"]').popper();
-
-        // Bind scroll events
-        $().scrollSpy({
-            onScrollStart: function () {               
-                $().popper("hideAll");
-            }
-        });
 
     });
 
@@ -8300,12 +8300,6 @@ $(function (win, doc, $) {
                     // Default offset for sticky sidebars
                     sidebarOffsetTop = Math.floor($header.outerHeight());
 
-                    // Important: Set initial height of header
-                    // This ensures other calculations are correct
-                    //$header.css({
-                    //    "height": sidebarOffsetTop
-                    //});
-
                     // Apply sticky headers
                     $header.sticky();
 
@@ -8319,7 +8313,7 @@ $(function (win, doc, $) {
                     if ($content.length > 0) {
                         // Ensure is greater than our content
                         if ($contentLeft.height() >= $content.height()) {
-                            $content.css({ "minHeight": $body.height() });
+                            $content.css({ "min-height": $body.height() });
                         }
                     }
 
@@ -8330,12 +8324,12 @@ $(function (win, doc, $) {
                             var top = Math.floor($footer.offset().top),
                                 scrollTop = Math.floor($(win).scrollTop() + $(win).height());
                             if (scrollTop > top) {
-                                $contentLeft.css({
+                                $this.css({
                                     "bottom": scrollTop - top
                                 });
                             } else {
-                                $contentLeft.css({
-                                    "bottom": 0
+                                $this.css({
+                                    "bottom": "auto"
                                 });
                             }
                         },
@@ -8366,7 +8360,7 @@ $(function (win, doc, $) {
                     if ($content.length > 0) {
                         // Ensure is greater than our content
                         if ($contentRight.height() >= $content.height()) {
-                            $content.css({ "minHeight": $body.height() });
+                            $content.css({ "min-height": $body.height() });
                         }
                     }
 
@@ -8377,12 +8371,12 @@ $(function (win, doc, $) {
                             var top = Math.floor($footer.offset().top),
                                 scrollTop = Math.floor($(win).scrollTop() + $(win).height());
                             if (scrollTop > top) {
-                                $contentRight.css({
+                                $this.css({
                                     "bottom": scrollTop - top
                                 });
                             } else {
-                                $contentRight.css({
-                                    "bottom": 0
+                                $this.css({
+                                    "bottom": "auto"
                                 });
                             }
                         },

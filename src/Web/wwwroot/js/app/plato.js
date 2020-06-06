@@ -521,7 +521,7 @@ $(function (win, doc, $) {
     win.$.Plato = {
         // defaults
         defaults: {
-            debug: false,         
+            debug: true,         
             pathBase: "",
             locale: "en-US",
             apiKey: "",
@@ -602,7 +602,7 @@ $(function (win, doc, $) {
         app.ui.init();
 
         // Initialize Locales
-        app.locale.init();
+        //app.locale.init();
 
     });
 
