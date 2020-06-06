@@ -8359,8 +8359,7 @@ $(function (win, doc, $) {
                             if ($this.hasClass("fixed")) {                           
                                 // Setup content when container becomes fixed
                                 $contentLeftContainer.css({
-                                    "top": sidebarOffsetTop,
-                                    "width": $this.width()
+                                    "top": sidebarOffsetTop
                                 });
                                 // Apply overflow CSS
                                 if (!$contentLeftContainer.hasClass("overflow-auto")) {
@@ -8369,8 +8368,7 @@ $(function (win, doc, $) {
                             } else {
                                 // Reset
                                 $contentLeftContainer.css({
-                                    "top": "auto",
-                                    "width": "auto"
+                                    "top": "auto"
                                 });
                                 // Remove overflow CSS
                                 if ($contentLeftContainer.hasClass("overflow-auto")) {
@@ -8415,9 +8413,8 @@ $(function (win, doc, $) {
                             if ($this.hasClass("fixed")) {                                
                                 // Setup content when container becomes fixed
                                 $contentRightContainer.css({
-                                    "top": sidebarOffsetTop,
-                                    "width": $this.width()
-                                });                                
+                                    "top": sidebarOffsetTop
+                                });
                                 // Apply overflow CSS
                                 if ($contentRightContainer.hasClass("overflow-auto")) {
                                     $contentRightContainer.addClass("overflow-auto");
@@ -8425,8 +8422,7 @@ $(function (win, doc, $) {
                             } else {
                                 // Reset
                                 $contentRightContainer.css({
-                                    "top": "auto",
-                                    "width": "auto"
+                                    "top": "auto"
                                 });
                                 // Remove overflow CSS
                                 if ($contentRightContainer.hasClass("overflow-auto")) {
