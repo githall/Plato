@@ -8313,7 +8313,7 @@ $(function (win, doc, $) {
                     if ($content.length > 0) {
                         // Ensure is greater than our content
                         if ($contentLeft.height() >= $content.height()) {
-                            $content.css({ "min-height": $body.height() });
+                            //$content.css({ "min-height": $body.height() });
                         }
                     }
 
@@ -8321,11 +8321,12 @@ $(function (win, doc, $) {
                     $contentLeft.sticky({
                         offset: sidebarOffsetTop,
                         onScroll: function ($this) {
-                            var top = Math.floor($footer.offset().top),
-                                scrollTop = Math.floor($(win).scrollTop() + $(win).height());
-                            if (scrollTop > top) {
+                            var footerTop = Math.floor($footer.offset().top),
+                                winHeight = Math.floor($(win).height()),
+                                scrollTop = Math.floor($(win).scrollTop() + winHeight);
+                            if (footerTop > winHeight && scrollTop > footerTop) {
                                 $this.css({
-                                    "bottom": scrollTop - top
+                                    "bottom": scrollTop - footerTop
                                 });
                             } else {
                                 $this.css({
@@ -8360,7 +8361,7 @@ $(function (win, doc, $) {
                     if ($content.length > 0) {
                         // Ensure is greater than our content
                         if ($contentRight.height() >= $content.height()) {
-                            $content.css({ "min-height": $body.height() });
+                            //$content.css({ "min-height": $body.height() });
                         }
                     }
 
@@ -8368,11 +8369,12 @@ $(function (win, doc, $) {
                     $contentRight.sticky({
                         offset: sidebarOffsetTop,
                         onScroll: function ($this) {
-                            var top = Math.floor($footer.offset().top),
-                                scrollTop = Math.floor($(win).scrollTop() + $(win).height());
-                            if (scrollTop > top) {
+                            var footerTop = Math.floor($footer.offset().top),
+                                winHeight = Math.floor($(win).height()),
+                                scrollTop = Math.floor($(win).scrollTop() + winHeight);                          
+                            if (footerTop > winHeight && scrollTop > footerTop) {
                                 $this.css({
-                                    "bottom": scrollTop - top
+                                    "bottom": scrollTop - footerTop
                                 });
                             } else {
                                 $this.css({

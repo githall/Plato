@@ -521,7 +521,7 @@ $(function (win, doc, $) {
     win.$.Plato = {
         // defaults
         defaults: {
-            debug: true,         
+            debug: false,         
             pathBase: "",
             locale: "en-US",
             apiKey: "",
