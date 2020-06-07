@@ -737,22 +737,6 @@ a.label:hover, .label.active {
 .doc-header hr { margin: 2rem 0 0 0; }
 .doc-header .doc-title { margin-bottom:0; }
 
-element.style {
-    top: auto;
-    max-height: 916px;
-    bottom: auto;
-}
-.row.gutter-sm > .col, .row.gutter-sm > [class*="col-"] {
-    padding-right: 8px;
-    padding-left: 8px;
-}
-.layout-content-left, .layout-content-right {
-    overflow: visible;
-}
-.overflow-auto {
-    overflow-y: auto;
-    overflow-x: visible;
-}
 @media (min-width: 992px) {
 
     .doc-display .col-lg-3 {
