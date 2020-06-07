@@ -6,6 +6,8 @@
 
 :root {
     
+    --body-bg: #fff;
+
     /* Default = #007bff */
     --primary-text: #007bff;
     --primary-background: #007bff;
@@ -42,6 +44,10 @@
     /* Default = #80bdff */
     --form-control-border-focus: #80bdff;
 
+}
+
+body {
+    background-color:var(--body-bg);
 }
 
 /* ------------------- */
@@ -184,11 +190,7 @@
 /* ------------------- */
 
 .asides-content,
-.layout-header.fixed > .layout-header-container,
-.layout-content-left,
-.layout-content-left.fixed > .layout-content-left-container,
-.layout-content-right,
-.layout-content-right.fixed > .layout-content-right-container { background-color: white; }
+.layout-header.fixed > .layout-header-container { background-color: var(--body-bg); }
 
 .asides-header,
 .asides-footer,
@@ -849,16 +851,16 @@ a.label:hover, .label.active {
 /* Give our content column a little more space for docs */
 @media (min-width: 992px) {
 
-    .doc-display .layout-content-right.col-lg-3 {
+    .doc-display .col-lg-3 {
         -ms-flex: 0 0 20%;
         flex: 0 0 20%;
         max-width: 20%;
     }
 
     .doc-display .col-lg-6 {
-        -ms-flex: 0 0 55%;
-        flex: 0 0 55%;
-        max-width: 55%;
+        -ms-flex: 0 0 60%;
+        flex: 0 0 60%;
+        max-width: 60%;
     }
 
 }

@@ -63,7 +63,7 @@
         -ms-flex-direction: column !important;
         flex-direction: column !important;
     }    
-    
+
     /* Ensure asides are reset for screen sizes above 992px */
     /* ------------------- */
 
@@ -140,11 +140,7 @@
 /* ------------------- */
 
 .asides-content,
-.layout-header.fixed > .layout-header-container,
-.layout-content-left,
-.layout-content-left.fixed > .layout-content-left-container,
-.layout-content-right,
-.layout-content-right.fixed > .layout-content-right-container { background-color: #0a0a0a; }
+.layout-header.fixed > .layout-header-container { background-color: #0a0a0a; }
 
 .asides-header,
 .asides-footer,
@@ -741,6 +737,23 @@ a.label.active {
 .doc-header { display: none; padding-bottom: 0 !important; }
 .doc-header hr { margin: 2rem 0 0 0; }
 .doc-header .doc-title { margin-bottom:0; }
+
+/* Give our content column a little more space for docs */
+@media (min-width: 992px) {
+
+    .doc-display .layout-content-right.col-lg-3 {
+        -ms-flex: 0 0 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+
+    .doc-display .col-lg-6 {
+        -ms-flex: 0 0 55%;
+        flex: 0 0 55%;
+        max-width: 55%;
+    }
+
+}
 
 /* ------------------- */
 /*  Bootswatch v4.3.1 overrides */

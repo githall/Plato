@@ -763,8 +763,9 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 /* Card */
 /* ------------------------- */
 
-.card-header .card-title { margin: 0.50rem 0; }
-.card-header .nav-link { padding: 0.25rem 1rem; }
+.card-header { padding: 1rem 1.25rem !important; }
+.card-header .nav-link { padding: 0 1rem; }
+.card-header .card-title { margin-bottom: 0 !important; }
 
 .card-body-flush .card-body { padding: 0; }
 .card-body-sm-gutter .card-body { padding: 0.5rem; }
@@ -2093,8 +2094,8 @@ i.is-banned:before { margin-right: 0 !important; }
 .slide-out-top-left { top: -200px; left: 24px; }
 .slide-out-top-right { top: -200px; right: 24px; }
 
-.slide-out-bottom-left { bottom: -200px; left: 24px; }
-.slide-out-bottom-right { bottom: -200px; right: 24px; }
+.slide-out-bottom-left { bottom: -200px; left: 12px; }
+.slide-out-bottom-right { bottom: -200px; right: 12px; }
 
 .slide-out-top-left.active,
 .slide-out-top-right.active { top: 24px; }
