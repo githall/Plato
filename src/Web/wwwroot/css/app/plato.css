@@ -763,7 +763,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 /* Card */
 /* ------------------------- */
 
-.card-header { padding: 1rem 1.25rem !important; }
+.card-header { padding: 1rem 1.25rem; }
 .card-header .nav-link { padding: 0 1rem; }
 .card-header .card-title { margin-bottom: 0 !important; }
 

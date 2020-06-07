@@ -850,17 +850,17 @@ a.label:hover, .label.active {
 
 /* Give our content column a little more space for docs */
 @media (min-width: 992px) {
-
-    .doc-display .col-lg-3 {
+    
+    .doc-display .layout-content-right.col-lg-3 {
         -ms-flex: 0 0 20%;
         flex: 0 0 20%;
         max-width: 20%;
     }
 
     .doc-display .col-lg-6 {
-        -ms-flex: 0 0 60%;
-        flex: 0 0 60%;
-        max-width: 60%;
+        -ms-flex: 0 0 55%;
+        flex: 0 0 55%;
+        max-width: 55%;
     }
 
 }
