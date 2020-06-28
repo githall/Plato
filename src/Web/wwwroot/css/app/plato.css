@@ -623,11 +623,12 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .markdown-body blockquote {
     display: block;
     font-size: 100%;
-    padding: 1rem;
+    padding: 24px;
     position: relative;
     border: 0;
     border-left-width: 0.25rem;
     border-left-style: solid;
+    border-radius: 2px;
 }
 
 .markdown-body blockquote h1:first-child, 
@@ -693,7 +694,8 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .markdown-body h2 {
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    padding-bottom: .3em;
+    padding-bottom: 16px;
+    margin-bottom:32px;
 }
 
 .markdown-body h1,
@@ -705,7 +707,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     font-weight: 600;
     line-height: 1.25;
     margin-bottom: 16px;
-    margin-top: 24px;
+    margin-top: 32px;
 }
 
 /* code blocks */
@@ -1652,6 +1654,7 @@ a.navbar-brand img { max-height: 48px; }
 
 .tree > ul { margin: 0; padding: 0;  list-style: none; }
 .tree li.list-group-item { padding: 0 !important; border: 0;  }
+.tree a:hover { text-decoration:none; }
 
 /* addresses dropdown overflow issues */
 .tree li.list-group-item,

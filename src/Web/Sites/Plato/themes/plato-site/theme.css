@@ -34,34 +34,27 @@
 /* To be removed once all HR elements have been removed from layout-header-container */
 .layout-header .layout-header-container hr { display: none; }
 
-.layout-content-left,
-.layout-content-right {
-    overflow:visible;
-}
-
 @media (min-width: 992px) {
     
     /* Only apply fixed layout for screen sizes above 992px */
     /* ------------------- */
 
-    /* When the header becomes fixed, fix content */
-    .layout-header.fixed  {
-        position: sticky;        
+    .layout-header  {
+        position: sticky;      
         top: 0;
         z-index: 5;
-    }
-    
-    /* When the sidebars becomes fixed, fix content */
-    .layout-content-left.fixed,
-    .layout-content-right.fixed {
-        position: sticky;     
-        z-index: 4;  /* Below sticky header*/
-        overflow:auto;
-        -webkit-box-orient: vertical !important;
-        -webkit-box-direction: normal !important;
-        -ms-flex-direction: column !important;
-        flex-direction: column !important;
     }    
+
+    .layout-content-left,
+    .layout-content-right {   
+        position: sticky; 
+        z-index: 4;         
+    }    
+    
+    .layout-content-left:not(.fixed),
+    .layout-content-right:not(.fixed) {
+        overflow:visible;
+    }
 
     /* Ensure asides are reset for screen sizes above 992px */
     /* ------------------- */
@@ -77,6 +70,7 @@
         overflow:visible !important;
         border: 0 !important;
         padding: 0 !important;
+        outline:none;
         opacity: 1 !important;
     }
 
@@ -139,7 +133,7 @@
 /* ------------------- */
 
 .asides-content,
-.layout-header.fixed > .layout-header-container { background-color: #fff; }
+.layout-header-container { background-color: #fff; }
 
 .asides-header,
 .asides-footer,
@@ -230,7 +224,7 @@
 
 .markdown-body blockquote {
     border-left: .25em solid rgba(50, 50, 50, 0.25);
-    background: rgba(200, 200, 200, 0.1);
+    background: rgb(245, 247, 249);
 }
 
 .markdown-body blockquote footer {

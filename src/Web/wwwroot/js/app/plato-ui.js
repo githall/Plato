@@ -847,17 +847,15 @@ $(function (win, doc, $) {
                     }
                 });
 
+                var top = methods._getOriginalTop($caller),
+                    offset = methods._getOffset($caller);
+
                 // Bind scroll events
                 $().scrollSpy({
                     namespace: dataKey,
-                    onScroll: function (spy, e, $win) {
-
-                        var scrollTop = $win.scrollTop(),
-                            top = methods._getOriginalTop($caller),
-                            offset = methods._getOffset($caller);
-
+                    onScroll: function (spy, e, $win) {                 
                         // onUpdate event
-                        if (scrollTop > top - offset) {
+                        if (spy.scrollTop > top - offset) {
                             if (!$caller.hasClass("fixed")) {
                                 $caller.addClass("fixed");
                                 if ($caller.data(dataKey).onUpdate) {
@@ -911,7 +909,7 @@ $(function (win, doc, $) {
                     }
                 }
             },
-            _setOriginalTop: function ($caller, top) {
+            _setOriginalTop: function ($caller, top) {                
                 var key = dataKey + "_top";
                 if (!$caller.data(key)) {
                     $caller.data(key, $caller.offset().top);
@@ -2460,18 +2458,11 @@ $(function (win, doc, $) {
                         }
 
                         // Raise onScroll passing in a normalized scroll threshold
-                        if (events.onScroll.length > 0) {
-                            var scrollTop = $caller.scrollTop(),
-                                docHeight = $(doc).height(),
-                                winHeight = $caller.height();
+                        if (events.onScroll.length > 0) {                         
                             for (i = 0; i < events.onScroll.length; i++) {
                                 events.onScroll[i]({
-                                    scrollTop: Math.ceil(scrollTop),
-                                    scrollBottom: Math.ceil(scrollTop + winHeight),
-                                    documentHeight: docHeight,
-                                    windowHeight: winHeight
-                                },
-                                    e, $caller);
+                                    scrollTop: $caller.scrollTop()
+                                }, e, $caller);
                             }
                         }
 
@@ -2505,7 +2496,7 @@ $(function (win, doc, $) {
             _getEventName: function ($caller) {
                 return "scroll." + this._getNamespace($caller);
             },
-            _getNamespace: function ($caller) {
+            _getNamespace: function ($caller) {                          
                 return $caller.data(dataKey).namespace || "scrollSpy";
             },
             _storeEvents: function ($caller) {
@@ -7788,7 +7779,7 @@ $(function (win, doc, $) {
         this.find('[data-provide="scroll"]').scrollTo();
 
         /* sticky */
-        this.find('[data-provide="sticky"]').sticky();
+        //this.find('[data-provide="sticky"]').sticky();
 
         /* pagedList */
         this.find('[data-provide="paged-list"]').pagedList();
@@ -8239,10 +8230,8 @@ $(function (win, doc, $) {
             header: "#layout-header",
             body: "#layout-body",
             content: "#layout-content",
-            contentLeft: "#layout-content-left",
-            contentLeftContainer: "#layout-content-left-container",
-            contentRight: "#layout-content-right",
-            contentRightContainer: "#layout-content-right-container",
+            contentLeft: "#layout-content-left",            
+            contentRight: "#layout-content-right",            
             footer: "#layout-footer"
         };
 
@@ -8322,7 +8311,7 @@ $(function (win, doc, $) {
 
                 // Apply sticky left
                 if (this._enableStickyContentLeft($caller)) {
-
+             
                     // Apply sticky to sidebars
                     $contentLeft.sticky({
                         offset: sidebarOffsetTop,
@@ -8340,14 +8329,14 @@ $(function (win, doc, $) {
                             }
                         },
                         onUpdate: function ($this) {                   
-                            if ($this.hasClass("fixed")) {
-                                $this.css({
+                            if ($this.hasClass("fixed")) {                             
+                                $this.css({           
                                     "top": sidebarOffsetTop,
                                     "max-height": $(win).height() - sidebarOffsetTop
                                 });
                             } else {
                                 // Reset
-                                $this.css({
+                                $this.css({       
                                     "top": "auto",
                                     "max-height": "auto"
                                 });
@@ -8357,7 +8346,7 @@ $(function (win, doc, $) {
                     });
 
                 }
-
+            
                 // Apply sticky right
                 if (this._enableStickyContentRight($caller)) {
 

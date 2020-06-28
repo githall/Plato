@@ -94,26 +94,24 @@ body {
     
     /* Only apply fixed layout for screen sizes above 992px */
     /* ------------------- */
-
-    /* When the header becomes fixed, fix content */
-    .layout-header.fixed  {
-        position: sticky;        
+    
+    .layout-header  {
+        position: sticky;      
         top: 0;
         z-index: 5;
-    }
-    
-    /* When the sidebars becomes fixed, fix content */
-    .layout-content-left.fixed,
-    .layout-content-right.fixed {
-        position: sticky;     
-        z-index: 4;  /* Below sticky header*/
-        overflow:auto;
-        -webkit-box-orient: vertical !important;
-        -webkit-box-direction: normal !important;
-        -ms-flex-direction: column !important;
-        flex-direction: column !important;
+    }    
+
+    .layout-content-left,
+    .layout-content-right {   
+        position: sticky; 
+        z-index: 4;         
     }    
     
+    .layout-content-left:not(.fixed),
+    .layout-content-right:not(.fixed) {
+        overflow:visible;
+    }
+
     /* Ensure asides are reset for screen sizes above 992px */
     /* ------------------- */
 
@@ -190,7 +188,7 @@ body {
 /* ------------------- */
 
 .asides-content,
-.layout-header.fixed > .layout-header-container { background-color: var(--body-bg); }
+.layout-header-container { background-color: var(--body-bg); }
 
 .asides-header,
 .asides-footer,
