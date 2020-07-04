@@ -38,7 +38,7 @@
 }
 else
 {
-    var returnUrl = Context.Request.PathBase + Context.Request.Path;
+    var returnUrl = Context.Request.PathBase;
     <ul class="nav nav-pills">
         <li class="nav-item nav-item-login">       
             <a class="nav-link" asp-route-area="Plato.Users" asp-route-controller="Account" asp-route-action="Login" asp-route-returnUrl="@returnUrl">@T["Login"]</a>

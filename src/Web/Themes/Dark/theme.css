@@ -3374,3 +3374,19 @@ legend {
         border-color: #282828
     }
 }
+
+/* ------------------------- */
+/* Login & Register */
+/* ------------------------- */
+
+@media (min-width: 992px)
+{
+    .account-login .col-lg-9,
+    .account-login .col-lg-3,
+    .account-register .col-lg-9,
+    .account-register .col-lg-3 {
+        width: 50%;
+        max-width: 50%;
+        flex: 0 0 50%;
+    }
+}
