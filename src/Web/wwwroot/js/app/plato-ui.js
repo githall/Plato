@@ -835,25 +835,35 @@ $(function (win, doc, $) {
             },
             bind: function ($caller) {
 
-                // Bind resize events
-                $(win).resizeSpy({
-                    onResize: function ($win, e) {
-                        if ($caller.data(dataKey).onScroll) {
-                            $caller.data(dataKey).onScroll($caller, win);
-                        }
-                        if ($caller.data(dataKey).onUpdate) {
-                            $caller.data(dataKey).onUpdate($caller);
-                        }
-                    }
-                });
+                //// Bind resize events
+                //$(win).resizeSpy({
+                //    onResize: function ($win, e) {                  
+                //        //if ($caller.data(dataKey).onScroll) {
+                //        //    $caller.data(dataKey).onScroll($caller, win);
+                //        //}
+                //        //if ($caller.data(dataKey).onUpdate) {
+                //        //    $caller.data(dataKey).onUpdate($caller);
+                //        //}
+                //    },
+                //    onResizeEnd: function (e) {
+                //        // Initialize initial state
+                //        var key = dataKey + "_top";
+                //        //if (!$caller.data(key)) {
+                //            $caller.data(key, $caller.offset().top);
+                //        //}
+                //        methods.update($caller);
+                //    }
+                //});
 
-                var top = methods._getOriginalTop($caller),
-                    offset = methods._getOffset($caller);
-
+               
                 // Bind scroll events
                 $().scrollSpy({
                     namespace: dataKey,
-                    onScroll: function (spy, e, $win) {                 
+                    onScroll: function (spy, e, $win) {    
+
+                        var top = methods._getOriginalTop($caller),
+                            offset = methods._getOffset($caller);
+                      
                         // onUpdate event
                         if (spy.scrollTop > top - offset) {
                             if (!$caller.hasClass("fixed")) {
@@ -8295,8 +8305,7 @@ $(function (win, doc, $) {
                     $header = $caller.find(selectors.header),
                     $contentLeft = $caller.find(selectors.contentLeft),
                     $contentRight = $caller.find(selectors.contentRight),
-                    $footer = $caller.find(selectors.footer),
-                    winHeight = Math.floor($(win).height());
+                    $footer = $caller.find(selectors.footer);
 
                 // Apply sticky headers
                 if (this._enableStickyHeader($caller)) {
@@ -8316,7 +8325,8 @@ $(function (win, doc, $) {
                     $contentLeft.sticky({
                         offset: sidebarOffsetTop,
                         onScroll: function ($this) {
-                            var footerTop = Math.floor($footer.offset().top),                              
+                            var winHeight = Math.floor($(win).height()),
+                                footerTop = Math.floor($footer.offset().top),                              
                                 scrollTop = Math.floor($(win).scrollTop() + winHeight);
                             if (footerTop > winHeight && scrollTop > footerTop) {                                                                               
                                 $this.css({
@@ -8354,7 +8364,8 @@ $(function (win, doc, $) {
                     $contentRight.sticky({
                         offset: sidebarOffsetTop,
                         onScroll: function ($this) {
-                            var footerTop = Math.floor($footer.offset().top),                             
+                            var winHeight = Math.floor($(win).height()),
+                                footerTop = Math.floor($footer.offset().top),                             
                                 scrollTop = Math.floor($(win).scrollTop() + winHeight);
                             if (footerTop > winHeight && scrollTop > footerTop) {
                                 $this.css({
@@ -8362,8 +8373,7 @@ $(function (win, doc, $) {
                                 });
                             } else {
                                 $this.css({
-                                    "bottom": "auto",                                    
-                                    "max-height": "auto"
+                                    "bottom": "auto"
                                 });
                             }
                         },

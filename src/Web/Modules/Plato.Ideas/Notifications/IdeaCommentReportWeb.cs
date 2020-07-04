@@ -13,7 +13,6 @@ using Plato.Ideas.NotificationTypes;
 using Plato.Entities;
 using Plato.Entities.Models;
 using Plato.Entities.Stores;
-using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Notifications
 {

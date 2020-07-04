@@ -87,11 +87,27 @@ body {
 
 .layout-content-left,
 .layout-content-right {
+    position: sticky; 
+    z-index: 1;     
     overflow:visible;
 }
 
 @media (min-width: 992px) {
     
+    /* Ensure sidebars are ordered correctly for desktop */
+
+    .layout-content-left {
+        order: 0;
+    }
+
+    .layout-content-content {
+        order: 1;
+    }
+
+    .layout-content-right {
+        order: 2;
+    }
+
     /* Only apply fixed layout for screen sizes above 992px */
     /* ------------------- */
     
@@ -101,12 +117,6 @@ body {
         z-index: 5;
     }    
 
-    .layout-content-left,
-    .layout-content-right {   
-        position: sticky; 
-        z-index: 4;         
-    }    
-    
     .layout-content-left:not(.fixed),
     .layout-content-right:not(.fixed) {
         overflow:visible;
@@ -864,7 +874,7 @@ a.label:hover, .label.active {
 }
 
 /* ------------------------- */
-/* Login */
+/* Login & Register */
 /* ------------------------- */
 
 @media (min-width: 992px)

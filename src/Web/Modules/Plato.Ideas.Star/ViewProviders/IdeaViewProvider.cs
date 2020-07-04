@@ -3,7 +3,6 @@ using Plato.Ideas.Models;
 using Plato.Stars.Stores;
 using Plato.Stars.ViewModels;
 using PlatoCore.Hosting.Web.Abstractions;
-using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Layout.ViewProviders.Abstractions;
 
 namespace Plato.Ideas.Star.ViewProviders

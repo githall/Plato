@@ -10,7 +10,6 @@ using PlatoCore.Hosting.Web.Abstractions;
 using PlatoCore.Models.Notifications;
 using PlatoCore.Notifications.Abstractions;
 using Plato.Ideas.StopForumSpam.NotificationTypes;
-using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.StopForumSpam.Notifications
 {
