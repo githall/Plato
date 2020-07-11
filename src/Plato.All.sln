@@ -403,6 +403,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Tour", "Web\Modules\P
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Tenants.SignUp", "Web\Modules\Plato.Tenants.SignUp\Plato.Tenants.SignUp.csproj", "{7CBA74D6-D702-4BC4-8EEA-B875688231C4}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Plato.Spaces", "Web\Modules\Plato.Spaces\Plato.Spaces.csproj", "{1B270DED-9B65-4372-8A19-696A2E4CACCA}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -1197,6 +1199,10 @@ Global
 		{7CBA74D6-D702-4BC4-8EEA-B875688231C4}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7CBA74D6-D702-4BC4-8EEA-B875688231C4}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7CBA74D6-D702-4BC4-8EEA-B875688231C4}.Release|Any CPU.Build.0 = Release|Any CPU
+		{1B270DED-9B65-4372-8A19-696A2E4CACCA}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{1B270DED-9B65-4372-8A19-696A2E4CACCA}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{1B270DED-9B65-4372-8A19-696A2E4CACCA}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{1B270DED-9B65-4372-8A19-696A2E4CACCA}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -1399,6 +1405,7 @@ Global
 		{2756DC93-B57F-49F1-A1F5-7250796E3F5B} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 		{67DEBF9A-7452-47B8-9DB9-986D0F2FB95D} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 		{7CBA74D6-D702-4BC4-8EEA-B875688231C4} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
+		{1B270DED-9B65-4372-8A19-696A2E4CACCA} = {D250B06C-4CE6-4D5D-A27C-A74651B2B5BC}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {5D0A5670-4936-4ADF-AF0F-46D7F9842EC1}

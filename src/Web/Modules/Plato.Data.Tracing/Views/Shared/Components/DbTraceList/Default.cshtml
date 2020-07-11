@@ -31,23 +31,23 @@
                             <th scope="row">@trace.Id.ToString()</th>
                             <td>@trace.Command.CommandType.ToString()</td>
                             <td>@trace.Command.CommandText</td>
-                            <td>
+                            <td>                         
                                 @if (trace.ElapsedTime.Milliseconds > 500)
                                 {
                                     <span class="label p-1 bg-danger text-white">
-                                        @string.Format("{0}ms", trace.ElapsedTime.Milliseconds)
+                                        @trace.ElapsedTime.ToString(@"s\s\ fff\m\s")
                                     </span>
                                 }
                                 else if (trace.ElapsedTime.Milliseconds > 250)
                                 {
                                     <span class="label p-1 bg-warning text-white">
-                                        @string.Format("{0}ms", trace.ElapsedTime.Milliseconds)
+                                        @trace.ElapsedTime.ToString(@"s\s\ fff\m\s")
                                     </span>
                                 }
                                 else
                                 {
                                     <span class="label p-1">
-                                        @string.Format("{0}ms", trace.ElapsedTime.Milliseconds)
+                                        @trace.ElapsedTime.ToString(@"s\s\ fff\m\s")
                                     </span>
                                 }
                                 @{
@@ -59,7 +59,7 @@
                                 {
                                     foreach (var parameter in trace.Command.Parameters)
                                     {
-                                        @Html.Raw(string.Format("<strong>{0}</strong> = {1}<hr/>", parameter.ParameterName, parameter.Value.ToString()));
+                                        @Html.Raw(string.Format("<strong>{0}</strong><br/><code>{1}</code><hr/>", parameter.ParameterName, parameter.Value.ToString()));
                                     }
                                 }
                                 else

@@ -1,0 +1,93 @@
+/* CSs allowing for additional customization of this feature */
+
+header {
+    height: 55px;
+    background: black;
+}
+
+.panel-container {
+    display: flex;
+    flex-direction: row;
+}
+
+.panel-left {
+    flex: 0 0 auto;
+    position: sticky;
+    top:0;
+    width: 300px;
+    min-height: 200px;
+    min-width: 150px;
+    white-space: nowrap;
+    background: #f8f8f8;
+    max-width: 500px;
+    height: 100%;
+    z-index: 1;
+    -webkit-transform: translate3d(-100%,0,0) !important;
+    -ms-transform: translate3d(-100%,0,0) !important;
+    transform: translate3d(-100%,0,0) !important;
+}
+
+.panel-left,
+.panel-right {
+    -o-transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+    -webkit-transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+    transition: transform .4s cubic-bezier(.25,.8,.25,1) !important;
+}
+
+.panel-left.show {
+    -webkit-transform: translate3d(0,0,0) !important;
+    -ms-transform: translate3d(0,0,0) !important;
+    transform: translate3d(0,0,0) !important;
+}
+
+.panel-left.collapse {
+    display: inline !important;
+}
+
+.panel-left .scrollable {
+    width: calc(100% - 16px);
+    height: 100%;
+    padding: 1rem;
+    overflow:auto;
+}
+
+.panel-splitter {
+    position: absolute;
+    width: 16px;
+    top: 0;
+    right: 0;
+    background: url(../images/splitter.png) center center no-repeat #eee;
+    min-height: 200px;
+    cursor: col-resize;
+    height: 100%;
+    border-right: 1px solid #eee;
+    z-index: 2;
+}
+
+.panel-right {
+    flex: 0 0 auto;
+    width: 100%;
+    background: #fff;
+    padding: 1rem;
+    min-width: 200px;
+    height: 100%;
+    -webkit-transform: translate3d(-300px,0,0) !important;
+    -ms-transform: translate3d(-300px,0,0) !important;
+    transform: translate3d(-300px,0,0) !important;
+}
+
+/* Responsive Splitter */
+
+@media (min-width: 992px) {
+
+    .panel-left,
+    .panel-right {
+        -webkit-transform: translate3d(0,0,0) !important;
+        -ms-transform: translate3d(0,0,0) !important;
+        transform: translate3d(0,0,0) !important;
+    }
+
+    .panel-right {
+        flex: 1 1 auto;
+    }
+}

@@ -6927,7 +6927,7 @@ $(function (win, doc, $) {
                     }
 
                     // Checks bounds
-                    var padding = 20,
+                    var padding = 0,
                         left = parseInt($popper.css("left").split("p")[0]),
                         top = parseInt($popper.css("top").split("p")[0]),
                         right = left + width,
