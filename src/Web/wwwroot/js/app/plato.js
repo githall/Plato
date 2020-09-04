@@ -602,7 +602,7 @@ $(function (win, doc, $) {
         app.ui.init();
 
         // Initialize Locales
-        app.locale.init();
+        //app.locale.init();
 
     });
 

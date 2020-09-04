@@ -4,25 +4,6 @@
 /* Layout */
 /* ------------------- */
 
-.layout,
-.layout-header,
-.layout-header-right,
-.layout-alerts,
-.layout-body,
-.layout-content-tools,
-.layout-content-tools-right,
-.layout-content,
-.layout-content-left,
-.layout-content-right,
-.layout-content-actions,
-.layout-content-actions-right,
-.layout-footer,
-.layout-footer-right {}
-
-.layout-content {
-    transition: all 0.3s ease-out;
-}
-
 /* Ensure right aligned content does not wrap */
 .layout-header .layout-header-right,
 .layout-content-tools .layout-content-tools-right,
@@ -40,40 +21,48 @@
     This ensures we can correctly calculate the "fixed" header height
     via JavaScript upon the initial load before the header actually becomes "fixed" */
 
-.layout-header  { padding-bottom: 1rem; }
+.layout-header  { 
+    padding-bottom: 1rem;
+    width: 100%;
+}
+
 .layout-header .layout-header-container { 
-    padding: 1rem 0;
+    padding: 1rem 0; 
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
 
-/* To be removed once all HR elements have been removed from layout-header-content */
+/* To be removed once all HR elements have been removed from layout-header-container */
 .layout-header .layout-header-container hr { display: none; }
+
+.layout-content-left,
+.layout-content-right {
+    overflow:visible;
+}
 
 @media (min-width: 992px) {
     
     /* Only apply fixed layout for screen sizes above 992px */
     /* ------------------- */
-
-    /* When the header becomes fixed, fix content */
-    .layout-header.fixed > .layout-header-container {
-        position: fixed;
+    
+    .layout-header  {
+        position: sticky;      
         top: 0;
         z-index: 5;
-        white-space: nowrap;
-    }
-    
-    /* When the sidebars becomes fixed, fix content */
-    .layout-content-left.fixed > .layout-content-left-container,
-    .layout-content-right.fixed > .layout-content-right-container {
-        position: fixed;
-        display: flex;
-        -webkit-box-orient: vertical !important;
-        -webkit-box-direction: normal !important;
-        -ms-flex-direction: column !important;
-        flex-direction: column !important;
+    }    
+
+    .layout-content-left,
+    .layout-content-right {   
+        position: sticky; 
+        z-index: 4;         
     }    
     
+    .layout-content-left:not(.fixed),
+    .layout-content-right:not(.fixed) {
+        overflow:visible;
+    }
+
+
     /* Ensure asides are reset for screen sizes above 992px */
     /* ------------------- */
 
@@ -150,11 +139,7 @@
 /* ------------------- */
 
 .asides-content,
-.layout-header.fixed > .layout-header-container,
-.layout-content-left,
-.layout-content-left.fixed > .layout-content-left-container,
-.layout-content-right,
-.layout-content-right.fixed > .layout-content-right-container { background-color: #0a0a0a; }
+.layout-header-container { background-color: #0a0a0a; }
 
 .asides-header,
 .asides-footer,
@@ -751,6 +736,23 @@ a.label.active {
 .doc-header { display: none; padding-bottom: 0 !important; }
 .doc-header hr { margin: 2rem 0 0 0; }
 .doc-header .doc-title { margin-bottom:0; }
+
+/* Give our content column a little more space for docs */
+@media (min-width: 992px) {
+    
+    .doc-display .layout-content-right.col-lg-3 {
+        -ms-flex: 0 0 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+
+    .doc-display .col-lg-6 {
+        -ms-flex: 0 0 55%;
+        flex: 0 0 55%;
+        max-width: 55%;
+    }
+
+}
 
 /* ------------------- */
 /*  Bootswatch v4.3.1 overrides */
@@ -3370,5 +3372,21 @@ legend {
     .table .thead-dark th {
         color: inherit;
         border-color: #282828
+    }
+}
+
+/* ------------------------- */
+/* Login & Register */
+/* ------------------------- */
+
+@media (min-width: 992px)
+{
+    .account-login .col-lg-9,
+    .account-login .col-lg-3,
+    .account-register .col-lg-9,
+    .account-register .col-lg-3 {
+        width: 50%;
+        max-width: 50%;
+        flex: 0 0 50%;
     }
 }

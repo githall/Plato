@@ -143,7 +143,7 @@ namespace Plato.Docs.Categories.ViewProviders
                     foreach (var parent in parentCategories)
                     {
                         builder.Add(S[parent.Name], channel => channel
-                            .Action("Index", "Home", "Plato.Docs.Categories", new RouteValueDictionary
+                            .Action("Display", "Home", "Plato.Docs.Categories", new RouteValueDictionary
                             {
                                 ["opts.categoryId"] = parent.Id,
                                 ["opts.alias"] = parent.Alias,

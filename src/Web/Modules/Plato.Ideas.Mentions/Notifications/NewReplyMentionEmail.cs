@@ -17,7 +17,6 @@ using PlatoCore.Models.Notifications;
 using PlatoCore.Models.Users;
 using PlatoCore.Notifications.Abstractions;
 using PlatoCore.Security.Abstractions;
-using PlatoCore.Hosting.Web.Abstractions;
 
 namespace Plato.Ideas.Mentions.Notifications
 {

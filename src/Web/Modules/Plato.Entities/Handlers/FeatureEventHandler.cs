@@ -690,7 +690,10 @@ namespace Plato.Entities.Handlers
                 .CreateProcedure(
                     new SchemaProcedure(
                             $"SelectEntityById",
-                            @"SELECT e.*, f.ModuleId, 0 AS Rank, 0 AS MaxRank,
+                            @"SELECT e.*, 
+                                    f.ModuleId, 
+                                    0 AS Rank, 
+                                    0 AS MaxRank,
                                     c.UserName AS CreatedUserName,                              
                                     c.DisplayName AS CreatedDisplayName,                                  
                                     c.Alias AS CreatedAlias,

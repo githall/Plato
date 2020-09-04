@@ -623,11 +623,12 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .markdown-body blockquote {
     display: block;
     font-size: 100%;
-    padding: 1rem;
+    padding: 24px;
     position: relative;
     border: 0;
     border-left-width: 0.25rem;
     border-left-style: solid;
+    border-radius: 2px;
 }
 
 .markdown-body blockquote h1:first-child, 
@@ -693,7 +694,8 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 .markdown-body h2 {
     border-bottom-width: 1px;
     border-bottom-style: solid;
-    padding-bottom: .3em;
+    padding-bottom: 16px;
+    margin-bottom:32px;
 }
 
 .markdown-body h1,
@@ -705,7 +707,7 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
     font-weight: 600;
     line-height: 1.25;
     margin-bottom: 16px;
-    margin-top: 24px;
+    margin-top: 32px;
 }
 
 /* code blocks */
@@ -763,8 +765,9 @@ canvas { -moz-user-select: none; -webkit-user-select: none; -ms-user-select: non
 /* Card */
 /* ------------------------- */
 
-.card-header .card-title { margin: 0.50rem 0; }
-.card-header .nav-link { padding: 0.25rem 1rem; }
+.card-header { padding: 1rem 1.25rem; }
+.card-header .nav-link { padding: 0 1rem; }
+.card-header .card-title { margin-bottom: 0 !important; }
 
 .card-body-flush .card-body { padding: 0; }
 .card-body-sm-gutter .card-body { padding: 0.5rem; }
@@ -1651,6 +1654,7 @@ a.navbar-brand img { max-height: 48px; }
 
 .tree > ul { margin: 0; padding: 0;  list-style: none; }
 .tree li.list-group-item { padding: 0 !important; border: 0;  }
+.tree a:hover { text-decoration:none; }
 
 /* addresses dropdown overflow issues */
 .tree li.list-group-item,
@@ -2093,8 +2097,8 @@ i.is-banned:before { margin-right: 0 !important; }
 .slide-out-top-left { top: -200px; left: 24px; }
 .slide-out-top-right { top: -200px; right: 24px; }
 
-.slide-out-bottom-left { bottom: -200px; left: 24px; }
-.slide-out-bottom-right { bottom: -200px; right: 24px; }
+.slide-out-bottom-left { bottom: -200px; left: 12px; }
+.slide-out-bottom-right { bottom: -200px; right: 12px; }
 
 .slide-out-top-left.active,
 .slide-out-top-right.active { top: 24px; }

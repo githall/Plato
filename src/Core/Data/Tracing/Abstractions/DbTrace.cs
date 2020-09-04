@@ -33,7 +33,7 @@ namespace PlatoCore.Data.Tracing.Abstractions
 
         public DbTrace()
         {
-            StartTime = DateTime.Now.Ticks;
+            StartTime = DateTime.Now.Millisecond;
         }
 
         public DbTrace(IDbTraceCommand command) : this()

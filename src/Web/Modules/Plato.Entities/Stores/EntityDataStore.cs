@@ -1,14 +1,12 @@
-﻿using System.Collections.Generic;
-using System.Data;
+﻿using System.Data;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Microsoft.Extensions.Logging;
 using Plato.Entities.Models;
 using Plato.Entities.Repositories;
-using PlatoCore.Cache;
 using PlatoCore.Cache.Abstractions;
 using PlatoCore.Data.Abstractions;
-using PlatoCore.Modules.Abstractions;
 using PlatoCore.Stores.Abstractions;
 
 namespace Plato.Entities.Stores
@@ -24,26 +22,23 @@ namespace Plato.Entities.Stores
     public class EntityDataStore : IEntityDataStore<IEntityData>
     {
 
-        private readonly ICacheManager _cacheManager;
         private readonly IEntityDataRepository<IEntityData> _entityDataRepository;
         private readonly ILogger<EntityDataStore> _logger;
         private readonly IDbQueryConfiguration _dbQuery;
-        private readonly ITypedModuleProvider _typedModuleProvider;
-        
-        public EntityDataStore(
-            ICacheManager cacheManager,
+        private readonly ICacheManager _cacheManager;
+
+        public EntityDataStore(            
             IEntityDataRepository<IEntityData> entityDataRepository, 
             ILogger<EntityDataStore> logger,
             IDbQueryConfiguration dbQuery,
-            ITypedModuleProvider typedModuleProvider)
-        {
-            _cacheManager = cacheManager;
+            ICacheManager cacheManager)
+        {            
             _entityDataRepository = entityDataRepository;
-            _logger = logger;
+            _cacheManager = cacheManager;
             _dbQuery = dbQuery;
-            _typedModuleProvider = typedModuleProvider;
+            _logger = logger;
         }
-        
+
         public async Task<IEntityData> CreateAsync(IEntityData model)
         {
             var result =  await _entityDataRepository.InsertUpdateAsync(model);
@@ -111,6 +106,7 @@ namespace Plato.Entities.Stores
         {
             _cacheManager.CancelTokens(this.GetType());
         }
+
     }
 
 }

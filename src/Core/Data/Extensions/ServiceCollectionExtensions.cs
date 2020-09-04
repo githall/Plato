@@ -16,7 +16,7 @@ namespace PlatoCore.Data.Extensions
         {
 
             // Add default data options and data context
-            // DbContextOptions is overriden for each tennet within ShellContainerFactory
+            // DbContextOptions is overridden for each tenant within ShellContainerFactory
             services.AddScoped<IDbContextOptions, DbContextOptions>();
 
             // Provider
@@ -26,7 +26,7 @@ namespace PlatoCore.Data.Extensions
             services.AddScoped<IDbContext, DbContext>();            
             services.AddTransient<IDbHelper, DbHelper>();
 
-            // Add schemas
+            // Add schema
             services.AddDataSchemas();
 
             // Add migrations 

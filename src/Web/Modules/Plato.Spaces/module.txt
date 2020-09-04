@@ -1,0 +1,19 @@
+Name: Plato Spaces
+Description: An experimental module for the next generation Plato UI.
+Author: InstantASP
+WebSite: https://www.instantasp.co.uk/
+Category: Spaces
+PlatoVersion: 2.0.0
+Version: 1.0.0
+Icon: /plato.spaces/content/images/icon.png
+Dependencies: 
+[
+	{
+		Id: "Plato.WebAPI",
+		Version: "1.0.0"
+	},
+	{
+		Id: "Plato.Admin",
+		Version: "1.0.0"
+	}
+]

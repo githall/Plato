@@ -111,7 +111,7 @@ namespace Plato.Discuss.SimilarTopics.ViewProviders
                         q.HideHidden.True();
                     }
 
-                    // Hide spam?
+                    // Hide SPAM?
                     if (!await _authorizationService.AuthorizeAsync(context.Controller.HttpContext.User,
                         Permissions.ViewSpamTopics))
                     {
@@ -138,10 +138,12 @@ namespace Plato.Discuss.SimilarTopics.ViewProviders
                     {
                         FeatureId = entity.FeatureId,
                         Sort = sort
-                    }, new PagerOptions()
+                    }, 
+                    new PagerOptions()
                     {
                         Page = 1,
-                        Size = 10
+                        Size = 10,
+                        CountTotal = false
                     });
 
             // Build similar topics view model
@@ -167,7 +169,7 @@ namespace Plato.Discuss.SimilarTopics.ViewProviders
         {
             return Task.FromResult(default(IViewProviderResult));
         }
-        
+
     }
 
 }

@@ -73,7 +73,7 @@ namespace Plato.Entities.Stores
                 CancelTokens(result);
             }
 
-            return await MergeEntityData(result); ;
+            return await MergeEntityData(result);
         }
 
         public async Task<TEntity> UpdateAsync(TEntity model)

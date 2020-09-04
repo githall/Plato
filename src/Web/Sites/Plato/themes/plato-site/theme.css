@@ -3,21 +3,6 @@
 /* Layout */
 /* ------------------- */
 
-.layout,
-.layout-header,
-.layout-header-right,
-.layout-alerts,
-.layout-body,
-.layout-content-tools,
-.layout-content-tools-right,
-.layout-content,
-.layout-content-left,
-.layout-content-right,
-.layout-content-actions,
-.layout-content-actions-right,
-.layout-footer,
-.layout-footer-right {}
-
 /* Ensure right aligned content does not wrap */
 .layout-header .layout-header-right,
 .layout-content-tools .layout-content-tools-right,
@@ -35,9 +20,13 @@
     This ensures we can correctly calculate the "fixed" header height
     via JavaScript upon the initial load before the header actually becomes "fixed" */
 
-.layout-header  { padding-bottom: 1rem; }
+.layout-header  { 
+    padding-bottom: 1rem;
+    width: 100%;
+}
+
 .layout-header .layout-header-container { 
-    padding: 1rem 0;
+    padding: 1rem 0; 
     border-bottom-width: 1px;
     border-bottom-style: solid;
 }
@@ -50,25 +39,23 @@
     /* Only apply fixed layout for screen sizes above 992px */
     /* ------------------- */
 
-    /* When the header becomes fixed, fix content */
-    .layout-header.fixed > .layout-header-container {
-        position: fixed;
+    .layout-header  {
+        position: sticky;      
         top: 0;
         z-index: 5;
-        white-space: nowrap;
-    }
-    
-    /* When the sidebars becomes fixed, fix content */
-    .layout-content-left.fixed > .layout-content-left-container,
-    .layout-content-right.fixed > .layout-content-right-container {
-        position: fixed;
-        display: flex;
-        -webkit-box-orient: vertical !important;
-        -webkit-box-direction: normal !important;
-        -ms-flex-direction: column !important;
-        flex-direction: column !important;
+    }    
+
+    .layout-content-left,
+    .layout-content-right {   
+        position: sticky; 
+        z-index: 4;         
     }    
     
+    .layout-content-left:not(.fixed),
+    .layout-content-right:not(.fixed) {
+        overflow:visible;
+    }
+
     /* Ensure asides are reset for screen sizes above 992px */
     /* ------------------- */
 
@@ -83,6 +70,7 @@
         overflow:visible !important;
         border: 0 !important;
         padding: 0 !important;
+        outline:none;
         opacity: 1 !important;
     }
 
@@ -145,9 +133,7 @@
 /* ------------------- */
 
 .asides-content,
-.layout-header.fixed > .layout-header-container,
-.layout-content-left.fixed > .layout-content-left-container,
-.layout-content-right.fixed > .layout-content-right-container { background-color: white; }
+.layout-header-container { background-color: #fff; }
 
 .asides-header,
 .asides-footer,
@@ -238,7 +224,7 @@
 
 .markdown-body blockquote {
     border-left: .25em solid rgba(50, 50, 50, 0.25);
-    background: rgba(200, 200, 200, 0.1);
+    background: rgb(245, 247, 249);
 }
 
 .markdown-body blockquote footer {
@@ -743,8 +729,25 @@ a.label:hover, .label.active {
 .doc-header hr { margin: 2rem 0 0 0; }
 .doc-header .doc-title { margin-bottom:0; }
 
+/* Give our content column a little more space for docs */
+@media (min-width: 992px) {
+
+    .doc-display .layout-content-right.col-lg-3 {
+        -ms-flex: 0 0 20%;
+        flex: 0 0 20%;
+        max-width: 20%;
+    }
+
+    .doc-display .col-lg-6 {
+        -ms-flex: 0 0 55%;
+        flex: 0 0 55%;
+        max-width: 55%;
+    }
+
+}
+
 /* ------------------------- */
-/* Custom Site Css */
+/* Custom Site CSS */
 /* ------------------------- */
 
 .home-page-tiles .font-weight-bold {
